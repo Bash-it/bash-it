@@ -17,4 +17,7 @@ alias -- -="cd -"       # Go back
 # Shell History
 alias h='history'
 
-# 
+# Directory
+alias	md='mkdir -p'
+alias	rd=rmdir
+alias d='dirs -v'
