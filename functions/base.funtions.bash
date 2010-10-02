@@ -1,11 +1,12 @@
 #!/bin/bash
 
-function rh {
-  history | awk '{a[$2]++}END{for(i in a){print a[i] " " i}}' | sort -rn | head
-}
-  
 function ips {
   ifconfig | grep "inet " | awk '{ print $2 }'
+}
+
+function myip {
+  res=$(curl -s checkip.dyndns.org | grep -Eo '[0-9\.]+')
+  echo "Your public IP is: ${LIGHT_GREEN} $res ${NORMAL}" 
 }
 
 

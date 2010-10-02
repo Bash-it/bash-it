@@ -9,11 +9,3 @@ alias filemerge="open -a '/Developer/Applications/Utilities/FileMerge.app'"
 alias safari="open -a safari"
 alias firefox="open -a firefox"
 alias dashcode="open -a dashcode"
-
-function plugin-help() {
-  echo "Plugin Help Screen"
-  echo
-  rails-help
-  echo
-  git-help
-}

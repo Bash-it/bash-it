@@ -23,8 +23,7 @@ cp template/bash_profile.template.bash ~/.bash_profile
 I'm working on adding various custom help screens to bash it. Currently, bash it has the following commands to show help screens:
 
 <pre><code>
-bash-it
-plugin-help
+bash-it (will show all the help commands)
 rails-help
 git-help
 </code></pre>

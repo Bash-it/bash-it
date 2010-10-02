@@ -6,6 +6,13 @@ alias reload='source ~/.bash_profile'
 
 # Load all files
 
+# Themes
+THEMES="${BASH}/themes/*.bash"
+for config_file in $THEMES
+do
+  source $config_file
+done
+
 # Library
 LIB="${BASH}/lib/*.bash"
 for config_file in $LIB
@@ -24,13 +31,6 @@ unset config_file
 # Plugins
 PLUGINS="${BASH}/plugins/*.bash"
 for config_file in $PLUGINS
-do
-  source $config_file
-done
-
-# Themes
-THEMES="${BASH}/themes/*.bash"
-for config_file in $THEMES
 do
   source $config_file
 done
