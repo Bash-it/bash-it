@@ -24,6 +24,7 @@ I'm working on adding various custom help screens to bash it. Currently, bash it
 
 <pre><code>
 bash-it (will show all the help commands)
+aliases-help
 rails-help
 git-help
 </code></pre>
