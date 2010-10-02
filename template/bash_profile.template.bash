@@ -14,7 +14,7 @@ export BASH=$HOME/.bash_it
 export BASH_THEME='bobby'
 
 # Your place for hosting Git repos. I use this for private repos.
-export GIT_HOSTING='git@git.domain.org'
+export GIT_HOSTING='git@git.domain.com'
 
 # Set my editor and git editor
 export EDITOR="/usr/bin/mate -w" 

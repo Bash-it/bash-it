@@ -13,7 +13,7 @@ alias rd='rails destroy'
 
 alias ss='script/server'
 alias sc='script/console'
-alias restart_app='touch tmp/restart.txt'
+alias restartapp='touch tmp/restart.txt'
 alias devlog='tail -f log/development.log'
 
 
