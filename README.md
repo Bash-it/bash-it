@@ -20,6 +20,16 @@ cp ~/.bash_profile ~/.bash_profile_original
 cp template/bash_profile.template.bash ~/.bash_profile
 </code></pre>
 
+I'm working on adding various custom help screens to bash it. Currently, bash it has the following commands to show help screens:
+
+<pre><code>
+bash-it
+plugin-help
+rails-help
+git-help
+</code></pre>
+
+
 ## Themes
 
 Currently, there is only 1 theme, 'bobby'. There is a base.theme.bash that includes various colors that can then be used to create custom themes. There is support for git in the prompt: showing what branch you're on, if you've committed locally or not, etc. I'm working on adding mercurial support as well.
