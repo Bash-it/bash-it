@@ -1,3 +1,5 @@
+#!/bin/bash
+
 function nginx_reload() {
   FILE="${NGINX_PATH}/logs/nginx.pid"
   if [ -e $FILE ]; then

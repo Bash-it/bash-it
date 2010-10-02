@@ -1,3 +1,4 @@
+#!/bin/bash
 switch () {
   rvm $1
   local v=$(rvm_version)

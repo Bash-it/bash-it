@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Aliases
 alias g='git'
 alias gst='git status'

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # List directory contents
 alias sl=ls
 alias ls='ls -G'        # Compact view, show colors

@@ -1,3 +1,4 @@
+#!/bin/bash
 # Initialize Bash It
 
 # Reload Library

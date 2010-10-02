@@ -1,11 +1,4 @@
-#
-# These is some Alias' for Rails
-#
-
-alias ss='script/server'
-alias sc='script/console'
-alias restart_app='touch tmp/restart.txt'
-
+#!/bin/bash
 
 # Rails Commands
 alias r='rails'
@@ -18,4 +11,7 @@ alias rp='rails plugin'
 alias ra='rails application'
 alias rd='rails destroy'
 
+alias ss='script/server'
+alias sc='script/console'
+alias restart_app='touch tmp/restart.txt'
 alias devlog='tail -f log/development.log'

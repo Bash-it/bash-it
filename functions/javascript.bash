@@ -1,3 +1,5 @@
+#!/bin/bash
+
 function rails_jquery {
   curl -o public/javascripts/rails.js http://github.com/rails/jquery-ujs/raw/master/src/rails.js
 }

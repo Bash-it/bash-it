@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Some Colors
 BGREEN='\[\033[1;32m\]'
 GREEN='\[\033[0;32m\]'

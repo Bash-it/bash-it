@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Desktop Programs
 alias fireworks="open -a '/Applications/Adobe Fireworks CS3/Adobe Fireworks CS3.app'"
 alias photoshop="open -a '/Applications/Adobe Photoshop CS3/Adobe Photoshop.app'"

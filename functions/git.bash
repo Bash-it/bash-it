@@ -1,3 +1,5 @@
+#!/bin/bash
+
 function git_remote {
   echo "Running: git remote add origin ${GIT_HOSTING}:$1.git"
   git remote add origin $GIT_HOSTING:$1.git
