@@ -21,3 +21,22 @@ alias h='history'
 alias	md='mkdir -p'
 alias	rd=rmdir
 alias d='dirs -v'
+
+function aliases-help() {
+  echo "Generic Alias Usage"
+  echo
+  echo "  sl    = ls"
+  echo "  ls    = ls -G"
+  echo "  la    = ls -AF"
+  echo "  ll    = ls -al"
+  echo "  l     = ls -a"
+  echo "  c/k   = clear"
+  echo "  ..    = cd .."
+  echo "  ...   = cd ../.."
+  echo "  -     = cd -"
+  echo "  h     = history"
+  echo "  md    = mkdir -p"
+  echo "  rd    = rmdir"
+  echo "  d     = dirs -v"
+  echo 
+}
