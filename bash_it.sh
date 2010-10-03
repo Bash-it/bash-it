@@ -49,6 +49,7 @@ do
   source $config_file
 done
 
+export PS1=$PROMPT
 
 #
 # Custom Help

@@ -1,2 +1,10 @@
 #!/bin/bash
-export PS1='${LIGHT_BLUE}$(prompt_char)${LIGHT_GREEN}$(parse_git_branch) ${ORANGE}\h ${NORMAL}in ${GREEN}\w ${NORMAL}→ '
+
+# prompt themeing
+PROMPT='\n${bold_blue}$(prompt_char)$(git_prompt_info) ${orange}\h ${reset_color}in ${green}\w ${reset_color}→ '
+
+# git themeing
+GIT_THEME_PROMPT_DIRTY=" ${red}✗"
+GIT_THEME_PROMPT_CLEAN=" ${bold_green}✓"
+GIT_THEME_PROMPT_PREFIX=" ${green}|"
+GIT_THEME_PROMPT_SUFFIX="${green}|"
