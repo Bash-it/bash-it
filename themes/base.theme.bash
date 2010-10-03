@@ -17,13 +17,17 @@ ORANGE=$'\e[33;40m'
 NORMAL=$'\e[00m'
 
 # LIGHT COLORS
-LIGHT_BLUE=$'\e[1;34m'
 LIGHT_GREEN=$'\e[1;32m'
-LIGHT_CYAN=$'\e[1;36m'
 LIGHT_RED=$'\e[1;31m'
-LIGHT_PURPLE=$'\e[1;35m'
+LIGHT_BLUE=$'\e[1;34m'
 LIGHT_YELLOW=$'\e[1;33m'
+LIGHT_PURPLE=$'\e[1;35m'
+LIGHT_CYAN=$'\e[1;36m'
 LIGHT_GRAY=$'\e[0;37m'
+
+
+
+
 
 
 # Stolen from Steve Losh
@@ -34,9 +38,14 @@ function prompt_char {
 }
 
 function parse_git_dirty {
-  [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "*"
+  if [[ -n $(git status -s 2> /dev/null) ]]; then
+    echo "$GIT_THEME_PROMPT_DIRTY"
+  else
+    echo "$GIT_THEME_PROMPT_CLEAN"
+  fi
 }
 
 function parse_git_branch {
-  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/[\1$(parse_git_dirty)]/"
+  ref=$(git symbolic-ref HEAD 2> /dev/null) || return
+  echo "$GIT_THEME_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_dirty)$GIT_THEME_PROMPT_SUFFIX"
 }
