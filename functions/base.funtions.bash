@@ -6,7 +6,7 @@ function ips {
 
 function myip {
   res=$(curl -s checkip.dyndns.org | grep -Eo '[0-9\.]+')
-  echo "Your public IP is: ${LIGHT_GREEN} $res ${NORMAL}" 
+  echo "Your public IP is: ${bold_green} $res ${normal}" 
 }
 
 
