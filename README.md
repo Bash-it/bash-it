@@ -17,7 +17,7 @@ Check a clone of this repo. You can view what a sample ~/.bash\_profile looks li
 git clone http://github.com/revans/bash-it.git bash_it
 
 cp ~/.bash_profile ~/.bash_profile_original
-cp template/bash_profile.template.bash ~/.bash_profile
+cp <path/to/cloned/repo>/template/bash_profile.template.bash ~/.bash_profile
 
 </code></pre>
 
