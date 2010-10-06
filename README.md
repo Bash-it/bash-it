@@ -14,10 +14,11 @@ Includes some autocompletion tools, theming support, aliases, custom functions, 
 Check a clone of this repo. You can view what a sample ~/.bash\_profile looks like in template/bash\_profile.template.bash. If you wanted to use that template, make sure to make a backup of your current ~/.bash\_profile file.
 
 <pre><code>
-git clone http://github.com/revans/bash-it.git
+git clone http://github.com/revans/bash-it.git bash_it
 
 cp ~/.bash_profile ~/.bash_profile_original
 cp template/bash_profile.template.bash ~/.bash_profile
+
 </code></pre>
 
 I'm working on adding various custom help screens to bash it. Currently, bash it has the following commands to show help screens:
