@@ -1,4 +1,4 @@
 #!/bin/bash
 
-alias v='mvim --remote-silent'
+alias v='mvim --remote-tab'
 
