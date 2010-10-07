@@ -18,7 +18,3 @@ function git_remove_missing_files() {
 function local-ignore() {
   echo "$1" >> .git/info/exclude
 }
-
-function gitignore() {
-  echo ".DS_Store" >> .gitignore
-}
