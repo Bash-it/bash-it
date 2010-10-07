@@ -6,22 +6,22 @@ function ips {
 
 function myip {
   res=$(curl -s checkip.dyndns.org | grep -Eo '[0-9\.]+')
-  echo "Your public IP is: ${bold_green} $res ${normal}" 
+  echo "Your public IP is: ${bold_green} $res ${normal}"
 }
 
 
 # View man documentation in Preview
 pman () {
-   man -t "${1}" | open -f -a /Applications/Preview.app/
+   man -t "${1}" | open -f -a $PREVIEW
 }
 
 
 pcurl() {
-  curl "${1}" | open -f -a /Applications/Preview.app/
+  curl "${1}" | open -f -a $PREVIEW
 }
 
 pri() {
-  ri -T "${1}" | open -f -a /Applications/Preview.app/
+  ri -T "${1}" | open -f -a $PREVIEW
 }
 
 

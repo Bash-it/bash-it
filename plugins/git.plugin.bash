@@ -7,7 +7,6 @@ alias gs='git status'
 alias gl='git pull'
 alias gup='git fetch && git rebase'
 alias gp='git push'
-alias gd='git diff | mate'
 alias gdv='git diff -w "$@" | vim -R -'
 alias gc='git commit -v'
 alias gca='git commit -v -a'
@@ -17,6 +16,20 @@ alias gcount='git shortlog -sn'
 alias gcp='git cherry-pick'
 alias gco='git checkout'
 alias gexport='git archive --format zip --output'
+
+case $OSTYPE in
+  linux*)
+    alias gd='git diff | vim -R -'
+    ;;
+  darwin*)
+    alias gd='git diff | mate'
+    ;;
+  darwin*)
+    alias gd='git diff'
+    ;;
+esac
+
+
 
 function git-help() {
   echo "Git Custom Aliases Usage"
