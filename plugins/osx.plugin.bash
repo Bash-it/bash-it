@@ -1,5 +1,7 @@
 #!/bin/bash
 
+alias f='open -a Finder '
+
 function tab() {
   osascript 2>/dev/null <<EOF
     tell application "System Events"
