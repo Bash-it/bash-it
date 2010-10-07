@@ -1,4 +1,8 @@
 #!/bin/bash
+#
+# The install directory is hard-coded. TOOD: allow the directory to be specified on the command line.
+#
+
 
 function rails_jquery {
   curl -o public/javascripts/rails.js http://github.com/rails/jquery-ujs/raw/master/src/rails.js

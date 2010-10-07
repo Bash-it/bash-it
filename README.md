@@ -7,7 +7,7 @@ From what I remember, I've incorporated things I have found from the following:
 * oh-my-zsh   (http://github.com/robbyrussell/oh-my-zsh)
 * Steve Losh  (http://stevelosh.com/)
 
-Includes some autocompletion tools, theming support, aliases, custom functions, and more.
+Includes some autocompletion tools, theming support, aliases, custom functions, and more. 
 
 ## Install
 
@@ -30,6 +30,9 @@ rails-help
 git-help
 </code></pre>
 
+## Your Custom scripts, aliases, and functions
+
+If you have custom stuff that you don't want committed to bash it, put those scripts into the custom directory. It is automatically ignored by git.
 
 ## Themes
 
