@@ -15,6 +15,8 @@ alias gb='git branch'
 alias gba='git branch -a'
 alias gcount='git shortlog -sn'
 alias gcp='git cherry-pick'
+alias gco='git checkout'
+alias gexport='git archive --format zip --output'
 
 function git-help() {
   echo "Git Custom Aliases Usage"
@@ -32,5 +34,7 @@ function git-help() {
   echo "  gba     = git branch -a"
   echo "  gcount  = git shortlog -sn"
   echo "  gcp     = git cherry-pick"
+  echo "  gco     = git checkout"
+  echo "  gexport = git git archive --format zip --output"
   echo 
 }
