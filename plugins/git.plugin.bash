@@ -2,6 +2,7 @@
 
 # Aliases
 alias g='git'
+alias get='git'
 alias gst='git status'
 alias gs='git status'
 alias gl='git pull'
