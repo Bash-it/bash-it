@@ -11,7 +11,7 @@ case $TERM in
 	TITLEBAR=""
 	;;
 esac
-PROMPT="${TITLEBAR}${orange}${reset_color}${green}\w${bold_blue}\$(git_prompt_info)${reset_color} "
+PROMPT="${TITLEBAR}${orange}${reset_color}${green}\w${bold_blue}\[\$(git_prompt_info)\]${reset_color} "
 
 
 # git themeing

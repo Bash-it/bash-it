@@ -1,5 +1,7 @@
 PROMPT='\[${green}\]\u\[${normal}\]@\[${green}\]\h\[${normal}\]:\[${blue}\]\w\[${normal}\]\[${red}\]$(prompt_char)$(git_prompt_info)\[${normal}\]\$ '
 
+
+
 # git themeing
 GIT_THEME_PROMPT_DIRTY="×"
 GIT_THEME_PROMPT_CLEAN="✓"
