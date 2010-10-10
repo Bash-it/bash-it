@@ -1,6 +1,8 @@
 #!/bin/bash
 
 # Aliases
+alias ga='git add'
+alias gall='git add .'
 alias g='git'
 alias get='git'
 alias gst='git status'
