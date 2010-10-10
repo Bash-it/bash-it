@@ -17,6 +17,9 @@ alias -- -="cd -"       # Go back
 # Shell History
 alias h='history'
 
+# Tree
+alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
+
 # Directory
 alias	md='mkdir -p'
 alias	rd=rmdir
