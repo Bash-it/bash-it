@@ -13,7 +13,6 @@ export HISTCONTROL=erasedups
 # resize history size
 export HISTSIZE=5000
 
-
 export AUTOFEATURE=true autotest
 
 function rh {

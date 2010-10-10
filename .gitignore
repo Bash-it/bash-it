@@ -2,3 +2,6 @@
 custom/*.bash
 !custom/example.bash
 .rvmrc
+aliases/custom.aliases.bash
+lib/custom.bash
+plugins/custom.plugins.bash

@@ -27,7 +27,6 @@ do
   source $config_file
 done
 
-unset config_file
 # Plugins
 PLUGINS="${BASH}/plugins/*.bash"
 for config_file in $PLUGINS
@@ -35,8 +34,8 @@ do
   source $config_file
 done
 
-# Functions
-FUNCTIONS="${BASH}/functions/*.bash"
+# Aliases
+FUNCTIONS="${BASH}/aliases/*.bash"
 for config_file in $FUNCTIONS
 do
   source $config_file
@@ -49,6 +48,8 @@ do
   source $config_file
 done
 
+
+unset config_file
 export PS1=$PROMPT
 
 
