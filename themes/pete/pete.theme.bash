@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # prompt themeing
-PROMPT="(\t) \$(prompt_char) [\[$bold_blue\]\u\[$white\]@\[$green\]\h\[$white\]] \[$bold_yellow\]\w\[$white\]\$(git_prompt_info)\$(rvm_version_prompt) \\$\[$reset_color\] "
+PROMPT="(\t) \$(prompt_char) [\[$blue\]\u\[$normal_color\]@\[$green\]\h\[$reset_color\]] \[$yellow\]\w\[$reset_color\]\$(git_prompt_info)\$(rvm_version_prompt) \$\[$reset_color\] "
 
 GIT_THEME_PROMPT_DIRTY=" ✗"
 GIT_THEME_PROMPT_CLEAN=" ✓"
