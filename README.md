@@ -54,3 +54,4 @@ If you are submitting a pull request, please add your name to the list.
 * David Bradford
 * Rich Manalang
 * Piotr Usewicz
+* Simon H. Eskildsen
