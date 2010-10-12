@@ -4,7 +4,7 @@
 # Reload Library
 alias reload='source ~/.bash_profile'
 
-# Load all files
+# Load the framework
 
 # Themes
 THEMES="${BASH}/themes/*.bash"
