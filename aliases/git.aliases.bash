@@ -20,6 +20,7 @@ alias gcount='git shortlog -sn'
 alias gcp='git cherry-pick'
 alias gco='git checkout'
 alias gexport='git archive --format zip --output'
+alias gdel='git branch -D'
 
 case $OSTYPE in
   linux*)
@@ -53,5 +54,7 @@ function git-help() {
   echo "  gcp     = git cherry-pick"
   echo "  gco     = git checkout"
   echo "  gexport = git git archive --format zip --output"
+	echo "  gdel    = git branch -D"
+	echo "  gpo     = git push origin"
   echo 
 }
