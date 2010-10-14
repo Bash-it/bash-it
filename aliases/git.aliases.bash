@@ -38,11 +38,11 @@ esac
 
 function git-help() {
   echo "Git Custom Aliases Usage"
-  echo 
+  echo
   echo "  g       = git"
   echo "  get 	  = git"
   echo "  ga      = git add"
-  echo "  giall	  = git add ."
+  echo "  gall	  = git add ."
   echo "  gst/gs  = git status"
   echo "  gl      = git pull"
   echo "  gup     = git fetch && git rebase"
@@ -59,5 +59,5 @@ function git-help() {
   echo "  gexport = git git archive --format zip --output"
 	echo "  gdel    = git branch -D"
 	echo "  gpo     = git push origin"
-  echo 
+  echo
 }
