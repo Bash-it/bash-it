@@ -40,6 +40,9 @@ function git-help() {
   echo "Git Custom Aliases Usage"
   echo 
   echo "  g       = git"
+  echo "  get 	  = git"
+  echo "  ga      = git add"
+  echo "  giall	  = git add ."
   echo "  gst/gs  = git status"
   echo "  gl      = git pull"
   echo "  gup     = git fetch && git rebase"
