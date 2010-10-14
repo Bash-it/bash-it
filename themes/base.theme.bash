@@ -22,6 +22,8 @@ function git_prompt_info() {
 
 
 function rvm_version_prompt {
-  rvm=$(rvm tools identifier) || return
-  echo -e "$RVM_THEME_PROMPT_PREFIX$rvm$RVM_THEME_PROMPT_SUFFIX"
+  if which rvm &> /dev/null; then
+    rvm=$(rvm tools identifier) || return
+    echo -e "$RVM_THEME_PROMPT_PREFIX$rvm$RVM_THEME_PROMPT_SUFFIX"
+  fi
 }
