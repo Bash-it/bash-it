@@ -1,6 +1,6 @@
 # Bash it
 
-'Bash it' is a mash up of my own bash commands and scripts, other bash stuff I have found and a shameless ripoff of oh-my-zsh. :) 
+'Bash it' is a mash up of my own bash commands and scripts, other bash stuff I have found and a shameless ripoff of oh-my-zsh. :)
 
 Includes some autocompletion tools, theming support, aliases, custom functions, a few stolen pieces from Steve Losh, and more.
 
@@ -33,7 +33,7 @@ For custom scripts, and aliases, you can create the following files and they wil
 * lib/custom.bash
 * plugins/custom.plugins.bash
 
-and anything in the custom directory will be ignored with the exception of custom/example.bash. 
+and anything in the custom directory will be ignored with the exception of custom/example.bash.
 
 ## Themes
 
@@ -50,9 +50,17 @@ So, if you have contributions to bash-it, please send me a pull request and I'll
 
 If you are submitting a pull request, please add your name to the list.
 
-* Robert Evans
-* David Bradford
-* Rich Manalang
-* Piotr Usewicz
-* Simon H. Eskildsen
-* Mark Szymanski
+* [Robert Evans][revans]
+* [David Bradford][zerobearing2]
+* [Rich Manalang][manalang]
+* [Piotr Usewicz][pusewicz]
+* [Simon H. Eskildsen][sirupsen]
+* [Mark Szymanski][mrman208]
+
+[revans]: http://github.com/revans
+[zerobearing2]: http://github.com/zerobearing2
+[manalang]: http://github.com/manalang
+[pusewicz]: http://github.com/pusewicz
+[sirupsen]: http://github.com/sirupsen
+[mrman208]: http://github.com/mrman208
+
