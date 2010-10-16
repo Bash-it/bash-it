@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Aliases
+alias gcl='git clone'
 alias ga='git add'
 alias gall='git add .'
 alias g='git'
@@ -39,6 +40,7 @@ esac
 function git-help() {
   echo "Git Custom Aliases Usage"
   echo
+  echo "  gcl	  = git clone"
   echo "  g       = git"
   echo "  get 	  = git"
   echo "  ga      = git add"
