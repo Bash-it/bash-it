@@ -28,8 +28,8 @@ alias	rd=rmdir
 alias d='dirs -v'
 
 function mkcd(){
-	mkdir $*
-	cd $*
+	mkdir -p "$*"
+	cd "$*"
 }
 
 function aliases-help() {
