@@ -27,11 +27,6 @@ alias	md='mkdir -p'
 alias	rd=rmdir
 alias d='dirs -v'
 
-function mkcd(){
-	mkdir -p "$*"
-	cd "$*"
-}
-
 function aliases-help() {
   echo "Generic Alias Usage"
   echo

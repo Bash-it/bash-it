@@ -11,6 +11,10 @@ function myip {
   echo "Your public IP is: ${bold_green} $res ${normal}"
 }
 
+function mkcd(){
+	mkdir -p "$*"
+	cd "$*"
+}
 
 # View man documentation in Preview
 pman () {
