@@ -12,6 +12,10 @@ alias k='clear'
 
 alias ex="exit"
 
+# Pianobar can be found here: http://github.com/PromyLOPh/pianobar/
+
+alias piano="pianobar"
+
 alias ..='cd ..'        # Go up one directory
 alias ...='cd ../..'    # Go up two directories
 alias -- -="cd -"       # Go back
