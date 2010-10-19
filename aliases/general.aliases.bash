@@ -10,7 +10,7 @@ alias l='ls -a'
 alias c='clear'
 alias k='clear'
 
-alias ex="exit"
+alias q="exit"
 
 # Pianobar can be found here: http://github.com/PromyLOPh/pianobar/
 
