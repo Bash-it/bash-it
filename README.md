@@ -6,32 +6,28 @@ Includes some autocompletion tools, theming support, aliases, custom functions, 
 
 ## Install
 
-Check a clone of this repo. You can view what a sample ~/.bash\_profile looks like in template/bash\_profile.template.bash. If you wanted to use that template, make sure to make a backup of your current ~/.bash\_profile file.
+Check a clone of this repo. You can view what a sample `~/.bash_profile` looks like in `template/bash_profile.template.bash`. If you wanted to use that template, make sure to make a backup of your current `~/.bash_profile` file.
 
-<pre><code>
-git clone http://github.com/revans/bash-it.git bash_it
+	git clone http://github.com/revans/bash-it.git bash_it
 
-cp ~/.bash_profile ~/.bash_profile_original
-cp <path/to/cloned/repo>/template/bash_profile.template.bash ~/.bash_profile
+	cp ~/.bash_profile ~/.bash_profile_original
+	cp <path/to/cloned/repo>/template/bash_profile.template.bash ~/.bash_profile
 
-</code></pre>
 
 ## Help Screens
 
-<pre><code>
-bash-it (will show all the help commands)
-aliases-help
-rails-help
-git-help
-</code></pre>
+	bash-it (will show all the help commands)
+	aliases-help
+	rails-help
+	git-help
 
 ## Your Custom scripts, aliases, and functions
 
 For custom scripts, and aliases, you can create the following files and they will be ignored by the git repo:
 
-* aliases/custom.aliases.bash
-* lib/custom.bash
-* plugins/custom.plugins.bash
+* `aliases/custom.aliases.bash`
+* `lib/custom.bash`
+* `plugins/custom.plugins.bash`
 
 and anything in the custom directory will be ignored with the exception of custom/example.bash.
 
