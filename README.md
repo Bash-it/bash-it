@@ -29,7 +29,7 @@ For custom scripts, and aliases, you can create the following files and they wil
 * `lib/custom.bash`
 * `plugins/custom.plugins.bash`
 
-and anything in the custom directory will be ignored with the exception of custom/example.bash.
+and anything in the custom directory will be ignored with the exception of `custom/example.bash`.
 
 ## Themes
 
