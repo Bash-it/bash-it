@@ -10,6 +10,9 @@ alias l='ls -a'
 alias c='clear'
 alias k='clear'
 
+alias editor="$EDITOR"
+alias pager="$PAGER"
+
 alias q="exit"
 
 # Pianobar can be found here: http://github.com/PromyLOPh/pianobar/
