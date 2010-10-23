@@ -16,4 +16,4 @@ alias buildsite="cd $JEKYLL_LOCAL_ROOT && rm -rf _site/ && jekyll"
 
 # Rsync the site to the remote server
 
-alias deploysite="cd $JEKYLL_LOCAL_ROOT %% rsync -rz _site/ $JEKYLL_REMOTE_ROOT"
+alias deploysite="cd $JEKYLL_LOCAL_ROOT && rsync -rz _site/ $JEKYLL_REMOTE_ROOT"
