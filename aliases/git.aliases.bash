@@ -8,6 +8,7 @@ alias g='git'
 alias get='git'
 alias gst='git status'
 alias gs='git status'
+alias gss='git status -s'
 alias gl='git pull'
 alias gup='git fetch && git rebase'
 alias gp='git push'
@@ -46,6 +47,7 @@ function git-help() {
   echo "  ga      = git add"
   echo "  gall	  = git add ."
   echo "  gst/gs  = git status"
+  echo "  gss	  = git status -s"
   echo "  gl      = git pull"
   echo "  gup     = git fetch && git rebase"
   echo "  gp      = git push"
