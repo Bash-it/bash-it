@@ -1,4 +1,3 @@
 #!/bin/bash
 
-alias em="emacs"
-alias emac="open -a emacs"
+alias em="open -a emacs"
