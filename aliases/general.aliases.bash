@@ -6,6 +6,7 @@ alias ls='ls -G'        # Compact view, show colors
 alias la='ls -AF'       # Compact view, show hidden
 alias ll='ls -al'
 alias l='ls -a'
+alias l1='ls -1'
 
 alias c='clear'
 alias k='clear'
