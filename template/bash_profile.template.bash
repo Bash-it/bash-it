@@ -34,5 +34,9 @@ export JEKYLL_LOCAL_ROOT="~/Sites/mrminimalist"
 
 export JEKYLL_REMOTE_ROOT="user@server:/path/to/jekyll/root"
 
+# Change this to your console based IRC client of choice.
+
+export IRC_CLIENT='irssi'
+
 # Load Bash It
 source $BASH/bash_it.sh
