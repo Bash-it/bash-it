@@ -17,7 +17,7 @@ export BASH_THEME='bobby'
 export GIT_HOSTING='git@git.domain.com'
 
 # Set my editor and git editor
-export EDITOR="/usr/bin/mate -w" 
+export EDITOR="/usr/bin/mate -w"
 export GIT_EDITOR='/usr/bin/mate -w'
 
 # Set the path nginx
@@ -25,6 +25,14 @@ export NGINX_PATH='/opt/nginx'
 
 # Don't check mail when opening terminal.
 unset MAILCHECK
+
+# Change this to the path of your local jekyll root to use the jekyll aliases
+
+export JEKYLL_LOCAL_ROOT="~/Sites/mrminimalist"
+
+# And change this to the remote server and root
+
+export JEKYLL_REMOTE_ROOT="user@server:/path/to/jekyll/root"
 
 # Load Bash It
 source $BASH/bash_it.sh
