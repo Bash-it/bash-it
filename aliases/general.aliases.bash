@@ -16,6 +16,8 @@ alias pager="$PAGER"
 
 alias q="exit"
 
+alias irc="$IRC_CLIENT"
+
 # Pianobar can be found here: http://github.com/PromyLOPh/pianobar/
 
 alias piano="pianobar"
