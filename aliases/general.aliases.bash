@@ -8,7 +8,7 @@ alias ll='ls -al'
 alias l='ls -a'
 alias l1='ls -1'
 
-if [ $(uname) == "Linux" ]
+if [ $(uname) = "Linux" ]
 then
 	alias ls="ls --color=always"
 fi
