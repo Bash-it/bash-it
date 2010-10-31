@@ -38,5 +38,9 @@ export JEKYLL_REMOTE_ROOT="user@server:/path/to/jekyll/root"
 
 export IRC_CLIENT='irssi'
 
+# Set this to the command you use for todo.txt-cli
+
+export TODO="t"
+
 # Load Bash It
 source $BASH/bash_it.sh
