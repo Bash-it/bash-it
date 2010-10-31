@@ -69,7 +69,7 @@ function bash-it() {
   echo
   echo "  rails-help                  This will list out all the aliases you can use with rails."
   echo "  git-help                    This will list out all the aliases you can use with git."
+  echo "  todo-help                   This will list out all the aliases you can use with todo.txt-cli"
   echo "  aliases-help                Generic list of aliases."
-  
   echo
 }
