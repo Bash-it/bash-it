@@ -52,6 +52,7 @@ If you are submitting a pull request, please add your name to the list.
 * [Piotr Usewicz][pusewicz]
 * [Simon H. Eskildsen][sirupsen]
 * [Mark Szymanski][mrman208]
+* [Florian Baumann][noqqe]
 
 [revans]: http://github.com/revans
 [zerobearing2]: http://github.com/zerobearing2
@@ -59,4 +60,5 @@ If you are submitting a pull request, please add your name to the list.
 [pusewicz]: http://github.com/pusewicz
 [sirupsen]: http://github.com/sirupsen
 [mrman208]: http://github.com/mrman208
+[noqqe]: http://github.com/noqqe
 
