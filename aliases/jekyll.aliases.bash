@@ -1,6 +1,6 @@
 # Open the root of your site in your vim or cd to it
 
-if [ $EDITOR = "vim"]
+if [ $EDITOR = "vim" ]
 then
 	alias newentry="cd $JEKYLL_LOCAL_ROOT && $EDITOR ."
 else
@@ -9,7 +9,7 @@ fi
 
 # Open the _posts/ directory for making a new blog post (seperate from above alias because not everyone uses jekyll for a blog)
 
-if [ $EDITOR = "vim"]
+if [ $EDITOR = "vim" ]
 then
 	alias newpost="cd $JEKYLL_LOCAL_ROOT/_posts && $EDITOR ."
 else
