@@ -9,12 +9,12 @@ fi
 
 # Open the _posts/ directory for making a new blog post (seperate from above alias because not everyone uses jekyll for a blog)
 
-if [ $EDITOR = "vim" ]
-then
-	alias newpost="cd $JEKYLL_LOCAL_ROOT/_posts && $EDITOR ."
-else
-	alias newpost="cd $JEKYLL_LOCAL_ROOT"
-fi
+# if [ $editor = "vim" ]
+# then
+# 	alias newpost="cd $jekyll_local_root/_posts && $editor ."
+# else
+# 	alias newpost="cd $jekyll_local_root"
+# fi
 
 # Build and locally serve the site
 
