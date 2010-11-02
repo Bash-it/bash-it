@@ -16,8 +16,8 @@ fi
 alias c='clear'
 alias k='clear'
 
-alias editor="$EDITOR"
-alias pager="$PAGER"
+alias edit="$EDITOR"
+alias page="$PAGER"
 
 alias q="exit"
 
