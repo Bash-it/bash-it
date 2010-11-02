@@ -28,7 +28,7 @@ unset MAILCHECK
 
 # Change this to the path of your local jekyll root to use the jekyll aliases
 
-export JEKYLL_LOCAL_ROOT="~/Sites/jekyllsite"
+export JEKYLL_LOCAL_ROOT="$HOME/Sites/jekyllsite"
 
 # And change this to the remote server and root
 
