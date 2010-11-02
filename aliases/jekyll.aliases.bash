@@ -1,10 +1,20 @@
-# Open the root of your site in your favorite editor
+# Open the root of your site in your vim or cd to it
 
-alias newentry="cd $JEKYLL_LOCAL_ROOT && $EDITOR ."
+if [ $EDITOR = "vim" ]
+then
+	alias newentry="cd $JEKYLL_LOCAL_ROOT && $EDITOR ."
+else
+	alias newentry="cd $JEKYLL_LOCAL_ROOT"
+fi
 
 # Open the _posts/ directory for making a new blog post (seperate from above alias because not everyone uses jekyll for a blog)
 
-alias newpost="cd $JEKYLL_LOCAL_ROOT/_posts && $EDITOR ."
+# if [ $editor = "vim" ]
+# then
+# 	alias newpost="cd $jekyll_local_root/_posts && $editor ."
+# else
+# 	alias newpost="cd $jekyll_local_root"
+# fi
 
 # Build and locally serve the site
 
