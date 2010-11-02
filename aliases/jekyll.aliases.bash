@@ -5,10 +5,16 @@ then
 	alias newentry="cd $JEKYLL_LOCAL_ROOT && $EDITOR ."
 else
 	alias newentry="cd $JEKYLL_LOCAL_ROOT"
+fi
 
 # Open the _posts/ directory for making a new blog post (seperate from above alias because not everyone uses jekyll for a blog)
 
-alias newpost="cd $JEKYLL_LOCAL_ROOT/_posts && $EDITOR ."
+if [ $EDITOR = "vim"]
+then
+	alias newpost="cd $JEKYLL_LOCAL_ROOT/_posts && $EDITOR ."
+else
+	alias newpost="cd $JEKYLL_LOCAL_ROOT"
+fi
 
 # Build and locally serve the site
 
