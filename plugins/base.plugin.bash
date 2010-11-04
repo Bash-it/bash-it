@@ -30,6 +30,11 @@ pri() {
   ri -T "${1}" | open -f -a $PREVIEW
 }
 
+banish-cookies() {
+	rm -r ~/.macromedia ~/.adobe
+	ln -s /dev/null ~/.adobe
+	ln -s /dev/null ~/.macromedia
+}
 
 # disk usage per directory
 # in Mac OS X and Linux
