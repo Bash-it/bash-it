@@ -28,8 +28,8 @@ function dock-switch() {
 
         else
             echo "usage:"
-            echo "dockswitch 2d" 
-            echo "dockswitch 3d."
+            echo "dock-switch 2d" 
+            echo "dock-switch 3d."
         fi
     else
         echo "sorry. you're currently not using os x"
