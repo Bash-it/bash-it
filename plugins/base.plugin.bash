@@ -58,7 +58,7 @@ usage ()
 
 # One thing todo
 
- t() {
+function t() {
 	 if [[ "$*" == "" ]] ; then
 		 cat ~/.t
 	 else
