@@ -71,5 +71,6 @@ function bash-it() {
   echo "  git-help                    This will list out all the aliases you can use with git."
   echo "  todo-help                   This will list out all the aliases you can use with todo.txt-cli"
   echo "  aliases-help                Generic list of aliases."
+  echo "  plugins-help                This will list out all the plugins and functions you can use with bash-it"
   echo
 }

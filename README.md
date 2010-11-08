@@ -20,6 +20,7 @@ Check a clone of this repo. You can view what a sample `~/.bash_profile` looks l
 	aliases-help
 	rails-help
 	git-help
+    plugins-help
 
 ## Your Custom scripts, aliases, and functions
 
