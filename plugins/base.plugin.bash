@@ -57,12 +57,30 @@ usage ()
 }
 
 # One thing todo
-
 function t() {
 	 if [[ "$*" == "" ]] ; then
 		 cat ~/.t
 	 else
 		 echo "$*" > ~/.t
 	 fi
- }
+}
+
+# List all plugins and functions defined by bash-it
+function plugins-help() {
+    
+    echo "bash-it Plugins Help-Message"
+    echo 
+
+    set | grep "()" \
+    | sed -e "/^_/d" | grep -v "BASH_ARGC=()" \
+    | sed -e "/^\s/d" | grep -v "BASH_LINENO=()" \
+    | grep -v "BASH_ARGV=()" \
+    | grep -v "BASH_SOURCE=()" \
+    | grep -v "DIRSTACK=()" \
+    | grep -v "GROUPS=()" \
+    | grep -v "BASH_CMDS=()" \
+    | grep -v "BASH_ALIASES=()" \
+    | sed -e "s/()//"
+}
+
 
