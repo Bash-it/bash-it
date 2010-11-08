@@ -80,7 +80,7 @@ function plugins-help() {
     | grep -v "GROUPS=()" \
     | grep -v "BASH_CMDS=()" \
     | grep -v "BASH_ALIASES=()" \
-    | sed -e "s/()//"
+    | grep -v "COMPREPLY=()" | sed -e "s/()//"
 }
 
 
