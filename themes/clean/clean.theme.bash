@@ -1,6 +1,6 @@
 if [ "$(whoami)" = root ]; then no_color=$red; else no_color=$white; fi
 
-PROMPT="${no_color}\u${reset_color}:${blue}\W/${reset_color} \[\$(git_prompt_info)\]$ "
+PROMPT="${no_color}\u${reset_color}:${blue}\W/${reset_color} \[\$(scm_prompt_info)\]$ "
 RPROMPT='[\t]'
 
 
