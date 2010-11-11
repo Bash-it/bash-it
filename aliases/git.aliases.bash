@@ -23,6 +23,7 @@ alias gcp='git cherry-pick'
 alias gco='git checkout'
 alias gexport='git archive --format zip --output'
 alias gdel='git branch -D'
+alias gmu='git fetch origin -v; git fetch upstream -v; git merge upstream/master'
 
 case $OSTYPE in
   linux*)
@@ -61,7 +62,8 @@ function git-help() {
   echo "  gcp     = git cherry-pick"
   echo "  gco     = git checkout"
   echo "  gexport = git git archive --format zip --output"
-	echo "  gdel    = git branch -D"
-	echo "  gpo     = git push origin"
+  echo "  gdel    = git branch -D"
+  echo "  gpo     = git push origin"
+  echo "  gmu     = git fetch origin -v; git fetch upstream -v; git merge upstream/master"
   echo
 }
