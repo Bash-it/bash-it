@@ -8,4 +8,6 @@ export GREP_COLOR='1;33'
 export LSCOLORS='Gxfxcxdxdxegedabagacad'
 
 # Load the theme
-source "$BASH/themes/$BASH_THEME/$BASH_THEME.theme.bash"
+if [[ $BASH_THEME ]]; then
+    source "$BASH/themes/$BASH_THEME/$BASH_THEME.theme.bash"
+fi
