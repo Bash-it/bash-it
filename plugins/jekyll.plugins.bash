@@ -1,8 +1,8 @@
 newpost() {
 
-	# 'cd' into the local jekyll root
+	# 'builtin cd' into the local jekyll root
 
-	cd "$JEKYLL_LOCAL_ROOT/_posts"
+	builtin cd "$JEKYLL_LOCAL_ROOT/_posts"
 
 	# Get the date for the new post's filename
 
