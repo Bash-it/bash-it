@@ -14,39 +14,42 @@ newpost() {
 	# TODO: Add support for Textile formatting too.
 
 	OPTIONS="Text Quote Image Audio Video"
-
-	select OPTION in $OPTIONS
-	do
-		if [[ $OPTION = "Text" ]] 
-		then
-			POST_TYPE="Text"
-			break
-		fi
-
-		if [[ $OPTION = "Quote" ]]
-		then
-			POST_TYPE="Quote"
-			break
-		fi
 	
-		if [[ $OPTION = "Image" ]]
-		then
-			POST_TYPE="Image"
-			break
-		fi
+	if [[ $JEKYLL_FORMATTING = "markdown" ]]
+	then
+		select OPTION in $OPTIONS
+		do
+			if [[ $OPTION = "Text" ]] 
+			then
+				POST_TYPE="Text"
+				break
+			fi
 
-		if [[ $OPTION = "Audio" ]]
-		then
-			POST_TYPE="Audio"
-			break
-		fi
+			if [[ $OPTION = "Quote" ]]
+			then
+				POST_TYPE="Quote"
+				break
+			fi
+		
+			if [[ $OPTION = "Image" ]]
+			then
+				POST_TYPE="Image"
+				break
+			fi
 
-		if [[ $OPTION = "Video" ]]
-		then
-			POST_TYPE="Video"
-			break
-		fi
-	done
+			if [[ $OPTION = "Audio" ]]
+			then
+				POST_TYPE="Audio"
+				break
+			fi
+
+			if [[ $OPTION = "Video" ]]
+			then
+				POST_TYPE="Video"
+				break
+			fi
+		done
+	fi
 
 	# Get the title for the new post
 
@@ -92,31 +95,34 @@ newpost() {
 
 	# Generate template text based on the post type
 
-	if [[ $POST_TYPE = "Text" ]]
+	if [[ $JEKYLL_FORMATTING = "markdown" ]]
 	then
-		true
-	fi
+		if [[ $POST_TYPE = "Text" ]]
+		then
+			true
+		fi
 
-	if [[ $POST_TYPE = "Quote" ]]
-	then
-		echo "> Quote" >> $FNAME
-		echo >> $FNAME
-		echo "&mdash; Author" >> $FNAME
-	fi
+		if [[ $POST_TYPE = "Quote" ]]
+		then
+			echo "> Quote" >> $FNAME
+			echo >> $FNAME
+			echo "&mdash; Author" >> $FNAME
+		fi
 
-	if [[ $POST_TYPE = "Image" ]]
-	then
-		echo "![Alternate Text](/path/to/image/or/url)" >> $FNAME
-	fi
+		if [[ $POST_TYPE = "Image" ]]
+		then
+			echo "![Alternate Text](/path/to/image/or/url)" >> $FNAME
+		fi
 
-	if [[ $POST_TYPE = "Audio" ]]
-	then
-		echo "<audio src=\"/path/to/audio/file\" controls=\"controls\"></audio>" >> $FNAME
-	fi
+		if [[ $POST_TYPE = "Audio" ]]
+		then
+			echo "<audio src=\"/path/to/audio/file\" controls=\"controls\"></audio>" >> $FNAME
+		fi
 
-	if [[ $POST_TYPE = "Video" ]]
-	then
-		echo "<video src=\"/path/to/video\" controls=\"controls\"></video>" >> $FNAME
+		if [[ $POST_TYPE = "Video" ]]
+		then
+			echo "<video src=\"/path/to/video\" controls=\"controls\"></video>" >> $FNAME
+		fi
 	fi
 
 	# Open the file in your favorite editor
