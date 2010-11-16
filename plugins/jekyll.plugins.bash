@@ -11,11 +11,10 @@ newpost() {
 	FNAME_DATE=$(date "+%Y-%m-%d")
 
 	# If the user is using markdown formatting, let them choose what type of post they want. Sort of like Tumblr. 
-	# TODO: Add support for Textile formatting too.
 
 	OPTIONS="Text Quote Image Audio Video"
 	
-	if [[ $JEKYLL_FORMATTING = "markdown" ]]
+	if [ $JEKYLL_FORMATTING = "markdown" -o $JEKYLL_FORMATTING = "textile" ]
 	then
 		select OPTION in $OPTIONS
 		do
@@ -116,12 +115,42 @@ newpost() {
 
 		if [[ $POST_TYPE = "Audio" ]]
 		then
-			echo "<audio src=\"/path/to/audio/file\" controls=\"controls\"></audio>" >> $FNAME
+			echo "<html><audio src=\"/path/to/audio/file\" controls=\"controls\"></audio></html>" >> $FNAME
 		fi
 
 		if [[ $POST_TYPE = "Video" ]]
 		then
-			echo "<video src=\"/path/to/video\" controls=\"controls\"></video>" >> $FNAME
+			echo "<html><video src=\"/path/to/video\" controls=\"controls\"></video></html>" >> $FNAME
+		fi
+	fi
+
+	if [[ $JEKYLL_FORMATTING = "textile" ]]
+	then
+		if [[ $POST_TYPE = "Text" ]]
+		then
+			true
+		fi
+
+		if [[ $POST_TYPE = "Quote" ]]
+		then
+			echo "bq. Quote" >> $FNAME
+			echo >> $FNAME
+			echo "&mdash; Author" >> $FNAME
+		fi
+
+		if [[ $POST_TYPE = "Image" ]]
+		then
+			echo "!url(alt text)" >> $FNAME
+		fi
+
+		if [[ $POST_TYPE = "Audio" ]]
+		then
+			echo "<html><audio src=\"/path/to/audio/file\" controls=\"controls\"></audio></html>" >> $FNAME
+		fi
+
+		if [[ $POST_TYPE = "Video" ]]
+		then
+			echo "<html><video src=\"/path/to/video\" controls=\"controls\"></video></html>" >> $FNAME
 		fi
 	fi
 
