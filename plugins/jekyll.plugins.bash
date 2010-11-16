@@ -1,3 +1,5 @@
+#!/bin/bash
+
 newpost() {
 
 	# 'builtin cd' into the local jekyll root
