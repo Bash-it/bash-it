@@ -30,6 +30,11 @@ pri() {
   ri -T "${1}" | open -f -a $PREVIEW
 }
 
+banish-cookies() {
+	rm -r ~/.macromedia ~/.adobe
+	ln -s /dev/null ~/.adobe
+	ln -s /dev/null ~/.macromedia
+}
 
 # disk usage per directory
 # in Mac OS X and Linux
@@ -50,3 +55,32 @@ usage ()
         fi
     fi
 }
+
+# One thing todo
+function t() {
+	 if [[ "$*" == "" ]] ; then
+		 cat ~/.t
+	 else
+		 echo "$*" > ~/.t
+	 fi
+}
+
+# List all plugins and functions defined by bash-it
+function plugins-help() {
+    
+    echo "bash-it Plugins Help-Message"
+    echo 
+
+    set | grep "()" \
+    | sed -e "/^_/d" | grep -v "BASH_ARGC=()" \
+    | sed -e "/^\s/d" | grep -v "BASH_LINENO=()" \
+    | grep -v "BASH_ARGV=()" \
+    | grep -v "BASH_SOURCE=()" \
+    | grep -v "DIRSTACK=()" \
+    | grep -v "GROUPS=()" \
+    | grep -v "BASH_CMDS=()" \
+    | grep -v "BASH_ALIASES=()" \
+    | grep -v "COMPREPLY=()" | sed -e "s/()//"
+}
+
+
