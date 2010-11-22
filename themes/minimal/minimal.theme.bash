@@ -7,3 +7,5 @@ prompt_setter() {
 }
 
 PROMPT_COMMAND=prompt_setter
+
+export PS3=">> "

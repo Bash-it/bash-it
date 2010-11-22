@@ -6,12 +6,9 @@ alias reload='source ~/.bash_profile'
 
 # Load the framework
 
-# Themes
-THEMES="${BASH}/themes/*.bash"
-for config_file in $THEMES
-do
-  source $config_file
-done
+# Load colors first so they can be use in base theme
+source "${BASH}/themes/colors.theme.bash"
+source "${BASH}/themes/base.theme.bash"
 
 # Library
 LIB="${BASH}/lib/*.bash"

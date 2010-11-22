@@ -30,6 +30,10 @@ pri() {
   ri -T "${1}" | open -f -a $PREVIEW
 }
 
+quiet() {
+	$* &> /dev/null &
+}
+
 banish-cookies() {
 	rm -r ~/.macromedia ~/.adobe
 	ln -s /dev/null ~/.adobe
