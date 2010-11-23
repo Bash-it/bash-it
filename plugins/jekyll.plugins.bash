@@ -1,12 +1,54 @@
+#!/bin/bash
+
 newpost() {
 
-	# 'cd' into the local jekyll root
+	# 'builtin cd' into the local jekyll root
 
-	cd "$JEKYLL_LOCAL_ROOT/_posts"
+	builtin cd "$JEKYLL_LOCAL_ROOT/_posts"
 
 	# Get the date for the new post's filename
 
 	FNAME_DATE=$(date "+%Y-%m-%d")
+
+	# If the user is using markdown formatting, let them choose what type of post they want. Sort of like Tumblr. 
+
+	OPTIONS="Text Quote Image Audio Video"
+	
+	if [ $JEKYLL_FORMATTING = "markdown" -o $JEKYLL_FORMATTING = "textile" ]
+	then
+		select OPTION in $OPTIONS
+		do
+			if [[ $OPTION = "Text" ]] 
+			then
+				POST_TYPE="Text"
+				break
+			fi
+
+			if [[ $OPTION = "Quote" ]]
+			then
+				POST_TYPE="Quote"
+				break
+			fi
+		
+			if [[ $OPTION = "Image" ]]
+			then
+				POST_TYPE="Image"
+				break
+			fi
+
+			if [[ $OPTION = "Audio" ]]
+			then
+				POST_TYPE="Audio"
+				break
+			fi
+
+			if [[ $OPTION = "Video" ]]
+			then
+				POST_TYPE="Video"
+				break
+			fi
+		done
+	fi
 
 	# Get the title for the new post
 
@@ -49,6 +91,68 @@ newpost() {
 
 	echo "---" >> $FNAME
 	echo >> $FNAME
+
+	# Generate template text based on the post type
+
+	if [[ $JEKYLL_FORMATTING = "markdown" ]]
+	then
+		if [[ $POST_TYPE = "Text" ]]
+		then
+			true
+		fi
+
+		if [[ $POST_TYPE = "Quote" ]]
+		then
+			echo "> Quote" >> $FNAME
+			echo >> $FNAME
+			echo "&mdash; Author" >> $FNAME
+		fi
+
+		if [[ $POST_TYPE = "Image" ]]
+		then
+			echo "![Alternate Text](/path/to/image/or/url)" >> $FNAME
+		fi
+
+		if [[ $POST_TYPE = "Audio" ]]
+		then
+			echo "<html><audio src=\"/path/to/audio/file\" controls=\"controls\"></audio></html>" >> $FNAME
+		fi
+
+		if [[ $POST_TYPE = "Video" ]]
+		then
+			echo "<html><video src=\"/path/to/video\" controls=\"controls\"></video></html>" >> $FNAME
+		fi
+	fi
+
+	if [[ $JEKYLL_FORMATTING = "textile" ]]
+	then
+		if [[ $POST_TYPE = "Text" ]]
+		then
+			true
+		fi
+
+		if [[ $POST_TYPE = "Quote" ]]
+		then
+			echo "bq. Quote" >> $FNAME
+			echo >> $FNAME
+			echo "&mdash; Author" >> $FNAME
+		fi
+
+		if [[ $POST_TYPE = "Image" ]]
+		then
+			echo "!url(alt text)" >> $FNAME
+		fi
+
+		if [[ $POST_TYPE = "Audio" ]]
+		then
+			echo "<html><audio src=\"/path/to/audio/file\" controls=\"controls\"></audio></html>" >> $FNAME
+		fi
+
+		if [[ $POST_TYPE = "Video" ]]
+		then
+			echo "<html><video src=\"/path/to/video\" controls=\"controls\"></video></html>" >> $FNAME
+		fi
+	fi
 
 	# Open the file in your favorite editor
 
