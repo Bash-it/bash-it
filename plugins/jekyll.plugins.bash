@@ -12,7 +12,7 @@ newpost() {
 
 	# If the user is using markdown formatting, let them choose what type of post they want. Sort of like Tumblr. 
 
-	OPTIONS="Text Quote Image Audio Video"
+	OPTIONS="Text Quote Image Audio Video Link"
 	
 	if [ $JEKYLL_FORMATTING = "markdown" -o $JEKYLL_FORMATTING = "textile" ]
 	then
@@ -45,6 +45,12 @@ newpost() {
 			if [[ $OPTION = "Video" ]]
 			then
 				POST_TYPE="Video"
+				break
+			fi
+
+			if [[ $OPTION = "Link" ]]
+			then
+				POST_TYPE="Link"
 				break
 			fi
 		done
@@ -122,6 +128,15 @@ newpost() {
 		then
 			echo "<html><video src=\"/path/to/video\" controls=\"controls\"></video></html>" >> $FNAME
 		fi
+	
+		if [[ $POST_TYPE = "Link" ]]
+		then
+			echo "[link][1]" >> $FNAME
+			echo >> $FNAME
+			echo "> Quote" >> $FNAME
+			echo >> $FNAME
+			echo "[1]: url" >> $FNAME
+		fi
 	fi
 
 	if [[ $JEKYLL_FORMATTING = "textile" ]]
@@ -151,6 +166,13 @@ newpost() {
 		if [[ $POST_TYPE = "Video" ]]
 		then
 			echo "<html><video src=\"/path/to/video\" controls=\"controls\"></video></html>" >> $FNAME
+		fi
+
+		if [[ $POST_TYPE = "Link" ]]
+		then
+			echo "\"Site\":url" >> $FNAME
+			echo >> $FNAME
+			echo "bq. Quote" >> $FNAME
 		fi
 	fi
 
