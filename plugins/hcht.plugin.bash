@@ -10,7 +10,7 @@
 # applications can do this much better. but storing things from commandline? 
 # 
 # hcht was fitted to work at your terminal. 
-# your daily stuff like notices, todos, commands or output from a 
+# your daily stuff like notices, todos, commands or output from a command. 
 # all these things will be stored without complex syntax. 
 # 
 # once you defined your storing-directory you will be able to easily
@@ -19,7 +19,6 @@
 
 ### create a file
 # the basic feature. open a file, do stuff and save.
-# *.hch trailor is required.
 #
 # $ hcht evilcommand.hch
 #
