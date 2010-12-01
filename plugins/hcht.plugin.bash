@@ -1,5 +1,5 @@
 #!/bin/bash
-# hch.plugin.bash: the handmade commandline history tool
+# hcht.plugin.bash: the handmade commandline history tool
 # Copyright: (C) 2010 Florian Baumann <flo@noqqe.de>
 # License: GPL-3 <http://www.gnu.org/licenses/gpl-3.0.txt>
 # Date: Dienstag 2010-11-30
@@ -51,10 +51,6 @@
 # $ cat any_important_logfile | hcht anylog 
 #
 # "anylog" will be the name of the saved file.  
-
-### configure store dir
-# like /home/user/.hcht/ or something
-hchtstoredir=""
 
 hcht() {
     # configured?

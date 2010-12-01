@@ -47,5 +47,8 @@ export IRC_CLIENT='irssi'
 
 export TODO="t"
 
+# Set store directory for handmade commandline history tool 
+export hchtstoredir="$HOME/.hcht"
+
 # Load Bash It
 source $BASH/bash_it.sh
