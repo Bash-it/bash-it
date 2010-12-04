@@ -1,8 +1,18 @@
 prompt_setter() {
 	if [[ $? -eq 0 ]]; then
-		PS1="\W "
+		if [ ! $VIMRUNTIME = "" ]
+		then
+			PS1="{vim} \W "
+		else
+			PS1="\W "
+		fi
 	else
-		PS1="${bold_red}\W ${normal}"
+		if [ ! $VIMRUNTIME = "" ]
+		then
+			PS1="{vim} ${bold_red}\W ${normal}"
+		else
+			PS1="${bold_red}\W ${normal}"
+		fi
 	fi
 }
 
