@@ -50,5 +50,8 @@ export TODO="t"
 # Set store directory for handmade commandline history tool 
 export hchtstoredir="$HOME/.hcht"
 
+# Set this to the directory to use for the ref plugin
+export REF_DIR="$HOME/.ref/"
+
 # Load Bash It
 source $BASH/bash_it.sh
