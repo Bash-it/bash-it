@@ -18,6 +18,29 @@
 # 																																									#
 # This is what the basic structure of your $REF_DIR should look like: Subdirectories for each subject, and then another set of subdirectories for the part of the   #
 # subject you want to reference. And in the second subdirectory, an index.html file. 																				#
+# 
+# To use ref, you do the ref command followed by the sugject and the sub-subject as arguments. For instance:
+# 
+# ref bash array
+# 
+# Would open the bash/array/index.html file.
+# 
+# To list your references, you would do the ref ls command, optionally followed by a subject. For instance:
+# 
+# ref ls
+# 
+# Would give me:
+# 
+# ruby bash
+# 
+# And:
+# 
+# ref ls bash
+# 
+# would output:
+# 
+# array
+# select
 # 																																									#
 # I hope that you like this plugin and if you have any questions about it, send me (mrman208) a message on GitHub or email me at mrman208@me.com 					#
 #####################################################################################################################################################################
