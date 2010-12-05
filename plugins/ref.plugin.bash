@@ -1,23 +1,23 @@
 #####################################################################################################################################################################
-# README 																																							#
-# ------ 																																							#
-# 																																									#
-# ref is a plugin for storing HTML formatted references, mainly suited for programming. 																			#
-# Your $REF_DIR variable is the directory for storing these references in. If it does not exist, it will be created automatically. 									#
-# Here is an example of what my $REF_DIR looks like, because this will be of use when I explain how your $REF_DIR has to be structured: 							#
-# 																																									#
-# ~/.ref/ 																																							#
-#   ruby/ 																																							#
-#       general/ 																																					#
-#  			index.html 																																				#
-# 	bash/ 																																							#
-# 		array/ 																																						#
-# 			index.html 																																				#
-# 		select/ 																																					#
-# 			index.html 																																				#
-# 																																									#
-# This is what the basic structure of your $REF_DIR should look like: Subdirectories for each subject, and then another set of subdirectories for the part of the   #
-# subject you want to reference. And in the second subdirectory, an index.html file. 																				#
+# README 																																							
+# ------ 																																							
+# 																																									
+# ref is a plugin for storing HTML formatted references, mainly suited for programming. 																			
+# Your $REF_DIR variable is the directory for storing these references in. If it does not exist, it will be created automatically. 									
+# Here is an example of what my $REF_DIR looks like, because this will be of use when I explain how your $REF_DIR has to be structured: 							
+# 																																									
+# ~/.ref/ 																																							
+#   ruby/ 																																							
+#       general/ 																																					
+#  			index.html 																																				
+# 	bash/ 																																							
+# 		array/ 																																						
+# 			index.html 																																				
+# 		select/ 																																					
+# 			index.html 																																				
+# 																																									
+# This is what the basic structure of your $REF_DIR should look like: Subdirectories for each subject, and then another set of subdirectories for the part of the   
+# subject you want to reference. And in the second subdirectory, an index.html file. 																				
 # 
 # To use ref, you do the ref command followed by the sugject and the sub-subject as arguments. For instance:
 # 
@@ -41,8 +41,8 @@
 # 
 # array
 # select
-# 																																									#
-# I hope that you like this plugin and if you have any questions about it, send me (mrman208) a message on GitHub or email me at mrman208@me.com 					#
+# 																																									
+# I hope that you like this plugin and if you have any questions about it, send me (mrman208) a message on GitHub or email me at mrman208@me.com 					
 #####################################################################################################################################################################
 
 ref() {
