@@ -20,10 +20,10 @@ modern_scm_prompt() {
 prompt() {
 	if [ $? -ne 0 ]
 	then
-		PS1="${bold_red}┌─${reset_color}$(modern_scm_prompt)[\W]
+		PS1="${bold_red}┌─${reset_color}$(modern_scm_prompt)[${cyan}\W${normal}]
 ${bold_red}└─▪${normal} "
 	else
-		PS1="┌─$(modern_scm_prompt)[\W]
+		PS1="┌─$(modern_scm_prompt)[${cyan}\W${normal}]
 └─▪ "
 	fi
 }
