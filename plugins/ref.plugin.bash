@@ -85,3 +85,25 @@ ref() {
 		gnome-open index.html
 	fi
 }
+
+ref-help() {
+	echo
+	echo "Help for the ref plugin"
+	echo "-----------------------"
+	echo
+	echo "Setting up: "
+	echo
+	echo "First, set the REF_DIR variable in you ~/.bash_profile to the directory you want to store your references in."
+	echo "You don't even have to create this directory if you don't want to, ref will make it for you if it doesn't exist."
+	echo
+	echo "Then, you can start adding some refs. You can do so with this command: "
+	echo "	ref new topic subtopic"
+	echo "Where topic is the general topic, such as ruby. And subtopic is a more exact topic, like array."
+	echo "This will create a directory for the topic, and a subdirectory for the subtopic. You can then move a file of your desired format into the subtopic's directory."
+	echo
+	echo "To access your ref, you would do the following command: "
+	echo "	ref topic subtopic"
+	echo "Where topic and subtopic are the same as before, but ref will open the file under your topic/subtopic directory. Unless it is a full website."
+	echo
+	echo "You can also download full websites as a ref, as long as it has an index.html file, it will work."
+}
