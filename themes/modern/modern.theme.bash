@@ -28,6 +28,8 @@ ${bold_red}└─▪${normal} "
 	fi
 }
 
+PS2="└─▪ "
+
 
 
 PROMPT_COMMAND=prompt
