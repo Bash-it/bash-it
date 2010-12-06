@@ -41,8 +41,6 @@
 # 
 # array
 # select
-# 																																									
-# I hope that you like this plugin and if you have any questions about it, send me (mrman208) a message on GitHub or email me at mrman208@me.com 					
 #####################################################################################################################################################################
 
 ref() {
@@ -53,20 +51,26 @@ ref() {
 
 	REF_DIR=${REF_DIR%/}
 
+	builtin cd $REF_DIR
+
 	if [ "$1" = 'ls' ]
 	then
 		if [ "$2" = '' ]
 		then
-			builtin cd "$REF_DIR"
 			ls -G
 			builtin cd - > /dev/null
 			return
 		else
-			builtin cd "$REF_DIR"/"$2"
 			ls -G
 			builtin cd - > /dev/null
 			return
 		fi
+	elif [ "$1" = 'new' ]
+	then
+		mkdir -p "$2"/"$3"
+		echo You can now put the index.html file into "$REF_DIR"/"$2"/"$3"
+		builtin cd - > /dev/null
+		return
 	fi
 
 	DIR="${1}/${2}"
