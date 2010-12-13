@@ -4,14 +4,11 @@
 # Reload Library
 alias reload='source ~/.bash_profile'
 
-# Load all files
+# Load the framework
 
-# Themes
-THEMES="${BASH}/themes/*.bash"
-for config_file in $THEMES
-do
-  source $config_file
-done
+# Load colors first so they can be use in base theme
+source "${BASH}/themes/colors.theme.bash"
+source "${BASH}/themes/base.theme.bash"
 
 # Library
 LIB="${BASH}/lib/*.bash"
@@ -27,7 +24,6 @@ do
   source $config_file
 done
 
-unset config_file
 # Plugins
 PLUGINS="${BASH}/plugins/*.bash"
 for config_file in $PLUGINS
@@ -35,8 +31,8 @@ do
   source $config_file
 done
 
-# Functions
-FUNCTIONS="${BASH}/functions/*.bash"
+# Aliases
+FUNCTIONS="${BASH}/aliases/*.bash"
 for config_file in $FUNCTIONS
 do
   source $config_file
@@ -49,8 +45,11 @@ do
   source $config_file
 done
 
-export PS1=$PROMPT
 
+unset config_file
+if [[ $PROMPT ]]; then
+    export PS1=$PROMPT
+fi
 
 # Adding Support for other OSes
 PREVIEW="less"
@@ -68,7 +67,8 @@ function bash-it() {
   echo
   echo "  rails-help                  This will list out all the aliases you can use with rails."
   echo "  git-help                    This will list out all the aliases you can use with git."
+  echo "  todo-help                   This will list out all the aliases you can use with todo.txt-cli"
   echo "  aliases-help                Generic list of aliases."
-  
+  echo "  plugins-help                This will list out all the plugins and functions you can use with bash-it"
   echo
 }

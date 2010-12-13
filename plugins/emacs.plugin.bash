@@ -1,1 +1,0 @@
-alias em="emacs"
