@@ -87,4 +87,10 @@ function plugins-help() {
     | grep -v "COMPREPLY=()" | sed -e "s/()//"
 }
 
-
+# back up file with timestamp
+# useful for administrators and configs
+buf () {
+    filename=$1
+    filetime=$(date +%Y%m%d_%H%M%S)
+    cp ${filename} ${filename}_${filetime}
+}
