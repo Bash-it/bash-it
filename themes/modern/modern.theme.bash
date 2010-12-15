@@ -7,6 +7,8 @@ SCM_GIT_CHAR='${bold_green}±${normal}'
 SCM_SVN_CHAR='${bold_cyan}⑆${normal}'
 SCM_HG_CHAR='${bold_red}☿${normal}'
 
+PS3=">> "
+
 modern_scm_prompt() {
 	CHAR=$(scm_char)
 	if [ $CHAR = $SCM_NONE_CHAR ]
