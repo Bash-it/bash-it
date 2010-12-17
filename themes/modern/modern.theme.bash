@@ -22,6 +22,9 @@ modern_scm_prompt() {
 prompt() {
 	if [ $? -ne 0 ]
 	then
+		# Yes, the indenting on these is weird, but it has to be like
+		# this otherwise it won't display properly.
+
 		PS1="${bold_red}┌─${reset_color}$(modern_scm_prompt)[${cyan}\W${normal}]
 ${bold_red}└─▪${normal} "
 	else
