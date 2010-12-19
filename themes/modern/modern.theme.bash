@@ -9,6 +9,13 @@ SCM_HG_CHAR='${bold_red}☿${normal}'
 
 PS3=">> "
 
+is_vim_shell() {
+	if [ ! -z "$VIMRUNTIME" ]
+	then
+		echo "[${cyan}vim shell${normal}]"
+	fi
+}
+
 modern_scm_prompt() {
 	CHAR=$(scm_char)
 	if [ $CHAR = $SCM_NONE_CHAR ]
@@ -25,10 +32,10 @@ prompt() {
 		# Yes, the indenting on these is weird, but it has to be like
 		# this otherwise it won't display properly.
 
-		PS1="${bold_red}┌─${reset_color}$(modern_scm_prompt)[${cyan}\W${normal}]
+		PS1="${bold_red}┌─${reset_color}$(modern_scm_prompt)[${cyan}\W${normal}]$(is_vim_shell)
 ${bold_red}└─▪${normal} "
 	else
-		PS1="┌─$(modern_scm_prompt)[${cyan}\W${normal}]
+		PS1="┌─$(modern_scm_prompt)[${cyan}\W${normal}]$(is_vim_shell)
 └─▪ "
 	fi
 }
