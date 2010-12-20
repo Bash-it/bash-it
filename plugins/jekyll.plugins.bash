@@ -5,14 +5,14 @@ editpost() {
 
 	COUNTER=1
 	NUMBER="$RANDOM"
+	TMPFILE="/tmp/editpost-$NUMBER"
 
 	for POST in *
 	do
 		DATE=`echo $POST | grep -oE "[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}"`
 		TITLE=`cat $POST | grep -oE "title: (.+)"`
 		TITLE=`echo $TITLE | sed 's/title: //'`
-		TMPFILE="/tmp/editpost-$NUMBER"
-		echo "$COUNTER) 	$DATE | $TITLE" >> "$TMPFILE"	
+		echo "$COUNTER) 	$DATE	$TITLE" >> "$TMPFILE"	
 		POSTS[$COUNTER]=$POST
 		COUNTER=`expr $COUNTER + 1`
 	done
