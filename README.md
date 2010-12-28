@@ -1,6 +1,6 @@
 # Bash it
 
-'Bash it' is a mash up of my own bash commands and scripts, other bash stuff I have found and a shameless ripoff of oh-my-zsh. :)
+'Bash it' is a mash up of my own bash commands and scripts, other bash stuff I have found and a shameless ripoff of [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh). :)
 
 Includes some autocompletion tools, theming support, aliases, custom functions, a few stolen pieces from Steve Losh, and more.
 

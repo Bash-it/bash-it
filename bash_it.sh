@@ -47,8 +47,9 @@ done
 
 
 unset config_file
-export PS1=$PROMPT
-
+if [[ $PROMPT ]]; then
+    export PS1=$PROMPT
+fi
 
 # Adding Support for other OSes
 PREVIEW="less"
