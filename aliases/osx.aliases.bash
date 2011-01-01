@@ -16,4 +16,3 @@ alias f='open -a Finder '
 if [ -s /usr/bin/firefox ] ; then
   unalias firefox
 fi
-
