@@ -204,5 +204,5 @@ newpost() {
 
 	# Open the file in your favorite editor
 
-	$EDITOR $FNAME
+	"$EDITOR" $FNAME
 }
