@@ -105,7 +105,7 @@ newpost() {
 	# Now we have to get the date, again. But this time for in the header (YAML Front Matter) of
 	# the file
 
-	YAML_DATE=$(date "+%B %d %X")
+	YAML_DATE=$(date "+%B %d %Y %X")
 
 	# Echo the YAML Formatted date to the post file
 
