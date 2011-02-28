@@ -25,7 +25,7 @@ prompt_setter() {
   history -c
   history -r
   PS1="
-\t $(scm_char) [\[$blue\]\u@local\[$reset_color\]] \w
+\t $(scm_char) [\[$blue\]\u@${THEME_PROMPT_HOST}\[$reset_color\]] \w
 $(doubletime_scm_prompt)\[$reset_color\] $ "
   PS2='> '
   PS4='+ '
