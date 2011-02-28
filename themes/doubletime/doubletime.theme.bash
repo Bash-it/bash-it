@@ -9,6 +9,12 @@ SCM_THEME_PROMPT_SUFFIX=""
 RVM_THEME_PROMPT_PREFIX=" ("
 RVM_THEME_PROMPT_SUFFIX=")"
 
+if [ ! -z $THEME_PROMPT_HOST_COLOR ]; then
+    THEME_PROMPT_HOST_COLOR=$(eval echo $`echo ${THEME_PROMPT_HOST_COLOR}`);
+else
+    THEME_PROMPT_HOST_COLOR="$blue"
+fi
+
 doubletime_scm_prompt() {
   CHAR=$(scm_char)
   if [ $CHAR = $SCM_NONE_CHAR ]
@@ -25,7 +31,7 @@ prompt_setter() {
   history -c
   history -r
   PS1="
-\t $(scm_char) [\[$blue\]\u@${THEME_PROMPT_HOST}\[$reset_color\]] \w
+\t $(scm_char) [\[$THEME_PROMPT_HOST_COLOR\]\u@${THEME_PROMPT_HOST}\[$reset_color\]] \w
 $(doubletime_scm_prompt)\[$reset_color\] $ "
   PS2='> '
   PS4='+ '
