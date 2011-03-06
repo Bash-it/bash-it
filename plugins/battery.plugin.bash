@@ -1,24 +1,29 @@
 #!/bin/bash
-
+# pmset -g batt
 battery_percentage(){
-  local ACPI_OUTPUT=$(acpi -b)
-  case $ACPI_OUTPUT in
-    *" Unknown"*) 
-      echo $ACPI_OUTPUT | head -c 22 | tail -c 2
-      ;;
-    *" Discharging"*) 
-      echo $ACPI_OUTPUT | head -c 26 | tail -c 2
-      ;;
-    *" Charging"*) 
-      echo $ACPI_OUTPUT | head -c 23 | tail -c 2
-      ;;
-    *" Full"*) 
-      echo '99'
-      ;;
-    *)
-      echo '-1'
-      ;;
-  esac
+  if command_exists acpi;
+  then
+    local ACPI_OUTPUT=$(acpi -b)
+    case $ACPI_OUTPUT in
+      *" Unknown"*) 
+        echo $ACPI_OUTPUT | head -c 22 | tail -c 2
+        ;;
+      *" Discharging"*) 
+        echo $ACPI_OUTPUT | head -c 26 | tail -c 2
+        ;;
+      *" Charging"*) 
+        echo $ACPI_OUTPUT | head -c 23 | tail -c 2
+        ;;
+      *" Full"*) 
+        echo '99'
+        ;;
+      *)
+        echo '-1'
+        ;;
+    esac
+  else
+    echo "no"
+  fi
 }
 
 battery_charge(){
@@ -34,6 +39,9 @@ battery_charge(){
   local BATTERY_PERC=$(battery_percentage)
 
   case $BATTERY_PERC in
+    no)
+      echo ""
+      ;;
     9*)
       echo "${FULL_COLOR}${F_C}${F_C}${F_C}${F_C}${F_C}${normal}"
       ;;
