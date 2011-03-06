@@ -56,17 +56,10 @@ case $TERM in
 esac
 
 is_vim_shell() {
-  if [ ! -z "$VIMRUNTIME" ]
+  if [ ! -z "$VIMRUNTIME" ];
   then
     echo "${D_INTERMEDIATE_COLOR}on ${D_VIMSHELL_COLOR}\
 vim shell${D_DEFAULT_COLOR} "
-  fi
-}
-
-demula_battery_charge() {
-  if [ ! -z "$(battery_charge)" ]
-  then
-    battery_charge
   fi
 }
 
@@ -81,7 +74,7 @@ $code ${D_DEFAULT_COLOR}"
 
 # vcprompt for scm instead of bash_it default
 demula_vcprompt() {
-  if [ ! -z "$VCPROMPT_EXECUTABLE" ]
+  if [ ! -z "$VCPROMPT_EXECUTABLE" ];
   then
     local D_VCPROMPT_FORMAT="on ${D_SCM_COLOR}%s${D_INTERMEDIATE_COLOR}:\
 ${D_BRANCH_COLOR}%b %r ${D_CHANGES_COLOR}%m%u ${D_DEFAULT_COLOR}"
@@ -96,15 +89,15 @@ prompt() {
   local MOVE_CURSOR_RIGHTMOST='\[\033[500C\]'
   local MOVE_CURSOR_5_LEFT='\[\033[5D\]'
 
-  PS1="${TITLEBAR}\n\
+  PS1="${TITLEBAR}
 ${SAVE_CURSOR}${MOVE_CURSOR_RIGHTMOST}${MOVE_CURSOR_5_LEFT}\
-$(demula_battery_charge)${RESTORE_CURSOR}\
+$(battery_charge)${RESTORE_CURSOR}\
 ${D_USER_COLOR}\u ${D_INTERMEDIATE_COLOR}\
 at ${D_MACHINE_COLOR}\h ${D_INTERMEDIATE_COLOR}\
 in ${D_DIR_COLOR}\w ${D_INTERMEDIATE_COLOR}\
 $(mitsuhikos_lastcommandfailed)\
 $(demula_vcprompt)\
-$(is_vim_shell)\n\
+$(is_vim_shell)
 ${D_INTERMEDIATE_COLOR}$ ${D_DEFAULT_COLOR}"
   
   PS2="${D_INTERMEDIATE_COLOR}$ ${D_DEFAULT_COLOR}"
