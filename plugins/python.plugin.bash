@@ -1,4 +1,9 @@
 #!/bin/bash
 
-alias http='python2 -m SimpleHTTPServer'
+if [ $(uname) = "Linux" ]
+then
+  alias http='python2 -m SimpleHTTPServer'
+else
+  alias http='python -m SimpleHTTPServer'
+fi
 
