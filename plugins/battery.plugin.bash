@@ -77,60 +77,7 @@ battery_charge(){
       echo "${HALF_COLOR}${F_C}${DEPLETED_COLOR}${D_C}${D_C}${D_C}${D_C}${normal}"
       ;;
     *)
-      echo "${DANGER_COLOR}ERROR\[${normal}\]"
+      echo "${DANGER_COLOR}UNPLG\[${normal}\]"
       ;;
   esac
-
-#  if [ $BATTERY_PERC < 0 ];
-  #then
-    #BATTERY_OUTPUT="ERROR"
-  #else
-    #if [ $BATTERY_PERC > 90 ];
-    #then
-      #BATTERY_OUTPUT="${FULL_COLOR}${F_C}${F_C}${F_C}${F_C}${F_C}${normal}"
-    #else
-      #if [ $BATTERY_PERC > 80 ];
-      #then
-        #BATTERY_OUTPUT="${FULL_COLOR}${F_C}${F_C}${F_C}${F_C}${HALF_COLOR}${F_C}${normal}"
-      #else
-        #if [ $BATTERY_PERC > 70 ];
-        #then
-          #BATTERY_OUTPUT="${FULL_COLOR}${F_C}${F_C}${F_C}${F_C}${DEPLETED_COLOR}${D_C}${normal}"
-        #else
-          #if [ $BATTERY_PERC > 60 ];
-          #then
-            #BATTERY_OUTPUT="${FULL_COLOR}${F_C}${F_C}${F_C}${HALF_COLOR}${F_C}${DEPLETED_COLOR}${D_C}${normal}"
-          #else
-            #if [ $BATTERY_PERC > 50 ];
-            #then
-              #BATTERY_OUTPUT="${FULL_COLOR}${F_C}${F_C}${F_C}${DEPLETED_COLOR}${D_C}${D_C}${normal}"
-            #else
-              #if [ $BATTERY_PERC > 40 ];
-              #then
-                #BATTERY_OUTPUT="${FULL_COLOR}${F_C}${F_C}${HALF_COLOR}${F_C}${DEPLETED_COLOR}${D_C}${D_C}${normal}"
-              #else
-                #if [ $BATTERY_PERC > 30 ];
-                #then
-                  #BATTERY_OUTPUT="${FULL_COLOR}${F_C}${F_C}${DEPLETED_COLOR}${D_C}${D_C}${D_C}${normal}"
-                #else
-                  #if [ $BATTERY_PERC > 20 ];
-                  #then
-                    #BATTERY_OUTPUT="${FULL_COLOR}${F_C}${HALF_COLOR}${F_C}${DEPLETED_COLOR}${D_C}${D_C}${D_C}${normal}"
-                  #else
-                    #if [ $BATTERY_PERC > 10 ];
-                    #then
-                      #BATTERY_OUTPUT="${FULL_COLOR}${F_C}${DEPLETED_COLOR}${D_C}${D_C}${D_C}${D_C}${normal}"
-                    #else
-                      #BATTERY_OUTPUT="${DANGER_COLOR}${F_C}${DEPLETED_COLOR}${D_C}${D_C}${D_C}${D_C}${normal}"
-                    #fi
-                  #fi
-                #fi
-              #fi
-            #fi
-          #fi
-        #fi
-      #fi
-    #fi
-  #fi
-  #echo $BATTERY_OUTPUT
 }
