@@ -11,9 +11,17 @@ function myip {
   echo "Your public IP is: ${bold_green} $res ${normal}"
 }
 
+# Make a directory and immediately 'cd' into it
+
 function mkcd(){
 	mkdir -p "$*"
 	cd "$*"
+}
+
+# Search through directory contents with grep
+
+function lsgrep(){
+  ls | grep "$*"
 }
 
 # View man documentation in Preview
