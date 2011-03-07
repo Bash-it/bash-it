@@ -6,13 +6,37 @@ battery_percentage(){
     local ACPI_OUTPUT=$(acpi -b)
     case $ACPI_OUTPUT in
       *" Unknown"*) 
-        echo $ACPI_OUTPUT | head -c 22 | tail -c 2
+        local PERC_OUTPUT=$(echo $ACPI_OUTPUT | head -c 22 | tail -c 2)
+        case $PERC_OUTPUT in
+          *%)
+            echo "0${PERC_OUTPUT}" | head -c 2
+            ;;
+          *)
+            echo ${PERC_OUTPUT}
+            ;;
+        esac
         ;;
       *" Discharging"*) 
-        echo $ACPI_OUTPUT | head -c 26 | tail -c 2
+        local PERC_OUTPUT=$(echo $ACPI_OUTPUT | head -c 26 | tail -c 2)
+        case $PERC_OUTPUT in
+          *%)
+            echo "0${PERC_OUTPUT}" | head -c 2
+            ;;
+          *)
+            echo ${PERC_OUTPUT}
+            ;;
+        esac
         ;;
       *" Charging"*) 
-        echo $ACPI_OUTPUT | head -c 23 | tail -c 2
+        local PERC_OUTPUT=$(echo $ACPI_OUTPUT | head -c 23 | tail -c 2)
+        case $PERC_OUTPUT in
+          *%)
+            echo "0${PERC_OUTPUT}" | head -c 2
+            ;;
+          *)
+            echo ${PERC_OUTPUT}
+            ;;
+        esac
         ;;
       *" Full"*) 
         echo '99'
