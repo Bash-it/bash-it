@@ -1,5 +1,5 @@
 #!/bin/bash
-# pmset -g batt
+
 battery_percentage(){
   if command_exists acpi;
   then
@@ -21,6 +21,11 @@ battery_percentage(){
         echo '-1'
         ;;
     esac
+  elif command_exists ioreg;
+  then
+    # http://hints.macworld.com/article.php?story=20100130123935998
+    local IOREG_OUTPUT_10_6=$(ioreg -l | grep -i capacity | tr '\n' ' | ' | awk '{printf("%.2f%%", $10/$5 * 100)}')
+    local IOREG_OUTPUT_10_5=$(ioreg -l | grep -i capacity | grep -v Legacy| tr '\n' ' | ' | awk '{printf("%.2f%%", $14/$7 * 100)}')
   else
     echo "no"
   fi

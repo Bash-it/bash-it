@@ -89,7 +89,9 @@ prompt() {
   local MOVE_CURSOR_RIGHTMOST='\[\033[500C\]'
   local MOVE_CURSOR_5_LEFT='\[\033[5D\]'
 
-  PS1="${TITLEBAR}
+  if [ $(uname) = "Linux" ];
+  then
+    PS1="${TITLEBAR}
 ${SAVE_CURSOR}${MOVE_CURSOR_RIGHTMOST}${MOVE_CURSOR_5_LEFT}\
 $(battery_charge)${RESTORE_CURSOR}\
 ${D_USER_COLOR}\u ${D_INTERMEDIATE_COLOR}\
@@ -99,7 +101,18 @@ $(mitsuhikos_lastcommandfailed)\
 $(demula_vcprompt)\
 $(is_vim_shell)
 ${D_INTERMEDIATE_COLOR}$ ${D_DEFAULT_COLOR}"
-  
+  else
+    PS1="${TITLEBAR}
+${D_USER_COLOR}\u ${D_INTERMEDIATE_COLOR}\
+at ${D_MACHINE_COLOR}\h ${D_INTERMEDIATE_COLOR}\
+in ${D_DIR_COLOR}\w ${D_INTERMEDIATE_COLOR}\
+$(mitsuhikos_lastcommandfailed)\
+$(demula_vcprompt)\
+$(is_vim_shell)\
+$(battery_charge)
+${D_INTERMEDIATE_COLOR}$ ${D_DEFAULT_COLOR}"
+  fi
+
   PS2="${D_INTERMEDIATE_COLOR}$ ${D_DEFAULT_COLOR}"
 }
 
