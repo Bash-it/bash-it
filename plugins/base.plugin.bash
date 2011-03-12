@@ -6,6 +6,10 @@ function ips {
   ifconfig | grep "inet " | awk '{ print $2 }'
 }
 
+function down4me() {
+  curl -s "http://www.downforeveryoneorjustme.com/$1" | sed '/just you/!d;s/<[^>]*>//g'
+}
+
 function myip {
   res=$(curl -s checkip.dyndns.org | grep -Eo '[0-9\.]+')
   echo "Your public IP is: ${bold_green} $res ${normal}"
@@ -13,9 +17,9 @@ function myip {
 
 # Make a directory and immediately 'cd' into it
 
-function mkcd(){
-	mkdir -p "$*"
-	cd "$*"
+function mkcd() {
+  mkdir -p "$*"
+  cd "$*"
 }
 
 # Search through directory contents with grep
