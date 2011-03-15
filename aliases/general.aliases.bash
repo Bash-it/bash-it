@@ -44,7 +44,6 @@ alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
 # Directory
 alias	md='mkdir -p'
 alias	rd=rmdir
-alias d='dirs -v'
 
 function aliases-help() {
   echo "Generic Alias Usage"
@@ -61,7 +60,6 @@ function aliases-help() {
   echo "  h      = history"
   echo "  md     = mkdir -p"
   echo "  rd     = rmdir"
-  echo "  d      = dirs -v"
   echo "  editor = $EDITOR"
   echo "  pager  = $PAGER"
   echo "  piano  = pianobar"
