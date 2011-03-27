@@ -47,9 +47,6 @@ export IRC_CLIENT='irssi'
 
 export TODO="t"
 
-# Set store directory for handmade commandline history tool 
-export hchtstoredir="$HOME/.hcht"
-
 # Set vcprompt executable path for scm advance info in prompt (demula theme)
 # https://github.com/xvzf/vcprompt
 #export VCPROMPT_EXECUTABLE=~/.vcprompt/bin/vcprompt
