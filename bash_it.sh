@@ -25,7 +25,7 @@ do
 done
 
 # Plugins
-PLUGINS="${BASH}/plugins/*.bash"
+PLUGINS="${BASH}/plugins/enabled/*.bash"
 for config_file in $PLUGINS
 do
   source $config_file
