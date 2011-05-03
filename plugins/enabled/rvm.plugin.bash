@@ -1,0 +1,1 @@
+../available/rvm.plugin.bash
