@@ -25,6 +25,7 @@ alias gco='git checkout'
 alias gexport='git archive --format zip --output'
 alias gdel='git branch -D'
 alias gmu='git fetch origin -v; git fetch upstream -v; git merge upstream/master'
+alias gsmu="git submodule foreach 'git checkout master && git pull origin master'"
 alias gll='git log --graph --pretty=oneline --abbrev-commit'
 
 case $OSTYPE in
@@ -44,13 +45,13 @@ esac
 function git-help() {
   echo "Git Custom Aliases Usage"
   echo
-  echo "  gcl	  = git clone"
+  echo "  gcl     = git clone"
   echo "  g       = git"
-  echo "  get 	  = git"
+  echo "  get     = git"
   echo "  ga      = git add"
-  echo "  gall	  = git add ."
+  echo "  gall    = git add ."
   echo "  gst/gs  = git status"
-  echo "  gss	  = git status -s"
+  echo "  gss     = git status -s"
   echo "  gl      = git pull"
   echo "  gup     = git fetch && git rebase"
   echo "  gp      = git push"
@@ -58,7 +59,7 @@ function git-help() {
   echo "  gdv     = git diff -w \"$@\" | vim -R -"
   echo "  gc      = git commit -v"
   echo "  gca     = git commit -v -a"
-  echo "  gci 	  = git commit --interactive"
+  echo "  gci     = git commit --interactive"
   echo "  gb      = git branch"
   echo "  gba     = git branch -a"
   echo "  gcount  = git shortlog -sn"
@@ -68,6 +69,7 @@ function git-help() {
   echo "  gdel    = git branch -D"
   echo "  gpo     = git push origin"
   echo "  gmu     = git fetch origin -v; git fetch upstream -v; git merge upstream/master"
+  echo "  gsmu    = git submodule foreach 'git checkout master && git pull origin master'"
   echo "  gll     = git log --graph --pretty=oneline --abbrev-commit"
   echo
 }
