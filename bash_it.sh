@@ -25,6 +25,11 @@ do
 done
 
 # Plugins
+if [ ! -d "plugins/enabled" ]
+then
+  mkdir "${BASH}/plugins/enabled"
+  ln -s ${BASH}/plugins/available/* "${BASH}/plugins/enabled"
+fi
 PLUGINS="${BASH}/plugins/enabled/*.bash"
 for config_file in $PLUGINS
 do
