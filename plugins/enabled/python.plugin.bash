@@ -1,1 +1,0 @@
-../available/python.plugin.bash

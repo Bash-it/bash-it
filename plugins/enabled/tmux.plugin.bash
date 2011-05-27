@@ -1,1 +1,0 @@
-../available/tmux.plugin.bash

@@ -1,3 +1,4 @@
+plugins/enabled
 .DS_Store
 custom/*.bash
 !custom/example.bash
@@ -5,5 +6,4 @@ custom/*.bash
 aliases/custom.aliases.bash
 lib/custom.bash
 plugins/custom.plugins.bash
-plugins/enabled
 *.swp

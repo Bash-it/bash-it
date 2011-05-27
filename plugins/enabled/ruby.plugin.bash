@@ -1,1 +1,0 @@
-../available/ruby.plugin.bash

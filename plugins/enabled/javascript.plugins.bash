@@ -1,1 +1,0 @@
-../available/javascript.plugins.bash

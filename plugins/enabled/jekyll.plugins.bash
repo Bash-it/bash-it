@@ -1,1 +1,0 @@
-../available/jekyll.plugins.bash

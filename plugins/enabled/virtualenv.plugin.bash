@@ -1,1 +1,0 @@
-../available/virtualenv.plugin.bash
