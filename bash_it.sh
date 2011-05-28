@@ -25,7 +25,7 @@ do
 done
 
 # Plugins
-if [ ! -d "plugins/enabled" ]
+if [ ! -d "${BASH}/plugins/enabled" ]
 then
   mkdir "${BASH}/plugins/enabled"
   ln -s ${BASH}/plugins/available/* "${BASH}/plugins/enabled"
