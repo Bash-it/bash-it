@@ -15,6 +15,17 @@ function myip {
   echo "Your public IP is: ${bold_green} $res ${normal}"
 }
 
+# Function for previewing markdown files in the browser
+
+function pmdown() {
+  if command -v markdown &>/dev/null
+  then
+    markdown $1 | browser
+  else
+    echo "You don't have a markdown command installed!"
+  fi
+}
+
 # Make a directory and immediately 'cd' into it
 
 function mkcd() {

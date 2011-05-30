@@ -1,1 +1,0 @@
-../available/latex.plugin.bash

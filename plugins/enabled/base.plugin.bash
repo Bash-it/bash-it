@@ -1,1 +1,0 @@
-../available/base.plugin.bash
