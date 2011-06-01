@@ -24,6 +24,12 @@ MAX_PWD_LENGTH=20
 # Max length of Git Hex to display
 MAX_GIT_HEX_LENGTH=5
 
+GIT_THEME_PROMPT_PREFIX=' |git:'
+GIT_THEME_PROMPT_SUFFIX='|'
+
+HG_THEME_PROMPT_PREFIX=' |hg:'
+HG_THEME_PROMPT_SUFFIX='|'
+
 # Use http://geoff.greer.fm/lscolors/
 
 # Displays the current virtualenv information
@@ -62,13 +68,14 @@ function virtual_info() {
     echo $prompt
 }
 
-
 # SCM information
 function scm_info() {
     SCM_CHAR=$(scm_char)
     [ "$SCM_CHAR" == "$SCM_NONE_CHAR" ] && return
     local prompt="on"
     [ "$SCM_CHAR" == "$SCM_GIT_CHAR" ] && echo "$prompt$(parse_git_info)" && return
+    [ "$SCM_CHAR" == "$SCM_SVN_CHAR" ] && echo "$prompt$(parse_svn_info)" && return
+    [ "$SCM_CHAR" == "$SCM_HG_CHAR" ] && echo "$prompt$(parse_hg_info)" && return
 }
 
 # Parse git info
@@ -83,8 +90,23 @@ function parse_git_info() {
     ref=$(git symbolic-ref HEAD 2> /dev/null) || return
     rawhex=$(git rev-parse HEAD 2>/dev/null) || return
 
-    echo -e "$prefix${ref#refs/heads/} (${rawhex:0:$MAX_GIT_HEX_LENGTH})$state$suffix"
+    echo "$prefix${ref#refs/heads/}=#${rawhex:0:$MAX_GIT_HEX_LENGTH}$state$suffix"
 }
+
+# Parse hg info
+function parse_hg_info() {
+    if [[ -n $(hg status --no-color 2> /dev/null| awk '$1 == "?" { print "?" } $1 = "?" { print "!" }' | sort | uniq | head -c1) ]]; then
+      state=${HG_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
+    else
+      state=${HG_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
+    fi
+    prefix=${HG_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
+    suffix=${HG_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
+    branch=$(hg branch 2> /dev/null | awk '{print $1}')
+
+    echo "$prefix$branch$state$suffix"
+}
+
 
 # Displays last X characters of pwd 
 function limited_pwd() {
