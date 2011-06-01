@@ -10,10 +10,10 @@ USER_COLOR='\[${purple}\]'
 SUPERUSER_COLOR='\[${red}\]'
 MACHINE_COLOR=$ORANGE
 IP_COLOR=$MACHINE_COLOR
-DIRECTORY_COLOR='\[${bold_green}\]'
+DIRECTORY_COLOR='\[${green}\]'
 
-VE_COLOR='\[${red}\]'
-RVM_COLOR='\[${purple}\]'
+VE_COLOR='\[${cyan}\]'
+RVM_COLOR='\[${cyan}\]'
 
 SCM_COLOR=$ORANGE
 REF_COLOR='\[${purple}\]'
@@ -28,16 +28,9 @@ MAX_PWD_LENGTH=20
 # Max length of Git Hex to display
 MAX_GIT_HEX_LENGTH=5
 
-GIT_THEME_PROMPT_PREFIX=" |${SCM_COLOR}git${DEFAULT_COLOR}:"
-GIT_THEME_PROMPT_SUFFIX='|'
-
-HG_THEME_PROMPT_PREFIX=" |${SCM_COLOR}hg${DEFAULT_COLOR}:"
-HG_THEME_PROMPT_SUFFIX='|'
-
-SVN_THEME_PROMPT_PREFIX=" |${SCM_COLOR}svn${DEFAULT_COLOR}:"
-SVN_THEME_PROMPT_SUFFIX='|'
-
-# Use http://geoff.greer.fm/lscolors/
+# Removed prefix/suffix
+SCM_THEME_PROMPT_PREFIX=" "
+SCM_THEME_PROMPT_SUFFIX=""
 
 function ip {
     echo $(ifconfig en1 | grep "inet " | awk '{ print $2 }')
@@ -73,10 +66,11 @@ function curr_rvm_info() {
 function virtual_info() {
     local virtual_env_info=$(curr_virtualenv_info)
     local rvm_info=$(curr_rvm_info)
-    local prompt="using"
 
     # If no virtual info, just return
     [ "$virtual_env_info" == "" -a "$rvm_info" == "" ] && return
+
+    local prompt=" using"
 
     # If virtual_env info present, append to prompt
     [ "$virtual_env_info" != "" ] && prompt="$prompt virtualenv: ${VE_COLOR}$virtual_env_info${DEFAULT_COLOR}"
@@ -86,14 +80,14 @@ function virtual_info() {
         [ "$virtual_env_info" != "" ] && prompt="$prompt,"
         prompt="$prompt rvm: ${RVM_COLOR}$rvm_info${DEFAULT_COLOR}"
     fi
-    echo $prompt
+    echo "$prompt"
 }
 
 # SCM information
 function scm_info() {
     SCM_CHAR=$(scm_char)
     [ "$SCM_CHAR" == "$SCM_NONE_CHAR" ] && return
-    local prompt="on"
+    local prompt=" on"
     [ "$SCM_CHAR" == "$SCM_GIT_CHAR" ] && echo "$prompt$(parse_git_info)" && return
     [ "$SCM_CHAR" == "$SCM_SVN_CHAR" ] && echo "$prompt$(parse_svn_info)" && return
     [ "$SCM_CHAR" == "$SCM_HG_CHAR" ] && echo "$prompt$(parse_hg_info)" && return
@@ -168,7 +162,7 @@ function prompt() {
   local UC=$USER_COLOR
   [ $UID -eq "0" ] && UC=$SUPERUSER_COLOR
     
-  PS1="$(scm_char) ${UC}\u ${DEFAULT_COLOR}at ${MACHINE_COLOR}\h ${DEFAULT_COLOR}(${IP_COLOR}$(ip)${DEFAULT_COLOR})${DEFAULT_COLOR} in ${DIRECTORY_COLOR}$(limited_pwd)${DEFAULT_COLOR} $(virtual_info) $(scm_info) \$ "
+  PS1="$(scm_char) ${UC}\u ${DEFAULT_COLOR}at ${MACHINE_COLOR}\h ${DEFAULT_COLOR}(${IP_COLOR}$(ip)${DEFAULT_COLOR})${DEFAULT_COLOR} in ${DIRECTORY_COLOR}$(limited_pwd)${DEFAULT_COLOR}$(virtual_info)$(scm_info) \$ "
   PS2='> '
   PS4='+ '
 }
