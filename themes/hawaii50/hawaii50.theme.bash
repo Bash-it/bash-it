@@ -32,6 +32,16 @@ HG_THEME_PROMPT_SUFFIX='|'
 
 # Use http://geoff.greer.fm/lscolors/
 
+# Override function scm
+function scm {
+  if [[ -d .git ]]; then SCM=$GIT
+  elif [[ -n "$(git symbolic-ref HEAD 2> /dev/null)" ]]; then SCM=$GIT
+  elif [[ -n "$(hg summary 2> /dev/null)" ]]; then SCM=$HG
+  elif [[ -d .svn ]]; then SCM=$SVN
+  else SCM='NONE'
+  fi
+}
+
 # Displays the current virtualenv information
 function curr_virtualenv_info() {
     [ ! -z "$VIRTUAL_ENV" ] && echo "`basename $VIRTUAL_ENV`"
@@ -90,21 +100,22 @@ function parse_git_info() {
     ref=$(git symbolic-ref HEAD 2> /dev/null) || return
     rawhex=$(git rev-parse HEAD 2>/dev/null) || return
 
-    echo "$prefix${ref#refs/heads/}=#${rawhex:0:$MAX_GIT_HEX_LENGTH}$state$suffix"
+    echo "$prefix${ref#refs/heads/}:${rawhex:0:$MAX_GIT_HEX_LENGTH}$state$suffix"
 }
 
 # Parse hg info
 function parse_hg_info() {
-    if [[ -n $(hg status --no-color 2> /dev/null| awk '$1 == "?" { print "?" } $1 = "?" { print "!" }' | sort | uniq | head -c1) ]]; then
+    if [[ -n $(hg status 2> /dev/null) ]]; then
       state=${HG_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
     else
       state=${HG_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
     fi
     prefix=${HG_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
     suffix=${HG_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
-    branch=$(hg branch 2> /dev/null | awk '{print $1}')
+    branch=$(hg summary 2> /dev/null | grep branch | awk '{print $2}')
+    changeset=$(hg summary 2> /dev/null | grep parent | awk '{print $2}')
 
-    echo "$prefix$branch$state$suffix"
+    echo "$prefix${branch}:${changeset#*:}$state$suffix"
 }
 
 
