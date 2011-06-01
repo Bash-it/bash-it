@@ -15,6 +15,9 @@ DIRECTORY_COLOR='\[${bold_green}\]'
 VE_COLOR='\[${red}\]'
 RVM_COLOR='\[${purple}\]'
 
+SCM_COLOR=$ORANGE
+REF_COLOR='\[${purple}\]'
+
 # SCM prompts
 SCM_THEME_PROMPT_DIRTY=' ${bold_red}✗${normal}'
 SCM_THEME_PROMPT_CLEAN=' ${bold_green}✓${normal}'
@@ -25,13 +28,13 @@ MAX_PWD_LENGTH=20
 # Max length of Git Hex to display
 MAX_GIT_HEX_LENGTH=5
 
-GIT_THEME_PROMPT_PREFIX=' |git:'
+GIT_THEME_PROMPT_PREFIX=" |${SCM_COLOR}git${DEFAULT_COLOR}:"
 GIT_THEME_PROMPT_SUFFIX='|'
 
-HG_THEME_PROMPT_PREFIX=' |hg:'
+HG_THEME_PROMPT_PREFIX=" |${SCM_COLOR}hg${DEFAULT_COLOR}:"
 HG_THEME_PROMPT_SUFFIX='|'
 
-SVN_THEME_PROMPT_PREFIX=' |svn:'
+SVN_THEME_PROMPT_PREFIX=" |${SCM_COLOR}svn${DEFAULT_COLOR}:"
 SVN_THEME_PROMPT_SUFFIX='|'
 
 # Use http://geoff.greer.fm/lscolors/
@@ -108,7 +111,7 @@ function parse_git_info() {
     ref=$(git symbolic-ref HEAD 2> /dev/null) || return
     rawhex=$(git rev-parse HEAD 2>/dev/null) || return
 
-    echo "$prefix${ref#refs/heads/}:${rawhex:0:$MAX_GIT_HEX_LENGTH}$state$suffix"
+    echo "$prefix${REF_COLOR}${ref#refs/heads/}${DEFAULT_COLOR}:${rawhex:0:$MAX_GIT_HEX_LENGTH}$state$suffix"
 }
 
 # Parse hg info
@@ -123,7 +126,7 @@ function parse_hg_info() {
     branch=$(hg summary 2> /dev/null | grep branch | awk '{print $2}')
     changeset=$(hg summary 2> /dev/null | grep parent | awk '{print $2}')
 
-    echo "$prefix${branch}:${changeset#*:}$state$suffix"
+    echo "$prefix${REF_COLOR}${branch}${DEFAULT_COLOR}:${changeset#*:}$state$suffix"
 }
 
 # Parse svn info
@@ -138,7 +141,7 @@ function parse_svn_info() {
     ref=$(svn info 2> /dev/null | awk -F/ '/^URL:/ { for (i=0; i<=NF; i++) { if ($i == "branches" || $i == "tags" ) { print $(i+1); break }; if ($i == "trunk") { print $i; break } } }') || return
     revision=$(svn info 2> /dev/null | sed -ne 's#^Revision: ##p' )
     [[ -z $ref ]] && return
-    echo -e "$prefix$ref:$revision$state$suffix"
+    echo -e "$prefix${REF_COLOR}$ref${DEFAULT_COLOR}:$revision$state$suffix"
 }
 
 # Displays last X characters of pwd 
