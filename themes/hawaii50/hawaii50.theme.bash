@@ -1,6 +1,32 @@
-#!/bin/basORANGEh
+#!/bin/bash
 
-# Colors
+# This theme was obviously inspired a lot by 
+# - Demula theme
+#
+# which in itself was inspired by :
+#
+# - Ronacher's dotfiles (mitsuhikos) - http://github.com/mitsuhiko/dotfiles/tree/master/bash/
+# - Glenbot - http://theglenbot.com/custom-bash-shell-for-development/
+# - My extravagant zsh - http://stevelosh.com/blog/2010/02/my-extravagant-zsh-prompt/
+# - Monokai colors - http://monokai.nl/blog/2006/07/15/textmate-color-theme/
+# - Bash_it modern theme
+#
+# Things theme supports:
+# - shortended directory
+# - hg, svn detection
+# - virtualenv, rvm
+# 
+# Screenshot: 
+#
+# by Ryan Kanno <ryankanno@localkinegrinds.com>
+#
+# And yes, we code out in Hawaii. :D
+#
+# Note: I also am really new to this bash scripting game, so if you see things
+# that are flat out wrong, or if you think of something neat, just send a pull
+# request.
+
+# COLORS ======================================================================
 ORANGE='\e[0;33m'
 GREY='\e[1:37m'
 
@@ -9,18 +35,19 @@ DEFAULT_COLOR='\[${white}\]'
 USER_COLOR='\[${purple}\]'
 SUPERUSER_COLOR='\[${red}\]'
 MACHINE_COLOR=$ORANGE
-IP_COLOR=$MACHINE_COLOR
+IP_COLOR=$ORANGE
 DIRECTORY_COLOR='\[${green}\]'
 
 VE_COLOR='\[${cyan}\]'
 RVM_COLOR='\[${cyan}\]'
 
-SCM_COLOR=$ORANGE
 REF_COLOR='\[${purple}\]'
 
 # SCM prompts
 SCM_THEME_PROMPT_DIRTY=' ${bold_red}✗${normal}'
 SCM_THEME_PROMPT_CLEAN=' ${bold_green}✓${normal}'
+SCM_THEME_PROMPT_PREFIX=" "
+SCM_THEME_PROMPT_SUFFIX=""
 
 # Max length of PWD to display
 MAX_PWD_LENGTH=20
@@ -28,10 +55,7 @@ MAX_PWD_LENGTH=20
 # Max length of Git Hex to display
 MAX_GIT_HEX_LENGTH=5
 
-# Removed prefix/suffix
-SCM_THEME_PROMPT_PREFIX=" "
-SCM_THEME_PROMPT_SUFFIX=""
-
+# FUNCS =======================================================================
 function ip {
     echo $(ifconfig en1 | grep "inet " | awk '{ print $2 }')
 }
