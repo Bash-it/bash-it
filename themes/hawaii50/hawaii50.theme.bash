@@ -9,6 +9,7 @@ DEFAULT_COLOR='\[${white}\]'
 USER_COLOR='\[${purple}\]'
 SUPERUSER_COLOR='\[${red}\]'
 MACHINE_COLOR=$ORANGE
+IP_COLOR=$MACHINE_COLOR
 DIRECTORY_COLOR='\[${bold_green}\]'
 
 VE_COLOR='\[${red}\]'
@@ -34,6 +35,10 @@ SVN_THEME_PROMPT_PREFIX=' |svn:'
 SVN_THEME_PROMPT_SUFFIX='|'
 
 # Use http://geoff.greer.fm/lscolors/
+
+function ip {
+    echo $(ifconfig en1 | grep "inet " | awk '{ print $2 }')
+}
 
 # Override function scm
 function scm {
@@ -160,7 +165,7 @@ function prompt() {
   local UC=$USER_COLOR
   [ $UID -eq "0" ] && UC=$SUPERUSER_COLOR
     
-  PS1="$(scm_char) ${UC}\u ${DEFAULT_COLOR}at ${MACHINE_COLOR}\h${DEFAULT_COLOR} in ${DIRECTORY_COLOR}$(limited_pwd)${DEFAULT_COLOR} $(virtual_info) $(scm_info) \$ "
+  PS1="$(scm_char) ${UC}\u ${DEFAULT_COLOR}at ${MACHINE_COLOR}\h ${DEFAULT_COLOR}(${IP_COLOR}$(ip)${DEFAULT_COLOR})${DEFAULT_COLOR} in ${DIRECTORY_COLOR}$(limited_pwd)${DEFAULT_COLOR} $(virtual_info) $(scm_info) \$ "
   PS2='> '
   PS4='+ '
 }
