@@ -30,6 +30,9 @@ GIT_THEME_PROMPT_SUFFIX='|'
 HG_THEME_PROMPT_PREFIX=' |hg:'
 HG_THEME_PROMPT_SUFFIX='|'
 
+SVN_THEME_PROMPT_PREFIX=' |svn:'
+SVN_THEME_PROMPT_SUFFIX='|'
+
 # Use http://geoff.greer.fm/lscolors/
 
 # Override function scm
@@ -118,6 +121,20 @@ function parse_hg_info() {
     echo "$prefix${branch}:${changeset#*:}$state$suffix"
 }
 
+# Parse svn info
+function parse_svn_info() {
+    if [[ -n $(svn status --ignore-externals -q 2> /dev/null) ]]; then
+      state=${SVN_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
+    else
+      state=${SVN_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
+    fi
+    prefix=${SVN_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
+    suffix=${SVN_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
+    ref=$(svn info 2> /dev/null | awk -F/ '/^URL:/ { for (i=0; i<=NF; i++) { if ($i == "branches" || $i == "tags" ) { print $(i+1); break }; if ($i == "trunk") { print $i; break } } }') || return
+    revision=$(svn info 2> /dev/null | sed -ne 's#^Revision: ##p' )
+    [[ -z $ref ]] && return
+    echo -e "$prefix$ref:$revision$state$suffix"
+}
 
 # Displays last X characters of pwd 
 function limited_pwd() {
