@@ -1,6 +1,7 @@
 #!/bin/bash
-
+#
 # This theme was obviously inspired a lot by 
+#
 # - Demula theme
 #
 # which in itself was inspired by :
@@ -11,10 +12,11 @@
 # - Monokai colors - http://monokai.nl/blog/2006/07/15/textmate-color-theme/
 # - Bash_it modern theme
 #
-# Things theme supports:
-# - shortended directory
-# - hg, svn detection
-# - virtualenv, rvm
+# Hawaii50 theme supports :
+#
+# - configurable directory length
+# - hg, svn, git detection (I work in all of them)
+# - virtualenv, rvm + gemsets
 # 
 # Screenshot: 
 #
@@ -24,7 +26,9 @@
 #
 # Note: I also am really new to this bash scripting game, so if you see things
 # that are flat out wrong, or if you think of something neat, just send a pull
-# request.
+# request.  This probably only works on a Mac - as some functions are OS 
+# specific like getting ip, etc.
+#
 
 # COLORS ======================================================================
 ORANGE='\e[0;33m'
