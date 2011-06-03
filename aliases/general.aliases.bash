@@ -15,32 +15,32 @@ then
 	alias ls="ls --color=always"
 fi
 
-alias c    = 'clear'
-alias k    = 'clear'
-alias cls  = 'clear'
+alias c='clear'
+alias k='clear'
+alias cls='clear'
 
-alias edit = "$EDITOR"
-alias page = "$PAGER"
+alias edit="$EDITOR"
+alias pager="$PAGER"
 
-alias q    = "exit"
+alias q="exit"
 
-alias irc  = "$IRC_CLIENT"
+alias irc="$IRC_CLIENT"
 
-alias rb   = "ruby"
+alias rb="ruby"
 
 # Pianobar can be found here: http://github.com/PromyLOPh/pianobar/
 
 alias piano="pianobar"
 
-alias ..   = 'cd ..'        # Go up one directory
-alias ...  = 'cd ../..'    # Go up two directories
-alias -- - = "cd -"       # Go back
+alias ..='cd ..'        # Go up one directory
+alias ...='cd ../..'    # Go up two directories
+alias -- -="cd -"       # Go back
 
 # Shell History
-alias h = 'history'
+alias h='history'
 
 # Tree
-alias tree = "find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
+alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
 
 # Directory
 alias	md='mkdir -p'
