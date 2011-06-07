@@ -18,7 +18,7 @@
 # - hg, svn, git detection (I work in all of them)
 # - virtualenv, rvm + gemsets
 # 
-# Screenshot: 
+# Screenshot: http://i.imgur.com/4IAMJ.png 
 #
 # by Ryan Kanno <ryankanno@localkinegrinds.com>
 #
@@ -60,6 +60,8 @@ MAX_PWD_LENGTH=20
 MAX_GIT_HEX_LENGTH=5
 
 # FUNCS =======================================================================
+
+# TODO: Should check with `uname` and use ip addr 
 function ip {
     echo $(ifconfig en1 | grep "inet " | awk '{ print $2 }')
 }
