@@ -59,6 +59,9 @@ RVM_THEME_PROMPT_SUFFIX=''
 VIRTUALENV_THEME_PROMPT_PREFIX=''
 VIRTUALENV_THEME_PROMPT_SUFFIX=''
 
+SCM_PROMPT_PREFIX=' on'
+SCM_PROMPT_SUFFIX=''
+
 # Max length of PWD to display
 MAX_PWD_LENGTH=20
 
@@ -94,17 +97,13 @@ function virtual_info() {
 }
 
 # SCM information
-function scm_info() {
-    SCM_CHAR=$(scm_char)
-    [ "$SCM_CHAR" == "$SCM_NONE_CHAR" ] && return
-    local prompt=" on"
-    [ "$SCM_CHAR" == "$SCM_GIT_CHAR" ] && echo "$prompt$(parse_git_info)" && return
-    [ "$SCM_CHAR" == "$SCM_SVN_CHAR" ] && echo "$prompt$(parse_svn_info)" && return
-    [ "$SCM_CHAR" == "$SCM_HG_CHAR" ] && echo "$prompt$(parse_hg_info)" && return
+function h50_scm_prompt_info() {
+    local scm_prompt=$(scm_prompt_info)
+    [[ -n "$scm_prompt" ]] && echo -e "$SCM_PROMPT_PREFIX$scm_prompt$SCM_PROMPT_SUFFIX"
 }
 
 # Parse git info
-function parse_git_info() {
+function git_prompt_info() {
     if [[ -n $(git status -s 2> /dev/null |grep -v ^# |grep -v "working directory clean") ]]; then
       state=${GIT_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
     else
@@ -119,7 +118,7 @@ function parse_git_info() {
 }
 
 # Parse hg info
-function parse_hg_info() {
+function hg_prompt_info() {
     if [[ -n $(hg status 2> /dev/null) ]]; then
       state=${HG_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
     else
@@ -134,7 +133,7 @@ function parse_hg_info() {
 }
 
 # Parse svn info
-function parse_svn_info() {
+function svn_prompt_info() {
     if [[ -n $(svn status --ignore-externals -q 2> /dev/null) ]]; then
       state=${SVN_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
     else
@@ -172,7 +171,7 @@ function prompt() {
   local UC=$USER_COLOR
   [ $UID -eq "0" ] && UC=$SUPERUSER_COLOR
     
-  PS1="$(scm_char) ${UC}\u ${DEFAULT_COLOR}at ${MACHINE_COLOR}\h ${DEFAULT_COLOR}(${IP_COLOR}$(ip)${DEFAULT_COLOR})${DEFAULT_COLOR} in ${DIRECTORY_COLOR}$(limited_pwd)${DEFAULT_COLOR}$(virtual_info)$(scm_info) \$ "
+  PS1="$(scm_char) ${UC}\u ${DEFAULT_COLOR}at ${MACHINE_COLOR}\h ${DEFAULT_COLOR}(${IP_COLOR}$(ip)${DEFAULT_COLOR})${DEFAULT_COLOR} in ${DIRECTORY_COLOR}$(limited_pwd)${DEFAULT_COLOR}$(virtual_info)$(h50_scm_prompt_info) \$ "
   PS2='> '
   PS4='+ '
 }
