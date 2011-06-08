@@ -66,16 +66,6 @@ function ip {
     echo $(ifconfig en1 | grep "inet " | awk '{ print $2 }')
 }
 
-# Override function scm
-function scm {
-  if [[ -d .git ]]; then SCM=$GIT
-  elif [[ -n "$(git symbolic-ref HEAD 2> /dev/null)" ]]; then SCM=$GIT
-  elif [[ -n "$(hg summary 2> /dev/null)" ]]; then SCM=$HG
-  elif [[ -d .svn ]]; then SCM=$SVN
-  else SCM='NONE'
-  fi
-}
-
 # Displays the current virtualenv information
 function curr_virtualenv_info() {
     [ ! -z "$VIRTUAL_ENV" ] && echo "`basename $VIRTUAL_ENV`"

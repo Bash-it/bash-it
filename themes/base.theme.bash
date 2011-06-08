@@ -24,6 +24,7 @@ function scm {
   if [[ -d .git ]]; then SCM=$GIT
   elif [[ -n "$(git symbolic-ref HEAD 2> /dev/null)" ]]; then SCM=$GIT
   elif [[ -d .hg ]]; then SCM=$HG
+  elif [[ -n "$(hg root 2> /dev/null)" ]]; then SCM=$HG
   elif [[ -d .svn ]]; then SCM=$SVN
   else SCM='NONE'
   fi
