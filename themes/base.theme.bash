@@ -20,6 +20,9 @@ SCM_NONE_CHAR='○'
 RVM_THEME_PROMPT_PREFIX=' |'
 RVM_THEME_PROMPT_SUFFIX='|'
 
+VIRTUALENV_THEME_PROMPT_PREFIX=' |'
+VIRTUALENV_THEME_PROMPT_SUFFIX='|'
+
 function scm {
   if [[ -d .git ]]; then SCM=$GIT
   elif [[ -n "$(git symbolic-ref HEAD 2> /dev/null)" ]]; then SCM=$GIT
@@ -83,5 +86,12 @@ function rvm_version_prompt {
   if which rvm &> /dev/null; then
     rvm=$(rvm tools identifier) || return
     echo -e "$RVM_THEME_PROMPT_PREFIX$rvm$RVM_THEME_PROMPT_SUFFIX"
+  fi
+}
+
+function virtualenv_prompt {
+  if which virtualenv &> /dev/null; then
+    virtualenv=$([ ! -z "$VIRTUAL_ENV" ] && echo "`basename $VIRTUAL_ENV`") || return
+    echo -e "$VIRTUALENV_THEME_PROMPT_PREFIX$virtualenv$VIRTUALENV_THEME_PROMPT_SUFFIX"
   fi
 }

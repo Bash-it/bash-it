@@ -50,8 +50,14 @@ REF_COLOR='\[${purple}\]'
 # SCM prompts
 SCM_THEME_PROMPT_DIRTY=' ${bold_red}✗${normal}'
 SCM_THEME_PROMPT_CLEAN=' ${bold_green}✓${normal}'
-SCM_THEME_PROMPT_PREFIX=" "
-SCM_THEME_PROMPT_SUFFIX=""
+SCM_THEME_PROMPT_PREFIX=' '
+SCM_THEME_PROMPT_SUFFIX=''
+
+RVM_THEME_PROMPT_PREFIX=''
+RVM_THEME_PROMPT_SUFFIX=''
+
+VIRTUALENV_THEME_PROMPT_PREFIX=''
+VIRTUALENV_THEME_PROMPT_SUFFIX=''
 
 # Max length of PWD to display
 MAX_PWD_LENGTH=20
@@ -66,26 +72,10 @@ function ip {
     echo $(ifconfig en1 | grep "inet " | awk '{ print $2 }')
 }
 
-# Displays the current virtualenv information
-function curr_virtualenv_info() {
-    [ ! -z "$VIRTUAL_ENV" ] && echo "`basename $VIRTUAL_ENV`"
-}
-
-# Displays the current rvm information w/gemset
-function curr_rvm_info() {
-    local ruby_version=$(echo $MY_RUBY_HOME | awk -F'-' '{print $2}')
-    local ruby_gemset=$(echo $GEM_HOME | awk -F'@' '{print $2}')
-
-    if [ "$ruby_version" != "" ]; then
-        [ "$ruby_gemset" != "" ] && ruby_gemset="@$ruby_gemset"
-        echo "$ruby_version$ruby_gemset"
-    fi
-}
-
 # Displays using ...
 function virtual_info() {
-    local virtual_env_info=$(curr_virtualenv_info)
-    local rvm_info=$(curr_rvm_info)
+    local virtual_env_info=$(virtualenv_prompt)
+    local rvm_info=$(rvm_version_prompt)
 
     # If no virtual info, just return
     [ "$virtual_env_info" == "" -a "$rvm_info" == "" ] && return
