@@ -50,7 +50,7 @@ REF_COLOR='\[${purple}\]'
 # SCM prompts
 SCM_THEME_PROMPT_DIRTY=' ${bold_red}✗${normal}'
 SCM_THEME_PROMPT_CLEAN=' ${bold_green}✓${normal}'
-SCM_THEME_PROMPT_PREFIX=' '
+SCM_THEME_PROMPT_PREFIX=' on '
 SCM_THEME_PROMPT_SUFFIX=''
 
 RVM_THEME_PROMPT_PREFIX=''
@@ -58,9 +58,6 @@ RVM_THEME_PROMPT_SUFFIX=''
 
 VIRTUALENV_THEME_PROMPT_PREFIX=''
 VIRTUALENV_THEME_PROMPT_SUFFIX=''
-
-SCM_PROMPT_PREFIX=' on'
-SCM_PROMPT_SUFFIX=''
 
 # Max length of PWD to display
 MAX_PWD_LENGTH=20
@@ -94,12 +91,6 @@ function virtual_info() {
         prompt="$prompt rvm: ${RVM_COLOR}$rvm_info${DEFAULT_COLOR}"
     fi
     echo "$prompt"
-}
-
-# SCM information
-function h50_scm_prompt_info() {
-    local scm_prompt=$(scm_prompt_info)
-    [[ -n "$scm_prompt" ]] && echo -e "$SCM_PROMPT_PREFIX$scm_prompt$SCM_PROMPT_SUFFIX"
 }
 
 # Parse git info
@@ -171,7 +162,7 @@ function prompt() {
   local UC=$USER_COLOR
   [ $UID -eq "0" ] && UC=$SUPERUSER_COLOR
     
-  PS1="$(scm_char) ${UC}\u ${DEFAULT_COLOR}at ${MACHINE_COLOR}\h ${DEFAULT_COLOR}(${IP_COLOR}$(ip)${DEFAULT_COLOR})${DEFAULT_COLOR} in ${DIRECTORY_COLOR}$(limited_pwd)${DEFAULT_COLOR}$(virtual_info)$(h50_scm_prompt_info) \$ "
+  PS1="$(scm_char) ${UC}\u ${DEFAULT_COLOR}at ${MACHINE_COLOR}\h ${DEFAULT_COLOR}(${IP_COLOR}$(ip)${DEFAULT_COLOR})${DEFAULT_COLOR} in ${DIRECTORY_COLOR}$(limited_pwd)${DEFAULT_COLOR}$(virtual_info)$(scm_prompt_info) \$ "
   PS2='> '
   PS4='+ '
 }
