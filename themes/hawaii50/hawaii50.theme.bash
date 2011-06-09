@@ -73,11 +73,14 @@ MAX_PWD_LENGTH=20
 # Max length of Git Hex to display
 MAX_GIT_HEX_LENGTH=5
 
+# IP address
+IP_SEPARATOR=', '
+
 # FUNCS =======================================================================
 
-# TODO: Should check with `uname` and use ip addr 
 function ip {
-    echo -e $(ifconfig en1 | grep "inet " | awk '{ print $2 }')
+    myip=$(curl -s checkip.dyndns.org | grep -Eo '[0-9\.]+')
+    echo -e "$(ips | sed -e :a -e '$!N;s/\n/${IP_SEPARATOR}/;ta' | sed -e 's/127\.0\.0\.1\${IP_SEPARATOR}//g'), ${myip}"
 }
 
 # Displays virtual info prompt (virtualenv/rvm)
