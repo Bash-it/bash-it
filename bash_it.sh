@@ -37,7 +37,12 @@ do
 done
 
 # Aliases
-FUNCTIONS="${BASH}/aliases/*.bash"
+if [ ! -d "${BASH}/aliases/enabled" ]
+then
+  mkdir "${BASH}/aliases/enabled"
+  ln -s ${BASH}/aliases/available/* "${BASH}/aliases/enabled"
+fi
+FUNCTIONS="${BASH}/aliases/enabled/*.bash"
 for config_file in $FUNCTIONS
 do
   source $config_file
