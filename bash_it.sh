@@ -48,6 +48,8 @@ do
   source $config_file
 done
 
+source "${BASH}/aliases/custom.aliases.bash"
+
 # Custom
 CUSTOM="${BASH}/custom/*.bash"
 for config_file in $CUSTOM
