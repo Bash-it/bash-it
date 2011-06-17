@@ -31,8 +31,7 @@
 #
 
 # COLORS ======================================================================
-ORANGE='\e[0;33m'
-GREY='\e[1:37m'
+ORANGE='\[\e[0;33m\]'
 
 DEFAULT_COLOR='\[${white}\]'
 
@@ -48,8 +47,8 @@ RVM_COLOR='\[${cyan}\]'
 REF_COLOR='\[${purple}\]'
 
 # SCM prompts
-SCM_THEME_PROMPT_DIRTY=' ${bold_red}✗${normal}'
-SCM_THEME_PROMPT_CLEAN=' ${bold_green}✓${normal}'
+SCM_THEME_PROMPT_DIRTY=' \[${bold_red}\]✗\[${normal}\]'
+SCM_THEME_PROMPT_CLEAN=' \[${bold_green}\]✓\[${normal}\]'
 SCM_THEME_PROMPT_PREFIX=' on '
 SCM_THEME_PROMPT_SUFFIX=''
 
@@ -177,9 +176,9 @@ function prompt() {
     [ $UID -eq "0" ] && UC=$SUPERUSER_COLOR
 
     if [[ $VIRTUAL_PROMPT_ENABLED == 1 ]]; then
-        PS1="$(scm_char) ${UC}\u ${DEFAULT_COLOR}at ${MACHINE_COLOR}\h ${DEFAULT_COLOR}(${IP_COLOR}$(ip)${DEFAULT_COLOR})${DEFAULT_COLOR} in ${DIRECTORY_COLOR}$(limited_pwd)${DEFAULT_COLOR}$(virtual_prompt_info)$(scm_prompt_info) \$ "
+        PS1="$(scm_char) ${UC}\u ${DEFAULT_COLOR}at ${MACHINE_COLOR}\h ${DEFAULT_COLOR}(${IP_COLOR}$(ip)${DEFAULT_COLOR}) in ${DIRECTORY_COLOR}$(limited_pwd)${DEFAULT_COLOR}$(virtual_prompt_info)$(scm_prompt_info) \$ "
     else
-        PS1="$(scm_char) ${UC}\u ${DEFAULT_COLOR}at ${MACHINE_COLOR}\h ${DEFAULT_COLOR}(${IP_COLOR}$(ip)${DEFAULT_COLOR})${DEFAULT_COLOR} in ${DIRECTORY_COLOR}$(limited_pwd)${DEFAULT_COLOR}$(scm_prompt_info) \$ "
+        PS1="$(scm_char) ${UC}\u ${DEFAULT_COLOR}at ${MACHINE_COLOR}\h ${DEFAULT_COLOR}(${IP_COLOR}$(ip)${DEFAULT_COLOR}) in ${DIRECTORY_COLOR}$(limited_pwd)${DEFAULT_COLOR}$(scm_prompt_info) \$ "
     fi
     PS2='> '
     PS4='+ '
