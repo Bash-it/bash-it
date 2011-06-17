@@ -39,7 +39,12 @@ case $OSTYPE in
     ;;
 esac
 
-
+# git add remote branch
+function garb() {
+  echo "Adding remote branch '$1'";
+  git config branch.$1.remote origin;
+  git config branch.$1.merge refs/heads/$1;
+}
 
 function git-help() {
   echo "Git Custom Aliases Usage"
