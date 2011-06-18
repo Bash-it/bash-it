@@ -26,7 +26,7 @@ editpost() {
 	fi
 }
 
-newpost() {
+jknewpost() {
 
 	# 'builtin cd' into the local jekyll root
 

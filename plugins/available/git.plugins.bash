@@ -5,6 +5,13 @@ function git_remote {
   git remote add origin $GIT_HOSTING:$1.git
 }
 
+# git add remote branch
+function garb() {
+  echo "Adding remote branch '$1'";
+  git config branch.$1.remote origin;
+  git config branch.$1.merge refs/heads/$1;
+}
+
 function git_first_push {
   echo "Running: git push origin master:refs/heads/master"
   git push origin master:refs/heads/master
@@ -92,4 +99,3 @@ else
     echo "you're currently not in a git repository"
 fi
 }
-
