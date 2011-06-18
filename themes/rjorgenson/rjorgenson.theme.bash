@@ -38,6 +38,13 @@ is_vim_shell() {
         fi
 }
 
+todo_txt_count() {
+	if `hash todo.sh 2>&-`; then
+		count=`todo.sh ls | egrep "TODO: [0-9]+ of ([0-9]+) tasks shown" | awk '{ print $4 }'`
+		echo "[T:$count]"
+	fi
+}
+
 modern_scm_prompt() {
         CHAR=$(scm_char)
         if [ $CHAR = $SCM_NONE_CHAR ]
@@ -51,9 +58,9 @@ modern_scm_prompt() {
 prompt() {
 
     my_ps_host="${bold_green}\h${normal}";
-    my_ps_user="\[\033[01;32m\]\u\[\033[00m\]";
-    my_ps_root="\[\033[01;31m\]\u\[\033[00m\]";
-    my_ps_path="\[\033[01;36m\]\w\[\033[00m\]";
+    my_ps_user="${bold_green}\u${normal}";
+    my_ps_root="${bold_red}\u${normal}";
+    my_ps_path="${bold_cyan}\w${normal}";
 
     # nice prompt
     case "`id -u`" in
@@ -61,7 +68,7 @@ prompt() {
 └─▪ "
         ;;
         *) PS1="${TITLEBAR}┌─[$my_ps_user][$my_ps_host]$(modern_scm_prompt)$(__my_rvm_ruby_version)[${cyan}\w${normal}]$(is_vim_shell)
-└─▪ "
+└─▪$(todo_txt_count) "
         ;;
     esac
 }
