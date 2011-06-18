@@ -33,22 +33,22 @@
 #*color7: #E5E5E5
 
 # ----------------------------------------------------------------- COLOR CONF
-D_DEFAULT_COLOR='\[${normal}\]'
-D_INTERMEDIATE_COLOR='\[${white}\]'
-D_USER_COLOR='\[${purple}\]'
-D_SUPERUSER_COLOR='\[${red}\]'
-D_MACHINE_COLOR='\[${cyan}\]'
-D_DIR_COLOR='\[${green}\]'
-D_SCM_COLOR='\[${yellow}\]'
-D_BRANCH_COLOR='\[${yellow}\]'
-D_CHANGES_COLOR='\[${white}\]'
-D_CMDFAIL_COLOR='\[${red}\]'
-D_VIMSHELL_COLOR='\[${cyan}\]'
+D_DEFAULT_COLOR="${normal}"
+D_INTERMEDIATE_COLOR="${white}"
+D_USER_COLOR="${purple}"
+D_SUPERUSER_COLOR="${red}"
+D_MACHINE_COLOR="${cyan}"
+D_DIR_COLOR="${green}"
+D_SCM_COLOR="${yellow}"
+D_BRANCH_COLOR="${yellow}"
+D_CHANGES_COLOR="${white}"
+D_CMDFAIL_COLOR="${red}"
+D_VIMSHELL_COLOR="${cyan}"
 
 # ------------------------------------------------------------------ FUNCTIONS
 case $TERM in
   xterm*)
-      TITLEBAR="\[\033]0;\w\007\]"
+      TITLEBAR="\033]0;\w\007"
       ;;
   *)
       TITLEBAR=""
@@ -84,10 +84,10 @@ ${D_BRANCH_COLOR}%b %r ${D_CHANGES_COLOR}%m%u ${D_DEFAULT_COLOR}"
 
 # -------------------------------------------------------------- PROMPT OUTPUT
 prompt() {
-  local SAVE_CURSOR='\[\033[s\]'
-  local RESTORE_CURSOR='\[\033[u\]'
-  local MOVE_CURSOR_RIGHTMOST='\[\033[500C\]'
-  local MOVE_CURSOR_5_LEFT='\[\033[5D\]'
+  local SAVE_CURSOR='\033[s'
+  local RESTORE_CURSOR='\033[u'
+  local MOVE_CURSOR_RIGHTMOST='\033[500C'
+  local MOVE_CURSOR_5_LEFT='\033[5D'
 
   if [ $(uname) = "Linux" ];
   then

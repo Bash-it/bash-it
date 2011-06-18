@@ -14,6 +14,7 @@ alias dashcode="open -a dashcode"
 alias f='open -a Finder '
 alias textedit='open -a TextEdit'
 alias hex='open -a "Hex Fiend"'
+alias gitx="open -a GitX"
 
 if [ -s /usr/bin/firefox ] ; then
   unalias firefox

@@ -1,7 +1,3 @@
-PROMPT='\[${green}\]\u\[${normal}\]@\[${green}\]\h\[${normal}\]:\[${blue}\]\w\[${normal}\]\[${red}\]$(prompt_char)$(git_prompt_info)\[${normal}\]\$ '
-
-
-
 # scm themeing
 SCM_THEME_PROMPT_DIRTY="×"
 SCM_THEME_PROMPT_CLEAN="✓"
@@ -20,3 +16,9 @@ case $TERM in
 	TITLEBAR=""
 	;;
 esac
+
+function prompt_command() {
+    PROMPT='${green}\u${normal}@${green}\h${normal}:${blue}\w${normal}${red}$(prompt_char)$(git_prompt_info)${normal}\$ '
+}
+
+PROMPT_COMMAND=prompt_command;
