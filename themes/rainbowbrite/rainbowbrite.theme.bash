@@ -20,6 +20,7 @@ prompt_setter() {
 
 PROMPT_COMMAND=prompt_setter
 
+SCM_NONE_CHAR='·'
 SCM_THEME_PROMPT_DIRTY=" ${red}✗"
 SCM_THEME_PROMPT_CLEAN=" ${green}✓"
 SCM_THEME_PROMPT_PREFIX=" ("
