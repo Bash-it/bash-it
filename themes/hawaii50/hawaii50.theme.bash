@@ -33,22 +33,22 @@
 # COLORS ======================================================================
 ORANGE='\[\e[0;33m\]'
 
-DEFAULT_COLOR='\[${white}\]'
+DEFAULT_COLOR="${white}"
 
-USER_COLOR='\[${purple}\]'
-SUPERUSER_COLOR='\[${red}\]'
+USER_COLOR="${purple}"
+SUPERUSER_COLOR="${red}"
 MACHINE_COLOR=$ORANGE
 IP_COLOR=$ORANGE
-DIRECTORY_COLOR='\[${green}\]'
+DIRECTORY_COLOR="${green}"
 
-VE_COLOR='\[${cyan}\]'
-RVM_COLOR='\[${cyan}\]'
+VE_COLOR="${cyan}"
+RVM_COLOR="${cyan}"
 
-REF_COLOR='\[${purple}\]'
+REF_COLOR="${purple}"
 
 # SCM prompts
-SCM_THEME_PROMPT_DIRTY=' \[${bold_red}\]✗\[${normal}\]'
-SCM_THEME_PROMPT_CLEAN=' \[${bold_green}\]✓\[${normal}\]'
+SCM_THEME_PROMPT_DIRTY=" ${bold_red}✗${normal}"
+SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓${normal}"
 SCM_THEME_PROMPT_PREFIX=' on '
 SCM_THEME_PROMPT_SUFFIX=''
 
