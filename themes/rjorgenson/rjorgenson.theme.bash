@@ -1,11 +1,16 @@
 # port of zork theme
 
+# set colors for use throughout the prompt
+# i like things consistent
+BRACKET_COLOR=$blue
+STRING_COLOR=$green
+
 SCM_THEME_PROMPT_PREFIX=""
 SCM_THEME_PROMPT_SUFFIX=""
 
 SCM_THEME_PROMPT_DIRTY=' ${bold_red}✗${normal}'
 SCM_THEME_PROMPT_CLEAN=' ${bold_green}✓${normal}'
-SCM_GIT_CHAR='${bold_green}±${normal}'
+SCM_GIT_CHAR='${STRING_COLOR}±${normal}'
 SCM_SVN_CHAR='${bold_cyan}⑆${normal}'
 SCM_HG_CHAR='${bold_red}☿${normal}'
 
@@ -28,20 +33,20 @@ __my_rvm_ruby_version() {
   [ "$gemset" != "" ] && gemset="@$gemset"
     local version=$(echo $MY_RUBY_HOME | awk -F'-' '{print $2}')
     local full="$version$gemset"
-  [ "$full" != "" ] && echo "[$full]"
+  [ "$full" != "" ] && echo "${BRACKET_COLOR}[${STRING_COLOR}$full${BRACKET_COLOR}]${normal}"
 }
 
 is_vim_shell() {
         if [ ! -z "$VIMRUNTIME" ]
         then
-                echo "[${cyan}vim shell${normal}]"
+                echo "$BRACKET_COLOR[${STRING_COLOR}vim shell$BRACKET_COLOR]$normal"
         fi
 }
 
 todo_txt_count() {
 	if `hash todo.sh 2>&-`; then
 		count=`todo.sh ls | egrep "TODO: [0-9]+ of ([0-9]+) tasks shown" | awk '{ print $4 }'`
-		echo "[T:$count]"
+		echo "$BRACKET_COLOR[${STRING_COLOR}T:$count$BRACKET_COLOR]$normal"
 	fi
 }
 
@@ -51,29 +56,37 @@ modern_scm_prompt() {
         then
                 return
         else
-                echo "[$(scm_char)][$(scm_prompt_info)]"
+                echo "$BRACKET_COLOR[$(scm_char)$BRACKET_COLOR][$STRING_COLOR$(scm_prompt_info)$BRACKET_COLOR]$normal"
         fi
+}
+
+my_prompt_char() {
+	if [[ $OSTYPE =~ "darwin" ]]; then
+		echo "${BRACKET_COLOR}➞  ${normal}"
+	else
+		echo "${BRACKET_COLOR}➞ ${normal}"
+	fi
 }
 
 prompt() {
 
-    my_ps_host="${bold_green}\h${normal}";
-    my_ps_user="${bold_green}\u${normal}";
+    my_ps_host="${STRING_COLOR}\h${normal}";
+    my_ps_user="${STRING_COLOR}\u${normal}";
     my_ps_root="${bold_red}\u${normal}";
-    my_ps_path="${bold_cyan}\w${normal}";
+    my_ps_path="${STRING_COLOR}\w${normal}";
 
     # nice prompt
     case "`id -u`" in
-        0) PS1="${TITLEBAR}┌─[$my_ps_root][$my_ps_host]$(modern_scm_prompt)$(__my_rvm_ruby_version)[${cyan}\w${normal}]$(is_vim_shell)
-└─▪ "
+        0) PS1="${TITLEBAR}${BRACKET_COLOR}┌─[$my_ps_root${BRACKET_COLOR}][$my_ps_host${BRACKET_COLOR}]$(modern_scm_prompt)$(__my_rvm_ruby_version)${BRACKET_COLOR}[${STRING_COLOR}\w${BRACKET_COLOR}]$(is_vim_shell)
+${BRACKET_COLOR}└─$(my_prompt_char)${normal}"
         ;;
-        *) PS1="${TITLEBAR}┌─[$my_ps_user][$my_ps_host]$(modern_scm_prompt)$(__my_rvm_ruby_version)[${cyan}\w${normal}]$(is_vim_shell)
-└─▪$(todo_txt_count) "
+        *) PS1="${TITLEBAR}${BRACKET_COLOR}┌─[$my_ps_user${BRACKET_COLOR}][$my_ps_host${BRACKET_COLOR}]$(modern_scm_prompt)$(__my_rvm_ruby_version)${BRACKET_COLOR}[${STRING_COLOR}\w${BRACKET_COLOR}]$(is_vim_shell)
+└─$(todo_txt_count)$(my_prompt_char)"
         ;;
     esac
 }
 
-PS2="└─▪ "
+PS2="└─$(my_prompt_char)"
 
 
 
