@@ -20,10 +20,14 @@ SCM_NONE_CHAR='○'
 RVM_THEME_PROMPT_PREFIX=' |'
 RVM_THEME_PROMPT_SUFFIX='|'
 
+VIRTUALENV_THEME_PROMPT_PREFIX=' |'
+VIRTUALENV_THEME_PROMPT_SUFFIX='|'
+
 function scm {
   if [[ -d .git ]]; then SCM=$GIT
   elif [[ -n "$(git symbolic-ref HEAD 2> /dev/null)" ]]; then SCM=$GIT
   elif [[ -d .hg ]]; then SCM=$HG
+  elif [[ -n "$(hg root 2> /dev/null)" ]]; then SCM=$HG
   elif [[ -d .svn ]]; then SCM=$SVN
   else SCM='NONE'
   fi
@@ -78,9 +82,30 @@ function svn_prompt_info {
   echo -e "$prefix$ref$state$suffix"
 }
 
+function hg_prompt_info() {
+    if [[ -n $(hg status 2> /dev/null) ]]; then
+        state=${HG_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
+    else
+        state=${HG_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
+    fi
+    prefix=${HG_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
+    suffix=${HG_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
+    branch=$(hg summary 2> /dev/null | grep branch | awk '{print $2}')
+    changeset=$(hg summary 2> /dev/null | grep parent | awk '{print $2}')
+
+    echo -e "$prefix${REF_COLOR}${branch}${DEFAULT_COLOR}:${changeset#*:}$state$suffix"
+}
+
 function rvm_version_prompt {
   if which rvm &> /dev/null; then
     rvm=$(rvm tools identifier) || return
     echo -e "$RVM_THEME_PROMPT_PREFIX$rvm$RVM_THEME_PROMPT_SUFFIX"
+  fi
+}
+
+function virtualenv_prompt {
+  if which virtualenv &> /dev/null; then
+    virtualenv=$([ ! -z "$VIRTUAL_ENV" ] && echo "`basename $VIRTUAL_ENV`") || return
+    echo -e "$VIRTUALENV_THEME_PROMPT_PREFIX$virtualenv$VIRTUALENV_THEME_PROMPT_SUFFIX"
   fi
 }
