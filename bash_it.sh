@@ -48,7 +48,10 @@ do
   source $config_file
 done
 
-source "${BASH}/aliases/custom.aliases.bash"
+if [ -e "${BASH}/aliases/custom.aliases.bash" ]
+then
+  source "${BASH}/aliases/custom.aliases.bash"
+fi
 
 # Custom
 CUSTOM="${BASH}/custom/*.bash"
