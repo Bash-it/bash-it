@@ -46,6 +46,15 @@ alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
 alias	md='mkdir -p'
 alias	rd=rmdir
 
+# show / hide hidden files
+alias showhidden="defaults write com.apple.finder AppleShowAllFiles TRUE; killall Finder"
+alias hidehidden="defaults write com.apple.finder AppleShowAllFiles FALSE; killall Finder"
+# display IP address
+alias myip="echo ethernet:; ipconfig getifaddr en0; echo wireless:; ipconfig getifaddr en1"
+
+# http://snippets.dzone.com/posts/show/2486
+alias killsvn="find . -name ".svn" -type d -exec rm -rf {} \;"
+
 function aliases-help() {
   echo "Generic Alias Usage"
   echo
