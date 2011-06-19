@@ -93,7 +93,7 @@ function hg_prompt_info() {
     branch=$(hg summary 2> /dev/null | grep branch | awk '{print $2}')
     changeset=$(hg summary 2> /dev/null | grep parent | awk '{print $2}')
 
-    echo -e "$prefix${REF_COLOR}${branch}${DEFAULT_COLOR}:${changeset#*:}$state$suffix"
+    echo -e "$prefix$branch:${changeset#*:}$state$suffix"
 }
 
 function rvm_version_prompt {
