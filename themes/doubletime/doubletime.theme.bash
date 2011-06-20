@@ -1,9 +1,9 @@
 #!/bin/bash
 SCM_THEME_PROMPT_DIRTY=''
 SCM_THEME_PROMPT_CLEAN=''
-SCM_GIT_CHAR='${bold_cyan}±${normal}'
-SCM_SVN_CHAR='${bold_cyan}⑆${normal}'
-SCM_HG_CHAR='${bold_red}☿${normal}'
+SCM_GIT_CHAR="${bold_cyan}±${normal}"
+SCM_SVN_CHAR="${bold_cyan}⑆${normal}"
+SCM_HG_CHAR="${bold_red}☿${normal}"
 SCM_THEME_PROMPT_PREFIX=""
 SCM_THEME_PROMPT_SUFFIX=""
 RVM_THEME_PROMPT_PREFIX=" ("
@@ -32,7 +32,7 @@ virtualenv_prompt() {
   fi
 }
 
-prompt_setter() {
+function prompt_setter() {
   # Save history
   history -a
   history -c
@@ -44,8 +44,8 @@ prompt_setter() {
       clock=$THEME_PROMPT_CLOCK_FORMAT
   fi
   PS1="
-$clock $(scm_char) [\[$THEME_PROMPT_HOST_COLOR\]\u@${THEME_PROMPT_HOST}\[$reset_color\]] $(virtualenv_prompt)\w
-$(doubletime_scm_prompt)\[$reset_color\] $ "
+$clock $(scm_char) [$THEME_PROMPT_HOST_COLOR\u@${THEME_PROMPT_HOST}$reset_color] $(virtualenv_prompt)\w
+$(doubletime_scm_prompt)$reset_color $ "
   PS2='> '
   PS4='+ '
 }
