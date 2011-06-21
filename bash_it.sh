@@ -17,8 +17,14 @@ do
   source $config_file
 done
 
+# TODO: reduce the repetition here by combining these three into a loop
 # Tab Completion
-COMPLETION="${BASH}/completion/*.bash"
+if [ ! -d "${BASH}/completion/enabled" ]
+then
+  mkdir "${BASH}/completion/enabled"
+  ln -s ${BASH}/completion/available/* "${BASH}/completion/enabled"
+fi
+COMPLETION="${BASH}/completion/enabled/*.bash"
 for config_file in $COMPLETION
 do
   source $config_file
