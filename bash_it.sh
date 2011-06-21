@@ -17,43 +17,22 @@ do
   source $config_file
 done
 
-# TODO: reduce the repetition here by combining these three into a loop
-# Tab Completion
-if [ ! -d "${BASH}/completion/enabled" ]
-then
-  mkdir "${BASH}/completion/enabled"
-  ln -s ${BASH}/completion/available/* "${BASH}/completion/enabled"
-fi
-COMPLETION="${BASH}/completion/enabled/*.bash"
-for config_file in $COMPLETION
+# Load enabled aliases, completion, plugins
+for file_type in "aliases" "completion" "plugins"
 do
-  source $config_file
+  if [ ! -d "${BASH}/${file_type}/enabled" ]
+  then
+    mkdir "${BASH}/${file_type}/enabled"
+    ln -s ${BASH}/${file_type}/available/* "${BASH}/${file_type}/enabled"
+  fi
+  FILES="${BASH}/${file_type}/enabled/*.bash"
+  for config_file in $FILES
+  do
+    source $config_file
+  done
 done
 
-# Plugins
-if [ ! -d "${BASH}/plugins/enabled" ]
-then
-  mkdir "${BASH}/plugins/enabled"
-  ln -s ${BASH}/plugins/available/* "${BASH}/plugins/enabled"
-fi
-PLUGINS="${BASH}/plugins/enabled/*.bash"
-for config_file in $PLUGINS
-do
-  source $config_file
-done
-
-# Aliases
-if [ ! -d "${BASH}/aliases/enabled" ]
-then
-  mkdir "${BASH}/aliases/enabled"
-  ln -s ${BASH}/aliases/available/* "${BASH}/aliases/enabled"
-fi
-FUNCTIONS="${BASH}/aliases/enabled/*.bash"
-for config_file in $FUNCTIONS
-do
-  source $config_file
-done
-
+# Load any custom aliases that the user has added
 if [ -e "${BASH}/aliases/custom.aliases.bash" ]
 then
   source "${BASH}/aliases/custom.aliases.bash"
