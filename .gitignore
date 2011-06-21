@@ -1,3 +1,4 @@
+aliases/enabled
 plugins/enabled
 .DS_Store
 custom/*.bash
