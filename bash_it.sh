@@ -56,6 +56,13 @@ PREVIEW="less"
 [ -s /usr/bin/gloobus-preview ] && PREVIEW="gloobus-preview"
 [ -s /Applications/Preview.app ] && PREVIEW="/Applications/Preview.app"
 
+# Load all the Jekyll stuff
+
+if [ -e $HOME/.jekyllconfig ]
+then
+  . $HOME/.jekyllconfig
+fi
+
 
 #
 # Custom Help
