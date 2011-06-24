@@ -13,6 +13,14 @@ Check a clone of this repo. You can view what a sample `~/.bash_profile` looks l
 	cp ~/.bash_profile ~/.bash_profile_original
 	cp <path/to/cloned/repo>/template/bash_profile.template.bash ~/.bash_profile
 
+To configure Jekyll support for bash it, move the
+jekyllconfig.template.bash to your home directory:
+
+    cp <path/to/cloned/repo>/template/jekyllconfig.template.bash ~/.jekyllconfig
+
+Be sure to edit this file to your needed specifications. Please note
+that this file is *not* required. Only use it if you plan on using the
+jekyll plugins.
 
 ## Help Screens
 
