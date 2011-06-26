@@ -42,13 +42,13 @@ and anything in the custom directory will be ignored with the exception of `cust
 
 ## Themes
 
-There are a few bash-it themes, but I'm hoping the community will jump in and create their own custom prompts and share their creations with everyone else by submitting a pull request to me (revans).
+There are a few bash it themes, but I'm hoping the community will jump in and create their own custom prompts and share their creations with everyone else by submitting a pull request to me (revans).
 
 ## Help out
 
-I think all of us have our own custom scripts that we have added over time and so following in the footsteps of oh-my-zsh, bash-it was created as a framework for those who choose to use bash as their shell. As a community, I'm excited to see what everyone else has in their custom toolbox and am hoping that they'll share it with everyone by submitting a pull request to bash-it.
+I think all of us have our own custom scripts that we have added over time and so following in the footsteps of oh-my-zsh, bash it was created as a framework for those who choose to use bash as their shell. As a community, I'm excited to see what everyone else has in their custom toolbox and am hoping that they'll share it with everyone by submitting a pull request to bash it.
 
-So, if you have contributions to bash-it, please send me a pull request and I'll take a look at it and commit it to the repo as long as it looks good. If you do change an existing command, please give an explanation as to why. That will help a lot when I merge your changes in. Thanks, and happing bashing!
+So, if you have contributions to bash it, please send me a pull request and I'll take a look at it and commit it to the repo as long as it looks good. If you do change an existing command, please give an explanation as to why. That will help a lot when I merge your changes in. Thanks, and happing bashing!
 
 
 ## Contributors
