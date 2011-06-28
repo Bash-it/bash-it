@@ -12,7 +12,10 @@ Check a clone of this repo:
 
 Then run the `install.sh` file, it will backup your `~/.bash_profile`
 file and move the template one into it's place (the template file is at
-`~/.bash_it/template/bash_profile.template.bash`). It will also prompt
+`~/.bash_it/template/bash_profile.template.bash`). Be sure to edit this
+template file in order to customize bash-it.
+
+The install script will also prompt
 you asking if you use [Jekyll](https://github.com/mojombo/jekyll). This
 is to set up the `.jekyllconfig` file, the file that stores the
 information needed to use the Jekyll plugin supplied with bash it.
