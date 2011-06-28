@@ -6,21 +6,17 @@ Includes some autocompletion tools, theming support, aliases, custom functions, 
 
 ## Install
 
-Check a clone of this repo. You can view what a sample `~/.bash_profile` looks like in `template/bash_profile.template.bash`. If you wanted to use that template, make sure to make a backup of your current `~/.bash_profile` file.
+Check a clone of this repo:
 
 	git clone http://github.com/revans/bash-it.git bash_it
 
-	cp ~/.bash_profile ~/.bash_profile_original
-	cp <path/to/cloned/repo>/template/bash_profile.template.bash ~/.bash_profile
+Then run the `install.sh` file, it will backup your `~/.bash_profile`
+file and move the template one into it's place (the template file is at
+`~/.bash_it/template/bash_profile.template.bash`). It will also prompt
+you asking if you use [Jekyll](https://github.com/mojombo/jekyll). This
+is to set up the `.jekyllconfig` file, the file that stores the
+information needed to use the Jekyll plugin supplied with bash it.
 
-To configure Jekyll support for bash it, move the
-jekyllconfig.template.bash to your home directory:
-
-    cp <path/to/cloned/repo>/template/jekyllconfig.template.bash ~/.jekyllconfig
-
-Be sure to edit this file to your needed specifications. Please note
-that this file is *not* required. Only use it if you plan on using the
-jekyll plugins.
 
 ## Help Screens
 
