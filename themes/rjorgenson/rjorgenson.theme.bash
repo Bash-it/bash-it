@@ -43,11 +43,18 @@ is_vim_shell() {
         fi
 }
 
+function is_integer() { # helper function for todo-txt-count
+    [ "$1" -eq "$1" ] > /dev/null 2>&1
+        return $?
+}
+
 todo_txt_count() {
-	if `hash todo.sh 2>&-`; then
-		count=`todo.sh ls | egrep "TODO: [0-9]+ of ([0-9]+) tasks shown" | awk '{ print $4 }'`
-		echo "$BRACKET_COLOR[${STRING_COLOR}T:$count$BRACKET_COLOR]$normal"
-	fi
+    if `hash todo.sh 2>&-`; then # is todo.sh installed
+        count=`todo.sh ls | egrep "TODO: [0-9]+ of ([0-9]+) tasks shown" | awk '{ print $4 }'`
+        if is_integer $count; then # did we get a sane answer back
+            echo "$BRACKET_COLOR[${STRING_COLOR}T:$count$BRACKET_COLOR]$normal"
+        fi
+    fi
 }
 
 modern_scm_prompt() {
