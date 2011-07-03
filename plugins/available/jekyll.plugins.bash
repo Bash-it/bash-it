@@ -41,11 +41,11 @@ editpost() {
   done
   less $TMPFILE	
   read -p "Number of post to edit: " POST_TO_EDIT
-  if [ -z "$EDITOR" ]
+  if [ -z "$JEKYLL_EDITOR" ]
   then
     nano "${POSTS[$POST_TO_EDIT]}"
   else
-    "$EDITOR" "${POSTS[$POST_TO_EDIT]}"
+    "$JEKYLL_EDITOR" "${POSTS[$POST_TO_EDIT]}"
   fi
 }
 
@@ -253,7 +253,7 @@ newpost() {
 
   # Open the file in your favorite editor
 
-  "$EDITOR" $FNAME
+  "$JEKYLL_EDITOR" $FNAME
 }
 
 function testsite() {
