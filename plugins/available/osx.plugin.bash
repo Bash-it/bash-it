@@ -35,3 +35,14 @@ function dock-switch() {
         echo "Sorry, this only works on Mac OS X"
     fi
 }
+
+# Download a file and open it in Preview
+
+function prevcurl() {
+  if [ ! $(uname) = "Darwin" ]
+  then
+    echo "This function only works with Mac OS X"
+    return 1
+  fi
+  curl "$*" | open -fa "Preview"
+}
