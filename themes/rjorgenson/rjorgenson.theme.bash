@@ -68,11 +68,11 @@ modern_scm_prompt() {
 }
 
 my_prompt_char() {
-	if [[ $OSTYPE =~ "darwin" ]]; then
-		echo "${BRACKET_COLOR}➞  ${normal}"
-	else
-		echo "${BRACKET_COLOR}➞ ${normal}"
-	fi
+    if [[ $OSTYPE =~ "darwin" ]]; then
+        echo "${BRACKET_COLOR}➞  ${normal}"
+    else
+        echo "${BRACKET_COLOR}➞ ${normal}"
+    fi
 }
 
 prompt() {
@@ -88,7 +88,7 @@ prompt() {
 ${BRACKET_COLOR}└─$(my_prompt_char)${normal}"
         ;;
         *) PS1="${TITLEBAR}${BRACKET_COLOR}┌─[$my_ps_user${BRACKET_COLOR}][$my_ps_host${BRACKET_COLOR}]$(modern_scm_prompt)$(__my_rvm_ruby_version)${BRACKET_COLOR}[${STRING_COLOR}\w${BRACKET_COLOR}]$(is_vim_shell)
-└─$(todo_txt_count)$(my_prompt_char)"
+${BRACKET_COLOR}└─$(todo_txt_count)$(my_prompt_char)"
         ;;
     esac
 }
