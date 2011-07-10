@@ -30,6 +30,15 @@
 # specific like getting ip, etc.
 #
 
+# IMPORTANT THINGS TO CHANGE ==================================================
+
+# Show IP in prompt
+# One thing to be weary about if you have slow Internets
+IP_ENABLED=1
+
+# virtual prompts
+VIRTUAL_PROMPT_ENABLED=1
+
 # COLORS ======================================================================
 ORANGE='\[\e[0;33m\]'
 
@@ -60,9 +69,6 @@ RVM_THEME_PROMPT_SUFFIX=''
 VIRTUALENV_THEME_PROMPT_PREFIX=''
 VIRTUALENV_THEME_PROMPT_SUFFIX=''
 
-# virtual prompts
-VIRTUAL_PROMPT_ENABLED=1
-
 VIRTUAL_THEME_PROMPT_PREFIX=' using '
 VIRTUAL_THEME_PROMPT_SUFFIX=''
 
@@ -74,9 +80,6 @@ MAX_GIT_HEX_LENGTH=5
 
 # IP address
 IP_SEPARATOR=', '
-
-# Show IP
-IP_ENABLED=1
 
 # FUNCS =======================================================================
 
