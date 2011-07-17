@@ -1,4 +1,9 @@
 extract () {
+  if [ $# -ne 1 ]
+  then
+    echo "Error: No file specified."
+    return 1
+  fi
 	if [ -f $1 ] ; then
 		case $1 in
 			*.tar.bz2) tar xvjf $1   ;;
@@ -12,7 +17,7 @@ extract () {
 			*.zip)     unzip $1      ;;
 			*.Z)       uncompress $1 ;;
 			*.7z)      7z x $1       ;;
-			*)         echo "'$1' cannot be extracted via >extract<" ;;
+			*)         echo "'$1' cannot be extracted via extract" ;;
 		esac
 	else
 		echo "'$1' is not a valid file"
