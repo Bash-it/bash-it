@@ -29,16 +29,13 @@ do
 done
 
 function load_all() {
-  for file_type in "aliases" "completion" "plugins"
-  do
-    [ ! -d "$BASH/$file_type/enabled" ] && mkdir "$BASH/${file_type}/enabled"
-    ln -s $BASH/${file_type}/available/* "${BASH}/${file_type}/enabled"
-  done
+  file_type=$1
+  [ ! -d "$BASH/$file_type/enabled" ] && mkdir "$BASH/${file_type}/enabled"
+  ln -s $BASH/${file_type}/available/* "${BASH}/${file_type}/enabled"
 }
 
 function load_some() {
-  for file_type in "aliases" "completion" "plugins"
-  do
+    file_type=$1
     for file in `ls $BASH/${file_type}/available`
     do
       if [ ! -d "$BASH/$file_type/enabled" ]
@@ -61,28 +58,30 @@ function load_some() {
         esac
       done
     done
-  done
 }
 
-while true
+for type in "aliases" "plugins" "completion"
 do
-  read -p "Would you like to enable all, some, or no plugins/aliases/tab-completion plugins? Some of these may make bash slower to start up. (all/some/none) " RESP
-  case $RESP
-  in
-  some)
-    load_some
-    break
-    ;;
-  all)
-    load_all
-    break
-    ;;
-  none)
-    break
-    ;;
-  *)
-    echo "Unknown choice. Please enter some, all, or none"
-    continue
-    ;;
-  esac
+  while true
+  do
+    read -p "Would you like to enable all, some, or no $type? Some of these may make bash slower to start up (especially completion). (all/some/none) " RESP
+    case $RESP
+    in
+    some)
+      load_some $type
+      break
+      ;;
+    all)
+      load_all $type
+      break
+      ;;
+    none)
+      break
+      ;;
+    *)
+      echo "Unknown choice. Please enter some, all, or none"
+      continue
+      ;;
+    esac
+  done
 done
