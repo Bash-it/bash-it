@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+BASH="$HOME/.bash_it"
 
 cp $HOME/.bash_profile $HOME/.bash_profile.bak
 
@@ -24,5 +25,64 @@ do
       ;;
     *)
       echo "Please enter Y or N"
+  esac
+done
+
+function load_all() {
+  for file_type in "aliases" "completion" "plugins"
+  do
+    [ ! -d "$BASH/$file_type/enabled" ] && mkdir "$BASH/${file_type}/enabled"
+    ln -s $BASH/${file_type}/available/* "${BASH}/${file_type}/enabled"
+  done
+}
+
+function load_some() {
+  for file_type in "aliases" "completion" "plugins"
+  do
+    for file in `ls $BASH/${file_type}/available`
+    do
+      if [ ! -d "$BASH/$file_type/enabled" ]
+      then
+        mkdir "$BASH/$file_type/enabled"
+      fi
+      while true
+      do
+        read -p "Would you like to enable the ${file%.*.*} $file_type? [Y/N] " RESP
+        case $RESP in
+        [yY])
+          ln -s "$BASH/$file_type/available/$file" "$BASH/$file_type/enabled"
+          ;;
+        [nN])
+          break
+          ;;
+        *)
+          echo "Please choose y or n."
+          ;;
+        esac
+      done
+    done
+  done
+}
+
+while true
+do
+  read -p "Would you like to enable all, some, or no plugins/aliases/tab-completion plugins? Some of these may make bash slower to start up. (all/some/none) " RESP
+  case $RESP
+  in
+  some)
+    load_some
+    break
+    ;;
+  all)
+    load_all
+    break
+    ;;
+  none)
+    break
+    ;;
+  *)
+    echo "Unknown choice. Please enter some, all, or none"
+    continue
+    ;;
   esac
 done
