@@ -26,13 +26,6 @@ doubletime_scm_prompt() {
   fi
 }
 
-virtualenv_prompt() {
-  if [ ! -z "$VIRTUAL_ENV" ]
-  then
-    echo "(`basename $VIRTUAL_ENV`) "
-  fi
-}
-
 function prompt_setter() {
   # Save history
   history -a
