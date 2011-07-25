@@ -48,6 +48,7 @@ function load_some() {
         case $RESP in
         [yY])
           ln -s "$BASH/$file_type/available/$file" "$BASH/$file_type/enabled"
+          break
           ;;
         [nN])
           break
