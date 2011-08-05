@@ -68,14 +68,14 @@ G () {				# goes to distination dir otherwise , stay in the dir
 }
 
 S () {				# SAVE a BOOKMARK
-    /bin/sed "/$@/d" ~/.dirs > ~/.dirs1;
+    sed "/$@/d" ~/.dirs > ~/.dirs1;
     \mv ~/.dirs1 ~/.dirs;
     echo "$@"=\"`pwd`\" >> ~/.dirs;
     source ~/.dirs ;
 }
 
 R () {				# remove a BOOKMARK
-    /bin/sed "/$@/d" ~/.dirs > ~/.dirs1;
+    sed "/$@/d" ~/.dirs > ~/.dirs1;
     \mv ~/.dirs1 ~/.dirs;
 }
 
