@@ -12,7 +12,12 @@ alias _="sudo"
 
 if [ $(uname) = "Linux" ]
 then
-	alias ls="ls --color=always"
+  alias ls="ls --color=always"
+fi
+
+if [ ! -z "$(which gshuf)" ]
+then
+  alias shuf=gshuf
 fi
 
 alias c='clear'
@@ -47,27 +52,27 @@ alias	md='mkdir -p'
 alias	rd=rmdir
 
 function aliases-help() {
-  echo "Generic Alias Usage"
-  echo
-  echo "  sl      = ls"
-  echo "  ls      = ls -G"
-  echo "  la      = ls -AF"
-  echo "  ll      = ls -al"
-  echo "  l       = ls -a"
-  echo "  c/k/cls = clear"
-  echo "  ..      = cd .."
-  echo "  ...     = cd ../.."
-  echo "  -       = cd -"
-  echo "  h       = history"
-  echo "  md      = mkdir -p"
-  echo "  rd      = rmdir"
-  echo "  editor  = $EDITOR"
-  echo "  pager   = $PAGER"
-  echo "  piano   = pianobar"
-  echo "  q       = exit"
-  echo "  irc     = $IRC_CLIENT"
-  echo "  md      = mkdir -p"
-  echo "  rd      = rmdir"
-  echo "  rb      = ruby"
-  echo
+echo "Generic Alias Usage"
+echo
+echo "  sl      = ls"
+echo "  ls      = ls -G"
+echo "  la      = ls -AF"
+echo "  ll      = ls -al"
+echo "  l       = ls -a"
+echo "  c/k/cls = clear"
+echo "  ..      = cd .."
+echo "  ...     = cd ../.."
+echo "  -       = cd -"
+echo "  h       = history"
+echo "  md      = mkdir -p"
+echo "  rd      = rmdir"
+echo "  editor  = $EDITOR"
+echo "  pager   = $PAGER"
+echo "  piano   = pianobar"
+echo "  q       = exit"
+echo "  irc     = $IRC_CLIENT"
+echo "  md      = mkdir -p"
+echo "  rd      = rmdir"
+echo "  rb      = ruby"
+echo
 }
