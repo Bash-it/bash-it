@@ -37,15 +37,19 @@ alias rb="ruby"
 
 alias piano="pianobar"
 
-alias ..='cd ..'        # Go up one directory
-alias ...='cd ../..'    # Go up two directories
-alias -- -="cd -"       # Go back
+alias ..='cd ..'         # Go up one directory
+alias ...='cd ../..'     # Go up two directories
+alias ....='cd ../../..' # Go up two directories
+alias -- -="cd -"        # Go back
 
 # Shell History
 alias h='history'
 
 # Tree
-alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
+if [ ! -x "$(which tree)" ]
+then
+  alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
+fi
 
 # Directory
 alias	md='mkdir -p'
