@@ -14,8 +14,8 @@ if [ $(uname) = "Linux" ]
 then
   alias ls="ls --color=always"
 fi
-
-if [ ! -z "$(which gshuf)" ]
+which gshuf &> /dev/null
+if [ $? -eq 1 ]
 then
   alias shuf=gshuf
 fi
