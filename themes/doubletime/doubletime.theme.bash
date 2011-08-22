@@ -6,8 +6,20 @@ SCM_SVN_CHAR="${bold_cyan}⑆${normal}"
 SCM_HG_CHAR="${bold_red}☿${normal}"
 SCM_THEME_PROMPT_PREFIX=""
 SCM_THEME_PROMPT_SUFFIX=""
-RVM_THEME_PROMPT_PREFIX=" ("
-RVM_THEME_PROMPT_SUFFIX=")"
+if [ ! -z $RVM_THEME_PROMPT_COLOR ]; then
+    RVM_THEME_PROMPT_COLOR=$(eval echo $`echo ${RVM_THEME_PROMPT_COLOR}`);
+else
+    RVM_THEME_PROMPT_COLOR="${red}"
+fi
+RVM_THEME_PROMPT_PREFIX="(${RVM_THEME_PROMPT_COLOR}rb${normal}: "
+RVM_THEME_PROMPT_SUFFIX=") "
+if [ ! -z $VIRTUALENV_THEME_PROMPT_COLOR ]; then
+    VIRTUALENV_THEME_PROMPT_COLOR=$(eval echo $`echo ${VIRTUALENV_THEME_PROMPT_COLOR}`);
+else
+    VIRTUALENV_THEME_PROMPT_COLOR="${green}"
+fi
+VIRTUALENV_THEME_PROMPT_PREFIX="(${VIRTUALENV_THEME_PROMPT_COLOR}py${normal}: "
+VIRTUALENV_THEME_PROMPT_SUFFIX=") "
 
 if [ ! -z $THEME_PROMPT_HOST_COLOR ]; then
     THEME_PROMPT_HOST_COLOR=$(eval echo $`echo ${THEME_PROMPT_HOST_COLOR}`);
@@ -26,13 +38,6 @@ doubletime_scm_prompt() {
   fi
 }
 
-virtualenv_prompt() {
-  if [ ! -z "$VIRTUAL_ENV" ]
-  then
-    echo "(`basename $VIRTUAL_ENV`) "
-  fi
-}
-
 function prompt_setter() {
   # Save history
   history -a
@@ -45,7 +50,7 @@ function prompt_setter() {
       clock=$THEME_PROMPT_CLOCK_FORMAT
   fi
   PS1="
-$clock $(scm_char) [$THEME_PROMPT_HOST_COLOR\u@${THEME_PROMPT_HOST}$reset_color] $(virtualenv_prompt)\w
+$clock $(scm_char) [$THEME_PROMPT_HOST_COLOR\u@${THEME_PROMPT_HOST}$reset_color] $(virtualenv_prompt)$(rvm_version_prompt)\w
 $(doubletime_scm_prompt)$reset_color $ "
   PS2='> '
   PS4='+ '
