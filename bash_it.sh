@@ -22,7 +22,7 @@ for file_type in "aliases" "completion" "plugins"
 do
   if [ ! -d "${BASH}/${file_type}/enabled" ]
   then
-    break
+    continue 
   fi
   FILES="${BASH}/${file_type}/enabled/*.bash"
   for config_file in $FILES
