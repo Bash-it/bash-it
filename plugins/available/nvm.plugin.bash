@@ -4,7 +4,6 @@
 #
 # Implemented by Tim Caswell <tim@creationix.com>
 # with much bash help from Matthew Ranney
-# https://github.com/creationix/nvm
 
 export NVM_DIR=$HOME/.nvm
 
@@ -89,6 +88,7 @@ nvm()
       echo "Usage:"
       echo "    nvm help                    Show this message"
       echo "    nvm install <version>       Download and install a <version>"
+      echo "    nvm uninstall <version>     Uninstall a version"
       echo "    nvm use <version>           Modify PATH to use <version>"
       echo "    nvm ls                      List versions (installed versions are blue)"
       echo "    nvm ls <version>            List versions matching a given description"
@@ -96,13 +96,15 @@ nvm()
       echo "    nvm sync                    Update the local cache of available versions"
       echo "    nvm alias [<pattern>]       Show all aliases beginning with <pattern>"
       echo "    nvm alias <name> <version>  Set an alias named <name> pointing to <version>"
+      echo "    nvm unalias <name>          Deletes the alias named <name>"
+      echo "    nvm copy-packages <version> Install global NPM packages contained in <version> to current version"
       echo
       echo "Example:"
       echo "    nvm install v0.4.0          Install a specific version number"
       echo "    nvm use stable              Use the stable release"
       echo "    nvm install latest          Install the latest, possibly unstable version"
       echo "    nvm use 0.2                 Use the latest available 0.2.x release"
-      echo "    nvm alias default v0.4.0    Set v0.4.0 as the default" 
+      echo "    nvm alias default v0.4.0    Set v0.4.0 as the default"
       echo
     ;;
     "install" )
@@ -112,10 +114,17 @@ nvm()
       fi
       [ "$NOCURL" ] && curl && return
       VERSION=`nvm_version $2`
+      tarball=''
+      if [ "`curl -Is "http://nodejs.org/dist/$VERSION/node-$VERSION.tar.gz" | grep '200 OK'`" != '' ]; then
+        tarball="http://nodejs.org/dist/$VERSION/node-$VERSION.tar.gz"
+      elif [ "`curl -Is "http://nodejs.org/dist/node-$VERSION.tar.gz" | grep '200 OK'`" != '' ]; then
+        tarball="http://nodejs.org/dist/node-$VERSION.tar.gz"
+      fi
       if (
+        [ ! -z $tarball ] && \
         mkdir -p "$NVM_DIR/src" && \
         cd "$NVM_DIR/src" && \
-        curl -C - -# "http://nodejs.org/dist/node-$VERSION.tar.gz" -o "node-$VERSION.tar.gz" && \
+        curl -C - -# $tarball -o "node-$VERSION.tar.gz" && \
         tar -xzf "node-$VERSION.tar.gz" && \
         cd "node-$VERSION" && \
         ./configure --prefix="$NVM_DIR/$VERSION" && \
@@ -133,6 +142,36 @@ nvm()
       else
         echo "nvm: install $VERSION failed!"
       fi
+    ;;
+    "uninstall" )
+      [ $# -ne 2 ] && nvm help && return
+      if [[ $2 == `nvm_version` ]]; then
+        echo "nvm: Cannot uninstall currently-active node version, $2."
+        return
+      fi
+      VERSION=`nvm_version $2`
+      if [ ! -d $NVM_DIR/$VERSION ]; then
+        echo "$VERSION version is not installed yet"
+        return;
+      fi
+
+      # Delete all files related to target version.
+      (cd "$NVM_DIR" && \
+          rm -rf "node-$VERSION" 2>/dev/null && \
+          mkdir -p "$NVM_DIR/src" && \
+          cd "$NVM_DIR/src" && \
+          rm -f "node-$VERSION.tar.gz" 2>/dev/null && \
+          rm -rf "$NVM_DIR/$VERSION" 2>/dev/null)
+      echo "Uninstalled node $VERSION"
+
+      # Rm any aliases that point to uninstalled version.
+      for A in `grep -l $VERSION $NVM_DIR/alias/*`
+      do
+        nvm unalias `basename $A`
+      done
+
+      # Run sync in order to restore version stub file in $NVM_DIR.
+      nvm sync 1>/dev/null
     ;;
     "deactivate" )
       if [[ $PATH == *$NVM_DIR/*/bin* ]]; then
@@ -210,7 +249,7 @@ nvm()
       mkdir -p $NVM_DIR/alias
       VERSION=`nvm_version $3`
       if [ $? -ne 0 ]; then
-        echo "! WARNING: Version '$3' does not exist." >&2 
+        echo "! WARNING: Version '$3' does not exist." >&2
       fi
       echo $3 > "$NVM_DIR/alias/$2"
       if [ ! "$3" = "$VERSION" ]; then
@@ -220,6 +259,13 @@ nvm()
         echo "$2 -> $3"
       fi
     ;;
+    "unalias" )
+      mkdir -p $NVM_DIR/alias
+      [ $# -ne 2 ] && nvm help && return
+      [ ! -f $NVM_DIR/alias/$2 ] && echo "Alias $2 doesn't exist!" && return
+      rm -f $NVM_DIR/alias/$2
+      echo "Deleted alias $2"
+    ;;
     "sync" )
         [ "$NOCURL" ] && curl && return
         LATEST=`nvm_version latest`
@@ -227,13 +273,23 @@ nvm()
         (cd $NVM_DIR
         rm -f v* 2>/dev/null
         printf "# syncing with nodejs.org..."
-        for VER in `curl -s http://nodejs.org/dist/ -o - | grep 'node-v.*\.tar\.gz' | sed -e 's/.*node-//' -e 's/\.tar\.gz.*//'`; do
+        for VER in `curl -s http://nodejs.org/dist/ -o - | grep 'v[0-9].*' | sed -e 's/.*node-//' -e 's/\.tar\.gz.*//' -e 's/<[^>]*>//' -e 's/\/<[^>]*>.*//'`; do
             touch $VER
         done
         echo " done."
         )
         [ "$STABLE" = `nvm_version stable` ] || echo "NEW stable: `nvm_version stable`"
         [ "$LATEST" = `nvm_version latest` ] || echo "NEW latest: `nvm_version latest`"
+    ;;
+    "copy-packages" )
+        if [ $# -ne 2 ]; then
+          nvm help
+          return
+        fi
+        VERSION=`nvm_version $2`
+        ROOT=`nvm use $VERSION && npm -g root`
+        INSTALLS=`nvm use $VERSION > /dev/null && npm -g -p ll | grep "$ROOT\/[^/]\+$" | cut -d '/' -f 8 | cut -d ":" -f 2 | grep -v npm | tr "\n" " "`
+        npm install -g $INSTALLS
     ;;
     "clear-cache" )
         rm -f $NVM_DIR/v* 2>/dev/null
