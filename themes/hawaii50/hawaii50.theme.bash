@@ -30,6 +30,15 @@
 # specific like getting ip, etc.
 #
 
+# IMPORTANT THINGS TO CHANGE ==================================================
+
+# Show IP in prompt
+# One thing to be weary about if you have slow Internets
+IP_ENABLED=1
+
+# virtual prompts
+VIRTUAL_PROMPT_ENABLED=1
+
 # COLORS ======================================================================
 ORANGE='\[\e[0;33m\]'
 
@@ -60,9 +69,6 @@ RVM_THEME_PROMPT_SUFFIX=''
 VIRTUALENV_THEME_PROMPT_PREFIX=''
 VIRTUALENV_THEME_PROMPT_SUFFIX=''
 
-# virtual prompts
-VIRTUAL_PROMPT_ENABLED=1
-
 VIRTUAL_THEME_PROMPT_PREFIX=' using '
 VIRTUAL_THEME_PROMPT_SUFFIX=''
 
@@ -80,6 +86,13 @@ IP_SEPARATOR=', '
 function ip {
     myip=$(curl -s checkip.dyndns.org | grep -Eo '[0-9\.]+')
     echo -e "$(ips | sed -e :a -e '$!N;s/\n/${IP_SEPARATOR}/;ta' | sed -e 's/127\.0\.0\.1\${IP_SEPARATOR}//g'), ${myip}"
+}
+
+# Displays ip prompt 
+function ip_prompt_info() {
+    if [[ $IP_ENABLED == 1 ]]; then
+        echo -e " ${DEFAULT_COLOR}(${IP_COLOR}$(ip)${DEFAULT_COLOR})"
+    fi 
 }
 
 # Displays virtual info prompt (virtualenv/rvm)
@@ -176,9 +189,9 @@ function prompt() {
     [ $UID -eq "0" ] && UC=$SUPERUSER_COLOR
 
     if [[ $VIRTUAL_PROMPT_ENABLED == 1 ]]; then
-        PS1="$(scm_char) ${UC}\u ${DEFAULT_COLOR}at ${MACHINE_COLOR}\h ${DEFAULT_COLOR}(${IP_COLOR}$(ip)${DEFAULT_COLOR}) in ${DIRECTORY_COLOR}$(limited_pwd)${DEFAULT_COLOR}$(virtual_prompt_info)$(scm_prompt_info)${reset_color} \$ "
+        PS1="$(scm_char) ${UC}\u ${DEFAULT_COLOR}at ${MACHINE_COLOR}\h$(ip_prompt_info) ${DEFAULT_COLOR}in ${DIRECTORY_COLOR}$(limited_pwd)${DEFAULT_COLOR}$(virtual_prompt_info)$(scm_prompt_info)${reset_color} \$ "
     else
-        PS1="$(scm_char) ${UC}\u ${DEFAULT_COLOR}at ${MACHINE_COLOR}\h ${DEFAULT_COLOR}(${IP_COLOR}$(ip)${DEFAULT_COLOR}) in ${DIRECTORY_COLOR}$(limited_pwd)${DEFAULT_COLOR}$(scm_prompt_info)${reset_color} \$ "
+        PS1="$(scm_char) ${UC}\u ${DEFAULT_COLOR}at ${MACHINE_COLOR}\h$(ip_prompt_info) ${DEFAULT_COLOR}in ${DIRECTORY_COLOR}$(limited_pwd)${DEFAULT_COLOR}$(scm_prompt_info)${reset_color} \$ "
     fi
     PS2='> '
     PS4='+ '

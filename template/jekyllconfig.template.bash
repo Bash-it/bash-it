@@ -15,3 +15,7 @@ REMOTES="user@host_1:path user@host_2:path"
 # Same rules as above. Can be HTML, textile, or markdown
 
 MARKUPS="markdown textile"
+
+# If you want to use a different editor for Jekyll, change the value of this variable
+
+JEKYLL_EDITOR="$EDITOR"
