@@ -22,8 +22,7 @@ for file_type in "aliases" "completion" "plugins"
 do
   if [ ! -d "${BASH}/${file_type}/enabled" ]
   then
-    mkdir "${BASH}/${file_type}/enabled"
-    ln -s ${BASH}/${file_type}/available/* "${BASH}/${file_type}/enabled"
+    continue 
   fi
   FILES="${BASH}/${file_type}/enabled/*.bash"
   for config_file in $FILES
@@ -55,6 +54,13 @@ fi
 PREVIEW="less"
 [ -s /usr/bin/gloobus-preview ] && PREVIEW="gloobus-preview"
 [ -s /Applications/Preview.app ] && PREVIEW="/Applications/Preview.app"
+
+# Load all the Jekyll stuff
+
+if [ -e $HOME/.jekyllconfig ]
+then
+  . $HOME/.jekyllconfig
+fi
 
 
 #
