@@ -7,11 +7,11 @@ alias reload='source ~/.bash_profile'
 # Load the framework
 
 # Load colors first so they can be use in base theme
-source "${BASH}/themes/colors.theme.bash"
-source "${BASH}/themes/base.theme.bash"
+source "${BASH_IT}/themes/colors.theme.bash"
+source "${BASH_IT}/themes/base.theme.bash"
 
 # Library
-LIB="${BASH}/lib/*.bash"
+LIB="${BASH_IT}/lib/*.bash"
 for config_file in $LIB
 do
   source $config_file
@@ -20,11 +20,11 @@ done
 # Load enabled aliases, completion, plugins
 for file_type in "aliases" "completion" "plugins"
 do
-  if [ ! -d "${BASH}/${file_type}/enabled" ]
+  if [ ! -d "${BASH_IT}/${file_type}/enabled" ]
   then
-    continue 
+    continue
   fi
-  FILES="${BASH}/${file_type}/enabled/*.bash"
+  FILES="${BASH_IT}/${file_type}/enabled/*.bash"
   for config_file in $FILES
   do
     source $config_file
@@ -32,13 +32,13 @@ do
 done
 
 # Load any custom aliases that the user has added
-if [ -e "${BASH}/aliases/custom.aliases.bash" ]
+if [ -e "${BASH_IT}/aliases/custom.aliases.bash" ]
 then
-  source "${BASH}/aliases/custom.aliases.bash"
+  source "${BASH_IT}/aliases/custom.aliases.bash"
 fi
 
 # Custom
-CUSTOM="${BASH}/custom/*.bash"
+CUSTOM="${BASH_IT}/custom/*.bash"
 for config_file in $CUSTOM
 do
   source $config_file
