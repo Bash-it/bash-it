@@ -6,15 +6,16 @@ SCM_THEME_PROMPT_CLEAN=' ✓'
 SCM_THEME_PROMPT_PREFIX=' |'
 SCM_THEME_PROMPT_SUFFIX='|'
 
-GIT='git'
+SCM_GIT='git'
 SCM_GIT_CHAR='±'
 
-HG='hg'
+SCM_HG='hg'
 SCM_HG_CHAR='☿'
 
-SVN='svn'
+SCM_SVN='svn'
 SCM_SVN_CHAR='⑆'
 
+SCM_NONE='NONE'
 SCM_NONE_CHAR='○'
 
 RVM_THEME_PROMPT_PREFIX=' |'
@@ -24,76 +25,85 @@ VIRTUALENV_THEME_PROMPT_PREFIX=' |'
 VIRTUALENV_THEME_PROMPT_SUFFIX='|'
 
 function scm {
-  if [[ -d .git ]]; then SCM=$GIT
-  elif [[ -n "$(git symbolic-ref HEAD 2> /dev/null)" ]]; then SCM=$GIT
-  elif [[ -d .hg ]]; then SCM=$HG
-  elif [[ -n "$(hg root 2> /dev/null)" ]]; then SCM=$HG
-  elif [[ -d .svn ]]; then SCM=$SVN
-  else SCM='NONE'
+  if [[ -d .git ]]; then SCM=$SCM_GIT
+  elif [[ -n "$(git symbolic-ref HEAD 2> /dev/null)" ]]; then SCM=$SCM_GIT
+  elif [[ -d .hg ]]; then SCM=$SCM_HG
+  elif [[ -n "$(hg root 2> /dev/null)" ]]; then SCM=$SCM_HG
+  elif [[ -d .svn ]]; then SCM=$SCM_SVN
+  else SCM=$SCM_NONE
   fi
 }
 
-function scm_char {
+function scm_prompt_char {
   if [[ -z $SCM ]]; then scm; fi
-  [[ $SCM == $GIT ]] && echo $SCM_GIT_CHAR && return
-  [[ $SCM == $HG ]] && echo $SCM_HG_CHAR && return
-  [[ $SCM == $SVN ]] && echo $SCM_SVN_CHAR && return
-  echo $SCM_NONE_CHAR
+  if [[ $SCM == $SCM_GIT ]]; then SCM_CHAR=$SCM_GIT_CHAR
+  elif [[ $SCM == $SCM_HG ]]; then SCM_CHAR=$SCM_HG_CHAR
+  elif [[ $SCM == $SCM_SVN ]]; then SCM_CHAR=$SCM_SVN_CHAR
+  else SCM_CHAR=$SCM_NONE_CHAR
+  fi
+}
+
+function scm_prompt_vars {
+  scm
+  scm_prompt_char
+  SCM_DIRTY=0
+  SCM_STATE=''
+  [[ $SCM == $SCM_GIT ]] && git_prompt_vars && return
+  [[ $SCM == $SCM_HG ]] && hg_prompt_vars && return
+  [[ $SCM == $SCM_SVN ]] && svn_prompt_vars && return
 }
 
 function scm_prompt_info {
-  if [[ -z $SCM ]]; then scm; fi
-  [[ $SCM == $GIT ]] && git_prompt_info && return
-  [[ $SCM == $HG ]] && hg_prompt_info && return
-  [[ $SCM == $SVN ]] && svn_prompt_info && return
+  scm
+  scm_prompt_char
+  SCM_DIRTY=0
+  SCM_STATE=''
+  [[ $SCM == $SCM_GIT ]] && git_prompt_info && return
+  [[ $SCM == $SCM_HG ]] && hg_prompt_info && return
+  [[ $SCM == $SCM_SVN ]] && svn_prompt_info && return
 }
 
-# Stolen from Steve Losh
-# left in for backwards-compatibility
-function prompt_char {
-    char=$(scm_char);
-    echo -e "$char"
-}
-
-function git_prompt_info {
+function git_prompt_vars {
   if [[ -n $(git status -s 2> /dev/null |grep -v ^# |grep -v "working directory clean") ]]; then
-      state=${GIT_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
+    SCM_DIRTY=1
+     SCM_STATE=${GIT_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
   else
-      state=${GIT_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
+    SCM_DIRTY=0
+     SCM_STATE=${GIT_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
   fi
-  prefix=${GIT_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
-  suffix=${GIT_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
-  ref=$(git symbolic-ref HEAD 2> /dev/null) || return
-
-  echo -e "$prefix${ref#refs/heads/}$state$suffix"
+  SCM_PREFIX=${GIT_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
+  SCM_SUFFIX=${GIT_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
+  local ref=$(git symbolic-ref HEAD 2> /dev/null)
+  SCM_BRANCH=${ref#refs/heads/}
+  SCM_CHANGE=$(git rev-parse HEAD 2>/dev/null)
 }
 
-function svn_prompt_info {
+function svn_prompt_vars {
   if [[ -n $(svn status 2> /dev/null) ]]; then
-      state=${SVN_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
+    SCM_DIRTY=1
+      SCM_STATE=${SVN_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
   else
-      state=${SVN_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
+    SCM_DIRTY=0
+      SCM_STATE=${SVN_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
   fi
-  prefix=${SVN_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
-  suffix=${SVN_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
-  ref=$(svn info 2> /dev/null | awk -F/ '/^URL:/ { for (i=0; i<=NF; i++) { if ($i == "branches" || $i == "tags" ) { print $(i+1); break }; if ($i == "trunk") { print $i; break } } }') || return
-
-  [[ -z $ref ]] && return
-  echo -e "$prefix$ref$state$suffix"
+  SCM_PREFIX=${SVN_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
+  SCM_SUFFIX=${SVN_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
+  SCM_BRANCH=$(svn info 2> /dev/null | awk -F/ '/^URL:/ { for (i=0; i<=NF; i++) { if ($i == "branches" || $i == "tags" ) { print $(i+1); break }; if ($i == "trunk") { print $i; break } } }') || return
+  SCM_CHANGE=$(svn info 2> /dev/null | sed -ne 's#^Revision: ##p' )
 }
 
-function hg_prompt_info() {
+function hg_prompt_vars {
     if [[ -n $(hg status 2> /dev/null) ]]; then
-        state=${HG_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
+      SCM_DIRTY=1
+        SCM_STATE=${HG_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
     else
-        state=${HG_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
+      SCM_DIRTY=0
+        SCM_STATE=${HG_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
     fi
-    prefix=${HG_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
-    suffix=${HG_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
-    branch=$(hg summary 2> /dev/null | grep branch | awk '{print $2}')
-    changeset=$(hg summary 2> /dev/null | grep parent | awk '{print $2}')
-
-    echo -e "$prefix$branch:${changeset#*:}$state$suffix"
+    SCM_PREFIX=${HG_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
+    SCM_SUFFIX=${HG_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
+    SCM_BRANCH=$(hg summary 2> /dev/null | grep branch | awk '{print $2}')
+    SCM_CHANGE=$(hg summary 2> /dev/null | grep parent | awk '{print $2}')
 }
 
 function rvm_version_prompt {
@@ -108,4 +118,29 @@ function virtualenv_prompt {
     virtualenv=$([ ! -z "$VIRTUAL_ENV" ] && echo "`basename $VIRTUAL_ENV`") || return
     echo -e "$VIRTUALENV_THEME_PROMPT_PREFIX$virtualenv$VIRTUALENV_THEME_PROMPT_SUFFIX"
   fi
+}
+
+# backwards-compatibility
+function git_prompt_info {
+  git_prompt_vars
+  echo -e "$SCM_PREFIX$SCM_BRANCH$SCM_STATE$SCM_SUFFIX"
+}
+
+function svn_prompt_info {
+  svn_prompt_vars
+  echo -e "$SCM_PREFIX$SCM_BRANCH$SCM_STATE$SCM_SUFFIX"
+}
+
+function hg_prompt_info() {
+  hg_prompt_vars
+  echo -e "$SCM_PREFIX$SCM_BRANCH:${SCM_CHANGE#*:}$SCM_STATE$SCM_SUFFIX"
+}
+
+function scm_char {
+  scm_prompt_char
+  echo -e "$SCM_CHAR"
+}
+
+function prompt_char {
+    scm_char
 }
