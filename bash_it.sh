@@ -14,7 +14,9 @@ source "${BASH}/themes/base.theme.bash"
 LIB="${BASH}/lib/*.bash"
 for config_file in $LIB
 do
-  source $config_file
+  if [ -e "${config_file}" ]; then
+    source $config_file
+  fi
 done
 
 # Load enabled aliases, completion, plugins
@@ -27,7 +29,9 @@ do
   FILES="${BASH}/${file_type}/enabled/*.bash"
   for config_file in $FILES
   do
-    source $config_file
+    if [ -e "${config_file}" ]; then
+      source $config_file
+    fi
   done
 done
 
@@ -41,7 +45,9 @@ fi
 CUSTOM="${BASH}/custom/*.bash"
 for config_file in $CUSTOM
 do
-  source $config_file
+  if [ -e "${config_file}" ]; then
+    source $config_file
+  fi
 done
 
 
