@@ -53,6 +53,8 @@ prompt() {
             ;;
     "pandora") my_ps_host="${red}\h${normal}";
             ;;
+    * ) my_ps_host="${green}\h${normal}";
+            ;;
     esac
 
     my_ps_user="\[\033[01;32m\]\u\[\033[00m\]";
