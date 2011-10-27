@@ -4,19 +4,6 @@
 # Reload Library
 alias reload='source ~/.bash_profile'
 
-# Load the framework
-
-# Load colors first so they can be use in base theme
-source "${BASH_IT}/themes/colors.theme.bash"
-source "${BASH_IT}/themes/base.theme.bash"
-
-# Library
-LIB="${BASH_IT}/lib/*.bash"
-for config_file in $LIB
-do
-  source $config_file
-done
-
 # Load enabled aliases, completion, plugins
 for file_type in "aliases" "completion" "plugins"
 do
@@ -44,6 +31,17 @@ do
   source $config_file
 done
 
+# Load colors first so they can be use in base theme
+source "${BASH_IT}/themes/colors.theme.bash"
+source "${BASH_IT}/themes/base.theme.bash"
+
+# library
+[ -z "$BASH_IT" ] && export BASH_IT=$HOME/.bash_it
+LIB="${BASH_IT}/lib/*.bash"
+for config_file in $LIB
+do
+  source $config_file
+done
 
 unset config_file
 if [[ $PROMPT ]]; then
