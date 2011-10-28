@@ -8,7 +8,7 @@ function get_ssh_agent_timeout(){
 }
 
 function bind_ssh_agent(){
-  local agent_pid=`ps -ef | grep ssh-agent | grep -v grep  | awk '{print $2}' | xargs`
+  local agent_pid=`ps -U $USER | grep ssh-agent | grep -v grep  | awk '{print $1}' | xargs`
 
   if [ "$agent_pid" = "" ]; then
     ssh-agent -t $(get_ssh_agent_timeout) > ~/.ssh/ssh_agent_rc
