@@ -7,11 +7,11 @@
 export PATH=$PATH:~/.gem/ruby/1.8/bin:/opt/nginx/sbin
 
 # Path to the bash it configuration
-export BASH=$HOME/.bash_it
+export BASH_IT=$HOME/.bash_it
 
 # Lock and Load a custom theme file
 # location /.bash_it/themes/
-export BASH_THEME='bobby'
+export BASH_IT_THEME='bobby'
 
 # Your place for hosting Git repos. I use this for private repos.
 export GIT_HOSTING='git@git.domain.com'
@@ -40,4 +40,4 @@ export TODO="t"
 #export VCPROMPT_EXECUTABLE=~/.vcprompt/bin/vcprompt
 
 # Load Bash It
-source $BASH/bash_it.sh
+source $BASH_IT/bash_it.sh
