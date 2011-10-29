@@ -7,6 +7,17 @@ alias reload='source ~/.bash_profile'
 # Only set $BASH_IT if it's not already set
 [ -z "$BASH_IT" ] && export BASH_IT=$HOME/.bash_it
 
+# Load colors first so they can be use in base theme
+source "${BASH_IT}/themes/colors.theme.bash"
+source "${BASH_IT}/themes/base.theme.bash"
+
+# library
+LIB="${BASH_IT}/lib/*.bash"
+for config_file in $LIB
+do
+  source $config_file
+done
+
 # Load enabled aliases, completion, plugins
 for file_type in "aliases" "completion" "plugins"
 do
@@ -36,17 +47,6 @@ do
   if [ -e "${config_file}" ]; then
     source $config_file
   fi
-done
-
-# Load colors first so they can be use in base theme
-source "${BASH_IT}/themes/colors.theme.bash"
-source "${BASH_IT}/themes/base.theme.bash"
-
-# library
-LIB="${BASH_IT}/lib/*.bash"
-for config_file in $LIB
-do
-  source $config_file
 done
 
 unset config_file
