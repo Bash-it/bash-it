@@ -39,7 +39,7 @@ function scm_prompt_info {
   if [[ -z $SCM ]]; then scm; fi
   [[ $SCM == $GIT ]] && git_prompt_info && return
   [[ $SCM == $HG ]] && hg_prompt_info && return
-  [[ $SCM == $SVN ]] && svn_prompt_info && return
+#  [[ $SCM == $SVN ]] && svn_prompt_info && return
 }
 
 # Stolen from Steve Losh
@@ -74,6 +74,20 @@ function svn_prompt_info {
 
   [[ -z $ref ]] && return
   echo -e "$prefix$ref$state$suffix"
+}
+
+function hg_prompt_info() {
+    if [[ -n $(hg status 2> /dev/null) ]]; then
+        state=${HG_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
+    else
+        state=${HG_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
+    fi
+    prefix=${HG_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
+    suffix=${HG_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
+    branch=$(hg summary 2> /dev/null | grep branch | awk '{print $2}')
+    changeset=$(hg summary 2> /dev/null | grep parent | awk '{print $2}')
+
+    echo -e "$prefix$branch:${changeset#*:}$state$suffix"
 }
 
 function rvm_version_prompt {
