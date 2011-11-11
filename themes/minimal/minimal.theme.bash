@@ -1,21 +1,12 @@
-prompt_setter() {
-	if [[ $? -eq 0 ]]; then
-		if [ ! $VIMRUNTIME = "" ]
-		then
-			PS1="{vim} \W "
-		else
-			PS1="\W "
-		fi
-	else
-		if [ ! $VIMRUNTIME = "" ]
-		then
-			PS1="{vim} ${bold_red}\W ${normal}"
-		else
-			PS1="${bold_red}\W ${normal}"
-		fi
-	fi
+#!/usr/bin/env bash
+
+SCM_THEME_PROMPT_PREFIX="${cyan}(${green}"
+SCM_THEME_PROMPT_SUFFIX="${cyan})"
+SCM_THEME_PROMPT_DIRTY=" ${red}✗"
+SCM_THEME_PROMPT_CLEAN=" ${green}✓"
+
+prompt() {
+  PS1="$(scm_prompt_info)${reset_color} ${cyan}\W${reset_color} "
 }
 
-PROMPT_COMMAND=prompt_setter
-
-export PS3=">> "
+PROMPT_COMMAND=prompt

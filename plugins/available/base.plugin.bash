@@ -6,14 +6,50 @@ function ips {
   ifconfig | grep "inet " | awk '{ print $2 }'
 }
 
+function down4me() {
+  curl -s "http://www.downforeveryoneorjustme.com/$1" | sed '/just you/!d;s/<[^>]*>//g'
+}
+
 function myip {
   res=$(curl -s checkip.dyndns.org | grep -Eo '[0-9\.]+')
   echo "Your public IP is: ${bold_green} $res ${normal}"
 }
 
-function mkcd(){
-	mkdir -p "$*"
-	cd "$*"
+pass() {
+  which gshuf &> /dev/null
+  if [ $? -eq 1 ]
+  then
+    echo "Error: shuf isn't installed!"
+    return 1
+  fi
+
+  pass=$(shuf -n4 /usr/share/dict/words | tr '\n' ' ')
+  echo "With spaces (easier to memorize): $pass"
+  echo "Without (use this as the pass): $(echo $pass | tr -d ' ')"
+}
+
+# Function for previewing markdown files in the browser
+
+function pmdown() {
+  if command -v markdown &>/dev/null
+  then
+    markdown $1 | browser
+  else
+    echo "You don't have a markdown command installed!"
+  fi
+}
+
+# Make a directory and immediately 'cd' into it
+
+function mkcd() {
+  mkdir -p "$*"
+  cd "$*"
+}
+
+# Search through directory contents with grep
+
+function lsgrep(){
+  ls | grep "$*"
 }
 
 # View man documentation in Preview
@@ -67,6 +103,11 @@ function t() {
 	 else
 		 echo "$*" > ~/.t
 	 fi
+}
+
+# Checks for existence of a command
+command_exists () {
+    type "$1" &> /dev/null ;
 }
 
 # List all plugins and functions defined by bash-it

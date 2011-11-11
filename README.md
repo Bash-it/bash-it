@@ -1,46 +1,53 @@
 # Bash it
 
-'Bash it' is a mash up of my own bash commands and scripts, other bash stuff I have found and a shameless ripoff of [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh). :)
+**Bash it** is a mash up of my own bash commands and scripts, other bash stuff I have found. 
 
-Includes some autocompletion tools, theming support, aliases, custom functions, a few stolen pieces from Steve Losh, and more.
+(And a shameless ripoff of [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh). :)
+
+Includes autocompletion, themes, aliases, custom functions, a few stolen pieces from Steve Losh, and more.
 
 ## Install
 
-Check a clone of this repo. You can view what a sample `~/.bash_profile` looks like in `template/bash_profile.template.bash`. If you wanted to use that template, make sure to make a backup of your current `~/.bash_profile` file.
+1. Check a clone of this repo: `git clone http://github.com/revans/bash-it.git ~/.bash_it`
+2. Run `~/.bash_it/install.sh` (it automatically backs up your `~/.bash_profile`)
+3. Edit your `~/.bash_profile` file in order to customize bash-it.
 
-	git clone http://github.com/revans/bash-it.git bash_it
-
-	cp ~/.bash_profile ~/.bash_profile_original
-	cp <path/to/cloned/repo>/template/bash_profile.template.bash ~/.bash_profile
+**NOTE:**
+The install script will also prompt you asking if you use [Jekyll](https://github.com/mojombo/jekyll). 
+This is to set up the `.jekyllconfig` file, which stores info necessary to use the Jekyll plugin.
 
 
 ## Help Screens
 
-	bash-it (will show all the help commands)
-	aliases-help
-	rails-help
-	git-help
-    plugins-help
+```
+bash-it (will show all the help commands)
+aliases-help
+rails-help
+git-help
+plugins-help
+```
 
 ## Your Custom scripts, aliases, and functions
 
-For custom scripts, and aliases, you can create the following files and they will be ignored by the git repo:
+For custom scripts, and aliases, just create the following files (they'll be ignored by the git repo):
 
 * `aliases/custom.aliases.bash`
 * `lib/custom.bash`
 * `plugins/custom.plugins.bash`
 
-and anything in the custom directory will be ignored with the exception of `custom/example.bash`.
+Anything in the custom directory will be ignored, with the exception of `custom/example.bash`.
 
 ## Themes
 
-There are a few bash-it themes, but I'm hoping the community will jump in and create their own custom prompts and share their creations with everyone else by submitting a pull request to me (revans).
+There are a few bash it themes.  If you've created your own custom prompts, I'd love it if you shared with everyone else!  Just submit a Pull Request to me (revans).
 
 ## Help out
 
-I think all of us have our own custom scripts that we have added over time and so following in the footsteps of oh-my-zsh, bash-it was created as a framework for those who choose to use bash as their shell. As a community, I'm excited to see what everyone else has in their custom toolbox and am hoping that they'll share it with everyone by submitting a pull request to bash-it.
+I think everyone has their own custom scripts accumulated over time.  And so, following in the footsteps of oh-my-zsh, bash it is a framework for easily customizing your bash shell. Everyone's got a custom toolbox, so let's start making them even better, **as a community!**
 
-So, if you have contributions to bash-it, please send me a pull request and I'll take a look at it and commit it to the repo as long as it looks good. If you do change an existing command, please give an explanation as to why. That will help a lot when I merge your changes in. Thanks, and happing bashing!
+Send me a pull request and I'll merge it as long as it looks good. If you change an existing command, please give an explanation why. That will help a lot when I merge your changes in. 
+
+Thanks, and happing bashing!
 
 
 ## Contributors

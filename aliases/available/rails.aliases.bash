@@ -10,6 +10,7 @@ alias rd='rails dbconsole'
 alias rp='rails plugin'
 alias ra='rails application'
 alias rd='rails destroy'
+alias dbm='rake db:migrate'
 
 alias ss='script/server'
 alias ts="thin start"     # thin server
