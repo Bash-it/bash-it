@@ -2,17 +2,17 @@
 
 # set colors for use throughout the prompt
 # i like things consistent
-BRACKET_COLOR=$blue
-STRING_COLOR=$green
+BRACKET_COLOR=${blue}
+STRING_COLOR=${green}
 
 SCM_THEME_PROMPT_PREFIX=""
 SCM_THEME_PROMPT_SUFFIX=""
 
-SCM_THEME_PROMPT_DIRTY=' ${bold_red}✗${normal}'
-SCM_THEME_PROMPT_CLEAN=' ${bold_green}✓${normal}'
-SCM_GIT_CHAR='${STRING_COLOR}±${normal}'
-SCM_SVN_CHAR='${bold_cyan}⑆${normal}'
-SCM_HG_CHAR='${bold_red}☿${normal}'
+SCM_THEME_PROMPT_DIRTY=" ${bold_red}✗${normal}"
+SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓${normal}"
+SCM_GIT_CHAR="${STRING_COLOR}±${normal}"
+SCM_SVN_CHAR="${bold_cyan}⑆${normal}"
+SCM_HG_CHAR="${bold_red}☿${normal}"
 
 #Mysql Prompt
 export MYSQL_PS1="(\u@\h) [\d]> "
@@ -39,7 +39,7 @@ __my_rvm_ruby_version() {
 is_vim_shell() {
         if [ ! -z "$VIMRUNTIME" ]
         then
-                echo "$BRACKET_COLOR[${STRING_COLOR}vim shell$BRACKET_COLOR]$normal"
+                echo "${BRACKET_COLOR}[${STRING_COLOR}vim shell${BRACKET_COLOR}]${normal}"
         fi
 }
 
@@ -52,7 +52,7 @@ todo_txt_count() {
     if `hash todo.sh 2>&-`; then # is todo.sh installed
         count=`todo.sh ls | egrep "TODO: [0-9]+ of ([0-9]+) tasks shown" | awk '{ print $4 }'`
         if is_integer $count; then # did we get a sane answer back
-            echo "$BRACKET_COLOR[${STRING_COLOR}T:$count$BRACKET_COLOR]$normal"
+            echo "${BRACKET_COLOR}[${STRING_COLOR}T:$count${BRACKET_COLOR}]$normal"
         fi
     fi
 }
@@ -63,7 +63,7 @@ modern_scm_prompt() {
         then
                 return
         else
-                echo "$BRACKET_COLOR[$(scm_char)$BRACKET_COLOR][$STRING_COLOR$(scm_prompt_info)$BRACKET_COLOR]$normal"
+                echo "${BRACKET_COLOR}[${CHAR}${BRACKET_COLOR}][${STRING_COLOR}$(scm_prompt_info)${BRACKET_COLOR}]$normal"
         fi
 }
 
