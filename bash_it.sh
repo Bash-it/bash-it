@@ -4,59 +4,64 @@
 # Reload Library
 alias reload='source ~/.bash_profile'
 
-# Load the framework
+# Only set $BASH_IT if it's not already set
+if [ -z "$BASH_IT" ];
+then
+    # Setting $BASH to maintain backwards compatibility
+    # TODO: warn users that they should upgrade their .bash_profile
+    export BASH_IT=$BASH
+    export BASH=`bash -c 'echo $BASH'`
+fi
+
+# For backwards compatibility, look in old BASH_THEME location
+if [ -z "$BASH_IT_THEME" ];
+then
+    # TODO: warn users that they should upgrade their .bash_profile
+    export BASH_IT_THEME="$BASH_THEME";
+    unset $BASH_THEME;
+fi
 
 # Load colors first so they can be use in base theme
-source "${BASH}/themes/colors.theme.bash"
-source "${BASH}/themes/base.theme.bash"
+source "${BASH_IT}/themes/colors.theme.bash"
+source "${BASH_IT}/themes/base.theme.bash"
 
-# Library
-LIB="${BASH}/lib/*.bash"
+# library
+LIB="${BASH_IT}/lib/*.bash"
 for config_file in $LIB
 do
   source $config_file
 done
 
-# Tab Completion
-COMPLETION="${BASH}/completion/*.bash"
-for config_file in $COMPLETION
+# Load enabled aliases, completion, plugins
+for file_type in "aliases" "completion" "plugins"
 do
-  source $config_file
+  if [ ! -d "${BASH_IT}/${file_type}/enabled" ]
+  then
+    continue
+  fi
+  FILES="${BASH_IT}/${file_type}/enabled/*.bash"
+  for config_file in $FILES
+  do
+    if [ -e "${config_file}" ]; then
+      source $config_file
+    fi
+  done
 done
 
-# Plugins
-if [ ! -d "${BASH}/plugins/enabled" ]
+# Load any custom aliases that the user has added
+if [ -e "${BASH_IT}/aliases/custom.aliases.bash" ]
 then
-  mkdir "${BASH}/plugins/enabled"
-  ln -s ${BASH}/plugins/available/* "${BASH}/plugins/enabled"
+  source "${BASH_IT}/aliases/custom.aliases.bash"
 fi
-PLUGINS="${BASH}/plugins/enabled/*.bash"
-for config_file in $PLUGINS
-do
-  source $config_file
-done
-
-# Aliases
-if [ ! -d "${BASH}/aliases/enabled" ]
-then
-  mkdir "${BASH}/aliases/enabled"
-  ln -s ${BASH}/aliases/available/* "${BASH}/aliases/enabled"
-fi
-FUNCTIONS="${BASH}/aliases/enabled/*.bash"
-for config_file in $FUNCTIONS
-do
-  source $config_file
-done
-
-source "${BASH}/aliases/custom.aliases.bash"
 
 # Custom
-CUSTOM="${BASH}/custom/*.bash"
+CUSTOM="${BASH_IT}/custom/*.bash"
 for config_file in $CUSTOM
 do
-  source $config_file
+  if [ -e "${config_file}" ]; then
+    source $config_file
+  fi
 done
-
 
 unset config_file
 if [[ $PROMPT ]]; then
@@ -67,6 +72,13 @@ fi
 PREVIEW="less"
 [ -s /usr/bin/gloobus-preview ] && PREVIEW="gloobus-preview"
 [ -s /Applications/Preview.app ] && PREVIEW="/Applications/Preview.app"
+
+# Load all the Jekyll stuff
+
+if [ -e $HOME/.jekyllconfig ]
+then
+  . $HOME/.jekyllconfig
+fi
 
 
 #
