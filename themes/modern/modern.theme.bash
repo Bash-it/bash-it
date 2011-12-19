@@ -41,7 +41,7 @@ prompt() {
 		# Yes, the indenting on these is weird, but it has to be like
 		# this otherwise it won't display properly.
 
-    PS1="${TITLEBAR}${bold_red}┌─${reset_color}$(modern_scm_prompt)[${cyan}\W${normal}][$(battery_charge)]$(is_vim_shell)
+		PS1="${bold_red}┌─${reset_color}$(scm_prompt)[${cyan}\W${normal}]$(is_vim_shell)
 ${bold_red}└─▪${normal} "
 	else
 		PS1="${TITLEBAR}┌─$(modern_scm_prompt)[${cyan}\W${normal}][$(battery_charge)]$(is_vim_shell)
