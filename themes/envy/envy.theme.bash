@@ -10,7 +10,7 @@ GIT_THEME_PROMPT_PREFIX=" ${green}|"
 GIT_THEME_PROMPT_SUFFIX="${green}|"
 
 function prompt_command() {
-    PS1="\n${yellow}$(rbfu_version_prompt)$(rbenv_version_prompt)$(rvm_version_prompt) ${purple}\h ${reset_color}in ${green}\w\n${bold_cyan}$(scm_char)${green}$(scm_prompt_info) ${green}→${reset_color} "
+    PS1="\n${yellow}$(ruby_version_prompt) ${purple}\h ${reset_color}in ${green}\w\n${bold_cyan}$(scm_char)${green}$(scm_prompt_info) ${green}→${reset_color} "
 }
 
 PROMPT_COMMAND=prompt_command;

@@ -132,6 +132,10 @@ function rbfu_version_prompt {
   fi
 }
 
+function ruby_version_prompt {
+  echo -e "$(rbfu_version_prompt)$(rbenv_version_prompt)$(rvm_version_prompt)"
+}
+
 function virtualenv_prompt {
   if which virtualenv &> /dev/null; then
     virtualenv=$([ ! -z "$VIRTUAL_ENV" ] && echo "`basename $VIRTUAL_ENV`") || return
