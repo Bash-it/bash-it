@@ -12,7 +12,7 @@ function down4me() {
 
 function myip {
   res=$(curl -s checkip.dyndns.org | grep -Eo '[0-9\.]+')
-  echo "Your public IP is: ${bold_green} $res ${normal}"
+  echo -e "Your public IP is: ${echo_bold_green} $res ${echo_normal}"
 }
 
 pass() {
