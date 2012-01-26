@@ -11,9 +11,9 @@ prompt_setter() {
   history -c
   history -r
   # displays user@server in purple
-  # PS1="$red$(scm_char) $purple\u@\h$reset_color:$blue\w$yellow$(scm_prompt_info)$(rvm_version_prompt) $black\$$reset_color "
+  # PS1="$red$(scm_char) $purple\u@\h$reset_color:$blue\w$yellow$(scm_prompt_info)$(ruby_version_prompt) $black\$$reset_color "
   # no user@server
-  PS1="$red$(scm_char) $blue\w$yellow$(scm_prompt_info)$(rvm_version_prompt) $black\$$reset_color "
+  PS1="$red$(scm_char) $blue\w$yellow$(scm_prompt_info)$(ruby_version_prompt) $black\$$reset_color "
   PS2='> '
   PS4='+ '
 }
