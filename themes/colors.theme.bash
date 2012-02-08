@@ -1,56 +1,76 @@
 #!/bin/bash
 
+function __ {
+  echo "$@"
+}
+
 function __make_ansi {
-  echo "\[\e[$1m\]"
+  next=$1 && shift
+  echo "\[\e[$(__$next $@)m\]"
 }
 
 function __make_echo {
-  echo "\033[$1m"
+  next=$1 && shift
+  echo "\033[$(__$next $@)m"
 }
 
 
 function __reset {
-  echo "0${1:+;$1}"
+  next=$1 && shift
+  out="$(__$next $@)"
+  echo "0${out:+;${out}}"
 }
 
 function __bold {
-  echo "${1:+$1;}1"
+  next=$1 && shift
+  out="$(__$next $@)"
+  echo "${out:+${out};}1"
 }
 
 function __faint {
-  echo "${1:+$1;}2"
+  next=$1 && shift
+  out="$(__$next $@)"
+  echo "${out:+${out};}2"
 }
 
 function __italic {
-  echo "${1:+$1;}3"
+  next=$1 && shift
+  out="$(__$next $@)"
+  echo "${out:+${out};}3"
 }
 
 function __underline {
-  echo "${1:+$1;}4"
+  next=$1 && shift
+  out="$(__$next $@)"
+  echo "${out:+${out};}4"
 }
 
 function __negative {
-  echo "${1:+$1;}7"
+  next=$1 && shift
+  out="$(__$next $@)"
+  echo "${out:+${out};}7"
 }
 
 function __crossed {
-  echo "${1:+$1;}8"
+  next=$1 && shift
+  out="$(__$next $@)"
+  echo "${out:+${out};}8"
 }
 
 
-function __normal_fg {
+function __color_normal_fg {
   echo "3$1"
 }
 
-function __normal_bg {
+function __color_normal_bg {
   echo "4$1"
 }
 
-function __bright_fg {
+function __color_bright_fg {
   echo "9$1"
 }
 
-function __bright_bg {
+function __color_bright_bg {
   echo "10$1"
 }
 
@@ -88,69 +108,79 @@ function __color_white   {
 }
 
 function __color_rgb {
-  r=$1
-  g=$2
-  b=$3
-
+  r=$1 && g=$2 && b=$3
   [[ r == g && g == b ]] && echo $(( $r / 11 + 232 )) && return # gray range above 232
   echo "8;5;$(( ($r * 36  + $b * 6 + $g) / 51 + 16 ))"
 }
 
 function __color {
-  color=$1
-  side=${2:-fg}
-  mode=${3:-normal}
-  echo "$(__${mode}_${side} $(__color_${color} $@))"
+  color=$1 && shift
+  case "$1" in
+    fg|bg) side="$1" && shift ;;
+    *) side=fg;;
+  esac
+  case "$1" in
+    normal|bright) mode="$1" && shift;;
+    *) mode=normal;;
+  esac
+  [[ $color == "rgb" ]] && rgb="$1 $2 $3" && shift 3
+
+  next=$1 && shift
+  out="$(__$next $@)"
+  echo "$(__color_${mode}_${side} $(__color_${color} $rgb))${out:+;${out}}"
 }
 
+
+function __black   {
+  echo "$(__color black $@)"
+}
+
+function __red   {
+  echo "$(__color red $@)"
+}
+
+function __green   {
+  echo "$(__color green $@)"
+}
+
+function __yellow  {
+  echo "$(__color yellow $@)"
+}
+
+function __blue  {
+  echo "$(__color blue $@)"
+}
+
+function __magenta {
+  echo "$(__color magenta $@)"
+}
+
+function __cyan  {
+  echo "$(__color cyan $@)"
+}
+
+function __white   {
+  echo "$(__color white $@)"
+}
+
+function __rgb {
+  echo "$(__color rgb $@)"
+}
+
+
 function __color_parse {
-  while [ $# -gt 0 ]
-  do
-    case "$1" in
-      reset|bold|faint|italic|underline|negative|crossed)
-        output="$(__$1 $output)"
-        shift
-
-        ;;
-
-      black|red|green|yellow|blue|magenta|cyan|white|rgb)
-        color="$1"
-        shift
-
-        case "$1" in
-          fg|bg)
-            side="$1"
-            shift
-
-            case "$1" in
-              normal|bright)
-                mode="$1"
-                shift
-              ;;
-            esac
-
-          ;;
-        esac
-
-        [[ $color == "rgb" ]] && params="$1 $2 $3" && shift 3
-        output=${output:+$output;}$(__color $color $side $mode $params)
-
-      ;;
-
-      *) shift;;
-    esac
-  done
-
-  echo ${output}
+  next=$1 && shift
+  echo "$(__$next $@)"
 }
 
 function color {
-  echo $(__make_ansi $(__color_parse $@))
+  echo "$(__color_parse make_ansi $@)"
 }
 
 function echo_color {
-  echo $(__make_echo $(__color_parse $@))
+  echo "$(__color_parse make_echo $@)"
 }
+
 
 black="$(color black)"
 red="$(color red)"
@@ -189,11 +219,11 @@ background_yellow="$(color yellow bg)"
 background_blue="$(color blue bg)"
 background_purple="$(color magenta bg)"
 background_cyan="$(color cyan bg)"
-background_white="$(color white bold bg)"
+background_white="$(color white bg bold)"
 background_orange="$(color red bg bright)"
 
 normal="$(color reset)"
-reset_color="$(__make_ansi 39)"
+reset_color="$(__make_ansi '' 39)"
 
 # These colors are meant to be used with `echo -e`
 echo_black="$(echo_color black)"
@@ -233,8 +263,8 @@ echo_background_yellow="$(echo_color yellow bg)"
 echo_background_blue="$(echo_color blue bg)"
 echo_background_purple="$(echo_color magenta bg)"
 echo_background_cyan="$(echo_color cyan bg)"
-echo_background_white="$(echo_color white bold bg)"
+echo_background_white="$(echo_color white bg bold)"
 echo_background_orange="$(echo_color red bg bright)"
 
 echo_normal="$(echo_color reset)"
-echo_reset_color="$(__make_ansi 39)"
+echo_reset_color="$(__make_echo '' 39)"
