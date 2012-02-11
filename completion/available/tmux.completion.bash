@@ -101,7 +101,7 @@ _tmux() {
             new-sesison|new)
             case "$prev" in
                 -t) _tmux_complete_session "${cur}" ;;
-                -@(n|d|s)) options="-d -n -s -t --" ;;
+                -[n|d|s]) options="-d -n -s -t --" ;;
                 *) 
                 if [[ ${COMP_WORDS[option_index]} == -- ]]; then
                     _command_offset ${option_index}
