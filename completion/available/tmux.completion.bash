@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # tmux completion
 # See: http://www.debian-administration.org/articles/317 for how to write more.
 # Usage: Put "source bash_completion_tmux.sh" into your .bashrc
@@ -98,7 +100,7 @@ _tmux() {
                 -t) _tmux_complete_session "${cur}" ;;
                 *) options="-t -d" ;;
             esac ;;
-            new-sesison|new)
+            new-session|new)
             case "$prev" in
                 -t) _tmux_complete_session "${cur}" ;;
                 -[n|d|s]) options="-d -n -s -t --" ;;
