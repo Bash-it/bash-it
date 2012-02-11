@@ -13,7 +13,7 @@ _sshcomplete() {
     # parse all hosts found in .ssh/known_hosts
     if [ -r $HOME/.ssh/known_hosts ]; then
         if grep -v -q -e '^ ssh-rsa' $HOME/.ssh/known_hosts ; then
-        COMPREPLY=( $COMPREPLY $(compgen -W "$( awk '{print $1}' $HOME/.ssh/known_hosts | cut -d, -f 1 | sed -e 's/\[//g' | sed -e 's/\]//g' | cut -d: -f1 | grep -v ssh-rsa)" -- ${COMP_WORDS[COMP_CWORD]} )) 
+        COMPREPLY=( ${COMPREPLY[@]} $(compgen -W "$( awk '{print $1}' $HOME/.ssh/known_hosts | cut -d, -f 1 | sed -e 's/\[//g' | sed -e 's/\]//g' | cut -d: -f1 | grep -v ssh-rsa)" -- ${COMP_WORDS[COMP_CWORD]} )) 
         fi
     fi
     
