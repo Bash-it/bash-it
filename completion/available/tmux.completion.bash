@@ -3,11 +3,25 @@
 # Usage: Put "source bash_completion_tmux.sh" into your .bashrc
 # Based upon the example at http://paste-it.appspot.com/Pj4mLycDE
 
+_tmux_expand () 
+{ 
+    [ "$cur" != "${cur%\\}" ] && cur="$cur"'\';
+    if [[ "$cur" == \~*/* ]]; then
+        eval cur=$cur;
+    else
+        if [[ "$cur" == \~* ]]; then
+            cur=${cur#\~};
+            COMPREPLY=($( compgen -P '~' -u $cur ));
+            return ${#COMPREPLY[@]};
+        fi;
+    fi
+}
+
 _tmux_filedir () 
 { 
     local IFS='
 ';
-    _expand || return 0;
+    _tmux_expand || return 0;
     if [ "$1" = -d ]; then
         COMPREPLY=(${COMPREPLY[@]} $( compgen -d -- $cur ));
         return 0;
