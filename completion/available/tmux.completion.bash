@@ -3,6 +3,18 @@
 # Usage: Put "source bash_completion_tmux.sh" into your .bashrc
 # Based upon the example at http://paste-it.appspot.com/Pj4mLycDE
 
+_tmux_filedir () 
+{ 
+    local IFS='
+';
+    _expand || return 0;
+    if [ "$1" = -d ]; then
+        COMPREPLY=(${COMPREPLY[@]} $( compgen -d -- $cur ));
+        return 0;
+    fi;
+    COMPREPLY=(${COMPREPLY[@]} $( eval compgen -f -- \"$cur\" ))
+}
+
 function _tmux_complete_client() {
     local IFS=$'\n'
     local cur="${1}"
@@ -38,7 +50,7 @@ _tmux() {
     prev="${COMP_WORDS[COMP_CWORD-1]}"
 
     if [ ${prev} == -f ]; then
-        _filedir
+        _tmux_filedir
     else
     # Search for the command
     local skip_next=0
@@ -121,7 +133,7 @@ _tmux() {
                 -t) _tmux_complete_session "${cur}" ;;
                 *) options="-t" ;;
             esac ;;
-            source-file|source) _filedir ;;
+            source-file|source) _tmux_filedir ;;
             has-session|has|kill-session)
             case "$prev" in
                 -t) _tmux_complete_session "${cur}" ;;
