@@ -35,17 +35,7 @@ done
 # Load enabled aliases, completion, plugins
 for file_type in "aliases" "completion" "plugins"
 do
-  if [ ! -d "${BASH_IT}/${file_type}/enabled" ]
-  then
-    continue
-  fi
-  FILES="${BASH_IT}/${file_type}/enabled/*.bash"
-  for config_file in $FILES
-  do
-    if [ -e "${config_file}" ]; then
-      source $config_file
-    fi
-  done
+  _load_bash_it_files $file_type
 done
 
 # Load any custom aliases that the user has added
