@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 alias hs='hg status'
 alias hsum='hg summary'

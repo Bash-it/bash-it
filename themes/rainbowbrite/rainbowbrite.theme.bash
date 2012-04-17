@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # based off of n0qorg
 # looks like, if you're in a git repo:

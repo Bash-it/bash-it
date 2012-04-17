@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 _vagrant()
 {
     cur="${COMP_WORDS[COMP_CWORD]}"

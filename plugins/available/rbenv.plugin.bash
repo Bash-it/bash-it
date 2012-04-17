@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Load rbebv, if you are using it
 export PATH="$HOME/.rbenv/bin:$PATH"

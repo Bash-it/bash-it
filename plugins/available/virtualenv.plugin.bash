@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # make sure virtualenvwrapper is enabled if available
 [[ `which virtualenvwrapper.sh` ]] && . virtualenvwrapper.sh
