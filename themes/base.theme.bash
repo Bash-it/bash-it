@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 THEME_PROMPT_HOST='\H'
 SCM_THEME_PROMPT_DIRTY=' ✗'

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # add mactex to the path if its present
 MACTEX_PATH=/usr/local/texlive/2009/bin/universal-darwin

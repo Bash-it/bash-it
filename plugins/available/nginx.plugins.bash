@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 function nginx_reload() {
   FILE="${NGINX_PATH}/logs/nginx.pid"

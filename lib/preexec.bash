@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # http://www.twistedmatrix.com/users/glyph/preexec.bash.txt
 # preexec.bash -- Bash support for ZSH-like 'preexec' and 'precmd' functions.
 

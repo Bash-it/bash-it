@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # maintains a jump-list of the directories you actually use
 #

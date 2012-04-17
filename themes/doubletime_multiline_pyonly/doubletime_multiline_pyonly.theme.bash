@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 source "$BASH_IT/themes/doubletime/doubletime.theme.bash"
 

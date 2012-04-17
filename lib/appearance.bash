@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # colored grep
 export GREP_OPTIONS='--color=auto'

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 SCM_THEME_PROMPT_DIRTY=" ${red}✗"
 SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓"
 SCM_THEME_PROMPT_PREFIX=" |"

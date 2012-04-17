@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Based on 'bobby' theme with the addition of virtualenv_prompt
 #

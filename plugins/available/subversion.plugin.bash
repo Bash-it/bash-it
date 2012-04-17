@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 rm_svn(){
   find $1 -name .svn -print0 | xargs -0 rm -rf
 }

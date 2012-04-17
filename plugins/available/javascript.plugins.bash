@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # The install directory is hard-coded. TOOD: allow the directory to be specified on the command line.
 #
