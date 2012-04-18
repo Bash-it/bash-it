@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 battery_percentage(){
   if command_exists acpi;

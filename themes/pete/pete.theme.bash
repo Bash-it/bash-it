@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 prompt_setter() {
   # Save history

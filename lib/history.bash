@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # append to bash_history if Terminal.app quits
 shopt -s histappend

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 function tab() {
   osascript 2>/dev/null <<EOF

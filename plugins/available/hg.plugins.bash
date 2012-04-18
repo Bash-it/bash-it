@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 hg_dirty() {
     hg status --no-color 2> /dev/null \
     | awk '$1 == "?" { print "?" } $1 != "?" { print "!" }' \
