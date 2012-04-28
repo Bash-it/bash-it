@@ -2,84 +2,125 @@
 
 # For generic functions.
 
-function ips {
-  ifconfig | grep "inet " | awk '{ print $2 }'
+ips ()
+{
+    about display all ip addresses for this host
+    ifconfig | grep "inet " | awk '{ print $2 }'
 }
 
-function down4me() {
-  curl -s "http://www.downforeveryoneorjustme.com/$1" | sed '/just you/!d;s/<[^>]*>//g'
+down4me ()
+{
+    about checks whether a website is down for you, or everybody
+    param 1: website url
+    example $ down4me http://www.google.com
+    curl -s "http://www.downforeveryoneorjustme.com/$1" | sed '/just you/!d;s/<[^>]*>//g'
 }
 
-function myip {
-  res=$(curl -s checkip.dyndns.org | grep -Eo '[0-9\.]+')
-  echo -e "Your public IP is: ${echo_bold_green} $res ${echo_normal}"
-}
-
-pass() {
-  which gshuf &> /dev/null
-  if [ $? -eq 1 ]
-  then
-    echo "Error: shuf isn't installed!"
-    return 1
-  fi
-
-  pass=$(shuf -n4 /usr/share/dict/words | tr '\n' ' ')
-  echo "With spaces (easier to memorize): $pass"
-  echo "Without (use this as the pass): $(echo $pass | tr -d ' ')"
-}
-
-# Function for previewing markdown files in the browser
-
-function pmdown() {
-  if command -v markdown &>/dev/null
-  then
-    markdown $1 | browser
-  else
-    echo "You don't have a markdown command installed!"
-  fi
-}
-
-# Make a directory and immediately 'cd' into it
-
-function mkcd() {
-  mkdir -p "$*"
-  cd "$*"
-}
-
-# Search through directory contents with grep
-
-function lsgrep(){
-  ls | grep "$*"
-}
-
-# View man documentation in Preview
-pman () {
-   man -t "${1}" | open -f -a $PREVIEW
+myip ()
+{
+    about displays your ip address, as seen by the Internet
+    res=$(curl -s checkip.dyndns.org | grep -Eo '[0-9\.]+')
+    echo -e "Your public IP is: ${echo_bold_green} $res ${echo_normal}"
 }
 
 
-pcurl() {
-  curl "${1}" | open -f -a $PREVIEW
+pickfrom ()
+{
+    about picks random line from file
+    param 1: filename
+    example $ pickfrom /usr/share/dict/words
+    local file=$1
+    [ -z "$file" ] && reference $FUNCNAME && return
+    length=$(cat $file | wc -l)
+    n=$(expr $RANDOM \* $length \/ 32768 + 1)
+    head -n $n $file | tail -1
 }
 
-pri() {
-  ri -T "${1}" | open -f -a $PREVIEW
+pass ()
+{
+    about generates random password from dictionary words
+    param optional integer length
+    param if unset, defaults to 4
+    example $ pass
+    example $ pass 6
+    local i pass length=${1:-4}
+    pass=$(echo $(for i in $(eval echo "{1..$length}"); do pickfrom /usr/share/dict/words; done))
+    echo "With spaces (easier to memorize): $pass"
+    echo "Without (use this as the pass): $(echo $pass | tr -d ' ')"
 }
 
-quiet() {
+pmdown ()
+{
+    about preview markdown file in a browser
+    param 1: markdown file
+    example $ pmdown README.md
+    if command -v markdown &>/dev/null
+    then
+      markdown $1 | browser
+    else
+      echo "You don't have a markdown command installed!"
+    fi
+}
+
+mkcd ()
+{
+    about make a directory and cd into it
+    param path to create
+    example $ mkcd foo
+    example $ mkcd /tmp/img/photos/large
+    mkdir -p "$*"
+    cd "$*"
+}
+
+lsgrep ()
+{
+    about search through directory contents with grep
+    ls | grep "$*"
+}
+
+
+pman ()
+{
+    about view man documentation in Preview
+    param 1: man page to view
+    example $ pman bash
+    man -t "${1}" | open -f -a $PREVIEW
+}
+
+
+pcurl ()
+{
+    about download file and Preview it
+    param 1: download URL
+    example $ pcurl http://www.irs.gov/pub/irs-pdf/fw4.pdf
+    curl "${1}" | open -f -a $PREVIEW
+}
+
+pri ()
+{
+    about display information about Ruby classes, modules, or methods, in Preview
+    param 1: Ruby method, module, or class
+    example $ pri Array
+    ri -T "${1}" | open -f -a $PREVIEW
+}
+
+quiet ()
+{
 	$* &> /dev/null &
 }
 
-banish-cookies() {
+banish-cookies ()
+{
+    about redirect .adobe and .macromedia files to /dev/null
 	rm -r ~/.macromedia ~/.adobe
 	ln -s /dev/null ~/.adobe
 	ln -s /dev/null ~/.macromedia
 }
 
-# disk usage per directory
-# in Mac OS X and Linux
 usage ()
 {
+    about disk usage per directory, in Mac OS X and Linux
+    param 1: directory name
     if [ $(uname) = "Darwin" ]; then
         if [ -n $1 ]; then
             du -hd $1
@@ -96,25 +137,31 @@ usage ()
     fi
 }
 
-# One thing todo
-function t() {
-	 if [[ "$*" == "" ]] ; then
-		 cat ~/.t
-	 else
-		 echo "$*" > ~/.t
-	 fi
+t ()
+{
+    about one thing todo
+    param if not set, display todo item
+    param 1: todo text
+	if [[ "$*" == "" ]] ; then
+	    cat ~/.t
+	else
+	    echo "$*" > ~/.t
+	fi
 }
 
-# Checks for existence of a command
-command_exists () {
+command_exists ()
+{
+    about checks for existence of a command
+    param 1: command to check
+    example $ command_exists ls && echo 'exists'
     type "$1" &> /dev/null ;
 }
 
-# List all plugins and functions defined by bash-it
-function plugins-help() {
-    
+plugins-help ()
+{
+    about list all plugins and functions defined by bash-it
     echo "bash-it Plugins Help-Message"
-    echo 
+    echo
 
     set | grep "()" \
     | sed -e "/^_/d" | grep -v "BASH_ARGC=()" \
@@ -128,10 +175,12 @@ function plugins-help() {
     | grep -v "COMPREPLY=()" | sed -e "s/()//"
 }
 
-# back up file with timestamp
 # useful for administrators and configs
-buf () {
-    filename=$1
-    filetime=$(date +%Y%m%d_%H%M%S)
+buf ()
+{
+    about back up file with timestamp
+    param filename
+    local filename=$1
+    local filetime=$(date +%Y%m%d_%H%M%S)
     cp ${filename} ${filename}_${filetime}
 }
