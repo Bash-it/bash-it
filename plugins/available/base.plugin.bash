@@ -23,17 +23,28 @@ myip ()
     echo -e "Your public IP is: ${echo_bold_green} $res ${echo_normal}"
 }
 
+
+pickfrom ()
+{
+    about picks random line from file
+    param 1: filename
+    example $ pickfrom /usr/share/dict/words
+    local file=$1
+    [ -z "$file" ] && reference $FUNCNAME && return
+    length=$(cat $file | wc -l)
+    n=$(expr $RANDOM \* $length \/ 32768 + 1)
+    head -n $n $f | tail -1
+}
+
 pass ()
 {
-    about generates password from random dictionary words
-    which gshuf &> /dev/null
-    if [ $? -eq 1 ]
-    then
-      echo "Error: shuf isn't installed!"
-      return 1
-    fi
-
-    pass=$(shuf -n4 /usr/share/dict/words | tr '\n' ' ')
+    about generates random password from dictionary words
+    param optional integer length
+    param if unset, defaults to 4
+    example $ pass
+    example $ pass 6
+    local i pass length=${1:-4}
+    pass=$(echo $(for i in $(eval echo "{1..$length}"); do pickfrom /usr/share/dict/words; done))
     echo "With spaces (easier to memorize): $pass"
     echo "Without (use this as the pass): $(echo $pass | tr -d ' ')"
 }
