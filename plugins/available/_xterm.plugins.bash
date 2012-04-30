@@ -1,3 +1,11 @@
+# This plugin is known to cause issues on OS X with the evaluation of
+# colors.  Please read [issue 108] for more information.
+#
+# You can manually turn this on by symlinking it into your
+# plugins/enabled/ directory.
+#
+# [issue 108]: https://github.com/revans/bash-it/issues/108
+
 set_xterm_title () {
     local title="$1"
     echo -ne "\e]0;$title\007"
