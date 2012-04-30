@@ -31,12 +31,12 @@ done
 function load_all() {
   file_type=$1
   [ ! -d "$BASH_IT/$file_type/enabled" ] && mkdir "$BASH_IT/${file_type}/enabled"
-  ln -s $BASH_IT/${file_type}/available/* "${BASH_IT}/${file_type}/enabled"
+  ln -s $BASH_IT/${file_type}/[^_]available/* "${BASH_IT}/${file_type}/enabled"
 }
 
 function load_some() {
     file_type=$1
-    for file in `ls $BASH_IT/${file_type}/available`
+    for file in `ls $BASH_IT/${file_type}/available/[^_]*`
     do
       if [ ! -d "$BASH_IT/$file_type/enabled" ]
       then
