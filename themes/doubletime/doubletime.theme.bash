@@ -74,18 +74,3 @@ git_prompt_status() {
   echo "[$git_status${normal}]"
 
 }
-
-# git_prompt_color() {
-#
-#   if [ -n "$(git status | grep 'Changes not staged' 2> /dev/null)" ]; then
-#     git_status='${bold_red} ✗'
-#   elif [ -n "$(git status | grep 'Changes to be committed' 2> /dev/null)" ]; then
-#      git_status='${bold_yellow} ^'
-#   elif [ -n "$(git status | grep 'Untracked files' 2> /dev/null)" ]; then
-#      git_status='${bold_cyan} +'
-#   else
-#     git_status='${bold_green} ✓'
-#   fi
-#   echo $git_status
-#
-# }
