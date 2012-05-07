@@ -584,7 +584,7 @@ fasd [-A|-D] [paths ...]
 fasd --init env
 
 case $- in
-  *i*) alias fasd='~/.bash_it/plugins/available/fasd.bash'
+  *i*) alias fasd='~/.bash_it/plugins/enabled/fasd.bash'
        eval "$(fasd --init auto)"
       ;;
   *) # assume being executed as an executable
