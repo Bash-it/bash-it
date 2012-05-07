@@ -12,7 +12,7 @@ down4me ()
 {
     about checks whether a website is down for you, or everybody
     param 1: website url
-    example $ down4me http://www.google.com
+    example '$ down4me http://www.google.com'
     curl -s "http://www.downforeveryoneorjustme.com/$1" | sed '/just you/!d;s/<[^>]*>//g'
 }
 
@@ -28,7 +28,7 @@ pickfrom ()
 {
     about picks random line from file
     param 1: filename
-    example $ pickfrom /usr/share/dict/words
+    example '$ pickfrom /usr/share/dict/words'
     local file=$1
     [ -z "$file" ] && reference $FUNCNAME && return
     length=$(cat $file | wc -l)
@@ -41,8 +41,8 @@ pass ()
     about generates random password from dictionary words
     param optional integer length
     param if unset, defaults to 4
-    example $ pass
-    example $ pass 6
+    example '$ pass'
+    example '$ pass 6'
     local i pass length=${1:-4}
     pass=$(echo $(for i in $(eval echo "{1..$length}"); do pickfrom /usr/share/dict/words; done))
     echo "With spaces (easier to memorize): $pass"
@@ -53,7 +53,7 @@ pmdown ()
 {
     about preview markdown file in a browser
     param 1: markdown file
-    example $ pmdown README.md
+    example '$ pmdown README.md'
     if command -v markdown &>/dev/null
     then
       markdown $1 | browser
@@ -66,8 +66,8 @@ mkcd ()
 {
     about make a directory and cd into it
     param path to create
-    example $ mkcd foo
-    example $ mkcd /tmp/img/photos/large
+    example '$ mkcd foo'
+    example '$ mkcd /tmp/img/photos/large'
     mkdir -p "$*"
     cd "$*"
 }
@@ -83,7 +83,7 @@ pman ()
 {
     about view man documentation in Preview
     param 1: man page to view
-    example $ pman bash
+    example '$ pman bash'
     man -t "${1}" | open -f -a $PREVIEW
 }
 
@@ -92,7 +92,7 @@ pcurl ()
 {
     about download file and Preview it
     param 1: download URL
-    example $ pcurl http://www.irs.gov/pub/irs-pdf/fw4.pdf
+    example '$ pcurl http://www.irs.gov/pub/irs-pdf/fw4.pdf'
     curl "${1}" | open -f -a $PREVIEW
 }
 
@@ -100,7 +100,7 @@ pri ()
 {
     about display information about Ruby classes, modules, or methods, in Preview
     param 1: Ruby method, module, or class
-    example $ pri Array
+    example '$ pri Array'
     ri -T "${1}" | open -f -a $PREVIEW
 }
 
@@ -153,7 +153,7 @@ command_exists ()
 {
     about checks for existence of a command
     param 1: command to check
-    example $ command_exists ls && echo 'exists'
+    example '$ command_exists ls && echo exists'
     type "$1" &> /dev/null ;
 }
 
