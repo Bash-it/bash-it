@@ -1,5 +1,5 @@
 # composure - by erichs
-# light-hearted shell functions for intuitive shell programming
+# light-hearted functions for intuitive shell programming
 
 # install: source this script in your ~/.profile or ~/.${SHELL}rc script
 
@@ -27,7 +27,7 @@ cite ()
 
     # anything following a keyword will get parsed as a positional
     # parameter, but stay resident in the ENV. As opposed to shell
-    # comments, '#', which do not get parsed, thus are not available
+    # comments, '#', which do not get parsed and are not available
     # at runtime.
 
     # a BIG caveat--your metadata must be roughly parsable: do not use
@@ -105,7 +105,8 @@ listfunctions ()
 
     typeset x ans
     typeset this=$(for x in $(ps -p $$); do ans=$x; done; printf "%s\n" $ans | sed 's/^-*//')
-    case "$this" in
+    typeset shell=$(basename $this)  # e.g. /bin/bash => bash
+    case "$shell" in
         bash)
             typeset -F | awk '{print $3}'
             ;;
