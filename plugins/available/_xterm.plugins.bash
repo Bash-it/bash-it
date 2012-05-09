@@ -6,6 +6,9 @@
 #
 # [issue 108]: https://github.com/revans/bash-it/issues/108
 
+cite about-plugin
+about-plugin 'automatically set your xterm title with host and location info'
+
 set_xterm_title () {
     local title="$1"
     echo -ne "\e]0;$title\007"
