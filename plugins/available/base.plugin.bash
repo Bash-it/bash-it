@@ -137,18 +137,6 @@ usage ()
     fi
 }
 
-t ()
-{
-    about one thing todo
-    param if not set, display todo item
-    param 1: todo text
-	if [[ "$*" == "" ]] ; then
-	    cat ~/.t
-	else
-	    echo "$*" > ~/.t
-	fi
-}
-
 command_exists ()
 {
     about checks for existence of a command
