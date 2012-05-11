@@ -1,9 +1,16 @@
 #!/bin/bash
 
-export TODO_DIR=$HOME/.bash_it/custom  # store todo items in user's custom dir, ignored by git
-export TODOTXT_DEFAULT_ACTION=ls       # typing 't' by itself will list current todos
+# you may override any of the exported variables below in your .bash_profile
 
-export TODO_SRC_DIR=$HOME/.bash_it/plugins/available/todo
+if [ -z "$TODO_DIR" ]; then
+    export TODO_DIR=$BASH_IT/custom  # store todo items in user's custom dir, ignored by git
+fi
+if [ -z "$TODOTXT_DEFAULT_ACTION" ]; then
+    export TODOTXT_DEFAULT_ACTION=ls       # typing 't' by itself will list current todos
+fi
+if [ -z "$TODO_SRC_DIR" ]; then
+    export TODO_SRC_DIR=$BASH_IT/plugins/available/todo
+fi
 
 # respect ENV var set in .bash_profile, default is 't'
 alias $TODO='$TODO_SRC_DIR/todo.sh -d $TODO_SRC_DIR/todo.cfg'
