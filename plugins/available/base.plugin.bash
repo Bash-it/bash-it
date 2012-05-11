@@ -175,21 +175,6 @@ command_exists ()
     type "$1" &> /dev/null ;
 }
 
-plugins-help ()
-{
-    about list all plugins and functions defined by bash-it
-    group base
-    printf '%s\n' "bash-it plugins help"
-    printf '\n'
-    typeset group
-    for group in $(all_groups)
-    do
-        printf '%s\n' "group: $group"
-        glossary $group
-        printf '\n'
-    done
-}
-
 # useful for administrators and configs
 buf ()
 {
@@ -199,18 +184,4 @@ buf ()
     local filename=$1
     local filetime=$(date +%Y%m%d_%H%M%S)
     cp ${filename} ${filename}_${filetime}
-}
-
-all_groups ()
-{
-    about displays all unique metadata groups
-    group base
-    typeset func
-    typeset file=$(mktemp /tmp/composure.XXXX)
-    for func in $(typeset_functions)
-    do
-        typeset -f $func | metafor group >> $file
-    done
-    cat $file | sort | uniq
-    rm $file
 }
