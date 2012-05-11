@@ -214,3 +214,15 @@ all_groups ()
     cat $file | sort | uniq
     rm $file
 }
+
+available_plugins ()
+{
+    about summarizes available bash_it plugins
+    group base
+
+    typeset f
+    for f in $BASH_IT/plugins/available/*.bash
+    do
+        letterpress "$(cat $f | metafor about-plugin)" "$(basename $f | cut -d'.' -f1)"
+    done
+}
