@@ -1,6 +1,8 @@
-#!/usr/bin/env bash
-
 # Load RVM, if you are using it
+
+cite about-plugin
+about-plugin 'load rvm, if you are using it'
+
 [[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
 
 # Check to make sure that RVM is actually loaded before adding

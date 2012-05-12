@@ -1,7 +1,7 @@
-#!/usr/bin/env bash
+cite about-plugin
+about-plugin 'maintains a jump-list of the directories you actually use'
+about-plugin '                              z is DEPRECATED, use fasd instead'
 
-# maintains a jump-list of the directories you actually use
-#
 # INSTALL:
 #   * put something like this in your .bashrc:
 #     . /path/to/z.sh

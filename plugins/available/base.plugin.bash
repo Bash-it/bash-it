@@ -1,7 +1,5 @@
-#!/usr/bin/env bash
-
 cite about-plugin
-about-plugin generic and miscellaneous tools
+about-plugin miscellaneous tools
 
 ips ()
 {

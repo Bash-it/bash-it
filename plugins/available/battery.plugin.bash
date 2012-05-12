@@ -1,7 +1,5 @@
-#!/usr/bin/env bash
-
 cite about-plugin
-about-plugin query and display info about your battery charge level
+about-plugin display info about your battery charge level
 
 battery_percentage(){
   about 'displays battery charge as a percentage of full (100%)'
