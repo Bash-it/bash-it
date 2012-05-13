@@ -584,7 +584,8 @@ fasd [-A|-D] [paths ...]
 fasd --init env
 
 case $- in
-  *i*) alias fasd=$BASH_IT'/plugins/enabled/fasd.bash'
+  *i*) cite about-plugin
+       about-plugin 'navigate "frecently" used files and directories'
        eval "$(fasd --init auto)"
       ;;
   *) # assume being executed as an executable
