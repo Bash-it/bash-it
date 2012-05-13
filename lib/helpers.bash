@@ -29,10 +29,10 @@ function reload_plugins() {
   _load_bash_it_files "plugins"
 }
 
-show_plugins ()
+bash-it-plugins ()
 {
-    about summarizes available bash_it plugins
-    group lib
+    about 'summarizes available bash_it plugins'
+    group 'lib'
 
     typeset f
     typeset enabled
@@ -47,57 +47,88 @@ show_plugins ()
         printf "%-20s%-10s%s\n" "$(basename $f | cut -d'.' -f1)" "  [$enabled]" "$(cat $f | metafor about-plugin)"
     done
     printf '\n%s\n' 'to enable a plugin, do:'
-    printf '%s\n' '$ enable_plugin <plugin name>'
+    printf '%s\n' '$ enable-plugin  <plugin name> -or- $ enable-plugin all'
     printf '\n%s\n' 'to disable a plugin, do:'
-    printf '%s\n' '$ disable_plugin <plugin name>'
+    printf '%s\n' '$ disable-plugin <plugin name> -or- $ disable-plugin all'
 }
 
-enable_plugin ()
+disable-plugin ()
 {
-    about enables bash_it plugin
-    param 1: plugin name
-    example '$ enable_plugin rvm'
-    group lib
-
-    typeset plugin=$(ls $BASH_IT/plugins/available/$1.*bash 2>/dev/null | head -1)
-    if [ -z "$plugin" ]; then
-        printf '%s\n' 'sorry, that does not appear to be an available plugin.'
-        return
-    fi
-
-    plugin=$(basename $plugin)
-    if [ -h $BASH_IT/plugins/enabled/$plugin ]; then
-        printf '%s\n' "$1 is already enabled."
-        return
-    fi
-
-    ln -s $BASH_IT/plugins/available/$plugin $BASH_IT/plugins/enabled/$plugin
-    printf '%s\n' "$1 is enabled."
-
-    reload_plugins
-    printf '%s\n' 'plugins reloaded.'
-}
-
-disable_plugin ()
-{
-    about disables bash_it plugin
-    param 1: plugin name
+    about 'disables bash_it plugin'
+    param '1: plugin name'
     example '$ disable_plugin rvm'
-    group lib
+    group 'lib'
 
-    typeset plugin=$(ls $BASH_IT/plugins/enabled/$1.*bash 2>/dev/null | head -1)
-    if [ -z "$plugin" ]; then
-        printf '%s\n' 'sorry, that does not appear to be an enabled plugin.'
+    if [ -z "$1" ]; then
+        reference disable_plugin
         return
     fi
-    rm $BASH_IT/plugins/enabled/$(basename $plugin)
-    printf '%s\n' "$1 is disabled, and will be unavailable when you open a new terminal."
+
+    if [ "$1" = "all" ]; then
+        typeset f plugin
+        for f in $BASH_IT/plugins/available/*.bash
+        do
+            plugin=$(basename $f)
+            if [ -h $BASH_IT/plugins/enabled/$plugin ]; then
+                rm $BASH_IT/plugins/enabled/$(basename $plugin)
+            fi
+        done
+    else
+        typeset plugin=$(ls $BASH_IT/plugins/enabled/$1.*bash 2>/dev/null | head -1)
+        if [ ! -h $plugin ]; then
+            printf '%s\n' 'sorry, that does not appear to be an enabled plugin.'
+            return
+        fi
+        rm $BASH_IT/plugins/enabled/$(basename $plugin)
+    fi
+
+    printf '%s\n' "$1 disabled."
+}
+
+enable-plugin ()
+{
+    about 'enables bash_it plugin'
+    param '1: plugin name'
+    example '$ enable_plugin rvm'
+    group 'lib'
+
+    if [ -z "$1" ]; then
+        reference enable_plugin
+        return
+    fi
+
+    if [ "$1" = "all" ]; then
+        typeset f plugin
+        for f in $BASH_IT/plugins/available/*.bash
+        do
+            plugin=$(basename $f)
+            if [ ! -h $BASH_IT/plugins/enabled/$plugin ]; then
+                ln -s $BASH_IT/plugins/available/$plugin $BASH_IT/plugins/enabled/$plugin
+            fi
+        done
+    else
+        typeset plugin=$(ls $BASH_IT/plugins/available/$1.*bash 2>/dev/null | head -1)
+        if [ -z "$plugin" ]; then
+            printf '%s\n' 'sorry, that does not appear to be an available plugin.'
+            return
+        fi
+
+        plugin=$(basename $plugin)
+        if [ -h $BASH_IT/plugins/enabled/$plugin ]; then
+            printf '%s\n' "$1 is already enabled."
+            return
+        fi
+
+        ln -s $BASH_IT/plugins/available/$plugin $BASH_IT/plugins/enabled/$plugin
+    fi
+
+    printf '%s\n' "$1 enabled."
 }
 
 plugins-help ()
 {
-    about list all plugins and functions defined by bash-it
-    group lib
+    about 'list all plugins and functions defined by bash-it'
+    group 'lib'
 
     printf '%s\n' "bash-it plugins help"
     printf '\n'
@@ -112,8 +143,8 @@ plugins-help ()
 
 all_groups ()
 {
-    about displays all unique metadata groups
-    group lib
+    about 'displays all unique metadata groups'
+    group 'lib'
 
     typeset func
     typeset file=$(mktemp /tmp/composure.XXXX)

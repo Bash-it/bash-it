@@ -1,9 +1,9 @@
 cite about-plugin
-about-plugin display info about your battery charge level
+about-plugin 'display info about your battery charge level'
 
 battery_percentage(){
   about 'displays battery charge as a percentage of full (100%)'
-  group battery
+  group 'battery'
 
   if command_exists acpi;
   then
@@ -69,8 +69,8 @@ battery_percentage(){
 }
 
 battery_charge(){
-  about graphical display of your battery charge
-  group battery
+  about 'graphical display of your battery charge'
+  group 'battery'
 
   # Full char
   local F_C='▸'

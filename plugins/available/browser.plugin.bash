@@ -4,10 +4,10 @@ cite about-plugin
 about-plugin 'render commandline output in your browser'
 
 function browser() {
-    about pipe html to a browser
+    about 'pipe html to a browser'
     example '$ echo "<h1>hi mom!</h1>" | browser'
     example '$ ron -5 man/rip.5.ron | browser'
-    group browser
+    group 'browser'
 
     if [ -t 0 ]; then
         if [ -n "$1" ]; then
@@ -27,7 +27,7 @@ function browser() {
 function wmate() {
     about 'pipe hot spicy interwebs into textmate and cleanup!'
     example '$ wmate google.com'
-    group browser
+    group 'browser'
 
     if [ -t 0 ]; then
         if [ -n "$1" ]; then
@@ -64,7 +64,7 @@ EOT`
 function raw() {
     about 'write wget into a temp file and pump it into your browser'
     example '$ raw google.com'
-    group browser
+    group 'browser'
 
     if [ -t 0 ]; then
         if [ -n "$1" ]; then

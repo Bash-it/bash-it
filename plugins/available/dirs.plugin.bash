@@ -6,7 +6,7 @@
 # Jump to location by number.
 
 cite about-plugin
-about-plugin directory stack navigation
+about-plugin 'directory stack navigation'
 
 # Show directory stack
 alias d="dirs -v -l"
@@ -32,8 +32,8 @@ alias pu="pushd"
 alias po="popd"
 
 function dirs-help() {
-  about directory navigation alias usage
-  group dirs
+  about 'directory navigation alias usage'
+  group 'dirs'
 
   echo "Directory Navigation Alias Usage"
   echo
@@ -68,17 +68,17 @@ fi
 alias L='cat ~/.dirs'
 
 G () {				# goes to distination dir otherwise , stay in the dir
-    about goes to destination dir
-    param 1: directory
+    about 'goes to destination dir'
+    param '1: directory'
     example '$ G ..'
-    group dirs
+    group 'dirs'
 
     cd ${1:-$(pwd)} ;
 }
 
 S () {				# SAVE a BOOKMARK
-    about save a bookmark
-    group dirs
+    about 'save a bookmark'
+    group 'dirs'
 
     sed "/$@/d" ~/.dirs > ~/.dirs1;
     \mv ~/.dirs1 ~/.dirs;
@@ -87,8 +87,8 @@ S () {				# SAVE a BOOKMARK
 }
 
 R () {				# remove a BOOKMARK
-    about remove a bookmark
-    group dirs
+    about 'remove a bookmark'
+    group 'dirs'
 
     sed "/$@/d" ~/.dirs > ~/.dirs1;
     \mv ~/.dirs1 ~/.dirs;

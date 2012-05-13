@@ -8,7 +8,7 @@ about-plugin 'virtualenvwrapper helper functions'
 
 function mkvenv {
   about 'create a new virtualenv for this directory'
-  group virtualenv
+  group 'virtualenv'
 
   cwd=`basename \`pwd\``
   mkvirtualenv --no-site-packages --distribute $cwd
@@ -17,14 +17,14 @@ function mkvenv {
 
 function mkvbranch {
   about 'create a new virtualenv for the current branch'
-  group virtualenv
+  group 'virtualenv'
 
   mkvirtualenv --no-site-packages --distribute "$(basename `pwd`)@$(git_prompt_info)"
 }
 
 function wovbranch {
   about 'sets workon branch'
-  group virtualenv
+  group 'virtualenv'
 
   workon "$(basename `pwd`)@$(git_prompt_info)"
 }

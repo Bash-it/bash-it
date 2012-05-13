@@ -1,9 +1,9 @@
 cite about-plugin
-about-plugin manage your nginx service
+about-plugin 'manage your nginx service'
 
 function nginx_reload() {
-  about reload your nginx config
-  group nginx
+  about 'reload your nginx config'
+  group 'nginx'
 
   FILE="${NGINX_PATH}/logs/nginx.pid"
   if [ -e $FILE ]; then
@@ -17,8 +17,8 @@ function nginx_reload() {
 }
 
 function nginx_stop() {
-  about stop nginx
-  group nginx
+  about 'stop nginx'
+  group 'nginx'
 
   FILE="${NGINX_PATH}/logs/nginx.pid"
   if [ -e $FILE ]; then
@@ -32,8 +32,8 @@ function nginx_stop() {
 }
 
 function nginx_start() {
-  about start nginx
-  group nginx
+  about 'start nginx'
+  group 'nginx'
 
   FILE="${NGINX_PATH}/sbin/nginx"
   if [ -e $FILE ]; then
@@ -45,8 +45,8 @@ function nginx_start() {
 }
 
 function nginx_restart() {
-  about restart nginx
-  group nginx
+  about 'restart nginx'
+  group 'nginx'
 
   FILE="${NGINX_PATH}/logs/nginx.pid"
   if [ -e $FILE ]; then

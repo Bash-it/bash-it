@@ -3,7 +3,7 @@ about-plugin 'osx-specific functions'
 
 function tab() {
   about 'opens a new terminal tab'
-  group osx
+  group 'osx'
 
   osascript 2>/dev/null <<EOF
     tell application "System Events"
@@ -22,7 +22,7 @@ function dock-switch() {
     about 'switch dock between 2d and 3d'
     param '1: "2d" or "3d"'
     example '$ dock-switch 2d'
-    group osx
+    group 'osx'
 
     if [ $(uname) = "Darwin" ]; then
 

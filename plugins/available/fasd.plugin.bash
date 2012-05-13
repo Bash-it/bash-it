@@ -585,7 +585,7 @@ fasd --init env
 
 case $- in
   *i*) cite about-plugin
-       about-plugin navigate 'frecently' used files and directories
+       about-plugin 'navigate "frecently" used files and directories'
        eval "$(fasd --init auto)"
       ;;
   *) # assume being executed as an executable

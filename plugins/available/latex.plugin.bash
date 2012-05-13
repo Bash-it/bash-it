@@ -1,5 +1,5 @@
 cite about-plugin
-about-plugin use mactex
+about-plugin 'use mactex'
 
 # add mactex to the path if its present
 MACTEX_PATH=/usr/local/texlive/2009/bin/universal-darwin

@@ -1,5 +1,5 @@
 cite about-plugin
-about-plugin one command to extract them all...
+about-plugin 'one command to extract them all...'
 extract () {
   if [ $# -ne 1 ]
   then

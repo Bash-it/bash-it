@@ -1,10 +1,10 @@
 cite about-plugin
-about-plugin manage your jekyll site
+about-plugin 'manage your jekyll site'
 
 editpost() {
-  about edit a post
-  param 1: site directory
-  group jekyll
+  about 'edit a post'
+  param '1: site directory'
+  group 'jekyll'
 
   unset SITE
   if [ -z "$1" ]
@@ -55,9 +55,9 @@ editpost() {
 }
 
 newpost() {
-  about create a new post
-  param 1: site directory
-  group jekyll
+  about 'create a new post'
+  param '1: site directory'
+  group 'jekyll'
 
   unset SITE
   if [ -z "$1" ]
@@ -266,9 +266,9 @@ newpost() {
 }
 
 function testsite() {
-  about launches local jekyll server
-  param 1: site directory
-  group jekyll
+  about 'launches local jekyll server'
+  param '1: site directory'
+  group 'jekyll'
 
   unset SITE
   if [ -z "$1" ]
@@ -298,9 +298,9 @@ function testsite() {
 }
 
 function buildsite() {
-  about builds site
-  param 1: site directory
-  group jekyll
+  about 'builds site'
+  param '1: site directory'
+  group 'jekyll'
 
   unset SITE
   if [ -z "$1" ]
@@ -332,8 +332,8 @@ function buildsite() {
 
 function deploysite() {
   about 'rsyncs site to remote host'
-  param 1: site directory
-  group jekyll
+  param '1: site directory'
+  group 'jekyll'
 
   unset SITE
   if [ -z "$1" ]

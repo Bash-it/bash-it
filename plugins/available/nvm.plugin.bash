@@ -80,7 +80,7 @@ nvm()
 {
   about 'Node Version Manager'
   param '1: command, see nvm help'
-  group nvm
+  group 'nvm'
 
   if [ $# -lt 1 ]; then
     nvm help
