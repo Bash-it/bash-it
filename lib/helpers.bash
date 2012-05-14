@@ -56,11 +56,11 @@ disable-plugin ()
 {
     about 'disables bash_it plugin'
     param '1: plugin name'
-    example '$ disable_plugin rvm'
+    example '$ disable-plugin rvm'
     group 'lib'
 
     if [ -z "$1" ]; then
-        reference disable_plugin
+        reference disable-plugin
         return
     fi
 
@@ -89,11 +89,11 @@ enable-plugin ()
 {
     about 'enables bash_it plugin'
     param '1: plugin name'
-    example '$ enable_plugin rvm'
+    example '$ enable-plugin rvm'
     group 'lib'
 
     if [ -z "$1" ]; then
-        reference enable_plugin
+        reference enable-plugin
         return
     fi
 
