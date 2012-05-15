@@ -127,18 +127,35 @@ enable-plugin ()
 
 plugins-help ()
 {
-    about 'list all plugins and functions defined by bash-it'
+    about 'summarize all functions defined by enabled bash-it plugins'
     group 'lib'
 
-    printf '%s\n' "bash-it plugins help"
-    printf '\n'
-    typeset group
-    for group in $(all_groups)
+    # display a brief progress message...
+    printf '%s' 'please wait, building help...'
+    typeset grouplist=$(mktemp /tmp/grouplist.XXXX)
+    typeset func
+    for func in $(typeset_functions)
     do
-        printf '%s\n' "group: $group"
-        glossary $group
-        printf '\n'
+        typeset group="$(typeset -f $func | metafor group)"
+        if [ -z "$group" ]; then
+            group='misc'
+        fi
+        typeset about="$(typeset -f $func | metafor about)"
+        letterpress "$about" $func >> $grouplist.$group
+        echo $grouplist.$group >> $grouplist
     done
+    # clear progress message
+    printf '\r%s\n' '                              '
+    typeset group
+    typeset gfile
+    for gfile in $(cat $grouplist | sort | uniq)
+    do
+        printf '%s\n' "${gfile##*.}:"
+        cat $gfile
+        printf '\n'
+        rm $gfile 2> /dev/null
+    done | less
+    rm $grouplist 2> /dev/null
 }
 
 all_groups ()

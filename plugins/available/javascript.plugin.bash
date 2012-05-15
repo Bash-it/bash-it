@@ -15,7 +15,7 @@ function rails_jquery {
 
 function jquery_install {
   about 'download jquery.js into public/javascripts'
-  group 'javascripts'
+  group 'javascript'
 
   if [ -z "$1" ]
   then
@@ -28,7 +28,7 @@ function jquery_install {
 
 function jquery_ui_install {
   about 'download jquery_us.js into public/javascripts'
-  group 'javascripts'
+  group 'javascript'
 
   if [ -z "$1" ]
   then
