@@ -145,13 +145,19 @@ typeset_functions ()
     # unfortunately, there does not seem to be a easy, portable way to list just the
     # names of the defined shell functions...
 
-    # here's a hack I modified from a StackOverflow post:
-    # we loop over the ps listing for the current process ($$), and print the last column (CMD)
-    # stripping any leading hyphens bash sometimes throws in there
-
-    typeset x ans
-    typeset this=$(for x in $(ps -p $$); do ans=$x; done; printf "%s\n" $ans | sed 's/^-*//')
-    typeset shell=$(basename $this)  # e.g. /bin/bash => bash
+    # first, determine our shell:
+    typeset shell
+    if [ -n "$SHELL" ]; then
+        shell=$(basename $SHELL)  # we assume this is set correctly!
+    else
+        # we'll have to try harder
+        # here's a hack I modified from a StackOverflow post:
+        # we loop over the ps listing for the current process ($$), and print the last column (CMD)
+        # stripping any leading hyphens bash sometimes throws in there
+        typeset x ans
+        typeset this=$(for x in $(ps -p $$); do ans=$x; done; printf "%s\n" $ans | sed 's/^-*//')
+        typeset shell=$(basename $this)  # e.g. /bin/bash => bash
+    fi
     case "$shell" in
         bash)
             typeset -F | awk '{print $3}'
@@ -229,7 +235,7 @@ draft ()
     fi
 
     # aliases bind tighter than function names, disallow them
-    if [ -n "$(type -a $func | grep 'is.*alias')" ]; then
+    if [ -n "$(type -a $func 2>/dev/null | grep 'is.*alias')" ]; then
         printf '%s\n' "sorry, $(type -a $func). please choose another name."
         return
     fi
