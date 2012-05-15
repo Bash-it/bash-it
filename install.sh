@@ -36,18 +36,19 @@ function load_all() {
 
 function load_some() {
     file_type=$1
-    for file in `ls $BASH_IT/${file_type}/available/[^_]*`
+    for path in `ls $BASH_IT/${file_type}/available/[^_]*`
     do
       if [ ! -d "$BASH_IT/$file_type/enabled" ]
       then
         mkdir "$BASH_IT/$file_type/enabled"
       fi
+      file_name=$(basename "$path")
       while true
       do
-        read -p "Would you like to enable the ${file%.*.*} $file_type? [Y/N] " RESP
+        read -p "Would you like to enable the ${file_name%%.*} $file_type? [Y/N] " RESP
         case $RESP in
         [yY])
-          ln -s "$BASH_IT/$file_type/available/$file" "$BASH_IT/$file_type/enabled"
+          ln -s "$path" "$BASH_IT/$file_type/enabled"
           break
           ;;
         [nN])
