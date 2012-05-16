@@ -39,7 +39,7 @@ bash-it-plugins ()
     printf "%-20s%-10s%s\n" 'Plugin' 'Enabled?' 'Description'
     for f in $BASH_IT/plugins/available/*.bash
     do
-        if [ -h $BASH_IT/plugins/enabled/$(basename $f) ]; then
+        if [ -e $BASH_IT/plugins/enabled/$(basename $f) ]; then
             enabled='x'
         else
             enabled=' '
@@ -69,7 +69,7 @@ disable-plugin ()
         for f in $BASH_IT/plugins/available/*.bash
         do
             plugin=$(basename $f)
-            if [ -h $BASH_IT/plugins/enabled/$plugin ]; then
+            if [ -e $BASH_IT/plugins/enabled/$plugin ]; then
                 rm $BASH_IT/plugins/enabled/$(basename $plugin)
             fi
         done
@@ -114,7 +114,7 @@ enable-plugin ()
         fi
 
         plugin=$(basename $plugin)
-        if [ -h $BASH_IT/plugins/enabled/$plugin ]; then
+        if [ -e $BASH_IT/plugins/enabled/$plugin ]; then
             printf '%s\n' "$1 is already enabled."
             return
         fi
