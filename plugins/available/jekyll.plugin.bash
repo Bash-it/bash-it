@@ -1,6 +1,11 @@
-#!/usr/bin/env bash
+cite about-plugin
+about-plugin 'manage your jekyll site'
 
 editpost() {
+  about 'edit a post'
+  param '1: site directory'
+  group 'jekyll'
+
   unset SITE
   if [ -z "$1" ]
   then
@@ -35,11 +40,11 @@ editpost() {
     DATE=`echo $POST | grep -oE "[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}"`
     TITLE=`cat $POST | grep -oE "title: (.+)"`
     TITLE=`echo $TITLE | sed 's/title: //'`
-    echo "$COUNTER) 	$DATE	$TITLE" >> "$TMPFILE"	
+    echo "$COUNTER) 	$DATE	$TITLE" >> "$TMPFILE"
     POSTS[$COUNTER]=$POST
     COUNTER=`expr $COUNTER + 1`
   done
-  less $TMPFILE	
+  less $TMPFILE
   read -p "Number of post to edit: " POST_TO_EDIT
   if [ -z "$JEKYLL_EDITOR" ]
   then
@@ -50,6 +55,10 @@ editpost() {
 }
 
 newpost() {
+  about 'create a new post'
+  param '1: site directory'
+  group 'jekyll'
+
   unset SITE
   if [ -z "$1" ]
   then
@@ -93,7 +102,7 @@ newpost() {
   then
     select OPTION in $OPTIONS
     do
-      if [[ $OPTION = "Text" ]] 
+      if [[ $OPTION = "Text" ]]
       then
         POST_TYPE="Text"
         break
@@ -257,6 +266,10 @@ newpost() {
 }
 
 function testsite() {
+  about 'launches local jekyll server'
+  param '1: site directory'
+  group 'jekyll'
+
   unset SITE
   if [ -z "$1" ]
   then
@@ -285,6 +298,10 @@ function testsite() {
 }
 
 function buildsite() {
+  about 'builds site'
+  param '1: site directory'
+  group 'jekyll'
+
   unset SITE
   if [ -z "$1" ]
   then
@@ -314,6 +331,10 @@ function buildsite() {
 }
 
 function deploysite() {
+  about 'rsyncs site to remote host'
+  param '1: site directory'
+  group 'jekyll'
+
   unset SITE
   if [ -z "$1" ]
   then

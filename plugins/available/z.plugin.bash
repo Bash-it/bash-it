@@ -1,7 +1,7 @@
-#!/usr/bin/env bash
+cite about-plugin
+about-plugin 'maintains a jump-list of the directories you actually use'
+about-plugin '                              z is DEPRECATED, use fasd instead'
 
-# maintains a jump-list of the directories you actually use
-#
 # INSTALL:
 #   * put something like this in your .bashrc:
 #     . /path/to/z.sh
@@ -14,6 +14,11 @@
 #   * z -r foo  # goes to highest ranked dir matching foo
 #   * z -t foo  # goes to most recently accessed dir matching foo
 #   * z -l foo  # list all dirs matching foo (by frecency)
+
+if [ -e $BASH_IT/plugins/enabled/fasd.plugin.bash ]; then
+    printf '%s\n' 'sorry, the z plugin is incompatible with the fasd plugin. you may use either, but not both.'
+    return
+fi
 
 z() {
  local datafile="$HOME/.z"

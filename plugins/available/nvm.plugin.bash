@@ -5,6 +5,9 @@
 # Implemented by Tim Caswell <tim@creationix.com>
 # with much bash help from Matthew Ranney
 
+cite about-plugin
+about-plugin 'node version manager, as a bash function'
+
 export NVM_DIR=$HOME/.nvm
 
 if [ ! -d "$NVM_DIR" ]; then
@@ -75,6 +78,10 @@ print_versions()
 
 nvm()
 {
+  about 'Node Version Manager'
+  param '1: command, see nvm help'
+  group 'nvm'
+
   if [ $# -lt 1 ]; then
     nvm help
     return
