@@ -1,42 +1,34 @@
 # based on https://gist.github.com/318247
 
-# Usage: browser
-# pipe html to a browser
-# e.g.
-# $ echo "<h1>hi mom!</h1>" | browser
-# $ ron -5 man/rip.5.ron | browser
+cite about-plugin
+about-plugin 'render commandline output in your browser'
 
 function browser() {
+    about 'pipe html to a browser'
+    example '$ echo "<h1>hi mom!</h1>" | browser'
+    example '$ ron -5 man/rip.5.ron | browser'
+    group 'browser'
+
     if [ -t 0 ]; then
         if [ -n "$1" ]; then
             open $1
         else
-            cat <<usage
-Usage: browser
-pipe html to a browser
-
-$ echo '<h1>hi mom!</h1>' | browser
-$ ron -5 man/rip.5.ron | browser
-usage
-
-    fi
+            reference browser
+        fi
 
     else
         f="/tmp/browser.$RANDOM.html"
         cat /dev/stdin > $f
-        open $f 
+        open $f
     fi
 }
 
 
-# pipe hot spicy interwebs into textmate and cleanup!
-#
-# Usage: wmate
-# wget into a pipe into TextMate and force Tidy (you can undo in textmate)
-# e.g.
-# $ wmate google.com
-
 function wmate() {
+    about 'pipe hot spicy interwebs into textmate and cleanup!'
+    example '$ wmate google.com'
+    group 'browser'
+
     if [ -t 0 ]; then
         if [ -n "$1" ]; then
             wget -qO- $1 | /usr/bin/mate
@@ -64,34 +56,21 @@ end tell
 EOT`
 
         else
-            cat <<usage
-Usage: wmate google.com
-wget into a pipe into TextMate and force Tidy (you can undo in textmate)
-
-$ wmate google.com
-usage
-
+            reference wmate
       fi
     fi
 }
 
-#
-# Usage: raw google.com
-# wget into a temp file and pump it into your browser
-#
-# e.g.
-# $ raw google.com
 function raw() {
+    about 'write wget into a temp file and pump it into your browser'
+    example '$ raw google.com'
+    group 'browser'
+
     if [ -t 0 ]; then
         if [ -n "$1" ]; then
             wget -qO- $1 | browser
         else
-            cat <<usage
-Usage: raw google.com
-wget into a temp file and pump it into your browser
-
-$ raw google.com
-usage
-      fi
+            reference raw
+        fi
     fi
 }
