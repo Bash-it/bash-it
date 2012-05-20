@@ -74,7 +74,7 @@ disable-plugin ()
             fi
         done
     else
-        typeset plugin=$(ls $BASH_IT/plugins/enabled/$1.*bash 2>/dev/null | head -1)
+        typeset plugin=$(command ls $BASH_IT/plugins/enabled/$1.*bash 2>/dev/null | head -1)
         if [ ! -h $plugin ]; then
             printf '%s\n' 'sorry, that does not appear to be an enabled plugin.'
             return
@@ -107,7 +107,7 @@ enable-plugin ()
             fi
         done
     else
-        typeset plugin=$(ls $BASH_IT/plugins/available/$1.*bash 2>/dev/null | head -1)
+        typeset plugin=$(command ls $BASH_IT/plugins/available/$1.*bash 2>/dev/null | head -1)
         if [ -z "$plugin" ]; then
             printf '%s\n' 'sorry, that does not appear to be an available plugin.'
             return
