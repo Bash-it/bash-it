@@ -73,7 +73,7 @@ _bash-it-describe ()
         else
             enabled=' '
         fi
-        printf "%-20s%-10s%s\n" "$(basename $f | cut -d'.' -f1)" "  [$enabled]" "$(cat $f | metafor about-plugin)"
+        printf "%-20s%-10s%s\n" "$(basename $f | cut -d'.' -f1)" "  [$enabled]" "$(cat $f | metafor about-$command_suffix)"
     done
     printf '\n%s\n' "to enable $preposition $command_suffix, do:"
     printf '%s\n' "$ enable-$command_suffix  <$command_suffix name> -or- $ enable-$command_suffix all"

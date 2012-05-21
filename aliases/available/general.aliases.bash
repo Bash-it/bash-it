@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-cite about-plugin
-about-plugin 'general aliases'
+cite about-alias
+about-alias 'general aliases'
 
 # List directory contents
 alias sl=ls
