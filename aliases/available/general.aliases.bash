@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+cite about-plugin
+about-plugin 'general aliases'
+
 # List directory contents
 alias sl=ls
 alias ls='ls -G'        # Compact view, show colors

@@ -29,27 +29,56 @@ function reload_plugins() {
   _load_bash_it_files "plugins"
 }
 
+bash-it-aliases ()
+{
+    about 'summarizes available bash_it aliases'
+    group 'lib'
+    
+    _bash-it-describe "aliases" "an" "alias" "Alias"
+}
+
+bash-it-completions ()
+{
+    about 'summarizes available bash_it completions'
+    group 'lib'
+    
+    _bash-it-describe "completion" "a" "completion" "Completion"
+}
+
 bash-it-plugins ()
 {
     about 'summarizes available bash_it plugins'
     group 'lib'
+    
+    _bash-it-describe "plugins" "a" "plugin" "Plugin"
+}
+
+_bash-it-describe ()
+{
+    about 'summarizes available bash_it plugins'
+    group 'lib'
+    
+    file_type="$1"
+    preposition="$2"
+    command_suffix="$3"
+    column_header="$4"
 
     typeset f
     typeset enabled
-    printf "%-20s%-10s%s\n" 'Plugin' 'Enabled?' 'Description'
-    for f in $BASH_IT/plugins/available/*.bash
+    printf "%-20s%-10s%s\n" "$column_header" 'Enabled?' 'Description'
+    for f in $BASH_IT/$file_type/available/*.bash
     do
-        if [ -e $BASH_IT/plugins/enabled/$(basename $f) ]; then
+        if [ -e $BASH_IT/$file_type/enabled/$(basename $f) ]; then
             enabled='x'
         else
             enabled=' '
         fi
         printf "%-20s%-10s%s\n" "$(basename $f | cut -d'.' -f1)" "  [$enabled]" "$(cat $f | metafor about-plugin)"
     done
-    printf '\n%s\n' 'to enable a plugin, do:'
-    printf '%s\n' '$ enable-plugin  <plugin name> -or- $ enable-plugin all'
-    printf '\n%s\n' 'to disable a plugin, do:'
-    printf '%s\n' '$ disable-plugin <plugin name> -or- $ disable-plugin all'
+    printf '\n%s\n' "to enable $preposition $command_suffix, do:"
+    printf '%s\n' "$ enable-$command_suffix  <$command_suffix name> -or- $ enable-$command_suffix all"
+    printf '\n%s\n' "to disable $preposition $command_suffix, do:"
+    printf '%s\n' "$ disable-$command_suffix <$command_suffix name> -or- $ disable-$command_suffix all"
 }
 
 disable-plugin ()
@@ -58,31 +87,60 @@ disable-plugin ()
     param '1: plugin name'
     example '$ disable-plugin rvm'
     group 'lib'
+    
+    _disable-thing "plugins" "plugin" $1
+}
 
-    if [ -z "$1" ]; then
-        reference disable-plugin
+disable-alias ()
+{
+    about 'disables bash_it alias'
+    param '1: alias name'
+    example '$ disable-alias git'
+    group 'lib'
+    
+    _disable-thing "aliases" "alias" $1
+}
+
+disable-completion ()
+{
+    about 'disables bash_it completion'
+    param '1: completion name'
+    example '$ disable-completion git'
+    group 'lib'
+    
+    _disable-thing "completion" "completion" $1
+}
+
+_disable-thing ()
+{
+	file_type="$1"
+	command_suffix="$2"
+	file_entity="$3"
+	
+    if [ -z "$file_entity" ]; then
+        reference "disable-$command_suffix"
         return
     fi
 
-    if [ "$1" = "all" ]; then
-        typeset f plugin
-        for f in $BASH_IT/plugins/available/*.bash
+    if [ "$file_entity" = "all" ]; then
+        typeset f $command_suffix
+        for f in $BASH_IT/$file_type/available/*.bash
         do
             plugin=$(basename $f)
-            if [ -e $BASH_IT/plugins/enabled/$plugin ]; then
-                rm $BASH_IT/plugins/enabled/$(basename $plugin)
+            if [ -e $BASH_IT/$file_type/enabled/$plugin ]; then
+                rm $BASH_IT/$file_type/enabled/$(basename $plugin)
             fi
         done
     else
-        typeset plugin=$(command ls $BASH_IT/plugins/enabled/$1.*bash 2>/dev/null | head -1)
-        if [ ! -h $plugin ]; then
-            printf '%s\n' 'sorry, that does not appear to be an enabled plugin.'
+        typeset plugin=$(command ls $BASH_IT/$file_type/enabled/$file_entity.*bash 2>/dev/null | head -1)
+        if [ -z "$plugin" ]; then
+            printf '%s\n' "sorry, that does not appear to be an enabled $command_suffix."
             return
         fi
-        rm $BASH_IT/plugins/enabled/$(basename $plugin)
+        rm $BASH_IT/$file_type/enabled/$(basename $plugin)
     fi
 
-    printf '%s\n' "$1 disabled."
+    printf '%s\n' "$file_entity disabled."
 }
 
 enable-plugin ()
@@ -91,38 +149,67 @@ enable-plugin ()
     param '1: plugin name'
     example '$ enable-plugin rvm'
     group 'lib'
+      
+    _enable-thing "plugins" "plugin" $1
+}
 
-    if [ -z "$1" ]; then
-        reference enable-plugin
+enable-alias ()
+{
+    about 'enables bash_it alias'
+    param '1: alias name'
+    example '$ enable-alias git'
+    group 'lib'
+      
+    _enable-thing "aliases" "alias" $1
+}
+
+enable-completion ()
+{
+    about 'enables bash_it completion'
+    param '1: completion name'
+    example '$ enable-completion git'
+    group 'lib'
+      
+    _enable-thing "completion" "completion" $1
+}
+
+_enable-thing ()
+{
+	file_type="$1"
+	command_suffix="$2"
+	file_entity="$3"
+	
+    if [ -z "$file_entity" ]; then
+        reference "enable-$command_suffix"
         return
     fi
 
-    if [ "$1" = "all" ]; then
-        typeset f plugin
-        for f in $BASH_IT/plugins/available/*.bash
+    if [ "$file_entity" = "all" ]; then
+        typeset f $command_suffix
+        for f in $BASH_IT/$file_type/available/*.bash
         do
             plugin=$(basename $f)
-            if [ ! -h $BASH_IT/plugins/enabled/$plugin ]; then
-                ln -s $BASH_IT/plugins/available/$plugin $BASH_IT/plugins/enabled/$plugin
+            if [ ! -h $BASH_IT/$file_type/enabled/$plugin ]; then
+                ln -s $BASH_IT/$file_type/available/$plugin $BASH_IT/$file_type/enabled/$plugin
             fi
         done
     else
-        typeset plugin=$(command ls $BASH_IT/plugins/available/$1.*bash 2>/dev/null | head -1)
+        typeset plugin=$(command ls $BASH_IT/$file_type/available/$file_entity.*bash 2>/dev/null | head -1)
         if [ -z "$plugin" ]; then
-            printf '%s\n' 'sorry, that does not appear to be an available plugin.'
+            printf '%s\n' "sorry, that does not appear to be an available $command_suffix."
             return
         fi
 
         plugin=$(basename $plugin)
-        if [ -e $BASH_IT/plugins/enabled/$plugin ]; then
-            printf '%s\n' "$1 is already enabled."
+        if [ -e $BASH_IT/$file_type/enabled/$plugin ]; then
+            printf '%s\n' "$file_entity is already enabled."
             return
         fi
 
-        ln -s $BASH_IT/plugins/available/$plugin $BASH_IT/plugins/enabled/$plugin
+        ln -s $BASH_IT/$file_type/available/$plugin $BASH_IT/$file_type/enabled/$plugin
     fi
 
-    printf '%s\n' "$1 enabled."
+    printf '%s\n' "$file_entity enabled."
 }
 
 plugins-help ()
