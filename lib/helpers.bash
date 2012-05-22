@@ -33,7 +33,7 @@ bash-it-aliases ()
 {
     about 'summarizes available bash_it aliases'
     group 'lib'
-    
+
     _bash-it-describe "aliases" "an" "alias" "Alias"
 }
 
@@ -41,7 +41,7 @@ bash-it-completions ()
 {
     about 'summarizes available bash_it completions'
     group 'lib'
-    
+
     _bash-it-describe "completion" "a" "completion" "Completion"
 }
 
@@ -49,13 +49,13 @@ bash-it-plugins ()
 {
     about 'summarizes available bash_it plugins'
     group 'lib'
-    
+
     _bash-it-describe "plugins" "a" "plugin" "Plugin"
 }
 
 _bash-it-describe ()
 {
-	cite _about _param _example
+    cite _about _param _example
     _about 'summarizes available bash_it components'
     _param '1: subdirectory'
     _param '2: preposition'
@@ -92,7 +92,7 @@ disable-plugin ()
     param '1: plugin name'
     example '$ disable-plugin rvm'
     group 'lib'
-    
+
     _disable-thing "plugins" "plugin" $1
 }
 
@@ -102,7 +102,7 @@ disable-alias ()
     param '1: alias name'
     example '$ disable-alias git'
     group 'lib'
-    
+
     _disable-thing "aliases" "alias" $1
 }
 
@@ -112,23 +112,23 @@ disable-completion ()
     param '1: completion name'
     example '$ disable-completion git'
     group 'lib'
-    
+
     _disable-thing "completion" "completion" $1
 }
 
 _disable-thing ()
 {
-	cite _about _param _example
+    cite _about _param _example
     _about 'disables a bash_it component'
     _param '1: subdirectory'
     _param '2: file_type'
     _param '3: file_entity'
     _example '$ _disable-thing "plugins" "plugin" "ssh"'
     
-	subdirectory="$1"
-	file_type="$2"
-	file_entity="$3"
-	
+    subdirectory="$1"
+    file_type="$2"
+    file_entity="$3"
+
     if [ -z "$file_entity" ]; then
         reference "disable-$file_type"
         return
@@ -161,7 +161,7 @@ enable-plugin ()
     param '1: plugin name'
     example '$ enable-plugin rvm'
     group 'lib'
-      
+
     _enable-thing "plugins" "plugin" $1
 }
 
@@ -171,7 +171,7 @@ enable-alias ()
     param '1: alias name'
     example '$ enable-alias git'
     group 'lib'
-      
+
     _enable-thing "aliases" "alias" $1
 }
 
@@ -181,23 +181,23 @@ enable-completion ()
     param '1: completion name'
     example '$ enable-completion git'
     group 'lib'
-      
+
     _enable-thing "completion" "completion" $1
 }
 
 _enable-thing ()
 {
-	cite _about _param _example
+    cite _about _param _example
     _about 'enables a bash_it component'
     _param '1: subdirectory'
     _param '2: file_type'
     _param '3: file_entity'
     _example '$ _enable-thing "plugins" "plugin" "ssh"'	
 	
-	subdirectory="$1"
-	file_type="$2"
-	file_entity="$3"
-	
+    subdirectory="$1"
+    file_type="$2"
+    file_entity="$3"
+
     if [ -z "$file_entity" ]; then
         reference "enable-$file_type"
         return
@@ -229,6 +229,27 @@ _enable-thing ()
     fi
 
     printf '%s\n' "$file_entity enabled."
+}
+
+alias-help ()
+{
+    about 'shows help for all aliases, or a specific alias group'
+    param '1: optional alias group'
+    example '$ alias-help'
+    example '$ alias-help git'
+
+    if [ -n "$1" ]; then
+        cat $BASH_IT/aliases/enabled/$1.aliases.bash | metafor alias | sed "s/$/'/"
+    else
+        typeset f
+        for f in $BASH_IT/aliases/enabled/*
+        do
+            typeset file=$(basename $f)
+            printf '\n\n%s:\n' "${file%%.*}"
+            # metafor() strips trailing quotes, restore them with sed..
+            cat $f | metafor alias | sed "s/$/'/"
+        done
+    fi
 }
 
 plugins-help ()
