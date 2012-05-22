@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+cite 'about-alias'
+about-alias 'osx-specific aliases'
 
 # Desktop Programs
 alias fireworks="open -a '/Applications/Adobe Fireworks CS3/Adobe Fireworks CS3.app'"
