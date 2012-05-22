@@ -1,11 +1,11 @@
 # Helper function loading various enable-able files
 function _load_bash_it_files() {
-  file_type="$1"
-  if [ ! -d "${BASH_IT}/${file_type}/enabled" ]
+  subdirectory="$1"
+  if [ ! -d "${BASH_IT}/${subdirectory}/enabled" ]
   then
     continue
   fi
-  FILES="${BASH_IT}/${file_type}/enabled/*.bash"
+  FILES="${BASH_IT}/${subdirectory}/enabled/*.bash"
   for config_file in $FILES
   do
     if [ -e "${config_file}" ]; then
@@ -55,30 +55,35 @@ bash-it-plugins ()
 
 _bash-it-describe ()
 {
-    about 'summarizes available bash_it plugins'
-    group 'lib'
+	cite _about _param _example
+    _about 'summarizes available bash_it components'
+    _param '1: subdirectory'
+    _param '2: preposition'
+    _param '3: file_type'
+    _param '4: column_header'
+    _example '$ _bash-it-describe "plugins" "a" "plugin" "Plugin"'
     
-    file_type="$1"
+    subdirectory="$1"
     preposition="$2"
-    command_suffix="$3"
+    file_type="$3"
     column_header="$4"
 
     typeset f
     typeset enabled
     printf "%-20s%-10s%s\n" "$column_header" 'Enabled?' 'Description'
-    for f in $BASH_IT/$file_type/available/*.bash
+    for f in $BASH_IT/$subdirectory/available/*.bash
     do
-        if [ -e $BASH_IT/$file_type/enabled/$(basename $f) ]; then
+        if [ -e $BASH_IT/$subdirectory/enabled/$(basename $f) ]; then
             enabled='x'
         else
             enabled=' '
         fi
-        printf "%-20s%-10s%s\n" "$(basename $f | cut -d'.' -f1)" "  [$enabled]" "$(cat $f | metafor about-$command_suffix)"
+        printf "%-20s%-10s%s\n" "$(basename $f | cut -d'.' -f1)" "  [$enabled]" "$(cat $f | metafor about-$file_type)"
     done
-    printf '\n%s\n' "to enable $preposition $command_suffix, do:"
-    printf '%s\n' "$ enable-$command_suffix  <$command_suffix name> -or- $ enable-$command_suffix all"
-    printf '\n%s\n' "to disable $preposition $command_suffix, do:"
-    printf '%s\n' "$ disable-$command_suffix <$command_suffix name> -or- $ disable-$command_suffix all"
+    printf '\n%s\n' "to enable $preposition $file_type, do:"
+    printf '%s\n' "$ enable-$file_type  <$file_type name> -or- $ enable-$file_type all"
+    printf '\n%s\n' "to disable $preposition $file_type, do:"
+    printf '%s\n' "$ disable-$file_type <$file_type name> -or- $ disable-$file_type all"
 }
 
 disable-plugin ()
@@ -113,31 +118,38 @@ disable-completion ()
 
 _disable-thing ()
 {
-	file_type="$1"
-	command_suffix="$2"
+	cite _about _param _example
+    _about 'disables a bash_it component'
+    _param '1: subdirectory'
+    _param '2: file_type'
+    _param '3: file_entity'
+    _example '$ _disable-thing "plugins" "plugin" "ssh"'
+    
+	subdirectory="$1"
+	file_type="$2"
 	file_entity="$3"
 	
     if [ -z "$file_entity" ]; then
-        reference "disable-$command_suffix"
+        reference "disable-$file_type"
         return
     fi
 
     if [ "$file_entity" = "all" ]; then
-        typeset f $command_suffix
-        for f in $BASH_IT/$file_type/available/*.bash
+        typeset f $file_type
+        for f in $BASH_IT/$subdirectory/available/*.bash
         do
             plugin=$(basename $f)
-            if [ -e $BASH_IT/$file_type/enabled/$plugin ]; then
-                rm $BASH_IT/$file_type/enabled/$(basename $plugin)
+            if [ -e $BASH_IT/$subdirectory/enabled/$plugin ]; then
+                rm $BASH_IT/$subdirectory/enabled/$(basename $plugin)
             fi
         done
     else
-        typeset plugin=$(command ls $BASH_IT/$file_type/enabled/$file_entity.*bash 2>/dev/null | head -1)
+        typeset plugin=$(command ls $BASH_IT/$subdirectory/enabled/$file_entity.*bash 2>/dev/null | head -1)
         if [ -z "$plugin" ]; then
-            printf '%s\n' "sorry, that does not appear to be an enabled $command_suffix."
+            printf '%s\n' "sorry, that does not appear to be an enabled $file_type."
             return
         fi
-        rm $BASH_IT/$file_type/enabled/$(basename $plugin)
+        rm $BASH_IT/$subdirectory/enabled/$(basename $plugin)
     fi
 
     printf '%s\n' "$file_entity disabled."
@@ -175,38 +187,45 @@ enable-completion ()
 
 _enable-thing ()
 {
-	file_type="$1"
-	command_suffix="$2"
+	cite _about _param _example
+    _about 'enables a bash_it component'
+    _param '1: subdirectory'
+    _param '2: file_type'
+    _param '3: file_entity'
+    _example '$ _enable-thing "plugins" "plugin" "ssh"'	
+	
+	subdirectory="$1"
+	file_type="$2"
 	file_entity="$3"
 	
     if [ -z "$file_entity" ]; then
-        reference "enable-$command_suffix"
+        reference "enable-$file_type"
         return
     fi
 
     if [ "$file_entity" = "all" ]; then
-        typeset f $command_suffix
-        for f in $BASH_IT/$file_type/available/*.bash
+        typeset f $file_type
+        for f in $BASH_IT/$subdirectory/available/*.bash
         do
             plugin=$(basename $f)
-            if [ ! -h $BASH_IT/$file_type/enabled/$plugin ]; then
-                ln -s $BASH_IT/$file_type/available/$plugin $BASH_IT/$file_type/enabled/$plugin
+            if [ ! -h $BASH_IT/$subdirectory/enabled/$plugin ]; then
+                ln -s $BASH_IT/$subdirectory/available/$plugin $BASH_IT/$subdirectory/enabled/$plugin
             fi
         done
     else
-        typeset plugin=$(command ls $BASH_IT/$file_type/available/$file_entity.*bash 2>/dev/null | head -1)
+        typeset plugin=$(command ls $BASH_IT/$subdirectory/available/$file_entity.*bash 2>/dev/null | head -1)
         if [ -z "$plugin" ]; then
-            printf '%s\n' "sorry, that does not appear to be an available $command_suffix."
+            printf '%s\n' "sorry, that does not appear to be an available $file_type."
             return
         fi
 
         plugin=$(basename $plugin)
-        if [ -e $BASH_IT/$file_type/enabled/$plugin ]; then
+        if [ -e $BASH_IT/$subdirectory/enabled/$plugin ]; then
             printf '%s\n' "$file_entity is already enabled."
             return
         fi
 
-        ln -s $BASH_IT/$file_type/available/$plugin $BASH_IT/$file_type/enabled/$plugin
+        ln -s $BASH_IT/$subdirectory/available/$plugin $BASH_IT/$subdirectory/enabled/$plugin
     fi
 
     printf '%s\n' "$file_entity enabled."
