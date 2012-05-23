@@ -81,9 +81,9 @@ _bash-it-describe ()
         printf "%-20s%-10s%s\n" "$(basename $f | cut -d'.' -f1)" "  [$enabled]" "$(cat $f | metafor about-$file_type)"
     done
     printf '\n%s\n' "to enable $preposition $file_type, do:"
-    printf '%s\n' "$ enable-$file_type  <$file_type name> -or- $ enable-$file_type all"
+    printf '%s\n' "$ bash-it enable $file_type  <$file_type name> -or- $ bash-it enable $file_type all"
     printf '\n%s\n' "to disable $preposition $file_type, do:"
-    printf '%s\n' "$ disable-$file_type <$file_type name> -or- $ disable-$file_type all"
+    printf '%s\n' "$ bash-it disable $file_type <$file_type name> -or- $ bash-it disable $file_type all"
 }
 
 disable-plugin ()
