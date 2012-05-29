@@ -183,3 +183,18 @@ buf ()
     local filetime=$(date +%Y%m%d_%H%M%S)
     cp ${filename} ${filename}_${filetime}
 }
+
+for_all_dirs ()
+{
+	about 'loops through all subdirectories of the current directory and executes the specified command in each of them'
+	param 'command'
+	group 'base'
+	example '$ for_all_dirs svn up'
+	for dir in */
+	do
+		echo "Processing $dir"
+		cd "$dir"
+		$*
+		cd ..
+	done
+}
