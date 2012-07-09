@@ -144,6 +144,61 @@ function virtualenv_prompt {
   fi
 }
 
+# conditional colors
+function user_type_color_prompt {
+  if [ ${UID} -eq 0 ] ; then
+      if [ "${USER}" == "${LOGNAME}" ]; then
+          if [[ ${SUDO_USER} ]]; then
+              echo -e "$bold_red"
+          else
+              echo -e "$red"
+          fi
+      else
+          echo -e "$yellow"
+      fi
+  else
+      if [ ${USER} == ${LOGNAME} ]; then
+          echo -e "$green"
+      else
+          echo -e "$orange"
+      fi
+  fi
+}
+
+function host_connection_color_prompt {
+  if [[ ${SSH_CLIENT} ]] || [[ ${SSH2_CLIENT} ]]; then
+    SSH_FLAG=1
+  fi
+  if [[ ${SSH_FLAG} -eq 1 ]]; then
+    echo -e "$cyan"
+  elif [[ -n ${SESS_SRC} ]]; then
+      if [[ "${SESS_SRC}" = "(:0.0)" ]]; then
+      echo -e "$green"
+      else
+        local parent_process=$(cat /proc/${PPID}/cmdline)
+        if [[ "$parent_process" = "in.rlogind*" ]]; then
+          echo -e "$orange"
+        elif [[ "$parent_process" = "in.telnetd*" ]]; then
+          echo -e "$yellow"
+        else
+          echo -e "$bold_red"
+        fi
+      fi
+  elif [[ "${SESS_SRC}" = "" ]]; then
+    echo -e "$green"
+  else
+    echo -e "$red"
+  fi
+}
+
+function writeable_path_color_prompt {
+  if [[ -w $PWD ]]; then
+    echo -e "$green"
+  else
+    echo -e "$red"
+  fi
+}
+
 # backwards-compatibility
 function git_prompt_info {
   git_prompt_vars
