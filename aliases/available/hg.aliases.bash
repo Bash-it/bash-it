@@ -1,14 +1,6 @@
-#!/usr/bin/env bash
+cite 'about-alias'
+about-alias 'mercurial abbreviations'
 
 alias hs='hg status'
 alias hsum='hg summary'
 alias hcm='hg commit -m'
-
-function hg-help() {
-  echo "Mercurial Alias Help"
-  echo
-  echo "  hs    = hg status"
-  echo "  hsum  = hg summary"
-  echo "  hcm   = hg commit -m"
-  echo
-}
