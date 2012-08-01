@@ -19,3 +19,6 @@ alias hex='open -a "Hex Fiend"'
 if [ -s /usr/bin/firefox ] ; then
   unalias firefox
 fi
+
+# Requires growlnotify, which can be found in the Growl DMG under "Extras"
+alias grnot='growlnotify -s -t Terminal -m "Done"'
