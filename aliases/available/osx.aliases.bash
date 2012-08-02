@@ -13,6 +13,7 @@ alias chrome="open -a google\ chrome"
 alias chromium="open -a chromium"
 alias dashcode="open -a dashcode"
 alias f='open -a Finder '
+alias fh='open -a Finder .'
 alias textedit='open -a TextEdit'
 alias hex='open -a "Hex Fiend"'
 
