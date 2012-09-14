@@ -136,7 +136,7 @@ _fasd_zsh_word_complete() {
   [ -z "\$_fasd_cur" ] && local _fasd_cur="\${words[CURRENT]}"
   local fnd="\${_fasd_cur//,/ }"
   local typ=\${1:-e}
-  fasd --query \$typ \$fnd | sort -nr | sed 's/^[0-9.]*[ ]*//' | \
+  fasd --query \$typ \$fnd | sort -nr | sed 's/^[^ ]*[ ]*//' | \
     while read line; do
       compadd -U -V fasd "\$line"
     done
@@ -204,7 +204,7 @@ _fasd_bash_word_complete() {
   [ "\$_fasd_cur" ] || local _fasd_cur="\${COMP_WORDS[COMP_CWORD]}"
   local typ=\${1:-e}
   local fnd="\${_fasd_cur//,/ }"
-  local RESULT=\$(fasd -q --query \$typ \$fnd | sed 's/^[0-9.]*[ ]*//')
+  local RESULT=\$(fasd -q --query \$typ \$fnd | sed 's/^[^ ]*[ ]*//')
   IFS=\$'\n' COMPREPLY=( \$RESULT )
 } >> "$_FASD_SINK" 2>&1
 _fasd_bash_word_complete_trigger() {
@@ -560,19 +560,19 @@ fasd [-A|-D] [paths ...]
       result="$(echo "$result" | sort -nr)"
       echo "$result" | sed = | sed 'N;s/\n/	/' | sort -nr >&2; printf "> " >&2
       local i; read i; [ 0 -lt "${i:-0}" ] 2>> "$_FASD_SINK" || return 1
-      result="$(echo "$result" | sed -n "${i:-1}"'s/^[0-9.]*[ ]*//p')"
+      result="$(echo "$result" | sed -n "${i:-1}"'s/^[^ ]*[ ]*//p')"
       if [ "$result" ]; then
         fasd --add "$result"; eval ${exec:-echo} "\"$result\""
       fi
     elif [ "$lst" ]; then
-      echo "$result" | sort -n${r} | sed 's/^[0-9.]*[ ]*//'
+      echo "$result" | sort -n${r} | sed 's/^[^ ]*[ ]*//'
     elif [ "$show" ]; then
       echo "$result" | sort -n
     elif [ "$fnd" -a "$exec" ]; then # exec
-      result="$(echo "$result" | sort -n | sed -n '$s/^[0-9.]*[ ]*//p')"
+      result="$(echo "$result" | sort -n | sed -n '$s/^[^ ]*[ ]*//p')"
       fasd --add "$result"; eval $exec "\"$result\""
     elif [ "$fnd" -a ! -t 1 ]; then # echo if output is not terminal
-      result="$(echo "$result" | sort -n | sed -n '$s/^[0-9.]*[ ]*//p')"
+      result="$(echo "$result" | sort -n | sed -n '$s/^[^ ]*[ ]*//p')"
       fasd --add "$result"; echo "$result"
     else # no args, show
       echo "$result" | sort -n
