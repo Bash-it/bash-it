@@ -122,6 +122,10 @@ fi
 # Show untracked files
 alias gu='git ls-files . --exclude-standard --others'
 
+# Git SVN
+alias gsr='git svn rebase'
+alias gsd='git svn dcommit'
+
 case $OSTYPE in
   darwin*)
     alias gtls="git tag -l | gsort -V"
