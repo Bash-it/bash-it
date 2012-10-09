@@ -137,9 +137,9 @@ usage ()
     group 'base'
     if [ $(uname) = "Darwin" ]; then
         if [ -n $1 ]; then
-            du -hd $1
+            du -h $1
         else
-            du -hd 1
+            du -h 1
         fi
 
     elif [ $(uname) = "Linux" ]; then
