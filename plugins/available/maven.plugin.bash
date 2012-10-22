@@ -26,6 +26,12 @@ usemvn ()
         done
         echo ""
     else
+    	# Undefine M2_HOME if it is defined, as it gets in the way. Use MAVEN_HOME instead, which works for both Maven 2 and 3.
+    	if [ -n "$M2_HOME" ]
+		then
+			unset M2_HOME
+		fi
+		
         if [ -z "$MAVEN_HOME" ]
         then
             export PATH=$MAVEN_INSTALL_ROOT/apache-maven-$1/bin:$PATH
