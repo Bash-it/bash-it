@@ -8,6 +8,7 @@ disable_proxy ()
 	
 	unset http_proxy
 	unset https_proxy
+	unset ALL_PROXY
 	echo "Disabled proxy environment variables"
 	
 	npm_disable_proxy
@@ -21,6 +22,7 @@ enable_proxy ()
 	
 	export http_proxy=$BASH_IT_HTTP_PROXY
 	export https_proxy=$BASH_IT_HTTPS_PROXY
+	export ALL_PROXY=$BASH_IT_HTTP_PROXY
 	echo "Enabled proxy environment variables"
 	
 	npm_enable_proxy
@@ -36,6 +38,7 @@ show_proxy ()
 	echo "Environment Variables"
 	echo "====================="
 	env | grep "proxy"
+	env | grep "ALL_PROXY"
 	
 	bash_it_show_proxy
 	npm_show_proxy
