@@ -35,7 +35,7 @@ case $OSTYPE in
   darwin*)
     alias gd='git diff | mate'
     ;;
-  darwin*)
+  *)
     alias gd='git diff'
     ;;
 esac
