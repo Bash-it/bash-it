@@ -28,3 +28,10 @@ function wovbranch {
 
   workon "$(basename `pwd`)@$(git_prompt_info)"
 }
+
+function wovenv {
+  about 'works on the virtualenv for this directory'
+  group 'virtualenv'
+
+  workon "$(basename `pwd`)"
+}
