@@ -1,32 +1,38 @@
 #!/usr/bin/env bash
 BASH_IT="$HOME/.bash_it"
 
-cp $HOME/.bash_profile $HOME/.bash_profile.bak
-
-echo "Your original .bash_profile has been backed up to .bash_profile.bak"
+if [ -e $HOME/.bash_profile ]; then
+  cp $HOME/.bash_profile $HOME/.bash_profile.orig
+  echo "Your original .bash_profile has been backed up to .bash_profile.orig"
+fi
 
 cp $HOME/.bash_it/template/bash_profile.template.bash $HOME/.bash_profile
-
 echo "Copied the template .bash_profile into ~/.bash_profile, edit this file to customize bash-it"
 
-while true
-do
-  read -p "Do you use Jekyll? (If you don't know what Jekyll is, answer 'n') [Y/N] " RESP
-
-  case $RESP
-    in
-    [yY])
-      cp $HOME/.bash_it/template/jekyllconfig.template.bash $HOME/.jekyllconfig
-      echo "Copied the template .jekyllconfig into your home directory. Edit this file to customize bash-it for using the Jekyll plugins"
-      break
-      ;;
-    [nN])
-      break
-      ;;
-    *)
-      echo "Please enter Y or N"
-  esac
-done
+if [ -e $HOME/.bash_profile.orig ]; then
+  while true
+  do
+    echo ""
+    echo "Would you like to append your original .bash_profile (currently .bash_profile.orig) to the bash-it configuration?"
+    echo "Be advised that therefore you maybe overwrite existing bash-it configurations"
+    read -p "Append? [y/N]" RESP
+    case $RESP
+      in
+      [yY])
+        echo -e "# Load original .bash_profile\nsource $HOME/.bash_profile.orig" >> $HOME/.bash_profile
+        echo "Appended .bash_profile.orig (your former .bash_profile) to .bash_profile (the current bash-it one)"
+        break
+        ;;
+      "")
+        ;&
+      [nN])
+        break
+        ;;
+      *)
+        echo "Please enter Y or N"
+    esac
+  done
+fi
 
 function load_all() {
   file_type=$1

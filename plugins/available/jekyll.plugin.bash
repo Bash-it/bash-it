@@ -1,6 +1,15 @@
 cite about-plugin
 about-plugin 'manage your jekyll site'
 
+# Load all the Jekyll stuff
+
+if [ -e $HOME/.jekyllconfig ]
+then
+  . $HOME/.jekyllconfig
+fi
+
+# functions
+
 editpost() {
   about 'edit a post'
   param '1: site directory'
