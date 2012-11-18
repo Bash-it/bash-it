@@ -46,6 +46,39 @@ while true; do
   esac
 done
 
+if [ -e $HOME/.bash_profile ]; then
+  cp $HOME/.bash_profile $HOME/.bash_profile.orig
+  echo "Your original .bash_profile has been backed up to .bash_profile.orig"
+fi
+
+cp $HOME/.bash_it/template/bash_profile.template.bash $HOME/.bash_profile
+echo "Copied the template .bash_profile into ~/.bash_profile, edit this file to customize bash-it"
+
+if [ -e $HOME/.bash_profile.orig ]; then
+  while true
+  do
+    echo ""
+    echo "Would you like to append your original .bash_profile (currently .bash_profile.orig) to the bash-it configuration?"
+    echo "Be advised that therefore you maybe overwrite existing bash-it configurations"
+    read -p "Append? [y/N]" RESP
+    case $RESP
+      in
+      [yY])
+        echo -e "# Load original .bash_profile\nsource $HOME/.bash_profile.orig" >> $HOME/.bash_profile
+        echo "Appended .bash_profile.orig (your former .bash_profile) to .bash_profile (the current bash-it one)"
+        break
+        ;;
+      "")
+        ;&
+      [nN])
+        break
+        ;;
+      *)
+        echo "Please enter Y or N"
+    esac
+  done
+fi
+
 # Show how to use this installer
 function _bash-it_show_usage() {
 	echo -e "\n$0 : Install bash-it"
