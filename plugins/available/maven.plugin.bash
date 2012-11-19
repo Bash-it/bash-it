@@ -41,3 +41,28 @@ usemvn ()
         export MAVEN_HOME=$MAVEN_INSTALL_ROOT/apache-maven-$1
     fi
 }
+
+_usemvn-comp()
+{
+	local cur
+	COMPREPLY=()
+	cur="${COMP_WORDS[COMP_CWORD]}"
+		
+	if [ -z "$MAVEN_INSTALL_ROOT" ]
+	then
+		local MAVEN_INSTALL_ROOT="/usr/local"
+	fi
+
+	local mvn_versions=$(for i in $MAVEN_INSTALL_ROOT/apache-maven-* ; 
+		do
+			if [ -x "$i/bin/mvn" ]; then
+                basename $i | sed 's/^apache-maven-//'
+            fi
+    	done)
+	
+	COMPREPLY=( $(compgen -W "${mvn_versions}" -- ${cur}) )
+	
+	return 0
+}
+
+complete -F _usemvn-comp usemvn
