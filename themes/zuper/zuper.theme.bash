@@ -37,7 +37,7 @@ function zuper_scm_prompt_info {
 
 prompt() {
     local my_branch="$(zuper_scm_prompt_info)"
-    PS1="${white}\n[ ${yellow}\u@\H ${white}] ${green}\w${my_branch}\n${white}[ ${red}\t${bold_white} ] →${normal} "
+    PS1="${white}\n[${yellow} \u@\H ${red}\t${white} ] ${green}\w${my_branch}\n${bold_white}→${normal} "
 }
 
 PROMPT_COMMAND=prompt
