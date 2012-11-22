@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #⚡
-#
+# looks good on dark bakground
 SCM_THEME_PROMPT_DIRTY=" ${red}✖${reset_color}"
 SCM_THEME_PROMPT_AHEAD=" ${red}!${reset_color}"
 SCM_THEME_PROMPT_CLEAN=" ${green}✔${reset_color}"
