@@ -10,7 +10,7 @@ SCM_GIT='git'
 SCM_GIT_CHAR='±'
 
 SCM_HG='hg'
-SCM_HG_CHAR='hg'
+SCM_HG_CHAR='☿'
 
 SCM_SVN='svn'
 SCM_SVN_CHAR='⑆'
