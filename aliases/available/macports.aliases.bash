@@ -1,9 +1,10 @@
 cite 'about-alias'
 about-alias 'macports aliases'
 
-alias pc="sudo port clean --all installed"
-alias pi="sudo port install $2"
-alias psu="sudo port selfupdate"
-alias puni="sudo port uninstall inactive"
-alias puo="sudo port upgrade outdated"
-alias pup="psu && puo"
+alias portc='sudo port clean --all installed'
+alias porti='sudo port install'
+alias ports='port search'
+alias portU='sudo port selfupdate && sudo port upgrade outdated'
+alias portu='sudo port upgrade'
+alias portX='sudo port -u uninstall'
+alias portx='sudo port uninstall'
