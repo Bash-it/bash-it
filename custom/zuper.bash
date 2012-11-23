@@ -4,9 +4,9 @@ if [ "$TERM" != "dumb" ]; then
 fi
 
 
-alias ls='gls $LS_OPTIONS -hF'
-alias ll='gls $LS_OPTIONS -lhF'
-alias l='gls $LS_OPTIONS -lAhF'
+alias ls='ls $LS_OPTIONS -hF'
+alias ll='ls $LS_OPTIONS -lhF'
+alias l='ls $LS_OPTIONS -lAhF'
 alias c='clear'
 alias edit="$EDITOR"
 alias pager="$PAGER"
