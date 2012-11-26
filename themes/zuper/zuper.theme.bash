@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-#⚡
 # looks good on dark bakground
 SCM_THEME_PROMPT_DIRTY=" ${red}✖${reset_color}"
 SCM_THEME_PROMPT_AHEAD=" ${red}!${reset_color}"
@@ -8,13 +7,6 @@ SCM_THEME_PROMPT_PREFIX="${white} ❮ "
 SCM_THEME_PROMPT_SUFFIX="${white} ❯"
 GIT_SHA_PREFIX="${white} ❮ $(scm_char)${cyan} "
 GIT_SHA_SUFFIX="${white} ❯"
-
-#SCM_GIT_CHAR="git ${red}|${white} "
-#SCM_HG_CHAR="hg | "
-#SCM_SVN_CHAR="svn ${red}|${white} "
-
-#HG_SHA_PREFIX="${white} ❮ ${yellow}"
-#HG_SHA_SUFFIX="${reset_color}"
 
 
 function zuper_hg_prompt_info() {
