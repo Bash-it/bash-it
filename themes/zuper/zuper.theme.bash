@@ -4,7 +4,7 @@
 SCM_THEME_PROMPT_DIRTY=" ${red}✖${reset_color}"
 SCM_THEME_PROMPT_AHEAD=" ${red}!${reset_color}"
 SCM_THEME_PROMPT_CLEAN=" ${green}✔${reset_color}"
-SCM_THEME_PROMPT_PREFIX="${white} ❮ $(scm_char)${cyan} "
+SCM_THEME_PROMPT_PREFIX="${white} ❮ "
 SCM_THEME_PROMPT_SUFFIX="${white} ❯"
 GIT_SHA_PREFIX="${white} ❮ $(scm_char)${cyan} "
 GIT_SHA_SUFFIX="${white} ❯"
@@ -15,12 +15,12 @@ GIT_SHA_SUFFIX="${white} ❯"
 
 function zuper_hg_prompt_info() {
   hg_prompt_vars
-  echo -e "$SCM_PREFIX$SCM_BRANCH$SCM_STATE$SCM_SUFFIX"
+  echo -e "$SCM_PREFIX${magenta}$(scm_char) ${cyan}$SCM_BRANCH$SCM_STATE$SCM_SUFFIX"
 }
 
 function zuper_git_prompt_info {
   git_prompt_vars
-  echo -e "$SCM_PREFIX$SCM_BRANCH$SCM_STATE$SCM_SUFFIX"
+  echo -e "$SCM_PREFIX${magenta}$(scm_char) ${cyan}$SCM_BRANCH$SCM_STATE$SCM_SUFFIX"
 }
 
 function zuper_scm_prompt_info {
