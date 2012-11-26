@@ -1,6 +1,6 @@
 # Bash it
 
-My personal modifications :)
+My personal modifications
 
 **Bash it** is a mash up of my own bash commands and scripts, other bash stuff I have found.
 
