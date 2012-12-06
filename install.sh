@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # bash-it installer
-BASH_IT="${HOME}/.bash_it"
-
+BASH_IT=$(cd ${0%/*} && echo ${PWD})
+cd "${OLDPWD}"
 cp "${HOME}/.bash_profile" "${HOME}/.bash_profile.bak"
 cp "${HOME}/.bash_it/template/bash_profile.template.bash" "${HOME}/.bash_profile"
 
