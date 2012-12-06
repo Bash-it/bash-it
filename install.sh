@@ -1,5 +1,26 @@
 #!/usr/bin/env bash
 # bash-it installer
+BASH_IT="${HOME}/.bash_it"
+
+cp "${HOME}/.bash_profile" "${HOME}/.bash_profile.bak"
+cp "${HOME}/.bash_it/template/bash_profile.template.bash" "${HOME}/.bash_profile"
+
+while true; do
+  read -p "Do you use Jekyll? (If you don't know what Jekyll is, answer 'n') [Y/N] " RESP
+  case ${RESP} in
+    [yY])
+      cp "${HOME}/.bash_it/template/jekyllconfig.template.bash" "${HOME}/.jekyllconfig"
+      echo "Copied the template .jekyllconfig into your home directory." \
+          "Edit this file to customize bash-it for using the Jekyll plugins"
+      break
+    ;;
+    [nN])
+      break
+    ;;
+    *)
+      echo "Please enter Y or N"
+  esac
+done
 
 # Show how to use this installer
 function _bash-it_show_usage() {
@@ -17,25 +38,30 @@ function _bash-it_show_usage() {
 
 # enable a thing
 function _bash-it_load_one() {
-	file_type=$1
-	file_to_enable=$2
-	mkdir -p "$BASH_IT/${file_type}/enabled"
-
-	dest="${BASH_IT}/${file_type}/enabled/${file_to_enable}"
-	if [ ! -e "${dest}" ]; then
-		ln -sf "../available/${file_to_enable}" "${dest}"
-	else
-		echo "File ${dest} exists, skipping"
-	fi
+  file_type="${1}"
+  [ ! -d "${BASH_IT}/${file_type}/enabled" ] && mkdir "${BASH_IT}/${file_type}/enabled"
+  for src in "${BASH_IT}/${file_type}/available/"*; do
+    filename="$(basename "${src}")"
+    [ "${filename:0:1}" = "_" ] && continue
+    dest="${BASH_IT}/${file_type}/enabled/${filename}"
+    if [ ! -e "${dest}" ]; then
+      ln -s "${src}" "${dest}"
+    else
+      echo "File ${dest} exists, skipping"
+    fi
+  done
 }
 
 # Interactively enable several things
 function _bash-it_load_some() {
-	file_type=$1
+	file_type="${1}"
 	single_type=$(echo "$file_type" | sed -e "s/aliases$/alias/g" | sed -e "s/plugins$/plugin/g")
 	enable_func="_enable-$single_type"
 	[ -d "$BASH_IT/$file_type/enabled" ] || mkdir "$BASH_IT/$file_type/enabled"
 	for path in "$BASH_IT/${file_type}/available/"[^_]*; do
+		if [ ! -d "${BASH_IT}/${file_type}/enabled" ]; then
+			mkdir "${BASH_IT}/${file_type}/enabled"
+		fi
 		file_name=$(basename "$path")
 		while true; do
 			just_the_name="${file_name%%.*}"
@@ -151,6 +177,31 @@ for param in "$@"; do
 		"--overwrite-backup") set -- "$@" "-f" ;;
 		*) set -- "$@" "$param" ;;
 	esac
+
+
+for type in "aliases" "plugins" "completion"; do
+  while true; do
+    read -p "Would you like to enable all, some, or no ${type}?" \
+        "Some of these may make bash slower to start up" \
+        "(especially completion). (all/some/none)" RESP
+    case ${RESP} in
+      some)
+        load_some "${type}"
+        break
+      ;;
+      all)
+        load_all "${type}"
+        break
+      ;;
+      none)
+        break
+      ;;
+      *)
+        echo "Unknown choice. Please enter some, all, or none"
+        continue
+      ;;
+    esac
+  done
 done
 
 OPTIND=1
