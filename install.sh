@@ -3,13 +3,17 @@
 BASH_IT=$(cd ${0%/*} && echo ${PWD})
 cd "${OLDPWD}"
 cp "${HOME}/.bash_profile" "${HOME}/.bash_profile.bak"
+
 BASH_PROFILE_BAK="${HOME}/.bash_profile.bak"
 if [ -f "${BASH_PROFILE_BAK}" ]; then
   list=($(ls "${BASH_PROFILE_BAK}"*))
   BASH_PROFILE_BAK="${BASH_PROFILE_BAK}.${#list[@]}"
 fi
 
-echo "Your original .bash_profile has been backed up to .bash_profile.bak"
+[[ -f "${HOME}/.bash_profile" ]] \
+    && cp "${HOME}/.bash_profile" "${BASH_PROFILE_BAK}" \
+    && echo "Your original .bash_profile has been backed up to ${BASH_PROFILE_BAK##*/}" \
+    || echo "No original .bash_profile file found so we have nothing to back up"
 
 cp "${BASH_IT}/template/bash_profile.template.bash" "${HOME}/.bash_profile"
 
