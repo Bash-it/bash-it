@@ -20,7 +20,7 @@ fi
 cp "${BASH_IT}/template/bash_profile.template.bash" "${HOME}/.bash_profile"
 
 while true; do
-  read -p "Do you use Jekyll? (If you don't know what Jekyll is, answer 'n') [Y/N] " RESP
+  read -n 1 -p "Do you use Jekyll? (If you don't know what Jekyll is, answer 'n') [Y/N] " RESP
   case ${RESP} in
     [yY])
       cp "${BASH_IT}/template/jekyllconfig.template.bash" "${HOME}/.jekyllconfig"
