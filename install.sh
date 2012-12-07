@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# bash-it installer
-cp "${HOME}/.bash_profile" "${HOME}/.bash_profile.bak"
+# direct bash install command
+# bash -c "$(curl -s https://raw.github.com/revans/bash-it/master/install.sh)"
 if [ "$0" == "bash" ]; then
   BASH_IT="${HOME}/.bash_it"
   [[ -d "${BASH_IT}" ]] && rm -rf "${BASH_IT}"
@@ -9,8 +9,10 @@ else
   BASH_IT=$(cd ${0%/*} && echo ${PWD})
 fi
 
+# if were not in ~/.bash_it then make it so
 [[ "${BASH_IT}" != "${HOME}/.bash_it" ]] && cp -Rf "${BASH_IT}" "${HOME}/.bash_it"
 
+# aggregated .bash_profile backups to prevent loss from overwriting previous backup
 BASH_PROFILE_BAK="${HOME}/.bash_profile.bak"
 if [ -f "${BASH_PROFILE_BAK}" ]; then
   list=($(ls "${BASH_PROFILE_BAK}"*))
@@ -24,6 +26,9 @@ fi
 
 cp "${BASH_IT}/template/bash_profile.template.bash" "${HOME}/.bash_profile"
 
+echo "Copied the template .bash_profile into ~/.bash_profile, edit this file to customize bash-it"
+
+# to jekyll conf or not to jekyll conf
 while true; do
   read -n 1 -p "Do you use Jekyll? (If you don't know what Jekyll is, answer 'n') [Y/N] " RESP
   case ${RESP} in
@@ -198,6 +203,36 @@ for param in "$@"; do
 	esac
 
 
+=======
+# re-usable helper function to load some of type
+# argument file_type to load some
+function load_some() {
+  file_type="${1}"
+  for path in $(ls "${BASH_IT}/${file_type}/available/"[^_]*); do
+    if [ ! -d "${BASH_IT}/${file_type}/enabled" ]; then
+      mkdir "${BASH_IT}/${file_type}/enabled"
+    fi
+    file_name="${path##*/}"
+    while true; do
+      read -p "Would you like to enable the ${file_name%%.*}${file_type}? [Y/N] " RESP
+      case ${RESP} in
+        [yY])
+          ln -s "${path}" "${BASH_IT}/${file_type}/enabled"
+          break
+        ;;
+        [nN])
+          break
+        ;;
+        *)
+          echo "Please choose y or n."
+        ;;
+      esac
+    done
+  done
+}
+
+# to load all/some/none of each enhancement type
+>>>>>>> 5473b27 (Added minimum comments)
 for type in "aliases" "plugins" "completion"; do
   while true; do
     prompt=("Enable ${type}: Would you like to enable all, some, or" \
