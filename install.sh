@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 # bash-it installer
-BASH_IT=$(cd ${0%/*} && echo ${PWD})
-cd "${OLDPWD}"
 cp "${HOME}/.bash_profile" "${HOME}/.bash_profile.bak"
+if [ "$0" == "bash" ]; then
+  BASH_IT="${HOME}/.bash_it"
+  [[ -d "${BASH_IT}" ]] && rm -rf "${BASH_IT}"
+  git clone http://github.com/revans/bash-it.git "${BASH_IT}"
+else
+  BASH_IT=$(cd ${0%/*} && echo ${PWD})
+fi
 
 [[ "${BASH_IT}" != "${HOME}/.bash_it" ]] && cp -Rf "${BASH_IT}" "${HOME}/.bash_it"
 
