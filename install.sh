@@ -201,62 +201,6 @@ for param in "$@"; do
 		"--overwrite-backup") set -- "$@" "-f" ;;
 		*) set -- "$@" "$param" ;;
 	esac
-
-
-=======
-# re-usable helper function to load some of type
-# argument file_type to load some
-function load_some() {
-  file_type="${1}"
-  for path in $(ls "${BASH_IT}/${file_type}/available/"[^_]*); do
-    if [ ! -d "${BASH_IT}/${file_type}/enabled" ]; then
-      mkdir "${BASH_IT}/${file_type}/enabled"
-    fi
-    file_name="${path##*/}"
-    while true; do
-      read -p "Would you like to enable the ${file_name%%.*}${file_type}? [Y/N] " RESP
-      case ${RESP} in
-        [yY])
-          ln -s "${path}" "${BASH_IT}/${file_type}/enabled"
-          break
-        ;;
-        [nN])
-          break
-        ;;
-        *)
-          echo "Please choose y or n."
-        ;;
-      esac
-    done
-  done
-}
-
-# to load all/some/none of each enhancement type
->>>>>>> 5473b27 (Added minimum comments)
-for type in "aliases" "plugins" "completion"; do
-  while true; do
-    prompt=("Enable ${type}: Would you like to enable all, some, or" \
-        "no ${type}? Some of these may make bash slower to start up" \
-        "(especially completion).")
-    read -p "${prompt[*]} [all/some/none] " RESP
-    case ${RESP} in
-      some)
-        load_some "${type}"
-        break
-      ;;
-      all)
-        load_all "${type}"
-        break
-      ;;
-      none)
-        break
-      ;;
-      *)
-        echo "Unknown choice. Please enter some, all, or none"
-        continue
-      ;;
-    esac
-  done
 done
 
 OPTIND=1
