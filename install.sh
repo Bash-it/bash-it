@@ -24,15 +24,15 @@ while true; do
   case ${RESP} in
     [yY])
       cp "${BASH_IT}/template/jekyllconfig.template.bash" "${HOME}/.jekyllconfig"
-      echo "Copied the template .jekyllconfig into your home directory." \
-          "Edit this file to customize bash-it for using the Jekyll plugins"
+      echo -e "\nCopied the template .jekyllconfig into your home directory." \
+          "Edit this file to customize bash-it when using the Jekyll plugins"
       break
     ;;
     [nN])
       break
     ;;
     *)
-      echo "Please enter Y or N"
+      echo " Please enter Y or N"
   esac
 done
 
