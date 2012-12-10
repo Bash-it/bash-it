@@ -55,3 +55,6 @@ fi
 # Directory
 alias	md='mkdir -p'
 alias	rd='rmdir'
+
+#Nopaste
+alias nopaste="curl -F 'sprunge=<-' http://sprunge.us"
