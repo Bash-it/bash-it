@@ -27,7 +27,7 @@ function jquery_install {
 }
 
 function jquery_ui_install {
-  about 'download jquery_us.js into public/javascripts'
+  about 'download jquery_ui.js into public/javascripts'
   group 'javascript'
 
   if [ -z "$1" ]
