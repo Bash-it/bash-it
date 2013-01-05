@@ -47,5 +47,11 @@ if [ -z "$EDITOR" ]; then
         ;;
     esac
 else
-    alias gd="git diff | $EDITOR"
+    case $EDITOR in
+      *vim*)
+        alias gd="git diff | $EDITOR -R -"
+        ;;
+      *)
+        alias gd="git diff | $EDITOR"
+    esac
 fi
