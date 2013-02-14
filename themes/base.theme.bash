@@ -137,8 +137,8 @@ function ruby_version_prompt {
 }
 
 function virtualenv_prompt {
-  if which virtualenv &> /dev/null; then
-    virtualenv=$([ ! -z "$VIRTUAL_ENV" ] && echo "`basename $VIRTUAL_ENV`") || return
+  if [[ -n "$VIRTUAL_ENV" ]]; then
+    virtualenv=`basename "$VIRTUAL_ENV"`
     echo -e "$VIRTUALENV_THEME_PROMPT_PREFIX$virtualenv$VIRTUALENV_THEME_PROMPT_SUFFIX"
   fi
 }
