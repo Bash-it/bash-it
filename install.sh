@@ -32,7 +32,7 @@ prep() {
 	echo "Edit this file to customize bash-it for using the Jekyll plugins"
 	break ;;
       n) break ;;
-      *) echo "Please enter y or n"
+      *) echo "Please enter y or n" ;;
     esac
   done
 }
