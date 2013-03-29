@@ -1,98 +1,77 @@
 #!/usr/bin/env bash
-BASH_IT="$HOME/.bash_it"
+shopt -qs nocaseglob
+# users can define their own home for bash-it to live in with their dotfiles
+bash_it=${bash_it-$HOME/.bash_it}
+bash_prof=$HOME/.bash_profile
 
-cp $HOME/.bash_profile $HOME/.bash_profile.bak
+prep() {
+  # use this to shorten some commandlines
+  local templates=$bash_it/template resp
+  # if symlink or doesn't exist, pointless operation
+  if [[ -e $bash_prof && ! -L $bash_prof ]]; then
+    cp "$bash_prof" "$bash_prof.bak"
+    echo "$bash_prof has been backed up to $bash_prof.bak"
+  fi
 
-echo "Your original .bash_profile has been backed up to .bash_profile.bak"
+  # why is the name so long? it's already in /template/ directory
+  cp "$templates/bash_profile" "$bash_prof"
 
-cp $HOME/.bash_it/template/bash_profile.template.bash $HOME/.bash_profile
+  echo "Copied $templates/bash_profile into $bash_prof."
+  echo "Edit this file to customize bash-it"
 
-echo "Copied the template .bash_profile into ~/.bash_profile, edit this file to customize bash-it"
+  # why do we care about a static blog framework for our custom shell?
+  # this seems really short-sighted -- why is jekyll special?
+  while :; do
+    # -N1 doesn't wait for user to press enter
+    read -N1 -p "Do you use Jekyll? (If you don't know what Jekyll is, answer 'n') [y/n] " resp
 
-while true
-do
-  read -p "Do you use Jekyll? (If you don't know what Jekyll is, answer 'n') [Y/N] " RESP
-
-  case $RESP
-    in
-    [yY])
-      cp $HOME/.bash_it/template/jekyllconfig.template.bash $HOME/.jekyllconfig
-      echo "Copied the template .jekyllconfig into your home directory. Edit this file to customize bash-it for using the Jekyll plugins"
-      break
-      ;;
-    [nN])
-      break
-      ;;
-    *)
-      echo "Please enter Y or N"
-  esac
-done
-
-function load_all() {
-  file_type=$1
-  [ ! -d "$BASH_IT/$file_type/enabled" ] && mkdir "$BASH_IT/${file_type}/enabled"
-  for src in $BASH_IT/${file_type}/available/*; do
-      filename="$(basename ${src})"
-      [ ${filename:0:1} = "_" ] && continue
-      dest="${BASH_IT}/${file_type}/enabled/${filename}"
-      if [ ! -e "${dest}" ]; then
-          ln -s "${src}" "${dest}"
-      else
-          echo "File ${dest} exists, skipping"
-      fi
-  done
-}
-
-function load_some() {
-    file_type=$1
-    for path in `ls $BASH_IT/${file_type}/available/[^_]*`
-    do
-      if [ ! -d "$BASH_IT/$file_type/enabled" ]
-      then
-        mkdir "$BASH_IT/$file_type/enabled"
-      fi
-      file_name=$(basename "$path")
-      while true
-      do
-        read -p "Would you like to enable the ${file_name%%.*} $file_type? [Y/N] " RESP
-        case $RESP in
-        [yY])
-          ln -s "$path" "$BASH_IT/$file_type/enabled"
-          break
-          ;;
-        [nN])
-          break
-          ;;
-        *)
-          echo "Please choose y or n."
-          ;;
-        esac
-      done
-    done
-}
-
-for type in "aliases" "plugins" "completion"
-do
-  while true
-  do
-    read -p "Would you like to enable all, some, or no $type? Some of these may make bash slower to start up (especially completion). (all/some/none) " RESP
-    case $RESP
-    in
-    some)
-      load_some $type
-      break
-      ;;
-    all)
-      load_all $type
-      break
-      ;;
-    none)
-      break
-      ;;
-    *)
-      echo "Unknown choice. Please enter some, all, or none"
-      continue
-      ;;
+    case $resp in
+      y)
+	cp "$templates/jekyllconfig" "$HOME/.jekyllconfig"
+	echo "Copied the template .jekyllconfig into your home directory."
+	echo "Edit this file to customize bash-it for using the Jekyll plugins"
+	break ;;
+      n) break ;;
+      *) echo "Please enter y or n"
     esac
   done
-done
+}
+
+list() {
+  declare -a apply; local extension resp
+  PS3="Choose which options you would like to enable. (0 to continue) "
+  printf %s\\n "Some of these may make bash slower to start up (especially completions)."
+  select extension in aliases plugins completions; do
+    (( $extension )) || break
+    apply+=($extension)
+  done
+  if (( ! ${#apply[@]} )); then
+    while :; do
+      read -N1 -p "No options specified. Would you like to retry? [y/n] " resp
+      case $resp in
+	y) load ;;
+	n) break ;;
+	*) echo "Please choose y or n." ;;
+      esac
+    done
+  fi
+}
+
+install() {
+  local avail enabled
+  for h; do
+    avail=$bash_it/$h/available
+    enabled=${avail%*/}/enabled
+    mkdir -p "$enabled"
+    # this glob eliminates the [[ ${filename:0:1} = _ ]] test
+    for src in "$avail/"[^_]*; do
+      filename=${src##*/}
+      dest=$enabled/$filename
+      ln -s "$src" "$dest"
+    done
+  done
+}
+
+prep
+list
+install "${apply[@]}"
