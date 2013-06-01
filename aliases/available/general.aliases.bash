@@ -34,6 +34,9 @@ alias irc="$IRC_CLIENT"
 
 alias rb='ruby'
 
+# Make a script runnable
+alias chx='chmod +x'
+
 # Pianobar can be found here: http://github.com/PromyLOPh/pianobar/
 
 alias piano='pianobar'
