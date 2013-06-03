@@ -1,11 +1,16 @@
 # cd becomes pushd
 #
-# Add to stack with: cd /path/to/directory
-# Delete current dir from stack with: popd
-# Show stack with: dirs
+# cd : Push directory to stack and change directory
+# ex $ cd /path/to/directory
+#
+# pd : Pop directory off stack and change to previous directory
+# ex $ pd
+#
+# vd : View directory stack
 
 cite about-plugin
 about-plugin 'always use pushd - cd becomes pushd'
 
 alias cd='pushd'
-alias dirs='dirs -v'
+alias pd='popd'
+alias vd='dirs -v'
