@@ -277,6 +277,8 @@ _enable-thing ()
             return
         fi
 
+        mkdir -p $BASH_IT/$subdirectory/enabled
+
         ln -s $BASH_IT/$subdirectory/available/$plugin $BASH_IT/$subdirectory/enabled/$plugin
     fi
 

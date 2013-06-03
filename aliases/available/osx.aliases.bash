@@ -23,3 +23,12 @@ fi
 
 # Requires growlnotify, which can be found in the Growl DMG under "Extras"
 alias grnot='growlnotify -s -t Terminal -m "Done"'
+
+# Get rid of those pesky .DS_Store files recursively
+alias dsclean='find . -type f -name .DS_Store -print0 | xargs -0 rm'
+
+# Track who is listening to your iTunes music
+alias whotunes='lsof -r 2 -n -P -F n -c iTunes -a -i TCP@`hostname`:3689'
+
+# Flush your dns cache
+alias flush='dscacheutil -flushcache'
