@@ -64,16 +64,26 @@ function __fab_chache_mtime() {
 # Get time of last fabfile file/module modification as seconds since Epoch
 #
 function __fab_fabfile_mtime() {
-    local f="fabfile"
-    if [[ -e "$f.py" ]]; then
-        ${__FAB_COMPLETION_MTIME_COMMAND} "$f.py" | xargs -n 1 expr
-    else
-        # Suppose that it's a fabfile dir
+    if [[ -d "$1" ]]; then
         find $f/*.py -exec ${__FAB_COMPLETION_MTIME_COMMAND} {} + \
             | xargs -n 1 expr | sort -n -r | head -1
+    else
+        ${__FAB_COMPLETION_MTIME_COMMAND} "$1" | xargs -n 1 expr
     fi
 }
 
+#
+# Recursively look for a file up the filesystem
+#
+function __fab_fabfile_search() {
+    slashes=${PWD//[^\/]/}
+    directory="$PWD"
+    for (( n=${#slashes}; n>0; --n ))
+    do
+      test -e "$directory/$1" && echo "$directory/$1" && return
+      directory="$directory/.."
+    done
+}
 
 #
 # Completion for "fab" command
@@ -107,22 +117,29 @@ function __fab_completion() {
         #     ;;
 
         *)
-            # If "fabfile.py" or "fabfile" dir with "__init__.py" file exists
-            local f="fabfile"
-            if [[ -e "$f.py" || (-d "$f" && -e "$f/__init__.py") ]]; then
-                # Build a list of the available tasks
-                if $FAB_COMPLETION_CACHE_TASKS; then
-                    # If use cache
+            # If use cache
+            if $FAB_COMPLETION_CACHE_TASKS; then
+                local f="fabfile"
+                local f_path=$(__fab_fabfile_search $f.py)
+                local f_location=""
+                # If "fabfile.py" or "fabfile" dir with "__init__.py" file exists
+                if [[ -n "$f_path" ]]; then
+                    f_location=$f_path
+                elif [[ -d "$f" && -e "$f/__init__.py" ]]; then
+                    f_location=$f
+                fi
+                if [[ -n "$f_location" ]]; then
+                    # Build a list of the available tasks
                     if [[ ! -s ${FAB_COMPLETION_CACHED_TASKS_FILENAME} ||
-                          $(__fab_fabfile_mtime) -gt $(__fab_chache_mtime) ]]; then
+                        $(__fab_fabfile_mtime $f_location) -gt $(__fab_chache_mtime) ]]; then
                         fab --shortlist > ${FAB_COMPLETION_CACHED_TASKS_FILENAME} \
                             2> /dev/null
                     fi
                     opts=$(cat ${FAB_COMPLETION_CACHED_TASKS_FILENAME})
-                else
-                    # Without cache
-                    opts=$(fab --shortlist 2> /dev/null)
                 fi
+            else
+                # Without cache
+                opts=$(fab --shortlist 2> /dev/null)
             fi
             ;;
     esac
