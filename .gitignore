@@ -8,3 +8,4 @@ lib/custom.bash
 plugins/custom.plugins.bash
 *.swp
 .*.un~
+.subl-*/*
