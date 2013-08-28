@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 SCM_NONE_CHAR=''
-SCM_THEME_PROMPT_DIRTY=" ${red}✗"
-SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓"
+SCM_THEME_PROMPT_DIRTY=" ${red}✗${reset_color}"
+SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓${reset_color}"
 SCM_THEME_PROMPT_PREFIX=" ${reset_color}|$(scm_char) "
-SCM_THEME_PROMPT_SUFFIX="${reset_color}|"
+SCM_THEME_PROMPT_SUFFIX="${reset_color}|${reset_color}"
 
 
 RVM_THEME_PROMPT_PREFIX="|"
