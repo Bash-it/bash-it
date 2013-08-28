@@ -5,6 +5,10 @@ SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓${reset_color}"
 SCM_THEME_PROMPT_PREFIX=" ${reset_color}|$(scm_char) "
 SCM_THEME_PROMPT_SUFFIX="${reset_color}|${reset_color}"
 
+GIT_THEME_PROMPT_DIRTY=" ${red}✗"
+GIT_THEME_PROMPT_CLEAN=" ${bold_green}✓"
+GIT_THEME_PROMPT_PREFIX=" ${green}|"
+GIT_THEME_PROMPT_SUFFIX="${reset_color}|${reset_color}"
 
 RVM_THEME_PROMPT_PREFIX="|"
 RVM_THEME_PROMPT_SUFFIX="|"
