@@ -15,21 +15,18 @@ GIT_THEME_PROMPT_SUFFIX="${green}|"
 RVM_THEME_PROMPT_PREFIX="|"
 RVM_THEME_PROMPT_SUFFIX="|"
 
-PROMPT_CHAR_CLEAN="${reset_color}\$"
-PROMPT_CHAR_DIRTY="${red}\$${reset_color}"
+PROMPT_END_CLEAN="\$"
+PROMPT_END_DIRTY="${red}\$${reset_color}"
 
-function prompt_char() {
-    if [ $? -eq 0 ]; then PROMPT_CHAR=$PROMPT_CHAR_CLEAN
-    else PROMPT_CHAR=$PROMPT_CHAR_DIRTY
-    fi
-    echo -e "$? \$"
+function prompt_end(){
+    echo -e "$PROMPT_END"
 }
 
 function prompt_command() {
-
-    PS1="${yellow}$(ruby_version_prompt)${purple}\u@\h${reset_color}:\W${green}${bold_cyan}${green}$(scm_prompt_info) ${green}${reset_color}$? \$ "
-
-    #PS1="${yellow}$(ruby_version_prompt)${purple}\u@\h${reset_color}:\W${green}${bold_cyan}${green}$(scm_prompt_info) ${green}${reset_color}\$ "
+    if [[ $? -eq 0 ]]; then PROMPT_END=$PROMPT_END_CLEAN
+    else PROMPT_END=$PROMPT_END_DIRTY
+    fi
+    PS1="${yellow}$(ruby_version_prompt)${purple}\u@\h${reset_color}:\W${green}${bold_cyan}${green}$(scm_prompt_info) ${reset_color}$(prompt_end) "
 }
 
 PROMPT_COMMAND=prompt_command;
