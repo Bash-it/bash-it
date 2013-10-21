@@ -353,3 +353,48 @@ all_groups ()
     cat $file | sort | uniq
     rm $file
 }
+edit () {
+	FILES=$1
+	if [ -z "$FILES" ] 
+	then
+		$EDITOR $HOME/.bash-it/custom/FILES
+	else
+		$EDITOR $FILES
+	fi
+}
+
+archive () {
+	FILE=$1
+	BASEFILE=$(basename "$FILE")
+	TODAY=$(date --rfc-3339=date) 
+	TARGET="$TODAY--$BASEFILE"
+
+	if [ -z "$FILE" ]  
+	then
+		echo "move a file  in the '$ARCHIVE' directory, timestamping it with $TODAY"
+		echo "Syntaxe : archive <file>" 
+		return 1
+	fi
+	if [ -d "$FILE" ]
+	then
+		echo "sorry, archive doesn't work for directories"
+		return 2
+	fi
+	if [ ! -r "$FILE" ]
+	then
+		echo "Cannot read  file '$FILE'" 
+		return 3
+	fi
+	if [ -z "$ARCHIVE" ] 
+	then
+		ARCHIVE=$HOME/archive
+	fi
+	if [ ! -r "$ARCHIVE" ] 
+	then
+		 mkdir -p "$ARCHIVE"
+	fi
+
+	echo "Archiving '$FILE' in '$ARCHIVE'"
+	/bin/mv -- "$FILE" "$ARCHIVE"/"$TARGET"
+}
+

@@ -1,5 +1,19 @@
 #!/usr/bin/env bash
 
+# Set where your want to archive your files with the archive command
+export ARCHIVE=$HOME/archive # default
+
+# Set the XDG_* environnment variable
+# See http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
+export XDG_DATA_HOME=$HOME/.local/share
+export XDG_CONFIG_HOME=$HOME/.config
+export XDG_CONFIG_DIRS=/etc/xdg
+export XDG_CACHE_HOME=$HOME/.cache
+# export XDG_RUNTIME_DIR=we won t set this for you, read the spec
+# export XDG_DATA_DIRS=we won t set this for you, read the spec
+# TODO : those directories should be created if they don't exist
+
+
 # Load RVM, if you are using it
 [[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
 
@@ -38,6 +52,7 @@ export TODO="t"
 # Set vcprompt executable path for scm advance info in prompt (demula theme)
 # https://github.com/xvzf/vcprompt
 #export VCPROMPT_EXECUTABLE=~/.vcprompt/bin/vcprompt
+
 
 # Load Bash It
 source $BASH_IT/bash_it.sh
