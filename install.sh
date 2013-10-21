@@ -9,6 +9,10 @@ cp $HOME/.bash_it/template/bash_profile.template.bash $HOME/.bash_profile
 
 echo "Copied the template .bash_profile into ~/.bash_profile, edit this file to customize bash-it"
 
+# TODO: this should be tested more.
+cp $BASH_IT/template/FILES.template $BASH_IT/custom/FILES
+echo "Copied the template FILES into $BASH_IT/custom/FILES, edit this file to have bookmarks to file you 'edit' often"
+
 while true
 do
   read -p "Do you use Jekyll? (If you don't know what Jekyll is, answer 'n') [Y/N] " RESP

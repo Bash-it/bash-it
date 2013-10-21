@@ -357,7 +357,7 @@ edit () {
 	FILES=$1
 	if [ -z "$FILES" ] 
 	then
-		$EDITOR $HOME/.bash-it/custom/FILES
+		$EDITOR $BASH_IT/custom/FILES
 	else
 		$EDITOR $FILES
 	fi
