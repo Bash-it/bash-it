@@ -132,8 +132,18 @@ function rbfu_version_prompt {
   fi
 }
 
+function chruby_version_prompt {
+  if declare -f -F chruby &> /dev/null; then
+    if declare -f -F chruby_auto &> /dev/null; then
+      chruby_auto
+    fi
+    chruby=$(ruby --version | awk '{print $1, $2;}') || return
+    echo -e "$CHRUBY_THEME_PROMPT_PREFIX$chruby$CHRUBY_THEME_PROMPT_SUFFIX"
+  fi
+}
+
 function ruby_version_prompt {
-  echo -e "$(rbfu_version_prompt)$(rbenv_version_prompt)$(rvm_version_prompt)"
+  echo -e "$(rbfu_version_prompt)$(rbenv_version_prompt)$(rvm_version_prompt)$(chruby_version_prompt)"
 }
 
 function virtualenv_prompt {
