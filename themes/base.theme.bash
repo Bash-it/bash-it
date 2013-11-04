@@ -5,6 +5,8 @@ SCM_THEME_PROMPT_DIRTY=' ✗'
 SCM_THEME_PROMPT_CLEAN=' ✓'
 SCM_THEME_PROMPT_PREFIX=' |'
 SCM_THEME_PROMPT_SUFFIX='|'
+SCM_THEME_COLOR_CLEAN=''
+SCM_THEME_COLOR_DIRTY=''
 
 SCM_GIT='git'
 SCM_GIT_CHAR='±'
@@ -72,10 +74,12 @@ function scm_prompt_info {
 function git_prompt_vars {
   if [[ -n $(git status -s 2> /dev/null |grep -v ^# |grep -v "working directory clean") ]]; then
     SCM_DIRTY=1
-     SCM_STATE=${GIT_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
+    SCM_THEME_COLOR=${GIT_THEME_PROMPT_DIRTY:-$SCM_THEME_COLOR_DIRTY}
+    SCM_STATE=${GIT_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
   else
     SCM_DIRTY=0
-     SCM_STATE=${GIT_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
+    SCM_THEME_COLOR=${GIT_THEME_PROMPT_CLEAN:-$SCM_THEME_COLOR_CLEAN}
+    SCM_STATE=${GIT_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
   fi
   SCM_PREFIX=${GIT_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
   SCM_SUFFIX=${GIT_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
@@ -87,9 +91,11 @@ function git_prompt_vars {
 function svn_prompt_vars {
   if [[ -n $(svn status 2> /dev/null) ]]; then
     SCM_DIRTY=1
+    SCM_THEME_COLOR=${SVN_THEME_PROMPT_DIRTY:-$SCM_THEME_COLOR_DIRTY}
       SCM_STATE=${SVN_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
   else
     SCM_DIRTY=0
+    SCM_THEME_COLOR=${SVN_THEME_PROMPT_CLEAN:-$SCM_THEME_COLOR_CLEAN}
       SCM_STATE=${SVN_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
   fi
   SCM_PREFIX=${SVN_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
@@ -101,9 +107,11 @@ function svn_prompt_vars {
 function hg_prompt_vars {
     if [[ -n $(hg status 2> /dev/null) ]]; then
       SCM_DIRTY=1
+      SCM_THEME_COLOR=${HG_THEME_PROMPT_DIRTY:-$SCM_THEME_COLOR_DIRTY}
         SCM_STATE=${HG_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
     else
       SCM_DIRTY=0
+      SCM_THEME_COLOR=${HG_THEME_PROMPT_DIRTY:-$SCM_THEME_COLOR_DIRTY}
         SCM_STATE=${HG_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
     fi
     SCM_PREFIX=${HG_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
@@ -146,17 +154,17 @@ function virtualenv_prompt {
 # backwards-compatibility
 function git_prompt_info {
   git_prompt_vars
-  echo -e "$SCM_PREFIX$SCM_BRANCH$SCM_STATE$SCM_SUFFIX"
+  echo -e "$SCM_PREFIX$SCM_THEME_COLOR$SCM_BRANCH$SCM_STATE$SCM_SUFFIX"
 }
 
 function svn_prompt_info {
   svn_prompt_vars
-  echo -e "$SCM_PREFIX$SCM_BRANCH$SCM_STATE$SCM_SUFFIX"
+  echo -e "$SCM_PREFIX$SCM_THEME_COLOR$SCM_BRANCH$SCM_STATE$SCM_SUFFIX"
 }
 
 function hg_prompt_info() {
   hg_prompt_vars
-  echo -e "$SCM_PREFIX$SCM_BRANCH:${SCM_CHANGE#*:}$SCM_STATE$SCM_SUFFIX"
+  echo -e "$SCM_PREFIX$SCM_THEME_COLOR$SCM_BRANCH:${SCM_CHANGE#*:}$SCM_STATE$SCM_SUFFIX"
 }
 
 function scm_char {
