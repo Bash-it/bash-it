@@ -33,6 +33,7 @@ alias gg="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %
 alias ggs="gg --stat"
 alias gsl="git shortlog -sn"
 alias gw="git whatchanged"
+alias git-sign-off='git filter-branch -f --msg-filter "cat && echo \"Signed-off-by: Mike Turquette <mturquette@linaro.org>\""'
 
 if [ -z "$EDITOR" ]; then
     case $OSTYPE in
