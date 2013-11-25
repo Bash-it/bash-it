@@ -90,7 +90,7 @@ function git_prompt_vars {
   local behind_re='.+behind ([0-9]+).+'
   [[ "${status}" =~ ${ahead_re} ]] && SCM_GIT_AHEAD=" ${SCM_GIT_AHEAD_CHAR}${BASH_REMATCH[1]}"
   [[ "${status}" =~ ${behind_re} ]] && SCM_GIT_BEHIND=" ${SCM_GIT_BEHIND_CHAR}${BASH_REMATCH[1]}"
-  local stash_count="$(git stash list | wc -l)"
+  local stash_count="$(git stash list | wc -l | tr -d ' ')"
   [[ "${stash_count}" -gt 0 ]] && SCM_GIT_STASH=" {${stash_count}}"
 }
 
