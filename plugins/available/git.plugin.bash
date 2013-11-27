@@ -26,14 +26,6 @@ function git_pub() {
   git push -u origin $BRANCH
 }
 
-function add_branch() {
-  about 'adds & tracks a remote branch'
-  group 'git'
-
-  echo "Adding & tracking origin/${1}"
-  git checkout -b $1 origin/$1
-}
-
 function git_revert() {
   about 'applies changes to HEAD that revert all changes after this commit'
   group 'git'
