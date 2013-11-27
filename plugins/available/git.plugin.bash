@@ -17,6 +17,92 @@ function git_first_push {
   git push origin master:refs/heads/master
 }
 
+function git_pub() {
+  about 'publishes current branch to remote origin'
+  group 'git'
+  BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+  echo "Publishing ${BRANCH} to remote origin"
+  git push -u origin $BRANCH
+}
+
+function git_revert() {
+  about 'applies changes to HEAD that revert all changes after this commit'
+  group 'git'
+
+  git reset $1
+  git reset --soft HEAD@{1}
+  git commit -m "Revert to ${1}"
+  git reset --hard
+}
+
+function git_rollback() {
+  about 'resets the current HEAD to this commit'
+  group 'git'
+
+  function is_clean() {
+    if [[ $(git diff --shortstat 2> /dev/null | tail -n1) != "" ]]; then
+      echo "Your branch is dirty, please commit your changes"
+      kill -INT $$
+    fi
+  }
+
+  function commit_exists() {
+    git rev-list --quiet $1
+    status=$?
+    if [ $status -ne 0 ]; then
+      echo "Commit ${1} does not exist"
+      kill -INT $$
+    fi
+  }
+
+  function keep_changes() {
+    while true
+    do
+      read -p "Do you want to keep all changes from rolled back revisions in your working tree? [Y/N]" RESP
+      case $RESP
+      in
+      [yY])
+        echo "Rolling back to commit ${1} with unstaged changes"
+        git reset $1
+        break
+        ;;
+      [nN])
+        echo "Rolling back to commit ${1} with a clean working tree"
+        git reset --hard $1
+        break
+        ;;
+      *)
+        echo "Please enter Y or N"
+      esac
+    done
+  }
+
+  if [ -n "$(git symbolic-ref HEAD 2> /dev/null)" ]; then
+    is_clean
+    commit_exists $1
+
+    while true
+    do
+      read -p "WARNING: This will change your history and move the current HEAD back to commit ${1}, continue? [Y/N]" RESP
+      case $RESP
+        in
+        [yY])
+          keep_changes $1
+          break
+          ;;
+        [nN])
+          break
+          ;;
+        *)
+          echo "Please enter Y or N"
+      esac
+    done
+  else
+    echo "you're currently not in a git repository"
+  fi
+}
+
 function git_remove_missing_files() {
   about "git rm's missing files"
   group 'git'
