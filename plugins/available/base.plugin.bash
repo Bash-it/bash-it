@@ -175,6 +175,11 @@ command_exists ()
     type "$1" &> /dev/null ;
 }
 
+batch_zip ()
+{
+    for f in *; do zip "${f%%.*}.zip" "$f"; done
+}
+
 # useful for administrators and configs
 buf ()
 {
