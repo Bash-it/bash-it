@@ -177,7 +177,13 @@ command_exists ()
 
 batch_zip ()
 {
-    for f in *; do zip "${f%%.*}.zip" "$f"; done
+    about 'individually compresses each file in a directory'
+    param '1: directory name'
+    example '$ batch_zip'
+    example '$ batch_zip ~/PDFs'
+    group 'base'
+    [ -z ${1+x} ] && local directory=${PWD} || local directory=$1
+    for f in "${directory}"/*; do zip "${f%%.*}.zip" "$f"; done
 }
 
 # useful for administrators and configs
