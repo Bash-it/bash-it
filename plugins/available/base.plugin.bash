@@ -179,8 +179,11 @@ mkiso ()
 {
 
     about 'creates iso from current dir in the parent dir (unless defined)'
-    example 'mkdir'
-    example 'mkdir ISO-Name dest/path src/path'
+    param '1: ISO name'
+    param '2: dest/path'
+    param '3: src/path'
+    example 'mkiso'
+    example 'mkiso ISO-Name dest/path src/path'
     group 'base'
 
     if type "mkisofs" > /dev/null; then
