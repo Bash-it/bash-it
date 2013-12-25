@@ -28,6 +28,11 @@ alias cls='clear'
 alias edit="$EDITOR"
 alias pager="$PAGER"
 
+#Avoid clashes with TextWrangler's command line tools on OS X
+if [ -s /usr/local/bin/edit ] ; then
+  unalias edit
+fi
+
 alias q='exit'
 
 alias irc="$IRC_CLIENT"
