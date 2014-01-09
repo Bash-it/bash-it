@@ -132,6 +132,7 @@ function rvm_version_prompt {
 function rbenv_version_prompt {
   if which rbenv &> /dev/null; then
     rbenv=$(rbenv version-name) || return
+    $(rbenv commands | grep -q gemset) && gemset=$(rbenv gemset active) && rbenv="$rbenv@${gemset%% *}"
     echo -e "$RBENV_THEME_PROMPT_PREFIX$rbenv$RBENV_THEME_PROMPT_SUFFIX"
   fi
 }
