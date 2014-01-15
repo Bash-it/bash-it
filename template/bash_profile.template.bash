@@ -37,7 +37,11 @@ export TODO="t"
 
 # Set vcprompt executable path for scm advance info in prompt (demula theme)
 # https://github.com/xvzf/vcprompt
-#export VCPROMPT_EXECUTABLE=~/.vcprompt/bin/vcprompt
+# export VCPROMPT_EXECUTABLE=~/.vcprompt/bin/vcprompt
 
 # Load Bash It
 source $BASH_IT/bash_it.sh
+
+# Retain current working directory when opening a new tab
+# https://github.com/revans/bash-it/issues/240
+# export PROMPT_COMMAND="$PROMPT_COMMAND;update_terminal_cwd;"
