@@ -175,6 +175,33 @@ command_exists ()
     type "$1" &> /dev/null ;
 }
 
+mkiso ()
+{
+
+    about 'creates iso from current dir in the parent dir (unless defined)'
+    param '1: ISO name'
+    param '2: dest/path'
+    param '3: src/path'
+    example 'mkiso'
+    example 'mkiso ISO-Name dest/path src/path'
+    group 'base'
+
+    if type "mkisofs" > /dev/null; then
+        [ -z ${1+x} ] && local isoname=${PWD##*/} || local isoname=$1
+        [ -z ${2+x} ] && local destpath=../ || local destpath=$2
+        [ -z ${3+x} ] && local srcpath=${PWD} || local srcpath=$3
+
+        if [ ! -f "${destpath}${isoname}.iso" ]; then
+            echo "writing ${isoname}.iso to ${destpath} from ${srcpath}"
+            mkisofs -V ${isoname} -iso-level 3 -r -o "${destpath}${isoname}.iso" "${srcpath}"
+        else
+            echo "${destpath}${isoname}.iso already exists"
+        fi
+    else
+        echo "mkisofs cmd does not exist, please install cdrtools"
+    fi
+}
+
 # useful for administrators and configs
 buf ()
 {
