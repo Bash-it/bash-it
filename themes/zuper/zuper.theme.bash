@@ -43,12 +43,21 @@ function zuper_scm_prompt_info {
   [[ $SCM == $SCM_SVN ]] && svn_prompt_info && return
 }
 
+PROMPT_END_CLEAN="${green}→${reset_color}"
+PROMPT_END_DIRTY="${red}→${reset_color}"
 
+function prompt_end() {
+  echo -e "$PROMPT_END"
+}
 
 prompt() {
-    # » ➜ 
+    # » ➜ ❯
+    local exit_status=$?
+    if [[ $exit_status -eq 0 ]]; then PROMPT_END=$PROMPT_END_CLEAN
+      else PROMPT_END=$PROMPT_END_DIRTY
+    fi
     local my_branch="$(zuper_scm_prompt_info)"
-    PS1="${white}\n[${yellow} \u@\H ${red}\t${white} ] ${green}\w${my_branch}\n${white}»${normal} "
+    PS1="${white}\n[${yellow} \u@\H ${red}\t${white} ] ${green}\w${my_branch}\n$(prompt_end) "
 }
 
 PROMPT_COMMAND=prompt

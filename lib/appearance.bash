@@ -8,14 +8,14 @@ export GREP_COLOR='1;33'
 export LSCOLORS='Gxfxcxdxdxegedabagacad'
 
 # colored ls
-if [[ ! -z $(which dircolors) ]]
-then
-    export DIRCOLORS_COMMAND=dircolors
-elif [[ ! -z $(which gdircolors) ]]
-then
-    export DIRCOLORS_COMMAND=gdircolors
-fi
-eval `$DIRCOLORS_COMMAND $BASH_IT/dircolors/$LS_THEME`
+#if [[ ! -z $(which dircolors) ]]
+#then
+#    export DIRCOLORS_COMMAND=dircolors
+#elif [[ ! -z $(which gdircolors) ]]
+#then
+#    export DIRCOLORS_COMMAND=gdircolors
+#fi
+#eval `$DIRCOLORS_COMMAND $BASH_IT/dircolors/$LS_THEME`
 
 
 # Load the theme
