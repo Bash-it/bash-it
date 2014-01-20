@@ -42,7 +42,7 @@ Anything in the custom directory will be ignored, with the exception of `custom/
 
 There are a few bash it themes.  If you've created your own custom prompts, I'd love it if you shared with everyone else!  Just submit a Pull Request to me (revans).
 
-You can see the themes available [here](https://github.com/revans/bash-it/wiki/Themes)
+You can see the theme screenshots  [here](https://github.com/revans/bash-it/tree/master/theme-screenshots)
 
 ## Help out
 
