@@ -8,6 +8,7 @@ alias dkpsa='docker ps -a'
 alias dki='docker images'
 alias dkrm='docker rm $(docker ps -a -q)'  # delete all stopped containers
 alias dkrmi='docker rmi $(docker images | grep "^<none>" | awk "{print $3}")'
+alias dkideps='docker images -viz | dot -Tpng -o docker.png && xdg-open docker.png ' # with graphviz
 
 # docker run [container] env
 function dkre() {
