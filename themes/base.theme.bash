@@ -148,8 +148,13 @@ function chruby_version_prompt {
     if declare -f -F chruby_auto &> /dev/null; then
       chruby_auto
     fi
-    chruby=$(ruby --version | awk '{print $1, $2;}') || return
-    echo -e "$CHRUBY_THEME_PROMPT_PREFIX$chruby$CHRUBY_THEME_PROMPT_SUFFIX"
+
+    ruby_version=$(ruby --version | awk '{print $1, $2;}') || return
+
+    if [[ ! $(chruby | grep '*') ]]; then
+      ruby_version="${ruby_version} (system)"
+    fi
+    echo -e "${CHRUBY_THEME_PROMPT_PREFIX}${ruby_version}${CHRUBY_THEME_PROMPT_SUFFIX}"
   fi
 }
 
@@ -188,3 +193,4 @@ function scm_char {
 function prompt_char {
     scm_char
 }
+
