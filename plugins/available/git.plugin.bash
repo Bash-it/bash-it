@@ -129,7 +129,7 @@ function git_info() {
         echo "-----------------"
         echo
 
-        # print all remotes and thier details
+        # print all remotes and their details
         for remote in $(git remote show); do
             echo $remote:
             git remote show $remote
