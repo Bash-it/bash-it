@@ -1,13 +1,24 @@
 #!/usr/bin/env bash
 BASH_IT="$HOME/.bash_it"
+LOGIN_SHELL=$(shopt | grep login_shell | awk '{print $2}')
 
-test -w $HOME/.bash_profile &&
-  cp $HOME/.bash_profile $HOME/.bash_profile.bak &&
-  echo "Your original .bash_profile has been backed up to .bash_profile.bak"
+if [ $LOGIN_SHELL == "on" ]; then
+  test -w $HOME/.bash_profile &&
+    cp $HOME/.bash_profile $HOME/.bash_profile.bak &&
+    echo "Your original .bash_profile has been backed up to .bash_profile.bak"
 
-cp $HOME/.bash_it/template/bash_profile.template.bash $HOME/.bash_profile
+  cp $HOME/.bash_it/template/bash_profile.template.bash $HOME/.bash_profile
 
-echo "Copied the template .bash_profile into ~/.bash_profile, edit this file to customize bash-it"
+  echo "Copied the template .bash_profile into ~/.bash_profile, edit this file to customize bash-it"
+else # $LOGIN_SHELL == off
+  test -w $HOME/.bashrc &&
+    cp $HOME/.bashrc $HOME/.bashrc.bak &&
+    echo "Your original .bashrc has been backed up to .bashrc.bak"
+
+  cp $HOME/.bash_it/template/bash_profile.template.bash $HOME/.bashrc
+
+  echo "Copied the template .bash_profile into ~/.bashrc, edit this file to customize bash-it"
+fi
 
 while true
 do
