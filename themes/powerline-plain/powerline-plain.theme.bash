@@ -11,11 +11,18 @@ SCM_NONE_CHAR=""
 SCM_GIT_CHAR="⎇  "
 SCM_GIT_BEHIND_CHAR="↓"
 SCM_GIT_AHEAD_CHAR="↑"
+SCM_GIT_UNTRACKED_CHAR="?:"
+SCM_GIT_UNSTAGED_CHAR="U:"
+SCM_GIT_STAGED_CHAR="S:"
+
 SCM_THEME_PROMPT_CLEAN=""
 SCM_THEME_PROMPT_DIRTY=""
+
 SCM_THEME_PROMPT_COLOR=238
 SCM_THEME_PROMPT_CLEAN_COLOR=231
-SCM_THEME_PROMPT_DIRTY_COLOR=220
+SCM_THEME_PROMPT_DIRTY_COLOR=160
+SCM_THEME_PROMPT_STAGED_COLOR=220
+SCM_THEME_PROMPT_UNSTAGED_COLOR=220
 
 CWD_THEME_PROMPT_COLOR=240
 
@@ -54,12 +61,26 @@ function powerline_scm_prompt {
 
     if [[ "${SCM_NONE_CHAR}" != "${SCM_CHAR}" ]]; then
         if [[ "${SCM_DIRTY}" -eq 1 ]]; then
-            SCM_PROMPT="$(set_rgb_color ${SCM_THEME_PROMPT_DIRTY_COLOR} ${SCM_THEME_PROMPT_COLOR})"
+            if [[ -n "${SCM_GIT_STAGED}" ]]; then
+                SCM_PROMPT="$(set_rgb_color ${SCM_THEME_PROMPT_STAGED_COLOR} ${SCM_THEME_PROMPT_COLOR})"
+            elif [[ -n "${SCM_GIT_UNSTAGED}" ]]; then
+                SCM_PROMPT="$(set_rgb_color ${SCM_THEME_PROMPT_UNSTAGED_COLOR} ${SCM_THEME_PROMPT_COLOR})"
+            else
+                SCM_PROMPT="$(set_rgb_color ${SCM_THEME_PROMPT_DIRTY_COLOR} ${SCM_THEME_PROMPT_COLOR})"
+            fi
         else
             SCM_PROMPT="$(set_rgb_color ${SCM_THEME_PROMPT_CLEAN_COLOR} ${SCM_THEME_PROMPT_COLOR})"
         fi
-        [[ "${SCM_GIT_CHAR}" == "${SCM_CHAR}" ]] && SCM_PROMPT+=" ${SCM_CHAR}${SCM_BRANCH}${SCM_STATE}${SCM_GIT_BEHIND}${SCM_GIT_AHEAD}${SCM_GIT_STASH}"
-        SCM_PROMPT="${SCM_PROMPT} ${normal}"
+        if [[ "${SCM_GIT_CHAR}" == "${SCM_CHAR}" ]]; then
+           SCM_PROMPT+=" ${SCM_CHAR}${SCM_BRANCH}${SCM_STATE} "
+           [[ -n "${SCM_GIT_AHEAD}" ]] && SCM_PROMPT+="${SCM_GIT_AHEAD} "
+           [[ -n "${SCM_GIT_BEHIND}" ]] && SCM_PROMPT+="${SCM_GIT_BEHIND} "
+           [[ -n "${SCM_GIT_STAGED}" ]] && SCM_PROMPT+="${SCM_GIT_STAGED} "
+           [[ -n "${SCM_GIT_UNSTAGED}" ]] && SCM_PROMPT+="${SCM_GIT_UNSTAGED} "
+           [[ -n "${SCM_GIT_UNTRACKED}" ]] && SCM_PROMPT+="${SCM_GIT_UNTRACKED} "
+           [[ -n "${SCM_GIT_STASH}" ]] && SCM_PROMPT+="${SCM_GIT_STASH} "
+        fi
+        SCM_PROMPT="${SCM_PROMPT}${normal}"
     else
         SCM_PROMPT=""
     fi
