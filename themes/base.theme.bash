@@ -78,9 +78,18 @@ function git_prompt_vars {
   SCM_GIT_AHEAD=''
   SCM_GIT_BEHIND=''
   SCM_GIT_STASH=''
+  SCM_GIT_UNTRACKED=''
+  SCM_GIT_UNSTAGED=''
+  SCM_GIT_STAGED=''
   if [[ "$(git config --get bash-it.hide-status)" != "1" ]]; then
     local status="$(git status -b --porcelain 2> /dev/null || git status --porcelain 2> /dev/null)"
     if [[ -n "${status}" ]] && [[ "${status}" != "\n" ]] && [[ -n "$(grep -v ^# <<< "${status}")" ]]; then
+      local untracked_count="$(egrep -c '^\?\? .+' <<< "${status}")"
+      local unstaged_count="$(egrep -c '^.[^ ?#] .+' <<< "${status}")"
+      local staged_count="$(egrep -c '^[^ ?#]. .+' <<< "${status}")"
+      [[ "${untracked_count}" -gt 0 ]] && SCM_GIT_UNTRACKED="${SCM_GIT_UNTRACKED_CHAR}${untracked_count}"
+      [[ "${unstaged_count}" -gt 0 ]] && SCM_GIT_UNSTAGED="${SCM_GIT_UNSTAGED_CHAR}${unstaged_count}"
+      [[ "${staged_count}" -gt 0 ]] && SCM_GIT_STAGED="${SCM_GIT_STAGED_CHAR}${staged_count}"
       SCM_DIRTY=1
       SCM_STATE=${GIT_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
     else
@@ -107,10 +116,10 @@ function git_prompt_vars {
   SCM_CHANGE=$(git rev-parse HEAD 2>/dev/null)
   local ahead_re='.+ahead ([0-9]+).+'
   local behind_re='.+behind ([0-9]+).+'
-  [[ "${status}" =~ ${ahead_re} ]] && SCM_GIT_AHEAD=" ${SCM_GIT_AHEAD_CHAR}${BASH_REMATCH[1]}"
-  [[ "${status}" =~ ${behind_re} ]] && SCM_GIT_BEHIND=" ${SCM_GIT_BEHIND_CHAR}${BASH_REMATCH[1]}"
+  [[ "${status}" =~ ${ahead_re} ]] && SCM_GIT_AHEAD="${SCM_GIT_AHEAD_CHAR}${BASH_REMATCH[1]}"
+  [[ "${status}" =~ ${behind_re} ]] && SCM_GIT_BEHIND="${SCM_GIT_BEHIND_CHAR}${BASH_REMATCH[1]}"
   local stash_count="$(git stash list 2> /dev/null | wc -l | tr -d ' ')"
-  [[ "${stash_count}" -gt 0 ]] && SCM_GIT_STASH=" {${stash_count}}"
+  [[ "${stash_count}" -gt 0 ]] && SCM_GIT_STASH="{${stash_count}}"
 }
 
 function svn_prompt_vars {
