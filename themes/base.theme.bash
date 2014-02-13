@@ -30,6 +30,9 @@ RBENV_THEME_PROMPT_SUFFIX='|'
 RBFU_THEME_PROMPT_PREFIX=' |'
 RBFU_THEME_PROMPT_SUFFIX='|'
 
+DATE_THEME_PROMPT_PREFIX='['
+DATE_THEME_PROMPT_SUFFIX=']'
+
 function scm {
   if [[ -f .git/HEAD ]]; then SCM=$SCM_GIT
   elif [[ -n "$(git symbolic-ref HEAD 2> /dev/null)" ]]; then SCM=$SCM_GIT
@@ -141,6 +144,11 @@ function virtualenv_prompt {
     virtualenv=$([ ! -z "$VIRTUAL_ENV" ] && echo "`basename $VIRTUAL_ENV`") || return
     echo -e "$VIRTUALENV_THEME_PROMPT_PREFIX$virtualenv$VIRTUALENV_THEME_PROMPT_SUFFIX"
   fi
+}
+
+function date_prompt() {
+  DATE_STRING=$(date +"%Y-%m-%d %H:%M:%S %z")
+  echo -e "$DATE_THEME_PROMPT_PREFIX$DATE_STRING$DATE_THEME_PROMPT_SUFFIX"
 }
 
 # backwards-compatibility
