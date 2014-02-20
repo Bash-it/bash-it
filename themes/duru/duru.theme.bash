@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-SCM_THEME_PROMPT_PREFIX="${cyan} at ${green}"
+SCM_THEME_PROMPT_PREFIX="${cyan} on ${green}"
 SCM_THEME_PROMPT_SUFFIX=""
 SCM_THEME_PROMPT_DIRTY=" ${red}with changes"
 SCM_THEME_PROMPT_CLEAN=""
@@ -9,7 +9,7 @@ venv() {
   if [ ! -z "$VIRTUAL_ENV" ]
   then
     local env=$VIRTUAL_ENV
-    echo "${gray} on ${orange}${env##*/} "
+    echo "${gray} in ${orange}${env##*/} "
   fi
 }
 
