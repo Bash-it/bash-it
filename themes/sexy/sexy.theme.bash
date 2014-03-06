@@ -7,7 +7,6 @@ elif [[ $TERM != dumb ]] && infocmp xterm-256color >/dev/null 2>&1; then export 
 fi
 
 if tput setaf 1 &> /dev/null; then
-    tput sgr0
     if [[ $(tput colors) -ge 256 ]] 2>/dev/null; then
       MAGENTA=$(tput setaf 9)
       ORANGE=$(tput setaf 172)
