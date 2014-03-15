@@ -19,6 +19,7 @@ function mkvbranch {
   about 'create a new virtualenv for the current branch'
   group 'virtualenv'
 
+  scm_prompt_info >/dev/null 2>&1
   mkvirtualenv --distribute "$(basename `pwd`)@$SCM_BRANCH"
 }
 
@@ -26,6 +27,7 @@ function wovbranch {
   about 'sets workon branch'
   group 'virtualenv'
 
+  scm_prompt_info >/dev/null 2>&1
   workon "$(basename `pwd`)@$SCM_BRANCH"
 }
 
