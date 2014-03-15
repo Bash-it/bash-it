@@ -11,7 +11,7 @@ function mkvenv {
   group 'virtualenv'
 
   cwd=`basename \`pwd\``
-  mkvirtualenv --distribute $cwd
+  mkvirtualenv $cwd
 }
 
 
@@ -20,7 +20,7 @@ function mkvbranch {
   group 'virtualenv'
 
   scm_prompt_info >/dev/null 2>&1
-  mkvirtualenv --distribute "$(basename `pwd`)@$SCM_BRANCH"
+  mkvirtualenv "$(basename `pwd`)@$SCM_BRANCH"
 }
 
 function wovbranch {
