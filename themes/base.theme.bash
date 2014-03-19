@@ -24,6 +24,9 @@ RVM_THEME_PROMPT_SUFFIX='|'
 VIRTUALENV_THEME_PROMPT_PREFIX=' |'
 VIRTUALENV_THEME_PROMPT_SUFFIX='|'
 
+NVM_THEME_PROMPT_PREFIX=' |'
+NVM_THEME_PROMPT_SUFFIX='|'
+
 RBENV_THEME_PROMPT_PREFIX=' |'
 RBENV_THEME_PROMPT_SUFFIX='|'
 
@@ -166,6 +169,12 @@ function virtualenv_prompt {
   if [[ -n "$VIRTUAL_ENV" ]]; then
     virtualenv=`basename "$VIRTUAL_ENV"`
     echo -e "$VIRTUALENV_THEME_PROMPT_PREFIX$virtualenv$VIRTUALENV_THEME_PROMPT_SUFFIX"
+  fi
+}
+
+function nvm_prompt {
+  if [[ -n "$VERSION" ]]; then
+    echo -e "$NVM_THEME_PROMPT_PREFIX$VERSION$NVM_THEME_PROMPT_SUFFIX"
   fi
 }
 
