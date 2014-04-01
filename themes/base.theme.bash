@@ -83,7 +83,18 @@ function git_prompt_vars {
   fi
   SCM_PREFIX=${GIT_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
   SCM_SUFFIX=${GIT_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
-  SCM_BRANCH=$(git symbolic-ref -q --short HEAD || git describe --tags --exact-match 2> /dev/null)
+
+  local ref=$(git symbolic-ref -q --short HEAD 2> /dev/null)
+  if [[ -n "$ref" ]]; then
+    SCM_BRANCH=$ref
+    SCM_IS_BRANCH=1
+    SCM_IS_TAG=0
+  else
+    SCM_BRANCH=$(git describe --tags --exact-match 2> /dev/null)
+    SCM_IS_TAG=1
+    SCM_IS_BRANCH=0
+  fi
+  # SCM_BRANCH=$(git symbolic-ref -q --short HEAD || git describe --tags --exact-match 2> /dev/null)
   SCM_CHANGE=$(git rev-parse HEAD 2>/dev/null)
   local ahead_re='.+ahead ([0-9]+).+'
   local behind_re='.+behind ([0-9]+).+'
