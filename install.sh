@@ -36,7 +36,7 @@ function load_all() {
       [ ${filename:0:1} = "_" ] && continue
       dest="${BASH_IT}/${file_type}/enabled/${filename}"
       if [ ! -e "${dest}" ]; then
-          ln -s "${src}" "${dest}"
+          ln -s "../available/${filename}" "${dest}"
       else
           echo "File ${dest} exists, skipping"
       fi
@@ -57,7 +57,7 @@ function load_some() {
         read -p "Would you like to enable the ${file_name%%.*} $file_type? [Y/N] " RESP
         case $RESP in
         [yY])
-          ln -s "$path" "$BASH_IT/$file_type/enabled"
+          ln -s "../available/${file_name}" "$BASH_IT/$file_type/enabled"
           break
           ;;
         [nN])
