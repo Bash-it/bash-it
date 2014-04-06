@@ -261,7 +261,7 @@ _enable-thing ()
         do
             plugin=$(basename $f)
             if [ ! -h $BASH_IT/$subdirectory/enabled/$plugin ]; then
-                ln -s $BASH_IT/$subdirectory/available/$plugin $BASH_IT/$subdirectory/enabled/$plugin
+                ln -s ../available/$plugin $BASH_IT/$subdirectory/enabled/$plugin
             fi
         done
     else
@@ -279,7 +279,7 @@ _enable-thing ()
 
         mkdir -p $BASH_IT/$subdirectory/enabled
 
-        ln -s $BASH_IT/$subdirectory/available/$plugin $BASH_IT/$subdirectory/enabled/$plugin
+        ln -s ../available/$plugin $BASH_IT/$subdirectory/enabled/$plugin
     fi
 
     printf '%s\n' "$file_entity enabled."
