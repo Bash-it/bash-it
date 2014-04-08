@@ -73,10 +73,15 @@ function git_prompt_vars {
   SCM_GIT_AHEAD=''
   SCM_GIT_BEHIND=''
   SCM_GIT_STASH=''
-  local status="$(git status -bs --porcelain 2> /dev/null)"
-  if [[ -n "$(grep -v ^# <<< "${status}")" ]]; then
-    SCM_DIRTY=1
-    SCM_STATE=${GIT_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
+  if [[ "$(git config --get bash-it.hide-status)" != "1" ]]; then
+    local status="$(git status -bs --porcelain 2> /dev/null)"
+    if [[ -n "$(grep -v ^# <<< "${status}")" ]]; then
+      SCM_DIRTY=1
+      SCM_STATE=${GIT_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
+    else
+      SCM_DIRTY=0
+      SCM_STATE=${GIT_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
+    fi
   else
     SCM_DIRTY=0
     SCM_STATE=${GIT_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
