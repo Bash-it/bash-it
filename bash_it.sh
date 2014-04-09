@@ -44,6 +44,11 @@ do
   _load_bash_it_files $file_type
 done
 
+# Load configured aliases, completion, plugins
+load_bash_it_files "aliases" "${aliases}"
+load_bash_it_files "completion" "${completion}"
+load_bash_it_files "plugins" "${plugins}"
+
 # Load any custom aliases that the user has added
 if [ -e "${BASH_IT}/aliases/custom.aliases.bash" ]
 then

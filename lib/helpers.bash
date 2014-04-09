@@ -14,6 +14,23 @@ function _load_bash_it_files() {
   done
 }
 
+# Helper function loading various enable-able files
+function load_bash_it_files() {
+  subdirectory="$1"
+  enable_files="$2"
+  if [ ! -d "${BASH_IT}/${subdirectory}/available" ]
+  then
+    return
+  fi
+  for enable_file in ${enable_files}
+  do
+    config_file="${BASH_IT}/${subdirectory}/available/${enable_file}.bash"
+    if [ -e "${config_file}" ]; then
+      source $config_file
+    fi
+  done
+}
+
 # Function for reloading aliases
 function reload_aliases() {
   _load_bash_it_files "aliases"
