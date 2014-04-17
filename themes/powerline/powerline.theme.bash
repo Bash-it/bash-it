@@ -53,9 +53,16 @@ function powerline_shell_prompt {
 }
 
 function powerline_virtualenv_prompt {
-    if [[ -n "$VIRTUAL_ENV" ]]; then
-        virtualenv=$(basename "$VIRTUAL_ENV")
-        VIRTUALENV_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${VIRTUALENV_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}$(set_rgb_color - ${VIRTUALENV_THEME_PROMPT_COLOR}) ${VIRTUALENV_CHAR}$virtualenv ${normal}"
+    local environ=""
+
+    if [[ -n "$CONDA_DEFAULT_ENV" ]]; then
+        environ="conda: $CONDA_DEFAULT_ENV"
+    elif [[ -n "$VIRTUAL_ENV" ]]; then
+        environ=$(basename "$VIRTUAL_ENV")
+    fi
+
+    if [[ -n "$environ" ]]; then
+        VIRTUALENV_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${VIRTUALENV_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}$(set_rgb_color - ${VIRTUALENV_THEME_PROMPT_COLOR}) ${VIRTUALENV_CHAR}$environ ${normal}"
         LAST_THEME_COLOR=${VIRTUALENV_THEME_PROMPT_COLOR}
     else
         VIRTUALENV_PROMPT=""
