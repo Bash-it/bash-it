@@ -4,6 +4,7 @@ custom/*
 !custom/example.bash
 .rvmrc
 aliases/custom.aliases.bash
+completion/custom.completion.bash
 lib/custom.bash
 plugins/custom.plugins.bash
 *.swp
