@@ -16,6 +16,7 @@ alias f='open -a Finder '
 alias fh='open -a Finder .'
 alias textedit='open -a TextEdit'
 alias hex='open -a "Hex Fiend"'
+alias skpye='open -a Skype'
 
 if [ -s /usr/bin/firefox ] ; then
   unalias firefox
