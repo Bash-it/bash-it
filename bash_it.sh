@@ -38,11 +38,15 @@ do
   source $config_file
 done
 
-# Load enabled and custom aliases, completion, plugins
+# Load enabled aliases, completion, plugins
 for file_type in "aliases" "completion" "plugins"
 do
   _load_bash_it_files $file_type
+done
 
+# Load custom aliases, completion, plugins
+for file_type in "aliases" "completion" "plugins"
+do
   if [ -e "${BASH_IT}/${file_type}/custom.${file_type}.bash" ]
   then
     source "${BASH_IT}/${file_type}/custom.${file_type}.bash"
