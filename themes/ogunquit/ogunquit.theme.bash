@@ -20,14 +20,12 @@ VIRTUALENV_THEME_PROMPT_PREFIX='[@env: '
 VIRTUALENV_THEME_PROMPT_SUFFIX='] '
 
 function prompt_command() {
-    PS1="\n${yellow}$(virtualenv_prompt)${purple}\h ${reset_color}in ${green}\w\n${bold_cyan}$(scm_char)${green}$(scm_prompt_info) ${green}→${reset_color} \[$(tput setaf 4)\]"
+    PS1="\n${yellow}$(virtualenv_prompt)${purple}\h ${reset_color}in ${green}\w\n${bold_cyan}$(scm_char)${green}$(scm_prompt_info) ${green}→${reset_color} ${blue}"
 }
 
 PROMPT_COMMAND=prompt_command;
 
-NOCOLOR="$(tput sgr0)"
 function preexec () {
     tput sgr0
-    #echo -ne "${NOCOLOR}"
 }
 preexec_install
