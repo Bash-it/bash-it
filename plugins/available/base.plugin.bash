@@ -5,7 +5,11 @@ ips ()
 {
     about 'display all ip addresses for this host'
     group 'base'
-    ifconfig | grep "inet " | awk '{ print $2 }'
+    resp=$(ifconfig | grep "inet " | awk '{ print $2 }')
+    for r in $resp
+    do
+        echo -e "`echo $r | cut -d: -f1`: ${echo_bold_green}`echo $r | cut -d: -f2` ${echo_normal}"
+    done
 }
 
 down4me ()
