@@ -115,7 +115,7 @@ _bash-it-describe ()
     _param '3: file_type'
     _param '4: column_header'
     _example '$ _bash-it-describe "plugins" "a" "plugin" "Plugin"'
-    
+
     subdirectory="$1"
     preposition="$2"
     file_type="$3"
@@ -176,7 +176,7 @@ _disable-thing ()
     _param '2: file_type'
     _param '3: file_entity'
     _example '$ _disable-thing "plugins" "plugin" "ssh"'
-    
+
     subdirectory="$1"
     file_type="$2"
     file_entity="$3"
@@ -244,8 +244,8 @@ _enable-thing ()
     _param '1: subdirectory'
     _param '2: file_type'
     _param '3: file_entity'
-    _example '$ _enable-thing "plugins" "plugin" "ssh"'	
-	
+    _example '$ _enable-thing "plugins" "plugin" "ssh"'
+
     subdirectory="$1"
     file_type="$2"
     file_entity="$3"
@@ -292,10 +292,21 @@ _help-aliases()
     _example '$ alias-help'
     _example '$ alias-help git'
 
+    typeset custom="$BASH_IT/aliases/custom.aliases.bash"
     if [ -n "$1" ]; then
-        cat $BASH_IT/aliases/available/$1.aliases.bash | metafor alias | sed "s/$/'/"
+        printf '\n'
+        if [ $1 == 'custom' ] && [ -e $custom ]; then
+            cat $custom | metafor alias | sed "s/$/'/"
+        else
+            cat $BASH_IT/aliases/available/$1.aliases.bash | metafor alias | sed "s/$/'/"
+        fi
+        printf '\n'
     else
         typeset f
+        if [ -e $custom ]; then
+            printf '\n\n%s:\n' 'custom'
+            cat $custom | metafor alias | sed "s/$/'/"
+        fi
         for f in $BASH_IT/aliases/enabled/*
         do
             typeset file=$(basename $f)
