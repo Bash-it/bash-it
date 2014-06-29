@@ -2,6 +2,6 @@
 # Yet another Oh-My-zsh feature
 
 # pick a theme:
-export BASH_IT_THEME=$( ls -w1 /home/cloudera/.bash_it/themes/  | grep -v .bash | grep -v random | sort -R | head -1 )
+export BASH_IT_THEME=$( ls -w1 ${BASH_IT}/.bash_it/themes/  | grep -v .bash | grep -v random | sort -R | head -1 )
 # load it the right way:
 source "${BASH_IT}/lib/appearance.bash"
