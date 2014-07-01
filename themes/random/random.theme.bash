@@ -2,6 +2,6 @@
 # Yet another Oh-My-zsh feature
 
 # pick a theme:
-export BASH_IT_THEME=$( ls -w1 ${BASH_IT}/.bash_it/themes/  | grep -v .bash | grep -v random | sort -R | head -1 )
-# load it the right way:
-source "${BASH_IT}/themes/${BASH_IT_THEME}.bash"
+export BASH_IT_THEME=$( ls -w1 ${BASH_IT}/themes/  | grep -v .bash | grep -v random | sort -R | head -1 )
+echo "using theme: ${BASH_IT_THEME}"
+source "${BASH_IT}/themes/${BASH_IT_THEME}/${BASH_IT_THEME}.theme.bash"
