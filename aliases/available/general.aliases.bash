@@ -2,6 +2,7 @@ cite about-alias
 about-alias 'general aliases'
 
 # bash.it alias
+# git clone -b devel https://github.com/dreftymac/bash-it.git ~/.bash_it
 alias bash.it='bash-it'
 
 # List directory contents
