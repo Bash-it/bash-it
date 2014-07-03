@@ -1,6 +1,9 @@
 cite about-alias
 about-alias 'general aliases'
 
+# bash.it alias
+alias bash.it='bash-it'
+
 # List directory contents
 alias sl=ls
 alias ls='ls -G'        # Compact view, show colors
