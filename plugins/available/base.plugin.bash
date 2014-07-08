@@ -153,7 +153,7 @@ function usage ()
 
 if [ ! -e $BASH_IT/plugins/enabled/todo.plugin.bash ]; then
 # if user has installed todo plugin, skip this...
-    function t ()
+    function __simpletodo ()
     {
         about 'one thing todo'
         param 'if not set, display todo item'
@@ -164,6 +164,9 @@ if [ ! -e $BASH_IT/plugins/enabled/todo.plugin.bash ]; then
             echo "$*" > ~/.t
         fi
     }
+    if ! alias | grep -q ' t='; then
+        alias t=__simpletodo
+    fi
 fi
 
 function command_exists ()
