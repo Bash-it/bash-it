@@ -15,3 +15,5 @@ alias vdstr="vagrant destroy"
 alias vl="vagrant list"
 # requires vagrant-hostmanager plugin
 alias vhst="vagrant hostmanager"
+# for working with homestead
+alias vm='ssh vagrant@127.0.0.1 -p 2222'
