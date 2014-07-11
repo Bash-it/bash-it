@@ -1,6 +1,42 @@
 #!/usr/bin/env bash
 BASH_IT="$HOME/.bash_it"
 
+default_aliases_list="
+bundler
+general
+git
+maven
+vim
+"
+default_plugins_list="
+base
+dirs
+extract
+git
+java
+python
+ruby
+rvm
+sshagent
+ssh
+tmux
+virtualenv
+"
+default_completion_list="
+bash-it
+defaults
+fabric
+gem
+git
+git_flow
+grunt
+maven
+pip
+rake
+ssh
+tmux
+"
+
 test -w $HOME/.bash_profile &&
   cp $HOME/.bash_profile $HOME/.bash_profile.bak &&
   echo "Your original .bash_profile has been backed up to .bash_profile.bak"
@@ -43,6 +79,28 @@ function load_all() {
   done
 }
 
+function load_list() {
+  local file_type=$1
+  shift
+  local src_list=$*
+  [ ! -d "$BASH_IT/$file_type/enabled" ] && mkdir "$BASH_IT/${file_type}/enabled"
+  for src in ${src_list}; do
+      full_filename="${BASH_IT}/${file_type}/available/${src}.${file_type}.bash"
+      if [ ! -e "${full_filename}" ]; then
+          echo "File ${full_filename} missing, skipping"
+          continue
+      fi
+      filename="$(basename ${full_filename})"
+      [ ${filename:0:1} = "_" ] && continue
+      dest="${BASH_IT}/${file_type}/enabled/${filename}"
+      if [ -e "${dest}" ]; then
+          echo "File ${dest} exists, skipping"
+          continue
+      fi
+      ln -s "../available/${filename}" "${dest}"
+  done
+}
+
 function load_some() {
     file_type=$1
     for path in `ls $BASH_IT/${file_type}/available/[^_]*`
@@ -75,7 +133,7 @@ for type in "aliases" "plugins" "completion"
 do
   while true
   do
-    read -p "Would you like to enable all, some, or no $type? Some of these may make bash slower to start up (especially completion). (all/some/none) " RESP
+    read -p "Would you like to enable all, some, or no $type? Some of these may make bash slower to start up (especially completion). (all/some/list/none) " RESP
     case $RESP
     in
     some)
@@ -85,6 +143,14 @@ do
     all)
       load_all $type
       break
+      ;;
+    list)
+      default_list_name="default_${type}_list"
+      eval default_list=\$$default_list_name
+      default_list="${default_list}"
+      read -p "Please type in space separated list of $type you want to have enabled. [default: ${default_list}" RESP
+      [ -z "${RESP}" ] && eval items_list=\$$default_list
+      load_list $type $items_list
       ;;
     none)
       break
