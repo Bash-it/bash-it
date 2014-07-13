@@ -53,7 +53,7 @@ function load_list() {
   local src_list=$*
   [ ! -d "$BASH_IT/$file_type/enabled" ] && mkdir "$BASH_IT/${file_type}/enabled"
   for src in ${src_list}; do
-      full_filename="${BASH_IT}/${file_type}/available/${src}.*.bash"
+      full_filename="$(ls ${BASH_IT}/${file_type}/available/${src}.*.bash)"
       if [ ! -e "${full_filename}" ]; then
           echo "File ${full_filename} missing, skipping"
           continue
