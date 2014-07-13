@@ -3,7 +3,7 @@ BASH_IT="$HOME/.bash_it"
 
 default_aliases_list="bundler general git maven vim"
 default_plugins_list="base dirs extract git java python ruby rvm sshagent ssh tmux virtualenv"
-default_completion_list="bash-it defaults fabric gem git git_flow maven pip rake ssh tmux"
+default_completion_list="bash-it defaults fabric-completion gem git git_flow maven pip rake ssh tmux"
 
 test -w $HOME/.bash_profile &&
   cp $HOME/.bash_profile $HOME/.bash_profile.bak &&
@@ -53,7 +53,7 @@ function load_list() {
   local src_list=$*
   [ ! -d "$BASH_IT/$file_type/enabled" ] && mkdir "$BASH_IT/${file_type}/enabled"
   for src in ${src_list}; do
-      full_filename="${BASH_IT}/${file_type}/available/${src}\.*.bash"
+      full_filename="${BASH_IT}/${file_type}/available/${src}.*.bash"
       if [ ! -e "${full_filename}" ]; then
           echo "File ${full_filename} missing, skipping"
           continue
