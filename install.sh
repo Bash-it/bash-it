@@ -1,41 +1,9 @@
 #!/usr/bin/env bash
 BASH_IT="$HOME/.bash_it"
 
-default_aliases_list="
-bundler
-general
-git
-maven
-vim
-"
-default_plugins_list="
-base
-dirs
-extract
-git
-java
-python
-ruby
-rvm
-sshagent
-ssh
-tmux
-virtualenv
-"
-default_completion_list="
-bash-it
-defaults
-fabric
-gem
-git
-git_flow
-grunt
-maven
-pip
-rake
-ssh
-tmux
-"
+default_aliases_list="bundler general git maven vim"
+default_plugins_list="base dirs extract git java python ruby rvm sshagent ssh tmux virtualenv"
+default_completion_list="bash-it defaults fabric gem git git_flow maven pip rake ssh tmux"
 
 test -w $HOME/.bash_profile &&
   cp $HOME/.bash_profile $HOME/.bash_profile.bak &&
@@ -85,7 +53,7 @@ function load_list() {
   local src_list=$*
   [ ! -d "$BASH_IT/$file_type/enabled" ] && mkdir "$BASH_IT/${file_type}/enabled"
   for src in ${src_list}; do
-      full_filename="${BASH_IT}/${file_type}/available/${src}.${file_type}.bash"
+      full_filename="${BASH_IT}/${file_type}/available/${src}\.*.bash"
       if [ ! -e "${full_filename}" ]; then
           echo "File ${full_filename} missing, skipping"
           continue
@@ -147,10 +115,18 @@ do
     list)
       default_list_name="default_${type}_list"
       eval default_list=\$$default_list_name
-      default_list="${default_list}"
-      read -p "Please type in space separated list of $type you want to have enabled. [default: ${default_list}" RESP
-      [ -z "${RESP}" ] && eval items_list=\$$default_list
+      available_list=""
+      for s in $BASH_IT/${type}/available/*.bash
+      do
+        available_list="${available_list} $( basename ${s} | cut -d. -f1 )"
+      done
+      echo "Enter space separated list of $type you want to have enabled."
+      echo "Avalable: ${available_list}"
+      echo "Default: ${default_list}"
+      read -p "Your choice [press ENTER to accept default]:" RESP
+      [ -z "${RESP}" ] && items_list=${default_list}
       load_list $type $items_list
+      break
       ;;
     none)
       break
