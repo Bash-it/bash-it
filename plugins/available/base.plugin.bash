@@ -3,10 +3,49 @@ about-plugin 'miscellaneous tools'
 
 function ips ()
 {
-    about 'display all ip addresses for this host'
+    about 'display all IPv4/6 addresses for this host'
     group 'base'
-    ifconfig | grep "inet " | awk '{ print $2 }'
+
+    mode=4
+    if [ -n "$1" ]; then
+        case "$1" in
+            -4) ;;
+            -6) mode=6 ;;
+            -a) mode=both ;;
+            -h) echo "Usage ips [-4|-6|-a]"
+               echo " -4    list only IPv4 addresses"
+               echo " -6    list only IPv6 addresses"
+               echo " -a    list both IPv4 and IPv6 addresses"
+               return
+               ;;
+            *) echo "Illegal option $1"
+               echo "Only -4, -6 and -a options are allowed"
+               return 1
+               ;;
+        esac
+    fi
+
+    token="inet"
+    case $mode in
+        4) ;;
+        6) token="${token}6" ;;
+        both) token="${token}6?" ;;
+    esac
+    case "$OSTYPE" in
+        darwin*)
+            ifconfig | grep -E "${token} " | awk '{ print $2 }'
+            ;;
+
+        # ifconfig is not available for users on modern linux distributions, 
+        # also it uses a slightly different format.
+        # Use ip instead.
+        linux*)
+            ip ad | grep -E "${token} " | awk '{ sub(/\/.*$/,"",$2); print $2}'
+            ;;
+    esac
 }
+
+alias ips6='ips -6'
 
 function down4me ()
 {
@@ -153,7 +192,7 @@ function usage ()
 
 if [ ! -e $BASH_IT/plugins/enabled/todo.plugin.bash ]; then
 # if user has installed todo plugin, skip this...
-    function t ()
+    function __simpletodo ()
     {
         about 'one thing todo'
         param 'if not set, display todo item'
@@ -164,6 +203,9 @@ if [ ! -e $BASH_IT/plugins/enabled/todo.plugin.bash ]; then
             echo "$*" > ~/.t
         fi
     }
+    if ! alias | grep -q ' t='; then
+        alias t=__simpletodo
+    fi
 fi
 
 function command_exists ()
