@@ -1,0 +1,15 @@
+cite 'about-alias'
+about-alias 'common hdfs dfs abbreviations'
+
+# Aliases
+alias hdls='hdfs dfs -ls'
+alias hdchmod='hdfs dfs -chmod'
+alias hdchown='hdfs dfs -chown'
+alias hdchgrp='hdfs dfs -chgrp'
+alias hdmkdir='hdfs dfs -mkdir -p'
+alias hdfsck='hdfs fsck'
+alias hdcat='hdfs dfs -cat'
+alias hdget='hdfs dfs -get'
+alias hdput='hdfs dfs -put'
+alias hddu='hdfs dfs -du'
+alias hddf='hdfs dfs -df'

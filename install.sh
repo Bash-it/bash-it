@@ -1,15 +1,38 @@
 #!/usr/bin/env bash
 BASH_IT="$HOME/.bash_it"
 
-default_aliases_list="bundler general git maven vim"
-default_plugins_list="base dirs extract git java python ruby rvm sshagent ssh tmux virtualenv"
+default_aliases_list="bundler general git maven vim hdfs"
+default_plugins_list="base dirs extract git java python ruby rvm sshagent ssh tmux"
 default_completion_list="bash-it defaults fabric gem git git_flow maven pip rake ssh tmux"
 
 test -w $HOME/.bash_profile &&
   cp $HOME/.bash_profile $HOME/.bash_profile.bak &&
   echo "Your original .bash_profile has been backed up to .bash_profile.bak"
 
-cp $HOME/.bash_it/template/bash_profile.template.bash $HOME/.bash_profile
+cp $HOME/.bash_it/template/bash_profile_bashit.template.bash $HOME/.bash_profile_bashit
+cat >> $HOME/.bash_profile << EOF
+
+
+### fortscale bashit customizations
+bashit() {
+        case \$1 in
+                on)
+                source \${HOME}/.bash_profile_bashit
+                ;;
+                off)
+                set | grep BASH_IT | awk '{ print "unset", \$1}' | cut -d= -f1 | while read -r line
+                do
+                        \$line
+                done
+                source /etc/profile
+                ;;
+                *)
+                echo "Unknown parameter: \$1, Usage: bashit [on|off]"
+                ;;
+        esac
+}
+
+EOF
 
 echo "Copied the template .bash_profile into ~/.bash_profile, edit this file to customize bash-it"
 
