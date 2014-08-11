@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 BASH_IT="$HOME/.bash_it"
 
-default_aliases_list="bundler general git maven vim"
-default_plugins_list="base dirs extract git java python ruby rvm sshagent ssh tmux virtualenv"
+default_aliases_list="bundler general git maven vim hdfs"
+default_plugins_list="base dirs extract git java python ruby rvm sshagent ssh tmux"
 default_completion_list="bash-it defaults fabric gem git git_flow maven pip rake ssh tmux"
 
 test -w $HOME/.bash_profile &&
