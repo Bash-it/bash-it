@@ -16,6 +16,16 @@ function tab() {
 EOF
 }
 
+# renames the current os x terminal tab title
+function tabname {
+  printf "\e]1;$1\a"
+}
+
+# renames the current os x terminal window title
+function winname {
+  printf "\e]2;$1\a"
+}
+
 # this one switches your os x dock between 2d and 3d
 # thanks to savier.zwetschge.org
 function dock-switch() {
