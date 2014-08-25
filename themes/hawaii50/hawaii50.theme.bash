@@ -83,7 +83,7 @@ IP_SEPARATOR=', '
 
 # FUNCS =======================================================================
 
-function ip {
+function get_ip_info {
     myip=$(curl -s checkip.dyndns.org | grep -Eo '[0-9\.]+')
     echo -e "$(ips | sed -e :a -e '$!N;s/\n/${IP_SEPARATOR}/;ta' | sed -e 's/127\.0\.0\.1\${IP_SEPARATOR}//g'), ${myip}"
 }
@@ -91,7 +91,7 @@ function ip {
 # Displays ip prompt 
 function ip_prompt_info() {
     if [[ $IP_ENABLED == 1 ]]; then
-        echo -e " ${DEFAULT_COLOR}(${IP_COLOR}$(ip)${DEFAULT_COLOR})"
+        echo -e " ${DEFAULT_COLOR}(${IP_COLOR}$(get_ip_info)${DEFAULT_COLOR})"
     fi 
 }
 
