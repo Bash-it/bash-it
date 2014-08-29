@@ -9,7 +9,8 @@ if [ -z "$BASH_IT" ];
 then
     # Setting $BASH to maintain backwards compatibility
     # TODO: warn users that they should upgrade their .bash_profile
-    export BASH_IT=$BASH
+    export BASH_IT=~/.bash_it/
+    #$BASH
     export BASH=`bash -c 'echo $BASH'`
 fi
 

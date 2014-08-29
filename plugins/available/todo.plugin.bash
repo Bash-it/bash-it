@@ -12,6 +12,9 @@ if [ -z "$TODO_SRC_DIR" ]; then
     export TODO_SRC_DIR=$BASH_IT/plugins/available/todo
 fi
 
+if [ -z "$TODO" ]; then
+    export TODO='t'
+fi
 # respect ENV var set in .bash_profile, default is 't'
 alias $TODO='$TODO_SRC_DIR/todo.sh -d $TODO_SRC_DIR/todo.cfg'
 
