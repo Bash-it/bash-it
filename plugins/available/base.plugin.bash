@@ -212,3 +212,29 @@ function buf ()
     local filetime=$(date +%Y%m%d_%H%M%S)
     cp ${filename} ${filename}_${filetime}
 }
+
+function imgur()
+{   
+    apikey="b3625162d3418ac51a9ee805b1840452"
+
+    response=$(curl -F "key=$apikey" -H "Expect: " -F "image=@$1" http://imgur.com/api/upload.xml 2>/dev/null)
+    # the "Expect: " header is to get around a problem when using this through the
+    # Squid proxy. Not sure if it's a Squid bug or what.
+    if [ $? -ne 0 ]; then
+        echo "Upload failed" >&2
+        exit 2
+    elif [ $(echo $response | grep -c "<error_msg>") -gt 0 ]; then
+        echo "Error message from imgur:" >&2
+        echo $response | sed -r 's/.*<error_msg>(.*)<\/error_msg>.*/\1/' >&2
+        exit 3
+    fi
+    
+    # parse the response and output our stuff
+    url=$(echo $response | sed -r 's/.*<original_image>(.*)<\/original_image>.*/\1/')
+    echo $(echo $url | grep "http://")
+}
+
+function tinyurl() 
+{ 
+    curl "http://tinyurl.com/api-create.php?url=$1" && echo 
+}
