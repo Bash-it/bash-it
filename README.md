@@ -44,6 +44,11 @@ There are a few bash it themes.  If you've created your own custom prompts, I'd 
 
 You can see the theme screenshots  [here](https://github.com/revans/bash-it/wiki/Themes)
 
+## Misc
+
+Bash it creates a 'reload' alias that makes it convenient to reload
+your bash profile when you make changes.
+
 ## Help out
 
 I think everyone has their own custom scripts accumulated over time.  And so, following in the footsteps of oh-my-zsh, bash it is a framework for easily customizing your bash shell. Everyone's got a custom toolbox, so let's start making them even better, **as a community!**
