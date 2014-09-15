@@ -9,6 +9,7 @@ alias gus='git reset HEAD'
 alias gm="git merge"
 alias g='git'
 alias get='git'
+alias gfa='git fetch -a; for branch in `git branch -a | grep remotes | grep -v HEAD | grep -v master `; do git branch --track ${branch#remotes/origin/} $branch; done'
 alias gst='git status'
 alias gs='git status'
 alias gss='git status -s'
