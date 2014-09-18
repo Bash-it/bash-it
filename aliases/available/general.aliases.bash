@@ -16,7 +16,7 @@ then
   alias ls="ls --color=auto"
 fi
 which gshuf &> /dev/null
-if [ $? -eq 1 ]
+if [ $? -eq 0 ]
 then
   alias shuf=gshuf
 fi
