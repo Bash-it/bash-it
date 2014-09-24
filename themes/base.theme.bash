@@ -74,8 +74,8 @@ function git_prompt_vars {
   SCM_GIT_BEHIND=''
   SCM_GIT_STASH=''
   if [[ "$(git config --get bash-it.hide-status)" != "1" ]]; then
-    local status="$(git status -bs --porcelain 2> /dev/null)"
-    if [[ -n "$(grep -v ^# <<< "${status}")" ]]; then
+    local status="$(git status -b --porcelain 2> /dev/null || git status --porcelain 2> /dev/null)"
+    if [[ -n "${status}" ]] && [[ "${status}" != "\n" ]] && [[ -n "$(grep -v ^# <<< "${status}")" ]]; then
       SCM_DIRTY=1
       SCM_STATE=${GIT_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
     else
@@ -89,9 +89,9 @@ function git_prompt_vars {
   SCM_PREFIX=${GIT_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
   SCM_SUFFIX=${GIT_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
 
-  local ref=$(git symbolic-ref -q --short HEAD 2> /dev/null)
+  local ref=$(git symbolic-ref -q HEAD 2> /dev/null)
   if [[ -n "$ref" ]]; then
-    SCM_BRANCH=$ref
+    SCM_BRANCH=${ref#refs/heads/}
     SCM_IS_BRANCH=1
     SCM_IS_TAG=0
   else
@@ -99,7 +99,6 @@ function git_prompt_vars {
     SCM_IS_TAG=1
     SCM_IS_BRANCH=0
   fi
-  # SCM_BRANCH=$(git symbolic-ref -q --short HEAD || git describe --tags --exact-match 2> /dev/null)
   SCM_CHANGE=$(git rev-parse HEAD 2>/dev/null)
   local ahead_re='.+ahead ([0-9]+).+'
   local behind_re='.+behind ([0-9]+).+'
