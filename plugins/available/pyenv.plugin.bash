@@ -1,8 +1,9 @@
 cite about-plugin
 about-plugin 'load pyenv, if you are using it'
 
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
+export PYENV_PATH=`which pyenv`
+export PATH="$PYENV_PATH:$PATH"
+
 [[ `which pyenv` ]] && eval "$(pyenv init -)"
 
 #Load pyenv virtualenv if the virtualenv plugin is installed.
