@@ -8,39 +8,39 @@ export PYENV_VIRTUALENVWRAPPER_PREFER_PYVENV="true"
 # Activate autoenv
 source /usr/local/opt/autoenv/activate.sh
 
-function mkenv {
+function mkpvenv {
   about 'create a new virtualenv for this directory'
   group 'pyenv-virtualenv'
 
   eval "touch .env"
   eval "echo \"#!/bin/bash\" >> .env"
-  eval "echo \"eval \"wovenv\"\" >> .env"
+  eval "echo \"eval \"wopvenv\"\" >> .env"
   cwd=`basename \`pwd\``
   mkvirtualenv --distribute $cwd
 }
 
-function mkvbranch {
+function mkpvbranch {
   about 'create a new virtualenv for the current branch'
   group 'pyenv-virtualenv'
 
   mkvirtualenv --distribute "$(basename `pwd`)@$SCM_BRANCH"
 }
 
-function wovbranch {
+function wopvbranch {
   about 'sets workon branch'
   group 'pyenv-virtualenv'
 
   workon "$(basename `pwd`)@$SCM_BRANCH"
 }
 
-function wovenv {
+function wopvenv {
   about 'works on the virtualenv for this directory'
   group 'virtualenv'
 
   workon "$(basename `pwd`)"
 }
 
-function rmenv {
+function rmpvenv {
   about 'removes virtualenv for this directory'
   group 'virtualenv'
 
@@ -49,7 +49,7 @@ function rmenv {
   eval "rm .env"
 }
 
-function rmenvbranch {
+function rmpvenvbranch {
   about 'removes virtualenv for this directory'
   group 'virtualenv'
 
