@@ -5,7 +5,8 @@ about-plugin 'pyenv-virtualenvwrapper helper functions'
 
 export PYENV_VIRTUALENVWRAPPER_PREFER_PYVENV="true"
 
-[[ `which pyenv` ]] && eval "$(pyenv virtualenv)"
+[[ `which pyenv` ]] && eval "$(pyenv init -)"
+[[ `which pyenv-virtualenvwrapper` ]] && eval "$(pyenv virtualenvwrapper)"
 
 # Activate autoenv
 source /usr/local/opt/autoenv/activate.sh
