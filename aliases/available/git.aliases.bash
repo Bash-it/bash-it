@@ -40,6 +40,11 @@ alias gt="git tag"
 alias gta="git tag -a"
 alias gtd="git tag -d"
 alias gtl="git tag -l"
+# From http://blogs.atlassian.com/2014/10/advanced-git-aliases/
+# Show commits since last pull
+alias gnew="git log HEAD@{1}..HEAD@{0}"
+# Add uncommitted and unstaged changes to the last commit
+alias gcaa="git commit -a --amend -C HEAD"
 
 case $OSTYPE in
   darwin*)
