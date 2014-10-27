@@ -1,0 +1,7 @@
+{
+  "name": "bash-it",
+  "version": "1.0.0",
+  "description": "A community bash framework.",
+  "install": "./install.sh"
+}
+
