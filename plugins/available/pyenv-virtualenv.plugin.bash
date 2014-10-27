@@ -15,10 +15,10 @@ function mkpvenv {
   about 'create a new virtualenv for this directory'
   group 'pyenv-virtualenv'
 
+  cwd=`basename \`pwd\``
   eval "touch .env"
   eval "echo \"#!/bin/bash\" >> .env"
-  eval "echo \"eval \"wopvenv\"\" >> .env"
-  cwd=`basename \`pwd\``
+  eval "echo \"if [ \\\`basename \\\$(pwd)\\\` == \\\"$cwd\\\" ]; then \"eval \"wopvenv\"\"; fi\" >> .env"
   mkvirtualenv --distribute $cwd
 }
 
