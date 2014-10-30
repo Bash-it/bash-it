@@ -38,3 +38,6 @@ alias flush='dscacheutil -flushcache'
 # Show/hide hidden files (for Mac OS X Mavericks)
 alias showhidden="defaults write com.apple.finder AppleShowAllFiles TRUE"
 alias hidehidden="defaults write com.apple.finder AppleShowAllFiles FALSE"
+
+# From http://apple.stackexchange.com/questions/110343/copy-last-command-in-terminal
+alias copyLastCmd='fc -ln -1 | awk '\''{$1=$1}1'\'' ORS='\'''\'' | pbcopy'
