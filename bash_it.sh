@@ -24,6 +24,9 @@ fi
 # Load composure first, so we support function metadata
 source "${BASH_IT}/lib/composure.sh"
 
+# Also load preexec, so themes can use it if needed
+source "${BASH_IT}/lib/preexec.sh"
+
 # support 'plumbing' metadata
 cite _about _param _example _group _author _version
 
