@@ -32,8 +32,10 @@ unset MAILCHECK
 export IRC_CLIENT='irssi'
 
 # Set this to the command you use for todo.txt-cli
-
 export TODO="t"
+
+# Set this to false to turn off version control status checking within the prompt for all themes
+export SCM_CHECK=true
 
 # Set vcprompt executable path for scm advance info in prompt (demula theme)
 # https://github.com/xvzf/vcprompt

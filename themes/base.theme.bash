@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
 THEME_PROMPT_HOST='\H'
+
+SCM_CHECK=${SCM_CHECK:=true}
+
 SCM_THEME_PROMPT_DIRTY=' ✗'
 SCM_THEME_PROMPT_CLEAN=' ✓'
 SCM_THEME_PROMPT_PREFIX=' |'
@@ -31,7 +34,9 @@ RBFU_THEME_PROMPT_PREFIX=' |'
 RBFU_THEME_PROMPT_SUFFIX='|'
 
 function scm {
-  if [[ -f .git/HEAD ]]; then SCM=$SCM_GIT
+
+  if [[ "$SCM_CHECK" = false ]]; then SCM=$SCM_NONE
+  elif [[ -f .git/HEAD ]]; then SCM=$SCM_GIT
   elif which git &> /dev/null && [[ -n "$(git symbolic-ref HEAD 2> /dev/null)" ]]; then SCM=$SCM_GIT
   elif [[ -d .hg ]]; then SCM=$SCM_HG
   elif which hg &> /dev/null && [[ -n "$(hg root 2> /dev/null)" ]]; then SCM=$SCM_HG
