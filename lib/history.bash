@@ -15,11 +15,6 @@ export HISTSIZE=5000
 
 export AUTOFEATURE=true autotest
 
-# enter a few characters and press UpArrow/DownArrow
-# to search backwards/forwards through the history
-bind '"[A":history-search-backward'
-bind '"[B":history-search-forward'
-
 function rh {
   history | awk '{a[$2]++}END{for(i in a){print a[i] " " i}}' | sort -rn | head
 }
