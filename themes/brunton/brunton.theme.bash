@@ -24,8 +24,15 @@ scm_prompt() {
 	fi
 }
 
+safe_battery_charge() {
+  if [ -e "${BASH_IT}/plugins/enabled/battery.plugin.bash" ];
+	  then
+		    battery_charge
+			  fi
+}
+
 prompt() {
-	PS1="${white}${background_blue} \u${normal}${background_blue}@${red}${background_blue}\h ${blue}${background_white} \t ${reset_color}${normal} $(battery_charge)
+	PS1="${white}${background_blue} \u${normal}${background_blue}@${red}${background_blue}\h ${blue}${background_white} \t ${reset_color}${normal} $(safe_battery_charge)
 ${bold_black}${background_white} \w ${normal}$(scm_prompt)$(is_vim_shell)
 ${white}>${normal} "
 
