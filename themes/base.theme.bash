@@ -216,3 +216,12 @@ function scm_char {
 function prompt_char {
     scm_char
 }
+
+if [ ! -e $BASH_IT/plugins/enabled/battery.plugin.bash ]; then
+# if user has installed battery plugin, skip this...
+    function battery_charge (){
+		# no op
+			echo -n
+    }
+fi
+
