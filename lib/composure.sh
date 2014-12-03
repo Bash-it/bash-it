@@ -235,7 +235,7 @@ draft ()
     fi
 
     # aliases bind tighter than function names, disallow them
-    if [ -n "$(type -a $func 2>/dev/null | grep 'is.*alias')" ]; then
+    if [ -n "$(LANG=C type -t $func 2>/dev/null | grep 'alias')" ]; then
         printf '%s\n' "sorry, $(type -a $func). please choose another name."
         return
     fi
