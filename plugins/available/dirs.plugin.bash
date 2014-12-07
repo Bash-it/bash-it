@@ -23,7 +23,7 @@ alias 8="pushd +8"
 alias 9="pushd +9"
 
 # Clone this location
-alias pc="pushd \`pwd\`"
+alias pc="pushd \$(pwd)"
 
 # Push new location
 alias pu="pushd"
@@ -73,7 +73,7 @@ G () {				# goes to distination dir otherwise , stay in the dir
     example '$ G ..'
     group 'dirs'
 
-    cd ${1:-$(pwd)} ;
+    cd "${1:-$(pwd)}" ;
 }
 
 S () {				# SAVE a BOOKMARK
