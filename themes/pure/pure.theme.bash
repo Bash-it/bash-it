@@ -28,7 +28,7 @@ pure_prompt() {
     ps_user="${green}\u${normal}";
     ps_user_mark="${green} $ ${normal}";
     ps_root="${red}\u${red}";
-    ps_root="${red} # ${normal}"
+    ps_root_mark="${red} # ${normal}"
     ps_path="${yellow}\w${normal}";
 
     # make it work
