@@ -128,20 +128,18 @@ function svn_prompt_vars {
 }
 
 function get_hg_root {
-    CURRENT_DIR=$(pwd)
+    local CURRENT_DIR=$(pwd)
 
     while [ "$CURRENT_DIR" != "/" ]; do
         echo $CURRENT_DIiR
  
         if [ -d "$CURRENT_DIR/.hg" ]; then
             echo "$CURRENT_DIR/.hg"
-            return 0
+            return
         fi
-    
+
         CURRENT_DIR=$(dirname $CURRENT_DIR)
     done
- 
-    return 1
 }
 
 function hg_prompt_vars {
