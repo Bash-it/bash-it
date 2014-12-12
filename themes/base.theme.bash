@@ -138,8 +138,6 @@ function get_hg_root {
     local CURRENT_DIR=$(pwd)
 
     while [ "$CURRENT_DIR" != "/" ]; do
-        echo $CURRENT_DIiR
- 
         if [ -d "$CURRENT_DIR/.hg" ]; then
             echo "$CURRENT_DIR/.hg"
             return
