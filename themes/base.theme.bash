@@ -127,6 +127,23 @@ function svn_prompt_vars {
   SCM_CHANGE=$(svn info 2> /dev/null | sed -ne 's#^Revision: ##p' )
 }
 
+function get_hg_root {
+    CURRENT_DIR=$(pwd)
+
+    while [ "$CURRENT_DIR" != "/" ]; do
+        echo $CURRENT_DIiR
+ 
+        if [ -d "$CURRENT_DIR/.hg" ]; then
+            echo "$CURRENT_DIR/.hg"
+            return 0
+        fi
+    
+        CURRENT_DIR=$(dirname $CURRENT_DIR)
+    done
+ 
+    return 1
+}
+
 function hg_prompt_vars {
     if [[ -n $(hg status 2> /dev/null) ]]; then
       SCM_DIRTY=1
@@ -137,8 +154,10 @@ function hg_prompt_vars {
     fi
     SCM_PREFIX=${HG_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
     SCM_SUFFIX=${HG_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
-    SCM_BRANCH=$(hg summary 2> /dev/null | grep branch: | awk '{print $2}')
-    SCM_CHANGE=$(hg summary 2> /dev/null | grep parent: | awk '{print $2}')
+
+    HG_ROOT=$(get_hg_root)
+    SCM_BRANCH=$(cat $HG_ROOT/branch)
+    SCM_CHANGE=$(hexdump -n 10 -e '1/1 "%02x"' $HG_ROOT/dirstate | cut -c-12)
 }
 
 function rvm_version_prompt {
