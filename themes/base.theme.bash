@@ -127,6 +127,26 @@ function svn_prompt_vars {
   SCM_CHANGE=$(svn info 2> /dev/null | sed -ne 's#^Revision: ##p' )
 }
 
+# this functions returns absolute location of .hg directory if one exists
+# It starts in the current directory and moves its way up until it hits /. 
+# If we get to / then no Mercurial repository was found.
+# Example: 
+# - lets say we cd into ~/Projects/Foo/Bar
+# - .hg is located in ~/Projects/Foo/.hg
+# - get_hg_root starts at ~/Projects/Foo/Bar and sees that there is no .hg directory, so then it goes into ~/Projects/Foo
+function get_hg_root {
+    local CURRENT_DIR=$(pwd)
+
+    while [ "$CURRENT_DIR" != "/" ]; do
+        if [ -d "$CURRENT_DIR/.hg" ]; then
+            echo "$CURRENT_DIR/.hg"
+            return
+        fi
+
+        CURRENT_DIR=$(dirname $CURRENT_DIR)
+    done
+}
+
 function hg_prompt_vars {
     if [[ -n $(hg status 2> /dev/null) ]]; then
       SCM_DIRTY=1
@@ -137,8 +157,22 @@ function hg_prompt_vars {
     fi
     SCM_PREFIX=${HG_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
     SCM_SUFFIX=${HG_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
-    SCM_BRANCH=$(hg summary 2> /dev/null | grep branch: | awk '{print $2}')
-    SCM_CHANGE=$(hg summary 2> /dev/null | grep parent: | awk '{print $2}')
+
+    HG_ROOT=$(get_hg_root)
+
+    if [ -f $HG_ROOT/branch ]; then
+        # Mercurial holds it's current branch in .hg/branch file    
+        SCM_BRANCH=$(cat $HG_ROOT/branch)
+    else
+        SCM_BRANCH=$(hg summary 2> /dev/null | grep branch: | awk '{print $2}')
+    fi
+
+    if [ -f $HG_ROOT/dirstate ]; then
+        # Mercurial holds various information about the working directory in .hg/dirstate file. More on http://mercurial.selenic.com/wiki/DirState
+        SCM_CHANGE=$(hexdump -n 10 -e '1/1 "%02x"' $HG_ROOT/dirstate | cut -c-12)
+    else
+        SCM_CHANGE=$(hg summary 2> /dev/null | grep parent: | awk '{print $2}')
+    fi
 }
 
 function rvm_version_prompt {
