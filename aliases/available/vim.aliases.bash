@@ -1,14 +1,17 @@
 cite 'about-alias'
 about-alias 'vim abbreviations'
 
-alias vim='gvim -b --remote-tab'
-alias v=vim
-alias vv=/usr/bin/vim
+VIM=$(command -v vim)
+GVIM=$(command -v gvim)
+MVIM=$(command -v mvim)
+
+[[ -n $VIM ]] && alias v=$VIM
 
 case $ostype in
   darwin*)
-    alias vim="mvim --remote-tab"
+    [[ -n $MVIM ]] && alias vim="mvim --remote-tab"
     ;;
   *)
+    [[ -n $GVIM ]] && alias gvim="gvim -b --remote-tab"
     ;;
 esac
