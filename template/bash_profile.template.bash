@@ -23,12 +23,8 @@ export GIT_EDITOR='/usr/bin/mate -w'
 # Set the path nginx
 export NGINX_PATH='/opt/nginx'
 
-# Set ignoring untracked files to true
-export DISABLE_UNTRACKED_FILES_DIRTY=false
-function set_disable_untracked_files() { export DISABLE_UNTRACKED_FILES_DIRTY=$@; };
-alias disable_untracked_files="export DISABLE_UNTRACKED_FILES_DIRTY=false"
-alias enable_untracked_files="export DISABLE_UNTRACKED_FILES_DIRTY=true"
-
+# Set ignoring untracked files to false
+export BASH_IT_GIT_UNTRACKED_FILES_DIRTY=true
 
 # Don't check mail when opening terminal.
 unset MAILCHECK

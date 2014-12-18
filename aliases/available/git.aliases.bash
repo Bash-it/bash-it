@@ -70,3 +70,8 @@ if [ -z "$EDITOR" ]; then
 else
     alias gd="git diff | $EDITOR"
 fi
+
+#Aliases to mark untracked files as dirty or not
+alias bash-it-untracked-files-dirty="export BASH_IT_GIT_UNTRACKED_FILES_DIRTY=true"
+alias bash-it-untracked-files-not-dirty="export BASH_IT_GIT_UNTRACKED_FILES_DIRTY=false"
+

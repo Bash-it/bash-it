@@ -79,7 +79,7 @@ function git_prompt_vars {
   SCM_GIT_BEHIND=''
   SCM_GIT_STASH=''
   SCM_GIT_ARGUMENTS='--porcelain'
-  if [ "$DISABLE_UNTRACKED_FILES_DIRTY" == true ]; then
+  if [ "$BASH_IT_GIT_UNTRACKED_FILES_DIRTY" == false ]; then
     SCM_GIT_ARGUMENTS="$SCM_GIT_ARGUMENTS -uno"
   fi
   if [[ "$(git config --get bash-it.hide-status)" != "1" ]]; then
