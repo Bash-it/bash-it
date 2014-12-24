@@ -15,14 +15,20 @@ SCM_GIT_UNTRACKED_CHAR="?:"
 SCM_GIT_UNSTAGED_CHAR="U:"
 SCM_GIT_STAGED_CHAR="S:"
 
+if [[ -z "$THEME_SCM_TAG_PREFIX" ]]; then
+    SCM_TAG_PREFIX="tag > "
+else
+    SCM_TAG_PREFIX="$THEME_SCM_TAG_PREFIX"
+fi
+
 SCM_THEME_PROMPT_CLEAN=""
 SCM_THEME_PROMPT_DIRTY=""
 
 SCM_THEME_PROMPT_COLOR=238
 SCM_THEME_PROMPT_CLEAN_COLOR=231
-SCM_THEME_PROMPT_DIRTY_COLOR=160
+SCM_THEME_PROMPT_DIRTY_COLOR=196
 SCM_THEME_PROMPT_STAGED_COLOR=220
-SCM_THEME_PROMPT_UNSTAGED_COLOR=220
+SCM_THEME_PROMPT_UNSTAGED_COLOR=166
 
 CWD_THEME_PROMPT_COLOR=240
 
@@ -48,9 +54,17 @@ function powerline_shell_prompt {
 }
 
 function powerline_virtualenv_prompt {
-    if [[ -n "$VIRTUAL_ENV" ]]; then
-        virtualenv=$(basename "$VIRTUAL_ENV")
-        VIRTUALENV_PROMPT="$(set_rgb_color - ${VIRTUALENV_THEME_PROMPT_COLOR}) ${VIRTUALENV_CHAR}$virtualenv ${normal}"
+    local environ=""
+
+    if [[ -n "$CONDA_DEFAULT_ENV" ]]; then
+        environ="conda: $CONDA_DEFAULT_ENV"
+    elif [[ -n "$VIRTUAL_ENV" ]]; then
+        environ=$(basename "$VIRTUAL_ENV")
+    fi
+
+    if [[ -n "$environ" ]]; then
+        VIRTUALENV_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${VIRTUALENV_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}$(set_rgb_color - ${VIRTUALENV_THEME_PROMPT_COLOR}) ${VIRTUALENV_CHAR}$environ ${normal}"
+        LAST_THEME_COLOR=${VIRTUALENV_THEME_PROMPT_COLOR}
     else
         VIRTUALENV_PROMPT=""
     fi
@@ -72,13 +86,17 @@ function powerline_scm_prompt {
             SCM_PROMPT="$(set_rgb_color ${SCM_THEME_PROMPT_CLEAN_COLOR} ${SCM_THEME_PROMPT_COLOR})"
         fi
         if [[ "${SCM_GIT_CHAR}" == "${SCM_CHAR}" ]]; then
-           SCM_PROMPT+=" ${SCM_CHAR}${SCM_BRANCH}${SCM_STATE} "
-           [[ -n "${SCM_GIT_AHEAD}" ]] && SCM_PROMPT+="${SCM_GIT_AHEAD} "
-           [[ -n "${SCM_GIT_BEHIND}" ]] && SCM_PROMPT+="${SCM_GIT_BEHIND} "
-           [[ -n "${SCM_GIT_STAGED}" ]] && SCM_PROMPT+="${SCM_GIT_STAGED} "
-           [[ -n "${SCM_GIT_UNSTAGED}" ]] && SCM_PROMPT+="${SCM_GIT_UNSTAGED} "
-           [[ -n "${SCM_GIT_UNTRACKED}" ]] && SCM_PROMPT+="${SCM_GIT_UNTRACKED} "
-           [[ -n "${SCM_GIT_STASH}" ]] && SCM_PROMPT+="${SCM_GIT_STASH} "
+            local tag=""
+            if [[ $SCM_IS_TAG -eq "1" ]]; then
+                tag=$SCM_TAG_PREFIX
+            fi
+            SCM_PROMPT+=" ${SCM_CHAR}${tag}${SCM_BRANCH}${SCM_STATE} "
+            [[ -n "${SCM_GIT_AHEAD}" ]] && SCM_PROMPT+="${SCM_GIT_AHEAD} "
+            [[ -n "${SCM_GIT_BEHIND}" ]] && SCM_PROMPT+="${SCM_GIT_BEHIND} "
+            [[ -n "${SCM_GIT_STAGED}" ]] && SCM_PROMPT+="${SCM_GIT_STAGED} "
+            [[ -n "${SCM_GIT_UNSTAGED}" ]] && SCM_PROMPT+="${SCM_GIT_UNSTAGED} "
+            [[ -n "${SCM_GIT_UNTRACKED}" ]] && SCM_PROMPT+="${SCM_GIT_UNTRACKED} "
+            [[ -n "${SCM_GIT_STASH}" ]] && SCM_PROMPT+="${SCM_GIT_STASH} "
         fi
         SCM_PROMPT="${SCM_PROMPT}${normal}"
     else
