@@ -13,6 +13,10 @@ SCM_NONE_CHAR=""
 SCM_GIT_CHAR=" "
 SCM_GIT_BEHIND_CHAR="↓"
 SCM_GIT_AHEAD_CHAR="↑"
+SCM_GIT_UNTRACKED_CHAR="?:"
+SCM_GIT_UNSTAGED_CHAR="U:"
+SCM_GIT_STAGED_CHAR="S:"
+
 if [[ -z "$THEME_SCM_TAG_PREFIX" ]]; then
     SCM_TAG_PREFIX="tag > "
 else
@@ -21,11 +25,12 @@ fi
 
 SCM_THEME_PROMPT_CLEAN=""
 SCM_THEME_PROMPT_DIRTY=""
+
 SCM_THEME_PROMPT_COLOR=238
 SCM_THEME_PROMPT_CLEAN_COLOR=231
 SCM_THEME_PROMPT_DIRTY_COLOR=196
 SCM_THEME_PROMPT_STAGED_COLOR=220
-SCM_THEME_PROMPT_UNTRACKED_COLOR=033
+SCM_THEME_PROMPT_UNSTAGED_COLOR=166
 
 CWD_THEME_PROMPT_COLOR=240
 
@@ -71,17 +76,13 @@ function powerline_virtualenv_prompt {
 
 function powerline_scm_prompt {
     scm_prompt_vars
-    local git_status_output
-    git_status_output=$(git status 2> /dev/null )
 
     if [[ "${SCM_NONE_CHAR}" != "${SCM_CHAR}" ]]; then
         if [[ "${SCM_DIRTY}" -eq 1 ]]; then
-            if [ -n "$(echo $git_status_output | grep 'Changes not staged')" ]; then
-                SCM_PROMPT="$(set_rgb_color ${SCM_THEME_PROMPT_DIRTY_COLOR} ${SCM_THEME_PROMPT_COLOR})"
-            elif [ -n "$(echo $git_status_output | grep 'Changes to be committed')" ]; then
+            if [[ -n "${SCM_GIT_STAGED}" ]]; then
                 SCM_PROMPT="$(set_rgb_color ${SCM_THEME_PROMPT_STAGED_COLOR} ${SCM_THEME_PROMPT_COLOR})"
-            elif [ -n "$(echo $git_status_output | grep 'Untracked files')" ]; then
-                SCM_PROMPT="$(set_rgb_color ${SCM_THEME_PROMPT_UNTRACKED_COLOR} ${SCM_THEME_PROMPT_COLOR})"
+            elif [[ -n "${SCM_GIT_UNSTAGED}" ]]; then
+                SCM_PROMPT="$(set_rgb_color ${SCM_THEME_PROMPT_UNSTAGED_COLOR} ${SCM_THEME_PROMPT_COLOR})"
             else
                 SCM_PROMPT="$(set_rgb_color ${SCM_THEME_PROMPT_DIRTY_COLOR} ${SCM_THEME_PROMPT_COLOR})"
             fi
@@ -93,9 +94,15 @@ function powerline_scm_prompt {
             if [[ $SCM_IS_TAG -eq "1" ]]; then
                 tag=$SCM_TAG_PREFIX
             fi
-            SCM_PROMPT+=" ${SCM_CHAR}${tag}${SCM_BRANCH}${SCM_STATE}${SCM_GIT_BEHIND}${SCM_GIT_AHEAD}${SCM_GIT_STASH}"
+            SCM_PROMPT+=" ${SCM_CHAR}${tag}${SCM_BRANCH}${SCM_STATE} "
+            [[ -n "${SCM_GIT_AHEAD}" ]] && SCM_PROMPT+="${SCM_GIT_AHEAD} "
+            [[ -n "${SCM_GIT_BEHIND}" ]] && SCM_PROMPT+="${SCM_GIT_BEHIND} "
+            [[ -n "${SCM_GIT_STAGED}" ]] && SCM_PROMPT+="${SCM_GIT_STAGED} "
+            [[ -n "${SCM_GIT_UNSTAGED}" ]] && SCM_PROMPT+="${SCM_GIT_UNSTAGED} "
+            [[ -n "${SCM_GIT_UNTRACKED}" ]] && SCM_PROMPT+="${SCM_GIT_UNTRACKED} "
+            [[ -n "${SCM_GIT_STASH}" ]] && SCM_PROMPT+="${SCM_GIT_STASH} "
         fi
-        SCM_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${SCM_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}${SCM_PROMPT} ${normal}"
+        SCM_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${SCM_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}${SCM_PROMPT}${normal}"
         LAST_THEME_COLOR=${SCM_THEME_PROMPT_COLOR}
     else
         SCM_PROMPT=""
