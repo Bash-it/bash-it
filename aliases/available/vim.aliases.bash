@@ -7,7 +7,7 @@ MVIM=$(command -v mvim)
 
 [[ -n $VIM ]] && alias v=$VIM
 
-case $ostype in
+case $OSTYPE in
   darwin*)
     [[ -n $MVIM ]] && alias mvim="mvim --remote-tab"
     ;;
