@@ -34,7 +34,6 @@ RBFU_THEME_PROMPT_PREFIX=' |'
 RBFU_THEME_PROMPT_SUFFIX='|'
 
 function scm {
-
   if [[ "$SCM_CHECK" = false ]]; then SCM=$SCM_NONE
   elif [[ -f .git/HEAD ]]; then SCM=$SCM_GIT
   elif which git &> /dev/null && [[ -n "$(git symbolic-ref HEAD 2> /dev/null)" ]]; then SCM=$SCM_GIT
@@ -100,26 +99,35 @@ function git_prompt_vars {
     SCM_DIRTY=0
     SCM_STATE=${GIT_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
   fi
-  SCM_PREFIX=${GIT_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
-  SCM_SUFFIX=${GIT_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
 
-  local ref=$(git symbolic-ref -q HEAD 2> /dev/null)
-  if [[ -n "$ref" ]]; then
-    SCM_BRANCH=${ref#refs/heads/}
-    SCM_IS_BRANCH=1
-    SCM_IS_TAG=0
-  else
-    SCM_BRANCH=$(git describe --tags --exact-match 2> /dev/null)
-    SCM_IS_TAG=1
-    SCM_IS_BRANCH=0
-  fi
-  SCM_CHANGE=$(git rev-parse HEAD 2>/dev/null)
   local ahead_re='.+ahead ([0-9]+).+'
   local behind_re='.+behind ([0-9]+).+'
   [[ "${status}" =~ ${ahead_re} ]] && SCM_GIT_AHEAD="${SCM_GIT_AHEAD_CHAR}${BASH_REMATCH[1]}"
   [[ "${status}" =~ ${behind_re} ]] && SCM_GIT_BEHIND="${SCM_GIT_BEHIND_CHAR}${BASH_REMATCH[1]}"
   local stash_count="$(git stash list 2> /dev/null | wc -l | tr -d ' ')"
   [[ "${stash_count}" -gt 0 ]] && SCM_GIT_STASH="{${stash_count}}"
+
+  SCM_REF_TYPE=""
+  local ref=$(git symbolic-ref -q HEAD 2> /dev/null)
+  if [[ -n "$ref" ]]; then
+    SCM_BRANCH=${ref#refs/heads/}
+    SCM_REF_TYPE=branch
+  else
+    local commit_re='.+-g([a-zA-Z0-9]+)$'
+    ref=$(git describe --tags --all 2> /dev/null)
+    if [[ "$ref" =~ ${commit_re} ]]; then
+      SCM_BRANCH=${BASH_REMATCH[1]}
+      SCM_REF_TYPE=commit
+      SCM_IS_COMMIT=1
+    else
+      SCM_BRANCH=${ref}
+      SCM_REF_TYPE=tag
+    fi
+  fi
+
+  SCM_PREFIX=${GIT_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
+  SCM_SUFFIX=${GIT_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
+  SCM_CHANGE=$(git rev-parse HEAD 2>/dev/null)
 }
 
 function svn_prompt_vars {
