@@ -8,10 +8,20 @@ SCM_THEME_PROMPT_DIRTY=' ✗'
 SCM_THEME_PROMPT_CLEAN=' ✓'
 SCM_THEME_PROMPT_PREFIX=' |'
 SCM_THEME_PROMPT_SUFFIX='|'
+SCM_THEME_BRANCH_PREFIX=''
+SCM_THEME_TAG_PREFIX='tag:'
+SCM_THEME_COMMIT_PREFIX='commit:'
+SCM_THEME_REMOTE_PREFIX=''
+
+SCM_GIT_SHOW_DETAILS=${SCM_GIT_SHOW_DETAILS:=false}
 
 SCM_GIT='git'
 SCM_GIT_CHAR='±'
-SCM_GIT_SHOW_DETAILS=${SCM_GIT_SHOW_DETAILS:=true}
+SCM_GIT_AHEAD_CHAR="↑"
+SCM_GIT_BEHIND_CHAR="↓"
+SCM_GIT_UNTRACKED_CHAR="?:"
+SCM_GIT_UNSTAGED_CHAR="U:"
+SCM_GIT_STAGED_CHAR="S:"
 
 SCM_HG='hg'
 SCM_HG_CHAR='☿'
@@ -75,59 +85,52 @@ function scm_prompt_info {
 }
 
 function git_prompt_vars {
-  SCM_GIT_AHEAD=''
-  SCM_GIT_BEHIND=''
-  SCM_GIT_STASH=''
-  SCM_GIT_UNTRACKED=''
-  SCM_GIT_UNSTAGED=''
-  SCM_GIT_STAGED=''
+  local details=''
+  SCM_STATE=${GIT_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
   if [[ "$(git config --get bash-it.hide-status)" != "1" ]]; then
     local status="$(git status -b --porcelain 2> /dev/null || git status --porcelain 2> /dev/null)"
     if [[ -n "${status}" ]] && [[ "${status}" != "\n" ]] && [[ -n "$(grep -v ^# <<< "${status}")" ]]; then
+      SCM_DIRTY=1
       if [[ "${SCM_GIT_SHOW_DETAILS}" = "true" ]]; then
         local untracked_count="$(egrep -c '^\?\? .+' <<< "${status}")"
         local unstaged_count="$(egrep -c '^.[^ ?#] .+' <<< "${status}")"
         local staged_count="$(egrep -c '^[^ ?#]. .+' <<< "${status}")"
-        [[ "${untracked_count}" -gt 0 ]] && SCM_GIT_UNTRACKED="${SCM_GIT_UNTRACKED_CHAR}${untracked_count}"
-        [[ "${unstaged_count}" -gt 0 ]] && SCM_GIT_UNSTAGED="${SCM_GIT_UNSTAGED_CHAR}${unstaged_count}"
-        [[ "${staged_count}" -gt 0 ]] && SCM_GIT_STAGED="${SCM_GIT_STAGED_CHAR}${staged_count}"
+        [[ "${staged_count}" -gt 0 ]] && details+=" ${SCM_GIT_STAGED_CHAR}${staged_count}" && SCM_DIRTY=3
+        [[ "${unstaged_count}" -gt 0 ]] && details+=" ${SCM_GIT_UNSTAGED_CHAR}${unstaged_count}" && SCM_DIRTY=2
+        [[ "${untracked_count}" -gt 0 ]] && details+=" ${SCM_GIT_UNTRACKED_CHAR}${untracked_count}" && SCM_DIRTY=1
       fi
-      SCM_DIRTY=1
       SCM_STATE=${GIT_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
-    else
-      SCM_DIRTY=0
-      SCM_STATE=${GIT_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
     fi
+  fi
+
+  local ref=$(git symbolic-ref -q HEAD 2> /dev/null)
+  if [[ -n "$ref" ]]; then
+    SCM_BRANCH=${SCM_THEME_BRANCH_PREFIX}${ref#refs/heads/}
   else
-    SCM_DIRTY=0
-    SCM_STATE=${GIT_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
+    ref=$(git describe --tags --exact-match 2> /dev/null)
+    if [[ -n "$ref" ]]; then
+      SCM_BRANCH=${SCM_THEME_TAG_PREFIX}${ref}
+    else
+      local commit_re='(^remotes/)?(.+-g[a-zA-Z0-9]+)$'
+      local remote_re='^remotes/(.+)$'
+      ref=$(git describe --tags --all --always 2> /dev/null)
+      if [[ "$ref" =~ ${commit_re} ]]; then
+        SCM_BRANCH=${SCM_THEME_COMMIT_PREFIX}${BASH_REMATCH[2]}
+      elif [[ "$ref" =~ ${remote_re} ]]; then
+        SCM_BRANCH=${SCM_THEME_REMOTE_PREFIX}${BASH_REMATCH[1]}
+      fi
+    fi
   fi
 
   local ahead_re='.+ahead ([0-9]+).+'
   local behind_re='.+behind ([0-9]+).+'
-  [[ "${status}" =~ ${ahead_re} ]] && SCM_GIT_AHEAD="${SCM_GIT_AHEAD_CHAR}${BASH_REMATCH[1]}"
-  [[ "${status}" =~ ${behind_re} ]] && SCM_GIT_BEHIND="${SCM_GIT_BEHIND_CHAR}${BASH_REMATCH[1]}"
+  [[ "${status}" =~ ${ahead_re} ]] && SCM_BRANCH+=" ${SCM_GIT_AHEAD_CHAR}${BASH_REMATCH[1]}"
+  [[ "${status}" =~ ${behind_re} ]] && SCM_BRANCH+=" ${SCM_GIT_BEHIND_CHAR}${BASH_REMATCH[1]}"
 
   local stash_count="$(git stash list 2> /dev/null | wc -l | tr -d ' ')"
-  [[ "${stash_count}" -gt 0 ]] && SCM_GIT_STASH="{${stash_count}}"
+  [[ "${stash_count}" -gt 0 ]] && SCM_BRANCH+=" {${stash_count}}"
 
-  SCM_REF_TYPE=""
-  local ref=$(git symbolic-ref -q HEAD 2> /dev/null)
-  if [[ -n "$ref" ]]; then
-    SCM_BRANCH=${ref#refs/heads/}
-    SCM_REF_TYPE=branch
-  else
-    local commit_re='.+-g([a-zA-Z0-9]+)$'
-    ref=$(git describe --tags --all 2> /dev/null)
-    if [[ "$ref" =~ ${commit_re} ]]; then
-      SCM_BRANCH=${BASH_REMATCH[1]}
-      SCM_REF_TYPE=commit
-      SCM_IS_COMMIT=1
-    else
-      SCM_BRANCH=${ref}
-      SCM_REF_TYPE=tag
-    fi
-  fi
+  SCM_BRANCH+=${details}
 
   SCM_PREFIX=${GIT_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
   SCM_SUFFIX=${GIT_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
@@ -137,10 +140,10 @@ function git_prompt_vars {
 function svn_prompt_vars {
   if [[ -n $(svn status 2> /dev/null) ]]; then
     SCM_DIRTY=1
-      SCM_STATE=${SVN_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
+    SCM_STATE=${SVN_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
   else
     SCM_DIRTY=0
-      SCM_STATE=${SVN_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
+    SCM_STATE=${SVN_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
   fi
   SCM_PREFIX=${SVN_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
   SCM_SUFFIX=${SVN_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
