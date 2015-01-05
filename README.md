@@ -66,6 +66,19 @@ Set `SCM_CHECK` to 'true' (the default value) to **turn on** version control che
 **NOTE:**
 It is possible for themes to ignore the `SCM_CHECK` flag and query specific version control information directly. For example, themes that use functions like `git_prompt_vars` skip the `SCM_CHECK` flag to retrieve and display git prompt information. If you turned version control checking off and you still see version control information  within your prompt, then functions like `git_prompt_vars` are most likely the reason why. 
 
+### Git repository info in the prompt
+Bash it can show some information about Git repositories in the shell prompt: the current branch, tag or commit you are at, how many commits the local branch is ahead or behind from the remote branch, and if you have changes stashed.
+
+Additionally, you can view the status of your working copy and get the count of staged, unstaged and untracked files. This feature is controlled through the flag `SCM_GIT_SHOW_DETAILS` as follows:
+
+Set `SCM_GIT_SHOW_DETAILS` to 'true' to **show** the working copy details in your prompt:
+
+* `export SCM_GIT_SHOW_DETAILS=true`
+
+Set `SCM_GIT_SHOW_DETAILS` to 'false' (the default value) to **don't show** it:
+
+* `export SCM_GIT_SHOW_DETAILS=false`
+
 ## Help out
 
 I think everyone has their own custom scripts accumulated over time.  And so, following in the footsteps of oh-my-zsh, bash it is a framework for easily customizing your bash shell. Everyone's got a custom toolbox, so let's start making them even better, **as a community!**
