@@ -44,6 +44,8 @@ There are a few bash it themes.  If you've created your own custom prompts, I'd 
 
 You can see the theme screenshots  [here](https://github.com/revans/bash-it/wiki/Themes)
 
+Alternatively, you can preview the themes in your own shell using `BASH_PREVIEW=true reload`
+
 ## Misc
 
 ### Bash Profile Aliases
