@@ -71,11 +71,11 @@ Bash it can show some information about Git repositories in the shell prompt: th
 
 Additionally, you can view the status of your working copy and get the count of staged, unstaged and untracked files. This feature is controlled through the flag `SCM_GIT_SHOW_DETAILS` as follows:
 
-Set `SCM_GIT_SHOW_DETAILS` to 'true' to **show** the working copy details in your prompt:
+Set `SCM_GIT_SHOW_DETAILS` to 'true' (the default value) to **show** the working copy details in your prompt:
 
 * `export SCM_GIT_SHOW_DETAILS=true`
 
-Set `SCM_GIT_SHOW_DETAILS` to 'false' (the default value) to **don't show** it:
+Set `SCM_GIT_SHOW_DETAILS` to 'false' to **don't show** it:
 
 * `export SCM_GIT_SHOW_DETAILS=false`
 
