@@ -1,0 +1,32 @@
+# This file is opened with you type 'edit' without argument
+#   $  edit
+
+# Simply edit this file and put you have bookmarks to the files you edit most
+#
+# You don't need anymore to go to the same directory and open the same files again and again
+# How to open the file is then trivial 
+# - With vim, see :help gf
+# - With xxx, do yyyy
+# - If your text editor doesn't have that feature, simply copy and paste
+
+# When you call edit with arguments, edit is simply a shortcut to EDITOR
+#   $ edit /etc/fstab
+
+# edit those files as root
+/etc/apt/sources.list
+/etc/fstab
+/etc/hosts
+/etc/hosts
+/etc/nginx/conf.d/nginx.conf
+/etc/profile
+
+# edit those files as a user
+$BASH_IT/aliases/custom.aliases.bash
+$BASH_IT/lib/custom.bash
+$BASH_IT/plugins/custom.plugins.bash
+$HOME/.bash_profile
+$HOME/.vimrc
+$HOME/.emacs
+
+# See here for inspiration of what you can put here
+http://en.wikibooks.org/wiki/Guide_to_Unix/Files

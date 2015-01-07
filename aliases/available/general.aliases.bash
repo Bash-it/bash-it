@@ -25,7 +25,6 @@ alias c='clear'
 alias k='clear'
 alias cls='clear'
 
-alias edit="$EDITOR"
 alias pager="$PAGER"
 
 alias q='exit'
