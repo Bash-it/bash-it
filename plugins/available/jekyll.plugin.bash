@@ -67,12 +67,6 @@ newpost() {
     return 1
   fi
 
-  if [ -z "$SITE" ]
-  then
-    echo "No such site."
-    return 1
-  fi
-
   loc=0
 
   for site in ${SITES[@]}
@@ -85,6 +79,12 @@ newpost() {
     fi
     loc=$(($loc+1))
   done
+
+  if [ -z "$SITE" ]
+  then
+    echo "No such site."
+    return 1
+  fi
 
   # 'builtin cd' into the local jekyll root
 
@@ -294,7 +294,7 @@ function testsite() {
   fi
 
   builtin cd $SITE
-  jekyll --server --auto
+  jekyll serve
 }
 
 function buildsite() {
@@ -327,7 +327,7 @@ function buildsite() {
 
   builtin cd $SITE
   rm -rf _site
-  jekyll --no-server
+  jekyll build
 }
 
 function deploysite() {
