@@ -9,8 +9,8 @@ Includes autocompletion, themes, aliases, custom functions, a few stolen pieces 
 ## Install
 
 1. Check a clone of this repo: `git clone https://github.com/revans/bash-it.git ~/.bash_it`
-2. Run `~/.bash_it/install.sh` (it automatically backs up your `~/.bash_profile`)
-3. Edit your `~/.bash_profile` file in order to customize bash-it.
+2. Run `~/.bash_it/install.sh` (it automatically backs up your `~/.bash_profile` or ~/.bashrc, depends on your OS)
+3. Edit your modified config (`~/.bash_profile` or `~/.bashrc`) file in order to customize bash-it.
 
 **NOTE:**
 The install script will also prompt you asking if you use [Jekyll](https://github.com/mojombo/jekyll).
