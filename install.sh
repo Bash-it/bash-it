@@ -1,13 +1,22 @@
 #!/usr/bin/env bash
 BASH_IT="$HOME/.bash_it"
 
-test -w $HOME/.bash_profile &&
-  cp $HOME/.bash_profile $HOME/.bash_profile.bak &&
-  echo "Your original .bash_profile has been backed up to .bash_profile.bak"
+case $OSTYPE in
+  darwin*)
+    CONFIG_FILE=.bash_profile
+    ;;
+  *)
+    CONFIG_FILE=.bashrc
+    ;;
+esac
 
-cp $HOME/.bash_it/template/bash_profile.template.bash $HOME/.bash_profile
+test -w $HOME/$CONFIG_FILE &&
+  cp $HOME/$CONFIG_FILE $HOME/$CONFIG_FILE.bak &&
+  echo "Your original $CONFIG_FILE has been backed up to $CONFIG_FILE.bak"
 
-echo "Copied the template .bash_profile into ~/.bash_profile, edit this file to customize bash-it"
+cp $HOME/.bash_it/template/bash_profile.template.bash $HOME/$CONFIG_FILE
+
+echo "Copied the template $CONFIG_FILE into ~/$CONFIG_FILE, edit this file to customize bash-it"
 
 while true
 do
