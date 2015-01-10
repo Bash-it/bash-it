@@ -15,17 +15,19 @@ SCM_GIT_CHAR=" "
 SCM_THEME_PROMPT_CLEAN=""
 SCM_THEME_PROMPT_DIRTY=""
 
-SCM_THEME_PROMPT_COLOR=240
+SCM_THEME_PROMPT_COLOR=238
 SCM_THEME_PROMPT_CLEAN_COLOR=231
 SCM_THEME_PROMPT_DIRTY_COLOR=196
 SCM_THEME_PROMPT_STAGED_COLOR=220
 SCM_THEME_PROMPT_UNSTAGED_COLOR=166
 
-CWD_THEME_PROMPT_COLOR=238
+CWD_THEME_PROMPT_COLOR=240
 
 LAST_STATUS_THEME_PROMPT_COLOR=52
 
 PROMPT_LENGTH=0
+
+THEME_PROMPT_CLOCK_FORMAT=${THEME_PROMPT_CLOCK_FORMAT:=" %a %H:%M:%S "}
 
 function set_rgb_color {
     if [[ "${1}" != "-" ]]; then
@@ -86,6 +88,7 @@ function powerline_scm_prompt {
         fi
         SCM_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${SCM_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}${SCM_PROMPT} ${normal}"
         LAST_THEME_COLOR=${SCM_THEME_PROMPT_COLOR}
+        PROMPT_LENGTH=$(($PROMPT_LENGTH + 5 + ${#SCM_BRANCH} + ${#SCM_STATE}))
     else
         SCM_PROMPT=""
     fi
@@ -112,16 +115,18 @@ function powerline_prompt_command() {
 
     powerline_shell_prompt
     powerline_virtualenv_prompt
-    powerline_cwd_prompt
     powerline_scm_prompt
+    powerline_cwd_prompt
     powerline_last_status_prompt LAST_STATUS
 
-    PADDING=$(($(tput cols) - $PROMPT_LENGTH))
+    CLOCK=$(date "+$THEME_PROMPT_CLOCK_FORMAT")
+    PADDING=$(($COLUMNS - ${#CLOCK} - $PROMPT_LENGTH - 1))
 
-    FIRST_LINE="${SHELL_PROMPT}${VIRTUALENV_PROMPT}${CWD_PROMPT}"
-    for i in $(seq 1 $PADDING); do FIRST_LINE="${FIRST_LINE}$(set_rgb_color - ${CWD_THEME_PROMPT_COLOR}) "; done
-
-    PS1="${FIRST_LINE}${normal}\n${SCM_PROMPT}${LAST_STATUS_PROMPT} "
+    FIRST_LINE="${SHELL_PROMPT}${VIRTUALENV_PROMPT}${SCM_PROMPT}${CWD_PROMPT}${LAST_STATUS_PROMPT}"
+    for i in $(seq 1 $PADDING); do
+      FIRST_LINE="${FIRST_LINE} ";
+    done
+    PS1="${FIRST_LINE}${CLOCK}\n> "
 }
 
 PROMPT_COMMAND=powerline_prompt_command
