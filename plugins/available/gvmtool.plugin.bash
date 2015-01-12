@@ -1,5 +1,5 @@
 cite about-plugin
-about-plugin 'load gvm environment'
+about-plugin 'load groovy environment manager'
 
 GVM_DIR="$HOME/.gvm"
 
