@@ -11,6 +11,7 @@ VIRTUALENV_THEME_PROMPT_COLOR=35
 
 SCM_NONE_CHAR=""
 SCM_GIT_CHAR=" "
+PROMPT_CHAR="❯"
 
 SCM_THEME_PROMPT_CLEAN=""
 SCM_THEME_PROMPT_DIRTY=""
@@ -119,15 +120,8 @@ function powerline_prompt_command() {
     powerline_cwd_prompt
     powerline_last_status_prompt LAST_STATUS
 
-    CLOCK=$(date "+$THEME_PROMPT_CLOCK_FORMAT")
-    PADDING=$(($COLUMNS - ${#CLOCK} - $PROMPT_LENGTH - 1))
-
     FIRST_LINE="${SHELL_PROMPT}${VIRTUALENV_PROMPT}${SCM_PROMPT}${CWD_PROMPT}${LAST_STATUS_PROMPT}"
-    for i in $(seq 1 $PADDING); do
-      FIRST_LINE="${FIRST_LINE} ";
-    done
-    PS1="${FIRST_LINE}${CLOCK}\n> "
+    PS1="${FIRST_LINE}\n${PROMPT_CHAR} "
 }
 
 PROMPT_COMMAND=powerline_prompt_command
-
