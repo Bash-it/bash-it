@@ -41,12 +41,21 @@ _gvm_complete()
 
 _gvm_candidate_versions(){
 
+  
+  CANDIDATE_LOCAL_VERSIONS=$(__gvm_cleanup_local_versions $1)
   if _gvm_offline; then
-    __gvmtool_build_version_csv $1
-    CANDIDATE_VERSIONS="$(echo $CSV | tr ',' ' ')"
+    CANDIDATE_VERSIONS=$CANDIDATE_LOCAL_VERSIONS
   else
-    CANDIDATE_VERSIONS="$(curl -s "${GVM_SERVICE}/candidates/$1" | tr ',' ' ')"
+    CANDIDATE_ONLINE_VERSIONS="$(curl -s "${GVM_SERVICE}/candidates/$1" | tr ',' ' ')"
+    CANDIDATE_VERSIONS="$(echo $CANDIDATE_ONLINE_VERSIONS $CANDIDATE_LOCAL_VERSIONS |sort | uniq ) "
   fi
+
+}
+
+__gvm_cleanup_local_versions(){
+  
+  __gvmtool_build_version_csv $1
+  echo $CSV | tr ',' ' '
 
 }
 
