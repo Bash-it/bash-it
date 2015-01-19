@@ -55,7 +55,7 @@ function passgen ()
 
 # Create alias pass to passgen when pass isn't installed or
 # BASH_IT_LEGACY_PASS is true.
-if ! command -v pass &>/dev/null || [ "$BASH_IT_LEGACY_PASS" == 1 ]
+if ! command -v pass &>/dev/null || [ "$BASH_IT_LEGACY_PASS" = true ]
 then
   alias pass=passgen
 fi
