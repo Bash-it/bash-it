@@ -39,7 +39,7 @@ function pickfrom ()
     head -n $n $file | tail -1
 }
 
-function pass ()
+function passgen ()
 {
     about 'generates random password from dictionary words'
     param 'optional integer length'
@@ -52,6 +52,13 @@ function pass ()
     echo "With spaces (easier to memorize): $pass"
     echo "Without (use this as the pass): $(echo $pass | tr -d ' ')"
 }
+
+# Create alias pass to passgen when pass isn't installed or
+# BASH_IT_LEGACY_PASS is true.
+if ! command -v pass &>/dev/null || [ "$BASH_IT_LEGACY_PASS" == 1 ]
+then
+  alias pass=passgen
+fi
 
 function pmdown ()
 {
