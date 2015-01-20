@@ -47,7 +47,7 @@ function passgen ()
     example '$ passgen'
     example '$ passgen 6'
     group 'base'
-    local i passgen length=${1:-4}
+    local i pass length=${1:-4}
     pass=$(echo $(for i in $(eval echo "{1..$length}"); do pickfrom /usr/share/dict/words; done))
     echo "With spaces (easier to memorize): $pass"
     echo "Without (use this as the password): $(echo $pass | tr -d ' ')"
