@@ -35,7 +35,7 @@ _collapsed_wd() {
       binmode STDIN,  ':encoding(UTF-8)';
       binmode STDOUT, ':encoding(UTF-8)';
    }; s|^$HOME|<HOME>|g; s|/([^/])[^/]*(?=/)|/\$1|g") | \
-    sed -re "s/\//  /g" 
+    sed -re "s/\//  /g"
 }
 
 _swd(){
@@ -70,7 +70,7 @@ _swd(){
 
         for ((i=${#current}-2; i>=0; i--)); do
             subcurrent="${current:0:i}"
-            matching=("$begin/$subcurrent"*) # Array of all files that start with $subcurrent. 
+            matching=("$begin/$subcurrent"*) # Array of all files that start with $subcurrent.
             (( ${#matching[*]} != 1 )) && break # Stop shortening if more than one file matches.
             shortcur="$subcurrent"
             shortcurstar="$subcurrent*"
@@ -157,7 +157,7 @@ function powerline_scm_prompt {
 }
 
 function powerline_cwd_prompt {
-CWD_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${CWD_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}$(set_rgb_color - ${CWD_THEME_PROMPT_COLOR}) $(_swd)${normal}$(set_rgb_color ${CWD_THEME_PROMPT_COLOR} -)${normal}"
+CWD_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${CWD_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}$(set_rgb_color 0 ${CWD_THEME_PROMPT_COLOR}) $(_swd)${normal}$(set_rgb_color ${CWD_THEME_PROMPT_COLOR} -)${normal}"
     LAST_THEME_COLOR=${CWD_THEME_PROMPT_COLOR}
 }
 
