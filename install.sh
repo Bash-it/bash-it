@@ -22,8 +22,7 @@ while true
 do
   read -p "Do you use Jekyll? (If you don't know what Jekyll is, answer 'n') [Y/N] " RESP
 
-  case $RESP
-    in
+  case $RESP in
     [yY])
       cp $HOME/.bash_it/template/jekyllconfig.template.bash $HOME/.jekyllconfig
       echo "Copied the template .jekyllconfig into your home directory. Edit this file to customize bash-it for using the Jekyll plugins"
@@ -53,31 +52,29 @@ function load_all() {
 }
 
 function load_some() {
-    file_type=$1
-    for path in `ls $BASH_IT/${file_type}/available/[^_]*`
-    do
-      if [ ! -d "$BASH_IT/$file_type/enabled" ]
-      then
-        mkdir "$BASH_IT/$file_type/enabled"
-      fi
-      file_name=$(basename "$path")
-      while true
-      do
-        read -p "Would you like to enable the ${file_name%%.*} $file_type? [Y/N] " RESP
-        case $RESP in
-        [yY])
-          ln -s "../available/${file_name}" "$BASH_IT/$file_type/enabled"
-          break
-          ;;
-        [nN])
-          break
-          ;;
-        *)
-          echo "Please choose y or n."
-          ;;
-        esac
-      done
+  file_type=$1
+  [ -d "$BASH_IT/$file_type/enabled" ] || mkdir "$BASH_IT/$file_type/enabled"
+  for path in `ls $BASH_IT/${file_type}/available/[^_]*`
+  do
+    file_name=$(basename "$path")
+    while true; do
+      read -s -n 1 -p "Would you like to enable the ${file_name%%.*} $file_type? [y/N] " RESP
+      case $RESP in
+      [yY])
+        echo "Y"
+        ln -s "../available/${file_name}" "$BASH_IT/$file_type/enabled"
+        break
+        ;;
+      [nN]|"")
+        echo "N"
+        break
+        ;;
+      *)
+        echo -e "\033[91mPlease choose y or n.\033[m"
+        ;;
+      esac
     done
+  done
 }
 
 for type in "aliases" "plugins" "completion"
