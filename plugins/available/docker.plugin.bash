@@ -24,7 +24,7 @@ function docker-remove-most-recent-image() {
   docker images | head -2 | tail -1 | awk '{print $3}' | xargs docker rmi
 }
 
-function docker_remove_images() {
+function docker-remove-images() {
   about 'attempt to remove images with supplied tags or all if no tags are supplied'
   group 'docker'
   if [ -z "$1" ]; then
@@ -39,7 +39,7 @@ function docker_remove_images() {
  fi
 }
 
-function docker_image_dependencies() {
+function docker-image-dependencies() {
   about 'attempt to create a Graphiz image of the supplied image ID dependencies'
   group 'docker'
   if hash dot 2>/dev/null; then
@@ -58,7 +58,7 @@ function docker_image_dependencies() {
   fi
 }
 
-function docker_runtime_environment() {
+function docker-runtime-environment() {
   about 'attempt to list the environmental variables of the supplied image ID'
   group 'docker'
   docker run "$@" env
