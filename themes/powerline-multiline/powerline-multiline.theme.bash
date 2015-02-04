@@ -17,25 +17,24 @@ PROMPT_CHAR="❯"
 SCM_THEME_PROMPT_CLEAN=""
 SCM_THEME_PROMPT_DIRTY=""
 
-SCM_THEME_PROMPT_CLEAN_COLOR=4
+SCM_THEME_PROMPT_CLEAN_COLOR=25
 SCM_THEME_PROMPT_DIRTY_COLOR=88
-SCM_THEME_PROMPT_STAGED_COLOR=6
+SCM_THEME_PROMPT_STAGED_COLOR=30
 SCM_THEME_PROMPT_UNSTAGED_COLOR=92
 SCM_THEME_PROMPT_COLOR=${SCM_THEME_PROMPT_CLEAN_COLOR}
 
 CWD_THEME_PROMPT_COLOR=240
-SEGMENT_AT_LEFT=0
 
 LAST_STATUS_THEME_PROMPT_COLOR=196
 
 CLOCK_THEME_PROMPT_COLOR=240
 
-BATTERY_STATUS_THEME_PROMPT_GOOD_COLOR=76
+BATTERY_AC_CHAR="⚡"
+BATTERY_STATUS_THEME_PROMPT_GOOD_COLOR=70
 BATTERY_STATUS_THEME_PROMPT_LOW_COLOR=208
-BATTERY_STATUS_THEME_PROMPT_CRITICAL_COLOR=196
-BATTERY_STATUS_THEME_PROMPT_COLOR=${BATTERY_STATUS_THEME_PROMPT_GOOD_COLOR}
+BATTERY_STATUS_THEME_PROMPT_CRITICAL_COLOR=160
 
-THEME_PROMPT_CLOCK_FORMAT=${THEME_PROMPT_CLOCK_FORMAT:=" %a %H:%M:%S "}
+THEME_PROMPT_CLOCK_FORMAT=${THEME_PROMPT_CLOCK_FORMAT:="%H:%M:%S"}
 
 function set_rgb_color {
     if [[ "${1}" != "-" ]]; then
@@ -49,15 +48,17 @@ function set_rgb_color {
 }
 
 function powerline_shell_prompt {
+    SEGMENT_AT_RIGHT=0
     if [[ -n "${SSH_CLIENT}" ]]; then
         SHELL_PROMPT="${USER}@${HOSTNAME}"
         SHELL_THEME_PROMPT_COLOR="${SHELL_SSH_THEME_PROMPT_COLOR}"
     else
         SHELL_PROMPT="${USER}"
     fi
-    RIGHT_PROMPT_LENGTH=$(( ${RIGHT_PROMPT_LENGTH} + ${#SHELL_PROMPT} + 3 ))
-    SHELL_PROMPT=$(set_rgb_color ${SHELL_THEME_PROMPT_COLOR} -)${THEME_PROMPT_LEFT_SEPARATOR}${normal}"${bold_white}$(set_rgb_color - ${SHELL_THEME_PROMPT_COLOR}) ${SHELL_PROMPT} ${normal}"
+    RIGHT_PROMPT_LENGTH=$(( ${RIGHT_PROMPT_LENGTH} + ${#SHELL_PROMPT} + 2 ))
+    SHELL_PROMPT="$(set_rgb_color - ${SHELL_THEME_PROMPT_COLOR}) ${SHELL_PROMPT} ${normal}"
     LAST_THEME_COLOR=${SHELL_THEME_PROMPT_COLOR}
+    (( SEGMENT_AT_RIGHT += 1 ))
 }
 
 function powerline_virtualenv_prompt {
@@ -123,42 +124,71 @@ function powerline_last_status_prompt {
 }
 
 function powerline_clock_prompt {
-    local CLOCK="$(date +"${THEME_PROMPT_CLOCK_FORMAT}")"
+    if [[ -z "${THEME_PROMPT_CLOCK_FORMAT}" ]]; then
+        CLOCK_PROMPT=""
+    else
+        local CLOCK=" $(date +"${THEME_PROMPT_CLOCK_FORMAT}") "
 
-    CLOCK_PROMPT=$(set_rgb_color ${CLOCK_THEME_PROMPT_COLOR} -)${THEME_PROMPT_LEFT_SEPARATOR}${normal}$(set_rgb_color - ${CLOCK_THEME_PROMPT_COLOR})${CLOCK}${normal}
-    RIGHT_PROMPT_LENGTH=$(( ${RIGHT_PROMPT_LENGTH} + ${#CLOCK} + 2 ))
-    LAST_THEME_COLOR=${CLOCK_THEME_PROMPT_COLOR}
+        CLOCK_PROMPT=$(set_rgb_color - ${CLOCK_THEME_PROMPT_COLOR})${CLOCK}${normal}
+        if [[ "${SEGMENT_AT_RIGHT}" -gt 0 ]]; then
+            CLOCK_PROMPT+=$(set_rgb_color ${LAST_THEME_COLOR} ${CLOCK_THEME_PROMPT_COLOR})${THEME_PROMPT_LEFT_SEPARATOR}${normal}
+            (( RIGHT_PROMPT_LENGTH += SEGMENT_AT_RIGHT - 1 ))
+        fi
+        RIGHT_PROMPT_LENGTH=$(( ${RIGHT_PROMPT_LENGTH} + ${#CLOCK} ))
+        LAST_THEME_COLOR=${CLOCK_THEME_PROMPT_COLOR}
+        (( SEGMENT_AT_RIGHT += 1 ))
+    fi
 }
 
 function powerline_battery_status_prompt {
-    BATTERY_STATUS="$(battery_percentage)"
-    if [[ "${BATTERY_STATUS}" -le 5 ]]; then
-        BATTERY_STATUS_THEME_PROMPT_COLOR="${BATTERY_STATUS_THEME_PROMPT_CRITICAL_COLOR}"
-    elif [[ "${BATTERY_STATUS}" -le 25 ]]; then
-        BATTERY_STATUS_THEME_PROMPT_COLOR="${BATTERY_STATUS_THEME_PROMPT_LOW_COLOR}"
+    BATTERY_STATUS="$(battery_percentage 2> /dev/null)"
+    if [[ -z "${BATTERY_STATUS}" ]] || [[ "${BATTERY_STATUS}" = "-1" ]] || [[ "${BATTERY_STATUS}" = "no" ]]; then
+        BATTERY_PROMPT=""
+    else
+        if [[ "${BATTERY_STATUS}" -le 5 ]]; then
+             BATTERY_STATUS_THEME_PROMPT_COLOR="${BATTERY_STATUS_THEME_PROMPT_CRITICAL_COLOR}"
+        elif [[ "${BATTERY_STATUS}" -le 25 ]]; then
+            BATTERY_STATUS_THEME_PROMPT_COLOR="${BATTERY_STATUS_THEME_PROMPT_LOW_COLOR}"
+        else
+            BATTERY_STATUS_THEME_PROMPT_COLOR="${BATTERY_STATUS_THEME_PROMPT_GOOD_COLOR}"
+        fi
+        [[ "$(ac_adapter_connected)" ]] && BATTERY_STATUS="${BATTERY_AC_CHAR}${BATTERY_STATUS}"
+        BATTERY_PROMPT="$(set_rgb_color - ${BATTERY_STATUS_THEME_PROMPT_COLOR}) ${BATTERY_STATUS}% "
+        if [[ "${SEGMENT_AT_RIGHT}" -gt 0 ]]; then
+            BATTERY_PROMPT+=$(set_rgb_color ${LAST_THEME_COLOR} ${BATTERY_STATUS_THEME_PROMPT_COLOR})${THEME_PROMPT_LEFT_SEPARATOR}${normal}
+            (( RIGHT_PROMPT_LENGTH += SEGMENT_AT_RIGHT ))
+        fi
+        RIGHT_PROMPT_LENGTH=$(( ${RIGHT_PROMPT_LENGTH} + ${#BATTERY_STATUS} + 2 ))
+        LAST_THEME_COLOR=${BATTERY_STATUS_THEME_PROMPT_COLOR}
+        (( SEGMENT_AT_RIGHT += 1 ))
     fi
-    BATTERY_PROMPT="$(set_rgb_color ${BATTERY_STATUS_THEME_PROMPT_COLOR} ${LAST_THEME_COLOR})${THEME_PROMPT_LEFT_SEPARATOR}${normal}$(set_rgb_color - ${BATTERY_STATUS_THEME_PROMPT_COLOR}) ${BATTERY_STATUS}% "
-    RIGHT_PROMPT_LENGTH=$(( ${RIGHT_PROMPT_LENGTH} + ${#BATTERY_STATUS} + 2 ))
-    LAST_THEME_COLOR=${BATTERY_STATUS_THEME_PROMPT_COLOR}
 }
 
 function powerline_prompt_command() {
     local LAST_STATUS="$?"
     local MOVE_CURSOR_RIGHTMOST='\033[500C'
-    RIGHT_PROMPT_LENGTH=0
+    RIGHT_PROMPT_LENGTH=1
 
     ## left prompt ##
     powerline_scm_prompt
     powerline_virtualenv_prompt
     powerline_cwd_prompt
     powerline_last_status_prompt LAST_STATUS
-    ## right prompt ##
-    powerline_clock_prompt
-    powerline_battery_status_prompt
-    powerline_shell_prompt
-    FIRST_LINE="${SCM_PROMPT}${VIRTUALENV_PROMPT}${CWD_PROMPT}${MOVE_CURSOR_RIGHTMOST}\033[${RIGHT_PROMPT_LENGTH}D${CLOCK_PROMPT}${BATTERY_PROMPT}${SHELL_PROMPT}${normal}"
 
-    PS1="${FIRST_LINE}\n${LAST_STATUS_PROMPT}${PROMPT_CHAR} "
+    LEFT_PROMPT="${SCM_PROMPT}${VIRTUALENV_PROMPT}${CWD_PROMPT}${MOVE_CURSOR_RIGHTMOST}"
+
+    ## right prompt ##
+    LAST_THEME_COLOR="-"
+    powerline_shell_prompt
+    powerline_battery_status_prompt
+    powerline_clock_prompt
+
+    [[ "${SEGMENT_AT_RIGHT}" -eq 1 ]] && (( RIGHT_PROMPT_LENGTH-=1 ))
+
+    RIGHT_PROMPT="\033[${RIGHT_PROMPT_LENGTH}D$(set_rgb_color ${LAST_THEME_COLOR} -)${THEME_PROMPT_LEFT_SEPARATOR}${normal}"
+    RIGHT_PROMPT+="${CLOCK_PROMPT}${BATTERY_PROMPT}${SHELL_PROMPT}${normal}"
+
+    PS1="${LEFT_PROMPT}${RIGHT_PROMPT}\n${LAST_STATUS_PROMPT}${PROMPT_CHAR} "
 }
 
 PROMPT_COMMAND=powerline_prompt_command
