@@ -9,8 +9,8 @@ Includes autocompletion, themes, aliases, custom functions, a few stolen pieces 
 ## Install
 
 1. Check a clone of this repo: `git clone https://github.com/revans/bash-it.git ~/.bash_it`
-2. Run `~/.bash_it/install.sh` (it automatically backs up your `~/.bash_profile` or ~/.bashrc, depends on your OS)
-3. Edit your modified config (`~/.bash_profile` or `~/.bashrc`) file in order to customize bash-it.
+2. Run `~/.bash_it/install.sh` (it automatically backs up your `~/.bash_profile` or `~/.bashrc`, depends on your OS)
+3. Edit your modified config (`~/.bash_profile` or `~/.bashrc`) file in order to customize bash it.
 
 **NOTE:**
 The install script will also prompt you asking if you use [Jekyll](https://github.com/mojombo/jekyll).
@@ -81,6 +81,20 @@ Set `SCM_GIT_SHOW_DETAILS` to 'false' to **don't show** it:
 
 * `export SCM_GIT_SHOW_DETAILS=false`
 
+#### pass function renamed to passgen
+
+The Bash it `pass` function has been renamed to `passgen` in order to avoid a naming conflict with the [pass password manager]. In order to minimize the impact on users of the legacy Bash it `pass` function, Bash it will create the alias `pass` that calls the new `passgen` function if the `pass` password manager command is not found on the `PATH` (default behavior).
+
+This behavior can be overridden with the `BASH_IT_LEGACY_PASS` flag as follows:
+
+Set `BASH_IT_LEGACY_PASS` to 'true' to force Bash it to always **create** the `pass` alias to `passgen`:
+
+* `export BASH_IT_LEGACY_PASS=true`
+
+Unset `BASH_IT_LEGACY_PASS` to have Bash it **return to default behavior**:
+
+* `unset BASH_IT_LEGACY_PASS`
+
 ## Help out
 
 I think everyone has their own custom scripts accumulated over time.  And so, following in the footsteps of oh-my-zsh, bash it is a framework for easily customizing your bash shell. Everyone's got a custom toolbox, so let's start making them even better, **as a community!**
@@ -95,3 +109,4 @@ Thanks, and happing bashing!
 * [List of contributors][contribute]
 
 [contribute]: https://github.com/revans/bash-it/contributors
+[pass password manager]: http://www.passwordstore.org/
