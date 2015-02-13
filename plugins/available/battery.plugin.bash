@@ -1,6 +1,18 @@
 cite about-plugin
 about-plugin 'display info about your battery charge level'
 
+ac_adapter_connected(){
+    if command_exists acpi;
+    then
+        acpi -a | grep "on-line"
+        if [[ "$?" -eq 0 ]]; then
+           return 1
+        else
+           return 0
+        fi
+    fi
+}
+
 battery_percentage(){
   about 'displays battery charge as a percentage of full (100%)'
   group 'battery'
