@@ -1629,9 +1629,9 @@ _git_push ()
 		;;
 	--*)
 		__gitcomp "
-			--all --mirror --tags --dry-run --force --verbose
-			--receive-pack= --repo= --set-upstream
-			--recurse-submodules=
+			--all --mirror --tags --dry-run --force
+			--force-with-lease --verbose --receive-pack= --repo=
+			--set-upstream --recurse-submodules=
 		"
 		return
 		;;
