@@ -4,7 +4,7 @@
 # the ordinary bash prompt.
 
 prompt() {
-  PS1="${reset_color}[\u@\h \W]$(scm_prompt_info)${reset_color}\$ "
+  PS1="${reset_color}[\u@\h$(scm_prompt_info)${reset_color} \W]\$ "
 }
 
 PROMPT_COMMAND=prompt
