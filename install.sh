@@ -20,19 +20,20 @@ echo "Copied the template $CONFIG_FILE into ~/$CONFIG_FILE, edit this file to cu
 
 while true
 do
-  read -p "Do you use Jekyll? (If you don't know what Jekyll is, answer 'n') [Y/N] " RESP
+  read -e -n 1 -p "Do you use Jekyll? (If you don't know what Jekyll is, answer 'n') [y/N] " RESP
 
   case $RESP in
-    [yY])
+    [Yy])
       cp $HOME/.bash_it/template/jekyllconfig.template.bash $HOME/.jekyllconfig
       echo "Copied the template .jekyllconfig into your home directory. Edit this file to customize bash-it for using the Jekyll plugins"
       break
       ;;
-    [nN])
+    [Nn]|"")
       break
       ;;
     *)
-      echo "Please enter Y or N"
+      echo -e "\033[91mPlease enter y or n\033[m"
+      ;;
   esac
 done
 
@@ -58,19 +59,17 @@ function load_some() {
   do
     file_name=$(basename "$path")
     while true; do
-      read -s -n 1 -p "Would you like to enable the ${file_name%%.*} $file_type? [y/N] " RESP
+      read -e -n 1 -p "Would you like to enable the ${file_name%%.*} $file_type? [y/N] " RESP
       case $RESP in
       [yY])
-        echo "Y"
         ln -s "../available/${file_name}" "$BASH_IT/$file_type/enabled"
         break
         ;;
       [nN]|"")
-        echo "N"
         break
         ;;
       *)
-        echo -e "\033[91mPlease choose y or n.\033[m"
+        echo -e "\033[91mPlease enter y or n\033[m"
         ;;
       esac
     done
