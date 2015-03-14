@@ -23,6 +23,11 @@ SCM_THEME_PROMPT_STAGED_COLOR=30
 SCM_THEME_PROMPT_UNSTAGED_COLOR=92
 SCM_THEME_PROMPT_COLOR=${SCM_THEME_PROMPT_CLEAN_COLOR}
 
+RVM_THEME_PROMPT_PREFIX=""
+RVM_THEME_PROMPT_SUFFIX=""
+RVM_THEME_PROMPT_COLOR=161
+RVM_CHAR=${POWERLINE_RVM_CHAR:="❲r❳ "}
+
 CWD_THEME_PROMPT_COLOR=240
 
 LAST_STATUS_THEME_PROMPT_COLOR=196
@@ -58,6 +63,24 @@ function powerline_shell_prompt {
     SHELL_PROMPT="$(set_rgb_color - ${SHELL_THEME_PROMPT_COLOR}) ${SHELL_PROMPT} ${normal}"
     LAST_THEME_COLOR=${SHELL_THEME_PROMPT_COLOR}
     (( SEGMENT_AT_RIGHT += 1 ))
+}
+
+function powerline_rvm_prompt {
+    local environ=""
+
+    if command_exists rvm; then
+        rvm_prompt=$(rvm_version_prompt)
+        if [[ "${rvm_prompt}" != $(rvm strings default) ]]; then
+            RVM_PROMPT="$(set_rgb_color - ${RVM_THEME_PROMPT_COLOR}) ${RVM_CHAR}${rvm_prompt} ${normal}"
+            if [[ "${SEGMENT_AT_LEFT}" -gt 0 ]]; then
+                RVM_PROMPT=$(set_rgb_color ${LAST_THEME_COLOR} ${RVM_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}${RVM_PROMPT}
+            fi
+            LAST_THEME_COLOR=${RVM_THEME_PROMPT_COLOR}
+            (( SEGMENT_AT_LEFT += 1 ))
+        else
+            RVM_PROMPT=""
+        fi
+    fi
 }
 
 function powerline_virtualenv_prompt {
@@ -171,10 +194,11 @@ function powerline_prompt_command() {
     ## left prompt ##
     powerline_scm_prompt
     powerline_virtualenv_prompt
+    powerline_rvm_prompt
     powerline_cwd_prompt
     powerline_last_status_prompt LAST_STATUS
 
-    LEFT_PROMPT="${SCM_PROMPT}${VIRTUALENV_PROMPT}${CWD_PROMPT}${MOVE_CURSOR_RIGHTMOST}"
+    LEFT_PROMPT="${SCM_PROMPT}${VIRTUALENV_PROMPT}${RVM_PROMPT}${CWD_PROMPT}${MOVE_CURSOR_RIGHTMOST}"
 
     ## right prompt ##
     LAST_THEME_COLOR="-"
