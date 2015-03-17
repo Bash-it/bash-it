@@ -6,10 +6,10 @@ _gvm_complete()
   COMPREPLY=()
  
   if [ $COMP_CWORD -eq 1 ]; then
-    COMPREPLY=( $(compgen -W "install uninstall rm list ls use current version default selfupdate broadcast offline help flush" -- ${COMP_WORDS[COMP_CWORD]}) )
+    COMPREPLY=( $(compgen -W "install uninstall rm list ls use current outdated version default selfupdate broadcast offline help flush" -- ${COMP_WORDS[COMP_CWORD]}) )
   elif [ $COMP_CWORD -eq 2 ]; then
     case "${COMP_WORDS[COMP_CWORD-1]}" in
-      "install" | "uninstall" | "rm" | "list" | "ls" | "use" | "current" )
+      "install" | "uninstall" | "rm" | "list" | "ls" | "use" | "current" | "outdated" )
         CANDIDATES=$(echo "${GVM_CANDIDATES_CSV}" | tr ',' ' ')
         COMPREPLY=( $(compgen -W "$CANDIDATES" -- ${COMP_WORDS[COMP_CWORD]}) )
         ;;
