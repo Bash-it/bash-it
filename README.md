@@ -16,6 +16,13 @@ Includes autocompletion, themes, aliases, custom functions, a few stolen pieces 
 The install script will also prompt you asking if you use [Jekyll](https://github.com/mojombo/jekyll).
 This is to set up the `.jekyllconfig` file, which stores info necessary to use the Jekyll plugin.
 
+**INSTALL OPTIONS:**
+The install script can take the following options:
+
+* `--all`: Enable all aliases, plugins and completions.
+* `--none`: Don't enable any aliases, plugins or completions.
+
+If none of these parameters is provided, the install script will ask the user.
 
 ## Help Screens
 
