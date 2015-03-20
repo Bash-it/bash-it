@@ -1,6 +1,6 @@
 # Bash it
 
-[![Join the chat at https://gitter.im/revans/bash-it](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/revans/bash-it?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the chat at https://gitter.im/Bash-it/bash-it](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Bash-it/bash-it?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 **Bash it** is a mash up of my own bash commands and scripts, other bash stuff I have found.
 
