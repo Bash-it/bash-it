@@ -9,40 +9,40 @@ _bash-it-comp-enable-disable()
 _bash-it-comp-list-available-not-enabled()
 {
 	subdirectory="$1"
-	
-	local available_things=$(for f in `ls -1 $BASH_IT/$subdirectory/available/*.bash`; 
-		do 
+
+	local available_things=$(for f in `ls -1 $BASH_IT/$subdirectory/available/*.bash`;
+		do
 			if [ ! -e $BASH_IT/$subdirectory/enabled/$(basename $f) ]
 			then
 				basename $f | cut -d'.' -f1
 			fi
 		done)
 
-	COMPREPLY=( $(compgen -W "all ${available_things}" -- ${cur}) )	
+	COMPREPLY=( $(compgen -W "all ${available_things}" -- ${cur}) )
 }
 
 _bash-it-comp-list-enabled()
 {
 	subdirectory="$1"
-	
-	local enabled_things=$(for f in `ls -1 $BASH_IT/$subdirectory/enabled/*.bash`; 
-		do 
+
+	local enabled_things=$(for f in `ls -1 $BASH_IT/$subdirectory/enabled/*.bash`;
+		do
 			basename $f | cut -d'.' -f1
 		done)
 
-	COMPREPLY=( $(compgen -W "all ${enabled_things}" -- ${cur}) )	
+	COMPREPLY=( $(compgen -W "all ${enabled_things}" -- ${cur}) )
 }
 
 _bash-it-comp-list-available()
 {
 	subdirectory="$1"
-	
-	local enabled_things=$(for f in `ls -1 $BASH_IT/$subdirectory/available/*.bash`; 
-		do 
+
+	local enabled_things=$(for f in `ls -1 $BASH_IT/$subdirectory/available/*.bash`;
+		do
 			basename $f | cut -d'.' -f1
 		done)
 
-	COMPREPLY=( $(compgen -W "${enabled_things}" -- ${cur}) )	
+	COMPREPLY=( $(compgen -W "${enabled_things}" -- ${cur}) )
 }
 
 _bash-it-comp()
@@ -51,9 +51,9 @@ _bash-it-comp()
 	COMPREPLY=()
 	cur="${COMP_WORDS[COMP_CWORD]}"
 	prev="${COMP_WORDS[COMP_CWORD-1]}"
-	
+
 	opts="help show enable disable"
-		
+
 	case "${prev}" in
 		show)
 			local show_args="plugins aliases completions"
@@ -61,7 +61,7 @@ _bash-it-comp()
 			return 0
 			;;
 		help)
-			local help_args="plugins aliases"
+			local help_args="plugins aliases completions"
 			COMPREPLY=( $(compgen -W "${help_args}" -- ${cur}) )
 			return 0
 			;;
@@ -75,17 +75,17 @@ _bash-it-comp()
 			;;
 		aliases)
 			prevprev="${COMP_WORDS[COMP_CWORD-2]}"
-			
+
 			case "${prevprev}" in
 				help)
 					_bash-it-comp-list-available aliases
 					return 0
 					;;
 			esac
-			;;			
+			;;
 		alias)
 			prevprev="${COMP_WORDS[COMP_CWORD-2]}"
-			
+
 			case "${prevprev}" in
 				enable)
 					_bash-it-comp-list-available-not-enabled aliases
@@ -96,10 +96,10 @@ _bash-it-comp()
 					return 0
 					;;
 			esac
-			;;			
+			;;
 		plugin)
 			prevprev="${COMP_WORDS[COMP_CWORD-2]}"
-			
+
 			case "${prevprev}" in
 				enable)
 					_bash-it-comp-list-available-not-enabled plugins
@@ -110,10 +110,10 @@ _bash-it-comp()
 					return 0
 					;;
 			esac
-			;;			
+			;;
 		completion)
 			prevprev="${COMP_WORDS[COMP_CWORD-2]}"
-			
+
 			case "${prevprev}" in
 				enable)
 					_bash-it-comp-list-available-not-enabled completion
@@ -124,11 +124,11 @@ _bash-it-comp()
 					return 0
 					;;
 			esac
-			;;			
+			;;
 	esac
-	
+
 	COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
-	
+
 	return 0
 }
 
