@@ -115,7 +115,7 @@ _bash-it-describe ()
     _param '3: file_type'
     _param '4: column_header'
     _example '$ _bash-it-describe "plugins" "a" "plugin" "Plugin"'
-    
+
     subdirectory="$1"
     preposition="$2"
     file_type="$3"
@@ -176,7 +176,7 @@ _disable-thing ()
     _param '2: file_type'
     _param '3: file_entity'
     _example '$ _disable-thing "plugins" "plugin" "ssh"'
-    
+
     subdirectory="$1"
     file_type="$2"
     file_entity="$3"
@@ -244,8 +244,8 @@ _enable-thing ()
     _param '1: subdirectory'
     _param '2: file_type'
     _param '3: file_entity'
-    _example '$ _enable-thing "plugins" "plugin" "ssh"'	
-	
+    _example '$ _enable-thing "plugins" "plugin" "ssh"'
+
     subdirectory="$1"
     file_type="$2"
     file_entity="$3"
@@ -283,6 +283,14 @@ _enable-thing ()
     fi
 
     printf '%s\n' "$file_entity enabled."
+}
+
+_help-completions()
+{
+  _about 'summarize all completions available in bash-it'
+  _group 'lib'
+
+  _bash-it-completions
 }
 
 _help-aliases()
