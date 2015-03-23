@@ -2,15 +2,15 @@
 
 [![Join the chat at https://gitter.im/Bash-it/bash-it](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Bash-it/bash-it?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-**Bash it** is a mash up of my own bash commands and scripts, other bash stuff I have found.
-
-(And a shameless ripoff of [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh). :)
+**Bash it** is a collection of community bash commands and scripts. (And a shameless ripoff of [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh). :)
 
 Includes autocompletion, themes, aliases, custom functions, a few stolen pieces from Steve Losh, and more.
 
+Bash it provides a solid framework for using, developing and maintaining shell scripts and custom commands for your daily work. If you're using the _Bourne Again Shell_ (Bash) on a regular basis and have been looking for an easy way on how to keep all of these nice little scripts and aliases under control, then Bash it is for you! Stop polluting your `~/bin` directory and your `.bashrc` file, fork/clone Bash it and start hacking away.
+
 ## Install
 
-1. Check a clone of this repo: `git clone https://github.com/revans/bash-it.git ~/.bash_it`
+1. Check a clone of this repo: `git clone https://github.com/Bash-it/bash-it.git ~/.bash_it`
 2. Run `~/.bash_it/install.sh` (it automatically backs up your `~/.bash_profile` or `~/.bashrc`, depends on your OS)
 3. Edit your modified config (`~/.bash_profile` or `~/.bashrc`) file in order to customize bash it.
 
@@ -62,20 +62,20 @@ Bash it creates a 'reload' alias that makes it convenient to reload
 your bash profile when you make changes.
 
 ### Prompt Version Control Check
-Bash it provides prompt themes the ability to check and display version control information for the current directory. The information is retrieved for each directory and can slow down the navigation of projects with a large number of files and folders. Turn version control checking off to prevent slow directory navigation within large projects. 
+Bash it provides prompt themes the ability to check and display version control information for the current directory. The information is retrieved for each directory and can slow down the navigation of projects with a large number of files and folders. Turn version control checking off to prevent slow directory navigation within large projects.
 
-Bash it provides a flag (`SCM_CHECK`) within the `~/.bash_profile` file that turns off/on version control information checking and display within all themes. Version control checking is on by default unless explicitly turned off. 
+Bash it provides a flag (`SCM_CHECK`) within the `~/.bash_profile` file that turns off/on version control information checking and display within all themes. Version control checking is on by default unless explicitly turned off.
 
-Set `SCM_CHECK` to 'false' to **turn off** version control checks for all themes: 
+Set `SCM_CHECK` to 'false' to **turn off** version control checks for all themes:
 
 * `export SCM_CHECK=false`
 
-Set `SCM_CHECK` to 'true' (the default value) to **turn on** version control checks for all themes: 
+Set `SCM_CHECK` to 'true' (the default value) to **turn on** version control checks for all themes:
 
 * `export SCM_CHECK=true`
 
 **NOTE:**
-It is possible for themes to ignore the `SCM_CHECK` flag and query specific version control information directly. For example, themes that use functions like `git_prompt_vars` skip the `SCM_CHECK` flag to retrieve and display git prompt information. If you turned version control checking off and you still see version control information  within your prompt, then functions like `git_prompt_vars` are most likely the reason why. 
+It is possible for themes to ignore the `SCM_CHECK` flag and query specific version control information directly. For example, themes that use functions like `git_prompt_vars` skip the `SCM_CHECK` flag to retrieve and display git prompt information. If you turned version control checking off and you still see version control information  within your prompt, then functions like `git_prompt_vars` are most likely the reason why.
 
 ### Git repository info in the prompt
 Bash it can show some information about Git repositories in the shell prompt: the current branch, tag or commit you are at, how many commits the local branch is ahead or behind from the remote branch, and if you have changes stashed.
@@ -106,9 +106,9 @@ Unset `BASH_IT_LEGACY_PASS` to have Bash it **return to default behavior**:
 
 ## Help out
 
-I think everyone has their own custom scripts accumulated over time.  And so, following in the footsteps of oh-my-zsh, bash it is a framework for easily customizing your bash shell. Everyone's got a custom toolbox, so let's start making them even better, **as a community!**
+We think everyone has their own custom scripts accumulated over time.  And so, following in the footsteps of oh-my-zsh, Bash it is a framework for easily customizing your bash shell. Everyone's got a custom toolbox, so let's start making them even better, **as a community!**
 
-Send me a pull request and I'll merge it as long as it looks good. If you change an existing command, please give an explanation why. That will help a lot when I merge your changes in.
+Send us a pull request and we'll merge it as long as it looks good. If you change an existing command, please give an explanation why. That will help a lot when we merge your changes in.
 
 Thanks, and happing bashing!
 
