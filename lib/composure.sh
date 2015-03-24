@@ -82,64 +82,6 @@ transcribe ()
     fi
 }
 
-transcribe ()
-{
-    typeset func=$1
-    typeset file=$2
-    typeset operation="$3"
-
-    if git --version >/dev/null 2>&1; then
-        if [ -d ~/.composure ]; then
-            (
-                cd ~/.composure
-                if git rev-parse 2>/dev/null; then
-                    if [ ! -f $file ]; then
-                        printf "%s\n" "Oops! Couldn't find $file to version it for you..."
-                        return
-                    fi
-                    cp $file ~/.composure/$func.inc
-                    git add --all .
-                    git commit -m "$operation $func"
-                fi
-            )
-        else
-            if [ "$USE_COMPOSURE_REPO" = "0" ]; then
-                return  # if you say so...
-            fi
-            printf "%s\n" "I see you don't have a ~/.composure repo..."
-            typeset input
-            typeset valid=0
-            while [ $valid != 1 ]; do
-                printf "\n%s" 'would you like to create one? y/n: '
-                read input
-                case $input in
-                    y|yes|Y|Yes|YES)
-                        (
-                            echo 'creating git repository for your functions...'
-                            mkdir ~/.composure
-                            cd ~/.composure
-                            git init
-                            echo "composure stores your function definitions here" > README.txt
-                            git add README.txt
-                            git commit -m 'initial commit'
-                        )
-                        # if at first you don't succeed...
-                        transcribe "$func" "$file" "$operation"
-                        valid=1
-                        ;;
-                    n|no|N|No|NO)
-                        printf "%s\n" "ok. add 'export USE_COMPOSURE_REPO=0' to your startup script to disable this message."
-                        valid=1
-                    ;;
-                    *)
-                        printf "%s\n" "sorry, didn't get that..."
-                    ;;
-                esac
-            done
-       fi
-    fi
-}
-
 typeset_functions ()
 {
     # unfortunately, there does not seem to be a easy, portable way to list just the
