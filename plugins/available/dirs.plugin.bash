@@ -80,7 +80,7 @@ S () {				# SAVE a BOOKMARK
     about 'save a bookmark'
     group 'dirs'
 
-    sed "/$@/d" ~/.dirs > ~/.dirs1;
+    sed "/^$@=/d" ~/.dirs > ~/.dirs1;
     \mv ~/.dirs1 ~/.dirs;
     echo "$@"=\"`pwd`\" >> ~/.dirs;
     source ~/.dirs ;
@@ -90,7 +90,7 @@ R () {				# remove a BOOKMARK
     about 'remove a bookmark'
     group 'dirs'
 
-    sed "/$@/d" ~/.dirs > ~/.dirs1;
+    sed "/^$@=/d" ~/.dirs > ~/.dirs1;
     \mv ~/.dirs1 ~/.dirs;
 }
 
