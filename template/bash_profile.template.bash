@@ -16,10 +16,6 @@ export BASH_IT_THEME='bobby'
 # Your place for hosting Git repos. I use this for private repos.
 export GIT_HOSTING='git@git.domain.com'
 
-# Set my editor and git editor
-export EDITOR="/usr/bin/mate -w"
-export GIT_EDITOR='/usr/bin/mate -w'
-
 # Set the path nginx
 export NGINX_PATH='/opt/nginx'
 
