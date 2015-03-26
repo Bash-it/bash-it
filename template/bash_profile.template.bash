@@ -26,9 +26,7 @@ export NGINX_PATH='/opt/nginx'
 # Don't check mail when opening terminal.
 unset MAILCHECK
 
-
 # Change this to your console based IRC client of choice.
-
 export IRC_CLIENT='irssi'
 
 # Set this to the command you use for todo.txt-cli
