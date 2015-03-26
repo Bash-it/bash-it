@@ -1,5 +1,11 @@
 cite about-plugin
-about-plugin 'adds "remove_gem" function'
+about-plugin 'ruby and rubygems specific functions and settings'
+
+# Make commands installed with 'gem install --user-install' available
+# ~/.gem/ruby/${RUBY_VERSION}/bin/
+if which ruby >/dev/null && which gem >/dev/null; then
+  PATH="$PATH:$(ruby -e 'print Gem.user_dir')/bin";
+fi
 
 function remove_gem {
   about 'removes installed gem'
