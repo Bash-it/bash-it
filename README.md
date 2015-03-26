@@ -42,6 +42,7 @@ bash-it help plugins        # shows help for installed plugins
 For custom scripts, and aliases, just create the following files (they'll be ignored by the git repo):
 
 * `aliases/custom.aliases.bash`
+* `completion/custom.completion.bash`
 * `lib/custom.bash`
 * `plugins/custom.plugins.bash`
 
