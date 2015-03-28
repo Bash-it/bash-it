@@ -55,7 +55,6 @@ function dirs-help() {
   echo "9	: Chance to stack location 9."
 }
 
-
 # ADD BOOKMARKing functionality
 # usage:
 
