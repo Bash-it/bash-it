@@ -25,7 +25,6 @@ function myip ()
     echo -e "Your public IP is: ${echo_bold_green} $res ${echo_normal}"
 }
 
-
 function pickfrom ()
 {
     about 'picks random line from file'
@@ -92,7 +91,6 @@ function lsgrep ()
     ls | grep "$*"
 }
 
-
 function pman ()
 {
     about 'view man documentation in Preview'
@@ -101,7 +99,6 @@ function pman ()
     group 'base'
     man -t "${1}" | open -f -a $PREVIEW
 }
-
 
 function pcurl ()
 {
@@ -125,16 +122,16 @@ function quiet ()
 {
     about 'what *does* this do?'
     group 'base'
-	$* &> /dev/null &
+    $* &> /dev/null &
 }
 
 function banish-cookies ()
 {
     about 'redirect .adobe and .macromedia files to /dev/null'
     group 'base'
-	rm -r ~/.macromedia ~/.adobe
-	ln -s /dev/null ~/.adobe
-	ln -s /dev/null ~/.macromedia
+    rm -r ~/.macromedia ~/.adobe
+    ln -s /dev/null ~/.adobe
+    ln -s /dev/null ~/.macromedia
 }
 
 function usage ()
@@ -184,7 +181,6 @@ function command_exists ()
 
 mkiso ()
 {
-
     about 'creates iso from current dir in the parent dir (unless defined)'
     param '1: ISO name'
     param '2: dest/path'
