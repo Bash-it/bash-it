@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -e
+
+exec bats ${CI:+--tap} test/{lib,plugins}
