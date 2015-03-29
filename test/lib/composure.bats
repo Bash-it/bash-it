@@ -3,7 +3,7 @@
 load ../test_helper
 load ../../lib/composure
 
-@test "composure_keywords()" {
+@test "lib composure: composure_keywords()" {
   run composure_keywords
   assert_output "about author example group param version"
 }
