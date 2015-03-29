@@ -29,7 +29,7 @@ then
 fi
 
 # Load composure first, so we support function metadata
-source "${BASH_IT}/lib/composure.sh"
+source "${BASH_IT}/lib/composure.bash"
 
 # support 'plumbing' metadata
 cite _about _param _example _group _author _version
