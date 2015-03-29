@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# Load RVM, if you are using it
-[[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
-
 # Add nginx to the path
 PATH=$PATH:/opt/nginx/sbin
 
