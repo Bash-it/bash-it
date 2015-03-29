@@ -9,7 +9,6 @@ load ../../plugins/available/ruby.plugin
   assert_line 1 "remove_gem () "
 }
 
-
 @test "plugins ruby: PATH includes ~/.gem/ruby/bin" {
   last_path_entry=$(echo $PATH | tr ":" "\n" | tail -1);
   [[ "${last_path_entry}" == "${HOME}"/.gem/ruby/*/bin ]]
