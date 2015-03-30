@@ -1,4 +1,3 @@
-unset BASH_IT
 unset BASH_IT_THEME
 unset GIT_HOSTING
 unset NGINX_PATH
@@ -6,7 +5,13 @@ unset IRC_CLIENT
 unset TODO
 unset SCM_CHECK
 
-BASH_IT_TEST_DIR="${BATS_TMPDIR}/bash_it"
+BASH_IT_TEST_DIR="${BATS_TMPDIR}/.bash_it"
+
+# guard against executing this block twice due to bats internals
+if [ "$BASH_IT_ROOT" != "${BASH_IT_TEST_DIR}/root" ]; then
+  export BASH_IT_ROOT="${BASH_IT_TEST_DIR}/root"
+  export BASH_IT=$BASH_IT_TEST_DIR
+fi
 
 teardown() {
   rm -rf "$BASH_IT_TEST_DIR"
