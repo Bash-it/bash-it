@@ -5,6 +5,10 @@ load ../../lib/composure
 load ../../plugins/available/base.plugin
 
 @test 'plugins base: ips()' {
+  if [[ $CI ]]; then
+    skip 'ifconfig probably requires sudo on TravisCI'
+  fi
+
   declare -r localhost='127.0.0.1'
   run ips
   assert_success
@@ -12,6 +16,10 @@ load ../../plugins/available/base.plugin
 }
 
 @test 'plugins base: myip()' {
+  if [[ ! $CI ]]; then
+    skip 'myip is slow - run only on CI'
+  fi
+
   run myip
   assert_success
   declare -r mask_ip=$(echo $output | tr -s '[0-9]' '?')
