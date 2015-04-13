@@ -34,3 +34,11 @@ load ../../plugins/available/base.plugin
   assert_success
   [[ $output == l? ]]
 }
+
+@test 'plugins base: buf()' {
+  mkdir -p $BASH_IT_ROOT
+  declare -r file="${BASH_IT_ROOT}/file"
+  touch $file
+  run buf $file
+  [[ -e ${file}_$(date +%Y%m%d_%H%M%S) ]]
+}

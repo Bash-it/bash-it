@@ -213,5 +213,5 @@ function buf ()
     group 'base'
     local filename=$1
     local filetime=$(date +%Y%m%d_%H%M%S)
-    cp "${filename}" "${filename}_${filetime}"
+    cp -a "${filename}" "${filename}_${filetime}"
 }

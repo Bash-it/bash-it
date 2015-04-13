@@ -11,7 +11,7 @@ case $OSTYPE in
 esac
 
 test -w $HOME/$CONFIG_FILE &&
-  cp $HOME/$CONFIG_FILE $HOME/$CONFIG_FILE.bak &&
+  cp -a $HOME/$CONFIG_FILE $HOME/$CONFIG_FILE.bak &&
   echo "Your original $CONFIG_FILE has been backed up to $CONFIG_FILE.bak"
 
 cp $HOME/.bash_it/template/bash_profile.template.bash $HOME/$CONFIG_FILE
