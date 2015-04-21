@@ -70,8 +70,13 @@ _vagrant() {
                 return 0
                 ;;
             "up")
+                vagrant_state_file=$(__vagrantinvestigate) || return 1
+                if [[ -d $vagrant_state_file ]]
+                then
+                    vm_list=$(find $vagrant_state_file/machines -mindepth 1 -maxdepth 1 -type d -exec basename {} \;)
+                fi
                 local up_commands="--no-provision"
-                COMPREPLY=($(compgen -W "${up_commands}" -- ${cur}))
+                COMPREPLY=($(compgen -W "${up_commands} ${vm_list}" -- ${cur}))
                 return 0
                 ;;
             "ssh"|"provision"|"reload"|"halt"|"suspend"|"resume"|"ssh-config")
@@ -113,6 +118,12 @@ _vagrant() {
     then
       action="${COMP_WORDS[COMP_CWORD-2]}"
       case "$action" in
+          "up")
+              if [ "$prev" == "--no-provision" ]; then
+                  COMPREPLY=($(compgen -W "${vm_list}" -- ${cur}))
+                  return 0
+              fi
+              ;;
           "box")
               case "$prev" in
                   "remove"|"repackage")
@@ -134,4 +145,3 @@ _vagrant() {
     fi
 }
 complete -F _vagrant vagrant
-
