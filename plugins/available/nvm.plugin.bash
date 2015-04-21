@@ -8,7 +8,7 @@
 cite about-plugin
 about-plugin 'node version manager, as a bash function'
 
-export NVM_DIR=$HOME/.nvm
+export NVM_DIR="$HOME/.nvm"
 
 if [ ! -d "$NVM_DIR" ]; then
     mkdir $NVM_DIR

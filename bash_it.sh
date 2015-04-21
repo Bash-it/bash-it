@@ -81,7 +81,7 @@ PREVIEW="less"
 
 # Load all the Jekyll stuff
 
-if [ -e $HOME/.jekyllconfig ]
+if [ -e "$HOME/.jekyllconfig" ]
 then
-  . $HOME/.jekyllconfig
+  . "$HOME/.jekyllconfig"
 fi

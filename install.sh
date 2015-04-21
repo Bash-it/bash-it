@@ -12,7 +12,7 @@ esac
 
 BACKUP_FILE=$CONFIG_FILE.bak
 
-if [ -e $HOME/$BACKUP_FILE ]; then
+if [ -e "$HOME/$BACKUP_FILE" ]; then
     echo "Backup file already exists. Make sure to backup your .bashrc before running this installation." >&2
     while true
     do
@@ -32,11 +32,11 @@ if [ -e $HOME/$BACKUP_FILE ]; then
     done
 fi
 
-test -w $HOME/$CONFIG_FILE &&
-  cp -a $HOME/$CONFIG_FILE $HOME/$CONFIG_FILE.bak &&
+test -w "$HOME/$CONFIG_FILE" &&
+  cp -a "$HOME/$CONFIG_FILE" "$HOME/$CONFIG_FILE.bak" &&
   echo "Your original $CONFIG_FILE has been backed up to $CONFIG_FILE.bak"
 
-cp $HOME/.bash_it/template/bash_profile.template.bash $HOME/$CONFIG_FILE
+cp "$HOME/.bash_it/template/bash_profile.template.bash" "$HOME/$CONFIG_FILE"
 
 echo "Copied the template $CONFIG_FILE into ~/$CONFIG_FILE, edit this file to customize bash-it"
 
@@ -95,7 +95,7 @@ else
     read -e -n 1 -p "Do you use Jekyll? (If you don't know what Jekyll is, answer 'n') [y/N] " RESP
     case $RESP in
       [yY])
-        cp $HOME/.bash_it/template/jekyllconfig.template.bash $HOME/.jekyllconfig
+        cp "$HOME/.bash_it/template/jekyllconfig.template.bash" "$HOME/.jekyllconfig"
         echo "Copied the template .jekyllconfig into your home directory. Edit this file to customize bash-it for using the Jekyll plugins"
         break
         ;;
