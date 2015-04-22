@@ -16,8 +16,8 @@ load ../../plugins/available/base.plugin
 }
 
 @test 'plugins base: myip()' {
-  if [[ ! $CI ]]; then
-    skip 'myip is slow - run only on CI'
+  if [[ ! $SLOW_TESTS ]]; then
+    skip 'myip is slow - run only with SLOW_TESTS=true'
   fi
 
   run myip
