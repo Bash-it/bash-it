@@ -5,6 +5,7 @@ THEME_PROMPT_LEFT_SEPARATOR=""
 
 SHELL_SSH_CHAR=${SHELL_SSH_CHAR:=" "}
 SHELL_THEME_PROMPT_COLOR=32
+SHELL_THEME_PROMPT_COLOR_SUDO=202
 
 VIRTUALENV_CHAR=${POWERLINE_VIRTUALENV_CHAR:="❲p❳ "}
 CONDA_VIRTUALENV_CHAR=${POWERLINE_CONDA_VIRTUALENV_CHAR:="❲c❳ "}
@@ -53,6 +54,11 @@ function set_rgb_color {
 }
 
 function powerline_shell_prompt {
+    SHELL_PROMPT_COLOR=${SHELL_THEME_PROMPT_COLOR}
+    CAN_I_RUN_SUDO=$(sudo -n uptime 2>&1 | grep "load" | wc -l)
+    if [ ${CAN_I_RUN_SUDO} -gt 0 ]; then
+        SHELL_PROMPT_COLOR=${SHELL_THEME_PROMPT_COLOR_SUDO}
+    fi
     SEGMENT_AT_RIGHT=0
     if [[ -n "${SSH_CLIENT}" ]]; then
         SHELL_PROMPT="${SHELL_SSH_CHAR}${USER}@${HOSTNAME}"
@@ -60,8 +66,8 @@ function powerline_shell_prompt {
         SHELL_PROMPT="${USER}"
     fi
     RIGHT_PROMPT_LENGTH=$(( ${RIGHT_PROMPT_LENGTH} + ${#SHELL_PROMPT} + 2 ))
-    SHELL_PROMPT="$(set_rgb_color - ${SHELL_THEME_PROMPT_COLOR}) ${SHELL_PROMPT} ${normal}"
-    LAST_THEME_COLOR=${SHELL_THEME_PROMPT_COLOR}
+    SHELL_PROMPT="$(set_rgb_color - ${SHELL_PROMPT_COLOR}) ${SHELL_PROMPT} ${normal}"
+    LAST_THEME_COLOR=${SHELL_PROMPT_COLOR}
     (( SEGMENT_AT_RIGHT += 1 ))
 }
 
