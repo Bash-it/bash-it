@@ -10,6 +10,30 @@ case $OSTYPE in
     ;;
 esac
 
+BACKUP_FILE=$CONFIG_FILE.bak
+
+if [ -e $HOME/$BACKUP_FILE ]; then
+    echo "Backup file already exists. Make sure to backup your .bashrc before running this installation." >&2
+    read -s -e -n 1 -r -p "Would you like to overwrite the existing backup? This will delete your existing backup file [y/N] " RESP
+    while true
+    do
+        case $RESP in
+        [yY])
+            break
+            ;;
+        [nN]|"")
+            echo "Installation aborted. Please come back soon!"
+            exit 1
+            ;;
+        *)
+            echo -e "\033[91mUnknown choice. Please choose y or N.\033[m"
+            read -s -n 1 -p " " RESP
+            continue
+            ;;
+        esac
+    done
+fi
+
 test -w $HOME/$CONFIG_FILE &&
   cp -a $HOME/$CONFIG_FILE $HOME/$CONFIG_FILE.bak &&
   echo "Your original $CONFIG_FILE has been backed up to $CONFIG_FILE.bak"
@@ -112,4 +136,5 @@ else
       esac
     done
   done
+echo -e "\033[0;32mInstallation finished successfully! Enjoy bash-it!\033[0m"
 fi
