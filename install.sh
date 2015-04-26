@@ -14,21 +14,19 @@ BACKUP_FILE=$CONFIG_FILE.bak
 
 if [ -e $HOME/$BACKUP_FILE ]; then
     echo "Backup file already exists. Make sure to backup your .bashrc before running this installation." >&2
-    read -s -e -n 1 -r -p "Would you like to overwrite the existing backup? This will delete your existing backup file [y/N] " RESP
     while true
     do
+        read -e -n 1 -r -p "Would you like to overwrite the existing backup? This will delete your existing backup file ($HOME/$BACKUP_FILE) [y/N] " RESP
         case $RESP in
         [yY])
             break
             ;;
         [nN]|"")
-            echo "Installation aborted. Please come back soon!"
+            echo -e "\033[91mInstallation aborted. Please come back soon!\033[m"
             exit 1
             ;;
         *)
-            echo -e "\033[91mUnknown choice. Please choose y or N.\033[m"
-            read -s -n 1 -p " " RESP
-            continue
+            echo -e "\033[91mPlease choose y or n.\033[m"
             ;;
         esac
     done
@@ -63,16 +61,15 @@ function load_some() {
   for path in `ls $BASH_IT/${file_type}/available/[^_]*`
   do
     file_name=$(basename "$path")
-    while true; do
-      read -s -n 1 -p "Would you like to enable the ${file_name%%.*} $file_type? [y/N] " RESP
+    while true
+    do
+      read -e -n 1 -p "Would you like to enable the ${file_name%%.*} $file_type? [y/N] " RESP
       case $RESP in
       [yY])
-        echo "Y"
         ln -s "../available/${file_name}" "$BASH_IT/$file_type/enabled"
         break
         ;;
       [nN]|"")
-        echo "N"
         break
         ;;
       *)
@@ -95,19 +92,19 @@ then
 else
   while true
   do
-    read -p "Do you use Jekyll? (If you don't know what Jekyll is, answer 'n') [Y/N] " RESP
-
+    read -e -n 1 -p "Do you use Jekyll? (If you don't know what Jekyll is, answer 'n') [y/N] " RESP
     case $RESP in
       [yY])
         cp $HOME/.bash_it/template/jekyllconfig.template.bash $HOME/.jekyllconfig
         echo "Copied the template .jekyllconfig into your home directory. Edit this file to customize bash-it for using the Jekyll plugins"
         break
         ;;
-      [nN])
+      [nN]|"")
         break
         ;;
       *)
-        echo "Please enter Y or N"
+        echo -e "\033[91mPlease choose y or n.\033[m"
+        ;;
     esac
   done
 
