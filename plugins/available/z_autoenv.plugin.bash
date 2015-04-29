@@ -11,7 +11,7 @@ autoenv_init()
   typeset target home _file
   typeset -a _files
   target=$1
-  home="$(dirname $HOME)"
+  home="$(dirname "$HOME")"
 
   _files=( $(
     while [[ "$PWD" != "/" && "$PWD" != "$home" ]]
