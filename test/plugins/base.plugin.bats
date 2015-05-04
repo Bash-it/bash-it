@@ -35,6 +35,14 @@ load ../../plugins/available/base.plugin
   [[ $output == l? ]]
 }
 
+@test 'plugins base: lsgrep()' {
+  for i in 1 2 3; do mkdir -p "${BASH_IT_TEST_DIR}/${i}"; done
+  cd $BASH_IT_TEST_DIR
+  run lsgrep 2
+  assert_success
+  assert_equal 2 $output
+}
+
 @test 'plugins base: buf()' {
   mkdir -p $BASH_IT_ROOT
   declare -r file="${BASH_IT_ROOT}/file"
