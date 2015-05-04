@@ -80,8 +80,8 @@ function mkcd ()
     example '$ mkcd foo'
     example '$ mkcd /tmp/img/photos/large'
     group 'base'
-    mkdir -p "$*"
-    cd "$*"
+    mkdir -p -- "$*"
+    cd -- "$*"
 }
 
 function lsgrep ()
