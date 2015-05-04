@@ -35,6 +35,12 @@ load ../../plugins/available/base.plugin
   [[ $output == l? ]]
 }
 
+@test 'plugins base: mkcd()' {
+  cd "${BASH_IT_ROOT}"
+  run mkcd -dir_with_dash
+  assert_success
+}
+
 @test 'plugins base: lsgrep()' {
   for i in 1 2 3; do mkdir -p "${BASH_IT_TEST_DIR}/${i}"; done
   cd $BASH_IT_TEST_DIR
