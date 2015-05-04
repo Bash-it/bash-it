@@ -13,8 +13,12 @@ if [ "$BASH_IT_ROOT" != "${BASH_IT_TEST_DIR}/root" ]; then
   export BASH_IT=$BASH_IT_TEST_DIR
 fi
 
+setup() {
+  mkdir -p -- "${BASH_IT_ROOT}"
+}
+
 teardown() {
-  rm -rf "$BASH_IT_TEST_DIR"
+  rm -rf "${BASH_IT_TEST_DIR}"
 }
 
 assert() {

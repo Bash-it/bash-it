@@ -27,7 +27,6 @@ load ../../plugins/available/base.plugin
 }
 
 @test 'plugins base: pickfrom()' {
-  mkdir -p $BASH_IT_ROOT
   stub_file="${BASH_IT_ROOT}/stub_file"
   printf "l1\nl2\nl3" > $stub_file
   run pickfrom $stub_file
@@ -50,7 +49,6 @@ load ../../plugins/available/base.plugin
 }
 
 @test 'plugins base: buf()' {
-  mkdir -p $BASH_IT_ROOT
   declare -r file="${BASH_IT_ROOT}/file"
   touch $file
   run buf $file
