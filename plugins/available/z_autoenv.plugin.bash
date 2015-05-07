@@ -32,14 +32,28 @@ autoenv_init()
   done
 }
 
-cd()
+# Bash support for Zsh like chpwd hook
+[[ -n "${ZSH_VERSION:-}" ]] || { cd() { __zsh_like_cd cd "$@" ; } }
+
+__zsh_like_cd()
 {
-  if builtin cd "$@"
+  \typeset __zsh_like_cd_hook
+  if
+    builtin "$@"
   then
-    autoenv_init
-    return 0
+    shift || true # remove the called method
+    for __zsh_like_cd_hook in chpwd "${chpwd_functions[@]}"
+    do
+      if \typeset -f "$__zsh_like_cd_hook" >/dev/null 2>&1
+      then "$__zsh_like_cd_hook" "$@" || break # finish on first failed hook
+      fi
+    done
+    true
   else
-    echo "else?"
     return $?
   fi
 }
+
+[[ -n "${chpwd_functions}" ]] || { export -a chpwd_functions; } # define hooks as shell array
+[[ " ${chpwd_functions[*]} " == *" autoenv_init "* ]] ||        # prevent double addition
+chpwd_functions+=(autoenv_init)                                 # add hook to the list
