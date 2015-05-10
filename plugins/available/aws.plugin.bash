@@ -4,18 +4,12 @@ about-plugin 'AWS helper functions'
 function awskeys {
     about 'helper function for AWS credentials file'
     group 'aws'
-    if [[ $# -eq 0 ]]; then
-        __awskeys_help
-    elif [[ $# -eq 1 ]] && [[ "$1" = "list" ]]; then
+    if [[ $# -eq 1 ]] && [[ "$1" = "list" ]]; then
         __awskeys_list "$2"
-    elif [[ $# -eq 2 ]]; then
-        if [[ "$1" = "show" ]]; then
-            __awskeys_show "$2"
-        elif [[ "$1" = "export" ]]; then
-            __awskeys_export "$2"
-        else
-            __awskeys_help
-        fi
+    elif [[ $# -eq 2 ]] && [[ "$1" = "show" ]]; then
+        __awskeys_show "$2"
+    elif [[ $# -eq 2 ]] && [[ "$1" = "export" ]]; then
+        __awskeys_export "$2"
     else
         __awskeys_help
     fi
@@ -26,9 +20,9 @@ function __awskeys_help {
     echo -e "Helper to AWS credentials file.\n"
     echo -e "Commands:\n"
     echo "   help    Show this help message"
-    echo "   list    List available credentials profiles"
-    echo "   show    Show the keys associated to a credentials profile"
-    echo "   export  Export a credentials profile keys as environment variables"
+    echo "   list    List available AWS credentials profiles"
+    echo "   show    Show the AWS keys associated to a credentials profile"
+    echo "   export  Export an AWS credentials profile keys as environment variables"
 }
 
 function __awskeys_get {
