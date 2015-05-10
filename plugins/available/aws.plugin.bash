@@ -61,9 +61,12 @@ function __awskeys_show {
 }
 
 function __awskeys_export {
-    local p_keys="$(__awskeys_get $1)"
+    local p_keys=( $(__awskeys_get $1 | tr -d " ") )
     if [[ -n "${p_keys}" ]]; then
-        eval $(echo "${p_keys}" | tr -d " " | sed -r -e "s/(.+=)(.+)/export \U\1\E\2/")
+        for p_key in ${p_keys[@]}; do
+            local key="${p_key%=*}"
+            export "${key^^}=${p_key#*=}"
+        done
         export AWS_DEFAULT_PROFILE="$1"
     else
         echo "Profile $1 not found in credentials file"
