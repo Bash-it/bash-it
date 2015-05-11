@@ -63,3 +63,15 @@ function docker-runtime-environment() {
   group 'docker'
   docker run "$@" env
 }
+
+function docker-envset-container-ips() {
+  about 'attempt to set environment variables based on docker container IPs'
+  group 'docker'
+  PERLCMD='my $line = <STDIN>; my $CONTAINER_ID = index($line, "CONTAINER ID", 0); my $IMAGE = index($line, "IMAGE", 0); my $COMMAND = index($line, "COMMAND", 0); my $CREATED = index($line, "CREATED", 0); my $STATUS = index($line, "STATUS", 0); my $PORTS = index($line, "PORTS", 0); my $NAMES = index($line, "NAMES", 0); my $CONTAINER_ID_W = $IMAGE - $CONTAINER_ID; my $IMAGE_W = $COMMAND - $IMAGE ; my $COMMAND_W = $CREATED - $COMMAND ; my $CREATED_W = $STATUS - $CREATED ; my $STATUS_W = $PORTS - $STATUS ; my $PORTS_W = $NAMES - $PORTS ; my $NAMES_W = length($line) - $NAMES; my $template = "A".join("A", $CONTAINER_ID_W, $IMAGE_W, $COMMAND_W, $CREATED_W, $STATUS_W, $PORTS_W)."A*"; while(my $line = <STDIN>) { $line =~ s/(\r|\n)$//g; my ($CONTAINER_ID_VAL, $IMAGE_VAL, $COMMAND_VAL, $CREATED_VAL, $STATUS_VAL, $PORTS_VAL, $NAMES_VAL) = unpack($template, $line); print join("|", $CONTAINER_ID_VAL, $IMAGE_VAL, $COMMAND_VAL, $CREATED_VAL, $STATUS_VAL, $PORTS_VAL, $NAMES_VAL)."\n"; }' 
+  for VAR in $(docker ps | perl -e "$PERLCMD" | cut -d '|' -f 7); do
+    ENVVAR=DOCKER_$(echo $VAR| sed 's/-|_//g')
+    export $ENVVAR=$(docker inspect "$VAR"| grep "IPAddress" | cut -d ':' -f 2 | cut -d '"' -f 2)
+  done
+  unset ENVVAR PERLCMD
+}
+
