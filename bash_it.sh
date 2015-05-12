@@ -71,7 +71,7 @@ done
 
 unset config_file
 if [[ $PROMPT ]]; then
-    export PS1=$PROMPT
+    export PS1="\["$PROMPT"\]"
 fi
 
 # Adding Support for other OSes
@@ -81,7 +81,7 @@ PREVIEW="less"
 
 # Load all the Jekyll stuff
 
-if [ -e $HOME/.jekyllconfig ]
+if [ -e "$HOME/.jekyllconfig" ]
 then
-  . $HOME/.jekyllconfig
+  . "$HOME/.jekyllconfig"
 fi

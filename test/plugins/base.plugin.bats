@@ -16,8 +16,8 @@ load ../../plugins/available/base.plugin
 }
 
 @test 'plugins base: myip()' {
-  if [[ ! $CI ]]; then
-    skip 'myip is slow - run only on CI'
+  if [[ ! $SLOW_TESTS ]]; then
+    skip 'myip is slow - run only with SLOW_TESTS=true'
   fi
 
   run myip
@@ -27,10 +27,30 @@ load ../../plugins/available/base.plugin
 }
 
 @test 'plugins base: pickfrom()' {
-  mkdir -p $BASH_IT_ROOT
   stub_file="${BASH_IT_ROOT}/stub_file"
   printf "l1\nl2\nl3" > $stub_file
   run pickfrom $stub_file
   assert_success
   [[ $output == l? ]]
+}
+
+@test 'plugins base: mkcd()' {
+  cd "${BASH_IT_ROOT}"
+  run mkcd -dir_with_dash
+  assert_success
+}
+
+@test 'plugins base: lsgrep()' {
+  for i in 1 2 3; do mkdir -p "${BASH_IT_TEST_DIR}/${i}"; done
+  cd $BASH_IT_TEST_DIR
+  run lsgrep 2
+  assert_success
+  assert_equal 2 $output
+}
+
+@test 'plugins base: buf()' {
+  declare -r file="${BASH_IT_ROOT}/file"
+  touch $file
+  run buf $file
+  [[ -e ${file}_$(date +%Y%m%d_%H%M%S) ]]
 }

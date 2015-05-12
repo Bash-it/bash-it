@@ -11,7 +11,7 @@ _todo()
               mv prepend prep pri p replace report"
 
     # Add custom commands from add-ons, if installed.
-    COMMANDS="$COMMANDS $('ls' ${TODO_ACTIONS_DIR:-$HOME/.todo.actions.d}/ 2>/dev/null)"
+    COMMANDS="$COMMANDS $('ls' ${TODO_ACTIONS_DIR:-"$HOME/.todo.actions.d"}/ 2>/dev/null)"
 
     OPTS="-@ -@@ -+ -++ -d -f -h -p -P -PP -a -n -t -v -vv -V -x"
 
