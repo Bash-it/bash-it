@@ -14,6 +14,9 @@ CAT_BIN=$(which cat)
 # replace the cat binary for a pygmentize if possible
 cat()
 {
+    about 'runs either pygmentize or cat on each file passed in'
+    param '*: files to concatenate (as normally passed to cat'
+    example 'cat mysite/manage.py dir/text-file.txt'
     for var;
     do
         pygmentize "$var" 2>/dev/null || "$CAT_BIN" "$var";
