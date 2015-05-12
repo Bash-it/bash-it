@@ -3,7 +3,7 @@ about-plugin 'pygmentize instead of cat to terminal if possible'
 
 if [ -z $(which pygmentize) ]
 then
-    echo "Pygments is required to use this pluging"
+    echo "Pygments is required to use this plugin"
     echo "Install it by doing 'pip install Pygments' as the superuser"
     exit 1
 fi
