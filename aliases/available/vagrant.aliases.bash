@@ -3,6 +3,7 @@ about-alias 'vagrant aliases'
 
 # Aliases
 alias vup="vagrant up"
+alias vupl="vagrant up 2>&1 | tee vagrant.log"
 alias vh="vagrant halt"
 alias vs="vagrant suspend"
 alias vr="vagrant resume"
