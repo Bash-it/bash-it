@@ -3,7 +3,7 @@ about-alias 'docker abbreviations'
 
 alias dklc='docker ps -l'  # List last Docker container
 alias dklcid='docker ps -l -q'  # List last Docker container ID
-alias dklcip="docker inspect `dklcid` | grep IPAddress | cut -d '\"' -f 4"  # Get IP of last Docker container
+alias dklcip="docker inspect `docker ps -l -q` | grep IPAddress | cut -d '\"' -f 4"  # Get IP of last Docker container
 alias dkps='docker ps'  # List running Docker containers
 alias dkpsa='docker ps -a'  # List all Docker containers
 alias dki='docker images'  # List Docker images
