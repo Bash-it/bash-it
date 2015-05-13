@@ -62,7 +62,7 @@ function __awskeys_export {
     if [[ -n "${p_keys}" ]]; then
         for p_key in ${p_keys[@]}; do
             local key="${p_key%=*}"
-            export "${key^^}=${p_key#*=}"
+            export "$(echo ${key} | tr [:lower:] [:upper:])=${p_key#*=}"
         done
         export AWS_DEFAULT_PROFILE="$1"
     else
