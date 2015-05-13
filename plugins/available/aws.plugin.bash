@@ -6,8 +6,8 @@ function awskeys {
     group 'aws'
     if [[ $# -eq 1 ]] && [[ "$1" = "list" ]]; then
         __awskeys_list "$2"
-    elif [[ $# -eq 1 ]] && [[ "$1" = "remove" ]]; then
-        __awskeys_remove "$2"
+    elif [[ $# -eq 1 ]] && [[ "$1" = "unset" ]]; then
+        __awskeys_unset "$2"
     elif [[ $# -eq 2 ]] && [[ "$1" = "show" ]]; then
         __awskeys_show "$2"
     elif [[ $# -eq 2 ]] && [[ "$1" = "export" ]]; then
@@ -25,7 +25,7 @@ function __awskeys_help {
     echo "   list    List available AWS credentials profiles"
     echo "   show    Show the AWS keys associated to a credentials profile"
     echo "   export  Export an AWS credentials profile keys as environment variables"
-    echo "   remove  Remove the AWS keys variables from the environment"
+    echo "   unset   Unset the AWS keys variables from the environment"
 }
 
 function __awskeys_get {
@@ -70,8 +70,6 @@ function __awskeys_export {
     fi
 }
 
-function __awskeys_remove {
-    unset AWS_DEFAULT_PROFILE
-    unset AWS_ACCESS_KEY_ID
-    unset AWS_SECRET_ACCESS_KEY
+function __awskeys_unset {
+    unset AWS_DEFAULT_PROFILE AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY
 }
