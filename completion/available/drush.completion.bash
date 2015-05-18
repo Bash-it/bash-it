@@ -7,7 +7,7 @@
 #   http://github.com/drush-ops/drush/blob/master/drush.complete.sh
 
 # Ensure drush is available.
-which drush > /dev/null || alias drush &> /dev/null || return
+which drush &> /dev/null || alias drush &> /dev/null || return
 
 __drush_ps1() {
   f="${TMPDIR:-/tmp/}/drush-env/drush-drupal-site-$$"
