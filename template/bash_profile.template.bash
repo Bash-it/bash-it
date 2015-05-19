@@ -27,4 +27,6 @@ export SCM_CHECK=true
 #export VCPROMPT_EXECUTABLE=~/.vcprompt/bin/vcprompt
 
 # Load Bash It
-source $BASH_IT/bash_it.sh
+if shopt -q login_shell; then
+  source $BASH_IT/bash_it.sh
+fi
