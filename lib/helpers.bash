@@ -361,3 +361,12 @@ all_groups ()
     cat $file | sort | uniq
     rm $file
 }
+
+function __append_uniq_path() {
+  declare -r new_path="${PATH}:${1}";
+  if [[ $(echo $new_path | tr ":" "\n" | sort | uniq -d) != *"${1}"* ]]; then
+    export PATH="${PATH}:${1}";
+  else
+    return 1;
+  fi
+}

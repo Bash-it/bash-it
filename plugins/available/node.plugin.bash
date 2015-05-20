@@ -1,9 +1,7 @@
 cite about-plugin
 about-plugin 'Node.js helper functions'
 
-export PATH=./node_modules/.bin:$PATH
+__append_uniq_path './node_modules/.bin'
 
 # Make sure the global npm prefix is on the path
-[[ `which npm` ]] && export PATH=$(npm config get prefix)/bin:$PATH
-
-
+[[ `which npm` ]] && __append_uniq_path "$(npm config get prefix)/bin"
