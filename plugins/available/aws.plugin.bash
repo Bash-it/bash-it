@@ -36,7 +36,7 @@ function __awskeys_get {
 }
 
 function __awskeys_list {
-    local credentials_list="$(egrep '^\[ *[a-zA-Z0-0_-]+ *\]$' ~/.aws/credentials)"
+    local credentials_list="$(egrep '^\[ *[a-zA-Z0-9_-]+ *\]$' ~/.aws/credentials)"
     if [[ -n $"{credentials_list}" ]]; then
         echo -e "Available credentials profiles:\n"
         for cred in ${credentials_list}; do
