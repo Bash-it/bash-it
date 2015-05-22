@@ -4,7 +4,7 @@ THEME_PROMPT_SEPARATOR=""
 
 SHELL_SSH_CHAR=" "
 SHELL_THEME_PROMPT_COLOR=32
-SHELL_SSH_THEME_PROMPT_COLOR=208
+SHELL_THEME_PROMPT_COLOR_SUDO=202
 
 VIRTUALENV_CHAR="ⓔ "
 VIRTUALENV_THEME_PROMPT_COLOR=35
@@ -37,13 +37,17 @@ function set_rgb_color {
 }
 
 function powerline_shell_prompt {
-    if [[ -n "${SSH_CLIENT}" ]]; then
-        SHELL_PROMPT="${bold_white}$(set_rgb_color - ${SHELL_SSH_THEME_PROMPT_COLOR}) ${SHELL_SSH_CHAR}\u@\h ${normal}"
-        LAST_THEME_COLOR=${SHELL_SSH_THEME_PROMPT_COLOR}
-    else
-        SHELL_PROMPT="${bold_white}$(set_rgb_color - ${SHELL_THEME_PROMPT_COLOR}) \u ${normal}"
-        LAST_THEME_COLOR=${SHELL_THEME_PROMPT_COLOR}
+    SHELL_PROMPT_COLOR=${SHELL_THEME_PROMPT_COLOR}
+    if sudo -n uptime 2>&1 | grep -q "load"; then
+        SHELL_PROMPT_COLOR=${SHELL_THEME_PROMPT_COLOR_SUDO}
     fi
+    if [[ -n "${SSH_CLIENT}" ]]; then
+        SHELL_PROMPT="${SHELL_SSH_CHAR}\u@\h"
+    else
+        SHELL_PROMPT="\u"
+    fi
+    SHELL_PROMPT="${bold_white}$(set_rgb_color - ${SHELL_PROMPT_COLOR}) ${SHELL_PROMPT} ${normal}"
+    LAST_THEME_COLOR=${SHELL_PROMPT_COLOR}
 }
 
 function powerline_virtualenv_prompt {
