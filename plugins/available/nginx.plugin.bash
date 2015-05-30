@@ -1,11 +1,8 @@
 cite about-plugin
 about-plugin 'manage your nginx service'
 
-# Set the path nginx
 export NGINX_PATH='/opt/nginx'
-
-# Add nginx to the path
-export PATH=$PATH:$NGINX_PATH/sbin
+pathmunge $NGINX_PATH/sbin after
 
 function nginx_reload() {
   about 'reload your nginx config'
