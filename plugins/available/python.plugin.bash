@@ -1,11 +1,11 @@
 cite about-plugin
-about-plugin 'alias "https" to SimpleHTTPServer'
+about-plugin 'alias "shttp" to SimpleHTTPServer'
 
 if [ $(uname) = "Linux" ]
 then
-  alias https='python2 -m SimpleHTTPServer'
+  alias shttp='python2 -m SimpleHTTPServer'
 else
-  alias https='python -m SimpleHTTPServer'
+  alias shttp='python -m SimpleHTTPServer'
 fi
 
 function pyedit() {
