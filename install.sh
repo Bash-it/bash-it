@@ -80,9 +80,52 @@ function load_some() {
   done
 }
 
-if [[ "$1" == "--none" ]]
+function load_one() {
+  file_type=$1
+  file_name=$2
+  file="$BASH_IT/$file_type/available/$file_name.bash"
+  [ -d "$BASH_IT/$file_type/enabled" ] || mkdir "$BASH_IT/$file_type/enabled"
+
+  if [ -f "$file" ];
+  then
+    if [ ! -f "$BASH_IT/$file_type/enabled/$file_name.bash" ];
+    then
+      ln -s "$file" "$BASH_IT/$file_type/enabled"
+    fi
+  fi
+}
+
+if [ -f ~/.bash_it_rc ];
 then
-  echo "Not enabling any aliases, plugins or completions"
+  echo "Using ~/.bash_it_rc as bash-it configuration file"
+  source ~/.bash_it_rc
+
+  if [ ! -z "$PLUGINS" ];
+  then
+    for PLUGIN in "${PLUGINS[@]}"
+    do
+      load_one plugins "$PLUGIN.plugin"
+    done;
+  fi
+
+  if [ ! -z "$ALIASES" ];
+  then
+    for ALIAS in "${ALIASES[@]}"
+    do
+      load_one aliases "$ALIAS.aliases"
+    done;
+  fi
+
+  if [ ! -z "$COMPLETIONS" ];
+  then
+    for COMPLETION in "${COMPLETIONS[@]}"
+    do
+      load_one completion "$COMPLETION.completion"
+    done;
+  fi
+elif [[ "$1" == "--none" ]]
+then
+    echo "Not enabling any aliases, plugins or completions"
 elif [[ "$1" == "--all" ]]
 then
   echo "Enabling all aliases, plugins and completions."
