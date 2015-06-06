@@ -250,6 +250,22 @@ function virtualenv_prompt {
   fi
 }
 
+function condaenv_prompt {
+  if [[ $CONDA_DEFAULT_ENV ]]; then
+    echo -e "${CONDAENV_THEME_PROMPT_PREFIX}${CONDA_DEFAULT_ENV}${CONDAENV_THEME_PROMPT_SUFFIX}"
+  fi
+}
+
+function py_interp_prompt {
+  py_version=$(python --version 2>&1 | awk '{print "py-"$2;}') || return
+  echo -e "${PYTHON_THEME_PROMPT_PREFIX}${py_version}${PYTHON_THEME_PROMPT_SUFFIX}"
+}
+
+function python_version_prompt {
+  echo -e "$(virtualenv_prompt)$(condaenv_prompt)$(py_interp_prompt)"
+}
+
+
 # backwards-compatibility
 function git_prompt_info {
   git_prompt_vars
