@@ -4,7 +4,7 @@ about-plugin 'ruby and rubygems specific functions and settings'
 # Make commands installed with 'gem install --user-install' available
 # ~/.gem/ruby/${RUBY_VERSION}/bin/
 if which ruby >/dev/null && which gem >/dev/null; then
-  PATH="$PATH:$(ruby -e 'print Gem.user_dir')/bin";
+  pathmunge "$(ruby -e 'print Gem.user_dir')/bin" after
 fi
 
 function remove_gem {

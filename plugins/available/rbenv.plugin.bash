@@ -3,7 +3,8 @@
 cite about-plugin
 about-plugin 'load rbenv, if you are using it'
 
-export PATH="$HOME/.rbenv/bin:$PATH"
+pathmunge "${HOME}/.rbenv/bin"
+
 [[ `which rbenv` ]] && eval "$(rbenv init -)"
 
 # Load the auto-completion script if rbenv was loaded.
