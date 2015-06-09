@@ -55,8 +55,7 @@ function set_rgb_color {
 
 function powerline_shell_prompt {
     SHELL_PROMPT_COLOR=${SHELL_THEME_PROMPT_COLOR}
-    CAN_I_RUN_SUDO=$(sudo -n uptime 2>&1 | grep "load" | wc -l)
-    if [ ${CAN_I_RUN_SUDO} -gt 0 ]; then
+    if sudo -n uptime 2>&1 | grep -q "load"; then
         SHELL_PROMPT_COLOR=${SHELL_THEME_PROMPT_COLOR_SUDO}
     fi
     SEGMENT_AT_RIGHT=0
