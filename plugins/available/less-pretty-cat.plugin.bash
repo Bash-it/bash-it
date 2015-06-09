@@ -28,5 +28,5 @@ less()
     about 'it pigments the file passed in and passes it to less for pagination'
     param '$1: the file to paginate with less'
     example 'less mysite/manage.py'
-    pygmentize "$1" | "$LESS_BIN" -R
+    pygmentize "$*" | "$LESS_BIN" -R
 }
