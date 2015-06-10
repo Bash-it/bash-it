@@ -4,6 +4,12 @@ about-plugin 'AWS helper functions'
 function awskeys {
     about 'helper function for AWS credentials file'
     group 'aws'
+
+    if [[ ! -f ~/.aws/credentials ]]; then
+        echo "AWS credentials file not found"
+        return 1
+    fi
+
     if [[ $# -eq 1 ]] && [[ "$1" = "list" ]]; then
         __awskeys_list "$2"
     elif [[ $# -eq 1 ]] && [[ "$1" = "unset" ]]; then
@@ -39,8 +45,8 @@ function __awskeys_list {
     local credentials_list="$(egrep '^\[ *[a-zA-Z0-9_-]+ *\]$' ~/.aws/credentials)"
     if [[ -n $"{credentials_list}" ]]; then
         echo -e "Available credentials profiles:\n"
-        for cred in ${credentials_list}; do
-            echo "    $(echo ${cred} | tr -d "[]")"
+        for profile in ${credentials_list}; do
+            echo "    $(echo ${profile} | tr -d "[]")"
         done
         echo
     else
