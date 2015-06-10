@@ -73,3 +73,29 @@ function __awskeys_export {
 function __awskeys_unset {
     unset AWS_DEFAULT_PROFILE AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY
 }
+
+function __awskeys_comp {
+    local cur prev opts prevprev
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    opts="help list show export unset"
+
+    case "${prev}" in
+        help|list|unset)
+            return 0
+            ;;
+        show|export)
+            local profile_list="$(__awskeys_list | grep "    ")"
+            COMPREPLY=( $(compgen -W "${profile_list}" -- ${cur}) )
+            return 0
+            ;;
+    esac
+
+    COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+
+    return 0
+}
+
+complete -F __awskeys_comp awskeys
