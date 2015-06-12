@@ -15,6 +15,7 @@ fi
 # respect ENV var set in .bash_profile, default is 't'
 alias $TODO='$TODO_SRC_DIR/todo.sh -d $TODO_SRC_DIR/todo.cfg'
 
-export PATH=$PATH:$TODO_SRC_DIR
+pathmunge $TODO_SRC_DIR after
+
 source $TODO_SRC_DIR/todo_completion   # bash completion for todo.sh
 complete -F _todo $TODO                # enable completion for 't' alias
