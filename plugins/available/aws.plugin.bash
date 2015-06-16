@@ -4,6 +4,12 @@ about-plugin 'AWS helper functions'
 function awskeys {
     about 'helper function for AWS credentials file'
     group 'aws'
+
+    if [[ ! -f ~/.aws/credentials ]]; then
+        echo "AWS credentials file not found"
+        return 1
+    fi
+
     if [[ $# -eq 1 ]] && [[ "$1" = "list" ]]; then
         __awskeys_list "$2"
     elif [[ $# -eq 1 ]] && [[ "$1" = "unset" ]]; then
@@ -39,8 +45,8 @@ function __awskeys_list {
     local credentials_list="$(egrep '^\[ *[a-zA-Z0-9_-]+ *\]$' ~/.aws/credentials)"
     if [[ -n $"{credentials_list}" ]]; then
         echo -e "Available credentials profiles:\n"
-        for cred in ${credentials_list}; do
-            echo "    $(echo ${cred} | tr -d "[]")"
+        for profile in ${credentials_list}; do
+            echo "    $(echo ${profile} | tr -d "[]")"
         done
         echo
     else
@@ -73,3 +79,29 @@ function __awskeys_export {
 function __awskeys_unset {
     unset AWS_DEFAULT_PROFILE AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY
 }
+
+function __awskeys_comp {
+    local cur prev opts prevprev
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    opts="help list show export unset"
+
+    case "${prev}" in
+        help|list|unset)
+            return 0
+            ;;
+        show|export)
+            local profile_list="$(__awskeys_list | grep "    ")"
+            COMPREPLY=( $(compgen -W "${profile_list}" -- ${cur}) )
+            return 0
+            ;;
+    esac
+
+    COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+
+    return 0
+}
+
+complete -F __awskeys_comp awskeys

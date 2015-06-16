@@ -365,10 +365,10 @@ all_groups ()
 if ! type pathmunge > /dev/null 2>&1
 then
   function pathmunge () {
-    _about 'prevent duplicate directories in you PATH variable'
-    _group 'lib helpers'
-    _example 'pathmunge /path/to/dir is equivalent to PATH=/path/to/dir:$PATH'
-    _example 'pathmunge /path/to/dir after is equivalent to PATH=$PATH:/path/to/dir'
+    about 'prevent duplicate directories in you PATH variable'
+    group 'lib helpers'
+    example 'pathmunge /path/to/dir is equivalent to PATH=/path/to/dir:$PATH'
+    example 'pathmunge /path/to/dir after is equivalent to PATH=$PATH:/path/to/dir'
 
     if ! [[ $PATH =~ (^|:)$1($|:) ]] ; then
       if [ "$2" = "after" ] ; then
