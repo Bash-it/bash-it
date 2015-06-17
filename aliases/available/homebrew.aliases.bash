@@ -4,6 +4,7 @@ cite 'about-alias'
 about-alias 'homebrew abbreviations'
 
 alias bup='brew update && brew upgrade --all'
+alias bupc='brew update && brew upgrade --all && brew cleanup'
 alias bout='brew outdated'
 alias bin='brew install'
 alias brm='brew uninstall'
