@@ -26,6 +26,9 @@ SCM_GIT_STAGED_CHAR="S:"
 SCM_HG='hg'
 SCM_HG_CHAR='☿'
 
+SCM_P4='p4'
+SCM_P4_CHAR='P'
+
 SCM_SVN='svn'
 SCM_SVN_CHAR='⑆'
 
@@ -50,6 +53,8 @@ function scm {
   elif which git &> /dev/null && [[ -n "$(git symbolic-ref HEAD 2> /dev/null)" ]]; then SCM=$SCM_GIT
   elif [[ -d .hg ]]; then SCM=$SCM_HG
   elif which hg &> /dev/null && [[ -n "$(hg root 2> /dev/null)" ]]; then SCM=$SCM_HG
+  elif [[ -d .p4root ]]; then SCM=$SCM_P4
+  elif which p4 &> /dev/null && [[ -n "$(p4 -ztag info 2> /dev/null | grep '... serverServices local')" ]]; then SCM=$SCM_P4
   elif [[ -d .svn ]]; then SCM=$SCM_SVN
   else SCM=$SCM_NONE
   fi
@@ -59,6 +64,7 @@ function scm_prompt_char {
   if [[ -z $SCM ]]; then scm; fi
   if [[ $SCM == $SCM_GIT ]]; then SCM_CHAR=$SCM_GIT_CHAR
   elif [[ $SCM == $SCM_HG ]]; then SCM_CHAR=$SCM_HG_CHAR
+  elif [[ $SCM == $SCM_P4 ]]; then SCM_CHAR=$SCM_P4_CHAR
   elif [[ $SCM == $SCM_SVN ]]; then SCM_CHAR=$SCM_SVN_CHAR
   else SCM_CHAR=$SCM_NONE_CHAR
   fi
@@ -71,6 +77,7 @@ function scm_prompt_vars {
   SCM_STATE=''
   [[ $SCM == $SCM_GIT ]] && git_prompt_vars && return
   [[ $SCM == $SCM_HG ]] && hg_prompt_vars && return
+  [[ $SCM == $SCM_P4 ]] && p4_prompt_vars && return
   [[ $SCM == $SCM_SVN ]] && svn_prompt_vars && return
 }
 
@@ -81,6 +88,7 @@ function scm_prompt_info {
   SCM_STATE=''
   [[ $SCM == $SCM_GIT ]] && git_prompt_info && return
   [[ $SCM == $SCM_HG ]] && hg_prompt_info && return
+  [[ $SCM == $SCM_P4 ]] && p4_prompt_info && return
   [[ $SCM == $SCM_SVN ]] && svn_prompt_info && return
 }
 
@@ -199,6 +207,20 @@ function hg_prompt_vars {
     fi
 }
 
+function p4_prompt_vars {
+  if [[ -n $(p4 status 2> /dev/null | grep -v 'No file(s)') ]]; then
+    SCM_DIRTY=1
+    SCM_STATE=${P4_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
+  else
+    SCM_DIRTY=0
+    SCM_STATE=${P4_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
+  fi
+  SCM_PREFIX=${P4_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
+  SCM_SUFFIX=${P4_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
+  SCM_BRANCH=$(p4 switch 2> /dev/null)
+  SCM_CHANGE=$(p4 changes -m1 ...#have 2> /dev/null | cut -d ' ' -f 2 )
+}
+
 function rvm_version_prompt {
   if which rvm &> /dev/null; then
     rvm=$(rvm tools identifier) || return
@@ -279,6 +301,11 @@ function svn_prompt_info {
 
 function hg_prompt_info() {
   hg_prompt_vars
+  echo -e "$SCM_PREFIX$SCM_BRANCH:${SCM_CHANGE#*:}$SCM_STATE$SCM_SUFFIX"
+}
+
+function p4_prompt_info() {
+  p4_prompt_vars
   echo -e "$SCM_PREFIX$SCM_BRANCH:${SCM_CHANGE#*:}$SCM_STATE$SCM_SUFFIX"
 }
 
