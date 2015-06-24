@@ -12,6 +12,7 @@ SCM_THEME_BRANCH_PREFIX=''
 SCM_THEME_TAG_PREFIX='tag:'
 SCM_THEME_COMMIT_PREFIX='commit:'
 SCM_THEME_REMOTE_PREFIX=''
+SCM_THEME_ROOT_SUFFIX=''
 
 SCM_GIT_SHOW_DETAILS=${SCM_GIT_SHOW_DETAILS:=true}
 
@@ -84,6 +85,10 @@ function scm_prompt_info {
   [[ $SCM == $SCM_SVN ]] && svn_prompt_info && return
 }
 
+function get_git_root {
+  basename $(git rev-parse --show-toplevel)
+}
+
 function git_prompt_vars {
   local details=''
   SCM_STATE=${GIT_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
@@ -120,6 +125,11 @@ function git_prompt_vars {
         SCM_BRANCH=${SCM_THEME_REMOTE_PREFIX}${BASH_REMATCH[1]}
       fi
     fi
+  fi
+
+  if [[ -n "$SCM_THEME_ROOT_SUFFIX" ]]; then
+    SCM_GIT_ROOT=$(get_git_root)
+    SCM_BRANCH=$(echo ${SCM_GIT_ROOT}${SCM_THEME_ROOT_SUFFIX}${SCM_BRANCH})
   fi
 
   local ahead_re='.+ahead ([0-9]+).+'
