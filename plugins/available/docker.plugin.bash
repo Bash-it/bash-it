@@ -13,6 +13,15 @@ function docker-remove-most-recent-image() {
   docker images | head -2 | tail -1 | awk '{print $3}' | xargs docker rmi
 }
 
+function docker-enter() {
+  about 'enter the specified docker container using bash'
+  group 'docker'
+  param '1: Name of the container to enter'
+  example 'docker-enter oracle-xe'
+
+  docker exec -it "$@" /bin/bash;
+}
+
 function docker-remove-images() {
   about 'attempt to remove images with supplied tags or all if no tags are supplied'
   group 'docker'
