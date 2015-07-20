@@ -56,6 +56,10 @@ You can see the theme screenshots  [here](https://github.com/revans/bash-it/wiki
 
 Alternatively, you can preview the themes in your own shell using `BASH_PREVIEW=true reload`
 
+## Uninstalling
+
+There is no automatic uninstall process. To return to your old, boring bash experience, do `rm -rf ~/.bash_it`, followed by `mv ~/.bashrc.bak ~/.bashrc` (on Linux), or `mv ~/.bash_profile.bak ~/.bash_profile` (on Mac). Start a new shell, and Bash it will be gone...
+
 ## Misc
 
 ### Bash Profile Aliases
