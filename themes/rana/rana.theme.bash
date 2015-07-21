@@ -7,8 +7,7 @@
 #  - Monokai colors - http://monokai.nl/blog/2006/07/15/textmate-color-theme/
 #  - Bash_it modern theme
 #
-# Screenshot: http://goo.gl/VCmX5
-# by Jesus de Mula <jesus@demula.name>
+# by Rana Amrit Parth<ramrit9@gmaiil.com>
 
 # For the real Monokai colors you should add these to your .XDefaults or
 # terminal configuration:
