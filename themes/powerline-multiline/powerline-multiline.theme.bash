@@ -172,9 +172,9 @@ function powerline_battery_status_prompt {
     if [[ -z "${BATTERY_STATUS}" ]] || [[ "${BATTERY_STATUS}" = "-1" ]] || [[ "${BATTERY_STATUS}" = "no" ]]; then
         BATTERY_PROMPT=""
     else
-        if [[ "${BATTERY_STATUS}" -le 5 ]]; then
+        if [[ "$((10#${BATTERY_STATUS}))" -le 5 ]]; then
              BATTERY_STATUS_THEME_PROMPT_COLOR="${BATTERY_STATUS_THEME_PROMPT_CRITICAL_COLOR}"
-        elif [[ "${BATTERY_STATUS}" -le 25 ]]; then
+        elif [[ "$((10#${BATTERY_STATUS}))" -le 25 ]]; then
             BATTERY_STATUS_THEME_PROMPT_COLOR="${BATTERY_STATUS_THEME_PROMPT_LOW_COLOR}"
         else
             BATTERY_STATUS_THEME_PROMPT_COLOR="${BATTERY_STATUS_THEME_PROMPT_GOOD_COLOR}"
