@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
-BASH_IT="$HOME/.bash_it"
+if [ -z "$BASH_IT" ];
+then
+  BASH_IT="$HOME/.bash_it"
+fi
 
 case $OSTYPE in
   darwin*)
