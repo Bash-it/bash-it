@@ -55,3 +55,14 @@ fi
 # Directory
 alias	md='mkdir -p'
 alias	rd='rmdir'
+
+# Display whatever file is regular file or folder
+catt() {
+  for i in "$@"; do
+    if [ -d "$i" ]; then
+      ls "$i"
+    else
+      cat "$i"
+    fi
+  done
+}
