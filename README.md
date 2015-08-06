@@ -58,7 +58,14 @@ Alternatively, you can preview the themes in your own shell using `BASH_PREVIEW=
 
 ## Uninstalling
 
-There is no automatic uninstall process. To return to your old, boring bash experience, do `rm -rf ~/.bash_it`, followed by `mv ~/.bashrc.bak ~/.bashrc` (on Linux), or `mv ~/.bash_profile.bak ~/.bash_profile` (on Mac). Start a new shell, and Bash it will be gone...
+To uninstall Bash it, run the `uninstall.sh` script found in the `$BASH_IT` directory:
+
+```
+cd $BASH_IT
+./uninstall.sh
+```
+
+This will restore your previous Bash profile. After the uninstall script finishes, remove the Bash it directory from your machine (`rm -rf $BASH_IT`) and start a new shell.
 
 ## Misc
 
