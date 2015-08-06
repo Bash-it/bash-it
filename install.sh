@@ -53,9 +53,43 @@ function load_one() {
   fi
 }
 
-echo ""
-echo "Enabling sane defaults"
-load_one completion bash-it.completion.bash
+function load_some() {
+  file_type=$1
+  [ -d "$BASH_IT/$file_type/enabled" ] || mkdir "$BASH_IT/$file_type/enabled"
+  for path in `ls $BASH_IT/${file_type}/available/[^_]*`
+  do
+    file_name=$(basename "$path")
+    while true
+    do
+      read -e -n 1 -p "Would you like to enable the ${file_name%%.*} $file_type? [y/N] " RESP
+      case $RESP in
+      [yY])
+        ln -s "../available/${file_name}" "$BASH_IT/$file_type/enabled"
+        break
+        ;;
+      [nN]|"")
+        break
+        ;;
+      *)
+        echo -e "\033[91mPlease choose y or n.\033[m"
+        ;;
+      esac
+    done
+  done
+}
+
+if [[ "$1" == "--interactive" ]]
+then
+  for type in "aliases" "plugins" "completion"
+  do
+    echo -e "\033[0;32mEnabling $type\033[0m"
+    load_some $type
+  done
+else
+  echo ""
+  echo -e "\033[0;32mEnabling sane defaults\033[0m"
+  load_one completion bash-it.completion.bash
+fi
 
 echo ""
 echo -e "\033[0;32mInstallation finished successfully! Enjoy bash-it!\033[0m"
