@@ -9,9 +9,9 @@ MVIM=$(command -v mvim)
 
 case $OSTYPE in
   darwin*)
-    [[ -n $MVIM ]] && alias mvim="mvim --remote-tab"
+    [[ -n $MVIM ]] && alias mvimt="mvim --remote-tab"
     ;;
   *)
-    [[ -n $GVIM ]] && alias gvim="gvim -b --remote-tab"
+    [[ -n $GVIM ]] && alias gvimt="gvim --remote-tab"
     ;;
 esac
