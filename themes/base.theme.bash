@@ -13,6 +13,8 @@ SCM_THEME_TAG_PREFIX='tag:'
 SCM_THEME_COMMIT_PREFIX='commit:'
 SCM_THEME_REMOTE_PREFIX=''
 
+CLOCK_CHAR='☆'
+
 SCM_GIT_SHOW_DETAILS=${SCM_GIT_SHOW_DETAILS:=true}
 
 SCM_GIT='git'
@@ -289,6 +291,10 @@ function scm_char {
 
 function prompt_char {
     scm_char
+}
+
+function clock_char {
+    echo -e "$CLOCK_CHAR"
 }
 
 if [ ! -e $BASH_IT/plugins/enabled/battery.plugin.bash ]; then
