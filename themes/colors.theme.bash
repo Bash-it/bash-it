@@ -5,54 +5,54 @@ function __ {
 }
 
 function __make_ansi {
-  next=$1 && shift
+  next=$1; shift
   echo "\[\e[$(__$next $@)m\]"
 }
 
 function __make_echo {
-  next=$1 && shift
+  next=$1; shift
   echo "\033[$(__$next $@)m"
 }
 
 
 function __reset {
-  next=$1 && shift
+  next=$1; shift
   out="$(__$next $@)"
   echo "0${out:+;${out}}"
 }
 
 function __bold {
-  next=$1 && shift
+  next=$1; shift
   out="$(__$next $@)"
   echo "${out:+${out};}1"
 }
 
 function __faint {
-  next=$1 && shift
+  next=$1; shift
   out="$(__$next $@)"
   echo "${out:+${out};}2"
 }
 
 function __italic {
-  next=$1 && shift
+  next=$1; shift
   out="$(__$next $@)"
   echo "${out:+${out};}3"
 }
 
 function __underline {
-  next=$1 && shift
+  next=$1; shift
   out="$(__$next $@)"
   echo "${out:+${out};}4"
 }
 
 function __negative {
-  next=$1 && shift
+  next=$1; shift
   out="$(__$next $@)"
   echo "${out:+${out};}7"
 }
 
 function __crossed {
-  next=$1 && shift
+  next=$1; shift
   out="$(__$next $@)"
   echo "${out:+${out};}8"
 }
@@ -114,18 +114,18 @@ function __color_rgb {
 }
 
 function __color {
-  color=$1 && shift
+  color=$1; shift
   case "$1" in
-    fg|bg) side="$1" && shift ;;
+    fg|bg) side="$1"; shift ;;
     *) side=fg;;
   esac
   case "$1" in
-    normal|bright) mode="$1" && shift;;
+    normal|bright) mode="$1"; shift;;
     *) mode=normal;;
   esac
-  [[ $color == "rgb" ]] && rgb="$1 $2 $3" && shift 3
+  [[ $color == "rgb" ]] && rgb="$1 $2 $3"; shift 3
 
-  next=$1 && shift
+  next=$1; shift
   out="$(__$next $@)"
   echo "$(__color_${mode}_${side} $(__color_${color} $rgb))${out:+;${out}}"
 }
@@ -169,7 +169,7 @@ function __rgb {
 
 
 function __color_parse {
-  next=$1 && shift
+  next=$1; shift
   echo "$(__$next $@)"
 }
 
