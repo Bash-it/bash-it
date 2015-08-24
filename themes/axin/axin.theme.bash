@@ -1,6 +1,5 @@
-# Sexy Bash Prompt, inspired by "Extravagant Zsh Prompt"
-# Screenshot: http://cloud.gf3.ca/M5rG
-# A big thanks to \amethyst on Freenode
+# Axin Bash Prompt, inspired by theme "Sexy" and "Bobby"
+# thanks to them
 
 if [[ $COLORTERM = gnome-* && $TERM = xterm ]]  && infocmp gnome-256color >/dev/null 2>&1; then export TERM=gnome-256color
 elif [[ $TERM != dumb ]] && infocmp xterm-256color >/dev/null 2>&1; then export TERM=xterm-256color
@@ -32,15 +31,8 @@ else
     RESET="\033[m"
 fi
 
-parse_git_dirty () {
-  [[ $(git status 2> /dev/null | tail -n1 | cut -c 1-17) != "nothing to commit" ]] && echo "*"
-}
-parse_git_branch () {
-  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1$(parse_git_dirty)/"
-}
-
 function prompt_command() {
-  PS1="\[${BOLD}${MAGENTA}\]\u \[$WHITE\]@ \[$ORANGE\]\h \[$WHITE\]in \[$GREEN\]\w\[$WHITE\]\$([[ -n \$(git branch 2> /dev/null) ]] && echo \" on \")\[$PURPLE\]\$(scm_prompt_info) ${white}\t\n\$ \[$RESET\]"
+  PS1="\[${BOLD}${MAGENTA}\]\u \[$WHITE\]@ \[$ORANGE\]\h \[$WHITE\]in \[$GREEN\]\w\[$WHITE\]\[$SCM_THEME_PROMPT_PREFIX\]${white}\t \[$PURPLE\]\$(scm_prompt_info) \n\$ \[$RESET\]"
 }
 
 PROMPT_COMMAND=prompt_command
