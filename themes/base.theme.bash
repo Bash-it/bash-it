@@ -14,8 +14,8 @@ SCM_THEME_COMMIT_PREFIX='commit:'
 SCM_THEME_REMOTE_PREFIX=''
 
 CLOCK_CHAR='☆'
-CLOCK_CHECK=${CLOCK_CHECK:=true}
-BATTER_PERCENTAGE_CHECK=${BATTER_PERCENTAGE_CHECK:=true}
+THEME_CLOCK_CHECK=${THEME_CLOCK_CHECK:=true}
+THEME_BATTERY_PERCENTAGE_CHECK=${THEME_BATTERY_PERCENTAGE_CHECK:=true}
 
 SCM_GIT_SHOW_DETAILS=${SCM_GIT_SHOW_DETAILS:=true}
 
@@ -296,14 +296,14 @@ function prompt_char {
 }
 
 function clock_char {
-    if [[ "${CLOCK_CHECK}" = true ]]; then
+    if [[ "${THEME_CLOCK_CHECK}" = true ]]; then
         DATE_STRING=$(date +"%Y-%m-%d %H:%M:%S")
         echo -e "${bold_cyan}$DATE_STRING ${red}$CLOCK_CHAR"
     fi
 }
 
 function battery_char {
-    if [[ "${BATTER_PERCENTAGE_CHECK}" = true ]]; then
+    if [[ "${THEME_BATTERY_PERCENTAGE_CHECK}" = true ]]; then
         echo -e "${bold_red}$(battery_percentage)%"
     fi
 }
@@ -320,4 +320,3 @@ if [ ! -e $BASH_IT/plugins/enabled/battery.plugin.bash ]; then
 	echo -n
     }
 fi
-
