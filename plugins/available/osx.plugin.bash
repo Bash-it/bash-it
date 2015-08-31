@@ -63,8 +63,25 @@ function dock-switch() {
     fi
 }
 
-# Download a file and open it in Preview
+function pman ()
+{
+    about 'view man documentation in Preview'
+    param '1: man page to view'
+    example '$ pman bash'
+    group 'osx'
+    man -t "${1}" | open -fa $PREVIEW
+}
 
+function pri ()
+{
+    about 'display information about Ruby classes, modules, or methods, in Preview'
+    param '1: Ruby method, module, or class'
+    example '$ pri Array'
+    group 'osx'
+    ri -T "${1}" | open -fa $PREVIEW
+}
+
+# Download a file and open it in Preview
 function prevcurl() {
   about 'download a file and open it in Preview'
   param '1: url'
@@ -75,5 +92,8 @@ function prevcurl() {
     echo "This function only works with Mac OS X"
     return 1
   fi
-  curl "$*" | open -fa "Preview"
+  curl "$*" | open -fa $PREVIEW
 }
+
+# Make this backwards compatible
+alias pcurl='prevcurl'
