@@ -108,7 +108,7 @@ function powerline_last_status_prompt {
 }
 
 function powerline_in_vim_prompt {
-  if [ -z "$MYVIMRC" ]; then
+  if [ -z "$VIMRUNTIME" ]; then
     IN_VIM_PROMPT=""
   else
     IN_VIM_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${IN_VIM_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}$(set_rgb_color - ${IN_VIM_PROMPT_COLOR}) ${IN_VIM_PROMPT_TEXT} ${normal}$(set_rgb_color ${IN_VIM_PROMPT_COLOR} -)${normal}"
