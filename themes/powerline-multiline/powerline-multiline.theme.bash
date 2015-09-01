@@ -42,6 +42,10 @@ BATTERY_STATUS_THEME_PROMPT_CRITICAL_COLOR=160
 
 THEME_PROMPT_CLOCK_FORMAT=${THEME_PROMPT_CLOCK_FORMAT:="%H:%M:%S"}
 
+IN_VIM_PROMPT_COLOR=35
+IN_VIM_PROMPT_TEXT="vim"
+
+
 function set_rgb_color {
     if [[ "${1}" != "-" ]]; then
         fg="38;5;${1}"
@@ -191,6 +195,22 @@ function powerline_battery_status_prompt {
     fi
 }
 
+function powerline_in_vim_prompt {
+  if [ -z "$VIMRUNTIME" ]; then
+    IN_VIM_PROMPT=""
+  else
+    IN_VIM_PROMPT="$(set_rgb_color - ${IN_VIM_PROMPT_COLOR}) ${IN_VIM_PROMPT_TEXT} "
+    if [[ "${SEGMENT_AT_RIGHT}" -gt 0 ]]; then
+      IN_VIM_PROMPT+=$(set_rgb_color ${LAST_THEME_COLOR} ${IN_VIM_PROMPT_COLOR})${THEME_PROMPT_LEFT_SEPARATOR}${normal}
+      (( RIGHT_PROMPT_LENGTH += SEGMENT_AT_RIGHT ))
+    fi
+    RIGHT_PROMPT_LENGTH=$(( ${RIGHT_PROMPT_LENGTH} + ${#IN_VIM_PROMPT_TEXT} ))
+    LAST_THEME_COLOR=${IN_VIM_PROMPT_COLOR}
+    (( SEGMENT_AT_RIGHT += 1 ))
+  fi
+}
+
+
 function powerline_prompt_command() {
     local LAST_STATUS="$?"
     local MOVE_CURSOR_RIGHTMOST='\033[500C'
@@ -210,11 +230,12 @@ function powerline_prompt_command() {
     powerline_shell_prompt
     powerline_battery_status_prompt
     powerline_clock_prompt
+    powerline_in_vim_prompt
 
     [[ "${SEGMENT_AT_RIGHT}" -eq 1 ]] && (( RIGHT_PROMPT_LENGTH-=1 ))
 
     RIGHT_PROMPT="\033[${RIGHT_PROMPT_LENGTH}D$(set_rgb_color ${LAST_THEME_COLOR} -)${THEME_PROMPT_LEFT_SEPARATOR}${normal}"
-    RIGHT_PROMPT+="${CLOCK_PROMPT}${BATTERY_PROMPT}${SHELL_PROMPT}${normal}"
+    RIGHT_PROMPT+="${IN_VIM_PROMPT}${CLOCK_PROMPT}${BATTERY_PROMPT}${SHELL_PROMPT}${normal}"
 
     PS1="${LEFT_PROMPT}${RIGHT_PROMPT}\n${LAST_STATUS_PROMPT}${PROMPT_CHAR} "
 }
