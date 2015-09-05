@@ -17,6 +17,7 @@ THEME_CLOCK_CHECK=${THEME_CLOCK_CHECK:=true}
 THEME_BATTERY_PERCENTAGE_CHECK=${THEME_BATTERY_PERCENTAGE_CHECK:=true}
 
 SCM_GIT_SHOW_DETAILS=${SCM_GIT_SHOW_DETAILS:=true}
+SCM_GIT_SHOW_REMOTE_INFO=${SCM_GIT_SHOW_REMOTE_INFO:=auto}
 
 SCM_GIT='git'
 SCM_GIT_CHAR='±'
@@ -111,6 +112,24 @@ function git_prompt_vars {
   local ref=$(git symbolic-ref -q HEAD 2> /dev/null)
   if [[ -n "$ref" ]]; then
     SCM_BRANCH=${SCM_THEME_BRANCH_PREFIX}${ref#refs/heads/}
+    local branch_tracking_info="$(grep "${SCM_BRANCH}..." <<< "${status}")"
+    if [[ -n "${branch_tracking_info}" ]]; then
+      branch_tracking_info=${branch_tracking_info#\#\# ${SCM_BRANCH}...}
+      branch_tracking_info=${branch_tracking_info% [*}
+      local remote_name=${branch_tracking_info%%/*}
+      local remote_branch=${branch_tracking_info#${remote_name}/}
+      local remote_info=""
+      local num_remotes=$(git remote | wc -l 2> /dev/null)
+      [[ "${SCM_BRANCH}" = "${remote_branch}" ]] && local same_branch_name=true
+      if ([[ "${SCM_GIT_SHOW_REMOTE_INFO}" = "auto" ]] && [[ "${num_remotes}" -ge 2 ]]) ||
+          [[ "${SCM_GIT_SHOW_REMOTE_INFO}" = "true" ]]; then
+        remote_info="${remote_name}"
+        [[ "${same_branch_name}" != "true" ]] && remote_info+="/${remote_branch}"
+      elif [[ ${same_branch_name} != "true" ]]; then
+        remote_info="${remote_branch}"
+      fi
+      [[ -n "${remote_info}" ]] && SCM_BRANCH+=" (${remote_info})"
+    fi
   else
     ref=$(git describe --tags --exact-match 2> /dev/null)
     if [[ -n "$ref" ]]; then
