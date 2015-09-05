@@ -37,6 +37,12 @@ alias rb='ruby'
 # find Space hogs
 alias ducks='du -cks * | sort -nr | head -11 |cut -f2- | xargs du -hs'
 
+# Set VI Mode
+alias sovi='set -o vi'
+
+# Sudo to root keeping your user environment
+alias rsu='sudo -E su -p'
+
 # Pianobar can be found here: http://github.com/PromyLOPh/pianobar/
 
 alias piano='pianobar'
