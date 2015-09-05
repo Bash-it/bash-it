@@ -11,6 +11,8 @@ SCM_THEME_PROMPT_SUFFIX='|'
 SCM_THEME_BRANCH_PREFIX=''
 SCM_THEME_TAG_PREFIX='tag:'
 SCM_THEME_DETACHED_PREFIX='detached:'
+SCM_THEME_BRANCH_TRACK_PREFIX=' → '
+SCM_THEME_BRANCH_GONE_PREFIX=' ⇢ '
 
 CLOCK_CHAR='☆'
 THEME_CLOCK_CHECK=${THEME_CLOCK_CHECK:=true}
@@ -21,6 +23,7 @@ SCM_GIT_SHOW_REMOTE_INFO=${SCM_GIT_SHOW_REMOTE_INFO:=auto}
 
 SCM_GIT='git'
 SCM_GIT_CHAR='±'
+SCM_GIT_DETACHED_CHAR='⌿'
 SCM_GIT_AHEAD_CHAR="↑"
 SCM_GIT_BEHIND_CHAR="↓"
 SCM_GIT_UNTRACKED_CHAR="?:"
@@ -112,12 +115,13 @@ function git_prompt_vars {
   local ref=$(git symbolic-ref -q HEAD 2> /dev/null)
   if [[ -n "$ref" ]]; then
     SCM_BRANCH=${SCM_THEME_BRANCH_PREFIX}${ref#refs/heads/}
-    local branch_tracking_info="$(grep "${SCM_BRANCH}..." <<< "${status}")"
-    if [[ -n "${branch_tracking_info}" ]]; then
-      branch_tracking_info=${branch_tracking_info#\#\# ${SCM_BRANCH}...}
-      branch_tracking_info=${branch_tracking_info% [*}
-      local remote_name=${branch_tracking_info%%/*}
-      local remote_branch=${branch_tracking_info#${remote_name}/}
+    local tracking_info="$(grep "${SCM_BRANCH}..." <<< "${status}")"
+    if [[ -n "${tracking_info}" ]]; then
+      [[ "${tracking_info}" =~ .+\[gone\]$ ]] && local branch_gone="true"
+      tracking_info=${tracking_info#\#\# ${SCM_BRANCH}...}
+      tracking_info=${tracking_info% [*}
+      local remote_name=${tracking_info%%/*}
+      local remote_branch=${tracking_info#${remote_name}/}
       local remote_info=""
       local num_remotes=$(git remote | wc -l 2> /dev/null)
       [[ "${SCM_BRANCH}" = "${remote_branch}" ]] && local same_branch_name=true
@@ -128,26 +132,28 @@ function git_prompt_vars {
       elif [[ ${same_branch_name} != "true" ]]; then
         remote_info="${remote_branch}"
       fi
-      [[ -n "${remote_info}" ]] && SCM_BRANCH+=" (${remote_info})"
-    fi
-  else
-    ref=$(git describe --tags --exact-match 2> /dev/null)
-    if [[ -n "$ref" ]]; then
-      SCM_BRANCH=${SCM_THEME_TAG_PREFIX}${ref}
-    else
-      ref=$(git describe --contains --all HEAD 2> /dev/null)
-      if [[ -n "$ref" ]]; then
-        local remote_re='^remotes/(.+)$'
-        if [[ "$ref" =~ ${remote_re} ]]; then
-          SCM_BRANCH=${SCM_THEME_DETACHED_PREFIX}${BASH_REMATCH[1]}
+      if [[ -n "${remote_info}" ]];then
+        if [[ "${branch_gone}" = "true" ]]; then
+          SCM_BRANCH+="${SCM_THEME_BRANCH_GONE_PREFIX}${remote_info}"
         else
-          SCM_BRANCH=${SCM_THEME_DETACHED_PREFIX}${ref}
+          SCM_BRANCH+="${SCM_THEME_BRANCH_TRACK_PREFIX}${remote_info}"
         fi
       fi
     fi
-    if [[ -z "$ref" ]]; then
-      SCM_BRANCH=${SCM_THEME_DETACHED_PREFIX}${SCM_CHANGE}
+    SCM_GIT_DETACHED="false"
+  else
+    local detached_prefix=""
+    ref=$(git describe --tags --exact-match 2> /dev/null)
+    if [[ -n "$ref" ]]; then
+      detached_prefix=${SCM_THEME_TAG_PREFIX}
+    else
+      ref=$(git describe --contains --all HEAD 2> /dev/null)
+      ref=${ref#remotes/}
+      [[ -z "$ref" ]] && ref=${SCM_CHANGE}
+      detached_prefix=${SCM_THEME_DETACHED_PREFIX}
     fi
+    SCM_BRANCH=${detached_prefix}${ref}
+    SCM_GIT_DETACHED="true"
   fi
 
   local ahead_re='.+ahead ([0-9]+).+'
