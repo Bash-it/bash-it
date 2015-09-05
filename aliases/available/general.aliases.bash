@@ -34,6 +34,9 @@ alias irc="$IRC_CLIENT"
 
 alias rb='ruby'
 
+# find Space hogs
+alias ducks='du -cks * | sort -nr | head -11 |cut -f2- | xargs du -hs'
+
 # Pianobar can be found here: http://github.com/PromyLOPh/pianobar/
 
 alias piano='pianobar'
