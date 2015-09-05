@@ -10,8 +10,7 @@ SCM_THEME_PROMPT_PREFIX=' |'
 SCM_THEME_PROMPT_SUFFIX='|'
 SCM_THEME_BRANCH_PREFIX=''
 SCM_THEME_TAG_PREFIX='tag:'
-SCM_THEME_COMMIT_PREFIX='commit:'
-SCM_THEME_REMOTE_PREFIX=''
+SCM_THEME_DETACHED_PREFIX='detached:'
 
 CLOCK_CHAR='☆'
 THEME_CLOCK_CHECK=${THEME_CLOCK_CHECK:=true}
@@ -107,6 +106,8 @@ function git_prompt_vars {
     fi
   fi
 
+  SCM_CHANGE=$(git rev-parse --short HEAD 2>/dev/null)
+
   local ref=$(git symbolic-ref -q HEAD 2> /dev/null)
   if [[ -n "$ref" ]]; then
     SCM_BRANCH=${SCM_THEME_BRANCH_PREFIX}${ref#refs/heads/}
@@ -115,14 +116,18 @@ function git_prompt_vars {
     if [[ -n "$ref" ]]; then
       SCM_BRANCH=${SCM_THEME_TAG_PREFIX}${ref}
     else
-      local commit_re='(^remotes/)?(.+-g[a-zA-Z0-9]+)$'
-      local remote_re='^remotes/(.+)$'
-      ref=$(git describe --tags --all --always 2> /dev/null)
-      if [[ "$ref" =~ ${commit_re} ]]; then
-        SCM_BRANCH=${SCM_THEME_COMMIT_PREFIX}${BASH_REMATCH[2]}
-      elif [[ "$ref" =~ ${remote_re} ]]; then
-        SCM_BRANCH=${SCM_THEME_REMOTE_PREFIX}${BASH_REMATCH[1]}
+      ref=$(git describe --contains --all HEAD 2> /dev/null)
+      if [[ -n "$ref" ]]; then
+        local remote_re='^remotes/(.+)$'
+        if [[ "$ref" =~ ${remote_re} ]]; then
+          SCM_BRANCH=${SCM_THEME_DETACHED_PREFIX}${BASH_REMATCH[1]}
+        else
+          SCM_BRANCH=${SCM_THEME_DETACHED_PREFIX}${ref}
+        fi
       fi
+    fi
+    if [[ -z "$ref" ]]; then
+      SCM_BRANCH=${SCM_THEME_DETACHED_PREFIX}${SCM_CHANGE}
     fi
   fi
 
@@ -138,7 +143,6 @@ function git_prompt_vars {
 
   SCM_PREFIX=${GIT_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
   SCM_SUFFIX=${GIT_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
-  SCM_CHANGE=$(git rev-parse HEAD 2>/dev/null)
 }
 
 function svn_prompt_vars {
