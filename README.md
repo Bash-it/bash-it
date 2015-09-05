@@ -98,6 +98,23 @@ Set `SCM_GIT_SHOW_DETAILS` to 'false' to **don't show** it:
 
 * `export SCM_GIT_SHOW_DETAILS=false`
 
+### Git remotes and remote branches
+In some git workflows you must work with various remotes, for this reason, Bash it can provide some useful information about your remotes and your remote branches, for example, the remote on you are working, or if your local branch is tracking a remote branch.
+
+You can control this feature with the flag `SCM_GIT_SHOW_REMOTE_INFO` as follows:
+
+Set `SCM_GIT_SHOW_REMOTE_INFO` to 'auto' (the default value) to activate it only when more than one remote is configured in the current repo:
+
+* `export SCM_GIT_SHOW_REMOTE_INFO=auto`
+
+Set `SCM_GIT_SHOW_REMOTE_INFO` to 'true' to always activate the feature:
+
+* `export SCM_GIT_SHOW_REMOTE_INFO=true`
+
+Set `SCM_GIT_SHOW_REMOTE_INFO` to 'false' to **disable the feature**:
+
+* `export SCM_GIT_SHOW_REMOTE_INFO=false`
+
 #### pass function renamed to passgen
 
 The Bash it `pass` function has been renamed to `passgen` in order to avoid a naming conflict with the [pass password manager]. In order to minimize the impact on users of the legacy Bash it `pass` function, Bash it will create the alias `pass` that calls the new `passgen` function if the `pass` password manager command is not found on the `PATH` (default behavior).
