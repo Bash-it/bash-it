@@ -2,19 +2,35 @@ cite about-alias
 about-alias 'general aliases'
 
 # List directory contents
-alias sl=ls
-alias ls='ls -G'        # Compact view, show colors
-alias la='ls -AF'       # Compact view, show hidden
-alias ll='ls -al'
-alias l='ls -a'
-alias l1='ls -1'
+# Source: http://tldp.org/LDP/abs/html/sample-bashrc.html
+
+# # Add colors for filetype and  human-readable sizes by default on 'ls':
+#alias ls='ls --color'
+alias l='ls -a --color'            # Standard
+alias lx='ls -lXB --color'         # Sort by extension.
+alias lk='ls -lSr --color'         # Sort by size, biggest last.
+alias lt='ls -ltr --color'         # Sort by date, most recent last.
+alias lc='ls -ltcr --color'        # Sort by/show change time,most recent last.
+alias lu='ls -ltur --color'        # Sort by/show access time,most recent last.
+
+# # The ubiquitous 'll': directories first, with alphanumeric sorting:
+alias ll="ls -lv --group-directories-first --color"
+  alias lm='ll |more'                # Pipe through 'more'
+  alias lr='ll -R'                   # Recursive ls.
+  alias la='ll -A'                   # Show hidden files.
+alias tree='tree -C'               # Nice alternative to 'recursive ls' ...
+
+alias sl='ls'
+alias l1='ls -1 --group-directories-first --color'
+
+# alias ls='ls -G'        # Compact view, show colors
+# alias la='ls -AF'       # Compact view, show hidden
+# alias ll='ls -al'
+
 
 alias _="sudo"
 
-if [ $(uname) = "Linux" ]
-then
-  alias ls="ls --color=auto"
-fi
+
 which gshuf &> /dev/null
 if [ $? -eq 0 ]
 then
