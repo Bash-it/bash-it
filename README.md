@@ -66,10 +66,12 @@ This will restore your previous Bash profile. After the uninstall script finishe
 ## Misc
 
 ### Bash Profile Aliases
+
 Bash it creates a `reload` alias that makes it convenient to reload
 your bash profile when you make changes.
 
 ### Prompt Version Control Check
+
 Bash it provides prompt themes the ability to check and display version control information for the current directory. The information is retrieved for each directory and can slow down the navigation of projects with a large number of files and folders. Turn version control checking off to prevent slow directory navigation within large projects.
 
 Bash it provides a flag (`SCM_CHECK`) within the `~/.bash_profile` file that turns off/on version control information checking and display within all themes. Version control checking is on by default unless explicitly turned off.
@@ -85,10 +87,15 @@ Set `SCM_CHECK` to 'true' (the default value) to **turn on** version control che
 **NOTE:**
 It is possible for themes to ignore the `SCM_CHECK` flag and query specific version control information directly. For example, themes that use functions like `git_prompt_vars` skip the `SCM_CHECK` flag to retrieve and display git prompt information. If you turned version control checking off and you still see version control information  within your prompt, then functions like `git_prompt_vars` are most likely the reason why.
 
-### Git repository info in the prompt
+### Git prompt
+
+Bash it has some nice features related to git, continue reading to know more about.
+
+#### Repository info in the prompt
+
 Bash it can show some information about Git repositories in the shell prompt: the current branch, tag or commit you are at, how many commits the local branch is ahead or behind from the remote branch, and if you have changes stashed.
 
-Additionally, you can view the status of your working copy and get the count of staged, unstaged and untracked files. This feature is controlled through the flag `SCM_GIT_SHOW_DETAILS` as follows:
+Additionally, you can view the status of your working copy and get the count of *staged*, *unstaged* and *untracked* files. This feature is controlled through the flag `SCM_GIT_SHOW_DETAILS` as follows:
 
 Set `SCM_GIT_SHOW_DETAILS` to 'true' (the default value) to **show** the working copy details in your prompt:
 
@@ -98,7 +105,8 @@ Set `SCM_GIT_SHOW_DETAILS` to 'false' to **don't show** it:
 
 * `export SCM_GIT_SHOW_DETAILS=false`
 
-### Git remotes and remote branches
+#### Remotes and remote branches
+
 In some git workflows you must work with various remotes, for this reason, Bash it can provide some useful information about your remotes and your remote branches, for example, the remote on you are working, or if your local branch is tracking a remote branch.
 
 You can control this feature with the flag `SCM_GIT_SHOW_REMOTE_INFO` as follows:
@@ -114,6 +122,22 @@ Set `SCM_GIT_SHOW_REMOTE_INFO` to 'true' to always activate the feature:
 Set `SCM_GIT_SHOW_REMOTE_INFO` to 'false' to **disable the feature**:
 
 * `export SCM_GIT_SHOW_REMOTE_INFO=false`
+
+#### Untracked files
+
+By default, `git status` command shows information about *untracked* files, this behavior can be controlled through command line flags or git configuration files, for big repositories, ignoring *untracked* files can make git faster. Bash it uses `git status` to gather the repo information it shows in the prompt, so in some circumstances, can be useful to instruct Bash it to ignore these files. You can control this behavior with the flag `SCM_GIT_IGNORE_UNTRACKED`:
+
+Set `SCM_GIT_IGNORE_UNTRACKED` to 'true' (the default value) to get information about *untracked* files:
+
+* `export SCM_GIT_IGNORE_UNTRACKED=true`
+
+Set `SCM_GIT_IGNORE_UNTRACKED` to 'false' to **ignore** *untracked* files:
+
+* `export SCM_GIT_IGNORE_UNTRACKED=false`
+
+also, with this flag to false, Bash it will not show the repository as dirty when the repo have *untracked* files, and will not display the count of *untracked* files.
+
+**NOTE:** If you set in git configuration file the option to ignore *untracked* files, this flag has no effect, and Bash it will ignore *untracked* files always.
 
 #### pass function renamed to passgen
 
