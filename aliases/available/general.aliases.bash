@@ -5,7 +5,6 @@ about-alias 'general aliases'
 # Source: http://tldp.org/LDP/abs/html/sample-bashrc.html
 
 # # Add colors for filetype and  human-readable sizes by default on 'ls':
-#alias ls='ls --color'
 alias l='ls -a --color'            # Standard
 alias lx='ls -lXB --color'         # Sort by extension.
 alias lk='ls -lSr --color'         # Sort by size, biggest last.
@@ -15,17 +14,14 @@ alias lu='ls -ltur --color'        # Sort by/show access time,most recent last.
 
 # # The ubiquitous 'll': directories first, with alphanumeric sorting:
 alias ll="ls -lv --group-directories-first --color"
-  alias lm='ll |more'                # Pipe through 'more'
-  alias lr='ll -R'                   # Recursive ls.
-  alias la='ll -A'                   # Show hidden files.
+alias lm='ll |more'                # Pipe through 'more'
+alias lr='ll -R'                   # Recursive ls.
+alias la='ll -A'                   # Show hidden files.
+
 alias tree='tree -C'               # Nice alternative to 'recursive ls' ...
 
 alias sl='ls'
 alias l1='ls -1 --group-directories-first --color'
-
-# alias ls='ls -G'        # Compact view, show colors
-# alias la='ls -AF'       # Compact view, show hidden
-# alias ll='ls -al'
 
 
 alias _="sudo"
