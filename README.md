@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/Bash-it/bash-it.svg?branch=master)](https://travis-ci.org/Bash-it/bash-it) [![Join the chat at https://gitter.im/Bash-it/bash-it](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Bash-it/bash-it?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-**Bash it** is a collection of community bash commands and scripts. (And a shameless ripoff of [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh). :)
+**Bash it** is a collection of community bash commands and scripts. (And a shameless ripoff of [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) :smiley:)
 
 Includes autocompletion, themes, aliases, custom functions, a few stolen pieces from Steve Losh, and more.
 
@@ -46,9 +46,9 @@ Anything in the custom directory will be ignored, with the exception of `custom/
 
 ## Themes
 
-There are a few bash it themes.  If you've created your own custom prompts, I'd love it if you shared with everyone else!  Just submit a Pull Request to me (revans).
+There are a few bash it themes. If you've created your own custom prompts, I'd love it if you shared with everyone else! Just submit a Pull Request to me (revans).
 
-You can see the theme screenshots  [here](https://github.com/revans/bash-it/wiki/Themes)
+You can see the theme screenshots [here](https://github.com/revans/bash-it/wiki/Themes)
 
 Alternatively, you can preview the themes in your own shell using `BASH_PREVIEW=true reload`
 
@@ -85,7 +85,7 @@ Set `SCM_CHECK` to 'true' (the default value) to **turn on** version control che
 * `export SCM_CHECK=true`
 
 **NOTE:**
-It is possible for themes to ignore the `SCM_CHECK` flag and query specific version control information directly. For example, themes that use functions like `git_prompt_vars` skip the `SCM_CHECK` flag to retrieve and display git prompt information. If you turned version control checking off and you still see version control information  within your prompt, then functions like `git_prompt_vars` are most likely the reason why.
+It is possible for themes to ignore the `SCM_CHECK` flag and query specific version control information directly. For example, themes that use functions like `git_prompt_vars` skip the `SCM_CHECK` flag to retrieve and display git prompt information. If you turned version control checking off and you still see version control information within your prompt, then functions like `git_prompt_vars` are most likely the reason why.
 
 ### Git prompt
 
@@ -139,7 +139,7 @@ also, with this flag to false, Bash it will not show the repository as dirty whe
 
 **NOTE:** If you set in git configuration file the option to ignore *untracked* files, this flag has no effect, and Bash it will ignore *untracked* files always.
 
-#### pass function renamed to passgen
+### pass function renamed to passgen
 
 The Bash it `pass` function has been renamed to `passgen` in order to avoid a naming conflict with the [pass password manager]. In order to minimize the impact on users of the legacy Bash it `pass` function, Bash it will create the alias `pass` that calls the new `passgen` function if the `pass` password manager command is not found on the `PATH` (default behavior).
 
@@ -153,7 +153,7 @@ Unset `BASH_IT_LEGACY_PASS` to have Bash it **return to default behavior**:
 
 * `unset BASH_IT_LEGACY_PASS`
 
-#### Proxy Support
+### Proxy Support
 
 If you are working in a corporate environment where you have to go through a proxy server for internet access, then you know how painful it is to configure the OS proxy variables in the shell, especially if you are switching between environments, e.g. office (with proxy) and home (without proxy).
 
@@ -186,7 +186,7 @@ There are many more proxy commands, e.g. for changing the local Git project's pr
 
 ## Help out
 
-We think everyone has their own custom scripts accumulated over time.  And so, following in the footsteps of oh-my-zsh, Bash it is a framework for easily customizing your bash shell. Everyone's got a custom toolbox, so let's start making them even better, **as a community!**
+We think everyone has their own custom scripts accumulated over time. And so, following in the footsteps of oh-my-zsh, Bash it is a framework for easily customizing your bash shell. Everyone's got a custom toolbox, so let's start making them even better, **as a community!**
 
 Send us a pull request and we'll merge it as long as it looks good. If you change an existing command, please give an explanation why. That will help a lot when we merge your changes in.
 
