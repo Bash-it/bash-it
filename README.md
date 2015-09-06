@@ -127,13 +127,13 @@ Set `SCM_GIT_SHOW_REMOTE_INFO` to 'false' to **disable the feature**:
 
 By default, `git status` command shows information about *untracked* files, this behavior can be controlled through command line flags or git configuration files, for big repositories, ignoring *untracked* files can make git faster. Bash it uses `git status` to gather the repo information it shows in the prompt, so in some circumstances, can be useful to instruct Bash it to ignore these files. You can control this behavior with the flag `SCM_GIT_IGNORE_UNTRACKED`:
 
-Set `SCM_GIT_IGNORE_UNTRACKED` to 'true' (the default value) to get information about *untracked* files:
-
-* `export SCM_GIT_IGNORE_UNTRACKED=true`
-
-Set `SCM_GIT_IGNORE_UNTRACKED` to 'false' to **ignore** *untracked* files:
+Set `SCM_GIT_IGNORE_UNTRACKED` to 'false' (the default value) to get information about *untracked* files:
 
 * `export SCM_GIT_IGNORE_UNTRACKED=false`
+
+Set `SCM_GIT_IGNORE_UNTRACKED` to 'true' to **ignore** *untracked* files:
+
+* `export SCM_GIT_IGNORE_UNTRACKED=true`
 
 also, with this flag to false, Bash it will not show the repository as dirty when the repo have *untracked* files, and will not display the count of *untracked* files.
 
