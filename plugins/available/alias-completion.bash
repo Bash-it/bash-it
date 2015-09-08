@@ -2,7 +2,7 @@ cite about-plugin
 about-plugin 'Automatic completion of aliases'
 
 # References:
-# http://superuser.com/questions/436314/how-can-i-get-bash-to-perform-tab-completion-for-my-aliases
+# http://superuser.com/a/437508/119764
 # http://stackoverflow.com/a/1793178/1228454
 
 # This needs to be a plugin so it gets executed after the completions and the aliases have been defined.
@@ -36,7 +36,7 @@ function alias_completion {
         eval "local alias_tokens; alias_tokens=($line)" 2>/dev/null || continue # some alias arg patterns cause an eval parse error
         local alias_name="${alias_tokens[0]}" alias_cmd="${alias_tokens[1]}" alias_args="${alias_tokens[2]# }"
 
-        # skip aliases to pipes, boolan control structures and other command lists
+        # skip aliases to pipes, boolean control structures and other command lists
         # (leveraging that eval errs out if $alias_args contains unquoted shell metacharacters)
         eval "local alias_arg_words; alias_arg_words=($alias_args)" 2>/dev/null || continue
         # avoid expanding wildcards
