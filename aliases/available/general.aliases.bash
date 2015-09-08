@@ -11,7 +11,7 @@ case "$OSTYPE" in
     # Set Linux color option
     LS_COLOR_OPTION="--color=auto"
     ;;
-    darwin*)
+  darwin*)
     # Set BSD color optio
     LS_COLOR_OPTION="-G"
     #Check if coreutils version of if exists
@@ -19,7 +19,7 @@ case "$OSTYPE" in
       # Check if coreutils path is in $PATH
       if [[ ":$PATH:" == *":/usr/local/opt/coreutils/libexec/gnubin:"* ]]; then
         # Set Linux color option
-        LS_COLOR_OPTION="--color"
+        LS_COLOR_OPTION="--color=auto"
       fi
     fi
     ;;
@@ -43,8 +43,6 @@ alias ll="ls -lv --group-directories-first $LS_COLOR_OPTION"
 alias lm="ll |more"                # Pipe through "more"
 alias lr="ll -R"                   # Recursive ls.
 alias la="ll -A"                   # Show hidden files.
-
-alias tree="tree -C"               # Nice alternative to "recursive ls" ...
 
 alias sl="ls"
 alias l1="ls -1 --group-directories-first $LS_COLOR_OPTION"
