@@ -118,7 +118,7 @@ function git_prompt_vars {
   local ref=$(git symbolic-ref -q HEAD 2> /dev/null)
   if [[ -n "$ref" ]]; then
     SCM_BRANCH=${SCM_THEME_BRANCH_PREFIX}${ref#refs/heads/}
-    local tracking_info="$(grep "${SCM_BRANCH}..." <<< "${status}")"
+    local tracking_info="$(grep "${SCM_BRANCH}\.\.\." <<< "${status}")"
     if [[ -n "${tracking_info}" ]]; then
       [[ "${tracking_info}" =~ .+\[gone\]$ ]] && local branch_gone="true"
       tracking_info=${tracking_info#\#\# ${SCM_BRANCH}...}
