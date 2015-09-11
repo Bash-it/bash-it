@@ -139,6 +139,24 @@ also, with this flag to false, Bash it will not show the repository as dirty whe
 
 **NOTE:** If you set in git configuration file the option to ignore *untracked* files, this flag has no effect, and Bash it will ignore *untracked* files always.
 
+#### Ignore repo status
+
+When working in repos with a large code base Bash it can slow down your prompt when checking the repo status, to avoid it, there is an option you can set via Git config to disable checking repo status in Bash it.
+
+To disable checking the status in the current repo:
+
+```
+$ git config --add bash-it.hide-status 1
+```
+
+But if you would like to disable it globally, and stop checking the status for all of your repos:
+
+```
+$ git config --global --add bash-it.hide-status 1
+```
+
+setting this flag globally has the same effect that `SCM_CHECK=true` but only for Git repos.
+
 ### pass function renamed to passgen
 
 The Bash it `pass` function has been renamed to `passgen` in order to avoid a naming conflict with the [pass password manager]. In order to minimize the impact on users of the legacy Bash it `pass` function, Bash it will create the alias `pass` that calls the new `passgen` function if the `pass` password manager command is not found on the `PATH` (default behavior).
