@@ -5,6 +5,7 @@ about-alias 'common git abbreviations'
 alias gcl='git clone'
 alias ga='git add'
 alias gall='git add .'
+alias gf='git fetch --all --prune'
 alias gus='git reset HEAD'
 alias gm="git merge"
 alias g='git'
