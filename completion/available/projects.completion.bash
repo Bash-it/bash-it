@@ -1,8 +1,6 @@
 _pj() {
     [ -z "$PROJECT_PATHS" ] && return
-
     shift
-
     [ "$1" == "open" ] && shift
 
     local cur prev words cword
@@ -26,8 +24,6 @@ _pj() {
         done
     done
 
-    _filedir -d
-
     if [[ ${#COMPREPLY[@]} -eq 1 ]]; then
         i=${COMPREPLY[0]}
         if [[ "$i" == "$cur" && $i != "*/" ]]; then
@@ -37,8 +33,6 @@ _pj() {
 
     return 0
 }
-if shopt -q cdable_vars; then
-    complete -v -F _pj -o nospace pj
-else
-    complete -F _pj -o nospace pj
-fi
+
+complete -F _pj -o nospace pj
+
