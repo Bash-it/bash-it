@@ -1,4 +1,4 @@
-_gvm_complete()
+_sdkman_complete()
 {
   local CANDIDATES
   local CANDIDATE_VERSIONS
@@ -10,7 +10,7 @@ _gvm_complete()
   elif [ $COMP_CWORD -eq 2 ]; then
     case "${COMP_WORDS[COMP_CWORD-1]}" in
       "install" | "uninstall" | "rm" | "list" | "ls" | "use" | "current" | "outdated" )
-        CANDIDATES=$(echo "${GVM_CANDIDATES_CSV}" | tr ',' ' ')
+        CANDIDATES=$(echo "${SDKMAN_CANDIDATES_CSV}" | tr ',' ' ')
         COMPREPLY=( $(compgen -W "$CANDIDATES" -- ${COMP_WORDS[COMP_CWORD]}) )
         ;;
       "offline" )
@@ -28,7 +28,7 @@ _gvm_complete()
   elif [ $COMP_CWORD -eq 3 ]; then
     case "${COMP_WORDS[COMP_CWORD-2]}" in
       "install" | "uninstall" | "rm" | "use" | "default" )
-        _gvm_candidate_versions ${COMP_WORDS[COMP_CWORD-1]}
+        _sdkman_candidate_versions ${COMP_WORDS[COMP_CWORD-1]}
         COMPREPLY=( $(compgen -W "$CANDIDATE_VERSIONS" -- ${COMP_WORDS[COMP_CWORD]}) )
         ;;
       *)
@@ -39,33 +39,33 @@ _gvm_complete()
   return 0
 }
 
-_gvm_candidate_versions(){
+_sdkman_candidate_versions(){
 
   
-  CANDIDATE_LOCAL_VERSIONS=$(__gvm_cleanup_local_versions $1)
-  if _gvm_offline; then
+  CANDIDATE_LOCAL_VERSIONS=$(__sdkman_cleanup_local_versions $1)
+  if _sdkman_offline; then
     CANDIDATE_VERSIONS=$CANDIDATE_LOCAL_VERSIONS
   else
-    CANDIDATE_ONLINE_VERSIONS="$(curl -s "${GVM_SERVICE}/candidates/$1" | tr ',' ' ')"
+    CANDIDATE_ONLINE_VERSIONS="$(curl -s "${SDKMAN_SERVICE}/candidates/$1" | tr ',' ' ')"
     CANDIDATE_VERSIONS="$(echo $CANDIDATE_ONLINE_VERSIONS $CANDIDATE_LOCAL_VERSIONS |sort | uniq ) "
   fi
 
 }
 
-__gvm_cleanup_local_versions(){
+__sdkman_cleanup_local_versions(){
   
-  __gvmtool_build_version_csv $1
+  __sdkmantool_build_version_csv $1
   echo $CSV | tr ',' ' '
 
 }
 
-_gvm_offline()
+_sdkman_offline()
 {
-  if [ "$GVM_ONLINE" = "true" ]; then
+  if [ "$SDKMAN_ONLINE" = "true" ]; then
     return 1
   else
     return 0
   fi
 }
 
-complete -F _gvm_complete gvm
+complete -F _sdkman_complete sdk
