@@ -89,7 +89,8 @@ else
   echo ""
   echo -e "\033[0;32mEnabling sane defaults\033[0m"
   load_one completion bash-it.completion.bash
-  load_one plugins alias-completion.bash
+  load_one plugins alias-completion.plugin.bash
+  load_one aliases general.aliases.bash
 fi
 
 echo ""
