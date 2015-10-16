@@ -38,7 +38,6 @@ test -w "$HOME/$CONFIG_FILE" &&
 
 cp "$BASH_IT/template/bash_profile.template.bash" "$HOME/$CONFIG_FILE"
 sed -i "s|{{BASH_IT}}|$BASH_IT|" "$HOME/$CONFIG_FILE"
-exit
 
 echo -e "\033[0;32mCopied the template $CONFIG_FILE into ~/$CONFIG_FILE, edit this file to customize bash-it\033[0m"
 
