@@ -1,8 +1,13 @@
 cite about-plugin
 about-plugin 'mankier.com explain function to explain other commands'
 
-# Add this to ~/.bash_profile or ~/.bashrc
 explain () {
+  about 'explain any bash command via mankier.com manpage API'
+  param '1: Name of the command to explain'
+  example '$ explain                # interactive mode. Type commands to explain in REPL'
+  example '$ explain 'cmd -o | ...' # one quoted command to explain it.'
+  group 'explain'
+
   if [ "$#" -eq 0 ]; then
     while read  -p "Command: " cmd; do
       curl -Gs "https://www.mankier.com/api/explain/?cols="$(tput cols) --data-urlencode "q=$cmd"
@@ -17,7 +22,3 @@ explain () {
   fi
 }
 
-# Update 26-03-2015. If using this command gives no output, see if running a simple fetch causes this error:
-# $ curl https://www.mankier.com
-# curl: (35) Cannot communicate securely with peer: no common encryption algorithm(s).
-# If so, try specifying a cipher in the curl commands: curl --ciphers ecdhe_ecdsa_aes_128_sha
