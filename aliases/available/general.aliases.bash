@@ -3,7 +3,7 @@ about-alias 'general aliases'
 
 # List directory contents
 alias sl=ls
-alias ls='ls -G'        # Compact view, show colors
+alias ls='ls -alG'        # Compact view, show colors
 alias la='ls -AF'       # Compact view, show hidden
 alias ll='ls -al'
 alias l='ls -a'
