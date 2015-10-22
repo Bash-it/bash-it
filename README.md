@@ -10,7 +10,7 @@ Bash it provides a solid framework for using, developing and maintaining shell s
 
 ## Install
 
-1. Check a clone of this repo: `git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it`
+1. Check out a clone of this repo to a location of your choice, such as: `git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it`
 2. Run `~/.bash_it/install.sh` (it automatically backs up your `~/.bash_profile` or `~/.bashrc`, depending on your OS)
 3. Edit your modified config (`~/.bash_profile` or `~/.bashrc`) file in order to customize Bash it.
 4. Check out available aliases, completions and plugins and enable the ones you want to use (see the next section for more details).

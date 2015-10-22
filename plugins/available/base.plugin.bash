@@ -196,3 +196,11 @@ function buf ()
     local filetime=$(date +%Y%m%d_%H%M%S)
     cp -a "${filename}" "${filename}_${filetime}"
 }
+
+function del() { 
+    about 'move files to hidden folder in tmp, that gets cleared on each reboot'
+    param 'file or folder to be deleted'
+    example 'del ./file.txt'
+    group 'base'
+    mkdir -p /tmp/.trash && mv "$@" /tmp/.trash; 
+}

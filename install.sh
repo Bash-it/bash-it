@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-BASH_IT="$HOME/.bash_it"
+BASH_IT="$(dirname "$(readlink -f "$0")")"
 
 case $OSTYPE in
   darwin*)
@@ -36,18 +36,19 @@ test -w "$HOME/$CONFIG_FILE" &&
   cp -a "$HOME/$CONFIG_FILE" "$HOME/$CONFIG_FILE.bak" &&
   echo -e "\033[0;32mYour original $CONFIG_FILE has been backed up to $CONFIG_FILE.bak\033[0m"
 
-cp "$HOME/.bash_it/template/bash_profile.template.bash" "$HOME/$CONFIG_FILE"
+cp "$BASH_IT/template/bash_profile.template.bash" "$HOME/$CONFIG_FILE"
+sed -i "s|{{BASH_IT}}|$BASH_IT|" "$HOME/$CONFIG_FILE"
 
 echo -e "\033[0;32mCopied the template $CONFIG_FILE into ~/$CONFIG_FILE, edit this file to customize bash-it\033[0m"
 
 function load_one() {
   file_type=$1
   file_to_enable=$2
-  [ ! -d "$BASH_IT/$file_type/enabled" ] && mkdir "$BASH_IT/${file_type}/enabled"
+  mkdir -p "$BASH_IT/${file_type}/enabled"
 
   dest="${BASH_IT}/${file_type}/enabled/${file_to_enable}"
   if [ ! -e "${dest}" ]; then
-      ln -s "../available/${file_to_enable}" "${dest}"
+      ln -sf "../available/${file_to_enable}" "${dest}"
   else
       echo "File ${dest} exists, skipping"
   fi
@@ -89,7 +90,8 @@ else
   echo ""
   echo -e "\033[0;32mEnabling sane defaults\033[0m"
   load_one completion bash-it.completion.bash
-  load_one plugins alias-completion.bash
+  load_one plugins alias-completion.plugin.bash
+  load_one aliases general.aliases.bash
 fi
 
 echo ""
