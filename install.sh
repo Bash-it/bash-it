@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-BASH_IT="$(dirname "$(readlink -f "$0")")"
+BASH_IT="$(cd "$(dirname "$0")" && pwd)"
 
 case $OSTYPE in
   darwin*)
@@ -36,8 +36,7 @@ test -w "$HOME/$CONFIG_FILE" &&
   cp -a "$HOME/$CONFIG_FILE" "$HOME/$CONFIG_FILE.bak" &&
   echo -e "\033[0;32mYour original $CONFIG_FILE has been backed up to $CONFIG_FILE.bak\033[0m"
 
-cp "$BASH_IT/template/bash_profile.template.bash" "$HOME/$CONFIG_FILE"
-sed -i "s|{{BASH_IT}}|$BASH_IT|" "$HOME/$CONFIG_FILE"
+sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" > "$HOME/$CONFIG_FILE"
 
 echo -e "\033[0;32mCopied the template $CONFIG_FILE into ~/$CONFIG_FILE, edit this file to customize bash-it\033[0m"
 
