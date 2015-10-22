@@ -53,8 +53,8 @@ then
 fi
 
 # Directory
-alias	md='mkdir -p'
-alias	rd='rmdir'
+alias md='mkdir -p'
+alias rd='rmdir'
 
 # Display whatever file is regular file or folder
 catt() {
