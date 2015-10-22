@@ -3,7 +3,7 @@ about-alias 'general aliases'
 
 # List directory contents
 alias sl=ls
-alias ls='ls -alG'        # Compact view, show colors
+alias ls='ls -G'        # Compact view, show colors
 alias la='ls -AF'       # Compact view, show hidden
 alias ll='ls -al'
 alias l='ls -a'
@@ -53,8 +53,8 @@ then
 fi
 
 # Directory
-alias	md='mkdir -p'
-alias	rd='rmdir'
+alias md='mkdir -p'
+alias rd='rmdir'
 
 # Display whatever file is regular file or folder
 catt() {
