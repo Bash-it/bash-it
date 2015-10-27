@@ -37,8 +37,8 @@ bash-it ()
     param '3: specific component [optional]'
     example '$ bash-it show plugins'
     example '$ bash-it help aliases'
-    example '$ bash-it enable plugin git'
-    example '$ bash-it disable alias hg'
+    example '$ bash-it enable plugin git [tmux]...'
+    example '$ bash-it disable alias hg [tmux]...'
     typeset verb=${1:-}
     shift
     typeset component=${1:-}
@@ -72,7 +72,15 @@ bash-it ()
             fi
         fi
     fi
-    $func $*
+
+    if [ x"$verb" == x"enable" -o x"$verb" == x"disable" ];then
+        for arg in "$@"
+        do
+            $func $arg
+        done
+    else
+        $func $*
+    fi
 }
 
 _is_function ()
@@ -134,9 +142,9 @@ _bash-it-describe ()
         printf "%-20s%-10s%s\n" "$(basename $f | cut -d'.' -f1)" "  [$enabled]" "$(cat $f | metafor about-$file_type)"
     done
     printf '\n%s\n' "to enable $preposition $file_type, do:"
-    printf '%s\n' "$ bash-it enable $file_type  <$file_type name> -or- $ bash-it enable $file_type all"
+    printf '%s\n' "$ bash-it enable $file_type  <$file_type name> [$file_type name]... -or- $ bash-it enable $file_type all"
     printf '\n%s\n' "to disable $preposition $file_type, do:"
-    printf '%s\n' "$ bash-it disable $file_type <$file_type name> -or- $ bash-it disable $file_type all"
+    printf '%s\n' "$ bash-it disable $file_type <$file_type name> [$file_type name]... -or- $ bash-it disable $file_type all"
 }
 
 _disable-plugin ()
@@ -198,7 +206,7 @@ _disable-thing ()
     else
         typeset plugin=$(command ls $BASH_IT/$subdirectory/enabled/$file_entity.*bash 2>/dev/null | head -1)
         if [ -z "$plugin" ]; then
-            printf '%s\n' "sorry, that does not appear to be an enabled $file_type."
+            printf '%s\n' "sorry, $file_entity does not appear to be an enabled $file_type."
             return
         fi
         rm $BASH_IT/$subdirectory/enabled/$(basename $plugin)
@@ -267,7 +275,7 @@ _enable-thing ()
     else
         typeset plugin=$(command ls $BASH_IT/$subdirectory/available/$file_entity.*bash 2>/dev/null | head -1)
         if [ -z "$plugin" ]; then
-            printf '%s\n' "sorry, that does not appear to be an available $file_type."
+            printf '%s\n' "sorry, $file_entity does not appear to be an available $file_type."
             return
         fi
 
