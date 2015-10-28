@@ -32,7 +32,10 @@ alias q='exit'
 
 alias irc="$IRC_CLIENT"
 
+# Language aliases
 alias rb='ruby'
+alias py='python'
+alias ipy='ipython'
 
 # Pianobar can be found here: http://github.com/PromyLOPh/pianobar/
 
