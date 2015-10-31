@@ -72,7 +72,7 @@ function powerline_shell_prompt {
             else
                 SHELL_PROMPT="${USER}"
             fi
-            RIGHT_PROMPT_LENGTH=$(( ${RIGHT_PROMPT_LENGTH} + ${#SHELL_PROMPT} + 2 ))
+            RIGHT_PROMPT_LENGTH=$(( ${RIGHT_PROMPT_LENGTH} + ${#SHELL_PROMPT} + 3 ))
             SHELL_PROMPT="$(set_rgb_color - ${SHELL_PROMPT_COLOR}) ${SHELL_PROMPT} ${normal}"
             LAST_THEME_COLOR=${SHELL_PROMPT_COLOR}
             (( SEGMENT_AT_RIGHT += 1 ))
@@ -80,7 +80,7 @@ function powerline_shell_prompt {
         "sudo")
             if [[ "${SHELL_PROMPT_COLOR}" == "${SHELL_THEME_PROMPT_COLOR_SUDO}" ]]; then
                 SHELL_PROMPT="!"
-                RIGHT_PROMPT_LENGTH=$(( ${RIGHT_PROMPT_LENGTH} + ${#SHELL_PROMPT} + 2 ))
+                RIGHT_PROMPT_LENGTH=$(( ${RIGHT_PROMPT_LENGTH} + ${#SHELL_PROMPT} + 3 ))
                 SHELL_PROMPT="$(set_rgb_color - ${SHELL_PROMPT_COLOR}) ${SHELL_PROMPT} ${normal}"
                 LAST_THEME_COLOR=${SHELL_PROMPT_COLOR}
                 (( SEGMENT_AT_RIGHT += 1 ))
@@ -90,46 +90,46 @@ function powerline_shell_prompt {
 }
 
 function powerline_rvm_prompt {
-    local environ=""
+    local RVM_PROMPT=""
 
     if command_exists rvm; then
-        rvm_prompt=$(rvm_version_prompt)
-        if [[ "${rvm_prompt}" != $(rvm strings default) ]]; then
-            RVM_PROMPT="$(set_rgb_color - ${RVM_THEME_PROMPT_COLOR}) ${RVM_CHAR}${rvm_prompt} ${normal}"
+        RVM_PROMPT=$(rvm_version_prompt)
+        if [[ "${RVM_PROMPT}" != $(rvm strings default) ]]; then
+            RVM_PROMPT="$(set_rgb_color - ${RVM_THEME_PROMPT_COLOR}) ${RVM_CHAR}${RVM_PROMPT} ${normal}"
             if [[ "${SEGMENT_AT_LEFT}" -gt 0 ]]; then
                 RVM_PROMPT=$(set_rgb_color ${LAST_THEME_COLOR} ${RVM_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}${RVM_PROMPT}
             fi
             LAST_THEME_COLOR=${RVM_THEME_PROMPT_COLOR}
+            LEFT_PROMPT+="${RVM_PROMPT}"
             (( SEGMENT_AT_LEFT += 1 ))
-        else
-            RVM_PROMPT=""
         fi
     fi
 }
 
 function powerline_virtualenv_prompt {
-    local environ=""
+    local VIRTUALENV_PROMPT=""
 
     if [[ -n "$CONDA_DEFAULT_ENV" ]]; then
-        environ="$CONDA_DEFAULT_ENV"
+        VIRTUALENV_PROMPT="$CONDA_DEFAULT_ENV"
         VIRTUALENV_CHAR=${CONDA_VIRTUALENV_CHAR}
     elif [[ -n "$VIRTUAL_ENV" ]]; then
-        environ=$(basename "$VIRTUAL_ENV")
+        VIRTUALENV_PROMPT=$(basename "$VIRTUAL_ENV")
     fi
 
-    if [[ -n "$environ" ]]; then
-        VIRTUALENV_PROMPT="$(set_rgb_color - ${VIRTUALENV_THEME_PROMPT_COLOR}) ${VIRTUALENV_CHAR}$environ ${normal}"
+    if [[ -n "$VIRTUALENV_PROMPT" ]]; then
+        VIRTUALENV_PROMPT="$(set_rgb_color - ${VIRTUALENV_THEME_PROMPT_COLOR}) ${VIRTUALENV_CHAR}${VIRTUALENV_PROMPT} ${normal}"
         if [[ "${SEGMENT_AT_LEFT}" -gt 0 ]]; then
             VIRTUALENV_PROMPT=$(set_rgb_color ${LAST_THEME_COLOR} ${VIRTUALENV_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}${VIRTUALENV_PROMPT}
         fi
         LAST_THEME_COLOR=${VIRTUALENV_THEME_PROMPT_COLOR}
+        LEFT_PROMPT+="${VIRTUALENV_PROMPT}"
         (( SEGMENT_AT_LEFT += 1 ))
-    else
-        VIRTUALENV_PROMPT=""
     fi
 }
 
 function powerline_scm_prompt {
+    local SCM_PROMPT=""
+
     scm_prompt_vars
     if [[ "${SCM_NONE_CHAR}" != "${SCM_CHAR}" ]]; then
         if [[ "${SCM_DIRTY}" -eq 3 ]]; then
@@ -142,23 +142,28 @@ function powerline_scm_prompt {
             SCM_THEME_PROMPT_COLOR=${SCM_THEME_PROMPT_CLEAN_COLOR}
         fi
         if [[ "${SCM_GIT_CHAR}" == "${SCM_CHAR}" ]]; then
-            SCM_PROMPT=" ${SCM_CHAR}${SCM_BRANCH}${SCM_STATE}"
+            SCM_PROMPT+=" ${SCM_CHAR}${SCM_BRANCH}${SCM_STATE}"
         fi
         SCM_PROMPT="$(set_rgb_color - ${SCM_THEME_PROMPT_COLOR})${SCM_PROMPT} ${normal}"
+        if [[ "${SEGMENT_AT_LEFT}" -gt 0 ]]; then
+            SCM_PROMPT=$(set_rgb_color ${LAST_THEME_COLOR} ${SCM_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}${SCM_PROMPT}
+        fi
+        LEFT_PROMPT+="${SCM_PROMPT}"
         LAST_THEME_COLOR=${SCM_THEME_PROMPT_COLOR}
         (( SEGMENT_AT_LEFT += 1 ))
-    else
-        SCM_PROMPT=""
     fi
 }
 
 function powerline_cwd_prompt {
-    CWD_PROMPT="$(set_rgb_color - ${CWD_THEME_PROMPT_COLOR}) \w ${normal}$(set_rgb_color ${CWD_THEME_PROMPT_COLOR} -)${normal}$(set_rgb_color ${CWD_THEME_PROMPT_COLOR} -)${THEME_PROMPT_SEPARATOR}${normal}"
+    local CWD_PROMPT=""
+    #CWD_PROMPT="$(set_rgb_color - ${CWD_THEME_PROMPT_COLOR}) \w ${normal}$(set_rgb_color ${CWD_THEME_PROMPT_COLOR} -)${normal}$(set_rgb_color ${CWD_THEME_PROMPT_COLOR} -)${THEME_PROMPT_SEPARATOR}${normal}"
+    CWD_PROMPT="$(set_rgb_color - ${CWD_THEME_PROMPT_COLOR}) \w ${normal}$(set_rgb_color ${CWD_THEME_PROMPT_COLOR} -)${normal}"
     if [[ "${SEGMENT_AT_LEFT}" -gt 0 ]]; then
         CWD_PROMPT=$(set_rgb_color ${LAST_THEME_COLOR} ${CWD_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}${CWD_PROMPT}
-        SEGMENT_AT_LEFT=0
     fi
     LAST_THEME_COLOR=${CWD_THEME_PROMPT_COLOR}
+    LEFT_PROMPT+="${CWD_PROMPT}"
+    (( SEGMENT_AT_LEFT += 1 ))
 }
 
 function powerline_last_status_prompt {
@@ -204,7 +209,7 @@ function powerline_battery_status_prompt {
             BATTERY_PROMPT+=$(set_rgb_color ${LAST_THEME_COLOR} ${BATTERY_STATUS_THEME_PROMPT_COLOR})${THEME_PROMPT_LEFT_SEPARATOR}${normal}
             (( RIGHT_PROMPT_LENGTH += SEGMENT_AT_RIGHT ))
         else
-            BATTERY_STATUS+=" "
+            BATTERY_STATUS+="  "
         fi
         RIGHT_PROMPT_LENGTH=$(( ${RIGHT_PROMPT_LENGTH} + ${#BATTERY_STATUS} + 2 ))
         LAST_THEME_COLOR=${BATTERY_STATUS_THEME_PROMPT_COLOR}
@@ -231,22 +236,28 @@ function powerline_in_vim_prompt {
 function powerline_prompt_command() {
     local LAST_STATUS="$?"
     local MOVE_CURSOR_RIGHTMOST='\033[500C'
+
+    LEFT_PROMPT=""
+    RIGHT_PROMPT=""
     SEGMENT_AT_LEFT=0
     SEGMENT_AT_RIGHT=0
-    RIGHT_PROMPT_LENGTH=1
-    RIGHT_PROMPT=""
+    RIGHT_PROMPT_LENGTH=0
+    LAST_THEME_COLOR=""
 
     ## left prompt ##
-    powerline_scm_prompt
-    powerline_virtualenv_prompt
-    powerline_rvm_prompt
-    powerline_cwd_prompt
-    powerline_last_status_prompt LAST_STATUS
-
-    LEFT_PROMPT="${SCM_PROMPT}${VIRTUALENV_PROMPT}${RVM_PROMPT}${CWD_PROMPT}${MOVE_CURSOR_RIGHTMOST}"
+    if [[ -z "${THEME_RIGHT_SEGMENTS}" ]]; then
+        powerline_scm_prompt
+        powerline_virtualenv_prompt
+        powerline_rvm_prompt
+        powerline_cwd_prompt
+    else
+        for f in $THEME_RIGHT_SEGMENTS; do
+            $f
+        done
+    fi
+    [[ -n "${LEFT_PROMPT}" ]] && LEFT_PROMPT+="$(set_rgb_color ${LAST_THEME_COLOR} -)${THEME_PROMPT_SEPARATOR}${normal}"
 
     ## right prompt ##
-    LAST_THEME_COLOR="-"
     powerline_shell_prompt
     powerline_battery_status_prompt
     powerline_clock_prompt
@@ -258,6 +269,8 @@ function powerline_prompt_command() {
         RIGHT_PROMPT="\033[${RIGHT_PROMPT_LENGTH}D$(set_rgb_color ${LAST_THEME_COLOR} -)${THEME_PROMPT_LEFT_SEPARATOR}${normal}"
         RIGHT_PROMPT+="${IN_VIM_PROMPT}${CLOCK_PROMPT}${BATTERY_PROMPT}${SHELL_PROMPT}${normal}"
     fi
+
+    powerline_last_status_prompt LAST_STATUS
 
     PS1="${LEFT_PROMPT}${RIGHT_PROMPT}\n${LAST_STATUS_PROMPT}${PROMPT_CHAR} "
 }
