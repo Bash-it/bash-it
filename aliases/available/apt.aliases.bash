@@ -9,8 +9,8 @@ about-alias 'Apt and dpkg aliases for Ubuntu and Debian distros.'
 function _set_pkg_aliases()
 {
 	if [ -x $(which apt) ]; then
-		alias apts='sudo apt-cache search'
-		alias aptshow='sudo apt-cache show'
+		alias apts='apt-cache search'
+		alias aptshow='apt-cache show'
 		alias aptinst='sudo apt-get install -V'
 		alias aptupd='sudo apt-get update'
 		alias aptupg='sudo apt-get dist-upgrade -V && sudo apt-get autoremove'
