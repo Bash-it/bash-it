@@ -178,6 +178,11 @@ function nvm_prompt {
   fi
 }
 
+function gvm_prompt {
+  go_version=`go version`
+  echo -e "($go_version)"
+}
+
 # backwards-compatibility
 function git_prompt_info {
   git_prompt_vars

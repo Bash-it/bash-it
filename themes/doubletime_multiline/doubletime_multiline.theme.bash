@@ -16,7 +16,7 @@ function prompt_setter() {
   PS1="
 $clock $(scm_char) [$THEME_PROMPT_HOST_COLOR\u@${THEME_PROMPT_HOST}$reset_color] $(virtualenv_prompt)$(ruby_version_prompt)
 \w
-$(doubletime_scm_prompt)$reset_color $ "
+$(doubletime_scm_prompt)$reset_color β "
   PS2='> '
   PS4='+ '
 }
