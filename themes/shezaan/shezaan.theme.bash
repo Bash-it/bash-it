@@ -12,7 +12,6 @@ GIT_THEME_PROMPT_SUFFIX="${green}|"
 RVM_THEME_PROMPT_PREFIX="|"
 RVM_THEME_PROMPT_SUFFIX="|"
 
-#myip=`ifconfig en4 | egrep "inet " | awk -F" " '{ print $2 }' | sed 's/\/[0-9]*//g'`
 myip=`$BASH_IT/lib/get_ip.py`
 
 function prompt_command() {
