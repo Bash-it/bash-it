@@ -5,12 +5,12 @@ light_red="$(color reset red)"
 
 
 SCM_THEME_PROMPT_DIRTY=" ${bold_red}✗"
-SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓"
+SCM_THEME_PROMPT_CLEAN=" ${green}✓"
 SCM_THEME_PROMPT_PREFIX=" ${light_blue}scm:("
 SCM_THEME_PROMPT_SUFFIX="${light_blue})"
 
 GIT_THEME_PROMPT_DIRTY=" ${bold_red}✗"
-GIT_THEME_PROMPT_CLEAN=" ${bold_green}✓"
+GIT_THEME_PROMPT_CLEAN=" ${green}✓"
 GIT_THEME_PROMPT_PREFIX="${light_blue}git:("
 GIT_THEME_PROMPT_SUFFIX="${light_blue})"
 
