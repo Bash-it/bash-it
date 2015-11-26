@@ -11,8 +11,8 @@ SCM_THEME_PROMPT_SUFFIX="${light_blue})"
 
 GIT_THEME_PROMPT_DIRTY=" ${bold_red}✗"
 GIT_THEME_PROMPT_CLEAN=" ${green}✓"
-GIT_THEME_PROMPT_PREFIX="${light_blue}git:("
-GIT_THEME_PROMPT_SUFFIX="${light_blue})"
+GIT_THEME_PROMPT_PREFIX="${light_blue}git:( "
+GIT_THEME_PROMPT_SUFFIX="${light_blue} )"
 
 RVM_THEME_PROMPT_PREFIX="|"
 RVM_THEME_PROMPT_SUFFIX="|"
