@@ -46,6 +46,27 @@ modern_scm_prompt() {
         fi
 }
 
+# show chroot if exist
+chroot(){
+    if [ -n "$debian_chroot" ]
+    then 
+        my_ps_chroot="\[\033[01;36m\]\$debian_chroot\[\033[00m\]";
+        echo "($my_ps_chroot)";
+    fi
+    }
+
+# show virtualenvwrapper
+my_ve(){
+    if [ -n "$VIRTUAL_ENV" ]
+    then 
+        my_ps_ve="\[\033[01;35m\]\$ve\[\033[00m\]";
+        echo "($my_ps_ve)";
+    fi
+    echo "";
+    }
+
+
+
 prompt() {
 
    case $HOSTNAME in
@@ -61,12 +82,17 @@ prompt() {
     my_ps_root="\[\033[01;31m\]\u\[\033[00m\]";
     my_ps_path="\[\033[01;36m\]\w\[\033[00m\]";
 
+    if [ -n "$VIRTUAL_ENV" ]
+    then
+        ve=`basename $VIRTUAL_ENV`;
+    fi
+
     # nice prompt
     case "`id -u`" in
-        0) PS1="${TITLEBAR}┌─[$my_ps_root][$my_ps_host]$(modern_scm_prompt)$(__my_rvm_ruby_version)[${cyan}\w${normal}]$(is_vim_shell)
+        0) PS1="${TITLEBAR}┌─$(my_ve)$(chroot)[$my_ps_root][$my_ps_host]$(modern_scm_prompt)$(__my_rvm_ruby_version)[${cyan}\w${normal}]$(is_vim_shell)
 └─▪ "
         ;;
-        *) PS1="${TITLEBAR}┌─[$my_ps_user][$my_ps_host]$(modern_scm_prompt)$(__my_rvm_ruby_version)[${cyan}\w${normal}]$(is_vim_shell)
+        *) PS1="${TITLEBAR}┌─$(my_ve)$(chroot)[$my_ps_user][$my_ps_host]$(modern_scm_prompt)$(__my_rvm_ruby_version)[${cyan}\w${normal}]$(is_vim_shell)
 └─▪ "
         ;;
     esac
