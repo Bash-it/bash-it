@@ -71,7 +71,7 @@ prompt() {
     # yes, these are the the same for now ...
     my_ps_host_root="${green}\h${normal}";
  
-    my_ps_user="${green}\h${normal}"
+    my_ps_user="${bold_green}\u${normal}"
     my_ps_root="${bold_red}\u${normal}";
 
     if [ -n "$VIRTUAL_ENV" ]
