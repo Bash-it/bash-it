@@ -46,27 +46,45 @@ modern_scm_prompt() {
         fi
 }
 
+# show chroot if exist
+chroot(){
+    if [ -n "$debian_chroot" ]
+    then 
+        my_ps_chroot="${bold_cyan}$debian_chroot${normal}";
+        echo "($my_ps_chroot)";
+    fi
+    }
+
+# show virtualenvwrapper
+my_ve(){
+    if [ -n "$VIRTUAL_ENV" ]
+    then 
+        my_ps_ve="${bold_purple}$ve${normal}";
+        echo "($my_ps_ve)";
+    fi
+    echo "";
+    }
+
 prompt() {
 
-   case $HOSTNAME in
-    "zork"* ) my_ps_host="${green}\h${normal}";
-            ;;
-    "pandora") my_ps_host="${red}\h${normal}";
-            ;;
-    * ) my_ps_host="${green}\h${normal}";
-            ;;
-    esac
+    my_ps_host="${green}\h${normal}";
+    # yes, these are the the same for now ...
+    my_ps_host_root="${green}\h${normal}";
+ 
+    my_ps_user="${bold_green}\u${normal}"
+    my_ps_root="${bold_red}\u${normal}";
 
-    my_ps_user="\[\033[01;32m\]\u\[\033[00m\]";
-    my_ps_root="\[\033[01;31m\]\u\[\033[00m\]";
-    my_ps_path="\[\033[01;36m\]\w\[\033[00m\]";
+    if [ -n "$VIRTUAL_ENV" ]
+    then
+        ve=`basename $VIRTUAL_ENV`;
+    fi
 
     # nice prompt
     case "`id -u`" in
-        0) PS1="${TITLEBAR}┌─[$my_ps_root][$my_ps_host]$(modern_scm_prompt)$(__my_rvm_ruby_version)[${cyan}\w${normal}]$(is_vim_shell)
+        0) PS1="${TITLEBAR}┌─$(my_ve)$(chroot)[$my_ps_root][$my_ps_host_root]$(modern_scm_prompt)$(__my_rvm_ruby_version)[${cyan}\w${normal}]$(is_vim_shell)
 └─▪ "
         ;;
-        *) PS1="${TITLEBAR}┌─[$my_ps_user][$my_ps_host]$(modern_scm_prompt)$(__my_rvm_ruby_version)[${cyan}\w${normal}]$(is_vim_shell)
+        *) PS1="${TITLEBAR}┌─$(my_ve)$(chroot)[$my_ps_user][$my_ps_host]$(modern_scm_prompt)$(__my_rvm_ruby_version)[${cyan}\w${normal}]$(is_vim_shell)
 └─▪ "
         ;;
     esac
