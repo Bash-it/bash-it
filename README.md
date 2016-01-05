@@ -64,6 +64,10 @@ cd $BASH_IT
 
 This will restore your previous Bash profile. After the uninstall script finishes, remove the Bash it directory from your machine (`rm -rf $BASH_IT`) and start a new shell.
 
+## Contributing
+
+Please take a look at the [Contribution Guidelines](CONTRIBUTING.md) before reporting a bug or providing a new feature.
+
 ## Misc
 
 ### Bash Profile Aliases
@@ -208,6 +212,8 @@ There are many more proxy commands, e.g. for changing the local Git project's pr
 We think everyone has their own custom scripts accumulated over time. And so, following in the footsteps of oh-my-zsh, Bash it is a framework for easily customizing your bash shell. Everyone's got a custom toolbox, so let's start making them even better, **as a community!**
 
 Send us a pull request and we'll merge it as long as it looks good. If you change an existing command, please give an explanation why. That will help a lot when we merge your changes in.
+
+Please take a look at the [Contribution Guidelines](CONTRIBUTING.md) before reporting a bug or providing a new feature.
 
 Thanks, and happing bashing!
 
