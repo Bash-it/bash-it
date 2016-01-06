@@ -32,11 +32,22 @@ if [ -e "$HOME/$BACKUP_FILE" ]; then
     done
 fi
 
-test -w "$HOME/$CONFIG_FILE" &&
-  cp -a "$HOME/$CONFIG_FILE" "$HOME/$CONFIG_FILE.bak" &&
-  echo -e "\033[0;32mYour original $CONFIG_FILE has been backed up to $CONFIG_FILE.bak\033[0m"
-
-sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" > "$HOME/$CONFIG_FILE"
+read -e -n 1 -r -p "Would you like to keep your $CONFIG_FILE and append bash_it templates at the end?[y/N] " choice
+  case $choice in
+    [yY])
+	  (sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" || tail -n +2) >> "$HOME/$CONFIG_FILE"
+	  echo -e "\033[0;32mBash_it template has correctly added to your $CONFIG_FILE\033[0m"
+      ;;
+    [nN]|"")
+	  test -w "$HOME/$CONFIG_FILE" &&
+	  cp -aL "$HOME/$CONFIG_FILE" "$HOME/$CONFIG_FILE.bak" &&
+	  echo -e "\033[0;32mYour original $CONFIG_FILE has been backed up to $CONFIG_FILE.bak\033[0m"
+	  sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" > "$HOME/$CONFIG_FILE"
+      ;;
+    *)
+      echo -e "\033[91mPlease choose y or n.\033[m"
+      ;;
+  esac
 
 echo -e "\033[0;32mCopied the template $CONFIG_FILE into ~/$CONFIG_FILE, edit this file to customize bash-it\033[0m"
 
