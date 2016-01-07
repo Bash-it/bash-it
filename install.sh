@@ -32,11 +32,11 @@ if [ -e "$HOME/$BACKUP_FILE" ]; then
     done
 fi
 
-read -e -n 1 -r -p "Would you like to keep your $CONFIG_FILE and append bash_it templates at the end?[y/N] " choice
+read -e -n 1 -r -p "Would you like to keep your $CONFIG_FILE and append bash-it templates at the end? [y/N] " choice
   case $choice in
     [yY])
 	  (sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" || tail -n +2) >> "$HOME/$CONFIG_FILE"
-	  echo -e "\033[0;32mBash_it template has correctly added to your $CONFIG_FILE\033[0m"
+	  echo -e "\033[0;32mBash-it template has been added to your $CONFIG_FILE\033[0m"
       ;;
     [nN]|"")
 	  test -w "$HOME/$CONFIG_FILE" &&
