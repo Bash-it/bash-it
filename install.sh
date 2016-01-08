@@ -37,7 +37,11 @@ do
   read -e -n 1 -r -p "Would you like to keep your $CONFIG_FILE and append bash-it templates at the end? [y/N] " choice
     case $choice in
       [yY])
-	    (sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" || tail -n +2) >> "$HOME/$CONFIG_FILE"
+        test -w "$HOME/$CONFIG_FILE" &&
+	    cp -aL "$HOME/$CONFIG_FILE" "$HOME/$CONFIG_FILE.bak" &&
+	    echo -e "\033[0;32mYour original $CONFIG_FILE has been backed up to $CONFIG_FILE.bak\033[0m"
+
+	    (sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" | tail -n +2) >> "$HOME/$CONFIG_FILE"
 	    echo -e "\033[0;32mBash-it template has been added to your $CONFIG_FILE\033[0m"
 	    break
         ;;
