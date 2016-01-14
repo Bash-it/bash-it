@@ -18,7 +18,7 @@ When contributing a new feature, a bug fix, a new theme, or any other change to 
 ## Code Style
 
 * Try to stick to the existing code style. Please don't reformat or change the syntax of existing code simply because you don't like that style.
-* Indentation is using spaces, not tabs. Most of the code is indented with 2 spaces, some with 4 spaces. Please try to stick to 2 spaces.
+* Indentation is using spaces, not tabs. Most of the code is indented with 2 spaces, some with 4 spaces. Please try to stick to 2 spaces. If you're using an editor that supports [EditorConfig](http://EditorConfig.org), the editor should automatically use the settings defined in Bash-it's [.editorconfig file](.editorconfig).
 * When creating new functions, please use a dash ("-") to separate the words of the function's name, e.g. `my-new-function`. Don't use underscores, e.g. `my_new_function`.
 * Internal functions that aren't to be used by the end user should start with an underscore, e.g. `_my-new-internal-function`.
 * Use the provided meta functions to document your code, e.g. `about-plugin`, `about`, `group`, `param`, `example`. This will make it easier for other people to use your new functionality. Take a look at the existing code for an example (e.g. [the base plugin](plugins/available/base.plugin.bash)).
