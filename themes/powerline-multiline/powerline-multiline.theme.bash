@@ -42,7 +42,7 @@ BATTERY_STATUS_THEME_PROMPT_CRITICAL_COLOR=160
 
 THEME_PROMPT_CLOCK_FORMAT=${THEME_PROMPT_CLOCK_FORMAT:="%H:%M:%S"}
 
-IN_VIM_PROMPT_COLOR=35
+IN_VIM_PROMPT_COLOR=245
 IN_VIM_PROMPT_TEXT="vim"
 
 THEME_LEFT_SEGMENTS="scm virtualenv rvm cwd"
@@ -185,7 +185,7 @@ function powerline_last_status_prompt {
 function powerline_clock_prompt {
     local offset=0
     local CLOCK=" $(date +"${THEME_PROMPT_CLOCK_FORMAT}") "
- 
+
     if [[ $? -eq 0 ]]; then
         local CLOCK_PROMPT=""
         RIGHT_PROMPT_LENGTH=$(( ${RIGHT_PROMPT_LENGTH} + ${#CLOCK} ))
@@ -237,7 +237,7 @@ function powerline_in_vim_prompt {
   local IN_VIM_PROMPT=""
   if [ -n "$VIMRUNTIME" ]; then
     if [[ "${SEGMENT_AT_RIGHT}" -eq 0 ]]; then
-      IN_VIM_PROMPT+=$(set_rgb_color ${IN_VIM_PROMPT_COLOR} -)${THEME_PROMPT_LEFT_SEPARATOR}${normal}
+      IN_VIM_PROMPT+="$(set_rgb_color ${IN_VIM_PROMPT_COLOR} -)${THEME_PROMPT_LEFT_SEPARATOR}${normal}"
     else
       IN_VIM_PROMPT+=$(set_rgb_color ${IN_VIM_PROMPT_COLOR} ${LAST_THEME_COLOR})${THEME_PROMPT_LEFT_SEPARATOR}${normal}
       (( offset += 1 ))
