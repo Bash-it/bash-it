@@ -114,9 +114,7 @@ function git_status_summary {
     if (!seen_header) {
       print
     }
-    print untracked
-    print unstaged
-    print staged
+    print untracked "\t" unstaged "\t" staged
   }'
 }
 
@@ -125,12 +123,11 @@ function git_prompt_vars {
   SCM_STATE=${GIT_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
   if [[ "$(git config --get bash-it.hide-status)" != "1" ]]; then
     [[ "${SCM_GIT_IGNORE_UNTRACKED}" = "true" ]] && local git_status_flags='-uno'
-    readarray -t status_lines < <((git status --porcelain ${git_status_flags} -b 2> /dev/null ||
-		                               git status --porcelain ${git_status_flags} 2> /dev/null) | git_status_summary )
-    local status="${status_lines[0]}"
-    local untracked_count="${status_lines[1]}"
-    local unstaged_count="${status_lines[2]}"
-    local staged_count="${status_lines[3]}"
+    local status_lines=$((git status --porcelain ${git_status_flags} -b 2> /dev/null ||
+                          git status --porcelain ${git_status_flags}    2> /dev/null) | git_status_summary)
+    local status=$(awk 'NR==1' <<< "$status_lines")
+    local counts=$(awk 'NR==2' <<< "$status_lines")
+    IFS=$'\t' read untracked_count unstaged_count staged_count <<< "$counts"
     if [[ "${untracked_count}" -gt 0 || "${unstaged_count}" -gt 0 || "${staged_count}" -gt 0 ]]; then
       SCM_DIRTY=1
       if [[ "${SCM_GIT_SHOW_DETAILS}" = "true" ]]; then
