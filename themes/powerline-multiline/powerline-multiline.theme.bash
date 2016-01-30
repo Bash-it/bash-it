@@ -62,11 +62,11 @@ function __powerline_user_info_prompt {
   local color=${USER_INFO_THEME_PROMPT_COLOR}
 
   if sudo -n uptime 2>&1 | grep -q "load"; then
-    COLOR=${USER_INFO_THEME_PROMPT_COLOR_SUDO}
+    color=${USER_INFO_THEME_PROMPT_COLOR_SUDO}
   fi
   case "${POWERLINE_PROMPT_USER_INFO_MODE}" in
     "sudo")
-      if [[ "${COLOR}" == "${USER_INFO_THEME_PROMPT_COLOR_SUDO}" ]]; then
+      if [[ "${color}" == "${USER_INFO_THEME_PROMPT_COLOR_SUDO}" ]]; then
         user_info="!"
       fi
       ;;
@@ -78,15 +78,15 @@ function __powerline_user_info_prompt {
       fi
       ;;
   esac
-  [[ -n "${user_info}" ]] && echo "${user_info}|${COLOR}"
+  [[ -n "${user_info}" ]] && echo "${user_info}|${color}"
 }
 
 function __powerline_rvm_prompt {
-  local RVM=""
+  local rvm=""
 
   if command_exists rvm; then
-    RVM="$(rvm_version_prompt)"
-    [[ -n "${RVM}" ]] && echo "${RVM}|${RVM_THEME_PROMPT_COLOR}"
+    rvm="$(rvm_version_prompt)"
+    [[ -n "${rvm}" ]] && echo "${RVM_CHAR}${rvm}|${RVM_THEME_PROMPT_COLOR}"
   fi
 }
 
@@ -95,34 +95,34 @@ function __powerline_python_venv_prompt {
 
   if [[ -n "${CONDA_DEFAULT_ENV}" ]]; then
     python_venv="${CONDA_DEFAULT_ENV}"
-    PYTHONV_VENV_CHAR=${CONDA_PYTHONVENV_CHAR}
+    PYTHON_VENV_CHAR=${CONDA_PYTHON_VENV_CHAR}
   elif [[ -n "${VIRTUAL_ENV}" ]]; then
     python_venv=$(basename "${VIRTUAL_ENV}")
   fi
 
-  [[ -n "${PYTHON_VENV}" ]] && echo "${python_venv}|${PYTHON_VENV_THEME_PROMPT_COLOR}"
+  [[ -n "${python_venv}" ]] && echo "${PYTHON_VENV_CHAR}${python_venv}|${PYTHON_VENV_THEME_PROMPT_COLOR}"
 }
 
 function __powerline_scm_prompt {
   local color=""
-  local SCM_PROMPT=""
+  local scm_prompt=""
 
   scm_prompt_vars
 
   if [[ "${SCM_NONE_CHAR}" != "${SCM_CHAR}" ]]; then
     if [[ "${SCM_DIRTY}" -eq 3 ]]; then
-      COLOR=${SCM_THEME_PROMPT_STAGED_COLOR}
+      color=${SCM_THEME_PROMPT_STAGED_COLOR}
     elif [[ "${SCM_DIRTY}" -eq 2 ]]; then
-      COLOR=${SCM_THEME_PROMPT_UNSTAGED_COLOR}
+      color=${SCM_THEME_PROMPT_UNSTAGED_COLOR}
     elif [[ "${SCM_DIRTY}" -eq 1 ]]; then
-      COLOR=${SCM_THEME_PROMPT_DIRTY_COLOR}
+      color=${SCM_THEME_PROMPT_DIRTY_COLOR}
     else
-      COLOR=${SCM_THEME_PROMPT_CLEAN_COLOR}
+      color=${SCM_THEME_PROMPT_CLEAN_COLOR}
     fi
     if [[ "${SCM_GIT_CHAR}" == "${SCM_CHAR}" ]]; then
-      SCM_PROMPT+="${SCM_CHAR}${SCM_BRANCH}${SCM_STATE}"
+      scm_prompt+="${SCM_CHAR}${SCM_BRANCH}${SCM_STATE}"
     fi
-    echo "${SCM_PROMPT}|${COLOR}"
+    echo "${scm_prompt}|${color}"
   fi
 }
 
