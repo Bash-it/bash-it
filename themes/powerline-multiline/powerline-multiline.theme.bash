@@ -160,11 +160,7 @@ function __powerline_in_vim_prompt {
 }
 
 function __powerline_last_status_prompt {
-  if [[ "$1" -eq 0 ]]; then
-    LAST_STATUS_PROMPT=""
-  else
-    LAST_STATUS_PROMPT="$(set_rgb_color ${LAST_STATUS_THEME_PROMPT_COLOR} -) ${1} ${normal}"
-  fi
+  [[ "$1" -ne 0 ]] && echo "$(set_rgb_color ${LAST_STATUS_THEME_PROMPT_COLOR} -) ${1} ${normal}"
 }
 
 function __powerline_left_segment {
@@ -231,12 +227,10 @@ function __powerline_prompt_command {
     LEFT_PROMPT+="\033[${RIGHT_PROMPT_LENGTH}D"
   fi
 
-  __powerline_last_status_prompt "${last_status}"
-
-  PS1="${LEFT_PROMPT}${RIGHT_PROMPT}\n${LAST_STATUS_PROMPT}${PROMPT_CHAR} "
+  PS1="${LEFT_PROMPT}${RIGHT_PROMPT}\n$(__powerline_last_status_prompt ${last_status})${PROMPT_CHAR} "
 
   ## cleanup ##
-  unset LAST_STATUS_PROMPT LAST_SEGMENT_COLOR \
+  unset LAST_SEGMENT_COLOR \
         LEFT_PROMPT RIGHT_PROMPT RIGHT_PROMPT_LENGTH \
         SEGMENTS_AT_LEFT SEGMENTS_AT_RIGHT
 }
