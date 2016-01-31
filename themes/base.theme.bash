@@ -92,19 +92,45 @@ function scm_prompt_info {
   [[ $SCM == $SCM_SVN ]] && svn_prompt_info && return
 }
 
+function git_status_summary {
+  awk '
+  {
+    if (!after_first && $0 ~ /^##.+/) {
+      print $0
+      seen_header = 1
+    } else if ($0 ~ /^\?\? .+/) {
+      untracked += 1
+    } else {
+      if ($0 ~ /^.[^ ] .+/) {
+        unstaged += 1
+      }
+      if ($0 ~ /^[^ ]. .+/) {
+        staged += 1
+      }
+    }
+    after_first = 1
+  }
+  END {
+    if (!seen_header) {
+      print
+    }
+    print untracked "\t" unstaged "\t" staged
+  }'
+}
+
 function git_prompt_vars {
   local details=''
   SCM_STATE=${GIT_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
   if [[ "$(git config --get bash-it.hide-status)" != "1" ]]; then
     [[ "${SCM_GIT_IGNORE_UNTRACKED}" = "true" ]] && local git_status_flags='-uno'
-    local status="$(git status -b --porcelain ${git_status_flags} 2> /dev/null ||
-		            git status --porcelain ${git_status_flags} 2> /dev/null)"
-    if [[ -n "${status}" ]] && [[ "${status}" != "\n" ]] && [[ -n "$(grep -v ^# <<< "${status}")" ]]; then
+    local status_lines=$((git status --porcelain ${git_status_flags} -b 2> /dev/null ||
+                          git status --porcelain ${git_status_flags}    2> /dev/null) | git_status_summary)
+    local status=$(awk 'NR==1' <<< "$status_lines")
+    local counts=$(awk 'NR==2' <<< "$status_lines")
+    IFS=$'\t' read untracked_count unstaged_count staged_count <<< "$counts"
+    if [[ "${untracked_count}" -gt 0 || "${unstaged_count}" -gt 0 || "${staged_count}" -gt 0 ]]; then
       SCM_DIRTY=1
       if [[ "${SCM_GIT_SHOW_DETAILS}" = "true" ]]; then
-        local untracked_count="$(egrep -c '^\?\? .+' <<< "${status}")"
-        local unstaged_count="$(egrep -c '^.[^ ?#] .+' <<< "${status}")"
-        local staged_count="$(egrep -c '^[^ ?#]. .+' <<< "${status}")"
         [[ "${staged_count}" -gt 0 ]] && details+=" ${SCM_GIT_STAGED_CHAR}${staged_count}" && SCM_DIRTY=3
         [[ "${unstaged_count}" -gt 0 ]] && details+=" ${SCM_GIT_UNSTAGED_CHAR}${unstaged_count}" && SCM_DIRTY=2
         [[ "${untracked_count}" -gt 0 ]] && details+=" ${SCM_GIT_UNTRACKED_CHAR}${untracked_count}" && SCM_DIRTY=1
