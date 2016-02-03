@@ -94,6 +94,11 @@ function scm_prompt_info {
 
 function git_status_summary {
   awk '
+  BEGIN {
+    untracked = 0
+    unstaged = 0
+    staged = 0
+  }
   {
     if (!after_first && $0 ~ /^##.+/) {
       print $0
@@ -202,7 +207,6 @@ function git_prompt_vars {
 
   SCM_PREFIX=${GIT_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
   SCM_SUFFIX=${GIT_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
-  SCM_CHANGE=$(git rev-parse HEAD 2>/dev/null)
 
   #RESET LANG
   LANG=$LANG_BAK
