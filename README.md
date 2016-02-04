@@ -49,9 +49,11 @@ Anything in the custom directory will be ignored, with the exception of `custom/
 
 There are a few bash it themes. If you've created your own custom prompts, I'd love it if you shared with everyone else! Just submit a Pull Request.
 
-You can see the theme screenshots [here](https://github.com/Bash-it/bash-it/wiki/Themes)
+You can see the theme screenshots [here](https://github.com/Bash-it/bash-it/wiki/Themes).
 
-Alternatively, you can preview the themes in your own shell using `BASH_PREVIEW=true reload`
+Alternatively, you can preview the themes in your own shell using `BASH_PREVIEW=true reload`.
+
+**NOTE**: Bash it and some themes use UTF-8 characters, so to avoid extrange behaviors in your terminal, set your locale to `LC_ALL=en_US.UTF-8` or the equivalent to your language if isn't American English.
 
 ## Uninstalling
 
