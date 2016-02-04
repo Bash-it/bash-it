@@ -1,6 +1,5 @@
 cite about-plugin
-about-plugin 'load Software Development Kit Manager. See http://sdkman.io'
+about-plugin 'Load Software Development Kit Manager'
 
 export SDKMAN_DIR="$HOME/.sdkman"
-
 [[ -s "${SDKMAN_DIR}/bin/sdkman-init.sh" ]] && source "${SDKMAN_DIR}/bin/sdkman-init.sh"

@@ -95,9 +95,9 @@ function scm_prompt_info {
 function git_status_summary {
   awk '
   BEGIN {
-    untracked = 0
-    unstaged = 0
-    staged = 0
+    untracked=0;
+    unstaged=0;
+    staged=0;
   }
   {
     if (!after_first && $0 ~ /^##.+/) {
