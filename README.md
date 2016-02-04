@@ -22,6 +22,16 @@ The install script can take the following options:
 
 When run without the `--interactive` switch, Bash it only enables a sane default set of functionality to keep your shell lean and to avoid issues with missing dependencies. Feel free to enable the tools you want to use after the installation.
 
+## Update
+
+To update Bash it, simply run:
+
+```
+bash-it update
+```
+
+that's all.
+
 ## Help Screens
 
 ```
