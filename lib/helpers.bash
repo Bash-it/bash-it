@@ -122,7 +122,7 @@ _bash-it_update() {
   _about 'updates Bash it'
   _group 'lib'
 
-  cd "${$BASH_IT}"
+  cd "${BASH_IT}"
   git fetch &> /dev/null
   local status="$(git rev-list master..origin/master 2> /dev/null)"
   if [[ -n "${status}" ]]; then
