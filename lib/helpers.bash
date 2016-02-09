@@ -31,7 +31,7 @@ function reload_plugins() {
 
 bash-it ()
 {
-    about 'bash-it help and maintenance'
+    about 'Bash-it help and maintenance'
     param '1: verb [one of: help | show | enable | disable | update ] '
     param '2: component type [one of: alias(es) | completion(s) | plugin(s) ]'
     param '3: specific component [optional]'
@@ -119,7 +119,7 @@ _bash-it-plugins ()
 }
 
 _bash-it_update() {
-  _about 'updates Bash it'
+  _about 'updates Bash-it'
   _group 'lib'
 
   cd "${BASH_IT}"
@@ -128,13 +128,13 @@ _bash-it_update() {
   if [[ -n "${status}" ]]; then
     git pull --rebase &> /dev/null
     if [[ $? -eq 0 ]]; then
-      echo "Bash it successfully updated, enjoy!"
+      echo "Bash-it successfully updated, enjoy!"
       reload
     else
-      echo "Error updating Bash it, please, check if your Bash it installation folder (${BASH_IT}) is clean."
+      echo "Error updating Bash-it, please, check if your Bash-it installation folder (${BASH_IT}) is clean."
     fi
   else
-    echo "Bash it is up to date, nothing to do!"
+    echo "Bash-it is up to date, nothing to do!"
   fi
   cd - &> /dev/null
 }
@@ -383,7 +383,7 @@ _help-update () {
   _about 'help message for update command'
   _group 'lib'
 
-  echo "Check for a new version of Bash it and update it."
+  echo "Check for a new version of Bash-it and update it."
 }
 
 all_groups ()
