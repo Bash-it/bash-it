@@ -6,13 +6,12 @@ function __gradle {
   case $OSTYPE in
     darwin*)
       local checksum_command="find . -name build.gradle -print0 | xargs -0 md5 -q | md5 -q"
-      local parsing_command="gradle --console=plain --quiet tasks | grep -v Rules | sed -nE -e 's/^([a-zA-Z]+)($| - .+)/\1/p'"
       ;;
     *)
       local checksum_command="find . -name build.gradle -print0 | xargs -0 md5sum | md5sum | cut -d ' ' -f 1"
-      local parsing_command="gradle --console=plain --quiet tasks | grep -v Rules | sed -nr -e 's/^([a-zA-Z]+)($| - .+)/\1/p'"
       ;;
   esac
+  local parsing_command="gradle --console=plain --quiet tasks | grep -v Rules | sed -nE -e 's/^([a-zA-Z]+)($| - .+)/\1/p'"
 
   mkdir -p "${cache_dir}"
 
