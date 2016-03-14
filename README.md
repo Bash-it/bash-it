@@ -166,6 +166,20 @@ also, with this flag to false, Bash-it will not show the repository as dirty whe
 
 **NOTE:** If you set in git configuration file the option to ignore *untracked* files, this flag has no effect, and Bash-it will ignore *untracked* files always.
 
+#### Git user
+
+In some environments it is useful to know the value of the currently-set git user, which is used to mark all new commits. For example, any organization that uses the practice of pair programming will typically author each commit with a [combined name of two authors](https://github.com/pivotal/git_scripts). When another pair uses the same pairing station, the authors must be changed.
+
+To enable display of the current pair in the prompt, you can set `SCM_GIT_SHOW_CURRENT_USER` to `true`. Once set, the `SCM_CURRENT_USER` variable will be automatically set to the initials of the git author(s). It will also be included in the default git prompt.
+
+You can control the prefix and the suffix of this component using the two variables:
+
+* `export SCM_THEME_CURRENT_USER_PREFFIX=' ☺︎ '`
+
+And
+
+* `export SCM_THEME_CURRENT_USER_SUFFIX=' '``
+
 #### Ignore repo status
 
 When working in repos with a large code base Bash-it can slow down your prompt when checking the repo status, to avoid it, there is an option you can set via Git config to disable checking repo status in Bash-it.
@@ -184,7 +198,7 @@ $ git config --global --add bash-it.hide-status 1
 
 setting this flag globally has the same effect that `SCM_CHECK=true` but only for Git repos.
 
-### pass function renamed to passgen
+### Pass function renamed to passgen
 
 The Bash-it `pass` function has been renamed to `passgen` in order to avoid a naming conflict with the [pass password manager]. In order to minimize the impact on users of the legacy Bash-it `pass` function, Bash-it will create the alias `pass` that calls the new `passgen` function if the `pass` password manager command is not found on the `PATH` (default behavior).
 

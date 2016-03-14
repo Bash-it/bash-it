@@ -13,6 +13,8 @@ SCM_THEME_TAG_PREFIX='tag:'
 SCM_THEME_DETACHED_PREFIX='detached:'
 SCM_THEME_BRANCH_TRACK_PREFIX=' → '
 SCM_THEME_BRANCH_GONE_PREFIX=' ⇢ '
+SCM_THEME_CURRENT_USER_PREFFIX=' ☺︎ '
+SCM_THEME_CURRENT_USER_SUFFIX=''
 
 CLOCK_CHAR='☆'
 THEME_CLOCK_CHECK=${THEME_CLOCK_CHECK:=true}
@@ -21,6 +23,7 @@ THEME_BATTERY_PERCENTAGE_CHECK=${THEME_BATTERY_PERCENTAGE_CHECK:=true}
 SCM_GIT_SHOW_DETAILS=${SCM_GIT_SHOW_DETAILS:=true}
 SCM_GIT_SHOW_REMOTE_INFO=${SCM_GIT_SHOW_REMOTE_INFO:=auto}
 SCM_GIT_IGNORE_UNTRACKED=${SCM_GIT_IGNORE_UNTRACKED:=false}
+SCM_GIT_SHOW_CURRENT_USER=${SCM_GIT_SHOW_CURRENT_USER:=false}
 
 SCM_GIT='git'
 SCM_GIT_CHAR='±'
@@ -142,6 +145,12 @@ function git_prompt_vars {
       fi
       SCM_STATE=${GIT_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
     fi
+  fi
+
+  if [[ "${SCM_GIT_SHOW_CURRENT_USER}" = "true" ]]; then
+    # support two or more initials, set by 'git pair' plugin
+    SCM_CURRENT_USER=`git config user.initials | sed 's% %+%'`
+    details+="$(git_user_info)"
   fi
 
   SCM_CHANGE=$(git rev-parse --short HEAD 2>/dev/null)
@@ -332,6 +341,11 @@ function python_version_prompt {
   echo -e "$(virtualenv_prompt)$(condaenv_prompt)$(py_interp_prompt)"
 }
 
+function git_user_info {
+  if [[ -n "$SCM_CURRENT_USER" ]]; then
+    echo -e "$SCM_THEME_CURRENT_USER_PREFFIX$SCM_CURRENT_USER$SCM_THEME_CURRENT_USER_SUFFIX"
+  fi
+}
 
 # backwards-compatibility
 function git_prompt_info {
