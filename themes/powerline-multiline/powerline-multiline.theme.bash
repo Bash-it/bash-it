@@ -23,8 +23,11 @@ SCM_THEME_PROMPT_COLOR=${SCM_THEME_PROMPT_CLEAN_COLOR}
 
 RVM_THEME_PROMPT_PREFIX=""
 RVM_THEME_PROMPT_SUFFIX=""
-RVM_THEME_PROMPT_COLOR=161
-RVM_CHAR=${POWERLINE_RVM_CHAR:="❲r❳ "}
+RBENV_THEME_PROMPT_PREFIX=""
+RBENV_THEME_PROMPT_SUFFIX=""
+
+RUBY_THEME_PROMPT_COLOR=161
+RUBY_CHAR=${POWERLINE_RUBY_CHAR:="❲r❳"}
 
 CWD_THEME_PROMPT_COLOR=240
 
@@ -42,7 +45,7 @@ THEME_PROMPT_CLOCK_FORMAT=${POWERLINE_PROMPT_CLOCK_FORMAT:="%H:%M:%S"}
 IN_VIM_THEME_PROMPT_COLOR=245
 IN_VIM_THEME_PROMPT_TEXT="vim"
 
-POWERLINE_LEFT_PROMPT=${POWERLINE_LEFT_PROMPT:="scm python_venv rvm cwd"}
+POWERLINE_LEFT_PROMPT=${POWERLINE_LEFT_PROMPT:="scm python_venv ruby cwd"}
 POWERLINE_RIGHT_PROMPT=${POWERLINE_RIGHT_PROMPT:="in_vim clock battery user_info"}
 
 function set_rgb_color {
@@ -80,13 +83,16 @@ function __powerline_user_info_prompt {
   [[ -n "${user_info}" ]] && echo "${user_info}|${color}"
 }
 
-function __powerline_rvm_prompt {
-  local rvm=""
+function __powerline_ruby_prompt {
+  local ruby_version=""
 
   if command_exists rvm; then
-    rvm="$(rvm_version_prompt)"
-    [[ -n "${rvm}" ]] && echo "${RVM_CHAR}${rvm}|${RVM_THEME_PROMPT_COLOR}"
+    ruby_version="$(rvm_version_prompt)"
+  elif command_exists rbenv; then
+    ruby_version=$(rbenv_version_prompt)
   fi
+
+  [[ -n "${ruby_version}" ]] && echo "${RUBY_CHAR}${ruby_version}|${RUBY_THEME_PROMPT_COLOR}"
 }
 
 function __powerline_python_venv_prompt {
@@ -121,7 +127,7 @@ function __powerline_scm_prompt {
     if [[ "${SCM_GIT_CHAR}" == "${SCM_CHAR}" ]]; then
       scm_prompt+="${SCM_CHAR}${SCM_BRANCH}${SCM_STATE}"
     fi
-    echo "${scm_prompt}|${color}"
+    echo "${scm_prompt}${scm}|${color}"
   fi
 }
 
