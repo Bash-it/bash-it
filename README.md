@@ -168,9 +168,11 @@ also, with this flag to false, Bash-it will not show the repository as dirty whe
 
 #### Git user
 
-In some environments it is useful to know the value of the currently-set git user, which is used to mark all new commits. For example, any organization that uses the practice of pair programming will typically author each commit with a [combined name of two authors](https://github.com/pivotal/git_scripts). When another pair uses the same pairing station, the authors must be changed.
+In some environments it is useful to know the value of the current git user, which is used to mark all new commits. For example, any organization that uses the practice of pair programming will typically author each commit with a [combined names of the two authors](https://github.com/pivotal/git_scripts). When another pair uses the same pairing station, the authors are changed at the beginning of the session.
 
-To enable display of the current pair in the prompt, you can set `SCM_GIT_SHOW_CURRENT_USER` to `true`. Once set, the `SCM_CURRENT_USER` variable will be automatically set to the initials of the git author(s). It will also be included in the default git prompt.
+To get up and running with this technique, run `gem install pivotal_git_scripts`, and then edit your `~/.pairs` file, according to the specification on the [gem's homepage](https://github.com/pivotal/git_scripts) After that you should be able to run `git pair kg as` to set the author to, eg. "Konstantin Gredeskoul and Alex Saxby", assuming they've been added to the `~/.pairs` file. Please see gem's documentation for more information.
+
+To enable the display of the current pair in the prompt, you must set `SCM_GIT_SHOW_CURRENT_USER` to `true`. Once set, the `SCM_CURRENT_USER` variable will be automatically populated with the initials of the git author(s). It will also be included in the default git prompt. Even if you do not have `git pair` installed, as long as your `user.name` is set, your initials will be computed from your name, and shown in the prompt.
 
 You can control the prefix and the suffix of this component using the two variables:
 
