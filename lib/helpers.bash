@@ -32,14 +32,15 @@ function reload_plugins() {
 bash-it ()
 {
     about 'Bash-it help and maintenance'
-    param '1: verb [one of: help | show | enable | disable | update ] '
-    param '2: component type [one of: alias(es) | completion(s) | plugin(s) ]'
+    param '1: verb [one of: help | show | enable | disable | update | search ] '
+    param '2: component type [one of: alias(es) | completion(s) | plugin(s) ] or search term(s)'
     param '3: specific component [optional]'
     example '$ bash-it show plugins'
     example '$ bash-it help aliases'
     example '$ bash-it enable plugin git [tmux]...'
     example '$ bash-it disable alias hg [tmux]...'
     example '$ bash-it update'
+    example '$ bash-it search ruby [rake]...'
     typeset verb=${1:-}
     shift
     typeset component=${1:-}
@@ -54,6 +55,9 @@ bash-it ()
              func=_disable-$component;;
          help)
              func=_help-$component;;
+         search)
+             _bash-it-search $component $*
+             return;;
          update)
              func=_bash-it_update;;
          *)
@@ -137,6 +141,58 @@ _bash-it_update() {
     echo "Bash-it is up to date, nothing to do!"
   fi
   cd - &> /dev/null
+}
+
+# This function returns list of aliases, plugins and completions in bash-it,
+# whose name or description matches one of the search terms provided as arguments.
+#
+# Usage:
+#    ❯ bash-it search term1 [term2]...
+# Example:
+#    ❯ bash-it search ruby rbenv rvm gem rake
+#  aliases: bundler
+#  plugins: chruby chruby-auto rbenv ruby rvm
+#  completions: gem rake
+#
+
+_bash-it-search() {
+  _about 'searches for given terms amongst bash-it plugins, aliases and completions'
+  _param '1: term1'
+  _param '2: [ term2 ]...'
+  _example '$ _bash-it-search ruby rvm rake bundler'
+
+  declare -a _components=(aliases plugins completions)
+  for _component in "${_components[@]}" ; do
+    _bash-it-search-component  "${_component}" "$*"
+  done
+}
+
+_bash-it-search-component() {
+  _about 'searches for given terms amongst a given component'
+  _param '1: component type, one of: [ aliases | plugins | completions ]'
+  _param '2: term1'
+  _param '3: [ term2 ]...'
+  _example '$ _bash-it-search-component aliases rake bundler'
+
+  _component=$1
+  local func=_bash-it-${_component}
+  shift
+  declare -a terms=($@)
+  declare -a matches=()
+  local _grep=$(which egrep || which grep)
+  for term in "${terms[@]}"; do
+    local term_match=($($func | ${_grep} -i -- ${term} | cut -d ' ' -f 1  | tr '\n' ' '))
+    [[ "${#term_match[@]}" -gt 0 ]] && {
+      matches=(${matches[@]} ${term_match[@]})
+    }
+  done
+  [[ -n "$NO_COLOR" && color_on="" ]]  || color_on="\e[1;32m"
+  [[ -n "$NO_COLOR" && color_off="" ]] || color_off="\e[0;0m"
+
+  if [[ "${#matches[*]}" -gt 0 ]] ; then
+    printf "%-12s: ${color_on}%s${color_off}\n" "${_component}" "$(echo -n ${matches[*]} | tr ' ' '\n' | sort | uniq | tr '\n' ' ' | sed 's/ $//g')"
+  fi
+  unset matches
 }
 
 _bash-it-describe ()

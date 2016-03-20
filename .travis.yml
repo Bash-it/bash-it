@@ -1,4 +1,3 @@
 sudo: false
-install: git clone --depth 1 https://github.com/sstephenson/bats.git
-script: PATH="./bats/bin:$PATH" test/run
+script: test/run
 language: c
