@@ -32,14 +32,15 @@ function reload_plugins() {
 bash-it ()
 {
     about 'Bash-it help and maintenance'
-    param '1: verb [one of: help | show | enable | disable | update ] '
-    param '2: component type [one of: alias(es) | completion(s) | plugin(s) ]'
+    param '1: verb [one of: help | show | enable | disable | update | search ] '
+    param '2: component type [one of: alias(es) | completion(s) | plugin(s) | - ]'
     param '3: specific component [optional]'
     example '$ bash-it show plugins'
     example '$ bash-it help aliases'
     example '$ bash-it enable plugin git [tmux]...'
     example '$ bash-it disable alias hg [tmux]...'
     example '$ bash-it update'
+    example '$ bash-it search ruby [rake]...'
     typeset verb=${1:-}
     shift
     typeset component=${1:-}
@@ -54,6 +55,9 @@ bash-it ()
              func=_disable-$component;;
          help)
              func=_help-$component;;
+         search)
+             _bash-it-search $component $*
+             return;;
          update)
              func=_bash-it_update;;
          *)
@@ -137,6 +141,36 @@ _bash-it_update() {
     echo "Bash-it is up to date, nothing to do!"
   fi
   cd - &> /dev/null
+}
+
+# This function returns list of aliases, plugins and completions in bash-it,
+# whose name or description matches one of the search terms provided as arguments.
+#
+# Usage:
+#    ❯ bash-it search term1 [term2]...
+# Example:
+#    ❯ bash-it search ruby rbenv rvm gem rake
+#  aliases: bundler
+#  plugins: chruby chruby-auto rbenv ruby rvm
+#  completions: gem rake
+#
+
+_bash-it-search() {
+  local terms=($@)
+  declare -a types=(aliases plugins completions)
+  for type in "${types[@]}" ; do
+    declare -a matches=()
+    for term in "${terms[@]}"; do
+      local term_match=($(bash-it show ${type} | grep -i -- ${term} | cut -d ' ' -f 1  | tr '\n' ' '))
+      [[ "${#term_match[@]}" -gt 0 ]] && {
+        matches=(${matches[@]} ${term_match[@]})
+      }
+    done
+    if [[ "${#matches[*]}" -gt 0 ]] ; then
+      printf "${type}: \e[3;32m%s\e[0;0m\n" "$(echo -n ${matches[*]} | tr ' ' '\n' | sort | uniq | tr '\n' ' ' | sed 's/ $//g')"
+    fi
+    unset matches
+  done
 }
 
 _bash-it-describe ()
