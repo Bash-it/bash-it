@@ -156,22 +156,26 @@ _bash-it_update() {
 #
 
 _bash-it-search() {
-  _about 'searches for a '
-  _param '1: subdirectory'
-  _param '2: preposition'
-  _param '3: file_type'
-  _param '4: column_header'
-  _example '$ _bash-it-describe "plugins" "a" "plugin" "Plugin"'
+  _about 'searches for given terms amongst bash-it plugins, aliases and completions'
+  _param '1: term1'
+  _param '2: [ term2 ]...'
+  _example '$ _bash-it-search ruby rvm rake bundler'
 
-  declare -a types=(aliases plugins completions)
-  for type in "${types[@]}" ; do
-    _bash-it-search-category  "${type}" "$*"
+  declare -a _components=(aliases plugins completions)
+  for _component in "${_components[@]}" ; do
+    _bash-it-search-component  "${_component}" "$*"
   done
 }
 
-_bash-it-search-category() {
-  type=$1
-  local func=_bash-it-${type}
+_bash-it-search-component() {
+  _about 'searches for given terms amongst a given component'
+  _param '1: component type, one of: [ aliases | plugins | completions ]'
+  _param '2: term1'
+  _param '3: [ term2 ]...'
+  _example '$ _bash-it-search-component aliases rake bundler'
+
+  _component=$1
+  local func=_bash-it-${_component}
   shift
   declare -a terms=($@)
   declare -a matches=()
@@ -182,14 +186,13 @@ _bash-it-search-category() {
       matches=(${matches[@]} ${term_match[@]})
     }
   done
-  [[ -n "$NO_COLOR" && color_on="" ]] || color_on="\e[3;32m"
-  [[ -n "$NO_COLOR" && color_off="" ]] || color_on="\e[0;0m"
+  [[ -n "$NO_COLOR" && color_on="" ]]  || color_on="\e[1;32m"
+  [[ -n "$NO_COLOR" && color_off="" ]] || color_off="\e[0;0m"
 
   if [[ "${#matches[*]}" -gt 0 ]] ; then
-    printf "%15s: ${color_on}%s${color_off}\n" "${type}" "$(echo -n ${matches[*]} | tr ' ' '\n' | sort | uniq | tr '\n' ' ' | sed 's/ $//g')"
+    printf "%15s: ${color_on}%s${color_off}\n" "${_component}" "$(echo -n ${matches[*]} | tr ' ' '\n' | sort | uniq | tr '\n' ' ' | sed 's/ $//g')"
   fi
   unset matches
-
 }
 
 _bash-it-describe ()
