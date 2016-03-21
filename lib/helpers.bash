@@ -190,7 +190,7 @@ _bash-it-search-component() {
   [[ -n "$NO_COLOR" && color_off="" ]] || color_off="\e[0;0m"
 
   if [[ "${#matches[*]}" -gt 0 ]] ; then
-    printf "%15s: ${color_on}%s${color_off}\n" "${_component}" "$(echo -n ${matches[*]} | tr ' ' '\n' | sort | uniq | tr '\n' ' ' | sed 's/ $//g')"
+    printf "%-12s: ${color_on}%s${color_off}\n" "${_component}" "$(echo -n ${matches[*]} | tr ' ' '\n' | sort | uniq | tr '\n' ' ' | sed 's/ $//g')"
   fi
   unset matches
 }
