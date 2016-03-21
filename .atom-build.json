@@ -1,0 +1,14 @@
+{
+  "cmd": "test/run",
+  "name": "Run All Tests",
+  "args": [ ],
+  "keymap": "ctrl-r",
+  "sh": true,
+  "errorMatch": [
+    "rspec (?<file>[\\/0-9a-zA-Z\\._]+):(?<line>\\d+) #",
+    "# (?<file>\\./.*):(?<line>\\d+)",
+    "\\s+from (?<file>\\./.*):(?<line>\\d+)",
+    "`(require|load)': (?<file>\\./.*):(?<line>\\d+)",
+    "^(<file>/.*):(?<line>\\d+)"
+  ]
+}

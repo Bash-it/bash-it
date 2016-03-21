@@ -156,21 +156,40 @@ _bash-it_update() {
 #
 
 _bash-it-search() {
-  local terms=($@)
+  _about 'searches for a '
+  _param '1: subdirectory'
+  _param '2: preposition'
+  _param '3: file_type'
+  _param '4: column_header'
+  _example '$ _bash-it-describe "plugins" "a" "plugin" "Plugin"'
+
   declare -a types=(aliases plugins completions)
   for type in "${types[@]}" ; do
-    declare -a matches=()
-    for term in "${terms[@]}"; do
-      local term_match=($(bash-it show ${type} | grep -i -- ${term} | cut -d ' ' -f 1  | tr '\n' ' '))
-      [[ "${#term_match[@]}" -gt 0 ]] && {
-        matches=(${matches[@]} ${term_match[@]})
-      }
-    done
-    if [[ "${#matches[*]}" -gt 0 ]] ; then
-      printf "${type}: \e[3;32m%s\e[0;0m\n" "$(echo -n ${matches[*]} | tr ' ' '\n' | sort | uniq | tr '\n' ' ' | sed 's/ $//g')"
-    fi
-    unset matches
+    _bash-it-search-category  "${type}" "$*"
   done
+}
+
+_bash-it-search-category() {
+  type=$1
+  local func=_bash-it-${type}
+  shift
+  declare -a terms=($@)
+  declare -a matches=()
+  local _grep=$(which egrep || which grep)
+  for term in "${terms[@]}"; do
+    local term_match=($($func | ${_grep} -i -- ${term} | cut -d ' ' -f 1  | tr '\n' ' '))
+    [[ "${#term_match[@]}" -gt 0 ]] && {
+      matches=(${matches[@]} ${term_match[@]})
+    }
+  done
+  [[ -n "$NO_COLOR" && color_on="" ]] || color_on="\e[3;32m"
+  [[ -n "$NO_COLOR" && color_off="" ]] || color_on="\e[0;0m"
+
+  if [[ "${#matches[*]}" -gt 0 ]] ; then
+    printf "%15s: ${color_on}%s${color_off}\n" "${type}" "$(echo -n ${matches[*]} | tr ' ' '\n' | sort | uniq | tr '\n' ' ' | sed 's/ $//g')"
+  fi
+  unset matches
+
 }
 
 _bash-it-describe ()
