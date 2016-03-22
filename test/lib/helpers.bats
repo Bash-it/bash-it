@@ -11,7 +11,7 @@ NO_COLOR=true
 IS_DARWIN=false
 [[ "$(uname -s)" == "Darwin" ]] && IS_DARWIN=true
 
-if [ "$IS_DARWIN" == "tru" ]; then
+if [ "$IS_DARWIN" == "true" ]; then
   @test "helpers search aliases" {
     run _bash-it-search-component 'plugins' 'base'
     [[ "${lines[0]}" =~ 'plugins' && "${lines[0]}" =~ 'base' ]]
