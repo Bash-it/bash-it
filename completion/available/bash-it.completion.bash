@@ -65,7 +65,7 @@ _bash-it-comp()
 			COMPREPLY=( $(compgen -W "${help_args}" -- ${cur}) )
 			return 0
 			;;
-    update)
+    update | search)
       return 0
       ;;
 		enable | disable)
