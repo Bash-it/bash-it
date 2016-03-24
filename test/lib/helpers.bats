@@ -9,13 +9,14 @@ load ../../lib/helpers
 
 NO_COLOR=true
 
-IS_DARWIN=
-[[ "$(uname -s)" == "Darwin" ]] && IS_DARWIN=true
-
 @test "helpers search aliases" {
-  if [ -z "$IS_DARWIN" ]; then
-     skip 'search test only runs on OSX'
-  fi
   run _bash-it-search-component 'plugins' 'base'
   [[ "${lines[0]}" =~ 'plugins' && "${lines[0]}" =~ 'base' ]]
+}
+
+@test "helpers search all ruby et al" {
+  run _bash-it-search 'ruby' 'gem' 'bundle' 'rake' 'rails'
+  [[ "${lines[0]}" == 'aliases     : bundler rails' ]]
+  [[ "${lines[1]}" == 'plugins     : chruby chruby-auto ruby' ]]
+  [[ "${lines[2]}" == 'completions : bundler gem rake' ]]
 }
