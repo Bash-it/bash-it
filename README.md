@@ -53,6 +53,30 @@ bash-it help completions    # shows help for installed completions
 bash-it help plugins        # shows help for installed plugins
 ```
 
+## Search
+
+If you need to quickly find out which of the plugins, aliases or completions
+are available for a specific task or an environment, you can search for 
+multiple terms related to the commands you use frequently.  Search will 
+find and output modules with the name or description matching the terms 
+provided.
+
+```
+bash-it search term1 [term2] [term3]....
+```
+
+For example, if you are a ruby developer, you might want to enable everything 
+related to the commands such as `ruby`, `rake`, `gem`, `bundler` and `rails`. 
+Search command helps you find related modules, so that you can decide which 
+of them you'd like to use:
+
+```
+> bash-it search ruby rake gem bundle irb rails
+aliases     : bundler rails
+plugins     : chruby chruby-auto ruby
+completions : bundler gem rake
+```
+
 ## Your Custom scripts, aliases, themes, and functions
 
 For custom scripts, and aliases, just create the following files (they'll be ignored by the git repo):
