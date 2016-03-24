@@ -1,3 +1,4 @@
+.atom-build.json
 */enabled/*
 .DS_Store
 custom/*
@@ -9,3 +10,5 @@ lib/custom.bash
 plugins/custom.plugins.bash
 *.swp
 .*.un~
+bats
+.idea
