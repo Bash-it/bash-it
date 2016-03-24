@@ -176,12 +176,14 @@ _bash-it-search-component() {
 
   _component=$1
   local func=_bash-it-${_component}
+  local help=$($func)
+
   shift
   declare -a terms=($@)
   declare -a matches=()
   local _grep=$(which egrep || which grep)
   for term in "${terms[@]}"; do
-    local term_match=($($func | ${_grep} -i -- ${term} | cut -d ' ' -f 1  | tr '\n' ' '))
+    local term_match=($(echo "${help}"| ${_grep} -i -- ${term} | cut -d ' ' -f 1  | tr '\n' ' '))
     [[ "${#term_match[@]}" -gt 0 ]] && {
       matches=(${matches[@]} ${term_match[@]})
     }
