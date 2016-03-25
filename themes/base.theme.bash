@@ -159,6 +159,7 @@ function git_prompt_vars {
       [[ "${tracking_info}" =~ .+\[gone\]$ ]] && local branch_gone="true"
       tracking_info=${tracking_info#\#\# ${SCM_BRANCH}...}
       tracking_info=${tracking_info% [*}
+      tracking_info=${tracking_info#remotes/}
       local remote_name=${tracking_info%%/*}
       local remote_branch=${tracking_info#${remote_name}/}
       local remote_info=""
