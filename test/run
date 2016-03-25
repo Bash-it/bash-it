@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
-PATH=$PATH:$(pwd)/bats/bin
-set +e
-[[ -z "$(which bats)" ]] && git clone --depth 1 https://github.com/sstephenson/bats.git
-set -e
-exec ./bats/bin/bats ${CI:+--tap} ./test/{lib,plugins}
+test_directory="$(cd "$(dirname "$0")" && pwd)"
+bats_executable="${test_directory}/../bats/bin/bats"
+
+[ ! -e $bats_executable ] && \
+  git clone --depth 1 https://github.com/sstephenson/bats.git ${test_directory}/../bats
+
+if [ -z "${BASH_IT}" ]; then
+  export BASH_IT=$(cd ${test_directory} && dirname $(pwd))
+fi
+
+exec $bats_executable ${CI:+--tap} ${test_directory}/{lib,plugins}
