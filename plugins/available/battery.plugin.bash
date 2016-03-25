@@ -32,30 +32,13 @@ battery_percentage(){
             ;;
         esac
         ;;
-      *" Discharging"*)
-        local PERC_OUTPUT=$(echo $ACPI_OUTPUT | head -c 26 | tail -c 2)
-        case $PERC_OUTPUT in
-          *%)
-            echo "0${PERC_OUTPUT}" | head -c 2
-            ;;
-          *)
-            echo ${PERC_OUTPUT}
-            ;;
-        esac
-        ;;
-      *" Charging"*)
-        local PERC_OUTPUT=$(echo $ACPI_OUTPUT | head -c 23 | tail -c 2)
-        case $PERC_OUTPUT in
-          *%)
-            echo "0${PERC_OUTPUT}" | head -c 2
-            ;;
-          *)
-            echo ${PERC_OUTPUT}
-            ;;
-        esac
+
+      *" Charging"* | *" Discharging"*)
+        local PERC_OUTPUT=$(echo $ACPI_OUTPUT | awk -F, '/,/{gsub(/ /, "", $0); gsub(/%/,"", $0); print $2}' )
+        echo ${PERC_OUTPUT}
         ;;
       *" Full"*)
-        echo '99'
+        echo '100'
         ;;
       *)
         echo '-1'
