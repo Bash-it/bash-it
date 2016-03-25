@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-PATH=$PATH:$(pwd)/bats/bin
-set +e
-[[ -z "$(which bats)" ]] && git clone --depth 1 https://github.com/sstephenson/bats.git
-set -e
-exec bats ${CI:+--tap} test/{lib,plugins}
+_TEST_DIR="$(cd "$(dirname "$0")" && pwd)"
+_BATS="${_TEST_DIR}/../bats/bin/bats"
+[ ! -e $_BATS ] && git clone --depth 1 https://github.com/sstephenson/bats.git ${_TEST_DIR}/../bats
+exec $_BATS ${CI:+--tap} ${_TEST_DIR}/{lib,plugins}
