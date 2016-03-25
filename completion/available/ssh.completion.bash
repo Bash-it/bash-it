@@ -14,7 +14,7 @@ _sshcomplete() {
     
     # parse all defined hosts from .ssh/config
     if [ -r "$HOME/.ssh/config" ]; then
-        COMPREPLY=($(compgen -W "$(grep ^Host "$HOME/.ssh/config" | awk '{print $2}' )" ${OPTIONS}) )
+        COMPREPLY=($(compgen -W "$(grep ^Host "$HOME/.ssh/config" | awk '{for (i=2; i<=NF; i++) print $i}' )" ${OPTIONS}) )
     fi
 
     # parse all hosts found in .ssh/known_hosts
@@ -26,7 +26,7 @@ _sshcomplete() {
 
     # parse hosts defined in /etc/hosts
     if [ -r /etc/hosts ]; then
-        COMPREPLY=( ${COMPREPLY[@]} $(compgen -W "$( grep -v '^[[:space:]]*$' /etc/hosts | grep -v '^#' | awk '{print $2}' )" ${OPTIONS}) )
+        COMPREPLY=( ${COMPREPLY[@]} $(compgen -W "$( grep -v '^[[:space:]]*$' /etc/hosts | grep -v '^#' | awk '{for (i=2; i<=NF; i++) print $i}' )" ${OPTIONS}) )
     fi
     
     return 0
