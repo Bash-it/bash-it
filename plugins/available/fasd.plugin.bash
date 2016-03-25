@@ -10,9 +10,12 @@ __init_fasd() {
     eval "$(fasd --init posix-alias)"
 
     # Note, this is a custom bash-hook to ensure that the last exit status
-    # is maintained even while this hook is in place
+    # is maintained even while this hook is in place. This code can be
+    # removed once PR #72 is merged into fasd.
+    #
+    # See: https://github.com/clvv/fasd/pull/72
     _fasd_prompt_func() {
-      local _exit_code="$?  "
+      local _exit_code="$?"
       eval "fasd --proc $(fasd --sanitize $(history 1 | \
         sed "s/^[ ]*[0-9]*[ ]*//"))" >> "/dev/null" 2>&1
       return $_exit_code
