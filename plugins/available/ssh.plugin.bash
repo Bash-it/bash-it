@@ -15,5 +15,5 @@ function sshlist() {
   about 'list hosts defined in ssh config'
   group 'ssh'
 
-  awk '$1 ~ /Host$/ { print $2 }' ~/.ssh/config
+  awk '$1 ~ /Host$/ {for (i=2; i<=NF; i++) print $i}' ~/.ssh/config
 }
