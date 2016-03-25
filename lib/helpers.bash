@@ -127,8 +127,11 @@ _bash-it_update() {
   _group 'lib'
 
   cd "${BASH_IT}"
+  if [ -z $BASH_IT_REMOTE ]; then
+    BASH_IT_REMOTE="origin"
+  fi
   git fetch &> /dev/null
-  local status="$(git rev-list master..origin/master 2> /dev/null)"
+  local status="$(git rev-list master..${BASH_IT_REMOTE}/master 2> /dev/null)"
   if [[ -n "${status}" ]]; then
     git pull --rebase &> /dev/null
     if [[ $? -eq 0 ]]; then
