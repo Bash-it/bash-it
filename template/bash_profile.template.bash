@@ -7,6 +7,10 @@ export BASH_IT="{{BASH_IT}}"
 # location /.bash_it/themes/
 export BASH_IT_THEME='bobby'
 
+# (Advanced): Change this to the name of your remote repo if you
+# cloned bash-it with a remote other than origin such as `bash-it`.
+# export BASH_IT_REMOTE='bash-it'
+
 # Your place for hosting Git repos. I use this for private repos.
 export GIT_HOSTING='git@git.domain.com'
 
