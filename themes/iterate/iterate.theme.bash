@@ -40,17 +40,20 @@ function git_prompt_info {
   echo -e "$SCM_PREFIX$SCM_BRANCH$SCM_STATE$SCM_GIT_AHEAD$SCM_GIT_BEHIND$SCM_GIT_STASH$SCM_SUFFIX"
 }
 
-LAST_PROMPT_INFO=""
+LAST_PROMPT=""
 function prompt_command() {
-    local prompt_info="\n${bold_cyan}$(scm_char)${yellow}$(ruby_version_prompt)${green}\w $(scm_prompt_info)"
-    if [ "$LAST_PROMPT_INFO" = "$prompt_info" ]; then
-        prompt_info=""
+    local new_PS1="${bold_cyan}$(scm_char)${yellow}$(ruby_version_prompt)${green}\w $(scm_prompt_info)"
+    local new_prompt=$(PS1="$new_PS1" "$BASH" --norc -i </dev/null 2>&1 | sed -n '${s/^\(.*\)exit$/\1/p;}')
+
+    if [ "$LAST_PROMPT" = "$new_prompt" ]; then
+        new_PS1=""
     else
-        LAST_PROMPT_INFO="$prompt_info"
+        LAST_PROMPT="$new_prompt"
     fi
+
     local wrap_char=""
-    [[ ${#prompt_info} -gt $(($COLUMNS/1)) ]] && wrap_char="\n"
-    PS1="${prompt_info}${green}${wrap_char}→${reset_color} "
+    [[ ${#new_PS1} -gt $(($COLUMNS/1)) ]] && wrap_char="\n"
+    PS1="${new_PS1}${green}${wrap_char}→${reset_color} "
 }
 
 PROMPT_COMMAND=prompt_command;
