@@ -153,7 +153,7 @@ function __powerline_battery_prompt {
     else
       color="${BATTERY_STATUS_THEME_PROMPT_GOOD_COLOR}"
     fi
-    [[ "$(ac_adapter_connected)" ]] && battery_status="${BATTERY_AC_CHAR}${battery_status}"
+    ac_adapter_connected && battery_status="${BATTERY_AC_CHAR} ${battery_status}"
     echo "${battery_status}%|${color}"
   fi
 }
