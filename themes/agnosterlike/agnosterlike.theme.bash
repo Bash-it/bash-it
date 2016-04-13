@@ -2,6 +2,8 @@
 
 # Based on the "powerline" theme
 #
+source ../powerline/powerline.theme.bash
+
 
 THEME_PROMPT_SEPARATOR=""
 
@@ -12,15 +14,6 @@ SHELL_THEME_PROMPT_COLOR=0
 SHELL_THEME_PROMPT_COLOR_SUDO=3
 SHELL_PROMPT_COLOR_FORE=7
 
-VIRTUALENV_CHAR="ⓔ "
-VIRTUALENV_THEME_PROMPT_COLOR=35
-
-SCM_NONE_CHAR=""
-SCM_GIT_CHAR=" "
-
-SCM_THEME_PROMPT_CLEAN=""
-SCM_THEME_PROMPT_DIRTY=""
-
 SCM_THEME_PROMPT_COLOR=0
 SCM_THEME_PROMPT_CLEAN_COLOR=2
 SCM_THEME_PROMPT_DIRTY_COLOR=3
@@ -29,22 +22,6 @@ SCM_THEME_PROMPT_UNSTAGED_COLOR=2
 
 CWD_THEME_PROMPT_COLOR=4
 
-LAST_STATUS_THEME_PROMPT_COLOR=52
-
-IN_VIM_PROMPT_COLOR=35
-IN_VIM_PROMPT_TEXT="vim"
-
-
-function set_rgb_color {
-  if [[ "${1}" != "-" ]]; then
-    fg="38;5;${1}"
-  fi
-  if [[ "${2}" != "-" ]]; then
-    bg="48;5;${2}"
-    [[ -n "${fg}" ]] && bg=";${bg}"
-  fi
-  echo -e "\[\033[${fg}${bg}m\]"
-}
 
 function powerline_shell_prompt {
   SHELL_PROMPT_COLOR=${SHELL_THEME_PROMPT_COLOR};
@@ -62,23 +39,6 @@ function powerline_shell_prompt {
     SHELL_PROMPT="\u@\h";
   SHELL_PROMPT="$(set_rgb_color ${SHELL_PROMPT_COLOR_FORE} ${SHELL_PROMPT_COLOR}) ${SHELL_PROMPT_SYMBOLS}$(set_rgb_color ${SHELL_PROMPT_COLOR_FORE} ${SHELL_PROMPT_COLOR})${SHELL_PROMPT} ${normal}";
   LAST_THEME_COLOR=${SHELL_PROMPT_COLOR};
-}
-
-function powerline_virtualenv_prompt {
-  local environ=""
-
-  if [[ -n "$CONDA_DEFAULT_ENV" ]]; then
-    environ="conda: $CONDA_DEFAULT_ENV"
-  elif [[ -n "$VIRTUAL_ENV" ]]; then
-    environ=$(basename "$VIRTUAL_ENV")
-  fi
-
-  if [[ -n "$environ" ]]; then
-    VIRTUALENV_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${VIRTUALENV_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}$(set_rgb_color - ${VIRTUALENV_THEME_PROMPT_COLOR}) ${VIRTUALENV_CHAR}$environ ${normal}"
-    LAST_THEME_COLOR=${VIRTUALENV_THEME_PROMPT_COLOR}
-  else
-    VIRTUALENV_PROMPT=""
-  fi
 }
 
 function powerline_scm_prompt {
@@ -123,23 +83,6 @@ function powerline_scm_prompt {
 function powerline_cwd_prompt {
   CWD_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${CWD_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}$(set_rgb_color 0 ${CWD_THEME_PROMPT_COLOR}) \w ${normal}";
   LAST_THEME_COLOR=${CWD_THEME_PROMPT_COLOR}
-}
-
-function powerline_last_status_prompt {
-  if [[ "$1" -eq 0 ]]; then
-    LAST_STATUS_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} -)${THEME_PROMPT_SEPARATOR}${normal}"
-  else
-    LAST_STATUS_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${LAST_STATUS_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}$(set_rgb_color - ${LAST_STATUS_THEME_PROMPT_COLOR}) ${LAST_STATUS} ${normal}$(set_rgb_color ${LAST_STATUS_THEME_PROMPT_COLOR} -)${THEME_PROMPT_SEPARATOR}${normal}"
-  fi
-}
-
-function powerline_in_vim_prompt {
-  if [ -z "$VIMRUNTIME" ]; then
-    IN_VIM_PROMPT=""
-  else
-    IN_VIM_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${IN_VIM_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}$(set_rgb_color - ${IN_VIM_PROMPT_COLOR}) ${IN_VIM_PROMPT_TEXT} ${normal}$(set_rgb_color ${IN_VIM_PROMPT_COLOR} -)${normal}"
-    LAST_THEME_COLOR=${IN_VIM_PROMPT_COLOR}
-  fi
 }
 
 function powerline_prompt_command() {
