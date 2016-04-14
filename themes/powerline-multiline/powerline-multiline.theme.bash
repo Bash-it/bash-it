@@ -35,7 +35,7 @@ LAST_STATUS_THEME_PROMPT_COLOR=196
 
 CLOCK_THEME_PROMPT_COLOR=240
 
-BATTERY_AC_CHAR="⚡"
+BATTERY_AC_CHAR=${BATTERY_AC_CHAR:="⚡"}
 BATTERY_STATUS_THEME_PROMPT_GOOD_COLOR=70
 BATTERY_STATUS_THEME_PROMPT_LOW_COLOR=208
 BATTERY_STATUS_THEME_PROMPT_CRITICAL_COLOR=160
@@ -153,7 +153,7 @@ function __powerline_battery_prompt {
     else
       color="${BATTERY_STATUS_THEME_PROMPT_GOOD_COLOR}"
     fi
-    ac_adapter_connected && battery_status="${BATTERY_AC_CHAR} ${battery_status}"
+    ac_adapter_connected && battery_status="${BATTERY_AC_CHAR}${battery_status}"
     echo "${battery_status}%|${color}"
   fi
 }
