@@ -17,12 +17,12 @@ function _set_dnf_aliases()
 
         alias dnfu="sudo dnf upgrade"               # Upgrade package
         alias dnfi="sudo dnf install"               # Install package
+        alias dnfri='sudo dnf reinstall'            # Reinstall package
         alias dnfgi="sudo dnf groupinstall"         # Install package group
         alias dnfr="sudo dnf remove"                # Remove package
         alias dnfgr="sudo dnf groupremove"          # Remove package group
         alias dnfc="sudo dnf clean all"             # Clean cache
     fi
 }
-
 _set_dnf_aliases
 
