@@ -2,15 +2,15 @@ cite about-plugin
 about-plugin 'display info about your battery charge level'
 
 ac_adapter_connected(){
-    if command_exists acpi;
-    then
-        acpi -a | grep "on-line"
-        if [[ "$?" -eq 0 ]]; then
-           return 1
-        else
-           return 0
-        fi
-    fi
+  if command_exists acpi;
+  then
+    acpi -a | grep -q "on-line"
+    return $?
+  elif command_exists ioreg;
+  then
+    ioreg -n AppleSmartBattery -r | grep -q '"ExternalConnected" = Yes'
+    return $?
+  fi
 }
 
 battery_percentage(){
