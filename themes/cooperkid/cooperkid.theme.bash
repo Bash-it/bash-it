@@ -4,9 +4,9 @@
 #      BASED ON: Mr Briggs by Matt Brigg (matt@mattbriggs.net)      #
 # ------------------------------------------------------------------#
 
-SCM_THEME_PROMPT_DIRTY="${yellow}⚡${reset_color}"
-SCM_THEME_PROMPT_AHEAD="${red}!${reset_color}"
-SCM_THEME_PROMPT_CLEAN="${green}✓${reset_color}"
+SCM_THEME_PROMPT_DIRTY="${red} ✗${reset_color}"
+SCM_THEME_PROMPT_AHEAD="${yellow} ↑${reset_color}"
+SCM_THEME_PROMPT_CLEAN="${green} ✓${reset_color}"
 SCM_THEME_PROMPT_PREFIX=" "
 SCM_THEME_PROMPT_SUFFIX=""
 GIT_SHA_PREFIX="${blue}"
