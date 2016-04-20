@@ -12,6 +12,15 @@ SCM_THEME_PROMPT_SUFFIX=""
 GIT_SHA_PREFIX="${blue}"
 GIT_SHA_SUFFIX="${reset_color}"
 
+function rvm_version_prompt {
+  if which rvm &> /dev/null; then
+    rvm=$(rvm-prompt) || return
+    if [ -n "$rvm" ]; then
+      echo -e "$rvm"
+    fi
+  fi
+}
+
 function git_short_sha() {
   SHA=$(git rev-parse --short HEAD 2> /dev/null) && echo "$GIT_SHA_PREFIX$SHA$GIT_SHA_SUFFIX"
 }
