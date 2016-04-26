@@ -31,11 +31,18 @@ pure_prompt() {
     ps_root_mark="${red} # ${normal}"
     ps_path="${yellow}\w${normal}";
 
+	# Virtualenv
+	if [[ $VIRTUAL_ENV != "" ]]; then
+		venv="(${VIRTUAL_ENV##*/})"
+	else
+		venv=""
+	fi
+
     # make it work
     case $(id -u) in
-        0) PS1="$ps_root@$ps_host$(scm_prompt):$ps_path$ps_root_mark"
+        0) PS1="${venv}$ps_root@$ps_host$(scm_prompt):$ps_path$ps_root_mark"
             ;;
-        *) PS1="$ps_user@$ps_host$(scm_prompt):$ps_path$ps_user_mark"
+        *) PS1="${venv}$ps_user@$ps_host$(scm_prompt):$ps_path$ps_user_mark"
             ;;
     esac
 }
