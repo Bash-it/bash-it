@@ -30,7 +30,7 @@ web_search(){
         echo ${YELLOW}"Search term missing!!"
         return 1
     fi
-    xdg-open "$url" 2>/dev/null
+    xdg-open "$url" > /dev/null 2>&1
 }
 
 alias google='web_search google'
@@ -48,7 +48,6 @@ alias youtube='web_search duckduckgo \!yt'
 alias map='web_search duckduckgo \!m'
 alias image='web_search duckduckgo \!i'
 alias ducky='web_search duckduckgo \!'
-alias codechef='web_search duckduckgo \!codechef'
-alias hackerrak='web_search duckduckgo \!hackerrank'
 alias twitter='web_search duckduckgo \!twitter'
 alias amazon='web_search duckduckgo \!a'
+alias torrent='web_search duckduckgo \!tpb'
