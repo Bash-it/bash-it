@@ -1,4 +1,4 @@
-# Installs plenv and perl-build if not installed
+# plugin for plenv
 
 cite about-plugin
 about-plugin 'plenv plugin for Perl'
