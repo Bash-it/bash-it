@@ -12,18 +12,28 @@
 #    Double dash indicates a command that is to be applied to the search result.
 #    At the moment only --enable and --disable are supported.
 #
-# Example:
-# ❯ bash-it search ruby rbenv rvm gem rake
-# aliases     :  bundler
-# plugins     :  chruby chruby-auto rbenv ruby rvm
-# completions :  gem rake
+# Examples:
+#    ❯ bash-it search ruby rbenv rvm gem rake
+#    aliases     :  bundler
+#    plugins     :  chruby chruby-auto rbenv ruby rvm
+#    completions :  gem rake
 
-# ❯ bash-it search ruby rbenv rvm gem rake -chruby
-# aliases     :  bundler
-# plugins     :  rbenv ruby rvm
-# completions :  gem rake
+#    ❯ bash-it search ruby rbenv rvm gem rake -chruby
+#    aliases     :  bundler
+#    plugins     :  rbenv ruby rvm
+#    completions :  gem rake
 #
-
+# Examples of enabling or disabling results of the search:
+#
+#    ❯ bash-it search ruby
+#    aliases  =>   bundler
+#    plugins  =>   chruby chruby-auto ruby
+#
+#    ❯ bash-it search ruby -chruby --enable
+#    aliases  =>   ✓bundler
+#    plugins  =>   ✓ruby
+#
+#
 _bash-it-search() {
   _about 'searches for given terms amongst bash-it plugins, aliases and completions'
   _param '1: term1'
