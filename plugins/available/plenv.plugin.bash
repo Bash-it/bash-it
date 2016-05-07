@@ -1,23 +1,17 @@
 # Installs plenv and perl-build if not installed
 
 cite about-plugin
-about-plugin 'Perl plenv plugin'
+about-plugin 'plenv plugin for Perl'
 
 pathmunge "${HOME}/.plenv/bin"
 
-[[ `which plenv` ]] && eval "$(plenv init -)"
+if [[ `which plenv` ]] ; then
 
-# What an incredible smell you've discovered!
+  # init plenv
+  eval "$(plenv init -)"
 
-# detect bash
-[[ $BASH ]] && SHELL_NAME='bash'
+  # Load the auto-completion script if it exists.
+  [[ -e ~/.plenv/completions/plenv.bash ]] && source ~/.plenv/completions/plenv.bash
 
-# detect csh/tcsh
-
-# detect zsh
-[[ $ZSH_NAME ]] && SHELL_NAME='zsh'
-
-# detect fish
-
-# Load the auto-completion script if plenv is installed.
-[[ -e ~/.plenv/completions/plenv.${SHELL_NAME} ]] && source ~/.plenv/completions/plenv.${SHELL_NAME}
+else echo "Unable to find plenv. See https://github.com/tokuhirom/plenv for installation"
+fi
