@@ -16,6 +16,7 @@ NO_COLOR=true
 }
 
 @test "helpers search all ruby et al" {
+  run _bash-it-search 'ruby' 'gem' 'bundle' 'rake' 'rails' '--disable'
   run _bash-it-search 'ruby' 'gem' 'bundle' 'rake' 'rails'
   [[ "${lines[0]/✓/}" == '      aliases  =>   bundler rails' ]]
   [[ "${lines[1]/✓/}" == '      plugins  =>   chruby chruby-auto ruby' ]]
