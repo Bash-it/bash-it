@@ -6,6 +6,7 @@ load ../../plugins/available/base.plugin
 cite _about _param _example _group _author _version
 
 load ../../lib/helpers
+load ../../lib/search
 
 NO_COLOR=true
 
