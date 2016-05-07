@@ -40,7 +40,7 @@ bash-it ()
     example '$ bash-it enable plugin git [tmux]...'
     example '$ bash-it disable alias hg [tmux]...'
     example '$ bash-it update'
-    example '$ bash-it search ruby [rake]...'
+    example '$ bash-it search ruby [[-]rake]... [--enable | --disable]'
     typeset verb=${1:-}
     shift
     typeset component=${1:-}
