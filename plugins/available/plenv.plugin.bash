@@ -3,7 +3,12 @@
 cite about-plugin
 about-plugin 'plenv plugin for Perl'
 
-pathmunge "${HOME}/.plenv/bin"
+if [[ -e "${HOME}/.plenv/bin" ]] ; then
+  
+  # load plenv bin dir into path if it exists
+  pathmunge "${HOME}/.plenv/bin"
+  
+fi
 
 if [[ `which plenv` ]] ; then
 
@@ -13,5 +18,4 @@ if [[ `which plenv` ]] ; then
   # Load the auto-completion script if it exists.
   [[ -e ~/.plenv/completions/plenv.bash ]] && source ~/.plenv/completions/plenv.bash
 
-else echo "Unable to find plenv. See https://github.com/tokuhirom/plenv for installation"
 fi
