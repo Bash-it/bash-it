@@ -98,7 +98,7 @@ _bash-it-search-component() {
     [[ "${term:0:1}" == "-"  ]] && negative_terms=(${negative_terms[@]} ${term:1}) && continue
 
     # print asterisk next to each result that is already enabled by the user
-    local term_match=($(echo "${help}"| ${_grep} -i -- ${term} | cut -b -30 | sed 's/ *\[ \]//g;s/ *\[x\]/*/g;' ))
+    local term_match=($(echo "${help}"| ${_grep} -i -- ${term} | egrep '\[( |x)\]' | cut -b -30 | sed 's/ *\[ \]//g;s/ *\[x\]/*/g;' ))
     [[ "${#term_match[@]}" -gt 0 ]] && {
       matches=(${matches[@]} ${term_match[@]}) # append to the list of results
     }
