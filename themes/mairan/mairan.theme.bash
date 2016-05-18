@@ -1,5 +1,36 @@
 # Mairan Bash Prompt, inspired by "Zork"
 
+if tput setaf 1 &> /dev/null; then
+    if [[ $(tput colors) -ge 256 ]] 2>/dev/null; then
+      MAGENTA=$(tput setaf 9)
+      ORANGE=$(tput setaf 172)
+      GREEN=$(tput setaf 190)
+      PURPLE=$(tput setaf 141)
+      WHITE=$(tput setaf 0)
+    else
+      MAGENTA=$(tput setaf 5)
+      ORANGE=$(tput setaf 4)
+      GREEN=$(tput setaf 2)
+      PURPLE=$(tput setaf 1)
+      WHITE=$(tput setaf 7)
+    fi
+    BOLD=$(tput bold)
+    RESET=$(tput sgr0)
+else
+    MAGENTA="\033[1;31m"
+    ORANGE="\033[1;33m"
+    GREEN="\033[1;32m"
+    PURPLE="\033[1;35m"
+    WHITE="\033[1;37m"
+    BOLD=""
+    RESET="\033[m"
+fi
+
+# prompt_symbol='λ'
+# prompt_symbol='⚡'
+prompt_symbol=''
+BRACKET_COLOR=$ORANGE
+
 SCM_THEME_PROMPT_PREFIX=""
 SCM_THEME_PROMPT_SUFFIX=""
 
@@ -44,7 +75,7 @@ modern_scm_prompt() {
         then
                 return
         else
-                echo "[$(scm_char)][$(scm_prompt_info)]"
+                echo "[$(scm_char)][$GREEN$(scm_prompt_info)]"
         fi
 }
 
@@ -69,11 +100,11 @@ my_ve(){
 
 prompt() {
 
-    my_ps_host="${red}\h${normal}";
+    my_ps_host="$BOLD$ORANGE\h${normal}";
     # yes, these are the the same for now ...
-    my_ps_host_root="${red}\h${normal}";
+    my_ps_host_root="$ORANGE\h${normal}";
 
-    my_ps_user="${bold_orange}\u${normal}"
+    my_ps_user="$BOLD$GREEN\u${normal}"
     my_ps_root="${bold_red}\u${normal}";
 
     if [ -n "$VIRTUAL_ENV" ]
@@ -83,11 +114,11 @@ prompt() {
 
     # nice prompt
     case "`id -u`" in
-        0) PS1="\n${TITLEBAR}┌─$(my_ve)$(chroot)[$my_ps_root][$my_ps_host_root]$(modern_scm_prompt)$(__my_rvm_ruby_version)[${green}\w${normal}]$(is_vim_shell)
-└─▪ "
+        0) PS1="\n${TITLEBAR}${BRACKET_COLOR}┌─${normal}$(my_ve)$(chroot)[$my_ps_root][$my_ps_host_root]$(modern_scm_prompt)$(__my_rvm_ruby_version)[${green}\w${normal}]$(is_vim_shell)${BRACKET_COLOR}
+└─▪ ${prompt_symbol} ${normal}"
         ;;
-        *) PS1="\n${TITLEBAR}┌─$(my_ve)$(chroot)[$my_ps_user][$my_ps_host]$(modern_scm_prompt)$(__my_rvm_ruby_version)[${green}\w${normal}]$(is_vim_shell)
-└─▪ "
+        *) PS1="\n${TITLEBAR}${BRACKET_COLOR}┌─${normal}$(my_ve)$(chroot)[$my_ps_user][$my_ps_host]$(modern_scm_prompt)${normal}$(__my_rvm_ruby_version)[${green}\w${normal}]$(is_vim_shell)${BRACKET_COLOR}
+└─▪ ${prompt_symbol} ${normal}"
         ;;
     esac
 }
