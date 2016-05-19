@@ -23,7 +23,7 @@ NO_COLOR=true
   run _bash-it-search 'ruby' 'gem' 'bundle' 'rake' 'rails'
   # And verify
   [[ "${lines[0]/✓/}" == '      aliases  =>   bundler rails' ]] && \
-  [[ "${lines[1]/✓/}" == '      plugins  =>   chruby chruby-auto ruby' ]] && \
+  [[ "${lines[1]/✓/}" == '      plugins  =>   chruby chruby-auto killrails ruby' ]] && \
   [[ "${lines[2]/✓/}" == '  completions  =>   bundler gem rake' ]]
 }
 
@@ -31,7 +31,7 @@ NO_COLOR=true
   run _bash-it-search 'ruby' 'gem' 'bundle' 'rake' 'rails' '--disable'
   run _bash-it-search 'ruby' 'gem' 'bundle' '-chruby' 'rake' 'rails'
   [[ "${lines[0]/✓/}" == '      aliases  =>   bundler rails' ]] && \
-  [[ "${lines[1]/✓/}" == '      plugins  =>   ruby' ]] && \
+  [[ "${lines[1]/✓/}" == '      plugins  =>   killrails ruby' ]] && \
   [[ "${lines[2]/✓/}" == '  completions  =>   bundler gem rake' ]]
 }
 
@@ -40,7 +40,7 @@ NO_COLOR=true
   run _enable-alias 'rails'
   run _bash-it-search 'ruby' 'gem' 'bundle' 'rake' 'rails'
   [[ "${lines[0]}"    == '      aliases  =>   bundler ✓rails' ]] && \
-  [[ "${lines[1]}"    == '      plugins  =>   chruby chruby-auto ruby' ]] && \
+  [[ "${lines[1]}"    == '      plugins  =>   chruby chruby-auto killrails ruby' ]] && \
   [[ "${lines[2]}"    == '  completions  =>   bundler gem rake' ]]
 }
 
@@ -48,6 +48,6 @@ NO_COLOR=true
   run _bash-it-search 'ruby' 'gem' 'bundle' 'rake' '-chruby' 'rails' '--enable'
   run _bash-it-search 'ruby' 'gem' 'bundle' 'rake' '-chruby' 'rails'
   [[ "${lines[0]}"    == '      aliases  =>   ✓bundler ✓rails' ]] && \
-  [[ "${lines[1]}"    == '      plugins  =>   ✓ruby' ]] && \
+  [[ "${lines[1]}"    == '      plugins  =>   ✓killrails ✓ruby' ]] && \
   [[ "${lines[2]}"    == '  completions  =>   ✓bundler ✓gem ✓rake' ]]
 }
