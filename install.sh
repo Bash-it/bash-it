@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-# parse long options
-
+# bash-it installer
 show_usage() {
   echo -e "\n$0 : Install bash-it"
   echo -e "Usage:\n$0 [arguments] \n"
@@ -10,6 +9,8 @@ show_usage() {
   echo "--interactive (-i): Interactively choose plugins"
   exit 0;
 }
+
+echo "Installing bash-it"
 
 for param in "$@"; do
   shift
