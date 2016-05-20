@@ -1,4 +1,44 @@
 #!/usr/bin/env bash
+# bash-it installer
+show_usage() {
+  echo -e "\n$0 : Install bash-it"
+  echo -e "Usage:\n$0 [arguments] \n"
+  echo "Arguments:"
+  echo "--help (-h): Display this help message"
+  echo "--silent (-s): Install default settings without prompting for input";
+  echo "--interactive (-i): Interactively choose plugins"
+  exit 0;
+}
+
+echo "Installing bash-it"
+
+for param in "$@"; do
+  shift
+  case "$param" in
+    "--help")        set -- "$@" "-h" ;;
+    "--silent")      set -- "$@" "-s" ;;
+    "--interactive") set -- "$@" "-i" ;;
+    *)               set -- "$@" "$param"
+  esac
+done
+
+OPTIND=1
+while getopts "hsi" opt
+do
+  case "$opt" in
+  "h") show_usage; exit 0 ;;
+  "s") silent=true ;;
+  "i") interactive=true ;;
+  "?") show_usage >&2; exit 1 ;;
+  esac
+done
+shift $(expr $OPTIND - 1)
+
+if [[ $silent ]] && [[ $interactive ]]; then
+  echo "Options --silent and --interactive are mutually exclusive. Please choose one or the other."
+  exit 1;
+fi
+
 BASH_IT="$(cd "$(dirname "$0")" && pwd)"
 
 case $OSTYPE in
@@ -14,8 +54,7 @@ BACKUP_FILE=$CONFIG_FILE.bak
 
 if [ -e "$HOME/$BACKUP_FILE" ]; then
   echo -e "\033[0;33mBackup file already exists. Make sure to backup your .bashrc before running this installation.\033[0m" >&2
-  while true
-  do
+  while ! [ $silent ];  do
     read -e -n 1 -r -p "Would you like to overwrite the existing backup? This will delete your existing backup file ($HOME/$BACKUP_FILE) [y/N] " RESP
     case $RESP in
     [yY])
@@ -32,7 +71,7 @@ if [ -e "$HOME/$BACKUP_FILE" ]; then
   done
 fi
 
-while true
+while ! [ $silent ]
 do
   read -e -n 1 -r -p "Would you like to keep your $CONFIG_FILE and append bash-it templates at the end? [y/N] " choice
   case $choice in
@@ -57,6 +96,14 @@ do
     ;;
   esac
 done
+
+if [ $silent ]; then
+  # backup/new by default
+  test -w "$HOME/$CONFIG_FILE" &&
+  cp -aL "$HOME/$CONFIG_FILE" "$HOME/$CONFIG_FILE.bak" &&
+  echo -e "\033[0;32mYour original $CONFIG_FILE has been backed up to $CONFIG_FILE.bak\033[0m"
+  sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" > "$HOME/$CONFIG_FILE"
+fi
 
 echo -e "\033[0;32mCopied the template $CONFIG_FILE into ~/$CONFIG_FILE, edit this file to customize bash-it\033[0m"
 
@@ -98,7 +145,7 @@ function load_some() {
   done
 }
 
-if [[ "$1" == "--interactive" ]]
+if [[ $interactive ]] && ! [[ $silent ]] ;
 then
   for type in "aliases" "plugins" "completion"
   do
