@@ -1,10 +1,10 @@
 cite about-plugin
-about-plugin 'Function to kill a daemonized Rails server.'
+about-plugin 'Helper functions for Ruby on Rails'
 
 # Quick function to kill a daemonized Rails server
 function killrails() {
   about 'Searches for a daemonized Rails server in tmp/pids and attempts to kill it.'
-  group 'killrails'
+  group 'rails'
 
   railsPid="$(cat tmp/pids/server.pid)"
   if [ ! -z "$railsPid" ]; then
