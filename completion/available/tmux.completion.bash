@@ -5,92 +5,8 @@
 # Usage: Put "source bash_completion_tmux.sh" into your .bashrc
 # Based upon the example at http://paste-it.appspot.com/Pj4mLycDE
 
-    _tmux_cmds=" \
-attach-session \
-bind-key \
-break-pane \
-capture-pane \
-choose-client \
-choose-session \
-choose-window \
-clear-history \
-clock-mode \
-command-prompt \
-confirm-before \
-copy-buffer \
-copy-mode \
-delete-buffer \
-detach-client \
-display-message \
-display-panes \
-down-pane \
-find-window \
-has-session \
-if-shell \
-join-pane \
-kill-pane \
-kill-server \
-kill-session \
-kill-window \
-last-window \
-link-window \
-list-buffers \
-list-clients \
-list-commands \
-list-keys \
-list-panes \
-list-sessions \
-list-windows \
-load-buffer \
-lock-client \
-lock-server \
-lock-session \
-move-window \
-new-session \
-new-window \
-next-layout \
-next-window \
-paste-buffer \
-pipe-pane \
-previous-layout \
-previous-window \
-refresh-client \
-rename-session \
-rename-window \
-resize-pane \
-respawn-window \
-rotate-window \
-run-shell \
-save-buffer \
-select-layout \
-select-pane \
-select-prompt \
-select-window \
-send-keys \
-send-prefix \
-server-info \
-set-buffer \
-set-environment \
-set-option \
-set-window-option \
-show-buffer \
-show-environment \
-show-messages \
-show-options \
-show-window-options \
-source-file \
-split-window \
-start-server \
-suspend-client \
-swap-pane \
-swap-window \
-switch-client \
-unbind-key \
-unlink-window \
-up-pane"
-
-_tmux_expand () 
-{ 
+_tmux_expand ()
+{
     [ "$cur" != "${cur%\\}" ] && cur="$cur"'\';
     if [[ "$cur" == \~*/* ]]; then
         eval cur=$cur;
@@ -103,8 +19,8 @@ _tmux_expand ()
     fi
 }
 
-_tmux_filedir () 
-{ 
+_tmux_filedir ()
+{
     local IFS='
 ';
     _tmux_expand || return 0;
@@ -130,7 +46,7 @@ function _tmux_complete_window() {
     local cur="${1}"
     local session_name="$(echo "${cur}" | sed 's/\\//g' | cut -d ':' -f 1)"
     local sessions
-    
+
     sessions="$(tmux -q list-sessions 2>/dev/null | sed -re 's/([^:]+:).*$/\1/')"
     if [[ -n "${session_name}" ]]; then
         sessions="${sessions}
@@ -186,8 +102,8 @@ _tmux() {
 
     if [[ $COMP_CWORD -le $cmd_index ]]; then
         # The user has not specified a command yet
-        COMPREPLY=( ${COMPREPLY[@]:-} $(compgen -W "${_tmux_cmds}" -- "${cur}") )
-    else        
+        COMPREPLY=( ${COMPREPLY[@]:-} $(compgen -W "$(tmux list-commands | cut -d' ' -f1)" -- "${cur}") )
+    else
         case ${cmd} in
             attach-session|attach)
             case "$prev" in
@@ -213,7 +129,7 @@ _tmux() {
             case "$prev" in
                 -t) _tmux_complete_session "${cur}" ;;
                 -[n|d|s]) options="-d -n -s -t --" ;;
-                *) 
+                *)
                 if [[ ${COMP_WORDS[option_index]} == -- ]]; then
                     _command_offset ${option_index}
                 else
@@ -249,7 +165,7 @@ _tmux() {
                 -t) _tmux_complete_session "${cur}" ;;
                 *) options="-l -n -p -c -t" ;;
             esac ;;
-            
+
             send-keys|send)
             case "$option" in
                 -t) _tmux_complete_window "${cur}" ;;
@@ -257,12 +173,12 @@ _tmux() {
             esac ;;
           esac # case ${cmd}
         fi # command specified
-      fi # not -f 
-            
+      fi # not -f
+
       if [[ -n "${options}" ]]; then
           COMPREPLY=( ${COMPREPLY[@]:-} $(compgen -W "${options}" -- "${cur}") )
       fi
-            
+
       return 0
 
 }
