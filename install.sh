@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # bash-it installer
-show_usage() {
+
+# Show how to use this installer
+function show_usage() {
   echo -e "\n$0 : Install bash-it"
   echo -e "Usage:\n$0 [arguments] \n"
   echo "Arguments:"
@@ -8,6 +10,55 @@ show_usage() {
   echo "--silent (-s): Install default settings without prompting for input";
   echo "--interactive (-i): Interactively choose plugins"
   exit 0;
+}
+
+# enable a thing
+function load_one() {
+  file_type=$1
+  file_to_enable=$2
+  mkdir -p "$BASH_IT/${file_type}/enabled"
+
+  dest="${BASH_IT}/${file_type}/enabled/${file_to_enable}"
+  if [ ! -e "${dest}" ]; then
+    ln -sf "../available/${file_to_enable}" "${dest}"
+  else
+    echo "File ${dest} exists, skipping"
+  fi
+}
+
+# Interactively enable several things
+function load_some() {
+  file_type=$1
+  [ -d "$BASH_IT/$file_type/enabled" ] || mkdir "$BASH_IT/$file_type/enabled"
+  for path in `ls $BASH_IT/${file_type}/available/[^_]*`
+  do
+    file_name=$(basename "$path")
+    while true
+    do
+      read -e -n 1 -p "Would you like to enable the ${file_name%%.*} $file_type? [y/N] " RESP
+      case $RESP in
+      [yY])
+        ln -s "../available/${file_name}" "$BASH_IT/$file_type/enabled"
+        break
+        ;;
+      [nN]|"")
+        break
+        ;;
+      *)
+        echo -e "\033[91mPlease choose y or n.\033[m"
+        ;;
+      esac
+    done
+  done
+}
+
+# Back up existing profile and create new one for bash-it
+function backup_new() {
+  test -w "$HOME/$CONFIG_FILE" &&
+  cp -aL "$HOME/$CONFIG_FILE" "$HOME/$CONFIG_FILE.bak" &&
+  echo -e "\033[0;32mYour original $CONFIG_FILE has been backed up to $CONFIG_FILE.bak\033[0m"
+  sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" > "$HOME/$CONFIG_FILE"
+  echo -e "\033[0;32mCopied the template $CONFIG_FILE into ~/$CONFIG_FILE, edit this file to customize bash-it\033[0m"
 }
 
 for param in "$@"; do
@@ -33,7 +84,7 @@ done
 shift $(expr $OPTIND - 1)
 
 if [[ $silent ]] && [[ $interactive ]]; then
-  echo "\033[91mOptions --silent and --interactive are mutually exclusive. Please choose one or the other.\033[m"
+  echo -e "\033[91mOptions --silent and --interactive are mutually exclusive. Please choose one or the other.\033[m"
   exit 1;
 fi
 
@@ -95,52 +146,6 @@ if [ $silent ]; then
   # backup/new by default
   backup_new
 fi
-
-function load_one() {
-  file_type=$1
-  file_to_enable=$2
-  mkdir -p "$BASH_IT/${file_type}/enabled"
-
-  dest="${BASH_IT}/${file_type}/enabled/${file_to_enable}"
-  if [ ! -e "${dest}" ]; then
-    ln -sf "../available/${file_to_enable}" "${dest}"
-  else
-    echo "File ${dest} exists, skipping"
-  fi
-}
-
-function load_some() {
-  file_type=$1
-  [ -d "$BASH_IT/$file_type/enabled" ] || mkdir "$BASH_IT/$file_type/enabled"
-  for path in `ls $BASH_IT/${file_type}/available/[^_]*`
-  do
-    file_name=$(basename "$path")
-    while true
-    do
-      read -e -n 1 -p "Would you like to enable the ${file_name%%.*} $file_type? [y/N] " RESP
-      case $RESP in
-      [yY])
-        ln -s "../available/${file_name}" "$BASH_IT/$file_type/enabled"
-        break
-        ;;
-      [nN]|"")
-        break
-        ;;
-      *)
-        echo -e "\033[91mPlease choose y or n.\033[m"
-        ;;
-      esac
-    done
-  done
-}
-
-function backup_new() {
-  test -w "$HOME/$CONFIG_FILE" &&
-  cp -aL "$HOME/$CONFIG_FILE" "$HOME/$CONFIG_FILE.bak" &&
-  echo -e "\033[0;32mYour original $CONFIG_FILE has been backed up to $CONFIG_FILE.bak\033[0m"
-  sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" > "$HOME/$CONFIG_FILE"
-  echo -e "\033[0;32mCopied the template $CONFIG_FILE into ~/$CONFIG_FILE, edit this file to customize bash-it\033[0m"
-}
 
 if [[ $interactive ]] && ! [[ $silent ]] ;
 then
