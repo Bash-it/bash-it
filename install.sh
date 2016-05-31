@@ -10,8 +10,6 @@ show_usage() {
   exit 0;
 }
 
-echo "Installing bash-it"
-
 for param in "$@"; do
   shift
   case "$param" in
@@ -35,7 +33,7 @@ done
 shift $(expr $OPTIND - 1)
 
 if [[ $silent ]] && [[ $interactive ]]; then
-  echo "Options --silent and --interactive are mutually exclusive. Please choose one or the other."
+  echo "\033[91mOptions --silent and --interactive are mutually exclusive. Please choose one or the other.\033[m"
   exit 1;
 fi
 
@@ -51,7 +49,7 @@ case $OSTYPE in
 esac
 
 BACKUP_FILE=$CONFIG_FILE.bak
-
+echo "Installing bash-it"
 if [ -e "$HOME/$BACKUP_FILE" ]; then
   echo -e "\033[0;33mBackup file already exists. Make sure to backup your .bashrc before running this installation.\033[0m" >&2
   while ! [ $silent ];  do
@@ -71,8 +69,7 @@ if [ -e "$HOME/$BACKUP_FILE" ]; then
   done
 fi
 
-while ! [ $silent ]
-do
+while ! [ $silent ]; do
   read -e -n 1 -r -p "Would you like to keep your $CONFIG_FILE and append bash-it templates at the end? [y/N] " choice
   case $choice in
   [yY])
@@ -85,10 +82,7 @@ do
     break
     ;;
   [nN]|"")
-    test -w "$HOME/$CONFIG_FILE" &&
-    cp -aL "$HOME/$CONFIG_FILE" "$HOME/$CONFIG_FILE.bak" &&
-    echo -e "\033[0;32mYour original $CONFIG_FILE has been backed up to $CONFIG_FILE.bak\033[0m"
-    sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" > "$HOME/$CONFIG_FILE"
+    backup_new
     break
     ;;
   *)
@@ -99,13 +93,8 @@ done
 
 if [ $silent ]; then
   # backup/new by default
-  test -w "$HOME/$CONFIG_FILE" &&
-  cp -aL "$HOME/$CONFIG_FILE" "$HOME/$CONFIG_FILE.bak" &&
-  echo -e "\033[0;32mYour original $CONFIG_FILE has been backed up to $CONFIG_FILE.bak\033[0m"
-  sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" > "$HOME/$CONFIG_FILE"
+  backup_new
 fi
-
-echo -e "\033[0;32mCopied the template $CONFIG_FILE into ~/$CONFIG_FILE, edit this file to customize bash-it\033[0m"
 
 function load_one() {
   file_type=$1
@@ -143,6 +132,14 @@ function load_some() {
       esac
     done
   done
+}
+
+function backup_new() {
+  test -w "$HOME/$CONFIG_FILE" &&
+  cp -aL "$HOME/$CONFIG_FILE" "$HOME/$CONFIG_FILE.bak" &&
+  echo -e "\033[0;32mYour original $CONFIG_FILE has been backed up to $CONFIG_FILE.bak\033[0m"
+  sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" > "$HOME/$CONFIG_FILE"
+  echo -e "\033[0;32mCopied the template $CONFIG_FILE into ~/$CONFIG_FILE, edit this file to customize bash-it\033[0m"
 }
 
 if [[ $interactive ]] && ! [[ $silent ]] ;
