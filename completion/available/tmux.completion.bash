@@ -50,7 +50,7 @@ function _tmux_complete_window() {
     sessions="$(tmux -q list-sessions 2>/dev/null | sed -re 's/([^:]+:).*$/\1/')"
     if [[ -n "${session_name}" ]]; then
         sessions="${sessions}
-$(tmux -q list-windows -t "${session_name}" 2>/dev/null | sed -re 's/^([^:]+):.*$/'"${session_name}"':\1/')"
+        $(tmux -q list-windows -t "${session_name}" 2>/dev/null | sed -re 's/^([^:]+):.*$/'"${session_name}"':\1/')"
     fi
     cur="$(echo "${cur}" | sed -e 's/:/\\\\:/')"
     sessions="$(echo "${sessions}" | sed -e 's/:/\\\\:/')"
@@ -102,7 +102,7 @@ _tmux() {
 
     if [[ $COMP_CWORD -le $cmd_index ]]; then
         # The user has not specified a command yet
-        COMPREPLY=( ${COMPREPLY[@]:-} $(compgen -W "$(tmux list-commands | cut -d' ' -f1)" -- "${cur}") )
+        COMPREPLY=( ${COMPREPLY[@]:-} $(compgen -W "$(tmux start-server \; list-commands | cut -d' ' -f1)" -- "${cur}") )
     else
         case ${cmd} in
             attach-session|attach)
