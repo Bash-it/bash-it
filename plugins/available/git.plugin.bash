@@ -201,11 +201,13 @@ fi
 function gittowork() {
   about 'Places the latest .gitignore file for a given project type in the current directory, or concatenates onto an existing .gitignore'
   group 'git'
+  param '1: the language/type of the project, used for determining the contents of the .gitignore file'
+  example '$ gittowork java'
 
-  result=$(curl -L "Https://www.gitignore.io/api/$1" 2>/dev/null)
+  result=$(curl -L "https://www.gitignore.io/api/$1" 2>/dev/null)
 
   if [[ $result =~ ERROR ]]; then
-    echo "Query '$1' has no match. See a list of possible queries with 'gittowork List'"
+    echo "Query '$1' has no match. See a list of possible queries with 'gittowork list'"
   elif [[ $1 = list ]]; then
     echo "$result"
   else
