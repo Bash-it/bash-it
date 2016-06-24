@@ -11,6 +11,11 @@ case $OSTYPE in
     ;;
 esac
 
+# Git auto completion
+if [ -f ~/.bash_it/custom/git-completion.bash ]; then
+  . ~/.bash_it/custom/git-completion.bash
+fi
+
 # Only set $BASH_IT if it's not already set
 if [ -z "$BASH_IT" ];
 then
