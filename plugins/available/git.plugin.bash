@@ -221,4 +221,57 @@ function gittowork() {
   fi
 }
 
+function gitignore-reload() {
+  about 'Empties the git cache, and readds all files not blacklisted by .gitignore'
+  group 'git'
+  example '$ gitignore-reload'
+
+    # The .gitignore file should not be reloaded if there are uncommited changes.
+  # Firstly, require a clean work tree. The function require_clean_work_tree() 
+  # was stolen with love from https://www.spinics.net/lists/git/msg142043.html
+
+  # Begin require_clean_work_tree()
+
+  # Update the index
+  git update-index -q --ignore-submodules --refresh
+  err=0
+
+  # Disallow unstaged changes in the working tree
+  if ! git diff-files --quiet --ignore-submodules --
+  then
+    echo >&2 "ERROR: Cannot reload .gitignore: Your index contains unstaged changes."
+    git diff-index --cached --name-status -r --ignore-submodules HEAD -- >&2
+    err=1
+  fi
+
+  # Disallow uncommited changes in the index
+  if ! git diff-index --cached --quiet HEAD --ignore-submodules
+  then
+    echo >&2 "ERROR: Cannot reload .gitignore: Your index contains uncommited changes."
+    git diff-index --cached --name-status -r --ignore-submodules HEAD -- >&2
+    err=1
+  fi
+
+  # Prompt user to commit or stash changes and exit
+  if [ $err = 1 ]
+  then
+    echo >&2 "Please commit or stash them."
+  fi
+
+  # End require_clean_work_tree()
+
+  # If we're here, then there are no uncommited or unstaged changes dangling around.
+  # Proceed to reload .gitignore
+  if [ $err = 0 ]; then
+    # Remove all cached files
+    git rm -r --cached .
+
+    # Re-add everything. The changed .gitignore will be picked up here and will exclude the files
+    # now blacklisted by .gitignore
+    echo >&2 "Running git add ."
+    git add .
+    echo >&2 "Files readded. Commit your new changes now."
+  fi
+}
+
 
