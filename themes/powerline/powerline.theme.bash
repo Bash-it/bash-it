@@ -25,6 +25,10 @@ CWD_THEME_PROMPT_COLOR=240
 
 LAST_STATUS_THEME_PROMPT_COLOR=52
 
+IN_VIM_PROMPT_COLOR=35
+IN_VIM_PROMPT_TEXT="vim"
+
+
 function set_rgb_color {
     if [[ "${1}" != "-" ]]; then
         fg="38;5;${1}"
@@ -103,16 +107,26 @@ function powerline_last_status_prompt {
     fi
 }
 
+function powerline_in_vim_prompt {
+  if [ -z "$VIMRUNTIME" ]; then
+    IN_VIM_PROMPT=""
+  else
+    IN_VIM_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${IN_VIM_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}$(set_rgb_color - ${IN_VIM_PROMPT_COLOR}) ${IN_VIM_PROMPT_TEXT} ${normal}$(set_rgb_color ${IN_VIM_PROMPT_COLOR} -)${normal}"
+    LAST_THEME_COLOR=${IN_VIM_PROMPT_COLOR}
+  fi
+}
+
 function powerline_prompt_command() {
     local LAST_STATUS="$?"
 
     powerline_shell_prompt
+    powerline_in_vim_prompt
     powerline_virtualenv_prompt
     powerline_scm_prompt
     powerline_cwd_prompt
     powerline_last_status_prompt LAST_STATUS
 
-    PS1="${SHELL_PROMPT}${VIRTUALENV_PROMPT}${SCM_PROMPT}${CWD_PROMPT}${LAST_STATUS_PROMPT} "
+    PS1="${SHELL_PROMPT}${IN_VIM_PROMPT}${VIRTUALENV_PROMPT}${SCM_PROMPT}${CWD_PROMPT}${LAST_STATUS_PROMPT} "
 }
 
 PROMPT_COMMAND=powerline_prompt_command

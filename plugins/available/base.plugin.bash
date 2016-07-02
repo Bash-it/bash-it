@@ -99,33 +99,6 @@ function lsgrep ()
     ls | grep "$*"
 }
 
-function pman ()
-{
-    about 'view man documentation in Preview'
-    param '1: man page to view'
-    example '$ pman bash'
-    group 'base'
-    man -t "${1}" | open -f -a $PREVIEW
-}
-
-function pcurl ()
-{
-    about 'download file and Preview it'
-    param '1: download URL'
-    example '$ pcurl http://www.irs.gov/pub/irs-pdf/fw4.pdf'
-    group 'base'
-    curl "${1}" | open -f -a $PREVIEW
-}
-
-function pri ()
-{
-    about 'display information about Ruby classes, modules, or methods, in Preview'
-    param '1: Ruby method, module, or class'
-    example '$ pri Array'
-    group 'base'
-    ri -T "${1}" | open -f -a $PREVIEW
-}
-
 function quiet ()
 {
     about 'what *does* this do?'
@@ -222,4 +195,12 @@ function buf ()
     local filename=$1
     local filetime=$(date +%Y%m%d_%H%M%S)
     cp -a "${filename}" "${filename}_${filetime}"
+}
+
+function del() { 
+    about 'move files to hidden folder in tmp, that gets cleared on each reboot'
+    param 'file or folder to be deleted'
+    example 'del ./file.txt'
+    group 'base'
+    mkdir -p /tmp/.trash && mv "$@" /tmp/.trash; 
 }

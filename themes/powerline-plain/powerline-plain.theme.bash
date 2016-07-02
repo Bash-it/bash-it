@@ -5,7 +5,10 @@ SHELL_THEME_PROMPT_COLOR=32
 SHELL_SSH_THEME_PROMPT_COLOR=208
 
 VIRTUALENV_CHAR="ⓔ "
-VIRTUALENV_THEME_PROMPT_COLOR=35
+VIRTUALENV_THEME_PROMPT_COLOR=25
+
+GEMSET_CHAR="ⓔ "
+GEMSET_THEME_PROMPT_COLOR=25
 
 SCM_NONE_CHAR=""
 SCM_GIT_CHAR="⎇  "
@@ -59,6 +62,17 @@ function powerline_virtualenv_prompt {
     fi
 }
 
+function powerline_gemset_prompt {
+    local gemset=$(rvm-prompt 2>/dev/null)
+
+    if [[ -n "$gemset" ]]; then
+        GEMSET_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${GEMSET_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}$(set_rgb_color - ${GEMSET_THEME_PROMPT_COLOR}) ${VIRTUALENV_CHAR}$gemset ${normal}"
+        LAST_THEME_COLOR=${GEMSET_THEME_PROMPT_COLOR}
+    else
+        GEMSET_PROMPT=""
+    fi
+}
+
 function powerline_scm_prompt {
     scm_prompt_vars
 
@@ -98,11 +112,12 @@ function powerline_prompt_command() {
 
     powerline_shell_prompt
     powerline_virtualenv_prompt
+    powerline_gemset_prompt
     powerline_scm_prompt
     powerline_cwd_prompt
     powerline_last_status_prompt LAST_STATUS
 
-    PS1="${SHELL_PROMPT}${VIRTUALENV_PROMPT}${SCM_PROMPT}${CWD_PROMPT}${LAST_STATUS_PROMPT} "
+    PS1="${SHELL_PROMPT}${GEMSET_PROMPT}${VIRTUALENV_PROMPT}${SCM_PROMPT}${CWD_PROMPT}${LAST_STATUS_PROMPT} "
 }
 
 PROMPT_COMMAND=powerline_prompt_command

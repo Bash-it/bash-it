@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
-set -e
+test_directory="$(cd "$(dirname "$0")" && pwd)"
+bats_executable="${test_directory}/../bats/bin/bats"
 
-exec bats ${CI:+--tap} test/{lib,plugins}
+[ ! -e $bats_executable ] && \
+  git clone --depth 1 https://github.com/sstephenson/bats.git ${test_directory}/../bats
+
+if [ -z "${BASH_IT}" ]; then
+  export BASH_IT=$(cd ${test_directory} && dirname $(pwd))
+fi
+
+exec $bats_executable ${CI:+--tap} ${test_directory}/{lib,plugins}

@@ -31,14 +31,16 @@ function reload_plugins() {
 
 bash-it ()
 {
-    about 'bash-it help and maintenance'
-    param '1: verb [one of: help | show | enable | disable ]'
-    param '2: component type [one of: alias(es) | completion(s) | plugin(s) ]'
+    about 'Bash-it help and maintenance'
+    param '1: verb [one of: help | show | enable | disable | update | search ] '
+    param '2: component type [one of: alias(es) | completion(s) | plugin(s) ] or search term(s)'
     param '3: specific component [optional]'
     example '$ bash-it show plugins'
     example '$ bash-it help aliases'
-    example '$ bash-it enable plugin git'
-    example '$ bash-it disable alias hg'
+    example '$ bash-it enable plugin git [tmux]...'
+    example '$ bash-it disable alias hg [tmux]...'
+    example '$ bash-it update'
+    example '$ bash-it search ruby [[-]rake]... [--enable | --disable]'
     typeset verb=${1:-}
     shift
     typeset component=${1:-}
@@ -53,6 +55,11 @@ bash-it ()
              func=_disable-$component;;
          help)
              func=_help-$component;;
+         search)
+             _bash-it-search $component $*
+             return;;
+         update)
+             func=_bash-it_update;;
          *)
              reference bash-it
              return;;
@@ -72,7 +79,15 @@ bash-it ()
             fi
         fi
     fi
-    $func $*
+
+    if [ x"$verb" == x"enable" -o x"$verb" == x"disable" ];then
+        for arg in "$@"
+        do
+            $func $arg
+        done
+    else
+        $func $*
+    fi
 }
 
 _is_function ()
@@ -107,6 +122,30 @@ _bash-it-plugins ()
     _bash-it-describe "plugins" "a" "plugin" "Plugin"
 }
 
+_bash-it_update() {
+  _about 'updates Bash-it'
+  _group 'lib'
+
+  cd "${BASH_IT}"
+  if [ -z $BASH_IT_REMOTE ]; then
+    BASH_IT_REMOTE="origin"
+  fi
+  git fetch &> /dev/null
+  local status="$(git rev-list master..${BASH_IT_REMOTE}/master 2> /dev/null)"
+  if [[ -n "${status}" ]]; then
+    git pull --rebase &> /dev/null
+    if [[ $? -eq 0 ]]; then
+      echo "Bash-it successfully updated, enjoy!"
+      reload
+    else
+      echo "Error updating Bash-it, please, check if your Bash-it installation folder (${BASH_IT}) is clean."
+    fi
+  else
+    echo "Bash-it is up to date, nothing to do!"
+  fi
+  cd - &> /dev/null
+}
+
 _bash-it-describe ()
 {
     _about 'summarizes available bash_it components'
@@ -134,9 +173,9 @@ _bash-it-describe ()
         printf "%-20s%-10s%s\n" "$(basename $f | cut -d'.' -f1)" "  [$enabled]" "$(cat $f | metafor about-$file_type)"
     done
     printf '\n%s\n' "to enable $preposition $file_type, do:"
-    printf '%s\n' "$ bash-it enable $file_type  <$file_type name> -or- $ bash-it enable $file_type all"
+    printf '%s\n' "$ bash-it enable $file_type  <$file_type name> [$file_type name]... -or- $ bash-it enable $file_type all"
     printf '\n%s\n' "to disable $preposition $file_type, do:"
-    printf '%s\n' "$ bash-it disable $file_type <$file_type name> -or- $ bash-it disable $file_type all"
+    printf '%s\n' "$ bash-it disable $file_type <$file_type name> [$file_type name]... -or- $ bash-it disable $file_type all"
 }
 
 _disable-plugin ()
@@ -198,7 +237,7 @@ _disable-thing ()
     else
         typeset plugin=$(command ls $BASH_IT/$subdirectory/enabled/$file_entity.*bash 2>/dev/null | head -1)
         if [ -z "$plugin" ]; then
-            printf '%s\n' "sorry, that does not appear to be an enabled $file_type."
+            printf '%s\n' "sorry, $file_entity does not appear to be an enabled $file_type."
             return
         fi
         rm $BASH_IT/$subdirectory/enabled/$(basename $plugin)
@@ -267,7 +306,7 @@ _enable-thing ()
     else
         typeset plugin=$(command ls $BASH_IT/$subdirectory/available/$file_entity.*bash 2>/dev/null | head -1)
         if [ -z "$plugin" ]; then
-            printf '%s\n' "sorry, that does not appear to be an available $file_type."
+            printf '%s\n' "sorry, $file_entity does not appear to be an available $file_type."
             return
         fi
 
@@ -345,6 +384,13 @@ _help-plugins()
         rm $gfile 2> /dev/null
     done | less
     rm $grouplist 2> /dev/null
+}
+
+_help-update () {
+  _about 'help message for update command'
+  _group 'lib'
+
+  echo "Check for a new version of Bash-it and update it."
 }
 
 all_groups ()

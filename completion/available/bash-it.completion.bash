@@ -51,27 +51,47 @@ _bash-it-comp()
 	COMPREPLY=()
 	cur="${COMP_WORDS[COMP_CWORD]}"
 	prev="${COMP_WORDS[COMP_CWORD-1]}"
-
-	opts="help show enable disable"
-
-	case "${prev}" in
+	chose_opt="${COMP_WORDS[1]}"
+	file_type="${COMP_WORDS[2]}"
+	opts="help show enable disable update search"
+	case "${chose_opt}" in
 		show)
 			local show_args="plugins aliases completions"
 			COMPREPLY=( $(compgen -W "${show_args}" -- ${cur}) )
 			return 0
 			;;
 		help)
-			local help_args="plugins aliases completions"
+			local help_args="plugins aliases completions update"
 			COMPREPLY=( $(compgen -W "${help_args}" -- ${cur}) )
 			return 0
 			;;
-		enable)
-			_bash-it-comp-enable-disable
-			return 0
-			;;
-		disable)
-			_bash-it-comp-enable-disable
-			return 0
+    update | search)
+      return 0
+      ;;
+		enable | disable)
+			if [ x"${chose_opt}" == x"enable" ];then
+				suffix="available-not-enabled"
+			else
+				suffix="enabled"
+			fi
+			case "${file_type}" in
+				alias)
+						_bash-it-comp-list-${suffix} aliases
+						return 0
+						;;
+				plugin)
+						_bash-it-comp-list-${suffix} plugins
+						return 0
+						;;
+				completion)
+						_bash-it-comp-list-${suffix} completion
+						return 0
+						;;
+				*)
+						_bash-it-comp-enable-disable
+						return 0
+						;;
+			esac
 			;;
 		aliases)
 			prevprev="${COMP_WORDS[COMP_CWORD-2]}"
@@ -79,48 +99,6 @@ _bash-it-comp()
 			case "${prevprev}" in
 				help)
 					_bash-it-comp-list-available aliases
-					return 0
-					;;
-			esac
-			;;
-		alias)
-			prevprev="${COMP_WORDS[COMP_CWORD-2]}"
-
-			case "${prevprev}" in
-				enable)
-					_bash-it-comp-list-available-not-enabled aliases
-					return 0
-					;;
-				disable)
-					_bash-it-comp-list-enabled aliases
-					return 0
-					;;
-			esac
-			;;
-		plugin)
-			prevprev="${COMP_WORDS[COMP_CWORD-2]}"
-
-			case "${prevprev}" in
-				enable)
-					_bash-it-comp-list-available-not-enabled plugins
-					return 0
-					;;
-				disable)
-					_bash-it-comp-list-enabled plugins
-					return 0
-					;;
-			esac
-			;;
-		completion)
-			prevprev="${COMP_WORDS[COMP_CWORD-2]}"
-
-			case "${prevprev}" in
-				enable)
-					_bash-it-comp-list-available-not-enabled completion
-					return 0
-					;;
-				disable)
-					_bash-it-comp-list-enabled completion
 					return 0
 					;;
 			esac
