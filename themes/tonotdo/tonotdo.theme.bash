@@ -10,4 +10,4 @@ function prompt_command() {
   PS1="${yellow}\u${normal}${cyan}@\h${normal}${purple} ${normal}${green}\w${normal}$(scm_prompt_info)> "
 }
 
-PROMPT_COMMAND=prompt_command
+safe_append_prompt_command prompt_command

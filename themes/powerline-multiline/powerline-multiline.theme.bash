@@ -240,4 +240,4 @@ function __powerline_prompt_command {
         SEGMENTS_AT_LEFT SEGMENTS_AT_RIGHT
 }
 
-PROMPT_COMMAND=__powerline_prompt_command
+safe_append_prompt_command __powerline_prompt_command

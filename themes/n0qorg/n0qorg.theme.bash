@@ -9,7 +9,7 @@ function prompt_command() {
     PS1="${bold_blue}[$(hostname)]${normal} \w${normal} ${bold_white}[$(git_prompt_info)]${normal}» "
 }
 
-PROMPT_COMMAND=prompt_command;
+safe_append_prompt_command prompt_command
 
 ## git-theme
 # feel free to change git chars.

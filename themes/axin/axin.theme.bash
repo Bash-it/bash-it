@@ -35,4 +35,4 @@ function prompt_command() {
   PS1="\[${BOLD}${MAGENTA}\]\u \[$WHITE\]@ \[$ORANGE\]\h \[$WHITE\]in \[$GREEN\]\w\[$WHITE\]\[$SCM_THEME_PROMPT_PREFIX\]${white}\t \[$PURPLE\]\$(scm_prompt_info) \n\$ \[$RESET\]"
 }
 
-PROMPT_COMMAND=prompt_command
+safe_append_prompt_command prompt_command

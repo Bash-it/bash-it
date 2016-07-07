@@ -18,7 +18,7 @@ prompt_setter() {
   PS4='+ '
 }
 
-PROMPT_COMMAND=prompt_setter
+safe_append_prompt_command prompt_setter
 
 SCM_NONE_CHAR='·'
 SCM_THEME_PROMPT_DIRTY=" ${red}✗"

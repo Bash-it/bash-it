@@ -14,4 +14,4 @@ function prompt_command() {
     fi
 }
 
-PROMPT_COMMAND=prompt_command;
+safe_append_prompt_command prompt_command
