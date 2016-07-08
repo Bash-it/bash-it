@@ -21,4 +21,4 @@ function prompt_command() {
     PROMPT='${green}\u${normal}@${green}\h${normal}:${blue}\w${normal}${red}$(prompt_char)$(git_prompt_info)${normal}\$ '
 }
 
-PROMPT_COMMAND=prompt_command;
+safe_append_prompt_command prompt_command

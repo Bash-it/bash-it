@@ -97,4 +97,4 @@ PS2="└─$(my_prompt_char)"
 
 
 
-PROMPT_COMMAND=prompt
+safe_append_prompt_command prompt

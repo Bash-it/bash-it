@@ -22,4 +22,4 @@ SCM_THEME_PROMPT_CLEAN=" ✓"
 SCM_THEME_PROMPT_PREFIX="("
 SCM_THEME_PROMPT_SUFFIX=")"
 
-PROMPT_COMMAND=prompt_command;
+safe_append_prompt_command prompt_command

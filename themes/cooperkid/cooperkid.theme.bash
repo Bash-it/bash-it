@@ -36,4 +36,4 @@ function prompt() {
     PS1="\n${user_host}${prompt_symbol}${ruby} ${git_branch} ${return_status}\n${prompt_char}"
 }
 
-PROMPT_COMMAND=prompt
+safe_append_prompt_command prompt

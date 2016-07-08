@@ -30,7 +30,7 @@ PS2="$LIGHT_BLUE-$YELLOW-$YELLOW-$NO_COLOUR "
 
 }
 
-PROMPT_COMMAND=prompt_setter
+safe_append_prompt_command prompt_setter
 
 export PS3=">> "
 

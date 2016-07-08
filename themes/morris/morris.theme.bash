@@ -25,4 +25,4 @@ SCM_THEME_PROMPT_PREFIX="${green}("
 SCM_THEME_PROMPT_SUFFIX="${green})${reset_color}"
 
 
-PROMPT_COMMAND=prompt_command;
+safe_append_prompt_command prompt_command

@@ -17,4 +17,4 @@ function prompt_command() {
     PS1="\n${green}$(virtualenv_prompt)${red}$(ruby_version_prompt) ${reset_color}\h ${orange}in ${reset_color}\w\n${yellow}$(scm_char)$(scm_prompt_info) ${yellow}→${white} "
 }
 
-PROMPT_COMMAND=prompt_command;
+safe_append_prompt_command prompt_command

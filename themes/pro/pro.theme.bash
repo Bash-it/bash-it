@@ -19,4 +19,4 @@ function prompt() {
   PS1="\h: \W $(scm_prompt_info)${reset_color} $ "
 }
 
-PROMPT_COMMAND=prompt
+safe_append_prompt_command prompt

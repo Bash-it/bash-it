@@ -31,4 +31,4 @@ function prompt_command() {
     PS1="\n$(get_hour_color)$(date +%H) ${purple}\h ${reset_color}in ${prompt_color}\w\n${bold_cyan}$(scm_char)${green}$(scm_prompt_info) ${green}→${reset_color} "
 }
 
-PROMPT_COMMAND=prompt_command;
+safe_append_prompt_command prompt_command
