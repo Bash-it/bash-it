@@ -21,4 +21,4 @@ prompt() {
   PS1="${yellow}# ${reset_color}$(last_two_dirs)$(scm_prompt_info)${reset_color}$(venv)${reset_color} ${cyan}\n> ${reset_color}"
 }
 
-PROMPT_COMMAND=prompt
+safe_append_prompt_command prompt

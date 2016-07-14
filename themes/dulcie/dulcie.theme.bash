@@ -95,4 +95,4 @@ dulcie_prompt() {
   PS1="${PS1}${DULCIE_PROMPTCHAR} "
 }
 
-PROMPT_COMMAND=dulcie_prompt
+safe_append_prompt_command dulcie_prompt

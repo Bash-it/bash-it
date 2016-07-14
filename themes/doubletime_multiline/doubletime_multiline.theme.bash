@@ -21,4 +21,4 @@ $(doubletime_scm_prompt)$reset_color $ "
   PS4='+ '
 }
 
-PROMPT_COMMAND=prompt_setter
+safe_append_prompt_command prompt_setter

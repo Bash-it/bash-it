@@ -211,4 +211,4 @@ ${D_INTERMEDIATE_COLOR}$ ${D_DEFAULT_COLOR}"
 }
 
 # Runs prompt (this bypasses bash_it $PROMPT setting)
-PROMPT_COMMAND=prompt
+safe_append_prompt_command prompt

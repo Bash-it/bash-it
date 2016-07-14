@@ -102,4 +102,4 @@ SCM_GIT_CHAR="${green}±${light_grey}"
 SCM_SVN_CHAR="${bold_cyan}⑆${light_grey}"
 SCM_HG_CHAR="${bold_red}☿${light_grey}"
 
-PROMPT_COMMAND=prompt_command;
+safe_append_prompt_command prompt_command

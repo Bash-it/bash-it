@@ -16,4 +16,4 @@ function prompt_command() {
     PS1="\n${yellow}$(python_version_prompt) ${purple}\h ${reset_color}in ${green}\w\n${bold_cyan}$(scm_char)${green}$(scm_prompt_info) ${green}→${reset_color} "
 }
 
-PROMPT_COMMAND=prompt_command;
+safe_append_prompt_command prompt_command

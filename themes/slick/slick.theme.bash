@@ -83,4 +83,4 @@ PS2="> "
 
 
 
-PROMPT_COMMAND=prompt
+safe_append_prompt_command prompt
