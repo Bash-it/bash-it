@@ -340,17 +340,33 @@ _help-aliases()
     _example '$ alias-help git'
 
     if [ -n "$1" ]; then
-        cat $BASH_IT/aliases/available/$1.aliases.bash | metafor alias | sed "s/$/'/"
+        case $1 in
+            custom)
+                alias_path='custom.aliases.bash'
+            ;;
+            *)
+                alias_path="available/$1.aliases.bash"
+            ;;
+        esac
+        cat $BASH_IT/aliases/$alias_path | metafor alias | sed "s/$/'/"
     else
-        typeset f
+        local f
         for f in $BASH_IT/aliases/enabled/*
         do
-            typeset file=$(basename $f)
-            printf '\n\n%s:\n' "${file%%.*}"
-            # metafor() strips trailing quotes, restore them with sed..
-            cat $f | metafor alias | sed "s/$/'/"
+            echo $f
+            _help-list-aliases $f
         done
+        echo $BASH_IT/aliases/custom.aliases.bash
+        _help-list-aliases $BASH_IT/aliases/custom.aliases.bash
     fi
+}
+
+_help-list-aliases ()
+{
+    local file=$(basename $1)
+    printf '\n\n%s:\n' "${file%%.*}"
+    # metafor() strips trailing quotes, restore them with sed..
+    cat $1 | metafor alias | sed "s/$/'/"
 }
 
 _help-plugins()
