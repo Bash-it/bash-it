@@ -353,10 +353,8 @@ _help-aliases()
         typeset f
         for f in $BASH_IT/aliases/enabled/*
         do
-            echo $f
             _help-list-aliases $f
         done
-        echo $BASH_IT/aliases/custom.aliases.bash
         _help-list-aliases $BASH_IT/aliases/custom.aliases.bash
     fi
 }
