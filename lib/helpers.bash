@@ -350,7 +350,7 @@ _help-aliases()
         esac
         cat $BASH_IT/aliases/$alias_path | metafor alias | sed "s/$/'/"
     else
-        local f
+        typeset f
         for f in $BASH_IT/aliases/enabled/*
         do
             echo $f
@@ -363,7 +363,7 @@ _help-aliases()
 
 _help-list-aliases ()
 {
-    local file=$(basename $1)
+    typeset file=$(basename $1)
     printf '\n\n%s:\n' "${file%%.*}"
     # metafor() strips trailing quotes, restore them with sed..
     cat $1 | metafor alias | sed "s/$/'/"
