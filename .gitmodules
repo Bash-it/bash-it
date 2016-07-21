@@ -1,0 +1,3 @@
+[submodule "custom"]
+	path = custom
+	url = git@github.com:jimwhimpey/dotfiles.git
