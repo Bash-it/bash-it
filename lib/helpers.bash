@@ -243,7 +243,7 @@ _disable-thing ()
         rm $BASH_IT/$subdirectory/enabled/$(basename $plugin)
     fi
 
-    exec $0
+    exec ${0/-/}
 
     printf '%s\n' "$file_entity disabled."
 }
@@ -323,7 +323,7 @@ _enable-thing ()
         ln -s ../available/$plugin $BASH_IT/$subdirectory/enabled/$plugin
     fi
 
-    exec $0
+    exec ${0/-/}
 
     printf '%s\n' "$file_entity enabled."
 }
