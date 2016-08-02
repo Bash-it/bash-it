@@ -157,6 +157,8 @@ Please take a look at the [Contribution Guidelines](CONTRIBUTING.md) before repo
 Bash-it creates a `reload` alias that makes it convenient to reload
 your Bash profile when you make changes.
 
+Additionally, if you export BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE as a non-null value, Bash-it will automatically reload itself after activating or deactivating plugins, aliases, or completions.
+
 ### Prompt Version Control Check
 
 Bash-it provides prompt themes the ability to check and display version control information for the current directory. The information is retrieved for each directory and can slow down the navigation of projects with a large number of files and folders. Turn version control checking off to prevent slow directory navigation within large projects.

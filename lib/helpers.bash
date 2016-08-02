@@ -243,6 +243,10 @@ _disable-thing ()
         rm $BASH_IT/$subdirectory/enabled/$(basename $plugin)
     fi
 
+    if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
+        exec ${0/-/}
+    fi
+
     printf '%s\n' "$file_entity disabled."
 }
 
@@ -319,6 +323,10 @@ _enable-thing ()
         mkdir -p $BASH_IT/$subdirectory/enabled
 
         ln -s ../available/$plugin $BASH_IT/$subdirectory/enabled/$plugin
+    fi
+
+    if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
+        exec ${0/-/}
     fi
 
     printf '%s\n' "$file_entity enabled."
