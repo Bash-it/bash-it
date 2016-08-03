@@ -408,6 +408,7 @@ function safe_append_prompt_command {
     if [[ -n $1 ]] ; then
         case $PROMPT_COMMAND in
             *$1*) ;;
+            "") PROMPT_COMMAND="$1";;
             *) PROMPT_COMMAND="$1;$PROMPT_COMMAND";;
         esac
     fi
