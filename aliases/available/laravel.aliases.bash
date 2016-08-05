@@ -3,7 +3,7 @@ about-alias 'laravel artisan abbreviations'
 
 # A list of useful laravel aliases
 
-alias laravel='/home/breno/.composer/vendor/bin/laravel'
+alias laravel="/home/${USER}/.composer/vendor/bin/laravel"
 # asset
 alias a:apub='php artisan asset:publish'
 
