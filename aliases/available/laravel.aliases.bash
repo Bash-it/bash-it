@@ -3,6 +3,7 @@ about-alias 'laravel artisan abbreviations'
 
 # A list of useful laravel aliases
 
+alias laravel='/home/breno/.composer/vendor/bin/laravel'
 # asset
 alias a:apub='php artisan asset:publish'
 
@@ -21,7 +22,7 @@ alias a:command='php artisan command:make'
 alias a:confpub='php artisan config:publish'
 
 # controller
-alias a:controller='php artisan controller:make'
+alias a:controller='php artisan make:controller'
 
 # db
 alias a:seed='php artisan db:seed'
