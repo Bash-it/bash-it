@@ -121,7 +121,7 @@ function usage ()
     param '1: directory name'
     group 'base'
     if [ $(uname) = "Darwin" ]; then
-        if [ -n $1 ]; then
+        if [ -n "$1" ]; then
             du -hd $1
         else
             du -hd 1
