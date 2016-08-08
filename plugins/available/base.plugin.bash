@@ -121,15 +121,15 @@ function usage ()
     param '1: directory name'
     group 'base'
     if [ $(uname) = "Darwin" ]; then
-        if [ -n $1 ]; then
-            du -hd $1
+        if [ -n "$1" ]; then
+            du -hd 1 "$1"
         else
             du -hd 1
         fi
 
     elif [ $(uname) = "Linux" ]; then
-        if [ -n $1 ]; then
-            du -h --max-depth=1 $1
+        if [ -n "$1" ]; then
+            du -h --max-depth=1 "$1"
         else
             du -h --max-depth=1
         fi
