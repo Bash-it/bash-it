@@ -24,6 +24,7 @@ __init_fasd() {
     # add bash hook
     case $PROMPT_COMMAND in
       *_fasd_prompt_func*) ;;
+      "") PROMPT_COMMAND="_fasd_prompt_func";;
       *) PROMPT_COMMAND="_fasd_prompt_func;$PROMPT_COMMAND";;
     esac
     eval "$(fasd --init bash-ccomp bash-ccomp-install)"
