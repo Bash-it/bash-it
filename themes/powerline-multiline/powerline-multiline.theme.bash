@@ -63,13 +63,15 @@ function __powerline_user_info_prompt {
   local user_info=""
   local color=${USER_INFO_THEME_PROMPT_COLOR}
 
+  if sudo -n uptime 2>&1 | grep -q "load"; then
+    color=${USER_INFO_THEME_PROMPT_COLOR_SUDO}
+  fi
   case "${POWERLINE_PROMPT_USER_INFO_MODE}" in
-  "sudo")
-    if sudo -n uptime 2>&1 | grep -q "load"; then    
-      color=${USER_INFO_THEME_PROMPT_COLOR_SUDO}
-      user_info="!"
-    fi
-    ;;
+    "sudo")
+      if [[ "${color}" == "${USER_INFO_THEME_PROMPT_COLOR_SUDO}" ]]; then
+        user_info="!"
+      fi
+      ;;
     *)
       if [[ -n "${SSH_CLIENT}" ]]; then
         user_info="${USER_INFO_SSH_CHAR}${USER}@${HOSTNAME}"

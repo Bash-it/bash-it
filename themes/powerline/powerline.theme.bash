@@ -42,13 +42,9 @@ function set_rgb_color {
 
 function powerline_shell_prompt {
     SHELL_PROMPT_COLOR=${SHELL_THEME_PROMPT_COLOR}
-    case "${POWERLINE_PROMPT_USER_INFO_MODE}" in
-        "sudo")
-            if sudo -n uptime 2>&1 | grep -q "load"; then
-                SHELL_PROMPT_COLOR=${SHELL_THEME_PROMPT_COLOR_SUDO}
-            fi
-            ;;
-    esac
+    if sudo -n uptime 2>&1 | grep -q "load"; then
+        SHELL_PROMPT_COLOR=${SHELL_THEME_PROMPT_COLOR_SUDO}
+    fi
     if [[ -n "${SSH_CLIENT}" ]]; then
         SHELL_PROMPT="${SHELL_SSH_CHAR}\u@\h"
     else
