@@ -3,7 +3,7 @@
 cite 'about-alias'
 about-alias 'homebrew abbreviations'
 
-alias bup='brew update && brew upgrade '
+alias bup='brew update && brew upgrade'
 alias bupc='brew update && brew upgrade --cleanup'
 alias bout='brew outdated'
 alias bin='brew install'
