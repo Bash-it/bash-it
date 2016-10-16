@@ -16,7 +16,8 @@ SCM_THEME_BRANCH_GONE_PREFIX=' ⇢ '
 SCM_THEME_CURRENT_USER_PREFFIX=' ☺︎ '
 SCM_THEME_CURRENT_USER_SUFFIX=''
 
-CLOCK_CHAR='☆'
+CLOCK_CHAR='⌚'
+THEME_CLOCK_CHAR_COLOR=${THEME_CLOCK_CHAR_COLOR:="${red}"}
 THEME_SHOW_CLOCK=${THEME_CLOCK_CHECK:-true}
 THEME_CLOCK_FORMAT=${THEME_CLOCK_FORMAT:="%Y-%m-%d %H:%M:%S"}
 THEME_CLOCK_COLOR=${THEME_CLOCK_COLOR:="${bold_cyan}"}
@@ -373,10 +374,14 @@ function prompt_char {
     scm_char
 }
 
+function clock_char {
+    echo -e "${THEME_CLOCK_CHAR_COLOR}$CLOCK_CHAR"
+}
+
 function clock_prompt {
     if [[ "${THEME_SHOW_CLOCK}" = true ]]; then
         DATE_STRING=$(date +"${THEME_CLOCK_FORMAT}")
-        echo -e "${THEME_CLOCK_COLOR}$DATE_STRING ${red}$CLOCK_CHAR"
+        echo -e "${THEME_CLOCK_COLOR}$DATE_STRING"
     fi
 }
 
