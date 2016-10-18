@@ -1,12 +1,12 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Two line prompt showing the following information:
-# (time) SCM [username@hostname] pwd (SCM branch SCM status) 
-# → 
+# (time) SCM [username@hostname] pwd (SCM branch SCM status)
+# →
 #
 # Example:
-# (14:00:26) ± [foo@bar] ~/.bash_it (master ✓) 
-# → 
+# (14:00:26) ± [foo@bar] ~/.bash_it (master ✓)
+# →
 #
 # The arrow on the second line is showing the exit status of the last command:
 # * Green: 0 exit status
@@ -32,7 +32,7 @@ prompt_setter() {
   history -a
   history -c
   history -r
-  PS1="(\t) $(scm_char) [${blue}\u${reset_color}@${green}\H${reset_color}] ${yellow}\w${reset_color}$(scm_prompt_info) ${reset_color}\n$(prompt_end) "
+  PS1="($(clock_prompt)) $(scm_char) [${blue}\u${reset_color}@${green}\H${reset_color}] ${yellow}\w${reset_color}$(scm_prompt_info) ${reset_color}\n$(prompt_end) "
   PS2='> '
   PS4='+ '
 }

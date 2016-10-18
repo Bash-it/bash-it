@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 SCM_THEME_PROMPT_DIRTY=''
 SCM_THEME_PROMPT_CLEAN=''
 SCM_GIT_CHAR="${bold_cyan}±${normal}"
@@ -43,14 +44,8 @@ function prompt_setter() {
   history -a
   history -c
   history -r
-  if [[ -z "$THEME_PROMPT_CLOCK_FORMAT" ]]
-  then
-      clock="\t"
-  else
-      clock=$THEME_PROMPT_CLOCK_FORMAT
-  fi
   PS1="
-$clock $(scm_char) [$THEME_PROMPT_HOST_COLOR\u@${THEME_PROMPT_HOST}$reset_color] $(virtualenv_prompt)$(ruby_version_prompt)\w
+$(clock_prompt) $(scm_char) [${THEME_PROMPT_HOST_COLOR}\u@${THEME_PROMPT_HOST}$reset_color] $(virtualenv_prompt)$(ruby_version_prompt)\w
 $(doubletime_scm_prompt)$reset_color $ "
   PS2='> '
   PS4='+ '

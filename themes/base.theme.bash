@@ -345,7 +345,7 @@ function git_user_info {
 
 function clock_char {
   CLOCK_CHAR=${THEME_CLOCK_CHAR:-"⌚"}
-  CLOCK_CHAR_COLOR=${THEME_CLOCK_CHAR_COLOR:="${red}"}
+  CLOCK_CHAR_COLOR=${THEME_CLOCK_CHAR_COLOR:-"$normal"}
   SHOW_CLOCK_CHAR=${THEME_SHOW_CLOCK_CHAR:-"true"}
 
   if [[ "${SHOW_CLOCK_CHAR}" = "true" ]]; then
@@ -354,10 +354,10 @@ function clock_char {
 }
 
 function clock_prompt {
+  CLOCK_COLOR=${THEME_CLOCK_COLOR:-"$normal"}
+  CLOCK_FORMAT=${THEME_CLOCK_FORMAT:-"%H:%M:%S"}
   [ -z $THEME_SHOW_CLOCK ] && THEME_SHOW_CLOCK=${THEME_CLOCK_CHECK:-"true"}
   SHOW_CLOCK=$THEME_SHOW_CLOCK
-  CLOCK_COLOR=${THEME_CLOCK_COLOR:-"$normal"}
-  CLOCK_FORMAT=${THEME_CLOCK_FORMAT:-"%Y-%m-%d %H:%M:%S"}
 
   if [[ "${SHOW_CLOCK}" = "true" ]]; then
     CLOCK_STRING=$(date +"${CLOCK_FORMAT}")

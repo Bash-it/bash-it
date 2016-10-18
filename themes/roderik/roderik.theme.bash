@@ -8,9 +8,9 @@ export PROMPT_DIRTRIM=3
 
 function prompt_command() {
     if [[ ${EUID} == 0 ]] ; then
-        PS1="[\t]${yellow}[${red}\u@\h ${green}\w${yellow}]${red}$(__git_ps1 "(%s)")${normal}\\$ "
+        PS1="[$(clock_prompt)]${yellow}[${red}\u@\h ${green}\w${yellow}]${red}$(__git_ps1 "(%s)")${normal}\\$ "
     else
-        PS1="[\t]${yellow}[${cyan}\u@\h ${green}\w${yellow}]${red}$(__git_ps1 "(%s)")${normal}\\$ "
+        PS1="[$(clock_prompt)]${yellow}[${cyan}\u@\h ${green}\w${yellow}]${red}$(__git_ps1 "(%s)")${normal}\\$ "
     fi
 }
 

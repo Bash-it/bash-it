@@ -1,3 +1,22 @@
+#!/usr/bin/env bash
+
+__tonka_time() {
+  THEME_CLOCK_FORMAT="%H%M"
+  clock_prompt
+}
+
+__tonka_date() {
+  THEME_CLOCK_FORMAT="%a,%d %b %y"
+  clock_prompt
+}
+
+__tonka_clock() {
+  local LIGHT_BLUE="\[\033[1;34m\]"
+  if [[ "${THEME_SHOW_CLOCK}" = "true" ]]; then
+    echo "$(__tonka_time)${LIGHT_BLUE}:$(__tonka_date)${LIGHT_BLUE}:"
+  fi
+}
+
 prompt_setter() {
 
 #   Named "Tonka" because of the colour scheme
@@ -23,14 +42,17 @@ $YELLOW\$PWD\
 $LIGHT_BLUE)-$YELLOW-\
 \n\
 $YELLOW-$LIGHT_BLUE-(\
-$YELLOW\$(date +%H%M)$LIGHT_BLUE:$YELLOW\$(date \"+%a,%d %b %y\")\
-$LIGHT_BLUE:$WHITE\\$ $LIGHT_BLUE)-$YELLOW-$NO_COLOUR "
+$(__tonka_clock)\
+$WHITE\$ $LIGHT_BLUE)-$YELLOW-$NO_COLOUR "
 
 PS2="$LIGHT_BLUE-$YELLOW-$YELLOW-$NO_COLOUR "
 
 }
 
 safe_append_prompt_command prompt_setter
+
+THEME_SHOW_CLOCK=${THEME_SHOW_CLOCK:-"true"}
+THEME_CLOCK_COLOR=${THEME_CLOCK_COLOR:-"\[\033[1;33m\]"}
 
 export PS3=">> "
 

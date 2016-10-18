@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Axin Bash Prompt, inspired by theme "Sexy" and "Bobby"
 # thanks to them
 
@@ -32,7 +34,9 @@ else
 fi
 
 function prompt_command() {
-  PS1="\[${BOLD}${MAGENTA}\]\u \[$WHITE\]@ \[$ORANGE\]\h \[$WHITE\]in \[$GREEN\]\w\[$WHITE\]\[$SCM_THEME_PROMPT_PREFIX\]${white}\t \[$PURPLE\]\$(scm_prompt_info) \n\$ \[$RESET\]"
+  PS1="\[${BOLD}${MAGENTA}\]\u \[$WHITE\]@ \[$ORANGE\]\h \[$WHITE\]in \[$GREEN\]\w\[$WHITE\]\[$SCM_THEME_PROMPT_PREFIX\]$(clock_prompt) \[$PURPLE\]\$(scm_prompt_info) \n\$ \[$RESET\]"
 }
+
+THEME_CLOCK_COLOR=${THEME_CLOCK_COLOR:-"${white}"}
 
 safe_append_prompt_command prompt_command
