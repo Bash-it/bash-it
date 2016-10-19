@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 SCM_THEME_PROMPT_DIRTY=" ${red}✗"
 SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓"
 SCM_THEME_PROMPT_PREFIX=" |"
@@ -27,8 +28,15 @@ function get_hour_color {
     echo "$hour_color"
 }
 
-function prompt_command() {
-    PS1="\n$(get_hour_color)$(date +%H) ${purple}\h ${reset_color}in ${prompt_color}\w\n${bold_cyan}$(scm_char)${green}$(scm_prompt_info) ${green}→${reset_color} "
+__emperor_clock() {
+  THEME_CLOCK_COLOR=$(get_hour_color)
+  clock_prompt
 }
+
+function prompt_command() {
+    PS1="\n$(__emperor_clock)${purple}\h ${reset_color}in ${prompt_color}\w\n${bold_cyan}$(scm_char)${green}$(scm_prompt_info) ${green}→${reset_color} "
+}
+
+THEME_CLOCK_FORMAT=${THEME_CLOCK_FORMAT:-"%H "}
 
 safe_append_prompt_command prompt_command

@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 SCM_THEME_PROMPT_PREFIX=""
 SCM_THEME_PROMPT_SUFFIX=""
 
@@ -25,10 +27,10 @@ scm_prompt() {
 }
 
 prompt() {
-	PS1="${white}${background_blue} \u${normal}${background_blue}@${red}${background_blue}\h ${blue}${background_white} \t ${reset_color}${normal} $(battery_charge)
-${bold_black}${background_white} \w ${normal}$(scm_prompt)$(is_vim_shell)
-${white}>${normal} "
-
+  PS1="${white}${background_blue} \u${normal}${background_blue}@${red}${background_blue}\h $(clock_prompt) ${reset_color}${normal} $(battery_charge)\n${bold_black}${background_white} \w ${normal}$(scm_prompt)$(is_vim_shell)\n${white}>${normal} "
 }
+
+THEME_CLOCK_COLOR=${THEME_CLOCK_COLOR:-"$blue$background_white"}
+THEME_CLOCK_FORMAT=${THEME_CLOCK_FORMAT:-" %H:%M:%S"}
 
 safe_append_prompt_command prompt

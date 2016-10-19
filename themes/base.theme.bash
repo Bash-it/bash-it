@@ -16,12 +16,6 @@ SCM_THEME_BRANCH_GONE_PREFIX=' ⇢ '
 SCM_THEME_CURRENT_USER_PREFFIX=' ☺︎ '
 SCM_THEME_CURRENT_USER_SUFFIX=''
 
-CLOCK_CHAR='⌚'
-THEME_CLOCK_CHAR_COLOR=${THEME_CLOCK_CHAR_COLOR:="${red}"}
-[ -z $THEME_SHOW_CLOCK ] && THEME_SHOW_CLOCK=${THEME_CLOCK_CHECK:-true}
-THEME_CLOCK_FORMAT=${THEME_CLOCK_FORMAT:="%Y-%m-%d %H:%M:%S"}
-THEME_CLOCK_COLOR=${THEME_CLOCK_COLOR:="${bold_cyan}"}
-
 THEME_BATTERY_PERCENTAGE_CHECK=${THEME_BATTERY_PERCENTAGE_CHECK:=true}
 
 SCM_GIT_SHOW_DETAILS=${SCM_GIT_SHOW_DETAILS:=true}
@@ -349,6 +343,28 @@ function git_user_info {
   [[ -n "${SCM_CURRENT_USER}" ]] && printf "%s" "$SCM_THEME_CURRENT_USER_PREFFIX$SCM_CURRENT_USER$SCM_THEME_CURRENT_USER_SUFFIX"
 }
 
+function clock_char {
+  CLOCK_CHAR=${THEME_CLOCK_CHAR:-"⌚"}
+  CLOCK_CHAR_COLOR=${THEME_CLOCK_CHAR_COLOR:-"$normal"}
+  SHOW_CLOCK_CHAR=${THEME_SHOW_CLOCK_CHAR:-"true"}
+
+  if [[ "${SHOW_CLOCK_CHAR}" = "true" ]]; then
+    echo -e "${CLOCK_CHAR_COLOR}${CLOCK_CHAR}"
+  fi
+}
+
+function clock_prompt {
+  CLOCK_COLOR=${THEME_CLOCK_COLOR:-"$normal"}
+  CLOCK_FORMAT=${THEME_CLOCK_FORMAT:-"%H:%M:%S"}
+  [ -z $THEME_SHOW_CLOCK ] && THEME_SHOW_CLOCK=${THEME_CLOCK_CHECK:-"true"}
+  SHOW_CLOCK=$THEME_SHOW_CLOCK
+
+  if [[ "${SHOW_CLOCK}" = "true" ]]; then
+    CLOCK_STRING=$(date +"${CLOCK_FORMAT}")
+    echo -e "${CLOCK_COLOR}${CLOCK_STRING}"
+  fi
+}
+
 # backwards-compatibility
 function git_prompt_info {
   git_prompt_vars
@@ -372,17 +388,6 @@ function scm_char {
 
 function prompt_char {
     scm_char
-}
-
-function clock_char {
-    echo -e "${THEME_CLOCK_CHAR_COLOR}$CLOCK_CHAR"
-}
-
-function clock_prompt {
-    if [[ "${THEME_SHOW_CLOCK}" = true ]]; then
-        DATE_STRING=$(date +"${THEME_CLOCK_FORMAT}")
-        echo -e "${THEME_CLOCK_COLOR}$DATE_STRING"
-    fi
 }
 
 function battery_char {

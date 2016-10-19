@@ -33,7 +33,7 @@ For now, the only supported value is `sudo`, which hides the username and hostna
 
 By default, the current time is shown on the right hand side, you can change the format using the following variable:
 
-    POWERLINE_PROMPT_CLOCK_FORMAT="%H:%M:%S"
+    THEME_CLOCK_FORMAT="%H:%M:%S"
 
 The time/date is printed by the `date` command, so refer to its man page to change the format.
 

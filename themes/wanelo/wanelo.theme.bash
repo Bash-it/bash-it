@@ -18,7 +18,9 @@ function prompt_command() {
     else
       status=💔
     fi
-    PS1="\n${yellow}$(ruby_version_prompt) ${purple}\h ${reset_color}in ${green}\w $status \n${bold_cyan} ${blue}|\t|${green}$(scm_prompt_info) ${green}→${reset_color} "
+    PS1="\n${yellow}$(ruby_version_prompt) ${purple}\h ${reset_color}in ${green}\w $status \n${bold_cyan} ${blue}|$(clock_prompt)|${green}$(scm_prompt_info) ${green}→${reset_color} "
 }
+
+THEME_CLOCK_COLOR=${THEME_CLOCK_COLOR:-"$blue"}
 
 PROMPT_COMMAND=prompt_command;

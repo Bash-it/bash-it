@@ -55,6 +55,7 @@ function randomize_nwinkler {
   USERNAME_COLOR=${AVAILABLE_COLORS[$RANDOM % ${#AVAILABLE_COLORS[@]} ]}
   HOSTNAME_COLOR=${AVAILABLE_COLORS[$RANDOM % ${#AVAILABLE_COLORS[@]} ]}
   TIME_COLOR=${AVAILABLE_COLORS[$RANDOM % ${#AVAILABLE_COLORS[@]} ]}
+  THEME_CLOCK_COLOR=$TIME_COLOR
   PATH_COLOR=${AVAILABLE_COLORS[$RANDOM % ${#AVAILABLE_COLORS[@]} ]}
 
   echo "$USERNAME_COLOR,$HOSTNAME_COLOR,$TIME_COLOR,$PATH_COLOR," > $RANDOM_COLOR_FILE
@@ -67,6 +68,7 @@ then
   USERNAME_COLOR=${COLORS[0]}
   HOSTNAME_COLOR=${COLORS[1]}
   TIME_COLOR=${COLORS[2]}
+  THEME_CLOCK_COLOR=$TIME_COLOR
   PATH_COLOR=${COLORS[3]}
 else
   # No colors stored yet. Generate them!
@@ -97,7 +99,7 @@ prompt_setter() {
   history -a
   history -c
   history -r
-  PS1="(${TIME_COLOR}\t${reset_color}) $(scm_char) [${USERNAME_COLOR}\u${reset_color}@${HOSTNAME_COLOR}\H${reset_color}] ${PATH_COLOR}\w${reset_color}$(scm_prompt_info) ${reset_color}\n$(prompt_end) "
+  PS1="($(clock_prompt)${reset_color}) $(scm_char) [${USERNAME_COLOR}\u${reset_color}@${HOSTNAME_COLOR}\H${reset_color}] ${PATH_COLOR}\w${reset_color}$(scm_prompt_info) ${reset_color}\n$(prompt_end) "
   PS2='> '
   PS4='+ '
 }
