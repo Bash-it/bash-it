@@ -49,7 +49,7 @@ do
 done
 
 # Load enabled aliases, completion, plugins
-for file_type in "aliases" "completion" "plugins"
+for file_type in "aliases" "plugins" "completion"
 do
   _load_bash_it_files $file_type
 done
