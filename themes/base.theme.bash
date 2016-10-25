@@ -84,13 +84,13 @@ function scm_prompt_vars {
 }
 
 function scm_prompt_info {
-  scm_prompt_vars
-  if [ $SCM == $SCM_HG ]; then
-    echo -e "$SCM_PREFIX$SCM_BRANCH:${SCM_CHANGE#*:}$SCM_STATE$SCM_SUFFIX"
-  else
-    echo -e "$SCM_PREFIX$SCM_BRANCH$SCM_STATE$SCM_SUFFIX"
-  fi
-  return
+  scm
+  scm_prompt_char
+  SCM_DIRTY=0
+  SCM_STATE=''
+  [[ $SCM == $SCM_GIT ]] && git_prompt_info && return
+  [[ $SCM == $SCM_HG ]] && hg_prompt_info && return
+  [[ $SCM == $SCM_SVN ]] && svn_prompt_info && return
 }
 
 function git_status_summary {
