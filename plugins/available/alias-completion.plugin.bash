@@ -19,7 +19,7 @@ function alias_completion {
     # parse function based completion definitions, where capture group 2 => function and 3 => trigger
     local compl_regex='complete( +[^ ]+)* -F ([^ ]+) ("[^"]+"|[^ ]+)'
     # parse alias definitions, where capture group 1 => trigger, 2 => command, 3 => command arguments
-    local alias_regex="alias ([^=]+)='(\"[^\"]+\"|[^ ]+)(( +[^ ]+)*)'"
+    local alias_regex="alias( -- | )([^=]+)='(\"[^\"]+\"|[^ ]+)(( +[^ ]+)*)'"
 
     # create array of function completion triggers, keeping multi-word triggers together
     eval "local completions=($(complete -p | sed -Ene "/$compl_regex/s//'\3'/p"))"
@@ -77,6 +77,6 @@ function alias_completion {
         # replace completion trigger by alias
         new_completion="${new_completion% *} $alias_name"
         echo "$new_completion" >> "$tmp_file"
-    done < <(alias -p | sed -Ene "s/$alias_regex/\1 '\2' '\3'/p")
+    done < <(alias -p | sed -Ene "s/$alias_regex/\2 '\3' '\4'/p")
     source "$tmp_file" && rm -f "$tmp_file"
 }; alias_completion
