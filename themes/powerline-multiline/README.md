@@ -8,6 +8,7 @@ A colorful multiline theme, where the first line shows information about your sh
 
 * Current path
 * Current username and hostname
+* Current time
 * An indicator when connected by SSH
 * An indicator when `sudo` has the credentials cached (see the `sudo` manpage for more info about this)
 * An indicator when the current shell is inside the Vim editor
