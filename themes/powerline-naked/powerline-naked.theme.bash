@@ -1,110 +1,52 @@
 #!/usr/bin/env bash
 
-THEME_PROMPT_SEPARATOR=""
+. "$BASH_IT/themes/powerline-naked/powerline-naked.base.bash"
 
-SHELL_SSH_CHAR=" "
-SHELL_THEME_PROMPT_COLOR=32
-SHELL_SSH_THEME_PROMPT_COLOR=208
+PROMPT_CHAR=${POWERLINE_PROMPT_CHAR:=""}
+POWERLINE_LEFT_SEPARATOR=${POWERLINE_LEFT_SEPARATOR:=""}
 
-VIRTUALENV_CHAR="ⓔ "
-VIRTUALENV_THEME_PROMPT_COLOR=35
+USER_INFO_SSH_CHAR=${POWERLINE_USER_INFO_SSH_CHAR:=" "}
+USER_INFO_THEME_PROMPT_COLOR=240
+USER_INFO_THEME_PROMPT_COLOR_SUDO=202
+
+PYTHON_VENV_CHAR=${POWERLINE_PYTHON_VENV_CHAR:="❲p❳ "}
+CONDA_PYTHON_VENV_CHAR=${POWERLINE_CONDA_PYTHON_VENV_CHAR:="❲c❳ "}
+PYTHON_VENV_THEME_PROMPT_COLOR=35
 
 SCM_NONE_CHAR=""
-SCM_GIT_CHAR=" "
-
+SCM_GIT_CHAR=${POWERLINE_SCM_GIT_CHAR:=" "}
 SCM_THEME_PROMPT_CLEAN=""
 SCM_THEME_PROMPT_DIRTY=""
-
 SCM_THEME_PROMPT_COLOR=238
-SCM_THEME_PROMPT_CLEAN_COLOR=231
-SCM_THEME_PROMPT_DIRTY_COLOR=196
-SCM_THEME_PROMPT_STAGED_COLOR=220
-SCM_THEME_PROMPT_UNSTAGED_COLOR=166
+SCM_THEME_PROMPT_CLEAN_COLOR=25
+SCM_THEME_PROMPT_DIRTY_COLOR=88
+SCM_THEME_PROMPT_STAGED_COLOR=30
+SCM_THEME_PROMPT_UNSTAGED_COLOR=92
+SCM_THEME_PROMPT_COLOR=${SCM_THEME_PROMPT_CLEAN_COLOR}
 
-CWD_THEME_PROMPT_COLOR=240
+RVM_THEME_PROMPT_PREFIX=""
+RVM_THEME_PROMPT_SUFFIX=""
+RBENV_THEME_PROMPT_PREFIX=""
+RBENV_THEME_PROMPT_SUFFIX=""
+RUBY_THEME_PROMPT_COLOR=161
+RUBY_CHAR=${POWERLINE_RUBY_CHAR:="❲r❳ "}
+
+CWD_THEME_PROMPT_COLOR=254
 
 LAST_STATUS_THEME_PROMPT_COLOR=124
 
-function set_rgb_color {
-    if [[ "${1}" != "-" ]]; then
-        fg="38;5;${1}"
-    fi
-    if [[ "${2}" != "-" ]]; then
-        bg="48;5;${2}"
-        [[ -n "${fg}" ]] && bg=";${bg}"
-    fi
-    echo -e "\[\033[${fg}${bg}m\]"
-}
+CLOCK_THEME_PROMPT_COLOR=240
 
-function powerline_shell_prompt {
-    if [[ -n "${SSH_CLIENT}" ]]; then
-        SHELL_PROMPT="${bold_white} ${SHELL_SSH_CHAR}\u@\h ${normal}"
-    else
-        SHELL_PROMPT="${bold_white} \u ${normal}"
-    fi
-}
+BATTERY_AC_CHAR=${BATTERY_AC_CHAR:="⚡"}
+BATTERY_STATUS_THEME_PROMPT_GOOD_COLOR=70
+BATTERY_STATUS_THEME_PROMPT_LOW_COLOR=208
+BATTERY_STATUS_THEME_PROMPT_CRITICAL_COLOR=160
 
-function powerline_virtualenv_prompt {
-    local environ=""
+THEME_CLOCK_FORMAT=${THEME_CLOCK_FORMAT:="%H:%M:%S"}
 
-    if [[ -n "$CONDA_DEFAULT_ENV" ]]; then
-        environ="conda: $CONDA_DEFAULT_ENV"
-    elif [[ -n "$VIRTUAL_ENV" ]]; then
-        environ=$(basename "$VIRTUAL_ENV")
-    fi
+IN_VIM_THEME_PROMPT_COLOR=245
+IN_VIM_THEME_PROMPT_TEXT="vim"
 
-    if [[ -n "$environ" ]]; then
-        VIRTUALENV_PROMPT="${THEME_PROMPT_SEPARATOR}$(set_rgb_color ${VIRTUALENV_THEME_PROMPT_COLOR} -) ${VIRTUALENV_CHAR}$environ ${normal}"
-    else
-        VIRTUALENV_PROMPT=""
-    fi
-}
+POWERLINE_PROMPT=${POWERLINE_PROMPT:="user_info scm python_venv ruby cwd"}
 
-function powerline_scm_prompt {
-    scm_prompt_vars
-
-    if [[ "${SCM_NONE_CHAR}" != "${SCM_CHAR}" ]]; then
-        if [[ "${SCM_DIRTY}" -eq 3 ]]; then
-            SCM_PROMPT="$(set_rgb_color ${SCM_THEME_PROMPT_STAGED_COLOR} -)"
-        elif [[ "${SCM_DIRTY}" -eq 2 ]]; then
-            SCM_PROMPT="$(set_rgb_color ${SCM_THEME_PROMPT_UNSTAGED_COLOR} -)"
-        elif [[ "${SCM_DIRTY}" -eq 1 ]]; then
-            SCM_PROMPT="$(set_rgb_color ${SCM_THEME_PROMPT_DIRTY_COLOR} -)"
-        else
-            SCM_PROMPT="$(set_rgb_color ${SCM_THEME_PROMPT_CLEAN_COLOR} -)"
-        fi
-        if [[ "${SCM_GIT_CHAR}" == "${SCM_CHAR}" ]]; then
-            SCM_PROMPT+=" ${SCM_CHAR}${SCM_BRANCH}${SCM_STATE} "
-        fi
-        SCM_PROMPT="${THEME_PROMPT_SEPARATOR}${SCM_PROMPT}${normal}"
-    else
-        SCM_PROMPT=""
-    fi
-}
-
-function powerline_cwd_prompt {
-    CWD_PROMPT="${THEME_PROMPT_SEPARATOR} \w "
-}
-
-function powerline_last_status_prompt {
-    if [[ "$1" -eq 0 ]]; then
-        LAST_STATUS_PROMPT="${THEME_PROMPT_SEPARATOR}"
-    else
-        LAST_STATUS_PROMPT="${THEME_PROMPT_SEPARATOR}$(set_rgb_color ${LAST_STATUS_THEME_PROMPT_COLOR} -) ${LAST_STATUS} ${normal}${THEME_PROMPT_SEPARATOR}"
-    fi
-}
-
-function powerline_prompt_command() {
-    local LAST_STATUS="$?"
-
-    powerline_shell_prompt
-    powerline_virtualenv_prompt
-    powerline_scm_prompt
-    powerline_cwd_prompt
-    powerline_last_status_prompt LAST_STATUS
-
-    PS1="${SHELL_PROMPT}${VIRTUALENV_PROMPT}${SCM_PROMPT}${CWD_PROMPT}${LAST_STATUS_PROMPT} "
-}
-
-safe_append_prompt_command powerline_prompt_command
-
+safe_append_prompt_command __powerline_prompt_command
