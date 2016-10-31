@@ -1,9 +1,15 @@
 cite about-alias
 about-alias 'general aliases'
 
+# Compact view, show colors
+if ls --color -d . >/dev/null 2>&1; then
+  alias ls='ls --color=auto'
+elif ls -G -d . >/dev/null 2>&1; then
+  alias ls='ls -G'
+fi
+
 # List directory contents
 alias sl=ls
-alias ls='ls -G'        # Compact view, show colors
 alias la='ls -AF'       # Compact view, show hidden
 alias ll='ls -al'
 alias l='ls -a'
@@ -11,10 +17,6 @@ alias l1='ls -1'
 
 alias _="sudo"
 
-if [ $(uname) = "Linux" ]
-then
-  alias ls="ls --color=auto"
-fi
 which gshuf &> /dev/null
 if [ $? -eq 0 ]
 then
