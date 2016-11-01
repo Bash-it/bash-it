@@ -17,6 +17,8 @@ function _set_pkg_aliases()
                 alias clocr='curl -L -C - -O --retry 5'
                 # follow redirects, fetch banner
                 alias clb='curl -L -I'
+		# see only response headers from a get request
+		alias clhead='curl -D - -so /dev/null'
 	fi
 }
 
