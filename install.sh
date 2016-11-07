@@ -9,6 +9,7 @@ function show_usage() {
   echo "--help (-h): Display this help message"
   echo "--silent (-s): Install default settings without prompting for input";
   echo "--interactive (-i): Interactively choose plugins"
+  echo "--no-modify-config (-n): Do not modify existing config file"
   exit 0;
 }
 
@@ -64,20 +65,22 @@ function backup_new() {
 for param in "$@"; do
   shift
   case "$param" in
-    "--help")        set -- "$@" "-h" ;;
-    "--silent")      set -- "$@" "-s" ;;
-    "--interactive") set -- "$@" "-i" ;;
-    *)               set -- "$@" "$param"
+    "--help")               set -- "$@" "-h" ;;
+    "--silent")             set -- "$@" "-s" ;;
+    "--interactive")        set -- "$@" "-i" ;;
+    "--no-modify-config")   set -- "$@" "-n" ;;
+    *)                      set -- "$@" "$param"
   esac
 done
 
 OPTIND=1
-while getopts "hsi" opt
+while getopts "hsin" opt
 do
   case "$opt" in
   "h") show_usage; exit 0 ;;
   "s") silent=true ;;
   "i") interactive=true ;;
+  "n") no_modify_config=true ;;
   "?") show_usage >&2; exit 1 ;;
   esac
 done
@@ -101,48 +104,48 @@ esac
 
 BACKUP_FILE=$CONFIG_FILE.bak
 echo "Installing bash-it"
-if [ -e "$HOME/$BACKUP_FILE" ]; then
-  echo -e "\033[0;33mBackup file already exists. Make sure to backup your .bashrc before running this installation.\033[0m" >&2
-  while ! [ $silent ];  do
-    read -e -n 1 -r -p "Would you like to overwrite the existing backup? This will delete your existing backup file ($HOME/$BACKUP_FILE) [y/N] " RESP
-    case $RESP in
+if ! [[ $silent ]] && ! [[ $no_modify_config ]]; then
+  if [ -e "$HOME/$BACKUP_FILE" ]; then
+    echo -e "\033[0;33mBackup file already exists. Make sure to backup your .bashrc before running this installation.\033[0m" >&2
+    while ! [ $silent ];  do
+      read -e -n 1 -r -p "Would you like to overwrite the existing backup? This will delete your existing backup file ($HOME/$BACKUP_FILE) [y/N] " RESP
+      case $RESP in
+      [yY])
+        break
+        ;;
+      [nN]|"")
+        echo -e "\033[91mInstallation aborted. Please come back soon!\033[m"
+        exit 1
+        ;;
+      *)
+        echo -e "\033[91mPlease choose y or n.\033[m"
+        ;;
+      esac
+    done
+  fi
+
+  while ! [ $silent ]; do
+    read -e -n 1 -r -p "Would you like to keep your $CONFIG_FILE and append bash-it templates at the end? [y/N] " choice
+    case $choice in
     [yY])
+      test -w "$HOME/$CONFIG_FILE" &&
+      cp -aL "$HOME/$CONFIG_FILE" "$HOME/$CONFIG_FILE.bak" &&
+      echo -e "\033[0;32mYour original $CONFIG_FILE has been backed up to $CONFIG_FILE.bak\033[0m"
+
+      (sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" | tail -n +2) >> "$HOME/$CONFIG_FILE"
+      echo -e "\033[0;32mBash-it template has been added to your $CONFIG_FILE\033[0m"
       break
       ;;
     [nN]|"")
-      echo -e "\033[91mInstallation aborted. Please come back soon!\033[m"
-      exit 1
+      backup_new
+      break
       ;;
     *)
       echo -e "\033[91mPlease choose y or n.\033[m"
       ;;
     esac
   done
-fi
-
-while ! [ $silent ]; do
-  read -e -n 1 -r -p "Would you like to keep your $CONFIG_FILE and append bash-it templates at the end? [y/N] " choice
-  case $choice in
-  [yY])
-    test -w "$HOME/$CONFIG_FILE" &&
-    cp -aL "$HOME/$CONFIG_FILE" "$HOME/$CONFIG_FILE.bak" &&
-    echo -e "\033[0;32mYour original $CONFIG_FILE has been backed up to $CONFIG_FILE.bak\033[0m"
-
-    (sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" | tail -n +2) >> "$HOME/$CONFIG_FILE"
-    echo -e "\033[0;32mBash-it template has been added to your $CONFIG_FILE\033[0m"
-    break
-    ;;
-  [nN]|"")
-    backup_new
-    break
-    ;;
-  *)
-    echo -e "\033[91mPlease choose y or n.\033[m"
-    ;;
-  esac
-done
-
-if [ $silent ]; then
+elif [[ $silent ]] && ! [[ $no_modify_config ]]; then
   # backup/new by default
   backup_new
 fi
