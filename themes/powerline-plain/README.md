@@ -13,7 +13,7 @@ A colorful theme, where shows a lot information about your shell session.
 * Battery charging status (depends on the [../../plugins/available/battery.plugin.bash](battery plugin))
 * SCM Repository status (e.g. Git, SVN)
 * The current Python environment (Virtualenv, venv, and Conda are supported) in use
-* The current Ruby environment (RVM) in use
+* The current Ruby environment (rvm and rbenv are supported) in use
 * Last command exit code (only shown when the exit code is greater than 0)
 
 ## Configuration
@@ -45,12 +45,12 @@ The contents of the prompt can be "reordered", all the "segments" (every piece o
 * cwd
 * in_vim
 * python_venv
-* rvm
+* ruby
 * scm
 * user_info
 
 A variables can be defined to set the order of the prompt segments:
 
-    POWERLINE_PROMPT="user_info scm python_venv rvm cwd"
+    POWERLINE_PROMPT="user_info scm python_venv ruby cwd"
 
 The example values above are the current default values, but if you want to remove anything from the prompt, simply remove the "string" that represents the segment from the variable.

@@ -15,7 +15,7 @@ A colorful multiline theme, where the first line shows information about your sh
 * Battery charging status (depends on the [../../plugins/available/battery.plugin.bash](battery plugin))
 * SCM Repository status (e.g. Git, SVN)
 * The current Python environment (Virtualenv, venv, and Conda are supported) in use
-* The current Ruby environment (RVM) in use
+* The current Ruby environment (rvm and rbenv are supported) in use
 * Last command exit code (only shown when the exit code is greater than 0)
 
 ## Configuration
@@ -47,13 +47,13 @@ The contents of both prompt sides can be "reordered", all the "segments" (every 
 * cwd
 * in_vim
 * python_venv
-* rvm
+* ruby
 * scm
 * user_info
 
 Two variables can be defined to set the order of the prompt segments:
 
-    POWERLINE_LEFT_PROMPT="scm python_venv rvm cwd"
+    POWERLINE_LEFT_PROMPT="scm python_venv ruby cwd"
     POWERLINE_RIGHT_PROMPT="in_vim clock battery user_info"
 
 The example values above are the current default values, but if you want to remove anything from the prompt, simply remove the "string" that represents the segment from the corresponding variable.
