@@ -207,6 +207,26 @@ _disable-completion ()
     _disable-thing "completion" "completion" $1
 }
 
+_remove-symlink ()
+{
+    _about 'remove bash_it component symlink'
+    _param '1: subdirectory'
+    _param '2: file_type'
+    _param '3: file_entity'
+    _example '$ _remove-symlink "plugins" "plugin" "ssh"'
+
+    subdirectory="$1"
+    file_type="$2"
+    file_entity="$3"
+
+    cmd_output="$(rm -f $BASH_IT/$subdirectory/enabled/$file_entity.*.bash 2>&1)"
+    if [[ $? -ne 0 ]]; then
+        printf '%s\n' "sorry, an error was encountered when trying to disable the $file_entity $file_type:"
+        echo "${cmd_output}"
+        return 1
+    fi
+}
+
 _disable-thing ()
 {
     _about 'disables a bash_it component'
@@ -225,28 +245,30 @@ _disable-thing ()
     fi
 
     if [ "$file_entity" = "all" ]; then
+        components_list="$(ls $BASH_IT/$subdirectory/enabled/*.bash 2> /dev/null)"
+        [[ -z "$components_list" ]] && printf '%s\n' "there's no $file_type to disable."
         typeset f $file_type
-        for f in $BASH_IT/$subdirectory/available/*.bash
+        for f in $components_list
         do
-            plugin=$(basename $f)
-            if [ -e $BASH_IT/$subdirectory/enabled/$plugin ]; then
-                rm $BASH_IT/$subdirectory/enabled/$(basename $plugin)
-            fi
+            component_file="$(basename $f)"
+            component="${component_file%.*.bash}"
+            _remove-symlink $subdirectory $file_type $component
+            [[ $? -eq 0 ]] && printf '%s\n' "$component $file_type disabled."
         done
     else
-        typeset plugin=$(command ls $BASH_IT/$subdirectory/enabled/$file_entity.*bash 2>/dev/null | head -1)
-        if [ -z "$plugin" ]; then
+        typeset component=$(command ls $BASH_IT/$subdirectory/enabled/$file_entity.*.bash 2>/dev/null | head -1)
+        if [ -z "$component" ]; then
             printf '%s\n' "sorry, $file_entity does not appear to be an enabled $file_type."
             return
         fi
-        rm $BASH_IT/$subdirectory/enabled/$(basename $plugin)
+        _remove-symlink $subdirectory $file_type $file_entity
+        [[ $? -ne 0 ]] && return 1
+        printf '%s\n' "$file_entity $file_type disabled."
     fi
 
     if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
         exec ${0/-/}
     fi
-
-    printf '%s\n' "$file_entity disabled."
 }
 
 _enable-plugin ()
@@ -279,6 +301,27 @@ _enable-completion ()
     _enable-thing "completion" "completion" $1
 }
 
+_create-symlink ()
+{
+    _about 'create bash_it component symlink'
+    _param '1: subdirectory'
+    _param '2: file_type'
+    _param '3: file_entity'
+    _example '$ _create-symlink "plugins" "plugin" "ssh"'
+
+    subdirectory="$1"
+    file_type="$2"
+    file_entity="$3"
+
+    component_file="$(basename $(command ls $BASH_IT/$subdirectory/available/$file_entity.*.bash))"
+    cmd_output="$(ln -s ../available/$component_file $BASH_IT/$subdirectory/enabled/ 2>&1)"
+    if [[ $? -ne 0 ]]; then
+        printf '%s\n' "sorry, an error was encountered when trying to enable the $file_entity $file_type:"
+        echo "${cmd_output}"
+        return 1
+    fi
+}
+
 _enable-thing ()
 {
     cite _about _param _example
@@ -299,36 +342,44 @@ _enable-thing ()
 
     if [ "$file_entity" = "all" ]; then
         typeset f $file_type
-        for f in $BASH_IT/$subdirectory/available/*.bash
+        components_list="$(ls $BASH_IT/$subdirectory/available/*.bash 2> /dev/null)"
+        for f in $components_list
         do
-            plugin=$(basename $f)
-            if [ ! -h $BASH_IT/$subdirectory/enabled/$plugin ]; then
-                ln -s ../available/$plugin $BASH_IT/$subdirectory/enabled/$plugin
+            component_file="$(basename $f)"
+            if [ ! -h $BASH_IT/$subdirectory/enabled/$component_file ]; then
+                component="${component_file%.*.bash}"
+                _create-symlink $subdirectory $file_type $component
+                [[ $? -eq 0 ]] && printf '%s\n' "$component $file_type enabled."
             fi
         done
     else
-        typeset plugin=$(command ls $BASH_IT/$subdirectory/available/$file_entity.*bash 2>/dev/null | head -1)
-        if [ -z "$plugin" ]; then
+        typeset component=$(command ls $BASH_IT/$subdirectory/available/$file_entity.*.bash 2>/dev/null | head -1)
+        if [ -z "$component" ]; then
             printf '%s\n' "sorry, $file_entity does not appear to be an available $file_type."
             return
         fi
 
-        plugin=$(basename $plugin)
-        if [ -e $BASH_IT/$subdirectory/enabled/$plugin ]; then
+        component=$(basename $component)
+        if [ -e $BASH_IT/$subdirectory/enabled/$component ]; then
             printf '%s\n' "$file_entity is already enabled."
             return
         fi
 
-        mkdir -p $BASH_IT/$subdirectory/enabled
+        cmd_output="$(mkdir -p $BASH_IT/$subdirectory/enabled 2>&1)"
+        if [[ $? -ne 0 ]]; then
+            printf '%s\n' "sorry, an error was encountered when trying to enable the $file_entity $file_type:"
+            echo "${cmd_output}"
+            return 1
+        fi
 
-        ln -s ../available/$plugin $BASH_IT/$subdirectory/enabled/$plugin
+        _create-symlink $subdirectory $file_type $file_entity
+        [[ $? -ne 0 ]] && return 1
+        printf '%s\n' "$file_entity $file_type enabled."
     fi
 
     if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
         exec ${0/-/}
     fi
-
-    printf '%s\n' "$file_entity enabled."
 }
 
 _help-completions()
