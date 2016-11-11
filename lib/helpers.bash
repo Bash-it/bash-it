@@ -230,7 +230,12 @@ _disable-thing ()
         do
             plugin=$(basename $f)
             if [ -e $BASH_IT/$subdirectory/enabled/$plugin ]; then
-                rm $BASH_IT/$subdirectory/enabled/$(basename $plugin)
+                cmd_output="$(rm -f $BASH_IT/$subdirectory/enabled/$(basename $plugin) 2>&1)"
+                if [[ $? -ne 0 ]]; then
+                    printf '%s\n' "sorry, an error was encountered when trying to enable the $file_entity $file_type:"
+                    echo "${cmd_output}"
+                    return 1
+                fi
             fi
         done
     else
@@ -239,7 +244,12 @@ _disable-thing ()
             printf '%s\n' "sorry, $file_entity does not appear to be an enabled $file_type."
             return
         fi
-        rm $BASH_IT/$subdirectory/enabled/$(basename $plugin)
+        cmd_output="$(rm -f $BASH_IT/$subdirectory/enabled/$(basename $plugin) 2>&1)"
+        if [[ $? -ne 0 ]]; then
+            printf '%s\n' "sorry, an error was encountered when trying to enable the $file_entity $file_type:"
+            echo "${cmd_output}"
+            return 1
+        fi
     fi
 
     if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
@@ -303,7 +313,12 @@ _enable-thing ()
         do
             plugin=$(basename $f)
             if [ ! -h $BASH_IT/$subdirectory/enabled/$plugin ]; then
-                ln -s ../available/$plugin $BASH_IT/$subdirectory/enabled/$plugin
+                cmd_output="$(ln -s ../available/$plugin $BASH_IT/$subdirectory/enabled/$plugin 2>&1)"
+                if [[ $? -ne 0 ]]; then
+                    printf '%s\n' "sorry, an error was encountered when trying to enable the $file_entity $file_type:"
+                    echo "${cmd_output}"
+                    return 1
+                fi
             fi
         done
     else
@@ -319,9 +334,19 @@ _enable-thing ()
             return
         fi
 
-        mkdir -p $BASH_IT/$subdirectory/enabled
+        cmd_output="$(mkdir -p $BASH_IT/$subdirectory/enabled 2>&1)"
+        if [[ $? -ne 0 ]]; then
+            printf '%s\n' "sorry, an error was encountered when trying to enable the $file_entity $file_type:"
+            echo "${cmd_output}"
+            return 1
+        fi
 
-        ln -s ../available/$plugin $BASH_IT/$subdirectory/enabled/$plugin
+        cmd_output="$(ln -s ../available/$plugin $BASH_IT/$subdirectory/enabled/$plugin 2>&1)"
+        if [[ $? -ne 0 ]]; then
+            printf '%s\n' "sorry, an error was encountered when trying to enable the $file_entity $file_type:"
+            echo "${cmd_output}"
+            return 1
+        fi
     fi
 
     if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
