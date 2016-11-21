@@ -4,8 +4,9 @@
 _terraform()
 {
    local cmds cur colonprefixes
-   cmds="apply destroy get graph init output plan push          \
-      refresh remote show taint version"
+   cmds="apply destroy fmt get graph import init \
+      output plan push refresh remote show taint \
+      untaint validate version state"
 
    COMPREPLY=()
    cur=${COMP_WORDS[COMP_CWORD]}
