@@ -11,6 +11,7 @@ Simple colorful terminal prompt theme (inspired by a number of themes).
 - SCM Information
 - Battery Charge
 - Clock
+- [Todo.txt](https://github.com/ginatrapani/todo.txt-cli) status
 - Ruby Environment
 - Python Environment
 - Exit Code
@@ -18,6 +19,7 @@ Simple colorful terminal prompt theme (inspired by a number of themes).
 ### Others
 
 - Indicator for cached `sudo` credential
+- Indicator for ssh login
 - `brainy` command for showing/hiding various prompt segments on-the-fly
 
 ## Configuration
@@ -69,6 +71,12 @@ Python environment version information:
 
 `THEME_SHOW_PYTHON=false`
 
+#### ToDo.txt status
+
+[Todo.txt](https://github.com/ginatrapani/todo.txt-cli) status:
+
+`THEME_SHOW_TODO=false`
+
 #### Clock
 
 `THEME_SHOW_CLOCK=true`
@@ -103,12 +111,13 @@ Currently available prompt segments are:
 - python
 - ruby
 - scm
+- todo
 - user_info
 
 Three environment variables can be defined to rearrange the segments order. The default values are:
 
 `___BRAINY_TOP_LEFT="user_info dir scm"`
 
-`___BRAINY_TOP_RIGHT="python ruby clock battery"`
+`___BRAINY_TOP_RIGHT="python ruby todo clock battery"`
 
 `___BRAINY_BOTTOM="exitcode char"`
