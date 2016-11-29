@@ -17,7 +17,7 @@ then
     # Setting $BASH to maintain backwards compatibility
     # TODO: warn users that they should upgrade their .bash_profile
     export BASH_IT=$BASH
-    export BASH=`bash -c 'echo $BASH'`
+    export BASH="$(bash -c 'echo $BASH')"
 fi
 
 # For backwards compatibility, look in old BASH_THEME location
