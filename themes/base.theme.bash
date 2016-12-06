@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+CLOCK_CHAR_THEME_PROMPT_PREFIX=''
+CLOCK_CHAR_THEME_PROMPT_SUFFIX=''
+CLOCK_THEME_PROMPT_PREFIX=''
+CLOCK_THEME_PROMPT_SUFFIX=''
+
 THEME_PROMPT_HOST='\H'
 
 SCM_CHECK=${SCM_CHECK:=true}
@@ -349,7 +354,7 @@ function clock_char {
   SHOW_CLOCK_CHAR=${THEME_SHOW_CLOCK_CHAR:-"true"}
 
   if [[ "${SHOW_CLOCK_CHAR}" = "true" ]]; then
-    echo -e "${CLOCK_CHAR_COLOR}${CLOCK_CHAR}"
+    echo -e "${CLOCK_CHAR_COLOR}${CLOCK_CHAR_THEME_PROMPT_PREFIX}${CLOCK_CHAR}${CLOCK_CHAR_THEME_PROMPT_SUFFIX}"
   fi
 }
 
@@ -361,7 +366,7 @@ function clock_prompt {
 
   if [[ "${SHOW_CLOCK}" = "true" ]]; then
     CLOCK_STRING=$(date +"${CLOCK_FORMAT}")
-    echo -e "${CLOCK_COLOR}${CLOCK_STRING}"
+    echo -e "${CLOCK_COLOR}${CLOCK_THEME_PROMPT_PREFIX}${CLOCK_STRING}${CLOCK_THEME_PROMPT_SUFFIX}"
   fi
 }
 
