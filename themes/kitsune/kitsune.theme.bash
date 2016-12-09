@@ -1,4 +1,7 @@
-# This is modified morris theme for bash-it. I have changed only the way PS1 looks than in morris.
+# This is combination of works from two different people which I combined for my requirement.
+# Original PS1 was from reddit user /u/Allevil669 which I found in thread: https://www.reddit.com/r/linux/comments/1z33lj/linux_users_whats_your_favourite_bash_prompt/
+# I used that PS1 to the bash-it theme 'morris', and customized it to my liking. All credits to /u/Allevil669 and morris.
+#
 # prompt theming
 
 # added TITLEBAR for updating the tab and window titles with the pwd
