@@ -61,3 +61,14 @@ function docker-runtime-environment() {
   group 'docker'
   docker run "$@" env
 }
+
+function docker-archive-content() {
+  about 'show the content of the provided Docker image archive'
+  group 'docker'
+  param '1: image archive name'
+  example 'docker-archive-content images.tar.gz'
+
+  if [ -n "$1" ]; then
+    tar -xzOf $1 manifest.json | jq '[.[] | .RepoTags] | add'
+  fi
+}
