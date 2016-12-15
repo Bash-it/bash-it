@@ -1,0 +1,3 @@
+[submodule "lib/composure"]
+	path = lib/composure
+	url = git@github.com:erichs/composure.git
