@@ -27,7 +27,7 @@ export TODO="t"
 export SCM_CHECK=true
 
 # Set Xterm/screen/Tmux title with only a short hostname.
-# Unomment this (or set SHORT_HOSTNAME to something else),
+# Uncomment this (or set SHORT_HOSTNAME to something else),
 # Will otherwise fall back on $HOSTNAME.
 #export SHORT_HOSTNAME=$(hostname -s)
 
