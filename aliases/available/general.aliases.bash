@@ -11,10 +11,12 @@ alias l1='ls -1'
 
 alias _="sudo"
 
-if [ $(uname) = "Linux" ]
+if [ $(uname) = "Linux" ] || brew ls --versions coreutils > /dev/null
 then
   alias ls="ls --color=auto"
 fi
+
+
 which gshuf &> /dev/null
 if [ $? -eq 0 ]
 then
