@@ -98,6 +98,44 @@ function scm_prompt_info {
   [[ $SCM == $SCM_SVN ]] && svn_prompt_info && return
 }
 
+function scm_prompt_status {
+  scm
+  scm_prompt_char
+  SCM_DIRTY=0
+  SCM_STATE=''
+  [[ $SCM == $SCM_GIT ]] && git_prompt_status && return
+  [[ $SCM == $SCM_HG ]] && hg_prompt_info && return
+  [[ $SCM == $SCM_SVN ]] && svn_prompt_info && return
+}
+
+function git_prompt_status {
+  local ref
+  local status
+  local git_status_flags=('--porcelain')
+  SCM_STATE=${GIT_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
+
+  if [[ "$(command git config --get bash-it.hide-status)" != "1" ]]; then
+    # Get the branch reference
+    ref=$(command git symbolic-ref -q HEAD 2> /dev/null) || \
+    ref=$(command git rev-parse --short HEAD 2> /dev/null)
+    SCM_BRANCH=${SCM_THEME_BRANCH_PREFIX}${ref#refs/heads/}
+
+    # Get the status
+    [[ "${SCM_GIT_IGNORE_UNTRACKED}" = "true" ]] && git_status_flags+='-untracked-files=no'
+    status=$(command git status ${git_status_flags} 2> /dev/null | tail -n1)
+
+    if [[ -n ${status} ]]; then
+      SCM_DIRTY=1
+      SCM_STATE=${GIT_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
+    fi
+
+    # Output the git prompt
+    SCM_PREFIX=${GIT_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
+    SCM_SUFFIX=${GIT_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
+    echo -e "${SCM_PREFIX}${SCM_BRANCH}${SCM_STATE}${SCM_SUFFIX}"
+  fi
+}
+
 function git_status_summary {
   awk '
   BEGIN {
