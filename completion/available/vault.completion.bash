@@ -16,7 +16,7 @@ function _vault_mounts() {
 }
 
 function _vault() {
-  local VAULT_COMMANDS='delete path-help read renew revoke server status write audit-disable audit-enable audit-list auth auth-disable auth-enable capabilities generate-root init key-status list mount mount-tune mounts policies policy-delete policy-write rekey remount rotate seal ssh step-down token-create token-lookup token-renew token-revoke unmount unseal version'
+  local VAULT_COMMANDS=$(vault 2>&1 | egrep '^ +' | awk '{print $1}')
 
   local cur
   local prev
