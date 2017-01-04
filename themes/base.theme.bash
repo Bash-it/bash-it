@@ -27,6 +27,7 @@ SCM_GIT_SHOW_DETAILS=${SCM_GIT_SHOW_DETAILS:=true}
 SCM_GIT_SHOW_REMOTE_INFO=${SCM_GIT_SHOW_REMOTE_INFO:=auto}
 SCM_GIT_IGNORE_UNTRACKED=${SCM_GIT_IGNORE_UNTRACKED:=false}
 SCM_GIT_SHOW_CURRENT_USER=${SCM_GIT_SHOW_CURRENT_USER:=false}
+SCM_GIT_SHOW_MINIMAL_INFO=${SCM_GIT_SHOW_MINIMAL_INFO:=false}
 
 SCM_GIT='git'
 SCM_GIT_CHAR='±'
@@ -93,22 +94,24 @@ function scm_prompt_info {
   scm_prompt_char
   SCM_DIRTY=0
   SCM_STATE=''
-  [[ $SCM == $SCM_GIT ]] && git_prompt_info && return
-  [[ $SCM == $SCM_HG ]] && hg_prompt_info && return
-  [[ $SCM == $SCM_SVN ]] && svn_prompt_info && return
+
+  if [[ ${SCM} == ${SCM_GIT} ]]; then
+    if [[ ${SCM_GIT_SHOW_MINIMAL_INFO} == true ]]; then
+      # user requests minimal git status information
+      git_prompt_minimal_info
+    else
+      # more detailed git status
+      git_prompt_info
+    fi
+    return
+  fi
+
+  # TODO: consider adding minimal status information for hg and svn
+  [[ ${SCM} == ${SCM_HG} ]] && hg_prompt_info && return
+  [[ ${SCM} == ${SCM_SVN} ]] && svn_prompt_info && return
 }
 
-function scm_prompt_status {
-  scm
-  scm_prompt_char
-  SCM_DIRTY=0
-  SCM_STATE=''
-  [[ $SCM == $SCM_GIT ]] && git_prompt_status && return
-  [[ $SCM == $SCM_HG ]] && hg_prompt_info && return
-  [[ $SCM == $SCM_SVN ]] && svn_prompt_info && return
-}
-
-function git_prompt_status {
+function git_prompt_minimal_info {
   local ref
   local status
   local git_status_flags=('--porcelain')
@@ -117,7 +120,7 @@ function git_prompt_status {
   if [[ "$(command git config --get bash-it.hide-status)" != "1" ]]; then
     # Get the branch reference
     ref=$(command git symbolic-ref -q HEAD 2> /dev/null) || \
-    ref=$(command git rev-parse --short HEAD 2> /dev/null)
+    ref=$(command git rev-parse --short HEAD 2> /dev/null) || return 0
     SCM_BRANCH=${SCM_THEME_BRANCH_PREFIX}${ref#refs/heads/}
 
     # Get the status

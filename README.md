@@ -200,6 +200,8 @@ Set `SCM_GIT_SHOW_DETAILS` to 'false' to **don't show** it:
 
 * `export SCM_GIT_SHOW_DETAILS=false`
 
+**NOTE:** If using `SCM_GIT_SHOW_MINIMAL_INFO=true`, then the value of `SCM_GIT_SHOW_DETAILS` is ignored.
+
 #### Remotes and remote branches
 
 In some git workflows you must work with various remotes, for this reason, Bash-it can provide some useful information about your remotes and your remote branches, for example, the remote on you are working, or if your local branch is tracking a remote branch.
@@ -217,6 +219,8 @@ Set `SCM_GIT_SHOW_REMOTE_INFO` to 'true' to always activate the feature:
 Set `SCM_GIT_SHOW_REMOTE_INFO` to 'false' to **disable the feature**:
 
 * `export SCM_GIT_SHOW_REMOTE_INFO=false`
+
+**NOTE:** If using `SCM_GIT_SHOW_MINIMAL_INFO=true`, then the value of `SCM_GIT_SHOW_REMOTE_INFO` is ignored.
 
 #### Untracked files
 
@@ -249,6 +253,16 @@ You can control the prefix and the suffix of this component using the two variab
 And
 
 * `export SCM_THEME_CURRENT_USER_SUFFIX=' '``
+
+**NOTE:** If using `SCM_GIT_SHOW_MINIMAL_INFO=true`, then the value of `SCM_GIT_SHOW_CURRENT_USER` is ignored.
+
+#### Git show minimal status info
+
+To speed up the prompt while still getting minimal git status information displayed such as the value of HEAD and whether there are any dirty objects, you can set:
+
+```
+export SCM_GIT_SHOW_MINIMAL_INFO=true
+```
 
 #### Ignore repo status
 
