@@ -115,7 +115,7 @@ function git_prompt_minimal_info {
   local ref
   local status
   local git_status_flags=('--porcelain')
-  SCM_STATE=${GIT_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
+  SCM_STATE=${SCM_THEME_PROMPT_CLEAN}
 
   if [[ "$(command git config --get bash-it.hide-status)" != "1" ]]; then
     # Get the branch reference
@@ -129,12 +129,12 @@ function git_prompt_minimal_info {
 
     if [[ -n ${status} ]]; then
       SCM_DIRTY=1
-      SCM_STATE=${GIT_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
+      SCM_STATE=${SCM_THEME_PROMPT_DIRTY}
     fi
 
     # Output the git prompt
-    SCM_PREFIX=${GIT_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
-    SCM_SUFFIX=${GIT_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
+    SCM_PREFIX=${SCM_THEME_PROMPT_PREFIX}
+    SCM_SUFFIX=${SCM_THEME_PROMPT_SUFFIX}
     echo -e "${SCM_PREFIX}${SCM_BRANCH}${SCM_STATE}${SCM_SUFFIX}"
   fi
 }
