@@ -4,7 +4,8 @@ about-alias 'general aliases'
 if ls --color -d . &> /dev/null
 then
   alias ls="ls --color=auto"
-else
+elif ls -G -d . &> /dev/null
+then
   alias ls='ls -G'        # Compact view, show colors
 fi
 
@@ -18,8 +19,13 @@ alias l1='ls -1'
 alias _="sudo"
 
 # colored grep
-alias grep='grep --color=auto'
-export GREP_COLOR='1;33'
+# Need to check an existing file for a pattern that will be found to ensure
+# that the check works when on an OS that supports the color option
+if grep --color=auto "a" $BASH_IT/*.md &> /dev/null
+then
+  alias grep='grep --color=auto'
+  export GREP_COLOR='1;33'
+fi
 
 which gshuf &> /dev/null
 if [ $? -eq 0 ]
