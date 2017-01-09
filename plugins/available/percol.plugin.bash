@@ -29,13 +29,14 @@ _replace_by_history() {
 if command -v percol>/dev/null; then
     local current_version=${BASH_VERSION%%[^0-9]*}
     if [ $current_version -lt 4 ]; then
-       echo "Warning:You have to upgrade bash to bash 4.x to use percol plugin."
+       echo -e "\033[91mWarning: You have to upgrade Bash to Bash v4.x to use the 'percol' plugin.\033[m"
+       echo -e "\033[91m         Your current Bash version is $BASH_VERSION.\033[m"
     else
         bind -x '"\C-r": _replace_by_history'
 
         # bind zz to percol if fasd enable
         if command -v fasd>/dev/null; then
-            zz(){
+            function zz() {
                 local l=$(fasd -d | awk '{print $2}' | percol)
                 cd $l
             }
