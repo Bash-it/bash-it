@@ -37,14 +37,14 @@ fi
 Refer to the official [Bash documention](https://www.gnu.org/software/bash/manual/bashref.html#Bash-Startup-Files) to get more info.
 
 
-## Install Docker (NEW)
+## Install using Docker
 
-You can try Bash-it in an isolated enviroment without changing any local files via Docker Container.  
-(Bash Shell v.4.4 with bash-it, bats and bash-completion based on Alpine Linux).   
+You can try Bash-it in an isolated enviroment without changing any local files via a [Docker](https://www.docker.com/) Container.  
+(Bash Shell v4.4 with Bash-it, [bats](https://github.com/sstephenson/bats) and bash-completion based on [Alpine Linux](https://alpinelinux.org/)).   
 
 `docker pull ellerbrock/bash-it`
 
-Have a look in our [bash-it-docker](https://github.com/Bash-it/bash-it-docker) Repository for further informations.
+Have a look at our [bash-it-docker respository](https://github.com/Bash-it/bash-it-docker) for further information.
 
 
 ## Update
