@@ -92,30 +92,16 @@ function scm_prompt_vars {
 function scm_prompt_info {
   scm
   scm_prompt_char
-  SCM_DIRTY=0
-  SCM_STATE=''
-
-  if [[ ${SCM} == ${SCM_GIT} ]]; then
-    if [[ ${SCM_GIT_SHOW_MINIMAL_INFO} == true ]]; then
-      # user requests minimal git status information
-      git_prompt_minimal_info
-    else
-      # more detailed git status
-      git_prompt_info
-    fi
-    return
-  fi
-
-  # TODO: consider adding minimal status information for hg and svn
-  [[ ${SCM} == ${SCM_HG} ]] && hg_prompt_info && return
-  [[ ${SCM} == ${SCM_SVN} ]] && svn_prompt_info && return
+  scm_prompt_info_common
 }
 
 function scm_prompt_char_info {
-  # Determine the scm char and print it
   scm_prompt_char
   echo -ne "${SCM_CHAR}"
+  scm_prompt_info_common
+}
 
+function scm_prompt_info_common {
   SCM_DIRTY=0
   SCM_STATE=''
 
