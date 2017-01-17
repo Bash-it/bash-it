@@ -464,11 +464,13 @@ function aws_profile {
 }
 
 function safe_append_prompt_command {
-    if [[ -n $1 ]] ; then
-        case $PROMPT_COMMAND in
-            *$1*) ;;
-            "") PROMPT_COMMAND="$1";;
-            *) PROMPT_COMMAND="$1;$PROMPT_COMMAND";;
-        esac
+    local prompt_re="\<${1}\>" # exact match regex
+
+    if [[ ${PROMPT_COMMAND} =~ ${prompt_re} ]]; then
+      return
+    elif [[ -z ${PROMPT_COMMAND} ]]; then
+      PROMPT_COMMAND="${1}"
+    else
+      PROMPT_COMMAND="${1};${PROMPT_COMMAND}"
     fi
 }
