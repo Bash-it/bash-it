@@ -20,6 +20,8 @@ SCM_THEME_BRANCH_TRACK_PREFIX=' → '
 SCM_THEME_BRANCH_GONE_PREFIX=' ⇢ '
 SCM_THEME_CURRENT_USER_PREFFIX=' ☺︎ '
 SCM_THEME_CURRENT_USER_SUFFIX=''
+SCM_THEME_CHAR_PREFIX=''
+SCM_THEME_CHAR_SUFFIX=''
 
 THEME_BATTERY_PERCENTAGE_CHECK=${THEME_BATTERY_PERCENTAGE_CHECK:=true}
 
@@ -97,7 +99,7 @@ function scm_prompt_info {
 
 function scm_prompt_char_info {
   scm_prompt_char
-  echo -ne "${SCM_CHAR}"
+  echo -ne "${SCM_THEME_CHAR_PREFIX}${SCM_CHAR}${SCM_THEME_CHAR_SUFFIX}"
   scm_prompt_info_common
 }
 
@@ -439,7 +441,7 @@ function hg_prompt_info() {
 
 function scm_char {
   scm_prompt_char
-  echo -e "$SCM_CHAR"
+  echo -e "${SCM_THEME_CHAR_PREFIX}${SCM_CHAR}${SCM_THEME_CHAR_SUFFIX}"
 }
 
 function prompt_char {
