@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-. $(dirname $0)/composure/composure.sh
+. ${BASH_IT}/lib/composure/composure.sh
