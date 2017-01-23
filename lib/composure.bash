@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
-. "${BASH_IT}/lib/composure/composure.sh"
-#. ${BASH_IT}/lib/composure/composure.sh
+#echo $0 >&2
+#. "${BASH_IT}/lib/composure/composure.sh"
+. "$BASH_IT/lib/composure/composure.sh"

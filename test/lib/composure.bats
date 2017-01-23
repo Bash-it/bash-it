@@ -2,6 +2,8 @@
 
 load ../test_helper
 load $BATS_TEST_DIRNAME/../../lib/composure/composure.sh
+run pwd
+run echo $BASH_IT
 
 @test "lib composure: composure_keywords()" {
   run composure_keywords
