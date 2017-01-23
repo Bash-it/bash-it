@@ -14,7 +14,8 @@ if [ "$BASH_IT_ROOT" != "${BASH_IT_TEST_DIR}/root" ]; then
 fi
 
 setup() {
-  mkdir -p -- "${BASH_IT_ROOT}"
+  mkdir -p -- "${BASH_IT_ROOT}/lib"
+    curl https://raw.githubusercontent.com/erichs/composure/master/composure.sh > ${BASH_IT_ROOT}/lib/composure.bash
 }
 
 teardown() {
