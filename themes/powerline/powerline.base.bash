@@ -10,16 +10,14 @@ function set_color {
 }
 
 function __powerline_user_info_prompt {
-  local user_info=""
+  local user_info=${USER}
   local color=${USER_INFO_THEME_PROMPT_COLOR}
 
-  if sudo -n uptime 2>&1 | grep -q "load"; then
-    color=${USER_INFO_THEME_PROMPT_COLOR_SUDO}
-  fi
   case "${POWERLINE_PROMPT_USER_INFO_MODE}" in
     "sudo")
-      if [[ "${color}" == "${USER_INFO_THEME_PROMPT_COLOR_SUDO}" ]]; then
-        user_info="!"
+      if sudo -n true >/dev/null 2>&1; then
+        color=${USER_INFO_THEME_PROMPT_COLOR_SUDO}
+        user_info=${USER_INFO_SUDO_CHAR}${USER}
       fi
       ;;
     *)
@@ -82,7 +80,17 @@ function __powerline_scm_prompt {
 }
 
 function __powerline_cwd_prompt {
-  echo "$(pwd | sed "s|^${HOME}|~|")|${CWD_THEME_PROMPT_COLOR}"
+  local cwd=$(pwd | sed "s|^${HOME}|~|")
+
+  #if [[ -n "${CWD_THEME_DIR_SEPARATOR}" ]]; then
+    # todo
+  #fi
+  
+  echo "${cwd}|${CWD_THEME_PROMPT_COLOR}"
+}
+
+function __powerline_hostname_prompt {
+    echo "$(hostname -s)|${HOST_THEME_PROMPT_COLOR}"
 }
 
 function __powerline_clock_prompt {
@@ -141,11 +149,17 @@ function __powerline_prompt_command {
   SEGMENTS_AT_LEFT=0
   LAST_SEGMENT_COLOR=""
 
+
+  if [[ -n "${POWERLINE_PROMPT_DISTRO_LOGO}" ]]; then
+      LEFT_PROMPT+="$(set_color ${PROMPT_DISTRO_LOGO_COLOR} ${PROMPT_DISTRO_LOGO_COLORBG})${PROMPT_DISTRO_LOGO}$(set_color - -)"
+  fi
+
   ## left prompt ##
   for segment in $POWERLINE_PROMPT; do
     local info="$(__powerline_${segment}_prompt)"
     [[ -n "${info}" ]] && __powerline_left_segment "${info}"
   done
+
   [[ "${last_status}" -ne 0 ]] && __powerline_left_segment $(__powerline_last_status_prompt ${last_status})
   [[ -n "${LEFT_PROMPT}" ]] && LEFT_PROMPT+="$(set_color ${LAST_SEGMENT_COLOR} -)${separator_char}${normal}"
 
@@ -156,3 +170,4 @@ function __powerline_prompt_command {
         LEFT_PROMPT \
         SEGMENTS_AT_LEFT
 }
+
