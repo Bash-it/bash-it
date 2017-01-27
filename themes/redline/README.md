@@ -2,7 +2,10 @@
 
 changed up the powerline base a little.
 
-it plays nicest with  this font: [DroidSansMonoForPowerline](https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/DroidSansMono)
+It plays nicest with  this font: [DroidSansMonoForPowerline](https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/DroidSansMono)
+
+Read the [powerline theme documentation](https://github.com/Bash-it/bash-it/blob/master/themes/powerline/README.md)
+
 
 ## added
 * hostname
@@ -37,4 +40,4 @@ export POWERLINE_PROMPT="python_venv user_info hostname cwd scm"
 export POWERLINE_PROMPT_DISTRO_LOGO="yes"
 ```
 
-Read the [powerline theme documentation](https://github.com/Bash-it/bash-it/blob/master/themes/powerline/README.md)
+![screenshot](screenshot.png?raw=true)
