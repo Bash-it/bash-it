@@ -37,4 +37,4 @@ export POWERLINE_PROMPT="python_venv user_info hostname cwd scm"
 export POWERLINE_PROMPT_DISTRO_LOGO="yes"
 ```
 
-Read the (powerline theme documentation)[https://github.com/Bash-it/bash-it/blob/master/themes/powerline/README.md]
+Read the [powerline theme documentation](https://github.com/Bash-it/bash-it/blob/master/themes/powerline/README.md)
