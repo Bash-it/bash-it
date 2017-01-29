@@ -82,9 +82,9 @@ function __powerline_scm_prompt {
 function __powerline_cwd_prompt {
   local cwd=$(pwd | sed "s|^${HOME}|~|")
 
-  if [[ -n "${CWD_THEME_DIR_SEPARATOR}" ]]; then
+  #if [[ -n "${CWD_THEME_DIR_SEPARATOR}" ]]; then
     # todo
-  fi
+  #fi
   
   echo "${cwd}|${CWD_THEME_PROMPT_COLOR}"
 }
