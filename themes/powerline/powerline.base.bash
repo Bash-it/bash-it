@@ -15,7 +15,7 @@ function __powerline_user_info_prompt {
 
   case "${POWERLINE_PROMPT_USER_INFO_MODE}" in
     "sudo")
-      if sudo -n uptime 2>&1 | grep -q "load"; then
+      if sudo -n true >/dev/null 2>&1; then
         color=${USER_INFO_THEME_PROMPT_COLOR_SUDO}
         user_info=${USER_INFO_SUDO_CHAR}${USER}
       fi
@@ -80,7 +80,13 @@ function __powerline_scm_prompt {
 }
 
 function __powerline_cwd_prompt {
-  echo "$(pwd | sed "s|^${HOME}|~|")|${CWD_THEME_PROMPT_COLOR}"
+  local cwd=$(pwd | sed "s|^${HOME}|~|")
+
+  if [[ -n "${CWD_THEME_DIR_SEPARATOR}" ]]; then
+    # todo
+  fi
+  
+  echo "${cwd}|${CWD_THEME_PROMPT_COLOR}"
 }
 
 function __powerline_hostname_prompt {
@@ -145,7 +151,7 @@ function __powerline_prompt_command {
 
 
   if [[ -n "${POWERLINE_PROMPT_DISTRO_LOGO}" ]]; then
-      LEFT_PROMPT+="$(set_color ${PROMPT_DISTRO_LOGO_COLOR} ${PROMPT_DISTRO_LOGO_COLORBG})${PROMPT_DISTRO_LOGO}"
+      LEFT_PROMPT+="$(set_color ${PROMPT_DISTRO_LOGO_COLOR} ${PROMPT_DISTRO_LOGO_COLORBG})${PROMPT_DISTRO_LOGO}$(set_color - -)"
   fi
 
   ## left prompt ##
