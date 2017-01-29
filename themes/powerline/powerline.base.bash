@@ -154,11 +154,15 @@ function __powerline_prompt_command {
       LEFT_PROMPT+="$(set_color ${PROMPT_DISTRO_LOGO_COLOR} ${PROMPT_DISTRO_LOGO_COLORBG})${PROMPT_DISTRO_LOGO}$(set_color - -)"
   fi
 
+  local OLD_IFS="${IFS}"; IFS=" "
+
   ## left prompt ##
   for segment in $POWERLINE_PROMPT; do
     local info="$(__powerline_${segment}_prompt)"
     [[ -n "${info}" ]] && __powerline_left_segment "${info}"
   done
+
+  IFS="${OLD_IFS}"
 
   [[ "${last_status}" -ne 0 ]] && __powerline_left_segment $(__powerline_last_status_prompt ${last_status})
   [[ -n "${LEFT_PROMPT}" ]] && LEFT_PROMPT+="$(set_color ${LAST_SEGMENT_COLOR} -)${separator_char}${normal}"
