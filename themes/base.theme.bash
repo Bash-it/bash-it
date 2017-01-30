@@ -464,7 +464,16 @@ function aws_profile {
 }
 
 function safe_append_prompt_command {
-    local prompt_re="\<${1}\>" # exact match regex
+    local prompt_re
+
+    # Set OS dependent exact match regular expression
+    if [[ ${OSTYPE} == darwin* ]]; then
+      # macOS
+      prompt_re="[[:<:]]${1}[[:>:]]"
+    else
+      # Linux, FreeBSD, etc.
+      prompt_re="\<${1}\>"
+    fi
 
     if [[ ${PROMPT_COMMAND} =~ ${prompt_re} ]]; then
       return
