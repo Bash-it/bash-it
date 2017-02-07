@@ -244,8 +244,8 @@ function git_prompt_vars {
   [[ "${status}" =~ ${ahead_re} ]] && SCM_BRANCH+=" ${SCM_GIT_AHEAD_CHAR}${BASH_REMATCH[1]}"
   [[ "${status}" =~ ${behind_re} ]] && SCM_BRANCH+=" ${SCM_GIT_BEHIND_CHAR}${BASH_REMATCH[1]}"
 
-  local stash_count="$(git stash list 2> /dev/null | wc -l | tr -d ' ')"
-  [[ "${stash_count}" -gt 0 ]] && SCM_BRANCH+=" {${stash_count}}"
+  # local stash_count="$(git stash list 2> /dev/null | wc -l | tr -d ' ')"
+  # [[ "${stash_count}" -gt 0 ]] && SCM_BRANCH+=" {${stash_count}}"
 
   SCM_BRANCH+=${details}
 
