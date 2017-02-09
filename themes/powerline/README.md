@@ -4,6 +4,9 @@ A colorful theme, where shows a lot information about your shell session.
 
 **IMPORTANT:** This theme requires that [a font with the Powerline symbols](https://github.com/powerline/fonts) needs to be used in your terminal emulator, otherwise the prompt won't be displayed correctly, i.e. some of the additional icons and characters will be missing. Please follow your operating system's instructions to install one of the fonts from the above link and select it in your terminal emulator.
 
+**NOTICE:** The default behavior of this theme assumes that you have sudo privileges on your workstation. If it's not the case (i.e you are running on
+a corporate network) you can set the flag 'CAN_SUDO=false' in powerbase.theme.bash
+
 ## Provided Information
 
 * Current path

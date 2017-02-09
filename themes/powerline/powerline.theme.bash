@@ -2,6 +2,8 @@
 
 . "$BASH_IT/themes/powerline/powerline.base.bash"
 
+CAN_SUDO=true
+
 PROMPT_CHAR=${POWERLINE_PROMPT_CHAR:=""}
 POWERLINE_LEFT_SEPARATOR=${POWERLINE_LEFT_SEPARATOR:=""}
 
