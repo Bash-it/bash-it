@@ -1,3 +1,6 @@
+# Define this here so it can be used by all of the Powerline themes
+THEME_CHECK_SUDO=${THEME_CHECK_SUDO:=true}
+
 function set_color {
   if [[ "${1}" != "-" ]]; then
     fg="38;5;${1}"
