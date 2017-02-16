@@ -4,13 +4,13 @@ about-plugin 'Helpers to more easily work with Docker'
 function docker-remove-most-recent-container() {
   about 'attempt to remove the most recent container from docker ps -a'
   group 'docker'
-  docker ps -a | head -2 | tail -1 | awk '{print $NF}' | xargs docker rm
+  docker ps -ql | xargs docker rm
 }
 
 function docker-remove-most-recent-image() {
   about 'attempt to remove the most recent image from docker images'
   group 'docker'
-  docker images | head -2 | tail -1 | awk '{print $3}' | xargs docker rmi
+  docker images -q | head -1 | xargs docker rmi
 }
 
 function docker-enter() {
