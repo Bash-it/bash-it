@@ -68,7 +68,6 @@ alias gcaa="git commit -a --amend -C HEAD"
 alias ggui="git gui"
 alias gcam="git commit -am"
 alias gcsam="git commit -S -am"
-alias gmu="git fetch origin -v && git merge origin/master"
 alias gstd="git stash drop"
 alias gstl="git stash list"
 
