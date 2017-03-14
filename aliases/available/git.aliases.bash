@@ -67,6 +67,10 @@ alias gnew="git log HEAD@{1}..HEAD@{0}"
 # Add uncommitted and unstaged changes to the last commit
 alias gcaa="git commit -a --amend -C HEAD"
 alias ggui="git gui"
+alias gcam="git commit -am"
+alias gcsam="git commit -S -am"
+alias gstd="git stash drop"
+alias gstl="git stash list"
 
 case $OSTYPE in
   darwin*)
