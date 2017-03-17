@@ -110,4 +110,10 @@ _bash-it-comp()
 	return 0
 }
 
+# Activate completion for bash-it and its common misspellings
 complete -F _bash-it-comp bash-it
+complete -F _bash-it-comp bash-ti
+complete -F _bash-it-comp shit
+complete -F _bash-it-comp bashit
+complete -F _bash-it-comp batshit
+complete -F _bash-it-comp bash_it
