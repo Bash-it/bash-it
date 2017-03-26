@@ -144,11 +144,12 @@ Alternately, if you would like to keep your custom scripts under version control
 
 ## Themes
 
-There are a few Bash-it themes. If you've created your own custom prompts, I'd love it if you shared with everyone else! Just submit a Pull Request.
+There are over 50+ Bash-it themes to pick from in `.bash_it/themes`. The default theme is `bobby`.  Set `BASH_IT_THEME` to the theme name you want, or if you've developed your own custom theme outside of `.bash_it/themes` point directly to the theme file.  
 
-You can see the theme screenshots [here](https://github.com/Bash-it/bash-it/wiki/Themes).
+You can easily preview the themes in your own shell using `BASH_PREVIEW=true reload`.
 
-Alternatively, you can preview the themes in your own shell using `BASH_PREVIEW=true reload`.
+If you've created your own custom prompts, I'd love it if you shared with everyone else! Just submit a Pull Request.
+You can see theme screenshots on [wiki/Themes](https://github.com/Bash-it/bash-it/wiki/Themes).
 
 **NOTE**: Bash-it and some themes use UTF-8 characters, so to avoid extrange behaviors in your terminal, set your locale to `LC_ALL=en_US.UTF-8` or the equivalent to your language if isn't American English.
 
