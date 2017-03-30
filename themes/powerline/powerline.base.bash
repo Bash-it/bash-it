@@ -1,4 +1,8 @@
+# Define this here so it can be used by all of the Powerline themes
+THEME_CHECK_SUDO=${THEME_CHECK_SUDO:=true}
+
 function set_color {
+  set +u
   if [[ "${1}" != "-" ]]; then
     fg="38;5;${1}"
   fi
@@ -10,11 +14,14 @@ function set_color {
 }
 
 function __powerline_user_info_prompt {
+  set +u
   local user_info=""
   local color=${USER_INFO_THEME_PROMPT_COLOR}
 
-  if sudo -n uptime 2>&1 | grep -q "load"; then
-    color=${USER_INFO_THEME_PROMPT_COLOR_SUDO}
+  if [[ "${THEME_CHECK_SUDO}" = true ]]; then
+    if sudo -n uptime 2>&1 | grep -q "load"; then
+      color=${USER_INFO_THEME_PROMPT_COLOR_SUDO}
+    fi
   fi
   case "${POWERLINE_PROMPT_USER_INFO_MODE}" in
     "sudo")
@@ -46,6 +53,7 @@ function __powerline_ruby_prompt {
 }
 
 function __powerline_python_venv_prompt {
+  set +u
   local python_venv=""
 
   if [[ -n "${CONDA_DEFAULT_ENV}" ]]; then

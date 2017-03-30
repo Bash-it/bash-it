@@ -36,6 +36,17 @@ fi
 
 Refer to the official [Bash documention](https://www.gnu.org/software/bash/manual/bashref.html#Bash-Startup-Files) to get more info.
 
+
+## Install using Docker
+
+You can try Bash-it in an isolated enviroment without changing any local files via a [Docker](https://www.docker.com/) Container.  
+(Bash Shell v4.4 with Bash-it, [bats](https://github.com/sstephenson/bats) and bash-completion based on [Alpine Linux](https://alpinelinux.org/)).   
+
+`docker pull ellerbrock/bash-it`
+
+Have a look at our [bash-it-docker respository](https://github.com/Bash-it/bash-it-docker) for further information.
+
+
 ## Update
 
 To update Bash-it, simply run:
@@ -129,17 +140,28 @@ For custom scripts, and aliases, just create the following files (they'll be ign
 
 Anything in the custom directory will be ignored, with the exception of `custom/example.bash`.
 
-Alternately, if you would like to keep your custom scripts under version control, you can set BASH_IT_CUSTOM in your `~/.bashrc` to another location outside of the `~/.bash_it` folder.
+Alternately, if you would like to keep your custom scripts under version control, you can set `BASH_IT_CUSTOM` in your `~/.bashrc` to another location outside of the `~/.bash_it` folder.
 
 ## Themes
 
-There are a few Bash-it themes. If you've created your own custom prompts, I'd love it if you shared with everyone else! Just submit a Pull Request.
+There are over 50+ Bash-it themes to pick from in `.bash_it/themes`. The default theme is `bobby`.  Set `BASH_IT_THEME` to the theme name you want, or if you've developed your own custom theme outside of `.bash_it/themes`, point the `BASH_IT_THEME` variable directly to the theme file.
 
-You can see the theme screenshots [here](https://github.com/Bash-it/bash-it/wiki/Themes).
+Examples:
 
-Alternatively, you can preview the themes in your own shell using `BASH_PREVIEW=true reload`.
+```bash
+# Use the "powerline-multiline" theme
+export BASH_IT_THEME="powerline-multiline"
 
-**NOTE**: Bash-it and some themes use UTF-8 characters, so to avoid extrange behaviors in your terminal, set your locale to `LC_ALL=en_US.UTF-8` or the equivalent to your language if isn't American English.
+# Use a theme outside of the Bash-it folder
+export BASH_IT_THEME="/home/foo/my_theme/my_theme.theme.bash"
+```
+
+You can easily preview the themes in your own shell using `BASH_PREVIEW=true reload`.
+
+If you've created your own custom prompts, we'd love it if you shared with everyone else! Just submit a Pull Request.
+You can see theme screenshots on [wiki/Themes](https://github.com/Bash-it/bash-it/wiki/Themes).
+
+**NOTE**: Bash-it and some themes use UTF-8 characters, so to avoid strange behavior in your terminal, set your locale to `LC_ALL=en_US.UTF-8` or the equivalent to your language if isn't American English.
 
 ## Uninstalling
 
@@ -200,6 +222,8 @@ Set `SCM_GIT_SHOW_DETAILS` to 'false' to **don't show** it:
 
 * `export SCM_GIT_SHOW_DETAILS=false`
 
+**NOTE:** If using `SCM_GIT_SHOW_MINIMAL_INFO=true`, then the value of `SCM_GIT_SHOW_DETAILS` is ignored.
+
 #### Remotes and remote branches
 
 In some git workflows you must work with various remotes, for this reason, Bash-it can provide some useful information about your remotes and your remote branches, for example, the remote on you are working, or if your local branch is tracking a remote branch.
@@ -217,6 +241,8 @@ Set `SCM_GIT_SHOW_REMOTE_INFO` to 'true' to always activate the feature:
 Set `SCM_GIT_SHOW_REMOTE_INFO` to 'false' to **disable the feature**:
 
 * `export SCM_GIT_SHOW_REMOTE_INFO=false`
+
+**NOTE:** If using `SCM_GIT_SHOW_MINIMAL_INFO=true`, then the value of `SCM_GIT_SHOW_REMOTE_INFO` is ignored.
 
 #### Untracked files
 
@@ -249,6 +275,16 @@ You can control the prefix and the suffix of this component using the two variab
 And
 
 * `export SCM_THEME_CURRENT_USER_SUFFIX=' '``
+
+**NOTE:** If using `SCM_GIT_SHOW_MINIMAL_INFO=true`, then the value of `SCM_GIT_SHOW_CURRENT_USER` is ignored.
+
+#### Git show minimal status info
+
+To speed up the prompt while still getting minimal git status information displayed such as the value of HEAD and whether there are any dirty objects, you can set:
+
+```
+export SCM_GIT_SHOW_MINIMAL_INFO=true
+```
 
 #### Ignore repo status
 

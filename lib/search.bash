@@ -86,7 +86,7 @@ _bash-it-search-component() {
     fi
   done
 
-  local _grep=$(which egrep || which grep)
+  local _grep=$((which --skip-alias grep 2> /dev/null || which grep) | tail -n 1)
 
   declare -a terms=($@)           # passed on the command line
   declare -a matches=()           # results that we found
@@ -98,7 +98,7 @@ _bash-it-search-component() {
     [[ "${term:0:1}" == "-"  ]] && negative_terms=(${negative_terms[@]} ${term:1}) && continue
 
     # print asterisk next to each result that is already enabled by the user
-    local term_match=($(echo "${help}"| ${_grep} -i -- ${term} | egrep '\[( |x)\]' | cut -b -30 | sed 's/ *\[ \]//g;s/ *\[x\]/*/g;' ))
+    local term_match=($(echo "${help}"| ${_grep} -i -- ${term} | ${_grep} -E '\[( |x)\]' | cut -b -30 | sed 's/ *\[ \]//g;s/ *\[x\]/*/g;' ))
     [[ "${#term_match[@]}" -gt 0 ]] && {
       matches=(${matches[@]} ${term_match[@]}) # append to the list of results
     }

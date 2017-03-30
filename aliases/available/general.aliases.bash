@@ -1,9 +1,16 @@
 cite about-alias
 about-alias 'general aliases'
 
+if ls --color -d . &> /dev/null
+then
+  alias ls="ls --color=auto"
+elif ls -G -d . &> /dev/null
+then
+  alias ls='ls -G'        # Compact view, show colors
+fi
+
 # List directory contents
 alias sl=ls
-alias ls='ls -G'        # Compact view, show colors
 alias la='ls -AF'       # Compact view, show hidden
 alias ll='ls -al'
 alias l='ls -a'
@@ -11,10 +18,15 @@ alias l1='ls -1'
 
 alias _="sudo"
 
-if [ $(uname) = "Linux" ]
+# colored grep
+# Need to check an existing file for a pattern that will be found to ensure
+# that the check works when on an OS that supports the color option
+if grep --color=auto "a" $BASH_IT/*.md &> /dev/null
 then
-  alias ls="ls --color=auto"
+  alias grep='grep --color=auto'
+  export GREP_COLOR='1;33'
 fi
+
 which gshuf &> /dev/null
 if [ $? -eq 0 ]
 then
@@ -58,6 +70,13 @@ fi
 # Directory
 alias md='mkdir -p'
 alias rd='rmdir'
+
+# Common misspellings of bash-it
+alias shit='bash-it'
+alias batshit='bash-it'
+alias bashit='bash-it'
+alias bash_it='bash-it'
+alias bash_ti='bash-it'
 
 # Display whatever file is regular file or folder
 catt() {
