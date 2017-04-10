@@ -8,6 +8,9 @@ SCM_GIT_CHAR="${green}±${normal}"
 SCM_SVN_CHAR="${bold_cyan}⑆${normal}"
 SCM_HG_CHAR="${bold_red}☿${normal}"
 
+VIRTUALENV_THEME_PROMPT_PREFIX="("
+VIRTUALENV_THEME_PROMPT_SUFFIX=")"
+
 ### TODO: openSUSE has already colors enabled, check if those differs from stock
 # LS colors, made with http://geoff.greer.fm/lscolors/
 # export LSCOLORS="Gxfxcxdxbxegedabagacad"
@@ -31,18 +34,11 @@ pure_prompt() {
     ps_root_mark="${red} # ${normal}"
     ps_path="${yellow}\w${normal}";
 
-	# Virtualenv
-	if [[ $VIRTUAL_ENV != "" ]]; then
-		venv="(${VIRTUAL_ENV##*/})"
-	else
-		venv=""
-	fi
-
     # make it work
     case $(id -u) in
-        0) PS1="${venv}$ps_root@$ps_host$(scm_prompt):$ps_path$ps_root_mark"
+        0) PS1="$(virtualenv_prompt)$ps_root@$ps_host$(scm_prompt):$ps_path$ps_root_mark"
             ;;
-        *) PS1="${venv}$ps_user@$ps_host$(scm_prompt):$ps_path$ps_user_mark"
+        *) PS1="$(virtualenv_prompt)$ps_user@$ps_host$(scm_prompt):$ps_path$ps_user_mark"
             ;;
     esac
 }
