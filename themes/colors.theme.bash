@@ -189,7 +189,7 @@ yellow="\[\e[0;33m\]"
 blue="\[\e[0;34m\]"
 purple="\[\e[0;35m\]"
 cyan="\[\e[0;36m\]"
-white="\[\e[0;37;1m\]"
+white="\[\e[0;37m\]"
 orange="\[\e[0;91m\]"
 
 bold_black="\[\e[30;1m\]"
