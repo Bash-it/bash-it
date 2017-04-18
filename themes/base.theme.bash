@@ -184,6 +184,11 @@ function git_status_summary {
 
 function git_prompt_vars {
   local details=''
+
+  ## SET LANGUAGE to EN
+  LANG_BAK=$LANG
+  LANG="en_EN.UTF8"
+
   SCM_STATE=${GIT_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
   if [[ "$(git config --get bash-it.hide-status)" != "1" ]]; then
     [[ "${SCM_GIT_IGNORE_UNTRACKED}" = "true" ]] && local git_status_flags='-uno'
@@ -263,6 +268,9 @@ function git_prompt_vars {
 
   SCM_PREFIX=${GIT_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
   SCM_SUFFIX=${GIT_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
+
+  #RESET LANG
+  LANG=$LANG_BAK
 }
 
 function svn_prompt_vars {
