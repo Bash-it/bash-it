@@ -140,17 +140,28 @@ For custom scripts, and aliases, just create the following files (they'll be ign
 
 Anything in the custom directory will be ignored, with the exception of `custom/example.bash`.
 
-Alternately, if you would like to keep your custom scripts under version control, you can set BASH_IT_CUSTOM in your `~/.bashrc` to another location outside of the `~/.bash_it` folder.
+Alternately, if you would like to keep your custom scripts under version control, you can set `BASH_IT_CUSTOM` in your `~/.bashrc` to another location outside of the `~/.bash_it` folder.
 
 ## Themes
 
-There are a few Bash-it themes. If you've created your own custom prompts, I'd love it if you shared with everyone else! Just submit a Pull Request.
+There are over 50+ Bash-it themes to pick from in `.bash_it/themes`. The default theme is `bobby`.  Set `BASH_IT_THEME` to the theme name you want, or if you've developed your own custom theme outside of `.bash_it/themes`, point the `BASH_IT_THEME` variable directly to the theme file.
 
-You can see the theme screenshots [here](https://github.com/Bash-it/bash-it/wiki/Themes).
+Examples:
 
-Alternatively, you can preview the themes in your own shell using `BASH_PREVIEW=true reload`.
+```bash
+# Use the "powerline-multiline" theme
+export BASH_IT_THEME="powerline-multiline"
 
-**NOTE**: Bash-it and some themes use UTF-8 characters, so to avoid extrange behaviors in your terminal, set your locale to `LC_ALL=en_US.UTF-8` or the equivalent to your language if isn't American English.
+# Use a theme outside of the Bash-it folder
+export BASH_IT_THEME="/home/foo/my_theme/my_theme.theme.bash"
+```
+
+You can easily preview the themes in your own shell using `BASH_PREVIEW=true reload`.
+
+If you've created your own custom prompts, we'd love it if you shared with everyone else! Just submit a Pull Request.
+You can see theme screenshots on [wiki/Themes](https://github.com/Bash-it/bash-it/wiki/Themes).
+
+**NOTE**: Bash-it and some themes use UTF-8 characters, so to avoid strange behavior in your terminal, set your locale to `LC_ALL=en_US.UTF-8` or the equivalent to your language if isn't American English.
 
 ## Uninstalling
 
