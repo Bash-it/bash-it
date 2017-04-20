@@ -1,0 +1,10 @@
+cite 'about-alias'
+about-alias 'common fasd abbreviations'
+
+alias a='fasd -a'
+alias s='fasd -si'
+alias d='fasd -d'
+alias f='fasd -f'
+alias sd='fasd -sid'
+alias sf='fasd -sif'
+alias z='fasd_cd -d'
