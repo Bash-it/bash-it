@@ -21,7 +21,7 @@ fe() {
 fd() {
   about "cd to the selected directory"
   group "fzf"
-  param "1: Directory to browse, or . if omitted
+  param "1: Directory to browse, or . if omitted"
   example "fd aliases"
 
   local dir
