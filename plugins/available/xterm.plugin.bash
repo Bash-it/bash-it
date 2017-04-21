@@ -8,11 +8,11 @@ set_xterm_title () {
 
 
 precmd () {
-    set_xterm_title "${USER}@${SHORT_HOSTNAME:-${HOSTNAME}} `dirs -0` $PROMPTCHAR"
+    set_xterm_title "${SHORT_USER:-${USER}}@${SHORT_HOSTNAME:-${HOSTNAME}} `dirs -0` $PROMPTCHAR"
 }
 
 preexec () {
-    set_xterm_title "$1 {`dirs -0`} (${USER}@${SHORT_HOSTNAME:-${HOSTNAME}})"
+    set_xterm_title "$1 {`dirs -0`} (${SHORT_USER:-${USER}}@${SHORT_HOSTNAME:-${HOSTNAME}})"
 }
 
 case "$TERM" in
