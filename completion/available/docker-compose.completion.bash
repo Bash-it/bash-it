@@ -534,12 +534,12 @@ _docker_compose() {
 		case "${words[$counter]}" in
 			$(__docker_compose_to_extglob "$daemon_boolean_options") )
 				local opt=${words[counter]}
-				daemon_options+=($opt)
+				daemon_options=(${daemon_options[@]} $opt)
 				;;
 			$(__docker_compose_to_extglob "$daemon_options_with_args") )
 				local opt=${words[counter]}
 				local arg=${words[++counter]}
-				daemon_options+=($opt $arg)
+				daemon_options=(${daemon_options[@]} $opt $arg)
 				;;
 			-*)
 				;;

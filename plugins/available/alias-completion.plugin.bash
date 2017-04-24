@@ -49,7 +49,7 @@ function alias_completion {
                 eval "$completion_loader $alias_cmd"
                 # 124 means completion loader was successful
                 [[ $? -eq 124 ]] || continue
-                completions+=($alias_cmd)
+                completions=(${completions[@]} $alias_cmd)
             else
                 continue
             fi

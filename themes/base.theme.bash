@@ -149,7 +149,7 @@ function git_prompt_minimal_info {
     SCM_BRANCH=${SCM_THEME_BRANCH_PREFIX}${ref}
 
     # Get the status
-    [[ "${SCM_GIT_IGNORE_UNTRACKED}" = "true" ]] && git_status_flags+='-untracked-files=no'
+    [[ "${SCM_GIT_IGNORE_UNTRACKED}" = "true" ]] && git_status_flags="${git_status_flags} -untracked-files=no"
     status=$(command git status ${git_status_flags} 2> /dev/null | tail -n1)
 
     if [[ -n ${status} ]]; then
@@ -208,15 +208,15 @@ function git_prompt_vars {
     if [[ "${untracked_count}" -gt 0 || "${unstaged_count}" -gt 0 || "${staged_count}" -gt 0 ]]; then
       SCM_DIRTY=1
       if [[ "${SCM_GIT_SHOW_DETAILS}" = "true" ]]; then
-        [[ "${staged_count}" -gt 0 ]] && details+=" ${SCM_GIT_STAGED_CHAR}${staged_count}" && SCM_DIRTY=3
-        [[ "${unstaged_count}" -gt 0 ]] && details+=" ${SCM_GIT_UNSTAGED_CHAR}${unstaged_count}" && SCM_DIRTY=2
-        [[ "${untracked_count}" -gt 0 ]] && details+=" ${SCM_GIT_UNTRACKED_CHAR}${untracked_count}" && SCM_DIRTY=1
+        [[ "${staged_count}" -gt 0 ]] && details="${details} ${SCM_GIT_STAGED_CHAR}${staged_count}" && SCM_DIRTY=3
+        [[ "${unstaged_count}" -gt 0 ]] && details="${details} ${SCM_GIT_UNSTAGED_CHAR}${unstaged_count}" && SCM_DIRTY=2
+        [[ "${untracked_count}" -gt 0 ]] && details="${details} ${SCM_GIT_UNTRACKED_CHAR}${untracked_count}" && SCM_DIRTY=1
       fi
       SCM_STATE=${GIT_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
     fi
   fi
 
-  [[ "${SCM_GIT_SHOW_CURRENT_USER}" == "true" ]] && details+="$(git_user_info)"
+  [[ "${SCM_GIT_SHOW_CURRENT_USER}" == "true" ]] && details="${details}$(git_user_info)"
 
   SCM_CHANGE=$(git rev-parse --short HEAD 2>/dev/null)
 
@@ -237,15 +237,15 @@ function git_prompt_vars {
       if ([[ "${SCM_GIT_SHOW_REMOTE_INFO}" = "auto" ]] && [[ "${num_remotes}" -ge 2 ]]) ||
           [[ "${SCM_GIT_SHOW_REMOTE_INFO}" = "true" ]]; then
         remote_info="${remote_name}"
-        [[ "${same_branch_name}" != "true" ]] && remote_info+="/${remote_branch}"
+        [[ "${same_branch_name}" != "true" ]] && remote_info="${remote_info}/${remote_branch}"
       elif [[ ${same_branch_name} != "true" ]]; then
         remote_info="${remote_branch}"
       fi
       if [[ -n "${remote_info}" ]];then
         if [[ "${branch_gone}" = "true" ]]; then
-          SCM_BRANCH+="${SCM_THEME_BRANCH_GONE_PREFIX}${remote_info}"
+          SCM_BRANCH="${SCM_BRANCH}${SCM_THEME_BRANCH_GONE_PREFIX}${remote_info}"
         else
-          SCM_BRANCH+="${SCM_THEME_BRANCH_TRACK_PREFIX}${remote_info}"
+          SCM_BRANCH="${SCM_BRANCH}${SCM_THEME_BRANCH_TRACK_PREFIX}${remote_info}"
         fi
       fi
     fi
@@ -267,13 +267,13 @@ function git_prompt_vars {
 
   local ahead_re='.+ahead ([0-9]+).+'
   local behind_re='.+behind ([0-9]+).+'
-  [[ "${status}" =~ ${ahead_re} ]] && SCM_BRANCH+=" ${SCM_GIT_AHEAD_CHAR}${BASH_REMATCH[1]}"
-  [[ "${status}" =~ ${behind_re} ]] && SCM_BRANCH+=" ${SCM_GIT_BEHIND_CHAR}${BASH_REMATCH[1]}"
+  [[ "${status}" =~ ${ahead_re} ]] && SCM_BRANCH="${SCM_BRANCH} ${SCM_GIT_AHEAD_CHAR}${BASH_REMATCH[1]}"
+  [[ "${status}" =~ ${behind_re} ]] && SCM_BRANCH="${SCM_BRANCH} ${SCM_GIT_BEHIND_CHAR}${BASH_REMATCH[1]}"
 
   local stash_count="$(git stash list 2> /dev/null | wc -l | tr -d ' ')"
-  [[ "${stash_count}" -gt 0 ]] && SCM_BRANCH+=" {${stash_count}}"
+  [[ "${stash_count}" -gt 0 ]] && SCM_BRANCH="${SCM_BRANCH} {${stash_count}}"
 
-  SCM_BRANCH+=${details}
+  SCM_BRANCH="${SCM_BRANCH}${details}"
 
   SCM_PREFIX=${GIT_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
   SCM_SUFFIX=${GIT_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}

@@ -13,13 +13,13 @@ ____brainy_top_left_parse() {
 	args=( $1 )
 	IFS="${ifs_old}"
 	if [ -n "${args[3]}" ]; then
-		_TOP_LEFT+="${args[2]}${args[3]}"
+		_TOP_LEFT="${_TOP_LEFT}${args[2]}${args[3]}"
 	fi
-	_TOP_LEFT+="${args[0]}${args[1]}"
+	_TOP_LEFT="${_TOP_LEFT}${args[0]}${args[1]}"
 	if [ -n "${args[4]}" ]; then
-		_TOP_LEFT+="${args[2]}${args[4]}"
+		_TOP_LEFT="${_TOP_LEFT}${args[2]}${args[4]}"
 	fi
-	_TOP_LEFT+=" "
+	_TOP_LEFT="${_TOP_LEFT} "
 }
 
 ____brainy_top_right_parse() {
@@ -27,13 +27,13 @@ ____brainy_top_right_parse() {
 	IFS="|"
 	args=( $1 )
 	IFS="${ifs_old}"
-	_TOP_RIGHT+=" "
+	_TOP_RIGHT="${_TOP_RIGHT} "
 	if [ -n "${args[3]}" ]; then
-		_TOP_RIGHT+="${args[2]}${args[3]}"
+		_TOP_RIGHT="${_TOP_RIGHT}${args[2]}${args[3]}"
 	fi
-	_TOP_RIGHT+="${args[0]}${args[1]}"
+	_TOP_RIGHT="${_TOP_RIGHT}${args[0]}${args[1]}"
 	if [ -n "${args[4]}" ]; then
-		_TOP_RIGHT+="${args[2]}${args[4]}"
+		_TOP_RIGHT="${_TOP_RIGHT}${args[2]}${args[4]}"
 	fi
 	__TOP_RIGHT_LEN=$(( __TOP_RIGHT_LEN + ${#args[1]} + ${#args[3]} + ${#args[4]} + 1 ))
 	(( __SEG_AT_RIGHT += 1 ))
@@ -44,8 +44,8 @@ ____brainy_bottom_parse() {
 	IFS="|"
 	args=( $1 )
 	IFS="${ifs_old}"
-	_BOTTOM+="${args[0]}${args[1]}"
-	[ ${#args[1]} -gt 0 ] && _BOTTOM+=" "
+	_BOTTOM="${_BOTTOM}${args[0]}${args[1]}"
+	[ ${#args[1]} -gt 0 ] && _BOTTOM="${_BOTTOM} "
 }
 
 ____brainy_top() {
@@ -60,7 +60,7 @@ ____brainy_top() {
 	done
 
 	___cursor_right="\033[500C"
-	_TOP_LEFT+="${___cursor_right}"
+	_TOP_LEFT="${_TOP_LEFT}${___cursor_right}"
 
 	for seg in ${___BRAINY_TOP_RIGHT}; do
 		info="$(___brainy_prompt_"${seg}")"
@@ -69,7 +69,7 @@ ____brainy_top() {
 
 	[ $__TOP_RIGHT_LEN -gt 0 ] && __TOP_RIGHT_LEN=$(( __TOP_RIGHT_LEN - 1 ))
 	___cursor_adjust="\033[${__TOP_RIGHT_LEN}D"
-	_TOP_LEFT+="${___cursor_adjust}"
+	_TOP_LEFT="${_TOP_LEFT}${___cursor_adjust}"
 
 	printf "%s%s" "${_TOP_LEFT}" "${_TOP_RIGHT}"
 }
@@ -162,7 +162,7 @@ ___brainy_prompt_battery() {
 		color=$bold_red
 	fi
 	box="[|]"
-	ac_adapter_connected && info+="+"
+	ac_adapter_connected && info="${info}+"
 	[ "$info" == "100+" ] && info="AC"
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
 }

@@ -86,7 +86,7 @@ _go()
               0)
                 _filedir go
                 _go_importpath_cache
-                COMPREPLY+=(`_go_importpath "$cur"`)
+                COMPREPLY=(${COMPREPLY[@]} `_go_importpath "$cur"`)
                 ;;
               1)
                 _filedir go

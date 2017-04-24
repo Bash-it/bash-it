@@ -83,7 +83,7 @@ function __powerline_scm_prompt {
       color=${SCM_THEME_PROMPT_CLEAN_COLOR}
     fi
     if [[ "${SCM_GIT_CHAR}" == "${SCM_CHAR}" ]]; then
-      scm_prompt+="${SCM_CHAR}${SCM_BRANCH}${SCM_STATE}"
+      scm_prompt="${scm_prompt}${SCM_CHAR}${SCM_BRANCH}${SCM_STATE}"
     fi
     echo "${scm_prompt}${scm}|${color}"
   fi
@@ -132,7 +132,7 @@ function __powerline_left_segment {
   if [[ "${SEGMENTS_AT_LEFT}" -gt 0 ]]; then
     separator="$(set_color ${LAST_SEGMENT_COLOR} ${params[1]})${separator_char}${normal}"
   fi
-  LEFT_PROMPT+="${separator}$(set_color - ${params[1]}) ${params[0]} ${normal}"
+  LEFT_PROMPT="${LEFT_PROMPT}${separator}$(set_color - ${params[1]}) ${params[0]} ${normal}"
   LAST_SEGMENT_COLOR=${params[1]}
   (( SEGMENTS_AT_LEFT += 1 ))
 }
@@ -155,7 +155,7 @@ function __powerline_prompt_command {
     [[ -n "${info}" ]] && __powerline_left_segment "${info}"
   done
   [[ "${last_status}" -ne 0 ]] && __powerline_left_segment $(__powerline_last_status_prompt ${last_status})
-  [[ -n "${LEFT_PROMPT}" ]] && LEFT_PROMPT+="$(set_color ${LAST_SEGMENT_COLOR} -)${separator_char}${normal}"
+  [[ -n "${LEFT_PROMPT}" ]] && LEFT_PROMPT="${LEFT_PROMPT}$(set_color ${LAST_SEGMENT_COLOR} -)${separator_char}${normal}"
 
   PS1="${LEFT_PROMPT} "
 
