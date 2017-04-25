@@ -30,9 +30,13 @@ SCM_GIT_SHOW_MINIMAL_INFO=true
 
 CLOCK_THEME_PROMPT_PREFIX=''
 CLOCK_THEME_PROMPT_SUFFIX=' '
-THEME_SHOW_CLOCK=true
+THEME_SHOW_CLOCK=false
 THEME_CLOCK_COLOR=${THEME_CLOCK_COLOR:-"$bold_blue"}
 THEME_CLOCK_FORMAT=${THEME_CLOCK_FORMAT:-"%I:%M:%S"}
+
+THEME_SHOW_USER_HOST=true
+USER_HOST_THEME_PROMPT_PREFIX="${bold_black}"
+USER_HOST_THEME_PROMPT_SUFFIX=" "
 
 VIRTUALENV_THEME_PROMPT_PREFIX='('
 VIRTUALENV_THEME_PROMPT_SUFFIX=') '
@@ -54,7 +58,7 @@ function prompt_command() {
     # Append new history lines to history file
     history -a
 
-    PS1="$(clock_prompt)${virtualenv}${hostname} ${bold_cyan}\W $(scm_prompt_char_info)${ret_status}→ ${normal}"
+    PS1="$(clock_prompt)${virtualenv}$(user_host_prompt)${bold_cyan}\W $(scm_prompt_char_info)${ret_status}→ ${normal}"
 }
 
 safe_append_prompt_command prompt_command
