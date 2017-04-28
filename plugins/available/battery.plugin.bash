@@ -13,6 +13,18 @@ ac_adapter_connected(){
   fi
 }
 
+ac_adapter_disconnected(){
+  if command_exists acpi;
+  then
+    acpi -a | grep -q "off-line"
+    return $?
+  elif command_exists ioreg;
+  then
+    ioreg -n AppleSmartBattery -r | grep -q '"ExternalConnected" = No'
+    return $?
+  fi
+}
+
 battery_percentage(){
   about 'displays battery charge as a percentage of full (100%)'
   group 'battery'

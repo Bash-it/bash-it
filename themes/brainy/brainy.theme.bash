@@ -19,7 +19,7 @@ ____brainy_top_left_parse() {
 	if [ -n "${args[4]}" ]; then
 		_TOP_LEFT+="${args[2]}${args[4]}"
 	fi
-	_TOP_LEFT+=" "
+	_TOP_LEFT+=""
 }
 
 ____brainy_top_right_parse() {
@@ -45,7 +45,7 @@ ____brainy_bottom_parse() {
 	args=( $1 )
 	IFS="${ifs_old}"
 	_BOTTOM+="${args[0]}${args[1]}"
-	[ ${#args[1]} -gt 0 ] && _BOTTOM+=" "
+	[ ${#args[1]} -gt 0 ] && _BOTTOM+=""
 }
 
 ____brainy_top() {
@@ -88,34 +88,26 @@ ____brainy_bottom() {
 ##############
 
 ___brainy_prompt_user_info() {
-	color=$bold_blue
-	if [ "${THEME_SHOW_SUDO}" == "true" ]; then
-		if [ $(sudo -n id -u 2>&1 | grep 0) ]; then
-			color=$bold_red
-		fi
-	fi
-	box="[|]"
-	info="\u@\H"
-	if [ -n "${SSH_CLIENT}" ]; then
-		printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
-	else
-		printf "%s|%s" "${color}" "${info}"
-	fi
+	color=$white
+	box="\e[0m\342\224\214\342\224\200\$([[ \$? != 0 ]] && echo \"\e[1m[\[\e[0;31m\]\342\234\227\[\e[0;37m\]\e[1m]\e[0m\342\224\200\")\342\224\200\e[1m[|\e[1m]\e[0m\342\224\200"
+	##info="\u@\H"
+	info="\e[1m\e[38;5;11m\u\[\e[38;5;9m\]@\[\e[38;5;10m\]\h"
+	printf "%s|%s|%s|%s" "${color}" "${info}" "${white}" "${box}"
 }
 
 ___brainy_prompt_dir() {
-	color=$bold_yellow
-	box="[|]"
-	info="\w"
-	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
+	color=$bold_red
+	box="\e[1m[|\e[1m]"
+	info="\W"
+	printf "%s|%s|%s|%s" "${color}" "${info}" "${white}" "${box}"
 }
 
 ___brainy_prompt_scm() {
 	[ "${THEME_SHOW_SCM}" != "true" ] && return
 	color=$bold_green
-	box="$(scm_char) "
+	box="\e[0m\342\224\200\e[1m[\e[1m$(scm_char)] "
 	info="$(scm_prompt_info)"
-	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
+	printf "%s|%s|%s|%s" "${color}" "${info}" "${white}" "${box}"
 }
 
 ___brainy_prompt_python() {
@@ -148,22 +140,24 @@ ___brainy_prompt_clock() {
 	color=$THEME_CLOCK_COLOR
 	box="[|]"
 	info="$(date +"${THEME_CLOCK_FORMAT}")"
-	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_purple}" "${box}"
+	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
 }
 
 ___brainy_prompt_battery() {
 	[ ! -e $BASH_IT/plugins/enabled/battery.plugin.bash ] ||
 	[ "${THEME_SHOW_BATTERY}" != "true" ] && return
-	info=$(battery_percentage)
+	batp=$(battery_percentage)
 	color=$bold_green
-	if [ "$info" -lt 50 ]; then
+	if [ "$batp" -lt 50 ]; then
 		color=$bold_yellow
-	elif [ "$info" -lt 25 ]; then
+	elif [ "$batp" -lt 25 ]; then
 		color=$bold_red
 	fi
 	box="[|]"
-	ac_adapter_connected && info+="+"
-	[ "$info" == "100+" ] && info="AC"
+	ac_adapter_disconnected && info="-"
+	ac_adapter_connected && info="+"
+	info+=$batp
+	[ "$info" == "+100" ] && info="AC"
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
 }
 
@@ -174,7 +168,7 @@ ___brainy_prompt_exitcode() {
 }
 
 ___brainy_prompt_char() {
-	color=$bold_white
+	color=$bold_red
 	prompt_char="${__BRAINY_PROMPT_CHAR_PS1}"
 	printf "%s|%s" "${color}" "${prompt_char}"
 }
@@ -253,20 +247,20 @@ export RVM_THEME_PROMPT_SUFFIX=""
 export SCM_THEME_PROMPT_DIRTY=" ${bold_red}✗${normal}"
 export SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓${normal}"
 
-THEME_SHOW_SUDO=${THEME_SHOW_SUDO:-"true"}
+THEME_SHOW_SUDO=${THEME_SHOW_SUDO:-"false"}
 THEME_SHOW_SCM=${THEME_SHOW_SCM:-"true"}
 THEME_SHOW_RUBY=${THEME_SHOW_RUBY:-"false"}
 THEME_SHOW_PYTHON=${THEME_SHOW_PYTHON:-"false"}
 THEME_SHOW_CLOCK=${THEME_SHOW_CLOCK:-"true"}
 THEME_SHOW_TODO=${THEME_SHOW_TODO:-"false"}
-THEME_SHOW_BATTERY=${THEME_SHOW_BATTERY:-"false"}
-THEME_SHOW_EXITCODE=${THEME_SHOW_EXITCODE:-"true"}
+THEME_SHOW_BATTERY=${THEME_SHOW_BATTERY:-"true"}
+THEME_SHOW_EXITCODE=${THEME_SHOW_EXITCODE:-"false"}
 
-THEME_CLOCK_COLOR=${THEME_CLOCK_COLOR:-"$bold_white"}
-THEME_CLOCK_FORMAT=${THEME_CLOCK_FORMAT:-"%H:%M:%S"}
+THEME_CLOCK_COLOR=${THEME_CLOCK_COLOR:-"\e[96m"}
+THEME_CLOCK_FORMAT=${THEME_CLOCK_FORMAT:-"%a %b %d - %H:%M"}
 
-__BRAINY_PROMPT_CHAR_PS1=${THEME_PROMPT_CHAR_PS1:-">"}
-__BRAINY_PROMPT_CHAR_PS2=${THEME_PROMPT_CHAR_PS2:-"\\"}
+__BRAINY_PROMPT_CHAR_PS1=${THEME_PROMPT_CHAR_PS1:-"\[\033[0m\]\342\224\224\342\224\200\342\224\200\342\225\274 \[\033[0m\]"}
+__BRAINY_PROMPT_CHAR_PS2=${THEME_PROMPT_CHAR_PS2:-"\[\033[0m\]\342\224\224\342\224\200\342\224\200\342\225\274 \[\033[0m\]"}
 
 ___BRAINY_TOP_LEFT=${___BRAINY_TOP_LEFT:-"user_info dir scm"}
 ___BRAINY_TOP_RIGHT=${___BRAINY_TOP_RIGHT:-"python ruby todo clock battery"}

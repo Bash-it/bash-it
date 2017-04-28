@@ -2,6 +2,8 @@
 
 Simple colorful terminal prompt theme (inspired by a number of themes).
 
+![alt text](https://www.lfsystems.xyz/img/brainy-Arch.png)
+
 ## Features
 
 ### Prompt Segments
