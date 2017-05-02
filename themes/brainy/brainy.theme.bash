@@ -1,7 +1,29 @@
 #!/usr/bin/env bash
 
 # Brainy Bash Prompt for Bash-it
-# by MunifTanjim
+# by MunifTanjim Edited By lfelipe
+
+############
+## Colors ##
+############
+ResetColor="\[\033[0m\]"
+IRed="\[\033[0;91m\]"
+White="\[\033[0;37m\]"
+IWhite="\[\033[0;97m\]"
+BIWhite="\[\033[1;97m\]"
+IYellow="\[\033[0;93m\]"
+IGreen="\[\033[0;92m\]"
+BICyan="\[\033[1;96m\]"
+
+#############
+## Symbols ##
+#############
+Line="\342\224\200"
+LineA="\342\224\214\342\224\200"
+SX="\342\234\227"
+LineB="\342\224\224\342\224\200\342\224\200"
+Circle="\342\227\217"
+Face="\342\230\273"
 
 #############
 ## Parsers ##
@@ -88,16 +110,16 @@ ____brainy_bottom() {
 ##############
 
 ___brainy_prompt_user_info() {
-	color=$white
-	box="\e[0m\342\224\214\342\224\200\$([[ \$? != 0 ]] && echo \"\e[1m[\[\e[0;31m\]\342\234\227\[\e[0;37m\]\e[1m]\e[0m\342\224\200\")\342\224\200\e[1m[|\e[1m]\e[0m\342\224\200"
-	##info="\u@\H"
-	info="\e[1m\e[38;5;11m\u\[\e[38;5;9m\]@\[\e[38;5;10m\]\h"
+	color=$white	
+	box="${ResetColor}${LineA}\$([[ \$? != 0 ]] && echo \"${BIWhite}[${IRed}${SX}${BIWhite}]${ResetColor}${Line}\")${Line}${BIWhite}[|${BIWhite}]${ResetColor}${Line}"
+	info="${IYellow}\u${IRed}@${IGreen}\h"
+	
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${white}" "${box}"
 }
 
 ___brainy_prompt_dir() {
-	color=$bold_red
-	box="\e[1m[|\e[1m]"
+	color=${IRed}
+	box="${BIWhite}[|${BIWhite}]"
 	info="\W"
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${white}" "${box}"
 }
@@ -105,7 +127,7 @@ ___brainy_prompt_dir() {
 ___brainy_prompt_scm() {
 	[ "${THEME_SHOW_SCM}" != "true" ] && return
 	color=$bold_green
-	box="\e[0m\342\224\200\e[1m[\e[1m$(scm_char)] "
+	box="${ResetColor}${Line}${BIWhite}[${IWhite}$(scm_char)${BIWhite}] "
 	info="$(scm_prompt_info)"
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${white}" "${box}"
 }
@@ -147,11 +169,12 @@ ___brainy_prompt_battery() {
 	[ ! -e $BASH_IT/plugins/enabled/battery.plugin.bash ] ||
 	[ "${THEME_SHOW_BATTERY}" != "true" ] && return
 	batp=$(battery_percentage)
-	color=$bold_green
-	if [ "$batp" -lt 50 ]; then
+	if [ "$batp" -gt 50 ]; then
+		color=$bold_green
+	elif [ "$batp" -lt 50 ] && [ "$batp" -gt 25 ]; then
 		color=$bold_yellow
 	elif [ "$batp" -lt 25 ]; then
-		color=$bold_red
+		color=$ColorRed
 	fi
 	box="[|]"
 	ac_adapter_disconnected && info="-"
@@ -170,6 +193,11 @@ ___brainy_prompt_exitcode() {
 ___brainy_prompt_char() {
 	color=$bold_red
 	prompt_char="${__BRAINY_PROMPT_CHAR_PS1}"
+	if [ "${THEME_SHOW_SUDO}" == "true" ]; then
+		if [ $(sudo -n id -u 2>&1 | grep 0) ]; then
+			prompt_char="${__BRAINY_PROMPT_CHAR_PS1_SUDO}"
+		fi
+	fi
 	printf "%s|%s" "${color}" "${prompt_char}"
 }
 
@@ -247,7 +275,7 @@ export RVM_THEME_PROMPT_SUFFIX=""
 export SCM_THEME_PROMPT_DIRTY=" ${bold_red}✗${normal}"
 export SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓${normal}"
 
-THEME_SHOW_SUDO=${THEME_SHOW_SUDO:-"false"}
+THEME_SHOW_SUDO=${THEME_SHOW_SUDO:-"true"}
 THEME_SHOW_SCM=${THEME_SHOW_SCM:-"true"}
 THEME_SHOW_RUBY=${THEME_SHOW_RUBY:-"false"}
 THEME_SHOW_PYTHON=${THEME_SHOW_PYTHON:-"false"}
@@ -256,11 +284,14 @@ THEME_SHOW_TODO=${THEME_SHOW_TODO:-"false"}
 THEME_SHOW_BATTERY=${THEME_SHOW_BATTERY:-"true"}
 THEME_SHOW_EXITCODE=${THEME_SHOW_EXITCODE:-"false"}
 
-THEME_CLOCK_COLOR=${THEME_CLOCK_COLOR:-"\e[96m"}
+THEME_CLOCK_COLOR=${THEME_CLOCK_COLOR:-"${BICyan}"}
 THEME_CLOCK_FORMAT=${THEME_CLOCK_FORMAT:-"%a %b %d - %H:%M"}
 
-__BRAINY_PROMPT_CHAR_PS1=${THEME_PROMPT_CHAR_PS1:-"\[\033[0m\]\342\224\224\342\224\200\342\224\200\342\225\274 \[\033[0m\]"}
-__BRAINY_PROMPT_CHAR_PS2=${THEME_PROMPT_CHAR_PS2:-"\[\033[0m\]\342\224\224\342\224\200\342\224\200\342\225\274 \[\033[0m\]"}
+__BRAINY_PROMPT_CHAR_PS1=${THEME_PROMPT_CHAR_PS1:-"${ResetColor}${LineB}${Circle} ${ResetColor}"}
+__BRAINY_PROMPT_CHAR_PS2=${THEME_PROMPT_CHAR_PS2:-"${ResetColor}${LineB}${Circle} ${ResetColor}"}
+
+__BRAINY_PROMPT_CHAR_PS1_SUDO=${THEME_PROMPT_CHAR_PS1_SUDO:-"${ResetColor}${LineB}${IRed}${Face} ${ResetColor}"}
+__BRAINY_PROMPT_CHAR_PS2_SUDO=${THEME_PROMPT_CHAR_PS2_SUDO:-"${ResetColor}${LineB}${IRed}${Face} ${ResetColor}"}
 
 ___BRAINY_TOP_LEFT=${___BRAINY_TOP_LEFT:-"user_info dir scm"}
 ___BRAINY_TOP_RIGHT=${___BRAINY_TOP_RIGHT:-"python ruby todo clock battery"}
