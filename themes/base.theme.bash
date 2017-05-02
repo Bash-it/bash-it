@@ -474,7 +474,7 @@ function battery_char {
     fi
 }
 
-if [ ! -e $BASH_IT/plugins/enabled/battery.plugin.bash ]; then
+if [ ! -e "$BASH_IT"/plugins/enabled/battery.plugin.bash ]; then
     # if user has installed battery plugin, skip this...
     function battery_charge (){
 	# no op
