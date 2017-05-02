@@ -31,7 +31,7 @@ function load_one() {
 function load_some() {
   file_type=$1
   [ -d "$BASH_IT/$file_type/enabled" ] || mkdir "$BASH_IT/$file_type/enabled"
-  for path in `ls $BASH_IT/${file_type}/available/[^_]*`
+  for path in "$BASH_IT/${file_type}/available/"[^_]*
   do
     file_name=$(basename "$path")
     while true
