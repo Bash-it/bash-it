@@ -6,14 +6,15 @@
 ############
 ## Colors ##
 ############
-ResetColor="\[\033[0m\]"
-IRed="\[\033[0;91m\]"
-White="\[\033[0;37m\]"
-IWhite="\[\033[0;97m\]"
-BIWhite="\[\033[1;97m\]"
-IYellow="\[\033[0;93m\]"
-IGreen="\[\033[0;92m\]"
-BICyan="\[\033[1;96m\]"
+IRed="\e[1;49;31m"
+IGreen="\e[1;49;32m"
+IYellow="\e[1;49;33m"
+ICyan="\e[1;49;36m"
+IWhite="\e[1;49;37m"
+White="\e[0;49;37m"
+BIWhite="\e[1;49;37m"
+BICyan="\e[1;49;36m"
+ResetColor="\e[0;49;37m"
 
 #############
 ## Symbols ##
@@ -111,7 +112,7 @@ ____brainy_bottom() {
 
 ___brainy_prompt_user_info() {
 	color=$white	
-	box="${ResetColor}${LineA}\$([[ \$? != 0 ]] && echo \"${BIWhite}[${IRed}${SX}${BIWhite}]${ResetColor}${Line}\")${Line}${BIWhite}[|${BIWhite}]${ResetColor}${Line}"
+	box="${ResetColor}${LineA}\$([[ \$? != 0 ]] && echo \"${BIWhite}[${IRed}${SX}${BIWhite}]${ResetColor}${Line}\")${ResetColor}${Line}${BIWhite}[|${BIWhite}]${ResetColor}${Line}"
 	info="${IYellow}\u${IRed}@${IGreen}\h"
 	
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${white}" "${box}"
@@ -287,8 +288,8 @@ THEME_SHOW_EXITCODE=${THEME_SHOW_EXITCODE:-"false"}
 THEME_CLOCK_COLOR=${THEME_CLOCK_COLOR:-"${BICyan}"}
 THEME_CLOCK_FORMAT=${THEME_CLOCK_FORMAT:-"%a %b %d - %H:%M"}
 
-__BRAINY_PROMPT_CHAR_PS1=${THEME_PROMPT_CHAR_PS1:-"${ResetColor}${LineB}${Circle} ${ResetColor}"}
-__BRAINY_PROMPT_CHAR_PS2=${THEME_PROMPT_CHAR_PS2:-"${ResetColor}${LineB}${Circle} ${ResetColor}"}
+__BRAINY_PROMPT_CHAR_PS1=${THEME_PROMPT_CHAR_PS1:-"${ResetColor}${LineB}${BIWhite}${Circle} ${ResetColor}"}
+__BRAINY_PROMPT_CHAR_PS2=${THEME_PROMPT_CHAR_PS2:-"${ResetColor}${LineB}${BIWhite}${Circle} ${ResetColor}"}
 
 __BRAINY_PROMPT_CHAR_PS1_SUDO=${THEME_PROMPT_CHAR_PS1_SUDO:-"${ResetColor}${LineB}${IRed}${Face} ${ResetColor}"}
 __BRAINY_PROMPT_CHAR_PS2_SUDO=${THEME_PROMPT_CHAR_PS2_SUDO:-"${ResetColor}${LineB}${IRed}${Face} ${ResetColor}"}
