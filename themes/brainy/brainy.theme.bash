@@ -90,7 +90,7 @@ ____brainy_top() {
 		[ -n "${info}" ] && ____brainy_top_right_parse "${info}"
 	done
 
-	[ $__TOP_RIGHT_LEN -gt 0 ] && __TOP_RIGHT_LEN=$(( __TOP_RIGHT_LEN - 1 ))
+	[ $__TOP_RIGHT_LEN -gt 0 ] && __TOP_RIGHT_LEN=$(( __TOP_RIGHT_LEN - 0 ))
 	___cursor_adjust="\033[${__TOP_RIGHT_LEN}D"
 	_TOP_LEFT+="${___cursor_adjust}"
 
