@@ -1,7 +1,30 @@
 #!/usr/bin/env bash
 
 # Brainy Bash Prompt for Bash-it
-# by MunifTanjim
+# by MunifTanjim Edited By lfelipe
+
+############
+## Colors ##
+############
+IRed="\e[1;49;31m"
+IGreen="\e[1;49;32m"
+IYellow="\e[1;49;33m"
+ICyan="\e[1;49;36m"
+IWhite="\e[1;49;37m"
+White="\e[0;49;37m"
+BIWhite="\e[1;49;37m"
+BICyan="\e[1;49;36m"
+ResetColor="\e[0;49;37m"
+
+#############
+## Symbols ##
+#############
+Line="\342\224\200"
+LineA="\342\224\214\342\224\200"
+SX="\342\234\227"
+LineB="\342\224\224\342\224\200\342\224\200"
+Circle="\342\227\217"
+Face="\342\230\273"
 
 #############
 ## Parsers ##
@@ -19,7 +42,7 @@ ____brainy_top_left_parse() {
 	if [ -n "${args[4]}" ]; then
 		_TOP_LEFT+="${args[2]}${args[4]}"
 	fi
-	_TOP_LEFT+=" "
+	_TOP_LEFT+=""
 }
 
 ____brainy_top_right_parse() {
@@ -45,7 +68,7 @@ ____brainy_bottom_parse() {
 	args=( $1 )
 	IFS="${ifs_old}"
 	_BOTTOM+="${args[0]}${args[1]}"
-	[ ${#args[1]} -gt 0 ] && _BOTTOM+=" "
+	[ ${#args[1]} -gt 0 ] && _BOTTOM+=""
 }
 
 ____brainy_top() {
@@ -67,7 +90,7 @@ ____brainy_top() {
 		[ -n "${info}" ] && ____brainy_top_right_parse "${info}"
 	done
 
-	[ $__TOP_RIGHT_LEN -gt 0 ] && __TOP_RIGHT_LEN=$(( __TOP_RIGHT_LEN - 1 ))
+	[ $__TOP_RIGHT_LEN -gt 0 ] && __TOP_RIGHT_LEN=$(( __TOP_RIGHT_LEN - 0 ))
 	___cursor_adjust="\033[${__TOP_RIGHT_LEN}D"
 	_TOP_LEFT+="${___cursor_adjust}"
 
@@ -88,34 +111,26 @@ ____brainy_bottom() {
 ##############
 
 ___brainy_prompt_user_info() {
-	color=$bold_blue
-	if [ "${THEME_SHOW_SUDO}" == "true" ]; then
-		if [ $(sudo -n id -u 2>&1 | grep 0) ]; then
-			color=$bold_red
-		fi
-	fi
-	box="[|]"
-	info="\u@\H"
-	if [ -n "${SSH_CLIENT}" ]; then
-		printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
-	else
-		printf "%s|%s" "${color}" "${info}"
-	fi
+	color=$white	
+	box="${ResetColor}${LineA}\$([[ \$? != 0 ]] && echo \"${BIWhite}[${IRed}${SX}${BIWhite}]${ResetColor}${Line}\")${ResetColor}${Line}${BIWhite}[|${BIWhite}]${ResetColor}${Line}"
+	info="${IYellow}\u${IRed}@${IGreen}\h"
+	
+	printf "%s|%s|%s|%s" "${color}" "${info}" "${white}" "${box}"
 }
 
 ___brainy_prompt_dir() {
-	color=$bold_yellow
-	box="[|]"
-	info="\w"
-	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
+	color=${IRed}
+	box="${BIWhite}[|${BIWhite}]"
+	info="\W"
+	printf "%s|%s|%s|%s" "${color}" "${info}" "${white}" "${box}"
 }
 
 ___brainy_prompt_scm() {
 	[ "${THEME_SHOW_SCM}" != "true" ] && return
 	color=$bold_green
-	box="$(scm_char) "
+	box="${ResetColor}${Line}${BIWhite}[${IWhite}$(scm_char)${BIWhite}] "
 	info="$(scm_prompt_info)"
-	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
+	printf "%s|%s|%s|%s" "${color}" "${info}" "${white}" "${box}"
 }
 
 ___brainy_prompt_python() {
@@ -148,22 +163,25 @@ ___brainy_prompt_clock() {
 	color=$THEME_CLOCK_COLOR
 	box="[|]"
 	info="$(date +"${THEME_CLOCK_FORMAT}")"
-	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_purple}" "${box}"
+	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
 }
 
 ___brainy_prompt_battery() {
 	[ ! -e $BASH_IT/plugins/enabled/battery.plugin.bash ] ||
 	[ "${THEME_SHOW_BATTERY}" != "true" ] && return
-	info=$(battery_percentage)
-	color=$bold_green
-	if [ "$info" -lt 50 ]; then
+	batp=$(battery_percentage)
+	if [ "$batp" -gt 50 ]; then
+		color=$bold_green
+	elif [ "$batp" -lt 50 ] && [ "$batp" -gt 25 ]; then
 		color=$bold_yellow
-	elif [ "$info" -lt 25 ]; then
-		color=$bold_red
+	elif [ "$batp" -lt 25 ]; then
+		color=$ColorRed
 	fi
 	box="[|]"
-	ac_adapter_connected && info+="+"
-	[ "$info" == "100+" ] && info="AC"
+	ac_adapter_disconnected && info="-"
+	ac_adapter_connected && info="+"
+	info+=$batp
+	[ "$info" == "+100" ] && info="AC"
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
 }
 
@@ -174,8 +192,13 @@ ___brainy_prompt_exitcode() {
 }
 
 ___brainy_prompt_char() {
-	color=$bold_white
+	color=$bold_red
 	prompt_char="${__BRAINY_PROMPT_CHAR_PS1}"
+	if [ "${THEME_SHOW_SUDO}" == "true" ]; then
+		if [ $(sudo -n id -u 2>&1 | grep 0) ]; then
+			prompt_char="${__BRAINY_PROMPT_CHAR_PS1_SUDO}"
+		fi
+	fi
 	printf "%s|%s" "${color}" "${prompt_char}"
 }
 
@@ -259,14 +282,17 @@ THEME_SHOW_RUBY=${THEME_SHOW_RUBY:-"false"}
 THEME_SHOW_PYTHON=${THEME_SHOW_PYTHON:-"false"}
 THEME_SHOW_CLOCK=${THEME_SHOW_CLOCK:-"true"}
 THEME_SHOW_TODO=${THEME_SHOW_TODO:-"false"}
-THEME_SHOW_BATTERY=${THEME_SHOW_BATTERY:-"false"}
-THEME_SHOW_EXITCODE=${THEME_SHOW_EXITCODE:-"true"}
+THEME_SHOW_BATTERY=${THEME_SHOW_BATTERY:-"true"}
+THEME_SHOW_EXITCODE=${THEME_SHOW_EXITCODE:-"false"}
 
-THEME_CLOCK_COLOR=${THEME_CLOCK_COLOR:-"$bold_white"}
-THEME_CLOCK_FORMAT=${THEME_CLOCK_FORMAT:-"%H:%M:%S"}
+THEME_CLOCK_COLOR=${THEME_CLOCK_COLOR:-"${BICyan}"}
+THEME_CLOCK_FORMAT=${THEME_CLOCK_FORMAT:-"%a %b %d - %H:%M"}
 
-__BRAINY_PROMPT_CHAR_PS1=${THEME_PROMPT_CHAR_PS1:-">"}
-__BRAINY_PROMPT_CHAR_PS2=${THEME_PROMPT_CHAR_PS2:-"\\"}
+__BRAINY_PROMPT_CHAR_PS1=${THEME_PROMPT_CHAR_PS1:-"${ResetColor}${LineB}${BIWhite}${Circle} ${ResetColor}"}
+__BRAINY_PROMPT_CHAR_PS2=${THEME_PROMPT_CHAR_PS2:-"${ResetColor}${LineB}${BIWhite}${Circle} ${ResetColor}"}
+
+__BRAINY_PROMPT_CHAR_PS1_SUDO=${THEME_PROMPT_CHAR_PS1_SUDO:-"${ResetColor}${LineB}${IRed}${Face} ${ResetColor}"}
+__BRAINY_PROMPT_CHAR_PS2_SUDO=${THEME_PROMPT_CHAR_PS2_SUDO:-"${ResetColor}${LineB}${IRed}${Face} ${ResetColor}"}
 
 ___BRAINY_TOP_LEFT=${___BRAINY_TOP_LEFT:-"user_info dir scm"}
 ___BRAINY_TOP_RIGHT=${___BRAINY_TOP_RIGHT:-"python ruby todo clock battery"}
