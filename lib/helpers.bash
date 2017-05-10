@@ -240,7 +240,11 @@ _disable-thing ()
             fi
         done
     else
-        typeset plugin=$(command ls $BASH_IT/$subdirectory/enabled/$file_entity.*bash 2>/dev/null | head -1)
+        # Use a glob to search for both possible patterns
+        # 250---node.plugin.bash
+        # node.plugin.bash
+        # Either one will be matched by this glob
+        typeset plugin=$(command ls $BASH_IT/$subdirectory/enabled/{[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity.*bash,$file_entity.*bash} 2>/dev/null | head -1)
         if [ -z "$plugin" ]; then
             printf '%s\n' "sorry, $file_entity does not appear to be an enabled $file_type."
             return
