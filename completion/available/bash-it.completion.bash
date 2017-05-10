@@ -53,7 +53,7 @@ _bash-it-comp()
 	prev="${COMP_WORDS[COMP_CWORD-1]}"
 	chose_opt="${COMP_WORDS[1]}"
 	file_type="${COMP_WORDS[2]}"
-	opts="help show enable disable update search"
+	opts="help show enable disable update search migrate"
 	case "${chose_opt}" in
 		show)
 			local show_args="plugins aliases completions"
@@ -65,7 +65,7 @@ _bash-it-comp()
 			COMPREPLY=( $(compgen -W "${help_args}" -- ${cur}) )
 			return 0
 			;;
-    update | search)
+    update | search | migrate)
       return 0
       ;;
 		enable | disable)

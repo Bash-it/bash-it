@@ -36,13 +36,14 @@ function reload_plugins() {
 bash-it ()
 {
     about 'Bash-it help and maintenance'
-    param '1: verb [one of: help | show | enable | disable | update | search ] '
+    param '1: verb [one of: help | show | enable | disable | migrate | update | search ] '
     param '2: component type [one of: alias(es) | completion(s) | plugin(s) ] or search term(s)'
     param '3: specific component [optional]'
     example '$ bash-it show plugins'
     example '$ bash-it help aliases'
     example '$ bash-it enable plugin git [tmux]...'
     example '$ bash-it disable alias hg [tmux]...'
+    example '$ bash-it migrate'
     example '$ bash-it update'
     example '$ bash-it search ruby [[-]rake]... [--enable | --disable]'
     typeset verb=${1:-}
@@ -64,6 +65,8 @@ bash-it ()
              return;;
          update)
              func=_bash-it_update;;
+          migrate)
+             func=_bash-it-migrate;;
          *)
              reference bash-it
              return;;
@@ -148,6 +151,32 @@ _bash-it_update() {
     echo "Bash-it is up to date, nothing to do!"
   fi
   cd - &> /dev/null
+}
+
+_bash-it-migrate() {
+  _about 'migrates Bash-it configuration from a previous format to the current one'
+  _group 'lib'
+
+  for file_type in "aliases" "plugins" "completion"
+  do
+    for f in $BASH_IT/$file_type/enabled/*.bash
+    do
+      typeset ff=$(basename $f)
+
+      # Only process the ones that don't use the new structure
+      if ! [[ $ff =~ ^[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR.*\.bash$ ]] ; then
+        # Get the type of component from the extension
+        typeset single_type=$(echo $ff | awk -F'.' '{print $2}' | sed 's/aliases/alias/g')
+        typeset component_name=$(echo $ff | cut -d'.' -f1)
+
+        disable_func="_disable-$single_type"
+        enable_func="_enable-$single_type"
+
+        $disable_func $component_name
+        $enable_func $component_name
+      fi
+    done
+  done
 }
 
 _bash-it-describe ()

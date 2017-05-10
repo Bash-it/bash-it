@@ -94,6 +94,26 @@ function __setup_plugin_tests {
   [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
 }
 
+@test "migrate enabled plugins that don't use the new priority-based configuration" {
+  __setup_plugin_tests
+
+  ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/nvm.plugin.bash
+  [ -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
+
+  ln -s $BASH_IT/plugins/available/node.plugin.bash $BASH_IT/plugins/enabled/node.plugin.bash
+  [ -L "$BASH_IT/plugins/enabled/node.plugin.bash" ]
+
+  run _enable-plugin "ssh"
+  [ -L "$BASH_IT/plugins/enabled/250---ssh.plugin.bash" ]
+
+  run _bash-it-migrate
+  [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
+  [ -L "$BASH_IT/plugins/enabled/250---node.plugin.bash" ]
+  [ -L "$BASH_IT/plugins/enabled/250---ssh.plugin.bash" ]
+  [ ! -L "$BASH_IT/plugins/enabled/node.plugin.bash" ]
+  [ ! -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
+}
+
 @test "enable all plugins" {
   __setup_plugin_tests
 
