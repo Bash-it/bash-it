@@ -10,10 +10,12 @@ load ../../lib/helpers
 
 function __setup_plugin_tests {
   mkdir -p $BASH_IT/plugins
+
+  lib_directory="$(cd "$(dirname "$0")" && pwd)"
   pwd
-  ls -als ..
-  ls -als ../plugins
-  cp -r ../plugins/available $BASH_IT/plugins
+  echo "$lib_directory"
+  ls -als "$lib_directory/../.."
+  cp -r $lib_directory/../../plugins/available $BASH_IT/plugins
   mkdir -p $BASH_IT/plugins/enabled
 }
 
