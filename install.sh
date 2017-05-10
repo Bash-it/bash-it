@@ -150,6 +150,11 @@ elif [[ $silent ]] && ! [[ $no_modify_config ]]; then
   backup_new
 fi
 
+# Load dependencies for enabling components
+source "$BASH_IT/lib/composure.bash"
+cite _about _param _example _group _author _version
+source "$BASH_IT/lib/helpers.bash"
+
 if [[ $interactive ]] && ! [[ $silent ]] ;
 then
   for type in "aliases" "plugins" "completion"
@@ -160,11 +165,11 @@ then
 else
   echo ""
   echo -e "\033[0;32mEnabling sane defaults\033[0m"
-  load_one completion bash-it.completion.bash
-  load_one completion system.completion.bash
-  load_one plugins base.plugin.bash
-  load_one plugins alias-completion.plugin.bash
-  load_one aliases general.aliases.bash
+  _enable-completion bash-it
+  _enable-completion system
+  _enable-plugin base
+  _enable-plugin alias-completion
+  _enable-alias general
 fi
 
 echo ""
