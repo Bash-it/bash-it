@@ -238,6 +238,9 @@ _disable-thing ()
             if [ -e $BASH_IT/$subdirectory/enabled/$plugin ]; then
                 rm $BASH_IT/$subdirectory/enabled/$(basename $plugin)
             fi
+            if [ -e $BASH_IT/$subdirectory/enabled/*$BASH_IT_LOAD_PRIORITY_SEPARATOR$plugin ]; then
+                rm $BASH_IT/$subdirectory/enabled/*$BASH_IT_LOAD_PRIORITY_SEPARATOR$(basename $plugin)
+            fi
         done
     else
         # Use a glob to search for both possible patterns

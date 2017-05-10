@@ -91,6 +91,21 @@ function __setup_plugin_tests {
   [ "$available" == "$enabled" ]
 }
 
+@test "disable all plugins" {
+  __setup_plugin_tests
+
+  run _enable-plugin "all"
+  local available=$(find $BASH_IT/plugins/available -name *.plugin.bash | wc -l)
+  local enabled=$(find $BASH_IT/plugins/enabled -name 2*.plugin.bash | wc -l)
+  echo "Available: $available, Enabled: $enabled"
+  [ "$available" == "$enabled" ]
+
+  run _disable-plugin "all"
+  local enabled2=$(find $BASH_IT/plugins/enabled -name *.plugin.bash | wc -l)
+  echo "Enabled: $enabled2"
+  [ "$enabled2" -eq 0 ]
+}
+
 @test "describe the nvm plugin without enabling it" {
   __setup_plugin_tests
 
