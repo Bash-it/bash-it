@@ -109,7 +109,7 @@ function __setup_plugin_tests {
 @test "describe the nvm plugin without enabling it" {
   __setup_plugin_tests
 
-  _bash-it-describe "plugins" "a" "plugin" "Plugin" | grep "nvm" | grep "\[ \]"
+  _bash-it-plugins | grep "nvm" | grep "\[ \]"
 }
 
 @test "describe the nvm plugin after enabling it" {
@@ -119,5 +119,5 @@ function __setup_plugin_tests {
   [ "${lines[0]}" == 'nvm enabled with priority 225.' ]
   [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
 
-  _bash-it-describe "plugins" "a" "plugin" "Plugin" | grep "nvm" | grep "\[x\]"
+  _bash-it-plugins | grep "nvm" | grep "\[x\]"
 }
