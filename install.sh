@@ -30,16 +30,19 @@ function load_one() {
 # Interactively enable several things
 function load_some() {
   file_type=$1
+  single_type=$(echo "$file_type" | sed -e "s/aliases$/alias/g" | sed -e "s/plugins$/plugin/g")
+  enable_func="_enable-$single_type"
   [ -d "$BASH_IT/$file_type/enabled" ] || mkdir "$BASH_IT/$file_type/enabled"
   for path in "$BASH_IT/${file_type}/available/"[^_]*
   do
     file_name=$(basename "$path")
     while true
     do
-      read -e -n 1 -p "Would you like to enable the ${file_name%%.*} $file_type? [y/N] " RESP
+      just_the_name="${file_name%%.*}"
+      read -e -n 1 -p "Would you like to enable the $just_the_name $file_type? [y/N] " RESP
       case $RESP in
       [yY])
-        ln -s "../available/${file_name}" "$BASH_IT/$file_type/enabled"
+        $enable_func $just_the_name
         break
         ;;
       [nN]|"")
