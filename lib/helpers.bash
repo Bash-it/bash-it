@@ -1,3 +1,8 @@
+BASH_IT_LOAD_PRIORITY_DEFAULT_ALIAS=150
+BASH_IT_LOAD_PRIORITY_DEFAULT_PLUGIN=250
+BASH_IT_LOAD_PRIORITY_DEFAULT_COMPLETION=350
+BASH_IT_LOAD_PRIORITY_SEPARATOR="---"
+
 # Helper function loading various enable-able files
 function _load_bash_it_files() {
   subdirectory="$1"
@@ -256,7 +261,7 @@ _enable-plugin ()
     _example '$ enable-plugin rvm'
     _group 'lib'
 
-    _enable-thing "plugins" "plugin" $1
+    _enable-thing "plugins" "plugin" $1 $BASH_IT_LOAD_PRIORITY_DEFAULT_PLUGIN
 }
 
 _enable-alias ()
@@ -266,7 +271,7 @@ _enable-alias ()
     _example '$ enable-alias git'
     _group 'lib'
 
-    _enable-thing "aliases" "alias" $1
+    _enable-thing "aliases" "alias" $1 $BASH_IT_LOAD_PRIORITY_DEFAULT_ALIAS
 }
 
 _enable-completion ()
@@ -276,7 +281,7 @@ _enable-completion ()
     _example '$ enable-completion git'
     _group 'lib'
 
-    _enable-thing "completion" "completion" $1
+    _enable-thing "completion" "completion" $1 $BASH_IT_LOAD_PRIORITY_DEFAULT_COMPLETION
 }
 
 _enable-thing ()
@@ -286,11 +291,13 @@ _enable-thing ()
     _param '1: subdirectory'
     _param '2: file_type'
     _param '3: file_entity'
-    _example '$ _enable-thing "plugins" "plugin" "ssh"'
+    _param '4: load priority'
+    _example '$ _enable-thing "plugins" "plugin" "ssh" "150"'
 
     subdirectory="$1"
     file_type="$2"
     file_entity="$3"
+    load_priority="$4"
 
     if [ -z "$file_entity" ]; then
         reference "enable-$file_type"
@@ -303,7 +310,7 @@ _enable-thing ()
         do
             plugin=$(basename $f)
             if [ ! -h $BASH_IT/$subdirectory/enabled/$plugin ]; then
-                ln -s ../available/$plugin $BASH_IT/$subdirectory/enabled/$plugin
+                ln -s ../available/$plugin $BASH_IT/$subdirectory/enabled/$load_priority$BASH_IT_LOAD_PRIORITY_SEPARATOR$plugin
             fi
         done
     else
@@ -314,14 +321,19 @@ _enable-thing ()
         fi
 
         plugin=$(basename $plugin)
-        if [ -e $BASH_IT/$subdirectory/enabled/$plugin ]; then
+        # Check for existence of the file using a wildcard, since we don't know which priority might have been used when enabling it.
+        for f in $BASH_IT/$subdirectory/enabled/*$BASH_IT_LOAD_PRIORITY_SEPARATOR$plugin; do
+          if [ -e "$f" ] ; then
             printf '%s\n' "$file_entity is already enabled."
             return
-        fi
+          fi
+
+          break
+        done
 
         mkdir -p $BASH_IT/$subdirectory/enabled
 
-        ln -s ../available/$plugin $BASH_IT/$subdirectory/enabled/$plugin
+        ln -s ../available/$plugin $BASH_IT/$subdirectory/enabled/$load_priority$BASH_IT_LOAD_PRIORITY_SEPARATOR$plugin
     fi
 
     if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
