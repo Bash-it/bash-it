@@ -10,6 +10,9 @@ load ../../lib/helpers
 
 function __setup_plugin_tests {
   mkdir -p $BASH_IT/plugins
+  pwd
+  ls -als ..
+  ls -als ../plugins
   cp -r ../plugins/available $BASH_IT/plugins
   mkdir -p $BASH_IT/plugins/enabled
 }
