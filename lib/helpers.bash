@@ -333,14 +333,18 @@ _enable-thing ()
 
         mkdir -p $BASH_IT/$subdirectory/enabled
 
-        ln -s ../available/$plugin $BASH_IT/$subdirectory/enabled/$load_priority$BASH_IT_LOAD_PRIORITY_SEPARATOR$plugin
+        # Load the priority from the file if it present there
+        local local_file_priority=$(grep -E "^# BASH_IT_LOAD_PRIORITY:" $BASH_IT/$subdirectory/available/$plugin | awk -F': ' '{ print $2 }')
+        local use_load_priority=${local_file_priority:-$load_priority}
+
+        ln -s ../available/$plugin $BASH_IT/$subdirectory/enabled/$use_load_priority$BASH_IT_LOAD_PRIORITY_SEPARATOR$plugin
     fi
 
     if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
         exec ${0/-/}
     fi
 
-    printf '%s\n' "$file_entity enabled."
+    printf '%s\n' "$file_entity enabled with priority $use_load_priority."
 }
 
 _help-completions()
