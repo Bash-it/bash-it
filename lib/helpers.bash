@@ -1,6 +1,6 @@
-BASH_IT_LOAD_PRIORITY_DEFAULT_ALIAS=150
-BASH_IT_LOAD_PRIORITY_DEFAULT_PLUGIN=250
-BASH_IT_LOAD_PRIORITY_DEFAULT_COMPLETION=350
+BASH_IT_LOAD_PRIORITY_DEFAULT_ALIAS=${BASH_IT_LOAD_PRIORITY_DEFAULT_ALIAS:-150}
+BASH_IT_LOAD_PRIORITY_DEFAULT_PLUGIN=${BASH_IT_LOAD_PRIORITY_DEFAULT_PLUGIN:-250}
+BASH_IT_LOAD_PRIORITY_DEFAULT_COMPLETION=${BASH_IT_LOAD_PRIORITY_DEFAULT_COMPLETION:-350}
 BASH_IT_LOAD_PRIORITY_SEPARATOR="---"
 
 # Helper function loading various enable-able files
@@ -169,7 +169,8 @@ _bash-it-describe ()
     printf "%-20s%-10s%s\n" "$column_header" 'Enabled?' 'Description'
     for f in $BASH_IT/$subdirectory/available/*.bash
     do
-        if [ -e $BASH_IT/$subdirectory/enabled/$(basename $f) ]; then
+        # Check for both the old format without the load priority, and the extended format with the priority
+        if [ -e $BASH_IT/$subdirectory/enabled/$(basename $f) ] || [ -e $BASH_IT/$subdirectory/enabled/*$BASH_IT_LOAD_PRIORITY_SEPARATOR$(basename $f) ]; then
             enabled='x'
         else
             enabled=' '
