@@ -316,7 +316,7 @@ _enable-thing ()
         typeset f $file_type
         for f in $BASH_IT/$subdirectory/available/*.bash
         do
-            plugin=$(basename -s .$file_type.bash $f)
+            plugin=$(basename $f .$file_type.bash)
             _enable-thing $subdirectory $file_type $plugin $load_priority
         done
     else
