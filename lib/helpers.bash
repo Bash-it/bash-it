@@ -328,14 +328,11 @@ _enable-thing ()
 
         plugin=$(basename $plugin)
         # Check for existence of the file using a wildcard, since we don't know which priority might have been used when enabling it.
-        for f in $BASH_IT/$subdirectory/enabled/*$BASH_IT_LOAD_PRIORITY_SEPARATOR$plugin; do
-          if [ -e "$f" ] ; then
-            printf '%s\n' "$file_entity is already enabled."
-            return
-          fi
-
-          break
-        done
+        typeset enabled_plugin=$(command ls $BASH_IT/$subdirectory/enabled/{[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$plugin,$plugin} 2>/dev/null | head -1)
+        if [ ! -z "$enabled_plugin" ] ; then
+          printf '%s\n' "$file_entity is already enabled."
+          return
+        fi
 
         mkdir -p $BASH_IT/$subdirectory/enabled
 

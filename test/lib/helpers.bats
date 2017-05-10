@@ -70,6 +70,18 @@ function __setup_plugin_tests {
   [ ! -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
 }
 
+@test "enable the nvm plugin if it was enabled without a priority" {
+  __setup_plugin_tests
+
+  ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/nvm.plugin.bash
+  [ -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
+
+  run _enable-plugin "nvm"
+  [ "${lines[0]}" == 'nvm is already enabled.' ]
+  [ -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
+  [ ! -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
+}
+
 @test "enable the nvm plugin twice" {
   __setup_plugin_tests
 
