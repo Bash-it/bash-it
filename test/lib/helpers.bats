@@ -8,7 +8,7 @@ cite _about _param _example _group _author _version
 
 load ../../lib/helpers
 
-function __setup_plugin_tests {
+function local_setup {
   mkdir -p $BASH_IT/plugins
   lib_directory="$(cd "$(dirname "$0")" && pwd)"
   cp -r $lib_directory/../../plugins/available $BASH_IT/plugins
@@ -16,24 +16,18 @@ function __setup_plugin_tests {
 }
 
 @test "bash-it: enable the node plugin" {
-  __setup_plugin_tests
-
   run _enable-plugin "node"
   [ "${lines[0]}" == 'node enabled with priority 250.' ]
   [ -L "$BASH_IT/plugins/enabled/250---node.plugin.bash" ]
 }
 
 @test "bash-it: enable the nvm plugin" {
-  __setup_plugin_tests
-
   run _enable-plugin "nvm"
   [ "${lines[0]}" == 'nvm enabled with priority 225.' ]
   [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
 }
 
 @test "bash-it: enable an unknown plugin" {
-  __setup_plugin_tests
-
   run _enable-plugin "unknown-foo"
   [ "${lines[0]}" == 'sorry, unknown-foo does not appear to be an available plugin.' ]
   [ ! -L "$BASH_IT/plugins/enabled/250---unknown-foo.plugin.bash" ]
@@ -41,15 +35,11 @@ function __setup_plugin_tests {
 }
 
 @test "bash-it: disable a plugin that is not enabled" {
-  __setup_plugin_tests
-
   run _disable-plugin "sdkman"
   [ "${lines[0]}" == 'sorry, sdkman does not appear to be an enabled plugin.' ]
 }
 
 @test "bash-it: enable and disable the nvm plugin" {
-  __setup_plugin_tests
-
   run _enable-plugin "nvm"
   [ "${lines[0]}" == 'nvm enabled with priority 225.' ]
   [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
@@ -60,8 +50,6 @@ function __setup_plugin_tests {
 }
 
 @test "bash-it: disable the nvm plugin if it was enabled without a priority" {
-  __setup_plugin_tests
-
   ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/nvm.plugin.bash
   [ -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
 
@@ -71,8 +59,6 @@ function __setup_plugin_tests {
 }
 
 @test "bash-it: enable the nvm plugin if it was enabled without a priority" {
-  __setup_plugin_tests
-
   ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/nvm.plugin.bash
   [ -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
 
@@ -83,8 +69,6 @@ function __setup_plugin_tests {
 }
 
 @test "bash-it: enable the nvm plugin twice" {
-  __setup_plugin_tests
-
   run _enable-plugin "nvm"
   [ "${lines[0]}" == 'nvm enabled with priority 225.' ]
   [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
@@ -95,8 +79,6 @@ function __setup_plugin_tests {
 }
 
 @test "bash-it: migrate enabled plugins that don't use the new priority-based configuration" {
-  __setup_plugin_tests
-
   ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/nvm.plugin.bash
   [ -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
 
@@ -115,8 +97,6 @@ function __setup_plugin_tests {
 }
 
 @test "bash-it: enable all plugins" {
-  __setup_plugin_tests
-
   run _enable-plugin "all"
   local available=$(find $BASH_IT/plugins/available -name *.plugin.bash | wc -l)
   local enabled=$(find $BASH_IT/plugins/enabled -name 2*.plugin.bash | wc -l)
@@ -125,8 +105,6 @@ function __setup_plugin_tests {
 }
 
 @test "bash-it: disable all plugins" {
-  __setup_plugin_tests
-
   run _enable-plugin "all"
   local available=$(find $BASH_IT/plugins/available -name *.plugin.bash | wc -l)
   local enabled=$(find $BASH_IT/plugins/enabled -name 2*.plugin.bash | wc -l)
@@ -140,14 +118,10 @@ function __setup_plugin_tests {
 }
 
 @test "bash-it: describe the nvm plugin without enabling it" {
-  __setup_plugin_tests
-
   _bash-it-plugins | grep "nvm" | grep "\[ \]"
 }
 
 @test "bash-it: describe the nvm plugin after enabling it" {
-  __setup_plugin_tests
-
   run _enable-plugin "nvm"
   [ "${lines[0]}" == 'nvm enabled with priority 225.' ]
   [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
