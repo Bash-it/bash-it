@@ -27,7 +27,7 @@ _bash-it-comp-list-enabled()
 
 	local enabled_things=$(for f in `ls -1 $BASH_IT/$subdirectory/enabled/*.bash`;
 		do
-			basename $f | cut -d'.' -f1
+			basename $f | cut -d'.' -f1 | sed -e "s/^[0-9]*---//g"
 		done)
 
 	COMPREPLY=( $(compgen -W "all ${enabled_things}" -- ${cur}) )
