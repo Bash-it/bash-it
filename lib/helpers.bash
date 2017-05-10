@@ -308,10 +308,8 @@ _enable-thing ()
         typeset f $file_type
         for f in $BASH_IT/$subdirectory/available/*.bash
         do
-            plugin=$(basename $f)
-            if [ ! -h $BASH_IT/$subdirectory/enabled/$plugin ]; then
-                ln -s ../available/$plugin $BASH_IT/$subdirectory/enabled/$load_priority$BASH_IT_LOAD_PRIORITY_SEPARATOR$plugin
-            fi
+            plugin=$(basename -s .$file_type.bash $f)
+            _enable-thing $subdirectory $file_type $plugin $load_priority
         done
     else
         typeset plugin=$(command ls $BASH_IT/$subdirectory/available/$file_entity.*bash 2>/dev/null | head -1)
