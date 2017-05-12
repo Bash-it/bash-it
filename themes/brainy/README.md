@@ -18,6 +18,7 @@ Examples:
 ```bash
 # Use the "brainy" theme
 export BASH_IT_THEME="brainy"
+```
 
 ### Automatically via terminal
 
@@ -28,6 +29,7 @@ Examples:
 ```bash
 # Set the "brainy" theme replacing the theme you are using of bash-it
 sed -i 's/'"$BASH_IT_THEME"'/brainy/g' ~/.bashrc
+```
 
 ## Features
 
