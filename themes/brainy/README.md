@@ -1,8 +1,33 @@
 # Brainy theme
 
 Simple colorful terminal prompt theme (inspired by a number of themes).
+Supported on all operating systems
+In constant maintenance and improvement
 
-![alt text](https://www.lfsystems.xyz/img/brainy-Arch.png)
+![alt text](img/BrainyTheme.gif "Brainy	Theme")
+
+## Install Theme
+
+### Manually
+
+You can install the theme manually by following these steps:
+Edit your modified config `~/.bashrc` file in order to customize Bash-it, set `BASH_IT_THEME` to the theme name `brainy`.
+
+Examples:
+
+```bash
+# Use the "brainy" theme
+export BASH_IT_THEME="brainy"
+
+### Automatically via terminal
+
+You can install the theme automatically using the `sed` command from your terminal.
+
+Examples:
+
+```bash
+# Set the "brainy" theme replacing the theme you are using of bash-it
+sed -i 's/'"$BASH_IT_THEME"'/brainy/g' ~/.bashrc
 
 ## Features
 
@@ -21,7 +46,7 @@ Simple colorful terminal prompt theme (inspired by a number of themes).
 ### Others
 
 - Indicator for cached `sudo` credential
-- Indicator for ssh login
+- Indicator for abort (ctrl + C) the current task and regain user control
 - `brainy` command for showing/hiding various prompt segments on-the-fly
 
 ## Configuration
