@@ -51,3 +51,20 @@ function local_teardown {
   assert [ -L "$BASH_IT/completion/enabled/350---bash-it.completion.bash" ]
   assert [ -L "$BASH_IT/completion/enabled/350---system.completion.bash" ]
 }
+
+@test "install: verify that a backup file is created" {
+  cd "$BASH_IT"
+
+  touch "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE"
+  echo "test file content" > "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE"
+  local md5_orig=$(md5sum "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE" | awk '{print $1}')
+
+  ./install.sh --silent
+
+  assert [ -e "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE" ]
+  assert [ -e "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.bak" ]
+
+  local md5_bak=$(md5sum "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.bak" | awk '{print $1}')
+
+  assert_equal "$md5_orig" "$md5_bak"
+}
