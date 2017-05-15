@@ -1,7 +1,9 @@
 # Brainy theme
 
 Simple colorful terminal prompt theme (inspired by a number of themes).
+
 Supported on all operating systems.
+
 In constant maintenance and improvement
 
 ![alt text](https://www.lfsystems.xyz/img/BrainyTheme.gif)
@@ -22,10 +24,10 @@ export BASH_IT_THEME="brainy"
 
 ### Automatically via terminal
 
-You can install the theme automatically using the `sed` command from your Linux or OSX Terminal.
-For installation on windows you should use `[Git-Bash](https://git-for-windows.github.io/) status` or make sure the terminal emulator you use (ej: cygwin, mintty, etc) has the `sed` command installed.
+1. You can install the theme automatically using the `sed` command from your Linux or OSX Terminal.
+2. For installation on windows you should use `[Git-Bash](https://git-for-windows.github.io/)` or make sure the terminal emulator you use (ej: cygwin, mintty, etc) has the `sed` command installed.
 
-Examples:
+Command to execute:
 
 ```bash
 # Set the "brainy" theme replacing the theme you are using of bash-it
