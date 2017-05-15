@@ -25,7 +25,7 @@ export BASH_IT_THEME="brainy"
 ### Automatically via terminal
 
 1. You can install the theme automatically using the `sed` command from your Linux or OSX Terminal.
-2. For installation on windows you should use `[Git-Bash](https://git-for-windows.github.io/)` or make sure the terminal emulator you use (ej: cygwin, mintty, etc) has the `sed` command installed.
+2. For installation on windows you should use [`Git-Bash`](https://git-for-windows.github.io/) or make sure the terminal emulator you use (ej: cygwin, mintty, etc) has the `sed` command installed.
 
 Command to execute:
 
