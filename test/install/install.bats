@@ -6,10 +6,10 @@ load ../../lib/composure
 # Determine which config file to use based on OS.
 case $OSTYPE in
   darwin*)
-    BASH_IT_CONFIG_FILE=.bash_profile
+    export BASH_IT_CONFIG_FILE=.bash_profile
     ;;
   *)
-    BASH_IT_CONFIG_FILE=.bashrc
+    export BASH_IT_CONFIG_FILE=.bashrc
     ;;
 esac
 
@@ -35,7 +35,7 @@ function local_teardown {
 }
 
 @test "install: verify that the install script exists" {
-  [ -e "$BASH_IT/install.sh" ]
+  assert [ -e "$BASH_IT/install.sh" ]
 }
 
 @test "install: run the install script silently" {
@@ -43,5 +43,11 @@ function local_teardown {
 
   ./install.sh --silent
 
-  [ -e "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE" ]
+  assert [ -e "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE" ]
+
+  assert [ -L "$BASH_IT/aliases/enabled/150---general.aliases.bash" ]
+  assert [ -L "$BASH_IT/plugins/enabled/250---base.plugin.bash" ]
+  assert [ -L "$BASH_IT/plugins/enabled/250---alias-completion.plugin.bash" ]
+  assert [ -L "$BASH_IT/completion/enabled/350---bash-it.completion.bash" ]
+  assert [ -L "$BASH_IT/completion/enabled/350---system.completion.bash" ]
 }
