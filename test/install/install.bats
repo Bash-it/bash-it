@@ -3,6 +3,16 @@
 load ../test_helper
 load ../../lib/composure
 
+# Determine which config file to use based on OS.
+case $OSTYPE in
+  darwin*)
+    BASH_IT_CONFIG_FILE=.bash_profile
+    ;;
+  *)
+    BASH_IT_CONFIG_FILE=.bashrc
+    ;;
+esac
+
 function local_setup {
   mkdir -p $BASH_IT
   lib_directory="$(cd "$(dirname "$0")" && pwd)"
@@ -29,10 +39,9 @@ function local_teardown {
 }
 
 @test "install: run the install script silently" {
-  skip "Waiting for test to be implemented"
   cd "$BASH_IT"
 
   ./install.sh --silent
 
-  [ -e "$BASH_IT_TEST_HOME/.bash_profile" ]
+  [ -e "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE" ]
 }
