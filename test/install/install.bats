@@ -68,3 +68,11 @@ function local_teardown {
 
   assert_equal "$md5_orig" "$md5_bak"
 }
+
+@test "install: verify that silent and interactive can not be used at the same time" {
+  cd "$BASH_IT"
+
+  run ./install.sh --silent --interactive
+
+  assert_failure
+}
