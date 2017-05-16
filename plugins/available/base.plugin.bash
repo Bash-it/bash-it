@@ -204,3 +204,18 @@ function del() {
     group 'base'
     mkdir -p /tmp/.trash && mv "$@" /tmp/.trash; 
 }
+
+for_all_dirs ()
+{
+	about 'loops through all subdirectories of the current directory and executes the specified command in each of them'
+	param 'command'
+	group 'base'
+	example '$ for_all_dirs svn up'
+	for dir in */
+	do
+		echo "Processing $dir"
+		cd "$dir"
+		$*
+		cd ..
+	done
+}
