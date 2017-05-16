@@ -25,13 +25,20 @@ export BASH_IT_THEME="brainy"
 ### Automatically via terminal
 
 1. You can install the theme automatically using the `sed` command from your Linux or OSX Terminal.
-2. For installation on windows you should use [`Git-Bash`](https://git-for-windows.github.io/) or make sure the terminal emulator you use (ej: cygwin, mintty, etc) has the `sed` command installed.
+2. On macOS, the ~/.bash_profile is used, not the ~/.bashrc.
+3. For installation on windows you should use [`Git-Bash`](https://git-for-windows.github.io/) or make sure the terminal emulator you use (ej: cygwin, mintty, etc) has the `sed` command installed.
 
-Command to execute:
+Command to execute For Windows and Linux:
 
 ```bash
 # Set the "brainy" theme replacing the theme you are using of bash-it
 sed -i 's/'"$BASH_IT_THEME"'/brainy/g' ~/.bashrc
+```
+Command to execute for macOS:
+
+```bash
+# Set the "brainy" theme replacing the theme you are using of bash-it
+sed -i '' 's/'"$BASH_IT_THEME"'/brainy/g' ~/.bash_profile
 ```
 
 ## Features
