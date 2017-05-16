@@ -98,19 +98,19 @@ function local_setup {
 
 @test "bash-it: enable all plugins" {
   run _enable-plugin "all"
-  local available=$(find $BASH_IT/plugins/available -name *.plugin.bash | wc -l)
-  local enabled=$(find $BASH_IT/plugins/enabled -name 2*.plugin.bash | wc -l)
+  local available=$(find $BASH_IT/plugins/available -name *.plugin.bash | wc -l | xargs)
+  local enabled=$(find $BASH_IT/plugins/enabled -name 2*.plugin.bash | wc -l | xargs)
   assert_equal "$available" "$enabled"
 }
 
 @test "bash-it: disable all plugins" {
   run _enable-plugin "all"
-  local available=$(find $BASH_IT/plugins/available -name *.plugin.bash | wc -l)
-  local enabled=$(find $BASH_IT/plugins/enabled -name 2*.plugin.bash | wc -l)
+  local available=$(find $BASH_IT/plugins/available -name *.plugin.bash | wc -l | xargs)
+  local enabled=$(find $BASH_IT/plugins/enabled -name 2*.plugin.bash | wc -l | xargs)
   assert_equal "$available" "$enabled"
 
   run _disable-plugin "all"
-  local enabled2=$(find $BASH_IT/plugins/enabled -name *.plugin.bash | wc -l)
+  local enabled2=$(find $BASH_IT/plugins/enabled -name *.plugin.bash | wc -l | xargs)
   assert_equal "$enabled2" "0"
 }
 
