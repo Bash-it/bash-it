@@ -1,5 +1,7 @@
 #!/usr/bin/env bats
 
+load ../test_helper
+
 load ../../lib/composure
 load ../../plugins/available/base.plugin
 
@@ -9,6 +11,12 @@ load ../../lib/helpers
 load ../../lib/search
 
 NO_COLOR=true
+
+function local_setup {
+  mkdir -p $BASH_IT
+  lib_directory="$(cd "$(dirname "$0")" && pwd)"
+  cp -r $lib_directory/../../* $BASH_IT/
+}
 
 @test "helpers search aliases" {
   run _bash-it-search-component 'plugins' 'base'
