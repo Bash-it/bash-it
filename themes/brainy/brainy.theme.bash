@@ -68,7 +68,7 @@ ____brainy_bottom_parse() {
 	args=( $1 )
 	IFS="${ifs_old}"
 	_BOTTOM+="${args[0]}${args[1]}"
-	[ ${#args[1]} -gt 0 ] && _BOTTOM+=""
+	[ ${#args[1]} -gt 0 ] && _BOTTOM+=" "
 }
 
 ____brainy_top() {
@@ -82,7 +82,7 @@ ____brainy_top() {
 		[ -n "${info}" ] && ____brainy_top_left_parse "${info}"
 	done
 
-	___cursor_right="\033[500C"
+	___cursor_right="\e[500C"
 	_TOP_LEFT+="${___cursor_right}"
 
 	for seg in ${___BRAINY_TOP_RIGHT}; do
@@ -91,7 +91,7 @@ ____brainy_top() {
 	done
 
 	[ $__TOP_RIGHT_LEN -gt 0 ] && __TOP_RIGHT_LEN=$(( __TOP_RIGHT_LEN - 0 ))
-	___cursor_adjust="\033[${__TOP_RIGHT_LEN}D"
+	___cursor_adjust="\e[${__TOP_RIGHT_LEN}D"
 	_TOP_LEFT+="${___cursor_adjust}"
 
 	printf "%s%s" "${_TOP_LEFT}" "${_TOP_RIGHT}"
@@ -112,7 +112,7 @@ ____brainy_bottom() {
 
 ___brainy_prompt_user_info() {
 	color=$white	
-	box="${ResetColor}${LineA}\$([[ \$? != 0 ]] && echo \"${BIWhite}[${IRed}${SX}${BIWhite}]${ResetColor}${Line}\")${ResetColor}${Line}${BIWhite}[|${BIWhite}]${ResetColor}${Line}"
+	box="${normal}${LineA}\$([[ \$? != 0 ]] && echo \"${BIWhite}[${IRed}${SX}${BIWhite}]${normal}${Line}\")${Line}${BIWhite}[|${BIWhite}]${normal}${Line}"
 	info="${IYellow}\u${IRed}@${IGreen}\h"
 	
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${white}" "${box}"
@@ -120,17 +120,17 @@ ___brainy_prompt_user_info() {
 
 ___brainy_prompt_dir() {
 	color=${IRed}
-	box="${BIWhite}[|${BIWhite}]"
-	info="\W"
-	printf "%s|%s|%s|%s" "${color}" "${info}" "${white}" "${box}"
+	box="[|]${normal}${Line}"
+	info="\w"
+	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
 }
 
 ___brainy_prompt_scm() {
 	[ "${THEME_SHOW_SCM}" != "true" ] && return
 	color=$bold_green
-	box="${ResetColor}${Line}${BIWhite}[${IWhite}$(scm_char)${BIWhite}] "
+	box="[${IWhite}$(scm_char)] "
 	info="$(scm_prompt_info)"
-	printf "%s|%s|%s|%s" "${color}" "${info}" "${white}" "${box}"
+	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
 }
 
 ___brainy_prompt_python() {
@@ -167,7 +167,7 @@ ___brainy_prompt_clock() {
 }
 
 ___brainy_prompt_battery() {
-	[ ! -e $BASH_IT/plugins/enabled/battery.plugin.bash ] ||
+	[ ! -e "$BASH_IT"/plugins/enabled/battery.plugin.bash ] ||
 	[ "${THEME_SHOW_BATTERY}" != "true" ] && return
 	batp=$(battery_percentage)
 	if [ "$batp" -gt 50 ]; then
@@ -175,7 +175,7 @@ ___brainy_prompt_battery() {
 	elif [ "$batp" -lt 50 ] && [ "$batp" -gt 25 ]; then
 		color=$bold_yellow
 	elif [ "$batp" -lt 25 ]; then
-		color=$ColorRed
+		color=$IRed
 	fi
 	box="[|]"
 	ac_adapter_disconnected && info="-"
@@ -192,7 +192,7 @@ ___brainy_prompt_exitcode() {
 }
 
 ___brainy_prompt_char() {
-	color=$bold_red
+	color=$white
 	prompt_char="${__BRAINY_PROMPT_CHAR_PS1}"
 	if [ "${THEME_SHOW_SUDO}" == "true" ]; then
 		if [ $(sudo -n id -u 2>&1 | grep 0) ]; then
@@ -288,15 +288,15 @@ THEME_SHOW_EXITCODE=${THEME_SHOW_EXITCODE:-"false"}
 THEME_CLOCK_COLOR=${THEME_CLOCK_COLOR:-"${BICyan}"}
 THEME_CLOCK_FORMAT=${THEME_CLOCK_FORMAT:-"%a %b %d - %H:%M"}
 
-__BRAINY_PROMPT_CHAR_PS1=${THEME_PROMPT_CHAR_PS1:-"${ResetColor}${LineB}${BIWhite}${Circle} ${ResetColor}"}
-__BRAINY_PROMPT_CHAR_PS2=${THEME_PROMPT_CHAR_PS2:-"${ResetColor}${LineB}${BIWhite}${Circle} ${ResetColor}"}
+__BRAINY_PROMPT_CHAR_PS1=${THEME_PROMPT_CHAR_PS1:-"${normal}${LineB}${bold_white}${Circle}"}
+__BRAINY_PROMPT_CHAR_PS2=${THEME_PROMPT_CHAR_PS2:-"${normal}${LineB}${bold_white}${Circle}"}
 
-__BRAINY_PROMPT_CHAR_PS1_SUDO=${THEME_PROMPT_CHAR_PS1_SUDO:-"${ResetColor}${LineB}${IRed}${Face} ${ResetColor}"}
-__BRAINY_PROMPT_CHAR_PS2_SUDO=${THEME_PROMPT_CHAR_PS2_SUDO:-"${ResetColor}${LineB}${IRed}${Face} ${ResetColor}"}
+__BRAINY_PROMPT_CHAR_PS1_SUDO=${THEME_PROMPT_CHAR_PS1_SUDO:-"${normal}${LineB}${bold_red}${Face}"}
+__BRAINY_PROMPT_CHAR_PS2_SUDO=${THEME_PROMPT_CHAR_PS2_SUDO:-"${normal}${LineB}${bold_red}${Face}"}
 
 ___BRAINY_TOP_LEFT=${___BRAINY_TOP_LEFT:-"user_info dir scm"}
-___BRAINY_TOP_RIGHT=${___BRAINY_TOP_RIGHT:-"python ruby todo clock battery"}
-___BRAINY_BOTTOM=${___BRAINY_BOTTOM:-"exitcode char"}
+___BRAINY_TOP_RIGHT=${___BRAINY_TOP_RIGHT:-"exitcode python ruby todo clock battery"}
+___BRAINY_BOTTOM=${___BRAINY_BOTTOM:-"char"}
 
 ############
 ## Prompt ##
