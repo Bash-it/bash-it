@@ -58,7 +58,7 @@ alias gll='git log --graph --pretty=oneline --abbrev-commit'
 alias gg="git log --graph --pretty=format:'%C(bold)%h%Creset%C(magenta)%d%Creset %s %C(yellow)<%an> %C(cyan)(%cr)%Creset' --abbrev-commit --date=relative"
 alias ggs="gg --stat"
 alias gsl="git shortlog -sn"
-alias gw="git whatchanged"
+alias gwc="git whatchanged"
 alias gt="git tag"
 alias gta="git tag -a"
 alias gtd="git tag -d"
