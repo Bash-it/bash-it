@@ -30,5 +30,5 @@ When contributing a new feature, a bug fix, a new theme, or any other change to 
 
 ## Themes
 
-* When adding a new theme, please include a screenshot and a short description about what makes this theme unique in the Pull Request.
+* When adding a new theme, please include a screenshot and a short description about what makes this theme unique in the Pull Request's description field. Please do not add theme screenshots to the repo itself, as they will add unnecessary bloat to the repo. The project's Wiki has a _Themes_ page where you can add a screenshot if you want.
 * Ideally, each theme's folder should contain a `README.md` file describing the theme and its configuration options.
