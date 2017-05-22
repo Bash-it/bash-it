@@ -36,6 +36,6 @@ For `aliases`, `plugins` and `completions`, the following rules are applied that
 * When symlinking a component into an `enabled` directory, the load priority is used as a prefix for the linked name, separated with three dashes from the name of the component. The `node.plugin.bash` would be symlinked to `250---node.plugin.bash` for example.
 * Each file can override the default load priority by specifying a new value. To do this, the file needs to include a comment in the following form. This example would cause the `node.plugin.bash` (if included in that file) to be linked to `225---node.plugin.bash`:
 
-```bash
-# BASH_IT_LOAD_PRIORITY: 225
-```
+  ```bash
+  # BASH_IT_LOAD_PRIORITY: 225
+  ```
