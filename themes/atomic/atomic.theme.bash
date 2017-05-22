@@ -1,13 +1,36 @@
 #!/usr/bin/env bash
 
-# Brainy Bash Prompt for Bash-it
-# by MunifTanjim
+# Atomic Bash Prompt for Bash-it
+# By lfelipe base on the theme brainy of MunifTanjim
+
+############
+## Colors ##
+############
+IRed="\e[1;49;31m"
+IGreen="\e[1;49;32m"
+IYellow="\e[1;49;33m"
+ICyan="\e[1;49;36m"
+IWhite="\e[1;49;37m"
+White="\e[0;49;37m"
+BIWhite="\e[1;49;37m"
+BICyan="\e[1;49;36m"
+ResetColor="\e[0;49;37m"
+
+#############
+## Symbols ##
+#############
+Line="\342\224\200"
+LineA="\342\224\214\342\224\200"
+SX="\342\234\227"
+LineB="\342\224\224\342\224\200\342\224\200"
+Circle="\342\227\217"
+Face="\342\230\273"
 
 #############
 ## Parsers ##
 #############
 
-____brainy_top_left_parse() {
+____atomic_top_left_parse() {
 	ifs_old="${IFS}"
 	IFS="|"
 	args=( $1 )
@@ -19,10 +42,10 @@ ____brainy_top_left_parse() {
 	if [ -n "${args[4]}" ]; then
 		_TOP_LEFT+="${args[2]}${args[4]}"
 	fi
-	_TOP_LEFT+=" "
+	_TOP_LEFT+=""
 }
 
-____brainy_top_right_parse() {
+____atomic_top_right_parse() {
 	ifs_old="${IFS}"
 	IFS="|"
 	args=( $1 )
@@ -39,7 +62,7 @@ ____brainy_top_right_parse() {
 	(( __SEG_AT_RIGHT += 1 ))
 }
 
-____brainy_bottom_parse() {
+____atomic_bottom_parse() {
 	ifs_old="${IFS}"
 	IFS="|"
 	args=( $1 )
@@ -48,37 +71,37 @@ ____brainy_bottom_parse() {
 	[ ${#args[1]} -gt 0 ] && _BOTTOM+=" "
 }
 
-____brainy_top() {
+____atomic_top() {
 	_TOP_LEFT=""
 	_TOP_RIGHT=""
 	__TOP_RIGHT_LEN=0
 	__SEG_AT_RIGHT=0
 
-	for seg in ${___BRAINY_TOP_LEFT}; do
-		info="$(___brainy_prompt_"${seg}")"
-		[ -n "${info}" ] && ____brainy_top_left_parse "${info}"
+	for seg in ${___ATOMIC_TOP_LEFT}; do
+		info="$(___atomic_prompt_"${seg}")"
+		[ -n "${info}" ] && ____atomic_top_left_parse "${info}"
 	done
 
-	___cursor_right="\033[500C"
+	___cursor_right="\e[500C"
 	_TOP_LEFT+="${___cursor_right}"
 
-	for seg in ${___BRAINY_TOP_RIGHT}; do
-		info="$(___brainy_prompt_"${seg}")"
-		[ -n "${info}" ] && ____brainy_top_right_parse "${info}"
+	for seg in ${___ATOMIC_TOP_RIGHT}; do
+		info="$(___atomic_prompt_"${seg}")"
+		[ -n "${info}" ] && ____atomic_top_right_parse "${info}"
 	done
 
-	[ $__TOP_RIGHT_LEN -gt 0 ] && __TOP_RIGHT_LEN=$(( __TOP_RIGHT_LEN - 1 ))
-	___cursor_adjust="\033[${__TOP_RIGHT_LEN}D"
+	[ $__TOP_RIGHT_LEN -gt 0 ] && __TOP_RIGHT_LEN=$(( __TOP_RIGHT_LEN - 0 ))
+	___cursor_adjust="\e[${__TOP_RIGHT_LEN}D"
 	_TOP_LEFT+="${___cursor_adjust}"
 
 	printf "%s%s" "${_TOP_LEFT}" "${_TOP_RIGHT}"
 }
 
-____brainy_bottom() {
+____atomic_bottom() {
 	_BOTTOM=""
-	for seg in $___BRAINY_BOTTOM; do
-		info="$(___brainy_prompt_"${seg}")"
-		[ -n "${info}" ] && ____brainy_bottom_parse "${info}"
+	for seg in $___ATOMIC_BOTTOM; do
+		info="$(___atomic_prompt_"${seg}")"
+		[ -n "${info}" ] && ____atomic_bottom_parse "${info}"
 	done
 	printf "\n%s" "${_BOTTOM}"
 }
@@ -87,38 +110,30 @@ ____brainy_bottom() {
 ## Segments ##
 ##############
 
-___brainy_prompt_user_info() {
-	color=$bold_blue
-	if [ "${THEME_SHOW_SUDO}" == "true" ]; then
-		if [ $(sudo -n id -u 2>&1 | grep 0) ]; then
-			color=$bold_red
-		fi
-	fi
-	box="[|]"
-	info="\u@\H"
-	if [ -n "${SSH_CLIENT}" ]; then
-		printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
-	else
-		printf "%s|%s" "${color}" "${info}"
-	fi
+___atomic_prompt_user_info() {
+	color=$white	
+	box="${normal}${LineA}\$([[ \$? != 0 ]] && echo \"${BIWhite}[${IRed}${SX}${BIWhite}]${normal}${Line}\")${Line}${BIWhite}[|${BIWhite}]${normal}${Line}"
+	info="${IYellow}\u${IRed}@${IGreen}\h"
+	
+	printf "%s|%s|%s|%s" "${color}" "${info}" "${white}" "${box}"
 }
 
-___brainy_prompt_dir() {
-	color=$bold_yellow
-	box="[|]"
+___atomic_prompt_dir() {
+	color=${IRed}
+	box="[|]${normal}${Line}"
 	info="\w"
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
 }
 
-___brainy_prompt_scm() {
+___atomic_prompt_scm() {
 	[ "${THEME_SHOW_SCM}" != "true" ] && return
 	color=$bold_green
-	box="$(scm_char) "
+	box="[${IWhite}$(scm_char)] "
 	info="$(scm_prompt_info)"
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
 }
 
-___brainy_prompt_python() {
+___atomic_prompt_python() {
 	[ "${THEME_SHOW_PYTHON}" != "true" ] && return
 	color=$bold_yellow
 	box="[|]"
@@ -126,7 +141,7 @@ ___brainy_prompt_python() {
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_blue}" "${box}"
 }
 
-___brainy_prompt_ruby() {
+___atomic_prompt_ruby() {
 	[ "${THEME_SHOW_RUBY}" != "true" ] && return
 	color=$bold_white
 	box="[|]"
@@ -134,7 +149,7 @@ ___brainy_prompt_ruby() {
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_red}" "${box}"
 }
 
-___brainy_prompt_todo() {
+___atomic_prompt_todo() {
 	[ "${THEME_SHOW_TODO}" != "true" ] ||
 	[ -z "$(which todo.sh)" ] && return
 	color=$bold_white
@@ -143,39 +158,47 @@ ___brainy_prompt_todo() {
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_green}" "${box}"
 }
 
-___brainy_prompt_clock() {
+___atomic_prompt_clock() {
 	[ "${THEME_SHOW_CLOCK}" != "true" ] && return
 	color=$THEME_CLOCK_COLOR
 	box="[|]"
 	info="$(date +"${THEME_CLOCK_FORMAT}")"
-	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_purple}" "${box}"
-}
-
-___brainy_prompt_battery() {
-	[ ! -e $BASH_IT/plugins/enabled/battery.plugin.bash ] ||
-	[ "${THEME_SHOW_BATTERY}" != "true" ] && return
-	info=$(battery_percentage)
-	color=$bold_green
-	if [ "$info" -lt 50 ]; then
-		color=$bold_yellow
-	elif [ "$info" -lt 25 ]; then
-		color=$bold_red
-	fi
-	box="[|]"
-	ac_adapter_connected && info+="+"
-	[ "$info" == "100+" ] && info="AC"
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
 }
 
-___brainy_prompt_exitcode() {
+___atomic_prompt_battery() {
+	[ ! -e "$BASH_IT"/plugins/enabled/battery.plugin.bash ] ||
+	[ "${THEME_SHOW_BATTERY}" != "true" ] && return
+	batp=$(battery_percentage)
+	if [ "$batp" -gt 50 ]; then
+		color=$bold_green
+	elif [ "$batp" -lt 50 ] && [ "$batp" -gt 25 ]; then
+		color=$bold_yellow
+	elif [ "$batp" -lt 25 ]; then
+		color=$IRed
+	fi
+	box="[|]"
+	ac_adapter_disconnected && info="-"
+	ac_adapter_connected && info="+"
+	info+=$batp
+	[ "$info" == "+100" ] && info="AC"
+	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
+}
+
+___atomic_prompt_exitcode() {
 	[ "${THEME_SHOW_EXITCODE}" != "true" ] && return
 	color=$bold_purple
 	[ "$exitcode" -ne 0 ] && printf "%s|%s" "${color}" "${exitcode}"
 }
 
-___brainy_prompt_char() {
-	color=$bold_white
-	prompt_char="${__BRAINY_PROMPT_CHAR_PS1}"
+___atomic_prompt_char() {
+	color=$white
+	prompt_char="${__ATOMIC_PROMPT_CHAR_PS1}"
+	if [ "${THEME_SHOW_SUDO}" == "true" ]; then
+		if [ $(sudo -n id -u 2>&1 | grep 0) ]; then
+			prompt_char="${__ATOMIC_PROMPT_CHAR_PS1_SUDO}"
+		fi
+	fi
 	printf "%s|%s" "${color}" "${prompt_char}"
 }
 
@@ -183,19 +206,19 @@ ___brainy_prompt_char() {
 ## cli ##
 #########
 
-__brainy_show() {
+__atomic_show() {
   typeset _seg=${1:-}
 	shift
 	export THEME_SHOW_${_seg}=true
 }
 
-__brainy_hide() {
+__atomic_hide() {
 	typeset _seg=${1:-}
 	shift
 	export THEME_SHOW_${_seg}=false
 }
 
-_brainy_completion() {
+_atomic_completion() {
 	local cur _action actions segments
 	COMPREPLY=()
 	cur="${COMP_WORDS[COMP_CWORD]}"
@@ -217,16 +240,16 @@ _brainy_completion() {
 	return 0
 }
 
-brainy() {
+atomic() {
 	typeset action=${1:-}
 	shift
 	typeset segs=${*:-}
 	typeset func
 	case $action in
 		show)
-			func=__brainy_show;;
+			func=__atomic_show;;
 		hide)
-			func=__brainy_hide;;
+			func=__atomic_hide;;
 	esac
 	for seg in ${segs}; do
 		seg=$(printf "%s" "${seg}" | tr '[:lower:]' '[:upper:]')
@@ -234,7 +257,7 @@ brainy() {
 	done
 }
 
-complete -F _brainy_completion brainy
+complete -F _atomic_completion atomic
 
 ###############
 ## Variables ##
@@ -259,37 +282,40 @@ THEME_SHOW_RUBY=${THEME_SHOW_RUBY:-"false"}
 THEME_SHOW_PYTHON=${THEME_SHOW_PYTHON:-"false"}
 THEME_SHOW_CLOCK=${THEME_SHOW_CLOCK:-"true"}
 THEME_SHOW_TODO=${THEME_SHOW_TODO:-"false"}
-THEME_SHOW_BATTERY=${THEME_SHOW_BATTERY:-"false"}
-THEME_SHOW_EXITCODE=${THEME_SHOW_EXITCODE:-"true"}
+THEME_SHOW_BATTERY=${THEME_SHOW_BATTERY:-"true"}
+THEME_SHOW_EXITCODE=${THEME_SHOW_EXITCODE:-"false"}
 
-THEME_CLOCK_COLOR=${THEME_CLOCK_COLOR:-"$bold_white"}
-THEME_CLOCK_FORMAT=${THEME_CLOCK_FORMAT:-"%H:%M:%S"}
+THEME_CLOCK_COLOR=${THEME_CLOCK_COLOR:-"${BICyan}"}
+THEME_CLOCK_FORMAT=${THEME_CLOCK_FORMAT:-"%a %b %d - %H:%M"}
 
-__BRAINY_PROMPT_CHAR_PS1=${THEME_PROMPT_CHAR_PS1:-">"}
-__BRAINY_PROMPT_CHAR_PS2=${THEME_PROMPT_CHAR_PS2:-"\\"}
+__ATOMIC_PROMPT_CHAR_PS1=${THEME_PROMPT_CHAR_PS1:-"${normal}${LineB}${bold_white}${Circle}"}
+__ATOMIC_PROMPT_CHAR_PS2=${THEME_PROMPT_CHAR_PS2:-"${normal}${LineB}${bold_white}${Circle}"}
 
-___BRAINY_TOP_LEFT=${___BRAINY_TOP_LEFT:-"user_info dir scm"}
-___BRAINY_TOP_RIGHT=${___BRAINY_TOP_RIGHT:-"python ruby todo clock battery"}
-___BRAINY_BOTTOM=${___BRAINY_BOTTOM:-"exitcode char"}
+__ATOMIC_PROMPT_CHAR_PS1_SUDO=${THEME_PROMPT_CHAR_PS1_SUDO:-"${normal}${LineB}${bold_red}${Face}"}
+__ATOMIC_PROMPT_CHAR_PS2_SUDO=${THEME_PROMPT_CHAR_PS2_SUDO:-"${normal}${LineB}${bold_red}${Face}"}
+
+___ATOMIC_TOP_LEFT=${___ATOMIC_TOP_LEFT:-"user_info dir scm"}
+___ATOMIC_TOP_RIGHT=${___ATOMIC_TOP_RIGHT:-"exitcode python ruby todo clock battery"}
+___ATOMIC_BOTTOM=${___ATOMIC_BOTTOM:-"char"}
 
 ############
 ## Prompt ##
 ############
 
-__brainy_ps1() {
-	printf "%s%s%s" "$(____brainy_top)" "$(____brainy_bottom)" "${normal}"
+__atomic_ps1() {
+	printf "%s%s%s" "$(____atomic_top)" "$(____atomic_bottom)" "${normal}"
 }
 
-__brainy_ps2() {
+__atomic_ps2() {
 	color=$bold_white
-	printf "%s%s%s" "${color}" "${__BRAINY_PROMPT_CHAR_PS2}  " "${normal}"
+	printf "%s%s%s" "${color}" "${__ATOMIC_PROMPT_CHAR_PS2}  " "${normal}"
 }
 
-_brainy_prompt() {
+_atomic_prompt() {
     exitcode="$?"
 
-    PS1="$(__brainy_ps1)"
-    PS2="$(__brainy_ps2)"
+    PS1="$(__atomic_ps1)"
+    PS2="$(__atomic_ps2)"
 }
 
-safe_append_prompt_command _brainy_prompt
+safe_append_prompt_command _atomic_prompt
