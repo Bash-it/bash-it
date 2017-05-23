@@ -1,6 +1,43 @@
-# Brainy theme
+# Atomic theme
 
-Simple colorful terminal prompt theme (inspired by a number of themes).
+Simple colorful terminal prompt theme (inspired by a number of themes and it is based mainly on the theme of @MunifTanjim [`brainy`](themes/brainy/README.md)).
+
+Supported on all operating systems.
+
+In constant maintenance and improvement
+
+![alt text](https://www.lfsystems.xyz/img/AtomicTheme.gif)
+
+## Install Theme
+
+### Manually
+
+You can install the theme manually by following these steps:
+Edit your modified config `~/.bashrc` file in order to customize Bash-it, set `BASH_IT_THEME` to the theme name `atomic`.
+
+Examples:
+
+```bash
+# Use the "atomic" theme
+export BASH_IT_THEME="atomic"
+```
+
+### Automatically via terminal
+
+1. You can install the theme automatically using the `sed` command from your Linux or OSX Terminal.
+2. On macOS, the ~/.bash_profile is used, not the ~/.bashrc.
+3. For installation on windows you should use [`Git-Bash`](https://git-for-windows.github.io/) or make sure the terminal emulator you use (ej: cygwin, mintty, etc) has the `sed` command installed.
+
+Command to execute For Windows and Linux:
+```bash
+# Set the "atomic" theme replacing the theme you are using of bash-it
+sed -i 's/'"$BASH_IT_THEME"'/atomic/g' ~/.bashrc
+```
+Command to execute for macOS:
+```bash
+# Set the "atomic" theme replacing the theme you are using of bash-it
+sed -i '' 's/'"$BASH_IT_THEME"'/atomic/g' ~/.bash_profile
+```
 
 ## Features
 
@@ -19,23 +56,23 @@ Simple colorful terminal prompt theme (inspired by a number of themes).
 ### Others
 
 - Indicator for cached `sudo` credential
-- Indicator for ssh login
-- `brainy` command for showing/hiding various prompt segments on-the-fly
+- Indicator for abort (ctrl + C) the current task and regain user control
+- `atomic` command for showing/hiding various prompt segments on-the-fly
 
 ## Configuration
 
 Various prompt segments can be shown/hidden or modified according to your choice. There are two ways for doing that:
 
-1. On-the-fly using `brainy` command
+1. On-the-fly using `atomic` command
 2. Theme Environment Variables
 
-### On-the-fly using `brainy` command
+### On-the-fly using `atomic` command
 
 This theme provides a command for showing/hiding prompt segments.
 
-`brainy show <segment>`
+`atomic show <segment>`
 
-`brainy hide <segment>`
+`atomic hide <segment>`
 
 Tab-completion for this command is enabled by default.
 
@@ -116,8 +153,8 @@ Currently available prompt segments are:
 
 Three environment variables can be defined to rearrange the segments order. The default values are:
 
-`___BRAINY_TOP_LEFT="user_info dir scm"`
+`___ATOMIC_TOP_LEFT="user_info dir scm"`
 
-`___BRAINY_TOP_RIGHT="python ruby todo clock battery"`
+`___ATOMIC_TOP_RIGHT="python ruby todo clock battery"`
 
-`___BRAINY_BOTTOM="exitcode char"`
+`___ATOMIC_BOTTOM="exitcode char"`
