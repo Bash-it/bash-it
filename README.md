@@ -8,6 +8,12 @@ Includes autocompletion, themes, aliases, custom functions, a few stolen pieces 
 
 Bash-it provides a solid framework for using, developing and maintaining shell scripts and custom commands for your daily work. If you're using the _Bourne Again Shell_ (Bash) on a regular basis and have been looking for an easy way on how to keep all of these nice little scripts and aliases under control, then Bash-it is for you! Stop polluting your `~/bin` directory and your `.bashrc` file, fork/clone Bash-it and start hacking away.
 
+## Contributing
+
+Please take a look at the [Contribution Guidelines](CONTRIBUTING.md) before reporting a bug or providing a new feature.
+
+The [Development Guidelines](DEVELOPMENT.md) have more information on some of the internal workings of Bash-it, please feel free to read through this page if you're interested in how Bash-it loads its components.
+
 ## Install
 
 1. Check out a clone of this repo to a location of your choice, such as: `git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it`
@@ -173,10 +179,6 @@ cd $BASH_IT
 ```
 
 This will restore your previous Bash profile. After the uninstall script finishes, remove the Bash-it directory from your machine (`rm -rf $BASH_IT`) and start a new shell.
-
-## Contributing
-
-Please take a look at the [Contribution Guidelines](CONTRIBUTING.md) before reporting a bug or providing a new feature.
 
 ## Misc
 
