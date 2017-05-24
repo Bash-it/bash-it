@@ -24,6 +24,24 @@ When contributing a new feature, a bug fix, a new theme, or any other change to 
 * Use the provided meta functions to document your code, e.g. `about-plugin`, `about`, `group`, `param`, `example`. This will make it easier for other people to use your new functionality. Take a look at the existing code for an example (e.g. [the base plugin](plugins/available/base.plugin.bash)).
 * When adding files, please use the existing file naming conventions, e.g. plugin files need to end in `.plugin.bash`. This is important for the installation functionality.
 
+## Unit Tests
+
+When adding features or making changes/fixes, please run our growing unit test suite to ensure that you did not break existing functionality. The test suite does not cover all aspects of Bash-it, but please run it anyway to verify that you did not introduce any regression issues.
+
+Any code pushed to GitHub as part of a Pull Request will automatically trigger a continuous integration build on [Travis CI](https://travis-ci.org/Bash-it/bash-it), where the test suite is run on both Linux and macOS. The Pull Request will then show the result of the Travis build, indicating whether all tests ran fine, or whether there were issues. Please pay attention to this, Pull Requests with build issues will not be merged.
+
+Adding new functionality or changing existing functionality is a good opportunity to increase Bash-it's test coverage. When you're changing the Bash-it codebase, please consider adding some unit tests that cover the new or changed functionality. Ideally, when fixing a bug, a matching unit test that verifies that the bug is no longer present, is added at the same time.
+
+To run the test suite, simply execute the following in the directory where you cloned Bash-it:
+
+```bash
+test/run
+```
+
+This command will clone the [Bats Test Framework](https://github.com/sstephenson/bats) to a local directory and then run the test suite found in the [test](test) folder. The test script will execute each test in turn, and will print a status for each test case.
+
+When adding new test cases, please take a look at the existing test cases for examples.
+
 ## Features
 
 * When adding new completions or plugins, please don't simply copy existing tools into the Bash-it codebase, try to load/integrate the tools instead. An example is using `nvm`: Instead of copying the existing `nvm` script into Bash-it, the `nvm.plugin.bash` file tries to load an existing installation of `nvm`. This means an additional step for the user (installing `nvm` from its own repo, or through a package manager), but it will also ensure that `nvm` can be upgraded in an easy way.

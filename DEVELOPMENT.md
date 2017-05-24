@@ -39,3 +39,5 @@ For `aliases`, `plugins` and `completions`, the following rules are applied that
   ```bash
   # BASH_IT_LOAD_PRIORITY: 225
   ```
+
+These items are subject to change. When making changes to the internal functionality, this page needs to be updated as well.
