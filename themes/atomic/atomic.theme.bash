@@ -166,7 +166,48 @@ ___atomic_prompt_clock() {
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
 }
 
-___atomic_prompt_battery() {
+case "$OSTYPE" in
+  cygwin*) ___atomic_prompt_battery() {
+	[ "${THEME_SHOW_BATTERY}" != "true" ] && return
+	batp=$(echo porcent=$(WMIC PATH Win32_Battery Get EstimatedChargeRemaining /Format:List) | grep -o '[0-9]*')
+	bats=$(echo porcent=$(WMIC Path Win32_Battery Get BatteryStatus /Format:List) | grep -o '[0-9]*')
+
+	if [ "$batp" -gt 50 ]; then
+		color=$bold_green
+	elif [ "$batp" -lt 50 ] && [ "$batp" -gt 25 ]; then
+		color=$bold_yellow
+	elif [ "$batp" -lt 25 ]; then
+		color=$IRed
+	fi
+	
+	box="[|]"
+	[ "$bats" -eq 1 ] && info="-"
+	[ "$bats" -eq 2 ] && info="+"
+	info+=$batp
+	[ "$info" == "+100" ] && info="AC"
+	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
+	} ;;
+  msys*) ___atomic_prompt_battery() {
+	[ "${THEME_SHOW_BATTERY}" != "true" ] && return
+	batp=$(echo porcent=$(WMIC PATH Win32_Battery Get EstimatedChargeRemaining /Format:List) | grep -o '[0-9]*')
+	bats=$(echo porcent=$(WMIC Path Win32_Battery Get BatteryStatus /Format:List) | grep -o '[0-9]*')
+
+	if [ "$batp" -gt 50 ]; then
+		color=$bold_green
+	elif [ "$batp" -lt 50 ] && [ "$batp" -gt 25 ]; then
+		color=$bold_yellow
+	elif [ "$batp" -lt 25 ]; then
+		color=$IRed
+	fi
+	
+	box="[|]"
+	[ "$bats" -eq 1 ] && info="-"
+	[ "$bats" -eq 2 ] && info="+"
+	info+=$batp
+	[ "$info" == "+100" ] && info="AC"
+	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
+	} ;;
+  darwin*) ___atomic_prompt_battery() {
 	[ ! -e "$BASH_IT"/plugins/enabled/battery.plugin.bash ] ||
 	[ "${THEME_SHOW_BATTERY}" != "true" ] && return
 	batp=$(battery_percentage)
@@ -183,7 +224,27 @@ ___atomic_prompt_battery() {
 	info+=$batp
 	[ "$info" == "+100" ] && info="AC"
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
-}
+	} ;; 
+  linux*) ___atomic_prompt_battery() {
+	[ ! -e "$BASH_IT"/plugins/enabled/battery.plugin.bash ] ||
+	[ "${THEME_SHOW_BATTERY}" != "true" ] && return
+	batp=$(battery_percentage)
+	if [ "$batp" -gt 50 ]; then
+		color=$bold_green
+	elif [ "$batp" -lt 50 ] && [ "$batp" -gt 25 ]; then
+		color=$bold_yellow
+	elif [ "$batp" -lt 25 ]; then
+		color=$IRed
+	fi
+	box="[|]"
+	ac_adapter_disconnected && info="-"
+	ac_adapter_connected && info="+"
+	info+=$batp
+	[ "$info" == "+100" ] && info="AC"
+	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
+	} ;;
+  *) echo "bt:" ;;
+esac
 
 ___atomic_prompt_exitcode() {
 	[ "${THEME_SHOW_EXITCODE}" != "true" ] && return
