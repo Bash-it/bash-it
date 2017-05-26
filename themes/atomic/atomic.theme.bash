@@ -169,11 +169,11 @@ ___atomic_prompt_battery() {
   chk=$(isFunction battery_percentage && echo yes || echo no)
   [ "$chk" != "yes" ] || [ "${THEME_SHOW_BATTERY}" != "true" ] && return
   batp=$(battery_percentage)
-  if [ "$batp" -eq 50 ] && [ "$batp" -gt 50 ]; then
+  if [ "$batp" -eq 50 ] || [ "$batp" -gt 50 ]; then
     color=$bold_green
     elif [ "$batp" -lt 50 ] && [ "$batp" -gt 25 ]; then
     color=$bold_yellow
-    elif [ "$batp" -eq 25 ] && [ "$batp" -lt 25 ]; then
+    elif [ "$batp" -eq 25 ] || [ "$batp" -lt 25 ]; then
     color=$IRed
   fi
   box="[|]"
