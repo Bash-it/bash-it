@@ -27,6 +27,8 @@ Face="\342\230\273"
 ## Parsers ##
 #############
 
+isFunction() { [[ "$(declare -Ff "$1")" ]]; }
+
 ____atomic_top_left_parse() {
   ifs_old="${IFS}"
   IFS="|"
@@ -164,8 +166,8 @@ ___atomic_prompt_clock() {
 }
 
 ___atomic_prompt_battery() {
-  [ ! -e "$BASH_IT"/plugins/enabled/battery.plugin.bash ] ||
-  [ "${THEME_SHOW_BATTERY}" != "true" ] && return
+  chk=$(isFunction battery_percentage && echo yes || echo no)
+  [ "$chk" != "yes" ] || [ "${THEME_SHOW_BATTERY}" != "true" ] && return
   batp=$(battery_percentage)
   if [ "$batp" -gt 50 ]; then
     color=$bold_green
