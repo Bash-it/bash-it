@@ -21,6 +21,12 @@ function local_setup {
   assert [ -L "$BASH_IT/plugins/enabled/250---node.plugin.bash" ]
 }
 
+@test "bash-it: enable the node plugin through the bash-it function" {
+  run bash-it enable plugin "node"
+  assert_line "0" 'node enabled with priority 250.'
+  assert [ -L "$BASH_IT/plugins/enabled/250---node.plugin.bash" ]
+}
+
 @test "bash-it: enable the nvm plugin" {
   run _enable-plugin "nvm"
   assert_line "0" 'nvm enabled with priority 225.'
@@ -29,6 +35,14 @@ function local_setup {
 
 @test "bash-it: enable an unknown plugin" {
   run _enable-plugin "unknown-foo"
+  assert_line "0" 'sorry, unknown-foo does not appear to be an available plugin.'
+  assert [ ! -L "$BASH_IT/plugins/enabled/250---unknown-foo.plugin.bash" ]
+  assert [ ! -L "$BASH_IT/plugins/enabled/unknown-foo.plugin.bash" ]
+}
+
+@test "bash-it: enable an unknown plugin through the bash-it function" {
+  run bash-it enable plugin "unknown-foo"
+  echo "${lines[@]}"
   assert_line "0" 'sorry, unknown-foo does not appear to be an available plugin.'
   assert [ ! -L "$BASH_IT/plugins/enabled/250---unknown-foo.plugin.bash" ]
   assert [ ! -L "$BASH_IT/plugins/enabled/unknown-foo.plugin.bash" ]
@@ -94,6 +108,48 @@ function local_setup {
   assert [ -L "$BASH_IT/plugins/enabled/250---ssh.plugin.bash" ]
   assert [ ! -L "$BASH_IT/plugins/enabled/node.plugin.bash" ]
   assert [ ! -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
+}
+
+@test "bash-it: run the migrate command without anything to migrate and nothing enabled" {
+  run _bash-it-migrate
+}
+
+@test "bash-it: run the migrate command without anything to migrate" {
+  run _enable-plugin "ssh"
+  assert [ -L "$BASH_IT/plugins/enabled/250---ssh.plugin.bash" ]
+
+  run _bash-it-migrate
+  assert [ -L "$BASH_IT/plugins/enabled/250---ssh.plugin.bash" ]
+}
+
+@test "bash-it: verify that existing components are automatically migrated when something is enabled" {
+  ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/nvm.plugin.bash
+  assert [ -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
+
+  run bash-it enable plugin "node"
+  assert_line "0" 'Migrating plugin nvm.'
+  assert_line "1" 'nvm disabled.'
+  assert_line "2" 'nvm enabled with priority 225.'
+  assert_line "3" 'node enabled with priority 250.'
+  assert [ ! -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
+  assert [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
+  assert [ -L "$BASH_IT/plugins/enabled/250---node.plugin.bash" ]
+}
+
+@test "bash-it: verify that existing components are automatically migrated when something is disabled" {
+  ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/nvm.plugin.bash
+  assert [ -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
+  ln -s $BASH_IT/plugins/available/node.plugin.bash $BASH_IT/plugins/enabled/250---node.plugin.bash
+  assert [ -L "$BASH_IT/plugins/enabled/250---node.plugin.bash" ]
+
+  run bash-it disable plugin "node"
+  assert_line "0" 'Migrating plugin nvm.'
+  assert_line "1" 'nvm disabled.'
+  assert_line "2" 'nvm enabled with priority 225.'
+  assert_line "3" 'node disabled.'
+  assert [ ! -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
+  assert [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
+  assert [ ! -L "$BASH_IT/plugins/enabled/250---node.plugin.bash" ]
 }
 
 @test "bash-it: enable all plugins" {

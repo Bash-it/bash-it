@@ -88,6 +88,9 @@ bash-it ()
     fi
 
     if [ x"$verb" == x"enable" -o x"$verb" == x"disable" ];then
+        # Automatically run a migration if required
+        _bash-it-migrate
+
         for arg in "$@"
         do
             $func $arg
@@ -159,6 +162,7 @@ _bash-it-migrate() {
 
   for file_type in "aliases" "plugins" "completion"
   do
+    shopt -s nullglob
     for f in $BASH_IT/$file_type/enabled/*.bash
     do
       typeset ff=$(basename $f)
@@ -169,6 +173,8 @@ _bash-it-migrate() {
         typeset single_type=$(echo $ff | awk -F'.' '{print $2}' | sed 's/aliases/alias/g')
         typeset component_name=$(echo $ff | cut -d'.' -f1)
 
+        echo "Migrating $single_type $component_name."
+
         disable_func="_disable-$single_type"
         enable_func="_enable-$single_type"
 
@@ -176,6 +182,7 @@ _bash-it-migrate() {
         $enable_func $component_name
       fi
     done
+    shopt -u nullglob
   done
 }
 
