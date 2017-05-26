@@ -345,19 +345,19 @@ _enable-thing ()
         typeset f $file_type
         for f in $BASH_IT/$subdirectory/available/*.bash
         do
-            plugin=$(basename $f .$file_type.bash)
-            _enable-thing $subdirectory $file_type $plugin $load_priority
+            to_enable=$(basename $f .$file_type.bash)
+            _enable-thing $subdirectory $file_type $to_enable $load_priority
         done
     else
-        typeset plugin=$(command ls $BASH_IT/$subdirectory/available/$file_entity.*bash 2>/dev/null | head -1)
-        if [ -z "$plugin" ]; then
+        typeset to_enable=$(command ls $BASH_IT/$subdirectory/available/$file_entity.*bash 2>/dev/null | head -1)
+        if [ -z "$to_enable" ]; then
             printf '%s\n' "sorry, $file_entity does not appear to be an available $file_type."
             return
         fi
 
-        plugin=$(basename $plugin)
+        to_enable=$(basename $to_enable)
         # Check for existence of the file using a wildcard, since we don't know which priority might have been used when enabling it.
-        typeset enabled_plugin=$(command ls $BASH_IT/$subdirectory/enabled/{[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$plugin,$plugin} 2>/dev/null | head -1)
+        typeset enabled_plugin=$(command ls $BASH_IT/$subdirectory/enabled/{[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$to_enable,$to_enable} 2>/dev/null | head -1)
         if [ ! -z "$enabled_plugin" ] ; then
           printf '%s\n' "$file_entity is already enabled."
           return
@@ -366,10 +366,10 @@ _enable-thing ()
         mkdir -p $BASH_IT/$subdirectory/enabled
 
         # Load the priority from the file if it present there
-        local local_file_priority=$(grep -E "^# BASH_IT_LOAD_PRIORITY:" $BASH_IT/$subdirectory/available/$plugin | awk -F': ' '{ print $2 }')
+        local local_file_priority=$(grep -E "^# BASH_IT_LOAD_PRIORITY:" $BASH_IT/$subdirectory/available/$to_enable | awk -F': ' '{ print $2 }')
         local use_load_priority=${local_file_priority:-$load_priority}
 
-        ln -s ../available/$plugin $BASH_IT/$subdirectory/enabled/$use_load_priority$BASH_IT_LOAD_PRIORITY_SEPARATOR$plugin
+        ln -s ../available/$to_enable $BASH_IT/$subdirectory/enabled/$use_load_priority$BASH_IT_LOAD_PRIORITY_SEPARATOR$to_enable
     fi
 
     if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
