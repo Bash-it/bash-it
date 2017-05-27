@@ -191,7 +191,7 @@ function git_status_summary {
     if (!seen_header) {
       print
     }
-    print untracked "\t" unstaged "\t" staged
+    print untracked + 0 "\t" unstaged + 0 "\t" staged + 0
   }'
 }
 
