@@ -381,7 +381,7 @@ _help-plugins()
 
     # display a brief progress message...
     printf '%s' 'please wait, building help...'
-    typeset grouplist=$(mktemp /tmp/grouplist.XXXX)
+    typeset grouplist=$(mktemp /tmp/grouplist.XXXXXX)
     typeset func
     for func in $(typeset_functions)
     do
