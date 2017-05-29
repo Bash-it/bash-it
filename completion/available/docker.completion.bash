@@ -147,7 +147,7 @@ __docker_complete_containers_and_images() {
 	__docker_complete_containers_all
 	local containers=( "${COMPREPLY[@]}" )
 	__docker_complete_images
-	COMPREPLY+=( "${containers[@]}" )
+	COMPREPLY=( "${COMPREPLY[@]}" "${containers[@]}" )
 }
 
 # Returns the names and optionally IDs of networks.
@@ -235,7 +235,7 @@ __docker_complete_nodes() {
 
 __docker_complete_nodes_plus_self() {
 	__docker_complete_nodes "$@"
-	COMPREPLY+=( self )
+	COMPREPLY=( ${COMPREPLY[@]} self )
 }
 
 # Returns a list of all services. Additional arguments to `docker service ls`
@@ -2375,7 +2375,7 @@ _docker_run() {
 		seccomp)
 			local cur=${cur##*=}
 			_filedir
-			COMPREPLY+=( $( compgen -W "unconfined" -- "$cur" ) )
+			COMPREPLY=( ${COMPREPLY[@]} $( compgen -W "unconfined" -- "$cur" ) )
 			return
 			;;
 	esac

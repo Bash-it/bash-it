@@ -5,7 +5,7 @@ function __powerline_left_segment {
   local params=( $1 )
   IFS="${OLD_IFS}"
 
-  LEFT_PROMPT+="${separator}$(set_color - ${params[1]}) ${params[0]} ${normal}"
+  LEFT_PROMPT="${LEFT_PROMPT}${separator}$(set_color - ${params[1]}) ${params[0]} ${normal}"
   LAST_SEGMENT_COLOR=${params[1]}
 }
 
@@ -20,7 +20,7 @@ function __powerline_prompt_command {
     [[ -n "${info}" ]] && __powerline_left_segment "${info}"
   done
   [[ "${last_status}" -ne 0 ]] && __powerline_left_segment $(__powerline_last_status_prompt ${last_status})
-  [[ -n "${LEFT_PROMPT}" ]] && LEFT_PROMPT+="$(set_color ${LAST_SEGMENT_COLOR} -) ${normal}"
+  [[ -n "${LEFT_PROMPT}" ]] && LEFT_PROMPT="${LEFT_PROMPT}$(set_color ${LAST_SEGMENT_COLOR} -) ${normal}"
 
   PS1="${LEFT_PROMPT} "
 

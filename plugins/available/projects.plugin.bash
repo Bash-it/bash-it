@@ -34,7 +34,7 @@ fi
 # with the same name in project directories
 for i in ${PROJECT_PATHS//:/$'\n'}; do
   if [ -d "$i"/"$1" ]; then
-    dests+=("$i/$1")
+    dests=(${dests[@]} "$i/$1")
   fi
 done
 
@@ -49,7 +49,7 @@ elif [ ${#dests[@]} -eq 1 ]; then
 
 elif [ ${#dests[@]} -gt 1 ]; then
   PS3="Multiple project directories found. Please select one: "
-  dests+=("cancel")
+  dests=(${dests[@]} "cancel")
   select d in "${dests[@]}"; do
     case $d in
       "cancel")

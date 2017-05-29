@@ -18,7 +18,7 @@ function __powerline_right_segment {
     separator_color="$(set_color ${params[1]} ${LAST_SEGMENT_COLOR})"
     (( padding += 1 ))
   fi
-  RIGHT_PROMPT+="${separator_color}${separator_char}${normal}$(set_color - ${params[1]}) ${params[0]} ${normal}$(set_color - ${COLOR})${normal}"
+  RIGHT_PROMPT="${RIGHT_PROMPT}${separator_color}${separator_char}${normal}$(set_color - ${params[1]}) ${params[0]} ${normal}$(set_color - ${COLOR})${normal}"
   RIGHT_PROMPT_LENGTH=$(( ${#params[0]} + RIGHT_PROMPT_LENGTH + padding ))
   LAST_SEGMENT_COLOR="${params[1]}"
   (( SEGMENTS_AT_RIGHT += 1 ))
@@ -41,16 +41,16 @@ function __powerline_prompt_command {
     local info="$(__powerline_${segment}_prompt)"
     [[ -n "${info}" ]] && __powerline_left_segment "${info}"
   done
-  [[ -n "${LEFT_PROMPT}" ]] && LEFT_PROMPT+="$(set_color ${LAST_SEGMENT_COLOR} -)${separator_char}${normal}"
+  [[ -n "${LEFT_PROMPT}" ]] && LEFT_PROMPT="${LEFT_PROMPT}$(set_color ${LAST_SEGMENT_COLOR} -)${separator_char}${normal}"
 
   ## right prompt ##
   if [[ -n "${POWERLINE_RIGHT_PROMPT}" ]]; then
-    LEFT_PROMPT+="${move_cursor_rightmost}"
+    LEFT_PROMPT="${LEFT_PROMPT}${move_cursor_rightmost}"
     for segment in $POWERLINE_RIGHT_PROMPT; do
       local info="$(__powerline_${segment}_prompt)"
       [[ -n "${info}" ]] && __powerline_right_segment "${info}"
     done
-    LEFT_PROMPT+="\033[${RIGHT_PROMPT_LENGTH}D"
+    LEFT_PROMPT="${LEFT_PROMPT}\033[${RIGHT_PROMPT_LENGTH}D"
   fi
 
   PS1="${LEFT_PROMPT}${RIGHT_PROMPT}\n$(__powerline_last_status_prompt ${last_status})${PROMPT_CHAR} "

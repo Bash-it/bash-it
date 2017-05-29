@@ -16,20 +16,27 @@ about-plugin 'Automatic completion of aliases'
 function alias_completion {
     local namespace="alias_completion"
 
+    # sed switch -E is BSD specific and only added to UNIX sed after v4.2
+    # fallback to -r if -E does not work
+    local sed_regex_switch='E'
+    if ! sed -${sed_regex_switch} '' /dev/null > /dev/null 2>&1; then
+        sed_regex_switch='r'
+    fi
+
     # parse function based completion definitions, where capture group 2 => function and 3 => trigger
     local compl_regex='complete( +[^ ]+)* -F ([^ ]+) ("[^"]+"|[^ ]+)'
     # parse alias definitions, where capture group 1 => trigger, 2 => command, 3 => command arguments
     local alias_regex="alias( -- | )([^=]+)='(\"[^\"]+\"|[^ ]+)(( +[^ ]+)*)'"
 
     # create array of function completion triggers, keeping multi-word triggers together
-    eval "local completions=($(complete -p | sed -Ene "/$compl_regex/s//'\3'/p"))"
+    eval "local completions=($(complete -p | sed -${sed_regex_switch}ne "/$compl_regex/s//'\3'/p"))"
     (( ${#completions[@]} == 0 )) && return 0
 
     # create temporary file for wrapper functions and completions
     rm -f "/tmp/${namespace}-*.tmp" # preliminary cleanup
     local tmp_file; tmp_file="$(mktemp "/tmp/${namespace}-${RANDOM}XXX.tmp")" || return 1
 
-    local completion_loader; completion_loader="$(complete -p -D 2>/dev/null | sed -Ene 's/.* -F ([^ ]*).*/\1/p')"
+    local completion_loader; completion_loader="$(complete -p -D 2>/dev/null | sed -${sed_regex_switch}ne 's/.* -F ([^ ]*).*/\1/p')"
 
     # read in "<alias> '<aliased command>' '<command args>'" lines from defined aliases
     local line; while read line; do
@@ -49,7 +56,7 @@ function alias_completion {
                 eval "$completion_loader $alias_cmd"
                 # 124 means completion loader was successful
                 [[ $? -eq 124 ]] || continue
-                completions+=($alias_cmd)
+                completions=(${completions[@]} $alias_cmd)
             else
                 continue
             fi
@@ -77,6 +84,6 @@ function alias_completion {
         # replace completion trigger by alias
         new_completion="${new_completion% *} $alias_name"
         echo "$new_completion" >> "$tmp_file"
-    done < <(alias -p | sed -Ene "s/$alias_regex/\2 '\3' '\4'/p")
+    done < <(alias -p | sed -${sed_regex_switch}ne "s/$alias_regex/\2 '\3' '\4'/p")
     source "$tmp_file" && rm -f "$tmp_file"
 }; alias_completion

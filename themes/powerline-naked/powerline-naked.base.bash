@@ -10,6 +10,6 @@ function __powerline_left_segment {
   if [[ "${SEGMENTS_AT_LEFT}" -gt 0 ]]; then
     separator="${separator_char}"
   fi
-  LEFT_PROMPT+="${separator}$(set_color ${params[1]} -) ${params[0]} ${normal}"
+  LEFT_PROMPT="${LEFT_PROMPT}${separator}$(set_color ${params[1]} -) ${params[0]} ${normal}"
   (( SEGMENTS_AT_LEFT += 1 ))
 }

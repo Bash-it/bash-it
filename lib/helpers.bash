@@ -437,7 +437,8 @@ then
     example 'pathmunge /path/to/dir is equivalent to PATH=/path/to/dir:$PATH'
     example 'pathmunge /path/to/dir after is equivalent to PATH=$PATH:/path/to/dir'
 
-    if ! [[ $PATH =~ (^|:)$1($|:) ]] ; then
+    local re="(^|:)$1($|:)"
+    if ! [[ $PATH =~ $re ]] ; then
       if [ "$2" = "after" ] ; then
         export PATH=$PATH:$1
       else
