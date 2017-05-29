@@ -9,12 +9,12 @@ This page summarizes a couple of rules to keep in mind when developing features 
 The main `bash_it.sh` script loads the frameworks individual components in the following order:
 
 * `lib/composure.bash`
-* `themes/colors.theme.bash`
-* `themes/base.theme.bash`
 * Files in `lib` with the exception of `appearance.bash` - this means that `composure.bash` is loaded again here (possible improvement?)
 * Enabled `aliases`
 * Enabled `plugins`
 * Enabled `completions`
+* `themes/colors.theme.bash`
+* `themes/base.theme.bash`
 * `lib/appearance.bash`, which loads the selected theme
 * Custom `aliases`
 * Custom `plugins`
