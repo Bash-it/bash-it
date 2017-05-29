@@ -163,7 +163,7 @@ _bash-it-migrate() {
   for file_type in "aliases" "plugins" "completion"
   do
     shopt -s nullglob
-    for f in $BASH_IT/$file_type/enabled/*.bash
+    for f in "${BASH_IT}/$file_type/enabled/"*.bash
     do
       typeset ff=$(basename $f)
 
@@ -203,10 +203,10 @@ _bash-it-describe ()
     typeset f
     typeset enabled
     printf "%-20s%-10s%s\n" "$column_header" 'Enabled?' 'Description'
-    for f in $BASH_IT/$subdirectory/available/*.bash
+    for f in "${BASH_IT}/$subdirectory/available/"*.bash
     do
         # Check for both the old format without the load priority, and the extended format with the priority
-        if [ -e $BASH_IT/$subdirectory/enabled/$(basename $f) ] || [ -e $BASH_IT/$subdirectory/enabled/*$BASH_IT_LOAD_PRIORITY_SEPARATOR$(basename $f) ]; then
+        if [ -e "${BASH_IT}/$subdirectory/enabled/"$(basename $f) ] || [ -e "${BASH_IT}/$subdirectory/enabled/"*$BASH_IT_LOAD_PRIORITY_SEPARATOR$(basename $f) ]; then
             enabled='x'
         else
             enabled=' '
@@ -268,14 +268,14 @@ _disable-thing ()
 
     if [ "$file_entity" = "all" ]; then
         typeset f $file_type
-        for f in $BASH_IT/$subdirectory/available/*.bash
+        for f in "${BASH_IT}/$subdirectory/available/"*.bash
         do
             plugin=$(basename $f)
-            if [ -e $BASH_IT/$subdirectory/enabled/$plugin ]; then
-                rm $BASH_IT/$subdirectory/enabled/$(basename $plugin)
+            if [ -e "${BASH_IT}/$subdirectory/enabled/$plugin" ]; then
+                rm "${BASH_IT}/$subdirectory/enabled/$(basename $plugin)"
             fi
-            if [ -e $BASH_IT/$subdirectory/enabled/*$BASH_IT_LOAD_PRIORITY_SEPARATOR$plugin ]; then
-                rm $BASH_IT/$subdirectory/enabled/*$BASH_IT_LOAD_PRIORITY_SEPARATOR$(basename $plugin)
+            if [ -e "${BASH_IT}/$subdirectory/enabled/"*$BASH_IT_LOAD_PRIORITY_SEPARATOR$plugin ]; then
+                rm "${BASH_IT}/$subdirectory/enabled/"*$BASH_IT_LOAD_PRIORITY_SEPARATOR$(basename $plugin)
             fi
         done
     else
@@ -283,12 +283,12 @@ _disable-thing ()
         # 250---node.plugin.bash
         # node.plugin.bash
         # Either one will be matched by this glob
-        typeset plugin=$(command ls $BASH_IT/$subdirectory/enabled/{[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity.*bash,$file_entity.*bash} 2>/dev/null | head -1)
+        typeset plugin=$(command ls $ "${BASH_IT}/$subdirectory/enabled/"{[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity.*bash,$file_entity.*bash} 2>/dev/null | head -1)
         if [ -z "$plugin" ]; then
             printf '%s\n' "sorry, $file_entity does not appear to be an enabled $file_type."
             return
         fi
-        rm $BASH_IT/$subdirectory/enabled/$(basename $plugin)
+        rm "${BASH_IT}/$subdirectory/enabled/$(basename $plugin)"
     fi
 
     if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
@@ -350,13 +350,13 @@ _enable-thing ()
 
     if [ "$file_entity" = "all" ]; then
         typeset f $file_type
-        for f in $BASH_IT/$subdirectory/available/*.bash
+        for f in "${BASH_IT}/$subdirectory/available/"*.bash
         do
             to_enable=$(basename $f .$file_type.bash)
             _enable-thing $subdirectory $file_type $to_enable $load_priority
         done
     else
-        typeset to_enable=$(command ls $BASH_IT/$subdirectory/available/$file_entity.*bash 2>/dev/null | head -1)
+        typeset to_enable=$(command ls "${BASH_IT}/$subdirectory/available/"$file_entity.*bash 2>/dev/null | head -1)
         if [ -z "$to_enable" ]; then
             printf '%s\n' "sorry, $file_entity does not appear to be an available $file_type."
             return
@@ -364,19 +364,19 @@ _enable-thing ()
 
         to_enable=$(basename $to_enable)
         # Check for existence of the file using a wildcard, since we don't know which priority might have been used when enabling it.
-        typeset enabled_plugin=$(command ls $BASH_IT/$subdirectory/enabled/{[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$to_enable,$to_enable} 2>/dev/null | head -1)
+        typeset enabled_plugin=$(command ls "${BASH_IT}/$subdirectory/enabled/"{[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$to_enable,$to_enable} 2>/dev/null | head -1)
         if [ ! -z "$enabled_plugin" ] ; then
           printf '%s\n' "$file_entity is already enabled."
           return
         fi
 
-        mkdir -p $BASH_IT/$subdirectory/enabled
+        mkdir -p "${BASH_IT}/$subdirectory/enabled"
 
         # Load the priority from the file if it present there
-        local local_file_priority=$(grep -E "^# BASH_IT_LOAD_PRIORITY:" $BASH_IT/$subdirectory/available/$to_enable | awk -F': ' '{ print $2 }')
+        local local_file_priority=$(grep -E "^# BASH_IT_LOAD_PRIORITY:" "${BASH_IT}/$subdirectory/available/$to_enable" | awk -F': ' '{ print $2 }')
         local use_load_priority=${local_file_priority:-$load_priority}
 
-        ln -s ../available/$to_enable $BASH_IT/$subdirectory/enabled/$use_load_priority$BASH_IT_LOAD_PRIORITY_SEPARATOR$to_enable
+        ln -s ../available/$to_enable "${BASH_IT}/$subdirectory/enabled/${use_load_priority}${BASH_IT_LOAD_PRIORITY_SEPARATOR}${to_enable}"
     fi
 
     if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
@@ -410,14 +410,14 @@ _help-aliases()
                 alias_path="available/$1.aliases.bash"
             ;;
         esac
-        cat $BASH_IT/aliases/$alias_path | metafor alias | sed "s/$/'/"
+        cat "${BASH_IT}/aliases/$alias_path" | metafor alias | sed "s/$/'/"
     else
         typeset f
-        for f in $BASH_IT/aliases/enabled/*
+        for f in "${BASH_IT}/aliases/enabled/"*
         do
             _help-list-aliases $f
         done
-        _help-list-aliases $BASH_IT/aliases/custom.aliases.bash
+        _help-list-aliases "${BASH_IT}/aliases/custom.aliases.bash"
     fi
 }
 
