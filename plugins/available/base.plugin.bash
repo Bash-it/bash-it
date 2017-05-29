@@ -136,7 +136,7 @@ function usage ()
     fi
 }
 
-if [ ! -e $BASH_IT/plugins/enabled/todo.plugin.bash ]; then
+if [ ! -e "${BASH_IT}/plugins/enabled/todo.plugin.bash" ] && [ ! -e "${BASH_IT}/plugins/enabled/*${BASH_IT_LOAD_PRIORITY_SEPARATOR}todo.plugin.bash" ]; then
 # if user has installed todo plugin, skip this...
     function t ()
     {
@@ -197,10 +197,10 @@ function buf ()
     cp -a "${filename}" "${filename}_${filetime}"
 }
 
-function del() { 
+function del() {
     about 'move files to hidden folder in tmp, that gets cleared on each reboot'
     param 'file or folder to be deleted'
     example 'del ./file.txt'
     group 'base'
-    mkdir -p /tmp/.trash && mv "$@" /tmp/.trash; 
+    mkdir -p /tmp/.trash && mv "$@" /tmp/.trash;
 }
