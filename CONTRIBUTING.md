@@ -23,6 +23,7 @@ When contributing a new feature, a bug fix, a new theme, or any other change to 
 * Internal functions that aren't to be used by the end user should start with an underscore, e.g. `_my-new-internal-function`.
 * Use the provided meta functions to document your code, e.g. `about-plugin`, `about`, `group`, `param`, `example`. This will make it easier for other people to use your new functionality. Take a look at the existing code for an example (e.g. [the base plugin](plugins/available/base.plugin.bash)).
 * When adding files, please use the existing file naming conventions, e.g. plugin files need to end in `.plugin.bash`. This is important for the installation functionality.
+* When using the `$BASH_IT` variable, please always enclose it in double quotes to ensure that the code also works when Bash-it is installed in a directory that contains spaces in its name: `for f in "${BASH_IT}/plugins/available"/*.bash ; do echo "$f" ; done`
 
 ## Unit Tests
 
