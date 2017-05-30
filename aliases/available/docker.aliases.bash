@@ -8,6 +8,7 @@ alias dkps='docker ps'  # List running Docker containers
 alias dkpsa='docker ps -a'  # List all Docker containers
 alias dki='docker images'  # List Docker images
 alias dkrmac='docker rm $(docker ps -a -q)'  # Delete all Docker containers
+alias dkrmiall='docker images -a --format "{{.ID}}" |xargs docker rmi -f' # Remove all Docker images filtered by ID
 alias dkrmlc='docker-remove-most-recent-container'  # Delete most recent (i.e., last) Docker container
 alias dkrmui='docker images -q -f dangling=true |xargs -r docker rmi'  # Delete all untagged Docker images
 alias dkrmall='docker-remove-stale-assets'  # Delete all untagged images and exited containers
