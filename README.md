@@ -55,17 +55,25 @@ Have a look at our [bash-it-docker respository](https://github.com/Bash-it/bash-
 
 ## Update
 
-To update Bash-it, simply run:
+To update Bash-it to the latest version, simply run:
 
-```
+```bash
 bash-it update
 ```
 
 that's all.
 
+If you are using an older version of Bash-it, it's possible that some functionality has changed, or that the internal structure of how Bash-it organizes its functionality has been updated. For these cases, we provide a `migrate` command:
+
+```bash
+bash-it migrate
+```
+
+This command will automatically migrate the Bash-it structure to the latest version. The `migrate` command is run automatically if you run the `update`, `enable` or `disable` commands.
+
 ## Help Screens
 
-```
+```bash
 bash-it show aliases        # shows installed and available aliases
 bash-it show completions    # shows installed and available completions
 bash-it show plugins        # shows installed and available plugins
