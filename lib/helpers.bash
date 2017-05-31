@@ -145,7 +145,12 @@ _bash-it_update() {
   if [[ -n "${status}" ]]; then
     git pull --rebase &> /dev/null
     if [[ $? -eq 0 ]]; then
-      echo "Bash-it successfully updated, enjoy!"
+      echo "Bash-it successfully updated."
+      echo ""
+      echo "Migrating your installation to the latest version now..."
+      _bash-it-migrate
+      echo ""
+      echo "All done, enjoy!"
       reload
     else
       echo "Error updating Bash-it, please, check if your Bash-it installation folder (${BASH_IT}) is clean."
