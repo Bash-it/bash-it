@@ -164,8 +164,10 @@ ___atomic_prompt_clock() {
 }
 
 ___atomic_prompt_battery() {
-  chk=$(command_exists battery_percentage && echo yes || echo no)
-  [ "$chk" != "yes" ] || [ "${THEME_SHOW_BATTERY}" != "true" ] && return
+  ! command_exists battery_percentage ||
+  [ "${THEME_SHOW_BATTERY}" != "true" ] ||
+  [ "$(battery_percentage)" = "no" ] && return
+
   batp=$(battery_percentage)
   if [ "$batp" -eq 50 ] || [ "$batp" -gt 50 ]; then
     color=$bold_green
