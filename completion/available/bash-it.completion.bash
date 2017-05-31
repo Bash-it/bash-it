@@ -61,7 +61,7 @@ _bash-it-comp()
 			return 0
 			;;
 		help)
-			local help_args="plugins aliases completions update"
+			local help_args="plugins aliases completions migrate update"
 			COMPREPLY=( $(compgen -W "${help_args}" -- ${cur}) )
 			return 0
 			;;

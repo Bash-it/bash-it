@@ -469,6 +469,14 @@ _help-update () {
   echo "Check for a new version of Bash-it and update it."
 }
 
+_help-migrate () {
+  _about 'help message for migrate command'
+  _group 'lib'
+
+  echo "Migrates internal Bash-it structure to the latest version in case of changes."
+  echo "The 'migrate' command is run automatically when calling 'update', 'enable' or 'disable'."
+}
+
 all_groups ()
 {
     about 'displays all unique metadata groups'
