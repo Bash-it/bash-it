@@ -23,6 +23,12 @@ function local_setup {
   assert [ -L "$BASH_IT/aliases/enabled/150---ansible.aliases.bash" ]
 }
 
+@test "bash-it: enable the todo.txt-cli aliases through the bash-it function" {
+  run bash-it enable alias "todo.txt-cli"
+  assert_line "0" 'todo.txt-cli enabled with priority 150.'
+  assert [ -L "$BASH_IT/aliases/enabled/150---todo.txt-cli.aliases.bash" ]
+}
+
 @test "bash-it: enable the curl aliases" {
   run _enable-alias "curl"
   assert_line "0" 'curl enabled with priority 150.'
@@ -140,6 +146,9 @@ function local_setup {
   ln -s $BASH_IT/plugins/available/node.plugin.bash $BASH_IT/plugins/enabled/node.plugin.bash
   assert [ -L "$BASH_IT/plugins/enabled/node.plugin.bash" ]
 
+  ln -s $BASH_IT/aliases/available/todo.txt-cli.aliases.bash $BASH_IT/aliases/enabled/todo.txt-cli.aliases.bash
+  assert [ -L "$BASH_IT/aliases/enabled/todo.txt-cli.aliases.bash" ]
+
   run _enable-plugin "ssh"
   assert [ -L "$BASH_IT/plugins/enabled/250---ssh.plugin.bash" ]
 
@@ -147,8 +156,10 @@ function local_setup {
   assert [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
   assert [ -L "$BASH_IT/plugins/enabled/250---node.plugin.bash" ]
   assert [ -L "$BASH_IT/plugins/enabled/250---ssh.plugin.bash" ]
+  assert [ -L "$BASH_IT/aliases/enabled/150---todo.txt-cli.aliases.bash" ]
   assert [ ! -L "$BASH_IT/plugins/enabled/node.plugin.bash" ]
   assert [ ! -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
+  assert [ ! -L "$BASH_IT/aliases/enabled/todo.txt-cli.aliases.bash" ]
 }
 
 @test "bash-it: run the migrate command without anything to migrate and nothing enabled" {

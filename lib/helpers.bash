@@ -175,7 +175,7 @@ _bash-it-migrate() {
       # Only process the ones that don't use the new structure
       if ! [[ $ff =~ ^[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR.*\.bash$ ]] ; then
         # Get the type of component from the extension
-        typeset single_type=$(echo $ff | awk -F'.' '{print $2}' | sed 's/aliases/alias/g')
+        typeset single_type=$(echo $ff | sed -e 's/.*\.\(.*\)\.bash/\1/g' | sed 's/aliases/alias/g')
         typeset component_name=$(echo $ff | cut -d'.' -f1)
 
         echo "Migrating $single_type $component_name."
