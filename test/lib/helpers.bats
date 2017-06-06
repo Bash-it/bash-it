@@ -9,9 +9,11 @@ cite _about _param _example _group _author _version
 load ../../lib/helpers
 
 function local_setup {
-  mkdir -p $BASH_IT/plugins
+  mkdir -p $BASH_IT
   lib_directory="$(cd "$(dirname "$0")" && pwd)"
-  cp -r $lib_directory/../../plugins/available $BASH_IT/plugins
+  cp -r $lib_directory/../.. $BASH_IT
+  mkdir -p $BASH_IT/aliases/enabled
+  mkdir -p $BASH_IT/completion/enabled
   mkdir -p $BASH_IT/plugins/enabled
 }
 
