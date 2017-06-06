@@ -53,6 +53,21 @@ function local_setup {
   assert [ -L "$BASH_IT/plugins/enabled/250---node.plugin.bash" ]
 }
 
+@test "bash-it: enable the node and nvm plugins through the bash-it function" {
+  run bash-it enable plugin "node" "nvm"
+  assert_line "0" 'node enabled with priority 250.'
+  assert_line "1" 'nvm enabled with priority 225.'
+  assert [ -L "$BASH_IT/plugins/enabled/250---node.plugin.bash" ]
+  assert [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
+}
+
+@test "bash-it: enable the foo-unkown and nvm plugins through the bash-it function" {
+  run bash-it enable plugin "foo-unknown" "nvm"
+  assert_line "0" 'sorry, foo-unknown does not appear to be an available plugin.'
+  assert_line "1" 'nvm enabled with priority 225.'
+  assert [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
+}
+
 @test "bash-it: enable the nvm plugin" {
   run _enable-plugin "nvm"
   assert_line "0" 'nvm enabled with priority 225.'
