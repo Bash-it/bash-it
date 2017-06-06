@@ -17,6 +17,30 @@ function local_setup {
   mkdir -p $BASH_IT/plugins/enabled
 }
 
+@test "bash-it: enable the ansible aliases through the bash-it function" {
+  run bash-it enable alias "ansible"
+  assert_line "0" 'ansible enabled with priority 150.'
+  assert [ -L "$BASH_IT/aliases/enabled/150---ansible.aliases.bash" ]
+}
+
+@test "bash-it: enable the curl aliases" {
+  run _enable-alias "curl"
+  assert_line "0" 'curl enabled with priority 150.'
+  assert [ -L "$BASH_IT/aliases/enabled/150---curl.aliases.bash" ]
+}
+
+@test "bash-it: enable the apm completion through the bash-it function" {
+  run bash-it enable completion "apm"
+  assert_line "0" 'apm enabled with priority 350.'
+  assert [ -L "$BASH_IT/completion/enabled/350---apm.completion.bash" ]
+}
+
+@test "bash-it: enable the brew completion" {
+  run _enable-completion "brew"
+  assert_line "0" 'brew enabled with priority 350.'
+  assert [ -L "$BASH_IT/completion/enabled/350---brew.completion.bash" ]
+}
+
 @test "bash-it: enable the node plugin" {
   run _enable-plugin "node"
   assert_line "0" 'node enabled with priority 250.'
