@@ -77,6 +77,22 @@ alias bashit='bash-it'
 alias bash_it='bash-it'
 alias bash_ti='bash-it'
 
+# Additional bash-it aliases for help/show
+alias shitsha='bash-it show aliases'
+alias shitshc='bash-it show completions'
+alias shitshp='bash-it show plugs'
+alias shitha='bash-it help aliases'
+alias shithc='bash-it help completions'
+alias shithp='bash-it help plugins'
+alias shitsrch="bash-it search $1"
+alias shitsrchen="bash-it search $1 --enable"
+alias shitenp="bash-it enable plugin"
+alias shitena="bash-it enable alias"
+alias shitenc="bash-it enable completion"
+
+# source ~/.bash_profile
+alias sprof="source ~/.bash_profile"
+
 # Display whatever file is regular file or folder
 catt() {
   for i in "$@"; do
