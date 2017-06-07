@@ -3,6 +3,8 @@ about-alias 'vagrant aliases'
 
 # Aliases
 alias vup="vagrant up"
+alias vupo="vagrant up $1 --provider=openstack"
+alias vupv="vagrant up $1 --provider=vsphere"
 alias vupl="vagrant up 2>&1 | tee vagrant.log"
 alias vh="vagrant halt"
 alias vs="vagrant suspend"
