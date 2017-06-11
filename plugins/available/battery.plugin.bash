@@ -47,15 +47,8 @@ battery_percentage(){
   
   if command_exists upower;
   then
-    local UPOWER_OUTPUT=$(upower --show-info $(upower --enumerate | grep BAT) | grep percentage)
-    case UPOWER_OUTPUT in
-      100*)
-        echo '100'
-      ;;
-      *)
-        echo $UPOWER_OUTPUT | tail --bytes 4 | head --bytes 2
-      ;;
-    esac
+    local UPOWER_OUTPUT=$(upower --show-info $(upower --enumerate | grep BAT) | grep percentage | tail --bytes 5)
+    echo ${UPOWER_OUTPUT: : -1}
   elif command_exists acpi;
   then
     local ACPI_OUTPUT=$(acpi -b)
