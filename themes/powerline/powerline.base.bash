@@ -22,7 +22,7 @@ function __powerline_user_info_prompt {
       ;;
     *)
       if [[ -n "${SSH_CLIENT}" ]]; then
-        user_info="${USER_INFO_SSH_CHAR}${USER}@${HOSTNAME}"
+        user_info="${USER_INFO_SSH_CHAR}${USER}"
       else
         user_info="${USER}"
       fi
