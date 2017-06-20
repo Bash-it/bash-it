@@ -5,7 +5,7 @@
 cite about-plugin
 about-plugin 'node version manager configuration'
 
-export NVM_DIR="$HOME/.nvm"
+export NVM_DIR=${NVM_DIR:- $HOME/.nvm}
 # This loads nvm
 if command -v brew &>/dev/null && [ -s $(brew --prefix nvm)/nvm.sh ]
 then
