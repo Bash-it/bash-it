@@ -77,6 +77,7 @@ alias batshit='bash-it'
 alias bashit='bash-it'
 alias bash_it='bash-it'
 alias bash_ti='bash-it'
+alias bsh='bash-it'
 
 # Display whatever file is regular file or folder
 catt() {
