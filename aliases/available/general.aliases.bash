@@ -76,6 +76,7 @@ alias batshit='bash-it'
 alias bashit='bash-it'
 alias bash_it='bash-it'
 alias bash_ti='bash-it'
+alias bsh='bash-it'
 
 # Additional bash-it aliases for help/show
 alias shitsha='bash-it show aliases'
