@@ -30,16 +30,19 @@ function load_one() {
 # Interactively enable several things
 function load_some() {
   file_type=$1
+  single_type=$(echo "$file_type" | sed -e "s/aliases$/alias/g" | sed -e "s/plugins$/plugin/g")
+  enable_func="_enable-$single_type"
   [ -d "$BASH_IT/$file_type/enabled" ] || mkdir "$BASH_IT/$file_type/enabled"
   for path in "$BASH_IT/${file_type}/available/"[^_]*
   do
     file_name=$(basename "$path")
     while true
     do
-      read -e -n 1 -p "Would you like to enable the ${file_name%%.*} $file_type? [y/N] " RESP
+      just_the_name="${file_name%%.*}"
+      read -e -n 1 -p "Would you like to enable the $just_the_name $file_type? [y/N] " RESP
       case $RESP in
       [yY])
-        ln -s "../available/${file_name}" "$BASH_IT/$file_type/enabled"
+        $enable_func $just_the_name
         break
         ;;
       [nN]|"")
@@ -150,6 +153,11 @@ elif [[ $silent ]] && ! [[ $no_modify_config ]]; then
   backup_new
 fi
 
+# Load dependencies for enabling components
+source "$BASH_IT/lib/composure.bash"
+cite _about _param _example _group _author _version
+source "$BASH_IT/lib/helpers.bash"
+
 if [[ $interactive ]] && ! [[ $silent ]] ;
 then
   for type in "aliases" "plugins" "completion"
@@ -160,11 +168,11 @@ then
 else
   echo ""
   echo -e "\033[0;32mEnabling sane defaults\033[0m"
-  load_one completion bash-it.completion.bash
-  load_one completion system.completion.bash
-  load_one plugins base.plugin.bash
-  load_one plugins alias-completion.plugin.bash
-  load_one aliases general.aliases.bash
+  _enable-completion bash-it
+  _enable-completion system
+  _enable-plugin base
+  _enable-plugin alias-completion
+  _enable-alias general
 fi
 
 echo ""

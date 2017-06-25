@@ -14,6 +14,6 @@ then
     BASH_IT_THEME=${BASH_IT_THEME##*/}
     echo "
     $BASH_IT_THEME"
-    echo "" | bash --init-file $BASH_IT/bash_it.sh -i
+    echo "" | bash --init-file "${BASH_IT}/bash_it.sh" -i
   done
 fi
