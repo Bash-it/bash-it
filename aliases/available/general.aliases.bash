@@ -23,17 +23,6 @@ alias vigen="vim ~/.bash_it/aliases/available/general.aliases.bash"
 alias vbrc="vim ~/.bashrc"
 alias vbpf="vim ~/.bash_profile"
 
-# vmpooler
-function vm-grab() {
-    printf "Hello! You rule. Which vm would you like?: "
-    read vm_msg
-    LDAP_USERNAME=rod LDAP_PASSWORD=$(python -c 'import getpass;print(getpass.getpass())') vmpool grab "$vm_msg"
-}
-
-function vm-list() {
-LDAP_USERNAME=rod LDAP_PASSWORD=$(python -c 'import getpass;print(getpass.getpass())') vmpool list
-}
-
 # colored grep
 # Need to check an existing file for a pattern that will be found to ensure
 # that the check works when on an OS that supports the color option
@@ -95,7 +84,6 @@ alias batbsh='bash-it'
 alias babsh='bash-it'
 alias bash_it='bash-it'
 alias bash_ti='bash-it'
-alias bsh='bash-it'
 
 # Additional bash-it aliases for help/show
 alias bshsa='bash-it show aliases'
