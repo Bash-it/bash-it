@@ -87,6 +87,9 @@ alias md='mkdir -p'
 alias rd='rmdir'
 
 # Common misspellings of bash-it
+alias shit='bash-it'
+alias batshit='bash-it'
+alias bashit='bash-it'
 alias bsh='bash-it'
 alias batbsh='bash-it'
 alias babsh='bash-it'
