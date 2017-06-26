@@ -7,8 +7,8 @@ alias vscp='vaagrant scp'
 alias vsl='vagrant snapshot list'
 alias vst='vagrant snapshot take'
 alias vup="vagrant up"
-alias vupo="vagrant up $1 --provider=openstack"
-alias vupv="vagrant up $1 --provider=vsphere"
+alias vupo="vagrant up $@ --provider=openstack"
+alias vupv="vagrant up $@ --provider=vsphere"
 alias vupl="vagrant up 2>&1 | tee vagrant.log"
 alias vh="vagrant halt"
 alias vs="vagrant suspend"
@@ -21,3 +21,4 @@ alias vdstr="vagrant destroy"
 alias vl="vagrant list"
 # requires vagrant-hostmanager plugin
 alias vhst="vagrant hostmanager"
+alias svop="source openrc.sh && source vsphere-rc.sh"

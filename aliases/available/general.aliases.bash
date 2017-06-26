@@ -18,6 +18,22 @@ alias l1='ls -1'
 
 alias _="sudo"
 
+# Shortcuts to edit startup files
+alias vigen="vim ~/.bash_it/aliases/available/general.aliases.bash"
+alias vbrc="vim ~/.bashrc"
+alias vbpf="vim ~/.bash_profile"
+
+# vmpooler
+function vm-grab() {
+    printf "Hello! You rule. Which vm would you like?: "
+    read vm_msg
+    LDAP_USERNAME=rod LDAP_PASSWORD=$(python -c 'import getpass;print(getpass.getpass())') vmpool grab "$vm_msg"
+}
+
+function vm-list() {
+LDAP_USERNAME=rod LDAP_PASSWORD=$(python -c 'import getpass;print(getpass.getpass())') vmpool list
+}
+
 # colored grep
 # Need to check an existing file for a pattern that will be found to ensure
 # that the check works when on an OS that supports the color option
@@ -72,28 +88,34 @@ alias md='mkdir -p'
 alias rd='rmdir'
 
 # Common misspellings of bash-it
-alias shit='bash-it'
-alias batshit='bash-it'
-alias bashit='bash-it'
+alias bsh='bash-it'
+alias batbsh='bash-it'
+alias babsh='bash-it'
 alias bash_it='bash-it'
 alias bash_ti='bash-it'
 alias bsh='bash-it'
 
 # Additional bash-it aliases for help/show
-alias shitsha='bash-it show aliases'
-alias shitshc='bash-it show completions'
-alias shitshp='bash-it show plugs'
-alias shitha='bash-it help aliases'
-alias shithc='bash-it help completions'
-alias shithp='bash-it help plugins'
-alias shitsrch="bash-it search $1"
-alias shitsrchen="bash-it search $1 --enable"
-alias shitenp="bash-it enable plugin"
-alias shitena="bash-it enable alias"
-alias shitenc="bash-it enable completion"
+alias bshsa='bash-it show aliases'
+alias bshsc='bash-it show completions'
+alias bshsp='bash-it show plugins'
+alias bshha='bash-it help aliases'
+alias bshhc='bash-it help completions'
+alias bshhp='bash-it help plugins'
+alias bshsch="bash-it search $1"
+alias bshschen="bash-it search $1 --enable"
+alias bshenp="bash-it enable plugin"
+alias bshena="bash-it enable alias"
+alias bshenc="bash-it enable completion"
+
+# Shorten extract
+alias xt="extract"
 
 # source ~/.bash_profile
 alias sprof="source ~/.bash_profile"
+
+# sudo vim
+alias svim="sudo vim"
 
 # Display whatever file is regular file or folder
 catt() {
