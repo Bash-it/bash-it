@@ -27,8 +27,7 @@ then
   export GREP_COLOR='1;33'
 fi
 
-which gshuf &> /dev/null
-if [ $? -eq 0 ]
+if which gshuf &> /dev/null
 then
   alias shuf=gshuf
 fi
