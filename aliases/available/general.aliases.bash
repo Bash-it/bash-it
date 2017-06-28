@@ -19,7 +19,6 @@ alias l1='ls -1'
 alias _="sudo"
 
 # Shortcuts to edit startup files
-alias vigen="vim ~/.bash_it/aliases/available/general.aliases.bash"
 alias vbrc="vim ~/.bashrc"
 alias vbpf="vim ~/.bash_profile"
 
