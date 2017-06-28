@@ -164,8 +164,10 @@ ___atomic_prompt_clock() {
 }
 
 ___atomic_prompt_battery() {
-  chk=$(command_exists battery_percentage && echo yes || echo no)
-  [ "$chk" != "yes" ] || [ "${THEME_SHOW_BATTERY}" != "true" ] && return
+  ! command_exists battery_percentage ||
+  [ "${THEME_SHOW_BATTERY}" != "true" ] ||
+  [ "$(battery_percentage)" = "no" ] && return
+
   batp=$(battery_percentage)
   if [ "$batp" -eq 50 ] || [ "$batp" -gt 50 ]; then
     color=$bold_green
@@ -178,7 +180,7 @@ ___atomic_prompt_battery() {
   ac_adapter_disconnected && info="-"
   ac_adapter_connected && info="+"
   info+=$batp
-  [ "$info" == "+100" ] && info="AC"
+  [ "$batp" -eq 100 ] || [ "$batp" -gt 100 ] && info="AC"
   printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
 }
 

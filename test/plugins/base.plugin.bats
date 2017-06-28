@@ -52,5 +52,5 @@ load ../../plugins/available/base.plugin
   declare -r file="${BASH_IT_ROOT}/file"
   touch $file
   run buf $file
-  [[ -e ${file}_$(date +%Y%m%d_%H%M%S) ]]
+  assert [ -e ${file}_$(date +%Y%m%d_%H%M%S) ]
 }

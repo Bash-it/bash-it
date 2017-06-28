@@ -1,6 +1,6 @@
 # Atomic theme
 
-Simple colorful terminal prompt theme (inspired by a number of themes and it is based mainly on the theme of @MunifTanjim [`brainy`](themes/brainy/README.md)).
+The Best ColorFull terminal prompt theme inspired by a number of themes and based on the theme of @MunifTanjim [`brainy`](../brainy/README.md).
 
 Supported on all operating systems.
 
@@ -155,6 +155,15 @@ Three environment variables can be defined to rearrange the segments order. The 
 
 `___ATOMIC_TOP_LEFT="user_info dir scm"`
 
-`___ATOMIC_TOP_RIGHT="python ruby todo clock battery"`
+`___ATOMIC_TOP_RIGHT="exitcode python ruby todo clock battery"`
 
-`___ATOMIC_BOTTOM="exitcode char"`
+`___ATOMIC_BOTTOM="char"`
+
+## Follow me
+
+I'm on the social media.
+
+* [@lfelipe1501](https://twitter.com/lfelipe1501) on Twitter.
+* [Luis Felipe](https://www.facebook.com/lfelipe1501) on Facebook.
+
+This work is licensed under the Creative Commons Attribution 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/ or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.

@@ -1,3 +1,8 @@
+BASH_IT_LOAD_PRIORITY_DEFAULT_ALIAS=${BASH_IT_LOAD_PRIORITY_DEFAULT_ALIAS:-150}
+BASH_IT_LOAD_PRIORITY_DEFAULT_PLUGIN=${BASH_IT_LOAD_PRIORITY_DEFAULT_PLUGIN:-250}
+BASH_IT_LOAD_PRIORITY_DEFAULT_COMPLETION=${BASH_IT_LOAD_PRIORITY_DEFAULT_COMPLETION:-350}
+BASH_IT_LOAD_PRIORITY_SEPARATOR="---"
+
 # Helper function loading various enable-able files
 function _load_bash_it_files() {
   subdirectory="$1"
@@ -31,13 +36,14 @@ function reload_plugins() {
 bash-it ()
 {
     about 'Bash-it help and maintenance'
-    param '1: verb [one of: help | show | enable | disable | update | search ] '
+    param '1: verb [one of: help | show | enable | disable | migrate | update | search ] '
     param '2: component type [one of: alias(es) | completion(s) | plugin(s) ] or search term(s)'
     param '3: specific component [optional]'
     example '$ bash-it show plugins'
     example '$ bash-it help aliases'
     example '$ bash-it enable plugin git [tmux]...'
     example '$ bash-it disable alias hg [tmux]...'
+    example '$ bash-it migrate'
     example '$ bash-it update'
     example '$ bash-it search ruby [[-]rake]... [--enable | --disable]'
     typeset verb=${1:-}
@@ -59,6 +65,8 @@ bash-it ()
              return;;
          update)
              func=_bash-it_update;;
+          migrate)
+             func=_bash-it-migrate;;
          *)
              reference bash-it
              return;;
@@ -80,6 +88,9 @@ bash-it ()
     fi
 
     if [ x"$verb" == x"enable" -o x"$verb" == x"disable" ];then
+        # Automatically run a migration if required
+        _bash-it-migrate
+
         for arg in "$@"
         do
             $func $arg
@@ -134,7 +145,12 @@ _bash-it_update() {
   if [[ -n "${status}" ]]; then
     git pull --rebase &> /dev/null
     if [[ $? -eq 0 ]]; then
-      echo "Bash-it successfully updated, enjoy!"
+      echo "Bash-it successfully updated."
+      echo ""
+      echo "Migrating your installation to the latest version now..."
+      _bash-it-migrate
+      echo ""
+      echo "All done, enjoy!"
       reload
     else
       echo "Error updating Bash-it, please, check if your Bash-it installation folder (${BASH_IT}) is clean."
@@ -143,6 +159,36 @@ _bash-it_update() {
     echo "Bash-it is up to date, nothing to do!"
   fi
   cd - &> /dev/null
+}
+
+_bash-it-migrate() {
+  _about 'migrates Bash-it configuration from a previous format to the current one'
+  _group 'lib'
+
+  for file_type in "aliases" "plugins" "completion"
+  do
+    shopt -s nullglob
+    for f in "${BASH_IT}/$file_type/enabled/"*.bash
+    do
+      typeset ff=$(basename $f)
+
+      # Only process the ones that don't use the new structure
+      if ! [[ $ff =~ ^[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR.*\.bash$ ]] ; then
+        # Get the type of component from the extension
+        typeset single_type=$(echo $ff | sed -e 's/.*\.\(.*\)\.bash/\1/g' | sed 's/aliases/alias/g')
+        typeset component_name=$(echo $ff | cut -d'.' -f1)
+
+        echo "Migrating $single_type $component_name."
+
+        disable_func="_disable-$single_type"
+        enable_func="_enable-$single_type"
+
+        $disable_func $component_name
+        $enable_func $component_name
+      fi
+    done
+    shopt -u nullglob
+  done
 }
 
 _bash-it-describe ()
@@ -162,14 +208,15 @@ _bash-it-describe ()
     typeset f
     typeset enabled
     printf "%-20s%-10s%s\n" "$column_header" 'Enabled?' 'Description'
-    for f in $BASH_IT/$subdirectory/available/*.bash
+    for f in "${BASH_IT}/$subdirectory/available/"*.bash
     do
-        if [ -e $BASH_IT/$subdirectory/enabled/$(basename $f) ]; then
+        # Check for both the old format without the load priority, and the extended format with the priority
+        if [ -e "${BASH_IT}/$subdirectory/enabled/"$(basename $f) ] || [ -e "${BASH_IT}/$subdirectory/enabled/"*$BASH_IT_LOAD_PRIORITY_SEPARATOR$(basename $f) ]; then
             enabled='x'
         else
             enabled=' '
         fi
-        printf "%-20s%-10s%s\n" "$(basename $f | cut -d'.' -f1)" "  [$enabled]" "$(cat $f | metafor about-$file_type)"
+        printf "%-20s%-10s%s\n" "$(basename $f | sed -e 's/\(.*\)\..*\.bash/\1/g')" "  [$enabled]" "$(cat $f | metafor about-$file_type)"
     done
     printf '\n%s\n' "to enable $preposition $file_type, do:"
     printf '%s\n' "$ bash-it enable $file_type  <$file_type name> [$file_type name]... -or- $ bash-it enable $file_type all"
@@ -226,20 +273,27 @@ _disable-thing ()
 
     if [ "$file_entity" = "all" ]; then
         typeset f $file_type
-        for f in $BASH_IT/$subdirectory/available/*.bash
+        for f in "${BASH_IT}/$subdirectory/available/"*.bash
         do
             plugin=$(basename $f)
-            if [ -e $BASH_IT/$subdirectory/enabled/$plugin ]; then
-                rm $BASH_IT/$subdirectory/enabled/$(basename $plugin)
+            if [ -e "${BASH_IT}/$subdirectory/enabled/$plugin" ]; then
+                rm "${BASH_IT}/$subdirectory/enabled/$(basename $plugin)"
+            fi
+            if [ -e "${BASH_IT}/$subdirectory/enabled/"*$BASH_IT_LOAD_PRIORITY_SEPARATOR$plugin ]; then
+                rm "${BASH_IT}/$subdirectory/enabled/"*$BASH_IT_LOAD_PRIORITY_SEPARATOR$(basename $plugin)
             fi
         done
     else
-        typeset plugin=$(command ls $BASH_IT/$subdirectory/enabled/$file_entity.*bash 2>/dev/null | head -1)
+        # Use a glob to search for both possible patterns
+        # 250---node.plugin.bash
+        # node.plugin.bash
+        # Either one will be matched by this glob
+        typeset plugin=$(command ls $ "${BASH_IT}/$subdirectory/enabled/"{[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity.*bash,$file_entity.*bash} 2>/dev/null | head -1)
         if [ -z "$plugin" ]; then
             printf '%s\n' "sorry, $file_entity does not appear to be an enabled $file_type."
             return
         fi
-        rm $BASH_IT/$subdirectory/enabled/$(basename $plugin)
+        rm "${BASH_IT}/$subdirectory/enabled/$(basename $plugin)"
     fi
 
     if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
@@ -256,7 +310,7 @@ _enable-plugin ()
     _example '$ enable-plugin rvm'
     _group 'lib'
 
-    _enable-thing "plugins" "plugin" $1
+    _enable-thing "plugins" "plugin" $1 $BASH_IT_LOAD_PRIORITY_DEFAULT_PLUGIN
 }
 
 _enable-alias ()
@@ -266,7 +320,7 @@ _enable-alias ()
     _example '$ enable-alias git'
     _group 'lib'
 
-    _enable-thing "aliases" "alias" $1
+    _enable-thing "aliases" "alias" $1 $BASH_IT_LOAD_PRIORITY_DEFAULT_ALIAS
 }
 
 _enable-completion ()
@@ -276,7 +330,7 @@ _enable-completion ()
     _example '$ enable-completion git'
     _group 'lib'
 
-    _enable-thing "completion" "completion" $1
+    _enable-thing "completion" "completion" $1 $BASH_IT_LOAD_PRIORITY_DEFAULT_COMPLETION
 }
 
 _enable-thing ()
@@ -286,11 +340,13 @@ _enable-thing ()
     _param '1: subdirectory'
     _param '2: file_type'
     _param '3: file_entity'
-    _example '$ _enable-thing "plugins" "plugin" "ssh"'
+    _param '4: load priority'
+    _example '$ _enable-thing "plugins" "plugin" "ssh" "150"'
 
     subdirectory="$1"
     file_type="$2"
     file_entity="$3"
+    load_priority="$4"
 
     if [ -z "$file_entity" ]; then
         reference "enable-$file_type"
@@ -299,36 +355,40 @@ _enable-thing ()
 
     if [ "$file_entity" = "all" ]; then
         typeset f $file_type
-        for f in $BASH_IT/$subdirectory/available/*.bash
+        for f in "${BASH_IT}/$subdirectory/available/"*.bash
         do
-            plugin=$(basename $f)
-            if [ ! -h $BASH_IT/$subdirectory/enabled/$plugin ]; then
-                ln -s ../available/$plugin $BASH_IT/$subdirectory/enabled/$plugin
-            fi
+            to_enable=$(basename $f .$file_type.bash)
+            _enable-thing $subdirectory $file_type $to_enable $load_priority
         done
     else
-        typeset plugin=$(command ls $BASH_IT/$subdirectory/available/$file_entity.*bash 2>/dev/null | head -1)
-        if [ -z "$plugin" ]; then
+        typeset to_enable=$(command ls "${BASH_IT}/$subdirectory/available/"$file_entity.*bash 2>/dev/null | head -1)
+        if [ -z "$to_enable" ]; then
             printf '%s\n' "sorry, $file_entity does not appear to be an available $file_type."
             return
         fi
 
-        plugin=$(basename $plugin)
-        if [ -e $BASH_IT/$subdirectory/enabled/$plugin ]; then
-            printf '%s\n' "$file_entity is already enabled."
-            return
+        to_enable=$(basename $to_enable)
+        # Check for existence of the file using a wildcard, since we don't know which priority might have been used when enabling it.
+        typeset enabled_plugin=$(command ls "${BASH_IT}/$subdirectory/enabled/"{[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$to_enable,$to_enable} 2>/dev/null | head -1)
+        if [ ! -z "$enabled_plugin" ] ; then
+          printf '%s\n' "$file_entity is already enabled."
+          return
         fi
 
-        mkdir -p $BASH_IT/$subdirectory/enabled
+        mkdir -p "${BASH_IT}/$subdirectory/enabled"
 
-        ln -s ../available/$plugin $BASH_IT/$subdirectory/enabled/$plugin
+        # Load the priority from the file if it present there
+        local local_file_priority=$(grep -E "^# BASH_IT_LOAD_PRIORITY:" "${BASH_IT}/$subdirectory/available/$to_enable" | awk -F': ' '{ print $2 }')
+        local use_load_priority=${local_file_priority:-$load_priority}
+
+        ln -s ../available/$to_enable "${BASH_IT}/$subdirectory/enabled/${use_load_priority}${BASH_IT_LOAD_PRIORITY_SEPARATOR}${to_enable}"
     fi
 
     if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
         exec ${0/-/}
     fi
 
-    printf '%s\n' "$file_entity enabled."
+    printf '%s\n' "$file_entity enabled with priority $use_load_priority."
 }
 
 _help-completions()
@@ -355,14 +415,14 @@ _help-aliases()
                 alias_path="available/$1.aliases.bash"
             ;;
         esac
-        cat $BASH_IT/aliases/$alias_path | metafor alias | sed "s/$/'/"
+        cat "${BASH_IT}/aliases/$alias_path" | metafor alias | sed "s/$/'/"
     else
         typeset f
-        for f in $BASH_IT/aliases/enabled/*
+        for f in "${BASH_IT}/aliases/enabled/"*
         do
             _help-list-aliases $f
         done
-        _help-list-aliases $BASH_IT/aliases/custom.aliases.bash
+        _help-list-aliases "${BASH_IT}/aliases/custom.aliases.bash"
     fi
 }
 
@@ -412,6 +472,14 @@ _help-update () {
   _group 'lib'
 
   echo "Check for a new version of Bash-it and update it."
+}
+
+_help-migrate () {
+  _about 'help message for migrate command'
+  _group 'lib'
+
+  echo "Migrates internal Bash-it structure to the latest version in case of changes."
+  echo "The 'migrate' command is run automatically when calling 'update', 'enable' or 'disable'."
 }
 
 all_groups ()

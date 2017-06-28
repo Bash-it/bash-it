@@ -8,6 +8,12 @@ Includes autocompletion, themes, aliases, custom functions, a few stolen pieces 
 
 Bash-it provides a solid framework for using, developing and maintaining shell scripts and custom commands for your daily work. If you're using the _Bourne Again Shell_ (Bash) on a regular basis and have been looking for an easy way on how to keep all of these nice little scripts and aliases under control, then Bash-it is for you! Stop polluting your `~/bin` directory and your `.bashrc` file, fork/clone Bash-it and start hacking away.
 
+## Contributing
+
+Please take a look at the [Contribution Guidelines](CONTRIBUTING.md) before reporting a bug or providing a new feature.
+
+The [Development Guidelines](DEVELOPMENT.md) have more information on some of the internal workings of Bash-it, please feel free to read through this page if you're interested in how Bash-it loads its components.
+
 ## Install
 
 1. Check out a clone of this repo to a location of your choice, such as: `git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it`
@@ -49,17 +55,25 @@ Have a look at our [bash-it-docker respository](https://github.com/Bash-it/bash-
 
 ## Update
 
-To update Bash-it, simply run:
+To update Bash-it to the latest version, simply run:
 
-```
+```bash
 bash-it update
 ```
 
 that's all.
 
+If you are using an older version of Bash-it, it's possible that some functionality has changed, or that the internal structure of how Bash-it organizes its functionality has been updated. For these cases, we provide a `migrate` command:
+
+```bash
+bash-it migrate
+```
+
+This command will automatically migrate the Bash-it structure to the latest version. The `migrate` command is run automatically if you run the `update`, `enable` or `disable` commands.
+
 ## Help Screens
 
-```
+```bash
 bash-it show aliases        # shows installed and available aliases
 bash-it show completions    # shows installed and available completions
 bash-it show plugins        # shows installed and available plugins
@@ -173,10 +187,6 @@ cd $BASH_IT
 ```
 
 This will restore your previous Bash profile. After the uninstall script finishes, remove the Bash-it directory from your machine (`rm -rf $BASH_IT`) and start a new shell.
-
-## Contributing
-
-Please take a look at the [Contribution Guidelines](CONTRIBUTING.md) before reporting a bug or providing a new feature.
 
 ## Misc
 
