@@ -29,7 +29,15 @@ function myip ()
 {
     about 'displays your ip address, as seen by the Internet'
     group 'base'
-    res=$(curl -s checkip.dyndns.org | grep -Eo '[0-9\.]+')
+    list=("http://myip.dnsomatic.com/" "http://checkip.dyndns.com/" "http://checkip.dyndns.org/")
+    for url in ${list[*]}
+    do
+        res=$(curl -s "${url}")
+        if [ $? -eq 0 ];then
+            break;
+        fi
+    done
+    res=$(echo "$res" | grep -Eo '[0-9\.]+')
     echo -e "Your public IP is: ${echo_bold_green} $res ${echo_normal}"
 }
 
