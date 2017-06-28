@@ -80,7 +80,6 @@ alias rd='rmdir'
 alias shit='bash-it'
 alias batshit='bash-it'
 alias bashit='bash-it'
-alias bsh='bash-it'
 alias batbsh='bash-it'
 alias babsh='bash-it'
 alias bash_it='bash-it'
@@ -93,17 +92,13 @@ alias bshsp='bash-it show plugins'
 alias bshha='bash-it help aliases'
 alias bshhc='bash-it help completions'
 alias bshhp='bash-it help plugins'
-alias bshsch="bash-it search $1"
-alias bshschen="bash-it search $1 --enable"
+alias bshsch="bash-it search"
 alias bshenp="bash-it enable plugin"
 alias bshena="bash-it enable alias"
 alias bshenc="bash-it enable completion"
 
 # Shorten extract
 alias xt="extract"
-
-# source ~/.bash_profile
-alias sprof="source ~/.bash_profile"
 
 # sudo vim
 alias svim="sudo vim"

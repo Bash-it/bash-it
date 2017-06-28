@@ -3,7 +3,7 @@ about-alias 'vagrant aliases'
 
 # Aliases
 alias vhl='vagrant hosts list'
-alias vscp='vaagrant scp'
+alias vscp='vagrant scp'
 alias vsl='vagrant snapshot list'
 alias vst='vagrant snapshot take'
 alias vup="vagrant up"
@@ -13,7 +13,6 @@ alias vs="vagrant suspend"
 alias vr="vagrant resume"
 alias vrl="vagrant reload"
 alias vssh="vagrant ssh"
-alias vsshr="vagrant ssh $1 -- -t 'sudo su -; /bin/bash'"
 alias vst="vagrant status"
 alias vp="vagrant provision"
 alias vdstr="vagrant destroy"
