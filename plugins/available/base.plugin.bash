@@ -91,13 +91,14 @@ function pmdown ()
 
 function mkcd ()
 {
-    about 'make a directory and cd into it'
-    param 'path to create'
+    about 'make one or more directories and cd into the last one'
+    param 'one or more directories to create'
     example '$ mkcd foo'
     example '$ mkcd /tmp/img/photos/large'
+    example '$ mkcd foo foo1 foo2 fooN'
+    example '$ mkcd /tmp/img/photos/large /tmp/img/photos/self /tmp/img/photos/Beijing'
     group 'base'
-    mkdir -p -- "$*"
-    cd -- "$*"
+    mkdir -p -- "$@" && eval cd -- "\"\$$#\""
 }
 
 function lsgrep ()
