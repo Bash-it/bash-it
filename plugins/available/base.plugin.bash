@@ -88,7 +88,7 @@ function pmdown ()
       echo "You don't have a markdown command installed!"
     fi
 }
-#if using mkcd many dirs, it will make all dirs and cd into the lastest one.
+
 function mkcd ()
 {
     about 'make a directory and cd into it'
@@ -96,7 +96,8 @@ function mkcd ()
     example '$ mkcd foo'
     example '$ mkcd /tmp/img/photos/large'
     group 'base'
-    mkdir -p "$@" && eval cd "\"\$$#\""
+    mkdir -p -- "$*"
+    cd -- "$*"
 }
 
 function lsgrep ()
