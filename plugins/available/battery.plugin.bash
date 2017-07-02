@@ -4,7 +4,7 @@ about-plugin 'display info about your battery charge level'
 ac_adapter_connected(){
   if command_exists upower;
   then
-    upower --show-info $(upower --enumerate | grep BAT) | grep --quiet state | grep --quiet charging
+    upower -i $(upower -e | grep BAT) | grep 'state' | grep -q 'charging\|fully-charged'
     return $?
   elif command_exists acpi;
   then
@@ -24,7 +24,7 @@ ac_adapter_connected(){
 ac_adapter_disconnected(){
   if command_exists upower;
   then
-    upower --show-info $(upower --enumerate | grep BAT) | grep --quiet state | grep --quiet discharging
+    upower -i $(upower -e | grep BAT) | grep 'state' | grep -q 'discharging'
     return $?
   elif command_exists acpi;
   then
