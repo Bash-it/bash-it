@@ -9,10 +9,10 @@ load ../../plugins/available/base.plugin
     skip 'ifconfig probably requires sudo on TravisCI'
   fi
 
-  declare -r localhost='127.0.0.1'
+  declare -r localhost="lo : 127.0.0.1"
   run ips
   assert_success
-  assert_line $localhost
+  assert_line "$localhost"
 }
 
 @test 'plugins base: myip()' {
