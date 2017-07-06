@@ -7,10 +7,10 @@ function ips ()
     group 'base'
     if command -v ifconfig &>/dev/null
     then
-        ifconfig | awk '/inet /{ print $2 }'
+        ifconfig | grep -B 1 -E "inet "|sed 's/addr://g' | sed 's/://g'|awk '{if (NR%3==1) printf $1 " : "; else if (NR%3==2) {print $2}}'
     elif command -v ip &>/dev/null
     then
-        ip addr | grep -oP 'inet \K[\d.]+'
+        ip addr | grep -B 2 'inet ' | sed 's/://g'|sed 's/\/[0-9]\+//g' | awk '{if(NR%4==1) printf $2 " : "; if(NR%4==3) print $2}'
     else
         echo "You don't have ifconfig or ip command installed!"
     fi
