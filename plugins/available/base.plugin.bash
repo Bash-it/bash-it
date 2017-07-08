@@ -7,7 +7,7 @@ function ips ()
     group 'base'
     if command -v ifconfig &>/dev/null
     then
-        ifconfig | awk '/inet /{ print $2 }'
+        ifconfig | awk '/inet /{ gsub(/addr:/, ""); print $2 }'
     elif command -v ip &>/dev/null
     then
         ip addr | grep -oP 'inet \K[\d.]+'
