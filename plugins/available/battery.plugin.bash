@@ -10,6 +10,10 @@ ac_adapter_connected(){
   then
     acpi -a | grep -q "on-line"
     return $?
+  elif command_exists pmset;
+  then
+    pmset -g batt | grep -q 'AC Power'
+    return $?
   elif command_exists ioreg;
   then
     ioreg -n AppleSmartBattery -r | grep -q '"ExternalConnected" = Yes'
@@ -29,6 +33,10 @@ ac_adapter_disconnected(){
   elif command_exists acpi;
   then
     acpi -a | grep -q "off-line"
+    return $?
+  elif command_exists pmset;
+  then
+    pmset -g batt | grep -q 'Battery Power'
     return $?
   elif command_exists ioreg;
   then
@@ -74,6 +82,17 @@ battery_percentage(){
       ;;
       *)
         echo '-1'
+      ;;
+    esac
+  elif command_exists pmset;
+  then
+    local PMSET_OUTPUT=$(pmset -g ps | sed -n 's/.*[[:blank:]]+*\(.*%\).*/\1/p')
+    case $PMSET_OUTPUT in
+      100*)
+        echo '100'
+      ;;
+      *)
+        echo $PMSET_OUTPUT | head -c 2
       ;;
     esac
   elif command_exists ioreg;
