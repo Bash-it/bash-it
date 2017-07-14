@@ -4,13 +4,24 @@ about-plugin 'miscellaneous tools'
 function ips ()
 {
     about 'display all ip addresses for this host'
+    param 'optional -i'
+    example '$ ips'
+    example '$ ips -i'
     group 'base'
     if command -v ifconfig &>/dev/null
     then
-        ifconfig | awk '/inet /{ gsub(/addr:/, ""); print $2 }'
+        if [ -n "$1" -a "$1" = "-i" ];then
+            ifconfig | grep -B 1 -E "inet "| sed 's/addr://g' | sed 's/: / /g' | awk '{if (NR%3==1) print $1 ":"; else if (NR%3==2) print $2}'
+        else
+            ifconfig | awk '/inet /{ gsub(/addr:/, ""); print $2 }'
+        fi
     elif command -v ip &>/dev/null
     then
-        ip addr | grep -oP 'inet \K[\d.]+'
+        if [ -n "$1" -a "$1" = "-i" ];then
+            ip addr | grep -E '^\s*[1-9]| (25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[0-9]{1,2})\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[0-9]{1,2})\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[0-9]{1,2})' | awk '{print $2}'
+        else
+            ip addr | grep -oP 'inet \K[\d.]+'
+        fi
     else
         echo "You don't have ifconfig or ip command installed!"
     fi
