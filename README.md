@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/Bash-it/bash-it.svg?branch=master)](https://travis-ci.org/Bash-it/bash-it) [![Join the chat at https://gitter.im/Bash-it/bash-it](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Bash-it/bash-it?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-**Bash-it** is a collection of community Bash commands and scripts. (And a shameless ripoff of [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) :smiley:)
+**Bash-it** is a collection of community Bash commands and scripts for Bash 3.2+. (And a shameless ripoff of [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) :smiley:)
 
 Includes autocompletion, themes, aliases, custom functions, a few stolen pieces from Steve Losh, and more.
 
