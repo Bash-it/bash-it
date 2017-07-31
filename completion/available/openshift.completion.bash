@@ -1,5 +1,3 @@
 #!/usr/bin/env bash
 
-OCPATH=$(which oc)
-
-[ -x "${OCPATH}" ] && eval "$(oc completion bash)" 
+[ -x "$(which oc)" ] && eval "$(oc completion bash)" 
