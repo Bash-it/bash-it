@@ -11,11 +11,16 @@ _sshcomplete() {
       local OPTIONS=" -- ${CURRENT_PROMPT}"
     fi
 
-
-    # parse all defined hosts from .ssh/config
-    if [ -r "$HOME/.ssh/config" ]; then
-        COMPREPLY=($(compgen -W "$(grep ^Host "$HOME/.ssh/config" | awk '{for (i=2; i<=NF; i++) print $i}' )" ${OPTIONS}) )
-    fi
+    # Parse defined hosts from all ssh configuration files (taking "Include" directives into consideration).
+    # The solution relies on ssh printing the configuration files paths in verbose mode.
+    #
+    # We try to connect to localhost on port 4, which is reserved and should be unused.
+    # In case there is an ssh server listening on that port, we ask ssh to "do nothing" by executing "echo" remotely.
+    config_files="$(ssh -v 127.0.0.1 -p 4 echo 2>&1 | sed -n '/Reading configuration data/ s/.*Reading configuration data \([^\r]*\).*/\1/gp')"
+    for file in $config_files
+    do
+        COMPREPLY=(${COMPREPLY[@]} $(compgen -W "$(grep ^Host "${file}" | awk '{for (i=2; i<=NF; i++) print $i}' )" ${OPTIONS}) )
+    done
 
     # parse all hosts found in .ssh/known_hosts
     if [ -r "$HOME/.ssh/known_hosts" ]; then
