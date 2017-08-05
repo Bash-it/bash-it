@@ -1,3 +1,6 @@
+# Load after the other completions to understand what needs to be completed
+# BASH_IT_LOAD_PRIORITY: 365
+
 cite about-plugin
 about-plugin 'Automatic completion of aliases'
 

@@ -52,6 +52,10 @@ SCM_NONE_CHAR='○'
 RVM_THEME_PROMPT_PREFIX=' |'
 RVM_THEME_PROMPT_SUFFIX='|'
 
+THEME_SHOW_USER_HOST=${THEME_SHOW_USER_HOST:=false}
+USER_HOST_THEME_PROMPT_PREFIX=''
+USER_HOST_THEME_PROMPT_SUFFIX=''
+
 VIRTUALENV_THEME_PROMPT_PREFIX=' |'
 VIRTUALENV_THEME_PROMPT_SUFFIX='|'
 
@@ -123,6 +127,15 @@ function scm_prompt_info_common {
   [[ ${SCM} == ${SCM_SVN} ]] && svn_prompt_info && return
 }
 
+# This is added to address bash shell interpolation vulnerability described
+# here: https://github.com/njhartwell/pw3nage
+function git_clean_branch {
+  local unsafe_ref=$(command git symbolic-ref -q HEAD 2> /dev/null)
+  local stripped_ref=${unsafe_ref##refs/heads/}
+  local clean_ref=${stripped_ref//[^a-zA-Z0-9\/]/-}
+  echo $clean_ref
+}
+
 function git_prompt_minimal_info {
   local ref
   local status
@@ -131,9 +144,9 @@ function git_prompt_minimal_info {
 
   if [[ "$(command git config --get bash-it.hide-status)" != "1" ]]; then
     # Get the branch reference
-    ref=$(command git symbolic-ref -q HEAD 2> /dev/null) || \
+    ref=$(git_clean_branch) || \
     ref=$(command git rev-parse --short HEAD 2> /dev/null) || return 0
-    SCM_BRANCH=${SCM_THEME_BRANCH_PREFIX}${ref#refs/heads/}
+    SCM_BRANCH=${SCM_THEME_BRANCH_PREFIX}${ref}
 
     # Get the status
     [[ "${SCM_GIT_IGNORE_UNTRACKED}" = "true" ]] && git_status_flags+='-untracked-files=no'
@@ -207,10 +220,11 @@ function git_prompt_vars {
 
   SCM_CHANGE=$(git rev-parse --short HEAD 2>/dev/null)
 
-  local ref=$(git symbolic-ref -q HEAD 2> /dev/null)
+  local ref=$(git_clean_branch)
+
   if [[ -n "$ref" ]]; then
-    SCM_BRANCH=${SCM_THEME_BRANCH_PREFIX}${ref#refs/heads/}
-    local tracking_info="$(grep "${SCM_BRANCH}\.\.\." <<< "${status}")"
+    SCM_BRANCH="${SCM_THEME_BRANCH_PREFIX}${ref}"
+    local tracking_info="$(grep -- "${SCM_BRANCH}\.\.\." <<< "${status}")"
     if [[ -n "${tracking_info}" ]]; then
       [[ "${tracking_info}" =~ .+\[gone\]$ ]] && local branch_gone="true"
       tracking_info=${tracking_info#\#\# ${SCM_BRANCH}...}
@@ -423,20 +437,26 @@ function clock_prompt {
   fi
 }
 
+function user_host_prompt {
+  if [[ "${THEME_SHOW_USER_HOST}" = "true" ]]; then
+      echo -e "${USER_HOST_THEME_PROMPT_PREFIX}\u@\h${USER_HOST_THEME_PROMPT_SUFFIX}"
+  fi
+}
+
 # backwards-compatibility
 function git_prompt_info {
   git_prompt_vars
-  echo -e "$SCM_PREFIX$SCM_BRANCH$SCM_STATE$SCM_SUFFIX"
+  echo -e "${SCM_PREFIX}${SCM_BRANCH}${SCM_STATE}${SCM_SUFFIX}"
 }
 
 function svn_prompt_info {
   svn_prompt_vars
-  echo -e "$SCM_PREFIX$SCM_BRANCH$SCM_STATE$SCM_SUFFIX"
+  echo -e "${SCM_PREFIX}${SCM_BRANCH}${SCM_STATE}${SCM_SUFFIX}"
 }
 
 function hg_prompt_info() {
   hg_prompt_vars
-  echo -e "$SCM_PREFIX$SCM_BRANCH:${SCM_CHANGE#*:}$SCM_STATE$SCM_SUFFIX"
+  echo -e "${SCM_PREFIX}${SCM_BRANCH}:${SCM_CHANGE#*:}${SCM_STATE}${SCM_SUFFIX}"
 }
 
 function scm_char {
@@ -454,13 +474,17 @@ function battery_char {
     fi
 }
 
-if [ ! -e $BASH_IT/plugins/enabled/battery.plugin.bash ]; then
+if ! command_exists battery_charge ; then
     # if user has installed battery plugin, skip this...
     function battery_charge (){
 	# no op
 	echo -n
     }
+fi
 
+# The battery_char function depends on the presence of the battery_percentage function.
+# If battery_percentage is not defined, then define battery_char as a no-op.
+if ! command_exists battery_percentage ; then
     function battery_char (){
 	# no op
 	echo -n

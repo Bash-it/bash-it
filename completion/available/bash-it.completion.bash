@@ -10,9 +10,9 @@ _bash-it-comp-list-available-not-enabled()
 {
 	subdirectory="$1"
 
-	local available_things=$(for f in `ls -1 $BASH_IT/$subdirectory/available/*.bash`;
+	local available_things=$(for f in `ls -1 "${BASH_IT}/$subdirectory/available/"*.bash`;
 		do
-			if [ ! -e $BASH_IT/$subdirectory/enabled/$(basename $f) ]
+			if [ ! -e "${BASH_IT}/$subdirectory/enabled/"$(basename $f) ] && [ ! -e "${BASH_IT}/$subdirectory/enabled/"*$BASH_IT_LOAD_PRIORITY_SEPARATOR$(basename $f) ]
 			then
 				basename $f | cut -d'.' -f1
 			fi
@@ -25,9 +25,9 @@ _bash-it-comp-list-enabled()
 {
 	subdirectory="$1"
 
-	local enabled_things=$(for f in `ls -1 $BASH_IT/$subdirectory/enabled/*.bash`;
+	local enabled_things=$(for f in `ls -1 "${BASH_IT}/$subdirectory/enabled/"*.bash`;
 		do
-			basename $f | cut -d'.' -f1
+			basename $f | cut -d'.' -f1 | sed -e "s/^[0-9]*---//g"
 		done)
 
 	COMPREPLY=( $(compgen -W "all ${enabled_things}" -- ${cur}) )
@@ -37,7 +37,7 @@ _bash-it-comp-list-available()
 {
 	subdirectory="$1"
 
-	local enabled_things=$(for f in `ls -1 $BASH_IT/$subdirectory/available/*.bash`;
+	local enabled_things=$(for f in `ls -1 "${BASH_IT}/$subdirectory/available/"*.bash`;
 		do
 			basename $f | cut -d'.' -f1
 		done)
@@ -53,7 +53,7 @@ _bash-it-comp()
 	prev="${COMP_WORDS[COMP_CWORD-1]}"
 	chose_opt="${COMP_WORDS[1]}"
 	file_type="${COMP_WORDS[2]}"
-	opts="help show enable disable update search"
+	opts="help show enable disable update search migrate"
 	case "${chose_opt}" in
 		show)
 			local show_args="plugins aliases completions"
@@ -61,11 +61,11 @@ _bash-it-comp()
 			return 0
 			;;
 		help)
-			local help_args="plugins aliases completions update"
+			local help_args="plugins aliases completions migrate update"
 			COMPREPLY=( $(compgen -W "${help_args}" -- ${cur}) )
 			return 0
 			;;
-    update | search)
+    update | search | migrate)
       return 0
       ;;
 		enable | disable)
