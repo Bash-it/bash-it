@@ -362,6 +362,11 @@ setup_repo_with_upstream() {
   git_prompt_vars
   assert_equal "$SCM_BRANCH" "${pre} ☺︎ cu"
 
+  git config user.name "Çool Üser"
+
+  git_prompt_vars
+  assert_equal "$SCM_BRANCH" "${pre} ☺︎ çü"
+
   # show initials set by `git pair`
 
   git config user.initials "ab cd"
