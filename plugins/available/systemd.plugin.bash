@@ -9,7 +9,7 @@ about-plugin 'SystemD helper functions'
 # Requires admin priviledge.
 scrs(){
     if [ $# -eq 0 ]; then
-	systemctl --user daemon-reload
+	systemctl daemon-reload
     else
 	echo "Stopping $1.service ..."
 	systemctl stop "$1.service"
