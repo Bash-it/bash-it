@@ -122,6 +122,10 @@ function _ensure_sshagent_dead() {
 
 
 function sshagent() {
+  about 'ensures ssh-agent is up and running'
+  param '1: on|off '
+  example '$ sshagent on'
+  group 'ssh'    
   [[ -v SSH_AGENT_ENV ]] \
   || export SSH_AGENT_ENV="${HOME}/.ssh/agent_env.${HOSTNAME}"
 
