@@ -126,8 +126,8 @@ function sshagent() {
   param '1: on|off '
   example '$ sshagent on'
   group 'ssh'    
-  [[ -v SSH_AGENT_ENV ]] \
-  || export SSH_AGENT_ENV="${HOME}/.ssh/agent_env.${HOSTNAME}"
+  [[ -z "${SSH_AGENT_ENV}" ]] \
+  && export SSH_AGENT_ENV="${HOME}/.ssh/agent_env.${HOSTNAME}"
 
   case "${1}" in
     on) _ensure_valid_sshagent_env;
