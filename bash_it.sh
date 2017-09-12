@@ -67,7 +67,7 @@ do
 done
 
 # Custom
-CUSTOM="${BASH_IT_CUSTOM:=${BASH_IT}/custom}/*.bash"
+CUSTOM="${BASH_IT_CUSTOM:=${BASH_IT}/custom}/*.bash ${BASH_IT_CUSTOM:=${BASH_IT}/custom}/**/*.bash"
 for config_file in $CUSTOM
 do
   if [ -e "${config_file}" ]; then
