@@ -11,7 +11,9 @@ load ../../lib/helpers
 function local_setup {
   mkdir -p "$BASH_IT"
   lib_directory="$(cd "$(dirname "$0")" && pwd)"
-  cp -r $lib_directory/../.. "$BASH_IT"
+  # Use rsync to copy Bash-it to the temp folder
+  # rsync is faster than cp, since we can exclude the large ".git" folder
+  rsync -qavrKL -d --delete-excluded --exclude=.git $lib_directory/../.. "$BASH_IT"
 
   rm -rf "$BASH_IT"/enabled
   rm -rf "$BASH_IT"/aliases/enabled
@@ -22,12 +24,6 @@ function local_setup {
   mkdir -p "$BASH_IT"/aliases/enabled
   mkdir -p "$BASH_IT"/completion/enabled
   mkdir -p "$BASH_IT"/plugins/enabled
-}
-
-@test "bash-it: enable the ansible aliases through the bash-it function" {
-  run bash-it enable alias "ansible"
-  assert_line "0" 'ansible enabled with priority 150.'
-  assert [ -L "$BASH_IT/enabled/150---ansible.aliases.bash" ]
 }
 
 @test "bash-it: enable the todo.txt-cli aliases through the bash-it function" {
@@ -58,6 +54,13 @@ function local_setup {
   run _enable-plugin "node"
   assert_line "0" 'node enabled with priority 250.'
   assert [ -L "$BASH_IT/enabled/250---node.plugin.bash" ]
+
+  # TODO Check for the link target - readlink
+  # target_path=$HOME/Code/slate/.slate.js
+  #
+  # if [ "`readlink $HOME/.slate.js`" -ef "$target_path" ]; then
+  #     rm -rf "$HOME/.slate.js"
+  # fi
 }
 
 @test "bash-it: enable the node plugin through the bash-it function" {
@@ -248,19 +251,29 @@ function local_setup {
 @test "bash-it: enable all plugins" {
   run _enable-plugin "all"
   local available=$(find $BASH_IT/plugins/available -name *.plugin.bash | wc -l | xargs)
-  local enabled=$(find $BASH_IT/plugins/enabled -name [0-9]*.plugin.bash | wc -l | xargs)
+  local enabled=$(find $BASH_IT/enabled -name [0-9]*.plugin.bash | wc -l | xargs)
   assert_equal "$available" "$enabled"
 }
 
 @test "bash-it: disable all plugins" {
   run _enable-plugin "all"
   local available=$(find $BASH_IT/plugins/available -name *.plugin.bash | wc -l | xargs)
-  local enabled=$(find $BASH_IT/plugins/enabled -name [0-9]*.plugin.bash | wc -l | xargs)
+  local enabled=$(find $BASH_IT/enabled -name [0-9]*.plugin.bash | wc -l | xargs)
   assert_equal "$available" "$enabled"
 
+  run _enable-alias "ag"
+  assert [ -L "$BASH_IT/enabled/150---ag.aliases.bash" ]
+
   run _disable-plugin "all"
-  local enabled2=$(find $BASH_IT/plugins/enabled -name *.plugin.bash | wc -l | xargs)
-  assert_equal "$enabled2" "0"
+  local enabled2=$(find $BASH_IT/enabled -name [0-9]*.plugin.bash | wc -l | xargs)
+  assert_equal "0" "$enabled2"
+  assert [ -L "$BASH_IT/enabled/150---ag.aliases.bash" ]
+}
+
+@test "bash-it: enable the ansible aliases through the bash-it function" {
+  run bash-it enable alias "ansible"
+  assert_line "0" 'ansible enabled with priority 150.'
+  assert [ -L "$BASH_IT/enabled/150---ansible.aliases.bash" ]
 }
 
 @test "bash-it: describe the nvm plugin without enabling it" {

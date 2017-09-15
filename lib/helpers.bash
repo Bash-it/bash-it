@@ -273,6 +273,7 @@ _disable-thing ()
 
     if [ "$file_entity" = "all" ]; then
         typeset f $file_type
+        # Disable everything that's using the old structure
         for f in "${BASH_IT}/$subdirectory/available/"*.bash
         do
             plugin=$(basename $f)
@@ -282,6 +283,18 @@ _disable-thing ()
             if [ -e "${BASH_IT}/$subdirectory/enabled/"*$BASH_IT_LOAD_PRIORITY_SEPARATOR$plugin ]; then
                 rm "${BASH_IT}/$subdirectory/enabled/"*$BASH_IT_LOAD_PRIORITY_SEPARATOR$(basename $plugin)
             fi
+        done
+
+        local suffix=$(echo "$subdirectory" | sed -e 's/plugins/plugin/g')
+
+        # Disable everything in the global "enabled" directory
+        for f in "${BASH_IT}/$subdirectory/available/"*.${suffix}.bash
+        do
+          plugin=$(basename $f)
+
+          if [ -e "${BASH_IT}/enabled/"*$BASH_IT_LOAD_PRIORITY_SEPARATOR$plugin ]; then
+              rm "${BASH_IT}/enabled/"*$BASH_IT_LOAD_PRIORITY_SEPARATOR$(basename $plugin)
+          fi
         done
     else
         typeset plugin_global=$(command ls $ "${BASH_IT}/enabled/"[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity.*bash 2>/dev/null | head -1)
@@ -375,6 +388,12 @@ _enable-thing ()
         to_enable=$(basename $to_enable)
         # Check for existence of the file using a wildcard, since we don't know which priority might have been used when enabling it.
         typeset enabled_plugin=$(command ls "${BASH_IT}/$subdirectory/enabled/"{[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$to_enable,$to_enable} 2>/dev/null | head -1)
+        if [ ! -z "$enabled_plugin" ] ; then
+          printf '%s\n' "$file_entity is already enabled."
+          return
+        fi
+
+        typeset enabled_plugin=$(command ls "${BASH_IT}/enabled/"[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$to_enable 2>/dev/null | head -1)
         if [ ! -z "$enabled_plugin" ] ; then
           printf '%s\n' "$file_entity is already enabled."
           return
