@@ -73,9 +73,14 @@ _bash-it-comp()
       return 0
       ;;
     help)
-      local help_args="plugins aliases completions migrate update"
-      COMPREPLY=( $(compgen -W "${help_args}" -- ${cur}) )
-      return 0
+      if [ x"${prev}" == x"aliases" ]; then
+        _bash-it-comp-list-available aliases
+        return 0
+      else
+        local help_args="plugins aliases completions migrate update"
+        COMPREPLY=( $(compgen -W "${help_args}" -- ${cur}) )
+        return 0
+      fi
       ;;
     update | search | migrate)
       return 0
@@ -103,16 +108,6 @@ _bash-it-comp()
             _bash-it-comp-enable-disable
             return 0
             ;;
-      esac
-      ;;
-    aliases)
-      prevprev="${COMP_WORDS[COMP_CWORD-2]}"
-
-      case "${prevprev}" in
-        help)
-          _bash-it-comp-list-available aliases
-          return 0
-          ;;
       esac
       ;;
   esac
