@@ -91,3 +91,5 @@ if [ -e "$HOME/.jekyllconfig" ]
 then
   . "$HOME/.jekyllconfig"
 fi
+
+set +T
