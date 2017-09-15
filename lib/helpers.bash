@@ -20,6 +20,20 @@ function _load_bash_it_files() {
   fi
 }
 
+function _load_global_bash_it_files() {
+  # In the new structure
+  if [ -d "${BASH_IT}/enabled" ]
+  then
+    FILES="${BASH_IT}/enabled/*.bash"
+    for config_file in $FILES
+    do
+      if [ -e "${config_file}" ]; then
+        source $config_file
+      fi
+    done
+  fi
+}
+
 # Function for reloading aliases
 function reload_aliases() {
   _load_bash_it_files "aliases"
