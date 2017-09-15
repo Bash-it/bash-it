@@ -90,10 +90,13 @@ function local_setup {
   assert_line "0" 'ag enabled with priority 150.'
   assert [ -L "$BASH_IT/enabled/150---ag.aliases.bash" ]
 
-  run bash-it help aliases
+  run bash-it enable plugin "aws"
+  assert_line "0" 'aws enabled with priority 250.'
+  assert [ -L "$BASH_IT/enabled/250---aws.plugin.bash" ]
 
-  echo "${lines[@]}"
-  assert_line "2" "foo"
+  run bash-it help aliases
+  assert_line "0" "ag:"
+  assert_line "1" "ag='ag --smart-case --pager=\"less -MIRFX'"
 }
 
 @test "helpers: enable the todo.txt-cli aliases through the bash-it function" {
