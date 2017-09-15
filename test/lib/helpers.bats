@@ -258,17 +258,17 @@ function __migrate_all_components() {
 
   ls ${BASH_IT}/${subdirectory}/enabled
 
-  all_available=$(compgen -G "${BASH_IT}/${subdirectory}/available/*.$one_type.bash" | wc -l)
-  all_enabled_old=$(compgen -G "${BASH_IT}/${subdirectory}/enabled/*.$one_type.bash" | wc -l)
+  all_available=$(compgen -G "${BASH_IT}/${subdirectory}/available/*.$one_type.bash" | wc -l | xargs)
+  all_enabled_old=$(compgen -G "${BASH_IT}/${subdirectory}/enabled/*.$one_type.bash" | wc -l | xargs)
 
   assert_equal "$all_available" "$all_enabled_old"
 
   run bash-it migrate
 
-  all_enabled_old_after=$(compgen -G "${BASH_IT}/${subdirectory}/enabled/*.$one_type.bash" | wc -l)
+  all_enabled_old_after=$(compgen -G "${BASH_IT}/${subdirectory}/enabled/*.$one_type.bash" | wc -l | xargs)
   assert_equal "0" "$all_enabled_old_after"
 
-  all_enabled_new_after=$(compgen -G "${BASH_IT}/enabled/*.$one_type.bash" | wc -l)
+  all_enabled_new_after=$(compgen -G "${BASH_IT}/enabled/*.$one_type.bash" | wc -l | xargs)
   assert_equal "$all_enabled_old" "$all_enabled_new_after"
 }
 
