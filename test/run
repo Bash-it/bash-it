@@ -11,4 +11,4 @@ fi
 
 # TODO Add tests for bash-it completion
 
-exec $bats_executable ${CI:+--tap} ${test_directory}/{install,lib,plugins,themes}
+exec $bats_executable ${CI:+--tap} ${test_directory}/{bash_it,install,lib,plugins,themes}

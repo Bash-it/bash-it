@@ -47,7 +47,6 @@ done
 # TODO Automatically check for content that needs to be migrated
 
 # Load enabled aliases, completion, plugins
-# TODO Add new global directory structure
 for file_type in "aliases" "plugins" "completion"
 do
   _load_bash_it_files $file_type
