@@ -10,7 +10,9 @@ _bash-it-comp-list-available-not-enabled()
 {
   subdirectory="$1"
 
-  local available_things=$(for f in `compgen -G "${BASH_IT}/$subdirectory/available/*.bash" | sort`;
+  local available_things
+
+  available_things=$(for f in `compgen -G "${BASH_IT}/$subdirectory/available/*.bash" | sort`;
     do
       file_entity=$(basename $f)
 
@@ -28,7 +30,7 @@ _bash-it-comp-list-available-not-enabled()
 
 _bash-it-comp-list-enabled()
 {
-  subdirectory="$1"
+  local subdirectory="$1"
 
   # TODO Check for global directory as well
   local enabled_things=$(for f in `compgen -G "${BASH_IT}/$subdirectory/enabled/*.bash" | sort`;
@@ -43,7 +45,9 @@ _bash-it-comp-list-available()
 {
   subdirectory="$1"
 
-  local enabled_things=$(for f in `compgen -G "${BASH_IT}/$subdirectory/available/*.bash" | sort`;
+  local enabled_things
+
+  enabled_things=$(for f in `compgen -G "${BASH_IT}/$subdirectory/available/*.bash" | sort`;
     do
       basename $f | cut -d'.' -f1
     done)
