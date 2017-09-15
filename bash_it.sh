@@ -29,6 +29,7 @@ then
 fi
 
 # Load composure first, so we support function metadata
+# shellcheck source=./lib/composure.bash
 source "${BASH_IT}/lib/composure.bash"
 
 # support 'plumbing' metadata
@@ -40,6 +41,7 @@ APPEARANCE_LIB="${BASH_IT}/lib/appearance.bash"
 for config_file in $LIB
 do
   if [ $config_file != $APPEARANCE_LIB ]; then
+    # shellcheck disable=SC1090
     source $config_file
   fi
 done
@@ -53,10 +55,13 @@ do
 done
 
 # Load colors first so they can be used in base theme
+# shellcheck source=./themes/colors.theme.bash
 source "${BASH_IT}/themes/colors.theme.bash"
+# shellcheck source=./themes/base.theme.bash
 source "${BASH_IT}/themes/base.theme.bash"
 
 # appearance (themes) now, after all dependencies
+# shellcheck source=./lib/appearance.bash
 source $APPEARANCE_LIB
 
 # Load custom aliases, completion, plugins
@@ -64,6 +69,7 @@ for file_type in "aliases" "completion" "plugins"
 do
   if [ -e "${BASH_IT}/${file_type}/custom.${file_type}.bash" ]
   then
+    # shellcheck disable=SC1090
     source "${BASH_IT}/${file_type}/custom.${file_type}.bash"
   fi
 done
@@ -73,23 +79,26 @@ CUSTOM="${BASH_IT_CUSTOM:=${BASH_IT}/custom}/*.bash ${BASH_IT_CUSTOM:=${BASH_IT}
 for config_file in $CUSTOM
 do
   if [ -e "${config_file}" ]; then
+    # shellcheck disable=SC1090
     source $config_file
   fi
 done
 
 unset config_file
 if [[ $PROMPT ]]; then
-    export PS1="\["$PROMPT"\]"
+    export PS1="\[""$PROMPT""\]"
 fi
 
 # Adding Support for other OSes
 PREVIEW="less"
 [ -s /usr/bin/gloobus-preview ] && PREVIEW="gloobus-preview"
+# shellcheck disable=SC2034
 [ -s /Applications/Preview.app ] && PREVIEW="/Applications/Preview.app"
 
 # Load all the Jekyll stuff
 
 if [ -e "$HOME/.jekyllconfig" ]
 then
+  # shellcheck disable=SC1090
   . "$HOME/.jekyllconfig"
 fi
