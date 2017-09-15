@@ -9,4 +9,6 @@ if [ -z "${BASH_IT}" ]; then
   export BASH_IT=$(cd ${test_directory} && dirname $(pwd))
 fi
 
+# TODO Add tests for bash-it completion
+
 exec $bats_executable ${CI:+--tap} ${test_directory}/{install,lib,plugins,themes}
