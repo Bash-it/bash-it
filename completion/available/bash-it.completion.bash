@@ -12,7 +12,7 @@ _bash-it-comp-list-available-not-enabled()
 
   local available_things
 
-  available_things=$(for f in `compgen -G "${BASH_IT}/$subdirectory/available/*.bash" | sort`;
+  available_things=$(for f in `compgen -G "${BASH_IT}/$subdirectory/available/*.bash" | sort -d`;
     do
       file_entity=$(basename $f)
 
@@ -35,7 +35,7 @@ _bash-it-comp-list-enabled()
 
   suffix=$(echo "$subdirectory" | sed -e 's/plugins/plugin/g')
 
-  enabled_things=$(for f in `sort <(compgen -G "${BASH_IT}/$subdirectory/enabled/*.${suffix}.bash") <(compgen -G "${BASH_IT}/enabled/*.${suffix}.bash")`;
+  enabled_things=$(for f in `sort -d <(compgen -G "${BASH_IT}/$subdirectory/enabled/*.${suffix}.bash") <(compgen -G "${BASH_IT}/enabled/*.${suffix}.bash")`;
     do
       basename $f | sed -e 's/\(.*\)\..*\.bash/\1/g' | sed -e "s/^[0-9]*---//g"
     done)
@@ -49,7 +49,7 @@ _bash-it-comp-list-available()
 
   local enabled_things
 
-  enabled_things=$(for f in `compgen -G "${BASH_IT}/$subdirectory/available/*.bash" | sort`;
+  enabled_things=$(for f in `compgen -G "${BASH_IT}/$subdirectory/available/*.bash" | sort -d`;
     do
       basename $f | sed -e 's/\(.*\)\..*\.bash/\1/g'
     done)
