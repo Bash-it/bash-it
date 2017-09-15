@@ -31,9 +31,11 @@ _bash-it-comp-list-available-not-enabled()
 _bash-it-comp-list-enabled()
 {
   local subdirectory="$1"
+  local suffix enabled_things
 
-  # TODO Check for global directory as well
-  local enabled_things=$(for f in `compgen -G "${BASH_IT}/$subdirectory/enabled/*.bash" | sort`;
+  suffix=$(echo "$subdirectory" | sed -e 's/plugins/plugin/g')
+
+  enabled_things=$(for f in `sort <(compgen -G "${BASH_IT}/$subdirectory/enabled/*.${suffix}.bash") <(compgen -G "${BASH_IT}/enabled/*.${suffix}.bash")`;
     do
       basename $f | cut -d'.' -f1 | sed -e "s/^[0-9]*---//g"
     done)
