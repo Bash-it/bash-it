@@ -229,3 +229,27 @@ function __check_completion () {
   run __check_completion 'bash-it enable plugin docker'
   assert_line "0" "docker-compose docker-machine docker"
 }
+
+@test "completion bash-it: enable - provide the todo.txt-cli aliases when todo plugin is enabled with the old location and name" {
+  ln -s $BASH_IT/plugins/available/todo.plugin.bash $BASH_IT/plugins/enabled/todo.plugin.bash
+  assert [ -L "$BASH_IT/plugins/enabled/todo.plugin.bash" ]
+
+  run __check_completion 'bash-it enable alias to'
+  assert_line "0" "todo.txt-cli"
+}
+
+@test "completion bash-it: enable - provide the todo.txt-cli aliases when todo plugin is enabled with the old location and priority-based name" {
+  ln -s $BASH_IT/plugins/available/todo.plugin.bash $BASH_IT/plugins/enabled/350---todo.plugin.bash
+  assert [ -L "$BASH_IT/plugins/enabled/350---todo.plugin.bash" ]
+
+  run __check_completion 'bash-it enable alias to'
+  assert_line "0" "todo.txt-cli"
+}
+
+@test "completion bash-it: enable - provide the todo.txt-cli aliases when todo plugin is enabled with the new location and priority-based name" {
+  ln -s $BASH_IT/plugins/available/todo.plugin.bash $BASH_IT/enabled/350---todo.plugin.bash
+  assert [ -L "$BASH_IT/enabled/350---todo.plugin.bash" ]
+
+  run __check_completion 'bash-it enable alias to'
+  assert_line "0" "todo.txt-cli"
+}
