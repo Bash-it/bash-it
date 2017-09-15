@@ -188,7 +188,8 @@ _bash-it-migrate() {
 
       # Get the type of component from the extension
       typeset single_type=$(echo $ff | sed -e 's/.*\.\(.*\)\.bash/\1/g' | sed 's/aliases/alias/g')
-      typeset component_name=$(echo $ff | cut -d'.' -f1)
+      # Cut off the optional "250---" prefix and the suffix
+      typeset component_name=$(echo $ff | sed -e 's/[0-9]*[-]*\(.*\)\..*\.bash/\1/g')
 
       echo "Migrating $single_type $component_name."
 
