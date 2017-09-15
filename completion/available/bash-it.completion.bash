@@ -21,7 +21,7 @@ _bash-it-comp-list-available-not-enabled()
 
       if [ -z "$enabled_component" ] && [ -z "$enabled_component_global" ]
       then
-        basename $f | cut -d'.' -f1
+        basename $f | sed -e 's/\(.*\)\..*\.bash/\1/g'
       fi
     done)
 
@@ -37,7 +37,7 @@ _bash-it-comp-list-enabled()
 
   enabled_things=$(for f in `sort <(compgen -G "${BASH_IT}/$subdirectory/enabled/*.${suffix}.bash") <(compgen -G "${BASH_IT}/enabled/*.${suffix}.bash")`;
     do
-      basename $f | cut -d'.' -f1 | sed -e "s/^[0-9]*---//g"
+      basename $f | sed -e 's/\(.*\)\..*\.bash/\1/g' | sed -e "s/^[0-9]*---//g"
     done)
 
   COMPREPLY=( $(compgen -W "all ${enabled_things}" -- ${cur}) )
@@ -51,7 +51,7 @@ _bash-it-comp-list-available()
 
   enabled_things=$(for f in `compgen -G "${BASH_IT}/$subdirectory/available/*.bash" | sort`;
     do
-      basename $f | cut -d'.' -f1
+      basename $f | sed -e 's/\(.*\)\..*\.bash/\1/g'
     done)
 
   COMPREPLY=( $(compgen -W "${enabled_things}" -- ${cur}) )
