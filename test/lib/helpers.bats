@@ -53,6 +53,22 @@ function local_setup {
   assert_line "0" "ag:"
 }
 
+@test "helpers: bash-it help list aliases with todo.txt-cli aliases enabled" {
+  ln -s $BASH_IT/aliases/available/todo.txt-cli.aliases.bash $BASH_IT/aliases/enabled/150---todo.txt-cli.aliases.bash
+  assert [ -L "$BASH_IT/aliases/enabled/150---todo.txt-cli.aliases.bash" ]
+
+  run _help-list-aliases "$BASH_IT/aliases/enabled/150---todo.txt-cli.aliases.bash"
+  assert_line "0" "todo.txt-cli:"
+}
+
+@test "helpers: bash-it help list aliases with docker-compose aliases enabled" {
+  ln -s $BASH_IT/aliases/available/docker-compose.aliases.bash $BASH_IT/aliases/enabled/150---docker-compose.aliases.bash
+  assert [ -L "$BASH_IT/aliases/enabled/150---docker-compose.aliases.bash" ]
+
+  run _help-list-aliases "$BASH_IT/aliases/enabled/150---docker-compose.aliases.bash"
+  assert_line "0" "docker-compose:"
+}
+
 @test "helpers: bash-it help list aliases with ag aliases enabled in global directory" {
   ln -s $BASH_IT/aliases/available/ag.aliases.bash $BASH_IT/enabled/150---ag.aliases.bash
   assert [ -L "$BASH_IT/enabled/150---ag.aliases.bash" ]
