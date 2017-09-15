@@ -181,7 +181,7 @@ _bash-it-migrate() {
 
   for file_type in "aliases" "plugins" "completion"
   do
-    for f in `compgen -G "${BASH_IT}/$file_type/enabled/*.bash"`
+    for f in `sort <(compgen -G "${BASH_IT}/$file_type/enabled/*.bash")`
     do
       typeset ff=$(basename $f)
 
