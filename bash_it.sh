@@ -91,9 +91,13 @@ fi
 
 # Adding Support for other OSes
 PREVIEW="less"
-[ -s /usr/bin/gloobus-preview ] && PREVIEW="gloobus-preview"
-# shellcheck disable=SC2034
-[ -s /Applications/Preview.app ] && PREVIEW="/Applications/Preview.app"
+
+if [ -s /usr/bin/gloobus-preview ]; then
+  PREVIEW="gloobus-preview"
+elif [ -s /Applications/Preview.app ]; then
+  # shellcheck disable=SC2034
+  PREVIEW="/Applications/Preview.app"
+fi
 
 # Load all the Jekyll stuff
 
