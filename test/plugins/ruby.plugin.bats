@@ -15,14 +15,6 @@ load ../../plugins/available/ruby.plugin
     skip 'ruby not installed'
   fi
 
-  # Reset the path for this test to ensure that the ruby directory is not part of the path yet.
-  PATH="/usr/local/bin:/usr/bin:/bin"
-
-  # Then load the ruby plugin again to ensure that the ruby path is appended at the end of the path
-  load ../../plugins/available/ruby.plugin
-
-  echo $PATH
-
   local last_path_entry=$(echo $PATH | tr ":" "\n" | tail -1)
   [[ "${last_path_entry}" == "${HOME}"/.gem/ruby/*/bin ]]
 }
