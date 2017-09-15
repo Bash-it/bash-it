@@ -282,29 +282,19 @@ _disable-thing ()
     fi
 
     if [ "$file_entity" = "all" ]; then
-        typeset f $file_type
+        typeset f $file_type suffix
+        suffix=$(echo "$subdirectory" | sed -e 's/plugins/plugin/g')
+
         # Disable everything that's using the old structure
-        for f in "${BASH_IT}/$subdirectory/available/"*.bash
+        for f in `compgen -G "${BASH_IT}/$subdirectory/enabled/*.${suffix}.bash"`
         do
-            plugin=$(basename $f)
-            if [ -e "${BASH_IT}/$subdirectory/enabled/$plugin" ]; then
-                rm "${BASH_IT}/$subdirectory/enabled/$(basename $plugin)"
-            fi
-            if [ -e "${BASH_IT}/$subdirectory/enabled/"*$BASH_IT_LOAD_PRIORITY_SEPARATOR$plugin ]; then
-                rm "${BASH_IT}/$subdirectory/enabled/"*$BASH_IT_LOAD_PRIORITY_SEPARATOR$(basename $plugin)
-            fi
+          rm "$f"
         done
 
-        local suffix=$(echo "$subdirectory" | sed -e 's/plugins/plugin/g')
-
         # Disable everything in the global "enabled" directory
-        for f in "${BASH_IT}/$subdirectory/available/"*.${suffix}.bash
+        for f in `compgen -G "${BASH_IT}/enabled/*.${suffix}.bash"`
         do
-          plugin=$(basename $f)
-
-          if [ -e "${BASH_IT}/enabled/"*$BASH_IT_LOAD_PRIORITY_SEPARATOR$plugin ]; then
-              rm "${BASH_IT}/enabled/"*$BASH_IT_LOAD_PRIORITY_SEPARATOR$(basename $plugin)
-          fi
+          rm "$f"
         done
     else
         typeset plugin_global=$(command ls $ "${BASH_IT}/enabled/"[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity.*bash 2>/dev/null | head -1)
