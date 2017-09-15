@@ -2,7 +2,7 @@
 
 _bash-it-comp-enable-disable()
 {
-  local enable_disable_args="alias plugin completion"
+  local enable_disable_args="alias completion plugin"
   COMPREPLY=( $(compgen -W "${enable_disable_args}" -- ${cur}) )
 }
 

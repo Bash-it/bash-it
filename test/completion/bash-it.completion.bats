@@ -43,15 +43,24 @@ function local_teardown {
 }
 
 function __check_completion () {
+  # Get the parameters as a single value
+  COMP_LINE=$*
+
   # Get the parameters as an array
   eval set -- "$@"
   COMP_WORDS=("$@")
 
-  # Get the parameters as a single value
-  COMP_LINE=$*
-
   # Index of the cursor in the line
   COMP_POINT=${#COMP_LINE}
+
+  # Get the last character of the line that was entered
+  COMP_LAST=$((${COMP_POINT} - 1))
+
+  # If the last character was a space...
+  if [[ ${COMP_LINE:$COMP_LAST} = ' ' ]]; then
+    # ...then add an empty array item
+    COMP_WORDS+=('')
+  fi
 
   # Word index of the last word
   COMP_CWORD=$(( ${#COMP_WORDS[@]} - 1 ))
@@ -66,6 +75,17 @@ function __check_completion () {
 @test "completion bash-it: help aliases" {
   run __check_completion 'bash-it help aliases v'
   assert_line "0" "vagrant vault vim"
+}
+
+@test "completion bash-it: disable - show options" {
+  run __check_completion 'bash-it disable '
+  assert_line "0" "alias completion plugin"
+}
+
+@test "completion bash-it: disable - show options a" {
+  run __check_completion 'bash-it disable a'
+
+  assert_line "0" "alias"
 }
 
 @test "completion bash-it: disable - provide nothing when atom is not enabled" {
