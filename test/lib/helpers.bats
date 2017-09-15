@@ -391,7 +391,8 @@ function __migrate_all_components() {
   assert_line "0" 'Migrating plugin nvm.'
   assert_line "1" 'nvm disabled.'
   assert_line "2" 'nvm enabled with priority 225.'
-  assert_line "3" 'node enabled with priority 250.'
+  assert_line "3" 'If any migration errors were reported, please try the following: reload && bash-it migrate'
+  assert_line "4" 'node enabled with priority 250.'
   assert [ ! -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
   assert [ -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
   assert [ -L "$BASH_IT/enabled/250---node.plugin.bash" ]
@@ -410,7 +411,8 @@ function __migrate_all_components() {
   assert_line "3" 'Migrating plugin nvm.'
   assert_line "4" 'nvm disabled.'
   assert_line "5" 'nvm enabled with priority 225.'
-  assert_line "6" 'node disabled.'
+  assert_line "6" 'If any migration errors were reported, please try the following: reload && bash-it migrate'
+  assert_line "7" 'node disabled.'
   assert [ ! -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
   assert [ -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
   assert [ ! -L "$BASH_IT/plugins/enabled/250---node.plugin.bash" ]

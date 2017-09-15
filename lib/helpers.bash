@@ -187,6 +187,9 @@ _bash-it-migrate() {
   _about 'migrates Bash-it configuration from a previous format to the current one'
   _group 'lib'
 
+  declare migrated_something
+  migrated_something=false
+
   for file_type in "aliases" "plugins" "completion"
   do
     for f in `sort <(compgen -G "${BASH_IT}/$file_type/enabled/*.bash")`
@@ -198,6 +201,8 @@ _bash-it-migrate() {
       # Cut off the optional "250---" prefix and the suffix
       typeset component_name=$(echo $ff | sed -e 's/[0-9]*[-]*\(.*\)\..*\.bash/\1/g')
 
+      migrated_something=true
+
       echo "Migrating $single_type $component_name."
 
       disable_func="_disable-$single_type"
@@ -207,6 +212,11 @@ _bash-it-migrate() {
       $enable_func $component_name
     done
   done
+
+  if [ "$migrated_something" = "true" ]; then
+    echo ""
+    echo "If any migration errors were reported, please try the following: reload && bash-it migrate"
+  fi
 }
 
 _bash-it-describe ()
