@@ -284,16 +284,21 @@ _disable-thing ()
             fi
         done
     else
-        # Use a glob to search for both possible patterns
-        # 250---node.plugin.bash
-        # node.plugin.bash
-        # Either one will be matched by this glob
-        typeset plugin=$(command ls $ "${BASH_IT}/$subdirectory/enabled/"{[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity.*bash,$file_entity.*bash} 2>/dev/null | head -1)
-        if [ -z "$plugin" ]; then
-            printf '%s\n' "sorry, $file_entity does not appear to be an enabled $file_type."
-            return
+        typeset plugin_global=$(command ls $ "${BASH_IT}/enabled/"[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity.*bash 2>/dev/null | head -1)
+        if [ -z "$plugin_global" ]; then
+          # Use a glob to search for both possible patterns
+          # 250---node.plugin.bash
+          # node.plugin.bash
+          # Either one will be matched by this glob
+          typeset plugin=$(command ls $ "${BASH_IT}/$subdirectory/enabled/"{[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity.*bash,$file_entity.*bash} 2>/dev/null | head -1)
+          if [ -z "$plugin" ]; then
+              printf '%s\n' "sorry, $file_entity does not appear to be an enabled $file_type."
+              return
+          fi
+          rm "${BASH_IT}/$subdirectory/enabled/$(basename $plugin)"
+        else
+          rm "${BASH_IT}/enabled/$(basename $plugin_global)"
         fi
-        rm "${BASH_IT}/$subdirectory/enabled/$(basename $plugin)"
     fi
 
     if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
@@ -375,13 +380,13 @@ _enable-thing ()
           return
         fi
 
-        mkdir -p "${BASH_IT}/$subdirectory/enabled"
+        mkdir -p "${BASH_IT}/enabled"
 
         # Load the priority from the file if it present there
         local local_file_priority=$(grep -E "^# BASH_IT_LOAD_PRIORITY:" "${BASH_IT}/$subdirectory/available/$to_enable" | awk -F': ' '{ print $2 }')
         local use_load_priority=${local_file_priority:-$load_priority}
 
-        ln -s ../available/$to_enable "${BASH_IT}/$subdirectory/enabled/${use_load_priority}${BASH_IT_LOAD_PRIORITY_SEPARATOR}${to_enable}"
+        ln -s ../$subdirectory/available/$to_enable "${BASH_IT}/enabled/${use_load_priority}${BASH_IT_LOAD_PRIORITY_SEPARATOR}${to_enable}"
     fi
 
     if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then

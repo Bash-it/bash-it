@@ -9,90 +9,107 @@ cite _about _param _example _group _author _version
 load ../../lib/helpers
 
 function local_setup {
-  mkdir -p $BASH_IT
+  mkdir -p "$BASH_IT"
   lib_directory="$(cd "$(dirname "$0")" && pwd)"
-  cp -r $lib_directory/../.. $BASH_IT
-  mkdir -p $BASH_IT/aliases/enabled
-  mkdir -p $BASH_IT/completion/enabled
-  mkdir -p $BASH_IT/plugins/enabled
+  cp -r $lib_directory/../.. "$BASH_IT"
+
+  rm -rf "$BASH_IT"/enabled
+  rm -rf "$BASH_IT"/aliases/enabled
+  rm -rf "$BASH_IT"/completion/enabled
+  rm -rf "$BASH_IT"/plugins/enabled
+
+  mkdir -p "$BASH_IT"/enabled
+  mkdir -p "$BASH_IT"/aliases/enabled
+  mkdir -p "$BASH_IT"/completion/enabled
+  mkdir -p "$BASH_IT"/plugins/enabled
 }
 
 @test "bash-it: enable the ansible aliases through the bash-it function" {
   run bash-it enable alias "ansible"
   assert_line "0" 'ansible enabled with priority 150.'
-  assert [ -L "$BASH_IT/aliases/enabled/150---ansible.aliases.bash" ]
+  assert [ -L "$BASH_IT/enabled/150---ansible.aliases.bash" ]
 }
 
 @test "bash-it: enable the todo.txt-cli aliases through the bash-it function" {
   run bash-it enable alias "todo.txt-cli"
   assert_line "0" 'todo.txt-cli enabled with priority 150.'
-  assert [ -L "$BASH_IT/aliases/enabled/150---todo.txt-cli.aliases.bash" ]
+  assert [ -L "$BASH_IT/enabled/150---todo.txt-cli.aliases.bash" ]
 }
 
 @test "bash-it: enable the curl aliases" {
   run _enable-alias "curl"
   assert_line "0" 'curl enabled with priority 150.'
-  assert [ -L "$BASH_IT/aliases/enabled/150---curl.aliases.bash" ]
+  assert [ -L "$BASH_IT/enabled/150---curl.aliases.bash" ]
 }
 
 @test "bash-it: enable the apm completion through the bash-it function" {
   run bash-it enable completion "apm"
   assert_line "0" 'apm enabled with priority 350.'
-  assert [ -L "$BASH_IT/completion/enabled/350---apm.completion.bash" ]
+  assert [ -L "$BASH_IT/enabled/350---apm.completion.bash" ]
 }
 
 @test "bash-it: enable the brew completion" {
   run _enable-completion "brew"
   assert_line "0" 'brew enabled with priority 350.'
-  assert [ -L "$BASH_IT/completion/enabled/350---brew.completion.bash" ]
+  assert [ -L "$BASH_IT/enabled/350---brew.completion.bash" ]
 }
 
 @test "bash-it: enable the node plugin" {
   run _enable-plugin "node"
   assert_line "0" 'node enabled with priority 250.'
-  assert [ -L "$BASH_IT/plugins/enabled/250---node.plugin.bash" ]
+  assert [ -L "$BASH_IT/enabled/250---node.plugin.bash" ]
 }
 
 @test "bash-it: enable the node plugin through the bash-it function" {
   run bash-it enable plugin "node"
   assert_line "0" 'node enabled with priority 250.'
-  assert [ -L "$BASH_IT/plugins/enabled/250---node.plugin.bash" ]
+  assert [ -L "$BASH_IT/enabled/250---node.plugin.bash" ]
 }
 
 @test "bash-it: enable the node and nvm plugins through the bash-it function" {
   run bash-it enable plugin "node" "nvm"
   assert_line "0" 'node enabled with priority 250.'
   assert_line "1" 'nvm enabled with priority 225.'
-  assert [ -L "$BASH_IT/plugins/enabled/250---node.plugin.bash" ]
-  assert [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
+  assert [ -L "$BASH_IT/enabled/250---node.plugin.bash" ]
+  assert [ -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
 }
 
 @test "bash-it: enable the foo-unkown and nvm plugins through the bash-it function" {
   run bash-it enable plugin "foo-unknown" "nvm"
   assert_line "0" 'sorry, foo-unknown does not appear to be an available plugin.'
   assert_line "1" 'nvm enabled with priority 225.'
-  assert [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
+  assert [ -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
 }
 
 @test "bash-it: enable the nvm plugin" {
   run _enable-plugin "nvm"
   assert_line "0" 'nvm enabled with priority 225.'
-  assert [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
+  assert [ -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
 }
 
 @test "bash-it: enable an unknown plugin" {
   run _enable-plugin "unknown-foo"
   assert_line "0" 'sorry, unknown-foo does not appear to be an available plugin.'
+
+  # Check for both old an new structure
   assert [ ! -L "$BASH_IT/plugins/enabled/250---unknown-foo.plugin.bash" ]
   assert [ ! -L "$BASH_IT/plugins/enabled/unknown-foo.plugin.bash" ]
+
+  assert [ ! -L "$BASH_IT/enabled/250---unknown-foo.plugin.bash" ]
+  assert [ ! -L "$BASH_IT/enabled/unknown-foo.plugin.bash" ]
 }
 
 @test "bash-it: enable an unknown plugin through the bash-it function" {
   run bash-it enable plugin "unknown-foo"
   echo "${lines[@]}"
   assert_line "0" 'sorry, unknown-foo does not appear to be an available plugin.'
+
+  # Check for both old an new structure
   assert [ ! -L "$BASH_IT/plugins/enabled/250---unknown-foo.plugin.bash" ]
   assert [ ! -L "$BASH_IT/plugins/enabled/unknown-foo.plugin.bash" ]
+
+  assert [ ! -L "$BASH_IT/enabled/250---unknown-foo.plugin.bash" ]
+  assert [ ! -L "$BASH_IT/enabled/unknown-foo.plugin.bash" ]
 }
 
 @test "bash-it: disable a plugin that is not enabled" {
@@ -103,11 +120,23 @@ function local_setup {
 @test "bash-it: enable and disable the nvm plugin" {
   run _enable-plugin "nvm"
   assert_line "0" 'nvm enabled with priority 225.'
+  assert [ -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
+  assert [ ! -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
+
+  run _disable-plugin "nvm"
+  assert_line "0" 'nvm disabled.'
+  assert [ ! -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
+}
+
+@test "bash-it: disable the nvm plugin if it was enabled with a priority, but in the component-specific directory" {
+  ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/225---nvm.plugin.bash
   assert [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
+  assert [ ! -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
 
   run _disable-plugin "nvm"
   assert_line "0" 'nvm disabled.'
   assert [ ! -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
+  assert [ ! -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
 }
 
 @test "bash-it: disable the nvm plugin if it was enabled without a priority" {
@@ -127,16 +156,28 @@ function local_setup {
   assert_line "0" 'nvm is already enabled.'
   assert [ -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
   assert [ ! -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
+  assert [ ! -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
+}
+
+@test "bash-it: enable the nvm plugin if it was enabled with a priority, but in the component-specific directory" {
+  ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/225---nvm.plugin.bash
+  assert [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
+
+  run _enable-plugin "nvm"
+  assert_line "0" 'nvm is already enabled.'
+  assert [ ! -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
+  assert [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
+  assert [ ! -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
 }
 
 @test "bash-it: enable the nvm plugin twice" {
   run _enable-plugin "nvm"
   assert_line "0" 'nvm enabled with priority 225.'
-  assert [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
+  assert [ -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
 
   run _enable-plugin "nvm"
   assert_line "0" 'nvm is already enabled.'
-  assert [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
+  assert [ -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
 }
 
 @test "bash-it: migrate enabled plugins that don't use the new priority-based configuration" {
