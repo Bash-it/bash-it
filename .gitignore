@@ -12,3 +12,4 @@ plugins/custom.plugins.bash
 .*.un~
 bats
 .idea
+enabled/*
