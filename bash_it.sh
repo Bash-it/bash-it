@@ -46,8 +46,6 @@ do
   fi
 done
 
-# TODO Automatically check for content that needs to be migrated
-
 # Load the global "enabled" directory
 _load_global_bash_it_files
 
