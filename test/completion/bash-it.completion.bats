@@ -65,6 +65,11 @@ function __check_completion () {
 
 @test "completion bash-it: disable - provide nothing when atom is not enabled" {
   run __check_completion 'bash-it disable alias ato'
+  assert_line "0" ""
+}
+
+@test "completion bash-it: disable - provide all when atom is not enabled" {
+  run __check_completion 'bash-it disable alias a'
   assert_line "0" "all"
 }
 
