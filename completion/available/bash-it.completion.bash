@@ -65,10 +65,10 @@ _bash-it-comp()
   prev="${COMP_WORDS[COMP_CWORD-1]}"
   chose_opt="${COMP_WORDS[1]}"
   file_type="${COMP_WORDS[2]}"
-  opts="help show enable disable update search migrate"
+  opts="disable enable help migrate search show update"
   case "${chose_opt}" in
     show)
-      local show_args="plugins aliases completions"
+      local show_args="aliases completions plugins"
       COMPREPLY=( $(compgen -W "${show_args}" -- ${cur}) )
       return 0
       ;;
@@ -77,7 +77,7 @@ _bash-it-comp()
         _bash-it-comp-list-available aliases
         return 0
       else
-        local help_args="plugins aliases completions migrate update"
+        local help_args="aliases completions migrate plugins update"
         COMPREPLY=( $(compgen -W "${help_args}" -- ${cur}) )
         return 0
       fi

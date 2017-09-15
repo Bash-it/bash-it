@@ -72,9 +72,74 @@ function __check_completion () {
   echo "${COMPREPLY[@]}"
 }
 
-@test "completion bash-it: help aliases" {
+@test "completion bash-it: help - show options" {
+  run __check_completion 'bash-it help '
+  assert_line "0" "aliases completions migrate plugins update"
+}
+
+@test "completion bash-it: help - aliases v" {
   run __check_completion 'bash-it help aliases v'
   assert_line "0" "vagrant vault vim"
+}
+
+@test "completion bash-it: update - show no options" {
+  run __check_completion 'bash-it update '
+  assert_line "0" ""
+}
+
+@test "completion bash-it: search - show no options" {
+  run __check_completion 'bash-it search '
+  assert_line "0" ""
+}
+
+@test "completion bash-it: migrate - show no options" {
+  run __check_completion 'bash-it migrate '
+  assert_line "0" ""
+}
+
+@test "completion bash-it: show options" {
+  run __check_completion 'bash-it '
+  assert_line "0" "disable enable help migrate search show update"
+}
+
+@test "completion bash-it: bash-ti - show options" {
+  run __check_completion 'bash-ti '
+  assert_line "0" "disable enable help migrate search show update"
+}
+
+@test "completion bash-it: shit - show options" {
+  run __check_completion 'shit '
+  assert_line "0" "disable enable help migrate search show update"
+}
+
+@test "completion bash-it: bashit - show options" {
+  run __check_completion 'bashit '
+  assert_line "0" "disable enable help migrate search show update"
+}
+
+@test "completion bash-it: batshit - show options" {
+  run __check_completion 'batshit '
+  assert_line "0" "disable enable help migrate search show update"
+}
+
+@test "completion bash-it: bash_it - show options" {
+  run __check_completion 'bash_it '
+  assert_line "0" "disable enable help migrate search show update"
+}
+
+@test "completion bash-it: show - show options" {
+  run __check_completion 'bash-it show '
+  assert_line "0" "aliases completions plugins"
+}
+
+@test "completion bash-it: enable - show options" {
+  run __check_completion 'bash-it enable '
+  assert_line "0" "alias completion plugin"
+}
+
+@test "completion bash-it: enable - show options a" {
+  run __check_completion 'bash-it enable a'
+  assert_line "0" "alias"
 }
 
 @test "completion bash-it: disable - show options" {
@@ -84,7 +149,6 @@ function __check_completion () {
 
 @test "completion bash-it: disable - show options a" {
   run __check_completion 'bash-it disable a'
-
   assert_line "0" "alias"
 }
 
@@ -253,6 +317,30 @@ function __check_completion () {
 
   run __check_completion 'bash-it enable plugin docker'
   assert_line "0" "docker-compose docker-machine docker"
+}
+
+@test "completion bash-it: enable - provide the docker-* completions when nothing is enabled with the old location and name" {
+  ln -s $BASH_IT/aliases/available/docker-compose.aliases.bash $BASH_IT/aliases/enabled/docker-compose.aliases.bash
+  assert [ -L "$BASH_IT/aliases/enabled/docker-compose.aliases.bash" ]
+
+  run __check_completion 'bash-it enable completion docker'
+  assert_line "0" "docker docker-compose docker-machine"
+}
+
+@test "completion bash-it: enable - provide the docker-* completions when nothing is enabled with the old location and priority-based name" {
+  ln -s $BASH_IT/aliases/available/docker-compose.aliases.bash $BASH_IT/aliases/enabled/150---docker-compose.aliases.bash
+  assert [ -L "$BASH_IT/aliases/enabled/150---docker-compose.aliases.bash" ]
+
+  run __check_completion 'bash-it enable completion docker'
+  assert_line "0" "docker docker-compose docker-machine"
+}
+
+@test "completion bash-it: enable - provide the docker-* completions when nothing is enabled with the new location and priority-based name" {
+  ln -s $BASH_IT/aliases/available/docker-compose.aliases.bash $BASH_IT/enabled/150---docker-compose.aliases.bash
+  assert [ -L "$BASH_IT/enabled/150---docker-compose.aliases.bash" ]
+
+  run __check_completion 'bash-it enable completion docker'
+  assert_line "0" "docker docker-compose docker-machine"
 }
 
 @test "completion bash-it: enable - provide the todo.txt-cli aliases when todo plugin is enabled with the old location and name" {
