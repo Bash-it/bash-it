@@ -44,6 +44,7 @@ do
   fi
 done
 
+
 # Load enabled aliases, completion, plugins
 for file_type in "aliases" "plugins" "completion"
 do
@@ -91,3 +92,5 @@ if [ -e "$HOME/.jekyllconfig" ]
 then
   . "$HOME/.jekyllconfig"
 fi
+
+set +T
