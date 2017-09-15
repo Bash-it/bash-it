@@ -10,7 +10,7 @@ _bash-it-comp-list-available-not-enabled()
 {
 	subdirectory="$1"
 
-	local available_things=$(for f in `ls -1 "${BASH_IT}/$subdirectory/available/"*.bash 2>/dev/null`;
+	local available_things=$(for f in `compgen -G "${BASH_IT}/$subdirectory/available/*.bash" | sort`;
 		do
 			if [ ! -e "${BASH_IT}/$subdirectory/enabled/"$(basename $f) ] && [ ! -e "${BASH_IT}/$subdirectory/enabled/"*$BASH_IT_LOAD_PRIORITY_SEPARATOR$(basename $f) ]
 			then
@@ -25,7 +25,7 @@ _bash-it-comp-list-enabled()
 {
 	subdirectory="$1"
 
-	local enabled_things=$(for f in `compgen -G "${BASH_IT}/$subdirectory/enabled/*.bash"`;
+	local enabled_things=$(for f in `compgen -G "${BASH_IT}/$subdirectory/enabled/*.bash" | sort`;
 		do
 			basename $f | cut -d'.' -f1 | sed -e "s/^[0-9]*---//g"
 		done)
@@ -37,7 +37,7 @@ _bash-it-comp-list-available()
 {
 	subdirectory="$1"
 
-	local enabled_things=$(for f in `compgen -G "${BASH_IT}/$subdirectory/available/*.bash"`;
+	local enabled_things=$(for f in `compgen -G "${BASH_IT}/$subdirectory/available/*.bash" | sort`;
 		do
 			basename $f | cut -d'.' -f1
 		done)
