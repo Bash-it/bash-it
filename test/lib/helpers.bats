@@ -189,16 +189,40 @@ function local_setup {
   assert [ -L "$BASH_IT/aliases/enabled/todo.txt-cli.aliases.bash" ]
 
   run _enable-plugin "ssh"
-  assert [ -L "$BASH_IT/plugins/enabled/250---ssh.plugin.bash" ]
+  assert [ -L "$BASH_IT/enabled/250---ssh.plugin.bash" ]
 
   run _bash-it-migrate
-  assert [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
-  assert [ -L "$BASH_IT/plugins/enabled/250---node.plugin.bash" ]
-  assert [ -L "$BASH_IT/plugins/enabled/250---ssh.plugin.bash" ]
-  assert [ -L "$BASH_IT/aliases/enabled/150---todo.txt-cli.aliases.bash" ]
+
+  assert [ -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
+  assert [ -L "$BASH_IT/enabled/250---node.plugin.bash" ]
+  assert [ -L "$BASH_IT/enabled/250---ssh.plugin.bash" ]
+  assert [ -L "$BASH_IT/enabled/150---todo.txt-cli.aliases.bash" ]
   assert [ ! -L "$BASH_IT/plugins/enabled/node.plugin.bash" ]
   assert [ ! -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
   assert [ ! -L "$BASH_IT/aliases/enabled/todo.txt-cli.aliases.bash" ]
+}
+
+@test "bash-it: migrate enabled plugins that use the new priority-based configuration in the individual directories" {
+  ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/225---nvm.plugin.bash
+  assert [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
+
+  ln -s $BASH_IT/plugins/available/node.plugin.bash $BASH_IT/plugins/enabled/250---node.plugin.bash
+  assert [ -L "$BASH_IT/plugins/enabled/250---node.plugin.bash" ]
+
+  ln -s $BASH_IT/aliases/available/todo.txt-cli.aliases.bash $BASH_IT/aliases/enabled/250---todo.txt-cli.aliases.bash
+  assert [ -L "$BASH_IT/aliases/enabled/250---todo.txt-cli.aliases.bash" ]
+
+  run _enable-plugin "ssh"
+  assert [ -L "$BASH_IT/enabled/250---ssh.plugin.bash" ]
+
+  run _bash-it-migrate
+  assert [ -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
+  assert [ -L "$BASH_IT/enabled/250---node.plugin.bash" ]
+  assert [ -L "$BASH_IT/enabled/250---ssh.plugin.bash" ]
+  assert [ -L "$BASH_IT/enabled/150---todo.txt-cli.aliases.bash" ]
+  assert [ ! -L "$BASH_IT/plugins/enabled/225----node.plugin.bash" ]
+  assert [ ! -L "$BASH_IT/plugins/enabled/250----nvm.plugin.bash" ]
+  assert [ ! -L "$BASH_IT/aliases/enabled/250----todo.txt-cli.aliases.bash" ]
 }
 
 @test "bash-it: run the migrate command without anything to migrate and nothing enabled" {

@@ -186,17 +186,17 @@ _bash-it-migrate() {
     do
       typeset ff=$(basename $f)
 
-        # Get the type of component from the extension
-        typeset single_type=$(echo $ff | sed -e 's/.*\.\(.*\)\.bash/\1/g' | sed 's/aliases/alias/g')
-        typeset component_name=$(echo $ff | cut -d'.' -f1)
+      # Get the type of component from the extension
+      typeset single_type=$(echo $ff | sed -e 's/.*\.\(.*\)\.bash/\1/g' | sed 's/aliases/alias/g')
+      typeset component_name=$(echo $ff | cut -d'.' -f1)
 
-        echo "Migrating $single_type $component_name."
+      echo "Migrating $single_type $component_name."
 
-        disable_func="_disable-$single_type"
-        enable_func="_enable-$single_type"
+      disable_func="_disable-$single_type"
+      enable_func="_enable-$single_type"
 
-        $disable_func $component_name
-        $enable_func $component_name
+      $disable_func $component_name
+      $enable_func $component_name
     done
     shopt -u nullglob
   done
@@ -404,8 +404,8 @@ _enable-thing ()
           return
         fi
 
-        typeset enabled_plugin=$(command ls "${BASH_IT}/enabled/"[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$to_enable 2>/dev/null | head -1)
-        if [ ! -z "$enabled_plugin" ] ; then
+        typeset enabled_plugin_global=$(command ls "${BASH_IT}/enabled/[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$to_enable" 2>/dev/null | head -1)
+        if [ ! -z "$enabled_plugin_global" ] ; then
           printf '%s\n' "$file_entity is already enabled."
           return
         fi
