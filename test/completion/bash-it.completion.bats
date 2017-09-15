@@ -63,6 +63,11 @@ function __check_completion () {
   echo "${COMPREPLY[@]}"
 }
 
+@test "completion bash-it: help aliases" {
+  run __check_completion 'bash-it help aliases v'
+  assert_line "0" "vagrant vault vim"
+}
+
 @test "completion bash-it: disable - provide nothing when atom is not enabled" {
   run __check_completion 'bash-it disable alias ato'
   assert_line "0" ""
