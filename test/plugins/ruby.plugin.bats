@@ -21,6 +21,8 @@ load ../../plugins/available/ruby.plugin
   # Then load the ruby plugin again to ensure that the ruby path is appended at the end of the path
   load ../../plugins/available/ruby.plugin
 
+  echo $PATH
+
   local last_path_entry=$(echo $PATH | tr ":" "\n" | tail -1)
   [[ "${last_path_entry}" == "${HOME}"/.gem/ruby/*/bin ]]
 }
