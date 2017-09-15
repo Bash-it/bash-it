@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 BASH_IT_LOAD_PRIORITY_DEFAULT_ALIAS=${BASH_IT_LOAD_PRIORITY_DEFAULT_ALIAS:-150}
 BASH_IT_LOAD_PRIORITY_DEFAULT_PLUGIN=${BASH_IT_LOAD_PRIORITY_DEFAULT_PLUGIN:-250}
 BASH_IT_LOAD_PRIORITY_DEFAULT_COMPLETION=${BASH_IT_LOAD_PRIORITY_DEFAULT_COMPLETION:-350}
@@ -227,7 +229,11 @@ _bash-it-describe ()
     for f in "${BASH_IT}/$subdirectory/available/"*.bash
     do
         # Check for both the old format without the load priority, and the extended format with the priority
-        if [ -e "${BASH_IT}/enabled/"*$BASH_IT_LOAD_PRIORITY_SEPARATOR$(basename $f) ] || [ -e "${BASH_IT}/$subdirectory/enabled/"$(basename $f) ] || [ -e "${BASH_IT}/$subdirectory/enabled/"*$BASH_IT_LOAD_PRIORITY_SEPARATOR$(basename $f) ]; then
+        declare enabled_files enabled_file
+        enabled_file=$(basename $f)
+        enabled_files=$(sort <(compgen -G "${BASH_IT}/enabled/*$BASH_IT_LOAD_PRIORITY_SEPARATOR${enabled_file}") <(compgen -G "${BASH_IT}/$subdirectory/enabled/${enabled_file}") <(compgen -G "${BASH_IT}/$subdirectory/enabled/*$BASH_IT_LOAD_PRIORITY_SEPARATOR${enabled_file}") | wc -l)
+
+        if [ $enabled_files -gt 0 ]; then
             enabled='x'
         else
             enabled=' '
