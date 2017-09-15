@@ -398,13 +398,13 @@ _enable-thing ()
 
         to_enable=$(basename $to_enable)
         # Check for existence of the file using a wildcard, since we don't know which priority might have been used when enabling it.
-        typeset enabled_plugin=$(command ls "${BASH_IT}/$subdirectory/enabled/"{[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$to_enable,$to_enable} 2>/dev/null | head -1)
+        typeset enabled_plugin=$(command ls "${BASH_IT}/$subdirectory/enabled/"{[0-9][0-9][0-9]$BASH_IT_LOAD_PRIORITY_SEPARATOR$to_enable,$to_enable} 2>/dev/null | head -1)
         if [ ! -z "$enabled_plugin" ] ; then
           printf '%s\n' "$file_entity is already enabled."
           return
         fi
 
-        typeset enabled_plugin_global=$(command ls "${BASH_IT}/enabled/[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$to_enable" 2>/dev/null | head -1)
+        typeset enabled_plugin_global=$(command ls "${BASH_IT}/enabled/"[0-9][0-9][0-9]$BASH_IT_LOAD_PRIORITY_SEPARATOR$to_enable 2>/dev/null | head -1)
         if [ ! -z "$enabled_plugin_global" ] ; then
           printf '%s\n' "$file_entity is already enabled."
           return
