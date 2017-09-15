@@ -207,10 +207,10 @@ function local_setup {
 
 @test "bash-it: run the migrate command without anything to migrate" {
   run _enable-plugin "ssh"
-  assert [ -L "$BASH_IT/plugins/enabled/250---ssh.plugin.bash" ]
+  assert [ -L "$BASH_IT/enabled/250---ssh.plugin.bash" ]
 
   run _bash-it-migrate
-  assert [ -L "$BASH_IT/plugins/enabled/250---ssh.plugin.bash" ]
+  assert [ -L "$BASH_IT/enabled/250---ssh.plugin.bash" ]
 }
 
 @test "bash-it: verify that existing components are automatically migrated when something is enabled" {

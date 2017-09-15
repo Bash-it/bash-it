@@ -186,8 +186,6 @@ _bash-it-migrate() {
     do
       typeset ff=$(basename $f)
 
-      # Only process the ones that don't use the new structure
-      if ! [[ $ff =~ ^[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR.*\.bash$ ]] ; then
         # Get the type of component from the extension
         typeset single_type=$(echo $ff | sed -e 's/.*\.\(.*\)\.bash/\1/g' | sed 's/aliases/alias/g')
         typeset component_name=$(echo $ff | cut -d'.' -f1)
@@ -199,7 +197,6 @@ _bash-it-migrate() {
 
         $disable_func $component_name
         $enable_func $component_name
-      fi
     done
     shopt -u nullglob
   done
