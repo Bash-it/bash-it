@@ -26,6 +26,10 @@ function local_setup {
   mkdir -p "$BASH_IT"/plugins/enabled
 }
 
+# TODO Create global __is_enabled function
+# TODO Create global __get_base_name function
+# TODO Create global __get_enabled_name function
+
 @test "bash-it: enable the todo.txt-cli aliases through the bash-it function" {
   run bash-it enable alias "todo.txt-cli"
   assert_line "0" 'todo.txt-cli enabled with priority 150.'
@@ -235,6 +239,79 @@ function local_setup {
 
   run _bash-it-migrate
   assert [ -L "$BASH_IT/enabled/250---ssh.plugin.bash" ]
+}
+
+function __migrate_all_components() {
+  subdirectory="$1"
+  one_type="$2"
+  priority="$3"
+
+  for f in "${BASH_IT}/$subdirectory/available/"*.bash
+  do
+    to_enable=$(basename $f)
+    if [ -z "$priority" ]; then
+      ln -s "../available/$to_enable" "${BASH_IT}/${subdirectory}/enabled/$to_enable"
+    else
+      ln -s "../available/$to_enable" "${BASH_IT}/${subdirectory}/enabled/$priority---$to_enable"
+    fi
+  done
+
+  ls ${BASH_IT}/${subdirectory}/enabled
+
+  all_available=$(compgen -G "${BASH_IT}/${subdirectory}/available/*.$one_type.bash" | wc -l)
+  all_enabled_old=$(compgen -G "${BASH_IT}/${subdirectory}/enabled/*.$one_type.bash" | wc -l)
+
+  assert_equal "$all_available" "$all_enabled_old"
+
+  run bash-it migrate
+
+  all_enabled_old_after=$(compgen -G "${BASH_IT}/${subdirectory}/enabled/*.$one_type.bash" | wc -l)
+  assert_equal "0" "$all_enabled_old_after"
+
+  all_enabled_new_after=$(compgen -G "${BASH_IT}/enabled/*.$one_type.bash" | wc -l)
+  assert_equal "$all_enabled_old" "$all_enabled_new_after"
+}
+
+@test "bash-it: migrate all plugins" {
+  subdirectory="plugins"
+  one_type="plugin"
+
+  __migrate_all_components "$subdirectory" "$one_type"
+}
+
+@test "bash-it: migrate all aliases" {
+  subdirectory="aliases"
+  one_type="aliases"
+
+  __migrate_all_components "$subdirectory" "$one_type"
+}
+
+@test "bash-it: migrate all completions" {
+  subdirectory="completion"
+  one_type="completion"
+
+  __migrate_all_components "$subdirectory" "$one_type"
+}
+
+@test "bash-it: migrate all plugins with previous priority" {
+  subdirectory="plugins"
+  one_type="plugin"
+
+  __migrate_all_components "$subdirectory" "$one_type" "100"
+}
+
+@test "bash-it: migrate all aliases with previous priority" {
+  subdirectory="aliases"
+  one_type="aliases"
+
+  __migrate_all_components "$subdirectory" "$one_type" "100"
+}
+
+@test "bash-it: migrate all completions with previous priority" {
+  subdirectory="completion"
+  one_type="completion"
+
+  __migrate_all_components "$subdirectory" "$one_type" "100"
 }
 
 @test "bash-it: verify that existing components are automatically migrated when something is enabled" {
