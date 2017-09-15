@@ -303,10 +303,10 @@ _disable-thing ()
         return
     fi
 
-    if [ "$file_entity" = "all" ]; then
-        typeset f $file_type suffix
-        suffix=$(echo "$subdirectory" | sed -e 's/plugins/plugin/g')
+    typeset f suffix
+    suffix=$(echo "$subdirectory" | sed -e 's/plugins/plugin/g')
 
+    if [ "$file_entity" = "all" ]; then
         # Disable everything that's using the old structure
         for f in `compgen -G "${BASH_IT}/$subdirectory/enabled/*.${suffix}.bash"`
         do
@@ -319,13 +319,13 @@ _disable-thing ()
           rm "$f"
         done
     else
-        typeset plugin_global=$(command ls $ "${BASH_IT}/enabled/"[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity.*bash 2>/dev/null | head -1)
+        typeset plugin_global=$(command ls $ "${BASH_IT}/enabled/"[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity.$suffix.bash 2>/dev/null | head -1)
         if [ -z "$plugin_global" ]; then
           # Use a glob to search for both possible patterns
           # 250---node.plugin.bash
           # node.plugin.bash
           # Either one will be matched by this glob
-          typeset plugin=$(command ls $ "${BASH_IT}/$subdirectory/enabled/"{[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity.*bash,$file_entity.*bash} 2>/dev/null | head -1)
+          typeset plugin=$(command ls $ "${BASH_IT}/$subdirectory/enabled/"{[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity.$suffix.bash,$file_entity.$suffix.bash} 2>/dev/null | head -1)
           if [ -z "$plugin" ]; then
               printf '%s\n' "sorry, $file_entity does not appear to be an enabled $file_type."
               return

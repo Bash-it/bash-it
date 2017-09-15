@@ -251,6 +251,28 @@ function local_setup {
   assert [ -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
 }
 
+@test "helpers: migrate plugins and completions that share the same name" {
+  ln -s $BASH_IT/completion/available/dirs.completion.bash $BASH_IT/completion/enabled/350---dirs.completion.bash
+  assert [ -L "$BASH_IT/completion/enabled/350---dirs.completion.bash" ]
+
+  ln -s $BASH_IT/plugins/available/dirs.plugin.bash $BASH_IT/plugins/enabled/250---dirs.plugin.bash
+  assert [ -L "$BASH_IT/plugins/enabled/250---dirs.plugin.bash" ]
+
+  run _bash-it-migrate
+  assert_line "0" 'Migrating plugin dirs.'
+  assert_line "1" 'dirs disabled.'
+  assert_line "2" 'dirs enabled with priority 250.'
+  assert_line "3" 'Migrating completion dirs.'
+  assert_line "4" 'dirs disabled.'
+  assert_line "5" 'dirs enabled with priority 350.'
+  assert_line "6" 'If any migration errors were reported, please try the following: reload && bash-it migrate'
+
+  assert [ -L "$BASH_IT/enabled/350---dirs.completion.bash" ]
+  assert [ -L "$BASH_IT/enabled/250---dirs.plugin.bash" ]
+  assert [ ! -L "$BASH_IT/completion/enabled/350----dirs.completion.bash" ]
+  assert [ ! -L "$BASH_IT/plugins/enabled/250----dirs.plugin.bash" ]
+}
+
 @test "helpers: migrate enabled plugins that don't use the new priority-based configuration" {
   ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/nvm.plugin.bash
   assert [ -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
@@ -265,6 +287,9 @@ function local_setup {
   assert [ -L "$BASH_IT/enabled/250---ssh.plugin.bash" ]
 
   run _bash-it-migrate
+  assert_line "0" 'Migrating alias todo.txt-cli.'
+  assert_line "1" 'todo.txt-cli disabled.'
+  assert_line "2" 'todo.txt-cli enabled with priority 150.'
 
   assert [ -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
   assert [ -L "$BASH_IT/enabled/250---node.plugin.bash" ]
