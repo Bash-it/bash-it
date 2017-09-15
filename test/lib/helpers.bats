@@ -30,6 +30,17 @@ function local_setup {
 # TODO Create global __get_base_name function
 # TODO Create global __get_enabled_name function
 
+@test "helpers: bash-it help aliases ag" {
+  run bash-it help alias "ag"
+  assert_line "0" "ag='ag --smart-case --pager=\"less -MIRFX'"
+}
+
+@test "helpers: bash-it help aliases without any aliases enabled" {
+  run bash-it help alias
+  echo "${lines[@]}"
+  assert_line "0" ""
+}
+
 @test "helpers: enable the todo.txt-cli aliases through the bash-it function" {
   run bash-it enable alias "todo.txt-cli"
   assert_line "0" 'todo.txt-cli enabled with priority 150.'

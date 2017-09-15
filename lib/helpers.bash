@@ -454,11 +454,18 @@ _help-aliases()
         cat "${BASH_IT}/aliases/$alias_path" | metafor alias | sed "s/$/'/"
     else
         typeset f
+        shopt -s nullglob
+
         for f in "${BASH_IT}/aliases/enabled/"*
         do
             _help-list-aliases $f
         done
-        _help-list-aliases "${BASH_IT}/aliases/custom.aliases.bash"
+
+        shopt -u nullglob
+
+        if [ -e "${BASH_IT}/aliases/custom.aliases.bash" ]; then
+          _help-list-aliases "${BASH_IT}/aliases/custom.aliases.bash"
+        fi
     fi
 }
 
