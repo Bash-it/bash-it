@@ -37,36 +37,33 @@ function local_teardown {
   assert_success
 }
 
-@test "completion bash-it: provide the atom aliases when not enabled" {
-  COMP_WORDS=(bash-it enable alias ato)
+function __check_completion () {
+  # Get the parameters as an array
+  eval set -- "$@"
+  COMP_WORDS=("$@")
 
-  COMP_CWORD=3
+  # Get the parameters as a single value
+  COMP_LINE=$*
 
-  COMP_LINE='bash-it enable alias ato'
-
+  # Index of the cursor in the line
   COMP_POINT=${#COMP_LINE}
 
+  # Word index of the last word
+  COMP_CWORD=$(( ${#COMP_WORDS[@]} - 1 ))
+
+  # Run the Bash-it completion function
   _bash-it-comp
 
+  # Return the completion output
   echo "${COMPREPLY[@]}"
-  all_results="${COMPREPLY[@]}"
+}
 
-  assert_equal "atom" "$all_results"
+@test "completion bash-it: provide the atom aliases when not enabled" {
+  run __check_completion 'bash-it enable alias ato'
+  assert_line "0" "atom"
 }
 
 @test "completion bash-it: provide the a* aliases when not enabled" {
-  COMP_WORDS=(bash-it enable alias a)
-
-  COMP_CWORD=3
-
-  COMP_LINE='bash-it enable alias a'
-
-  COMP_POINT=${#COMP_LINE}
-
-  _bash-it-comp
-
-  echo "${COMPREPLY[@]}"
-  all_results="${COMPREPLY[@]}"
-
-  assert_equal "all ag ansible apt atom" "$all_results"
+  run __check_completion 'bash-it enable alias a'
+  assert_line "0" "all ag ansible apt atom" "$all_results"
 }
