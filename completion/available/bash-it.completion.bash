@@ -12,7 +12,10 @@ _bash-it-comp-list-available-not-enabled()
 
   local available_things=$(for f in `compgen -G "${BASH_IT}/$subdirectory/available/*.bash" | sort`;
     do
-      if [ ! -e "${BASH_IT}/$subdirectory/enabled/"$(basename $f) ] && [ ! -e "${BASH_IT}/$subdirectory/enabled/"*$BASH_IT_LOAD_PRIORITY_SEPARATOR$(basename $f) ]
+      # TODO Find a better way to check for these, without using -e + glob
+      if [ ! -e "${BASH_IT}/$subdirectory/enabled/"$(basename $f) ] \
+        && [ ! -e "${BASH_IT}/$subdirectory/enabled/"*$BASH_IT_LOAD_PRIORITY_SEPARATOR$(basename $f) ] \
+        && [ ! -e "${BASH_IT}/enabled/"*$BASH_IT_LOAD_PRIORITY_SEPARATOR$(basename $f) ]
       then
         basename $f | cut -d'.' -f1
       fi
@@ -25,6 +28,7 @@ _bash-it-comp-list-enabled()
 {
   subdirectory="$1"
 
+  # TODO Check for global directory as well
   local enabled_things=$(for f in `compgen -G "${BASH_IT}/$subdirectory/enabled/*.bash" | sort`;
     do
       basename $f | cut -d'.' -f1 | sed -e "s/^[0-9]*---//g"
