@@ -5,6 +5,15 @@ BASH_IT_LOAD_PRIORITY_DEFAULT_PLUGIN=${BASH_IT_LOAD_PRIORITY_DEFAULT_PLUGIN:-250
 BASH_IT_LOAD_PRIORITY_DEFAULT_COMPLETION=${BASH_IT_LOAD_PRIORITY_DEFAULT_COMPLETION:-350}
 BASH_IT_LOAD_PRIORITY_SEPARATOR="---"
 
+function _command_exists ()
+{
+  _about 'checks for existence of a command'
+  _param '1: command to check'
+  _example '$ _command_exists ls && echo exists'
+  _group 'lib'
+  type "$1" &> /dev/null ;
+}
+
 # Helper function loading various enable-able files
 function _load_bash_it_files() {
   subdirectory="$1"
