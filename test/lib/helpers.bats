@@ -388,6 +388,20 @@ function __migrate_all_components() {
   _bash-it-plugins | grep "nvm" | grep "\[x\]"
 }
 
+@test "bash-it: describe the nvm plugin after enabling it in the old directory" {
+  ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/nvm.plugin.bash
+  assert [ -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
+
+  _bash-it-plugins | grep "nvm" | grep "\[x\]"
+}
+
+@test "bash-it: describe the nvm plugin after enabling it in the old directory with priority" {
+  ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/225---nvm.plugin.bash
+  assert [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
+
+  _bash-it-plugins | grep "nvm" | grep "\[x\]"
+}
+
 @test "bash-it: describe the todo.txt-cli aliases without enabling them" {
   run _bash-it-aliases
   assert_line "todo.txt-cli          [ ]     todo.txt-cli abbreviations"

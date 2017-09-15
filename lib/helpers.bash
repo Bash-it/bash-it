@@ -223,7 +223,7 @@ _bash-it-describe ()
     for f in "${BASH_IT}/$subdirectory/available/"*.bash
     do
         # Check for both the old format without the load priority, and the extended format with the priority
-        if [ -e "${BASH_IT}/$subdirectory/enabled/"$(basename $f) ] || [ -e "${BASH_IT}/$subdirectory/enabled/"*$BASH_IT_LOAD_PRIORITY_SEPARATOR$(basename $f) ]; then
+        if [ -e "${BASH_IT}/enabled/"*$BASH_IT_LOAD_PRIORITY_SEPARATOR$(basename $f) ] || [ -e "${BASH_IT}/$subdirectory/enabled/"$(basename $f) ] || [ -e "${BASH_IT}/$subdirectory/enabled/"*$BASH_IT_LOAD_PRIORITY_SEPARATOR$(basename $f) ]; then
             enabled='x'
         else
             enabled=' '
