@@ -439,6 +439,57 @@ function __migrate_all_components() {
   assert [ -L "$BASH_IT/enabled/150---ag.aliases.bash" ]
 }
 
+@test "helpers: disable all plugins in the old directory structure" {
+  ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/nvm.plugin.bash
+  assert [ -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
+
+  ln -s $BASH_IT/plugins/available/node.plugin.bash $BASH_IT/plugins/enabled/node.plugin.bash
+  assert [ -L "$BASH_IT/plugins/enabled/node.plugin.bash" ]
+
+  local enabled=$(find $BASH_IT/plugins/enabled -name *.plugin.bash | wc -l | xargs)
+  assert_equal "2" "$enabled"
+
+  run _enable-alias "ag"
+  assert [ -L "$BASH_IT/enabled/150---ag.aliases.bash" ]
+
+  run _disable-plugin "all"
+  local enabled2=$(find $BASH_IT/plugins/enabled -name *.plugin.bash | wc -l | xargs)
+  assert_equal "0" "$enabled2"
+  assert [ -L "$BASH_IT/enabled/150---ag.aliases.bash" ]
+}
+
+@test "helpers: disable all plugins in the old directory structure with priority" {
+  ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/250---nvm.plugin.bash
+  assert [ -L "$BASH_IT/plugins/enabled/250---nvm.plugin.bash" ]
+
+  ln -s $BASH_IT/plugins/available/node.plugin.bash $BASH_IT/plugins/enabled/250---node.plugin.bash
+  assert [ -L "$BASH_IT/plugins/enabled/250---node.plugin.bash" ]
+
+  local enabled=$(find $BASH_IT/plugins/enabled -name *.plugin.bash | wc -l | xargs)
+  assert_equal "2" "$enabled"
+
+  run _enable-alias "ag"
+  assert [ -L "$BASH_IT/enabled/150---ag.aliases.bash" ]
+
+  run _disable-plugin "all"
+  local enabled2=$(find $BASH_IT/plugins/enabled -name *.plugin.bash | wc -l | xargs)
+  assert_equal "0" "$enabled2"
+  assert [ -L "$BASH_IT/enabled/150---ag.aliases.bash" ]
+}
+
+@test "helpers: disable all plugins without anything enabled" {
+  local enabled=$(find $BASH_IT/enabled -name [0-9]*.plugin.bash | wc -l | xargs)
+  assert_equal "0" "$enabled"
+
+  run _enable-alias "ag"
+  assert [ -L "$BASH_IT/enabled/150---ag.aliases.bash" ]
+
+  run _disable-plugin "all"
+  local enabled2=$(find $BASH_IT/enabled -name [0-9]*.plugin.bash | wc -l | xargs)
+  assert_equal "0" "$enabled2"
+  assert [ -L "$BASH_IT/enabled/150---ag.aliases.bash" ]
+}
+
 @test "helpers: enable the ansible aliases through the bash-it function" {
   run bash-it enable alias "ansible"
   assert_line "0" 'ansible enabled with priority 150.'
