@@ -12,10 +12,12 @@ _bash-it-comp-list-available-not-enabled()
 
   local available_things=$(for f in `compgen -G "${BASH_IT}/$subdirectory/available/*.bash" | sort`;
     do
-      # TODO Find a better way to check for these, without using -e + glob
-      if [ ! -e "${BASH_IT}/$subdirectory/enabled/"$(basename $f) ] \
-        && [ ! -e "${BASH_IT}/$subdirectory/enabled/"*$BASH_IT_LOAD_PRIORITY_SEPARATOR$(basename $f) ] \
-        && [ ! -e "${BASH_IT}/enabled/"*$BASH_IT_LOAD_PRIORITY_SEPARATOR$(basename $f) ]
+      file_entity=$(basename $f)
+
+      typeset enabled_component=$(command ls "${BASH_IT}/$subdirectory/enabled/"{[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity,$file_entity} 2>/dev/null | head -1)
+      typeset enabled_component_global=$(command ls "${BASH_IT}/enabled/"[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity 2>/dev/null | head -1)
+
+      if [ -z "$enabled_component" ] && [ -z "$enabled_component_global" ]
       then
         basename $f | cut -d'.' -f1
       fi
