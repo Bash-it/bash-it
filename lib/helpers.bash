@@ -404,7 +404,7 @@ _enable-thing ()
           return
         fi
 
-        typeset enabled_plugin_global=$(command ls "${BASH_IT}/enabled/"[0-9][0-9][0-9]$BASH_IT_LOAD_PRIORITY_SEPARATOR$to_enable 2>/dev/null | head -1)
+        typeset enabled_plugin_global=$(command compgen -G "${BASH_IT}/enabled/[0-9][0-9][0-9]$BASH_IT_LOAD_PRIORITY_SEPARATOR$to_enable" 2>/dev/null | head -1)
         if [ ! -z "$enabled_plugin_global" ] ; then
           printf '%s\n' "$file_entity is already enabled."
           return
