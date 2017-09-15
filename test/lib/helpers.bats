@@ -303,7 +303,7 @@ function local_setup {
 @test "bash-it: describe the nvm plugin after enabling it" {
   run _enable-plugin "nvm"
   assert_line "0" 'nvm enabled with priority 225.'
-  assert [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
+  assert [ -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
 
   _bash-it-plugins | grep "nvm" | grep "\[x\]"
 }
