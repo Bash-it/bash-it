@@ -20,7 +20,8 @@ function _load_bash_it_files() {
   # In the new structure
   if [ -d "${BASH_IT}/enabled" ]
   then
-    local suffix=$(echo "$subdirectory" | sed -e 's/plugins/plugin/g')
+    declare suffix
+    suffix=$(echo "$subdirectory" | sed -e 's/plugins/plugin/g')
 
     FILES="${BASH_IT}/enabled/*.${suffix}.bash"
     for config_file in $FILES
@@ -75,7 +76,7 @@ bash-it ()
          help)
              func=_help-$component;;
          search)
-             _bash-it-search $component $*
+             _bash-it-search $component "$@"
              return;;
          update)
              func=_bash-it_update;;
@@ -101,7 +102,7 @@ bash-it ()
         fi
     fi
 
-    if [ x"$verb" == x"enable" -o x"$verb" == x"disable" ];then
+    if [ x"$verb" == x"enable" ] || [ x"$verb" == x"disable" ]; then
         # Automatically run a migration if required
         _bash-it-migrate
 
@@ -110,7 +111,7 @@ bash-it ()
             $func $arg
         done
     else
-        $func $*
+        $func "$@"
     fi
 }
 
@@ -150,12 +151,17 @@ _bash-it_update() {
   _about 'updates Bash-it'
   _group 'lib'
 
-  cd "${BASH_IT}"
+  cd "${BASH_IT}" || return
+
   if [ -z $BASH_IT_REMOTE ]; then
     BASH_IT_REMOTE="origin"
   fi
+
   git fetch &> /dev/null
-  local status="$(git rev-list master..${BASH_IT_REMOTE}/master 2> /dev/null)"
+
+  declare status
+  status="$(git rev-list master..${BASH_IT_REMOTE}/master 2> /dev/null)"
+
   if [[ -n "${status}" ]]; then
     git pull --rebase &> /dev/null
     if [[ $? -eq 0 ]]; then
@@ -172,7 +178,7 @@ _bash-it_update() {
   else
     echo "Bash-it is up to date, nothing to do!"
   fi
-  cd - &> /dev/null
+  cd - &> /dev/null || return
 }
 
 _bash-it-migrate() {
@@ -402,8 +408,9 @@ _enable-thing ()
         mkdir -p "${BASH_IT}/enabled"
 
         # Load the priority from the file if it present there
-        local local_file_priority=$(grep -E "^# BASH_IT_LOAD_PRIORITY:" "${BASH_IT}/$subdirectory/available/$to_enable" | awk -F': ' '{ print $2 }')
-        local use_load_priority=${local_file_priority:-$load_priority}
+        declare local_file_priority use_load_priority
+        local_file_priority=$(grep -E "^# BASH_IT_LOAD_PRIORITY:" "${BASH_IT}/$subdirectory/available/$to_enable" | awk -F': ' '{ print $2 }')
+        use_load_priority=${local_file_priority:-$load_priority}
 
         ln -s ../$subdirectory/available/$to_enable "${BASH_IT}/enabled/${use_load_priority}${BASH_IT_LOAD_PRIORITY_SEPARATOR}${to_enable}"
     fi
