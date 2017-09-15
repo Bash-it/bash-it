@@ -471,7 +471,7 @@ _help-aliases()
 
 _help-list-aliases ()
 {
-    typeset file=$(basename $1 | sed -e 's/\(.*\)\..*\.bash/\1/g')
+    typeset file=$(basename $1 | sed -e 's/[0-9]*[-]*\(.*\)\..*\.bash/\1/g')
     printf '\n\n%s:\n' "${file%%.*}"
     # metafor() strips trailing quotes, restore them with sed..
     cat $1 | metafor alias | sed "s/$/'/"

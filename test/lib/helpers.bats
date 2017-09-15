@@ -40,17 +40,36 @@ function local_setup {
   assert_line "0" ""
 }
 
+@test "helpers: bash-it help list aliases without any aliases enabled" {
+  run _help-list-aliases "$BASH_IT/aliases/available/ag.aliases.bash"
+  assert_line "0" "ag:"
+}
+
+@test "helpers: bash-it help list aliases with ag aliases enabled" {
+  ln -s $BASH_IT/aliases/available/ag.aliases.bash $BASH_IT/aliases/enabled/150---ag.aliases.bash
+  assert [ -L "$BASH_IT/aliases/enabled/150---ag.aliases.bash" ]
+
+  run _help-list-aliases "$BASH_IT/aliases/enabled/150---ag.aliases.bash"
+  assert_line "0" "ag:"
+}
+
+@test "helpers: bash-it help list aliases with ag aliases enabled in global directory" {
+  ln -s $BASH_IT/aliases/available/ag.aliases.bash $BASH_IT/enabled/150---ag.aliases.bash
+  assert [ -L "$BASH_IT/enabled/150---ag.aliases.bash" ]
+
+  run _help-list-aliases "$BASH_IT/enabled/150---ag.aliases.bash"
+  assert_line "0" "ag:"
+}
+
 @test "helpers: bash-it help aliases one alias enabled in the old directory" {
   ln -s $BASH_IT/aliases/available/ag.aliases.bash $BASH_IT/aliases/enabled/150---ag.aliases.bash
   assert [ -L "$BASH_IT/aliases/enabled/150---ag.aliases.bash" ]
 
   run bash-it help aliases
-
-  echo "${lines[@]}"
   assert_line "0" "ag:"
 }
 
-@test "helpers: bash-it help aliases one alias enabled" {
+@test "helpers: bash-it help aliases one alias enabled in global directory" {
   run bash-it enable alias "ag"
   assert_line "0" 'ag enabled with priority 150.'
   assert [ -L "$BASH_IT/enabled/150---ag.aliases.bash" ]
