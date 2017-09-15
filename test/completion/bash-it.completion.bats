@@ -16,6 +16,11 @@ function local_setup {
   rm -rf "$BASH_IT"/completion/enabled
   rm -rf "$BASH_IT"/plugins/enabled
 
+  mkdir -p "$BASH_IT"/enabled
+  mkdir -p "$BASH_IT"/aliases/enabled
+  mkdir -p "$BASH_IT"/completion/enabled
+  mkdir -p "$BASH_IT"/plugins/enabled
+
   # Don't pollute the user's actual $HOME directory
   # Use a test home directory instead
   export BASH_IT_TEST_CURRENT_HOME="${HOME}"
@@ -58,12 +63,65 @@ function __check_completion () {
   echo "${COMPREPLY[@]}"
 }
 
-@test "completion bash-it: provide the atom aliases when not enabled" {
+@test "completion bash-it: disable - provide nothing when atom is not enabled" {
+  run __check_completion 'bash-it disable alias ato'
+  assert_line "0" "all"
+}
+
+@test "completion bash-it: disable - provide the a* aliases when atom is enabled with the old location and name" {
+  ln -s $BASH_IT/aliases/available/atom.aliases.bash $BASH_IT/aliases/enabled/atom.aliases.bash
+  assert [ -L "$BASH_IT/aliases/enabled/atom.aliases.bash" ]
+
+  run __check_completion 'bash-it disable alias a'
+  assert_line "0" "all atom"
+}
+
+@test "completion bash-it: disable - provide the a* aliases when atom is enabled with the old location and priority-based name" {
+  ln -s $BASH_IT/aliases/available/atom.aliases.bash $BASH_IT/aliases/enabled/150---atom.aliases.bash
+  assert [ -L "$BASH_IT/aliases/enabled/150---atom.aliases.bash" ]
+
+  run __check_completion 'bash-it disable alias a'
+  assert_line "0" "all atom"
+}
+
+@test "completion bash-it: disable - provide the a* aliases when atom is enabled with the new location and priority-based name" {
+  ln -s $BASH_IT/aliases/available/atom.aliases.bash $BASH_IT/enabled/150---atom.aliases.bash
+  assert [ -L "$BASH_IT/enabled/150---atom.aliases.bash" ]
+
+  run __check_completion 'bash-it disable alias a'
+  assert_line "0" "all atom"
+}
+
+@test "completion bash-it: enable - provide the atom aliases when not enabled" {
   run __check_completion 'bash-it enable alias ato'
   assert_line "0" "atom"
 }
 
-@test "completion bash-it: provide the a* aliases when not enabled" {
+@test "completion bash-it: enable - provide the a* aliases when not enabled" {
   run __check_completion 'bash-it enable alias a'
-  assert_line "0" "all ag ansible apt atom" "$all_results"
+  assert_line "0" "all ag ansible apt atom"
+}
+
+@test "completion bash-it: enable - provide the a* aliases when atom is enabled with the old location and name" {
+  ln -s $BASH_IT/aliases/available/atom.aliases.bash $BASH_IT/aliases/enabled/atom.aliases.bash
+  assert [ -L "$BASH_IT/aliases/enabled/atom.aliases.bash" ]
+
+  run __check_completion 'bash-it enable alias a'
+  assert_line "0" "all ag ansible apt"
+}
+
+@test "completion bash-it: enable - provide the a* aliases when atom is enabled with the old location and priority-based name" {
+  ln -s $BASH_IT/aliases/available/atom.aliases.bash $BASH_IT/aliases/enabled/150---atom.aliases.bash
+  assert [ -L "$BASH_IT/aliases/enabled/150---atom.aliases.bash" ]
+
+  run __check_completion 'bash-it enable alias a'
+  assert_line "0" "all ag ansible apt"
+}
+
+@test "completion bash-it: enable - provide the a* aliases when atom is enabled with the new location and priority-based name" {
+  ln -s $BASH_IT/aliases/available/atom.aliases.bash $BASH_IT/enabled/150---atom.aliases.bash
+  assert [ -L "$BASH_IT/enabled/150---atom.aliases.bash" ]
+
+  run __check_completion 'bash-it enable alias a'
+  assert_line "0" "all ag ansible apt"
 }
