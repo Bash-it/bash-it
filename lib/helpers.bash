@@ -16,6 +16,20 @@ function _load_bash_it_files() {
       fi
     done
   fi
+
+  # In the new structure
+  if [ -d "${BASH_IT}/enabled" ]
+  then
+    local suffix=$(echo "$subdirectory" | sed -e 's/plugins/plugin/g')
+
+    FILES="${BASH_IT}/enabled/*.${suffix}.bash"
+    for config_file in $FILES
+    do
+      if [ -e "${config_file}" ]; then
+        source $config_file
+      fi
+    done
+  fi
 }
 
 # Function for reloading aliases
