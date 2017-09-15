@@ -55,12 +55,7 @@ function local_setup {
   assert_line "0" 'node enabled with priority 250.'
   assert [ -L "$BASH_IT/enabled/250---node.plugin.bash" ]
 
-  # TODO Check for the link target - readlink
-  # target_path=$HOME/Code/slate/.slate.js
-  #
-  # if [ "`readlink $HOME/.slate.js`" -ef "$target_path" ]; then
-  #     rm -rf "$HOME/.slate.js"
-  # fi
+  assert_equal "../plugins/available/node.plugin.bash" "`readlink $BASH_IT/enabled/250---node.plugin.bash`"
 }
 
 @test "bash-it: enable the node plugin through the bash-it function" {
