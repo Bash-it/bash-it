@@ -247,8 +247,8 @@ function local_setup {
   assert_line "2" 'nvm enabled with priority 225.'
   assert_line "3" 'node enabled with priority 250.'
   assert [ ! -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
-  assert [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
-  assert [ -L "$BASH_IT/plugins/enabled/250---node.plugin.bash" ]
+  assert [ -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
+  assert [ -L "$BASH_IT/enabled/250---node.plugin.bash" ]
 }
 
 @test "bash-it: verify that existing components are automatically migrated when something is disabled" {
@@ -263,8 +263,9 @@ function local_setup {
   assert_line "2" 'nvm enabled with priority 225.'
   assert_line "3" 'node disabled.'
   assert [ ! -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
-  assert [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
+  assert [ -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
   assert [ ! -L "$BASH_IT/plugins/enabled/250---node.plugin.bash" ]
+  assert [ -L "$BASH_IT/enabled/250---node.plugin.bash" ]
 }
 
 @test "bash-it: enable all plugins" {
