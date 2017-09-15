@@ -13,9 +13,16 @@ load ../../lib/search
 NO_COLOR=true
 
 function local_setup {
-  mkdir -p $BASH_IT
+  mkdir -p "$BASH_IT"
   lib_directory="$(cd "$(dirname "$0")" && pwd)"
-  cp -r $lib_directory/../../* $BASH_IT/
+  # Use rsync to copy Bash-it to the temp folder
+  # rsync is faster than cp, since we can exclude the large ".git" folder
+  rsync -qavrKL -d --delete-excluded --exclude=.git $lib_directory/../.. "$BASH_IT"
+
+  rm -rf "$BASH_IT"/enabled
+  rm -rf "$BASH_IT"/aliases/enabled
+  rm -rf "$BASH_IT"/completion/enabled
+  rm -rf "$BASH_IT"/plugins/enabled
 }
 
 @test "helpers search plugins" {
