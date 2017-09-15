@@ -181,8 +181,7 @@ _bash-it-migrate() {
 
   for file_type in "aliases" "plugins" "completion"
   do
-    shopt -s nullglob
-    for f in "${BASH_IT}/$file_type/enabled/"*.bash
+    for f in `compgen -G "${BASH_IT}/$file_type/enabled/*.bash"`
     do
       typeset ff=$(basename $f)
 
@@ -199,7 +198,6 @@ _bash-it-migrate() {
       $disable_func $component_name
       $enable_func $component_name
     done
-    shopt -u nullglob
   done
 }
 
