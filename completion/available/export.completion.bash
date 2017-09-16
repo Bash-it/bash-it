@@ -1,1 +1,1 @@
-complete -W '$(printenv | awk -F= "{print \$1}")' export
+complete -o nospace -S = -W '$(printenv | awk -F= "{print \$1}")' export
