@@ -92,4 +92,5 @@ then
   . "$HOME/.jekyllconfig"
 fi
 
+# Disable trap DEBUG on subshells - https://github.com/Bash-it/bash-it/pull/1040
 set +T
