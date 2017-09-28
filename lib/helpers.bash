@@ -500,7 +500,7 @@ _help-plugins()
 
     # display a brief progress message...
     printf '%s' 'please wait, building help...'
-    typeset grouplist=$(mktemp /tmp/grouplist.XXXXXX)
+    typeset grouplist=$(mktemp -t grouplist.XXXXXX)
     typeset func
     for func in $(typeset_functions)
     do
@@ -547,7 +547,7 @@ all_groups ()
     group 'lib'
 
     typeset func
-    typeset file=$(mktemp /tmp/composure.XXXX)
+    typeset file=$(mktemp -t composure.XXXX)
     for func in $(typeset_functions)
     do
         typeset -f $func | metafor group >> $file
