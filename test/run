@@ -9,4 +9,4 @@ if [ -z "${BASH_IT}" ]; then
   export BASH_IT=$(cd ${test_directory} && dirname $(pwd))
 fi
 
-exec $bats_executable ${CI:+--tap} ${test_directory}/{install,lib,plugins,themes}
+exec $bats_executable ${CI:+--tap} ${test_directory}/{bash_it,completion,install,lib,plugins,themes}

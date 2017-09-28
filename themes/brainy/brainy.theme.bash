@@ -152,7 +152,7 @@ ___brainy_prompt_clock() {
 }
 
 ___brainy_prompt_battery() {
-	! command_exists battery_percentage ||
+	! _command_exists battery_percentage ||
 	[ "${THEME_SHOW_BATTERY}" != "true" ] ||
 	[ "$(battery_percentage)" = "no" ] && return
 

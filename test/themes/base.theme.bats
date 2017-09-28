@@ -2,7 +2,10 @@
 
 load ../test_helper
 load ../../lib/composure
-load ../../plugins/available/base.plugin
+
+cite _about _param _example _group _author _version
+
+load ../../lib/helpers
 load ../../themes/base.theme
 
 @test 'themes base: battery_percentage should not exist' {
