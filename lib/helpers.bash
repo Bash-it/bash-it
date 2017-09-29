@@ -61,7 +61,7 @@ function reload_plugins() {
 bash-it ()
 {
     about 'Bash-it help and maintenance'
-    param '1: verb [one of: help | show | enable | disable | migrate | update | search ] '
+    param '1: verb [one of: help | show | enable | disable | migrate | update | search | version ] '
     param '2: component type [one of: alias(es) | completion(s) | plugin(s) ] or search term(s)'
     param '3: specific component [optional]'
     example '$ bash-it show plugins'
@@ -71,6 +71,7 @@ bash-it ()
     example '$ bash-it migrate'
     example '$ bash-it update'
     example '$ bash-it search ruby [[-]rake]... [--enable | --disable]'
+    example '$ bash-it version'
     typeset verb=${1:-}
     shift
     typeset component=${1:-}
@@ -90,8 +91,10 @@ bash-it ()
              return;;
          update)
              func=_bash-it_update;;
-          migrate)
+         migrate)
              func=_bash-it-migrate;;
+         version)
+             func=_bash-it-version;;
          *)
              reference bash-it
              return;;
@@ -225,6 +228,19 @@ _bash-it-migrate() {
     echo ""
     echo "If any migration errors were reported, please try the following: reload && bash-it migrate"
   fi
+}
+
+_bash-it-version() {
+  _about 'shows current Bash-it version'
+  _group 'lib'
+
+  cd "${BASH_IT}" || return
+
+  echo "Current git SHA:"
+  echo "$(git log --pretty=format:'%h on %aI' -n 1)"
+
+  CURRENT_GIT_SHA=$(git rev-parse --verify HEAD)
+  echo "https://github.com/Bash-it/bash-it/commit/$CURRENT_GIT_SHA"
 }
 
 _bash-it-describe ()
