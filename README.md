@@ -154,11 +154,11 @@ For custom scripts, and aliases, just create the following files (they'll be ign
 
 Anything in the custom directory will be ignored, with the exception of `custom/example.bash`.
 
-Alternately, if you would like to keep your custom scripts under version control, you can set `BASH_IT_CUSTOM` in your `~/.bashrc` to another location outside of the `~/.bash_it` folder. In this case, any `*.bash` file under every directory below `BASH_IT_CUSTOM` folder will be used.
+Alternately, if you would like to keep your custom scripts under version control, you can set `BASH_IT_CUSTOM` in your `~/.bashrc` to another location outside of the `$BASH_IT` folder. In this case, any `*.bash` file under every directory below `BASH_IT_CUSTOM` folder will be used.
 
 ## Themes
 
-There are over 50+ Bash-it themes to pick from in `.bash_it/themes`. The default theme is `bobby`.  Set `BASH_IT_THEME` to the theme name you want, or if you've developed your own custom theme outside of `.bash_it/themes`, point the `BASH_IT_THEME` variable directly to the theme file.
+There are over 50+ Bash-it themes to pick from in `$BASH_IT/themes`. The default theme is `bobby`.  Set `BASH_IT_THEME` to the theme name you want, or if you've developed your own custom theme outside of `$BASH_IT/themes`, point the `BASH_IT_THEME` variable directly to the theme file.
 
 Examples:
 
@@ -195,7 +195,7 @@ This will restore your previous Bash profile. After the uninstall script finishe
 Bash-it creates a `reload` alias that makes it convenient to reload
 your Bash profile when you make changes.
 
-Additionally, if you export BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE as a non-null value, Bash-it will automatically reload itself after activating or deactivating plugins, aliases, or completions.
+Additionally, if you export `BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE` as a non-null value, Bash-it will automatically reload itself after activating or deactivating plugins, aliases, or completions.
 
 ### Prompt Version Control Check
 
