@@ -236,11 +236,18 @@ _bash-it-version() {
 
   cd "${BASH_IT}" || return
 
-  echo "Current git SHA:"
-  echo "$(git log --pretty=format:'%h on %aI' -n 1)"
+  if [ -z $BASH_IT_REMOTE ]; then
+    BASH_IT_REMOTE="origin"
+  fi
 
-  CURRENT_GIT_SHA=$(git rev-parse --verify HEAD)
-  echo "https://github.com/Bash-it/bash-it/commit/$CURRENT_GIT_SHA"
+  BASH_IT_GIT_REMOTE=$(git remote get-url $BASH_IT_REMOTE)
+  BASH_IT_GIT_URL=${BASH_IT_GIT_REMOTE%.git}
+
+  BASH_IT_GIT_VERSION_INFO="$(git log --pretty=format:'%h on %aI' -n 1)"
+  BASH_IT_GIT_SHA=${BASH_IT_GIT_VERSION_INFO%% *}
+
+  echo "Current git SHA: $BASH_IT_GIT_VERSION_INFO"
+  echo "$BASH_IT_GIT_URL/commit/$BASH_IT_GIT_SHA"
 
   cd - &> /dev/null || return
 }
