@@ -241,6 +241,8 @@ _bash-it-version() {
 
   CURRENT_GIT_SHA=$(git rev-parse --verify HEAD)
   echo "https://github.com/Bash-it/bash-it/commit/$CURRENT_GIT_SHA"
+
+  cd - &> /dev/null || return
 }
 
 _bash-it-describe ()
