@@ -6,9 +6,11 @@ load ../../lib/composure
 function local_setup {
   mkdir -p "$BASH_IT"
   lib_directory="$(cd "$(dirname "$0")" && pwd)"
+  echo "Bi : $BASH_IT"
+  echo "Lib: $lib_directory"
   # Use rsync to copy Bash-it to the temp folder
   # rsync is faster than cp, since we can exclude the large ".git" folder
-  rsync -qavrKL -d --delete-excluded --exclude=.git $lib_directory/../.. "$BASH_IT"
+  rsync -qavrKL -d --delete-excluded --exclude=.git $lib_directory/../../.. "$BASH_IT"
 
   rm -rf "$BASH_IT"/enabled
   rm -rf "$BASH_IT"/aliases/enabled
