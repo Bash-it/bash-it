@@ -54,15 +54,15 @@ function local_setup {
   run _bash-it-search 'ruby' 'gem' 'bundle' 'rake' 'rails' '--disable'
   run _enable-alias 'rails'
   run _bash-it-search 'ruby' 'gem' 'bundle' 'rake' 'rails'
-  assert_line "0" '      aliases  =>   bundler ✓rails'
-  assert_line "1" '      plugins  =>   chruby chruby-auto rails ruby'
-  assert_line "2" '  completions  =>   bundler gem rake'
+  assert_line -n 0 '      aliases  =>   bundler ✓rails'
+  assert_line -n 1 '      plugins  =>   chruby chruby-auto rails ruby'
+  assert_line -n 2 '  completions  =>   bundler gem rake'
 }
 
 @test "search: (all enabled) ruby gem bundle rake rails" {
   run _bash-it-search 'ruby' 'gem' 'bundle' 'rake' '-chruby' 'rails' '--enable'
   run _bash-it-search 'ruby' 'gem' 'bundle' 'rake' '-chruby' 'rails'
-  assert_line "0" '      aliases  =>   ✓bundler ✓rails'
-  assert_line "1" '      plugins  =>   ✓rails ✓ruby'
-  assert_line "2" '  completions  =>   ✓bundler ✓gem ✓rake'
+  assert_line -n 0 '      aliases  =>   ✓bundler ✓rails'
+  assert_line -n 1 '      plugins  =>   ✓rails ✓ruby'
+  assert_line -n 2 '  completions  =>   ✓bundler ✓gem ✓rake'
 }

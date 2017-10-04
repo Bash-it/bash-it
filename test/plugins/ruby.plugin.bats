@@ -33,7 +33,7 @@ function local_teardown {
 
 @test "plugins ruby: remove_gem is defined" {
   run type remove_gem
-  assert_line 1 "remove_gem () "
+  assert_line -n 1 "remove_gem () "
 }
 
 @test "plugins ruby: PATH includes ~/.gem/ruby/bin" {

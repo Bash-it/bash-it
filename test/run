@@ -3,13 +3,10 @@ test_directory="$(cd "$(dirname "$0")" && pwd)"
 #bats_executable="${test_directory}/../bats/bin/bats"
 bats_executable="${test_directory}/../test_lib/bats-core/bin/bats"
 
-[ ! -e $bats_executable ] && \
-  git submodule init && git submodule update
+git submodule init && git submodule update
 
 if [ -z "${BASH_IT}" ]; then
   export BASH_IT=$(cd ${test_directory} && dirname $(pwd))
 fi
-
-echo "Bats: $bats_executable"
 
 exec $bats_executable ${CI:+--tap} ${test_directory}/{bash_it,completion,install,lib,plugins,themes}

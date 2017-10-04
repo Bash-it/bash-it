@@ -61,7 +61,7 @@ function local_teardown {
 
   run alias test_alias &> /dev/null
   assert_success
-  assert_line "0" "alias test_alias='b'"
+  assert_line -n 0 "alias test_alias='b'"
 }
 
 @test "bash-it: load aliases in priority order" {
@@ -84,7 +84,7 @@ function local_teardown {
 
   run alias test_alias &> /dev/null
   assert_success
-  assert_line "0" "alias test_alias='a'"
+  assert_line -n 0 "alias test_alias='a'"
 }
 
 @test "bash-it: load aliases and plugins in priority order" {
@@ -109,7 +109,7 @@ function local_teardown {
 
   run alias test_alias &> /dev/null
   assert_success
-  assert_line "0" "alias test_alias='c'"
+  assert_line -n 0 "alias test_alias='c'"
 }
 
 @test "bash-it: load aliases, plugins and completions in priority order" {
@@ -136,7 +136,7 @@ function local_teardown {
   run alias test_alias &> /dev/null
   assert_success
   # "b" wins since completions are loaded last in the old directory structure
-  assert_line "0" "alias test_alias='b'"
+  assert_line -n 0 "alias test_alias='b'"
 }
 
 @test "bash-it: load aliases, plugins and completions in priority order, even if the priority says otherwise" {
@@ -163,7 +163,7 @@ function local_teardown {
   run alias test_alias &> /dev/null
   assert_success
   # "b" wins since completions are loaded last in the old directory structure
-  assert_line "0" "alias test_alias='b'"
+  assert_line -n 0 "alias test_alias='b'"
 }
 
 @test "bash-it: load aliases and plugins in priority order, with one alias higher than plugins" {
@@ -190,7 +190,7 @@ function local_teardown {
   assert_success
   # This will be c, loaded from the c plugin, since the individual directories
   # are loaded one by one.
-  assert_line "0" "alias test_alias='c'"
+  assert_line -n 0 "alias test_alias='c'"
 }
 
 @test "bash-it: load global aliases in order" {
@@ -212,7 +212,7 @@ function local_teardown {
 
   run alias test_alias &> /dev/null
   assert_success
-  assert_line "0" "alias test_alias='b'"
+  assert_line -n 0 "alias test_alias='b'"
 }
 
 @test "bash-it: load global aliases in priority order" {
@@ -234,7 +234,7 @@ function local_teardown {
 
   run alias test_alias &> /dev/null
   assert_success
-  assert_line "0" "alias test_alias='a'"
+  assert_line -n 0 "alias test_alias='a'"
 }
 
 @test "bash-it: load global aliases and plugins in priority order" {
@@ -258,7 +258,7 @@ function local_teardown {
 
   run alias test_alias &> /dev/null
   assert_success
-  assert_line "0" "alias test_alias='c'"
+  assert_line -n 0 "alias test_alias='c'"
 }
 
 @test "bash-it: load global aliases and plugins in priority order, with one alias higher than plugins" {
@@ -284,7 +284,7 @@ function local_teardown {
   assert_success
   # This will be a, loaded from the a aliases, since the global directory
   # loads all component types at once
-  assert_line "0" "alias test_alias='a'"
+  assert_line -n 0 "alias test_alias='a'"
 }
 
 @test "bash-it: load global aliases and plugins in priority order, individual old directories are loaded later" {
@@ -314,7 +314,7 @@ function local_teardown {
   assert_success
   # This will be "b", loaded from the b aliases in the individual directory, since
   # the individual directories are loaded after the global one.
-  assert_line "0" "alias test_alias='b'"
+  assert_line -n 0 "alias test_alias='b'"
 }
 
 @test "bash-it: load enabled aliases from new structure, priority-based" {
