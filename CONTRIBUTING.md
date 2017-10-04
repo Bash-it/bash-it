@@ -58,7 +58,7 @@ To run the test suite, simply execute the following in the directory where you c
 test/run
 ```
 
-This command will clone the [Bats Test Framework](https://github.com/sstephenson/bats) to a local directory and then run the test suite found in the [test](test) folder.
+This command will ensure that the [Bats Test Framework](https://github.com/bats-core/bats-core) is available in a local directory (it's included as a Git submodule) and then run the test suite found in the [test](test) folder.
 The test script will execute each test in turn, and will print a status for each test case.
 
 When adding new test cases, please take a look at the existing test cases for examples.
