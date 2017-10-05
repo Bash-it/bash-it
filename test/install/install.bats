@@ -42,7 +42,7 @@ function local_teardown {
 }
 
 @test "install: verify that the install script exists" {
-  assert [ -e "$BASH_IT/install.sh" ]
+  assert_file_exist "$BASH_IT/install.sh"
 }
 
 @test "install: run the install script silently" {
@@ -50,7 +50,7 @@ function local_teardown {
 
   ./install.sh --silent
 
-  assert [ -e "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE" ]
+  assert_file_exist "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE"
 
   assert [ -L "$BASH_IT/enabled/150---general.aliases.bash" ]
   assert [ -L "$BASH_IT/enabled/250---base.plugin.bash" ]
@@ -68,8 +68,8 @@ function local_teardown {
 
   ./install.sh --silent
 
-  assert [ -e "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE" ]
-  assert [ -e "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.bak" ]
+  assert_file_exist "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE"
+  assert_file_exist "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.bak"
 
   local md5_bak=$(md5sum "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.bak" | awk '{print $1}')
 

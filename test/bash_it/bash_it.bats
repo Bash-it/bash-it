@@ -37,8 +37,8 @@ function local_teardown {
 }
 
 @test "bash-it: verify that the test fixture is available" {
-  assert [ -e "$BASH_IT/aliases/available/a.aliases.bash" ]
-  assert [ -e "$BASH_IT/aliases/available/b.aliases.bash" ]
+  assert_file_exist "$BASH_IT/aliases/available/a.aliases.bash"
+  assert_file_exist "$BASH_IT/aliases/available/b.aliases.bash"
 }
 
 @test "bash-it: load aliases in order" {
