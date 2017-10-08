@@ -146,9 +146,7 @@ function local_setup {
 @test "helpers: enable the node plugin" {
   run _enable-plugin "node"
   assert_line -n 0 'node enabled with priority 250.'
-  assert_link_exist "$BASH_IT/enabled/250---node.plugin.bash"
-
-  assert_equal "../plugins/available/node.plugin.bash" "`readlink $BASH_IT/enabled/250---node.plugin.bash`"
+  assert_link_exist "$BASH_IT/enabled/250---node.plugin.bash" "../plugins/available/node.plugin.bash"
 }
 
 @test "helpers: enable the node plugin through the bash-it function" {
