@@ -13,6 +13,13 @@ if [ "$BASH_IT_ROOT" != "${BASH_IT_TEST_DIR}/root" ]; then
   export BASH_IT=$BASH_IT_TEST_DIR
 fi
 
+export TEST_MAIN_DIR="${BATS_TEST_DIRNAME}/.."
+export TEST_DEPS_DIR="${TEST_DEPS_DIR-${TEST_MAIN_DIR}/../test_lib}"
+
+load "${TEST_DEPS_DIR}/bats-support/load.bash"
+load "${TEST_DEPS_DIR}/bats-assert/load.bash"
+load "${TEST_DEPS_DIR}/bats-file/load.bash"
+
 local_setup() {
   true
 }
@@ -33,76 +40,47 @@ teardown() {
   rm -rf "${BASH_IT_TEST_DIR}"
 }
 
-assert() {
-  if ! "$@"; then
-    flunk "failed: $@"
-  fi
-}
-
-flunk() {
-  { if [ "$#" -eq 0 ]; then cat -
-    else echo "$@"
-    fi
-  } | sed "s:${BASH_IT_TEST_DIR}:TEST_DIR:g" >&2
-  return 1
-}
-
-assert_success() {
-  if [ "$status" -ne 0 ]; then
-    flunk "command failed with exit status $status"
-  elif [ "$#" -gt 0 ]; then
-    assert_output "$1"
-  fi
-}
-
-assert_failure() {
-  if [ "$status" -eq 0 ]; then
-    flunk "expected failed exit status"
-  elif [ "$#" -gt 0 ]; then
-    assert_output "$1"
-  fi
-}
-
-assert_equal() {
-  if [ "$1" != "$2" ]; then
-    { echo "expected: $1"
-      echo "actual:   $2"
-    } | flunk
-  fi
-}
-
-assert_output() {
-  local expected
-  if [ $# -eq 0 ]; then expected="$(cat -)"
-  else expected="$1"
-  fi
-  assert_equal "$expected" "$output"
-}
-
-assert_line() {
-  if [ "$1" -ge 0 ] 2>/dev/null; then
-    assert_equal "$2" "${lines[$1]}"
-  else
-    local line
-    for line in "${lines[@]}"; do
-      if [ "$line" = "$1" ]; then return 0; fi
-    done
-    flunk "expected line \`$1'"
-  fi
-}
-
-refute_line() {
-  if [ "$1" -ge 0 ] 2>/dev/null; then
-    local num_lines="${#lines[@]}"
-    if [ "$1" -lt "$num_lines" ]; then
-      flunk "output has $num_lines lines"
+# Fail and display path of the link if it does not exist. Also fails
+# if the path exists, but is not a link.
+# This function is the logical complement of `assert_file_not_exist'.
+# There is no dedicated function for checking that a link does not exist.
+#
+# Globals:
+#   BATSLIB_FILE_PATH_REM
+#   BATSLIB_FILE_PATH_ADD
+# Arguments:
+#   $1 - path
+# Returns:
+#   0 - link exists and is a link
+#   1 - otherwise
+# Outputs:
+#   STDERR - details, on failure
+assert_link_exist() {
+  local -r file="$1"
+  local -r target="$2"
+  if [[ ! -L "$file" ]]; then
+    local -r rem="$BATSLIB_FILE_PATH_REM"
+    local -r add="$BATSLIB_FILE_PATH_ADD"
+    if [[ -e "$file" ]]; then
+      batslib_print_kv_single 4 'path' "${file/$rem/$add}" \
+        | batslib_decorate 'exists, but is not a link' \
+        | fail
+    else
+      batslib_print_kv_single 4 'path' "${file/$rem/$add}" \
+        | batslib_decorate 'link does not exist' \
+        | fail
     fi
   else
-    local line
-    for line in "${lines[@]}"; do
-      if [ "$line" = "$1" ]; then
-        flunk "expected to not find line \`$line'"
+    if [ -n "$target" ]; then
+      local link_target=''
+      link_target=$(readlink "$file")
+      if [[ "$link_target" != "$target" ]]; then
+        batslib_print_kv_single_or_multi 8 'path' "${file/$rem/$add}" \
+            'expected' "$target" \
+            'actual'   "$link_target" \
+          | batslib_decorate 'link exists, but does not point to target file' \
+          | fail
       fi
-    done
+    fi
   fi
 }

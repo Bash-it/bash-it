@@ -26,7 +26,7 @@ load ../../themes/base.theme
 
   run battery_char
   assert_success
-  assert_line "0" ""
+  assert_line -n 0 ""
 
   run type -a battery_char
   assert_line "    echo -n"
@@ -53,7 +53,7 @@ load ../../themes/base.theme
 
   run battery_charge
   assert_success
-  assert_line "0" ""
+  assert_line -n 0 ""
 }
 
 @test 'themes base: battery_charge should exist if battery plugin loaded' {

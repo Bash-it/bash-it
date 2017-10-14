@@ -13,7 +13,7 @@ function local_setup {
   lib_directory="$(cd "$(dirname "$0")" && pwd)"
   # Use rsync to copy Bash-it to the temp folder
   # rsync is faster than cp, since we can exclude the large ".git" folder
-  rsync -qavrKL -d --delete-excluded --exclude=.git $lib_directory/../.. "$BASH_IT"
+  rsync -qavrKL -d --delete-excluded --exclude=.git $lib_directory/../../.. "$BASH_IT"
 
   rm -rf "$BASH_IT"/enabled
   rm -rf "$BASH_IT"/aliases/enabled
@@ -52,135 +52,133 @@ function local_setup {
 
 @test "helpers: bash-it help aliases ag" {
   run bash-it help aliases "ag"
-  assert_line "0" "ag='ag --smart-case --pager=\"less -MIRFX'"
+  assert_line -n 0 "ag='ag --smart-case --pager=\"less -MIRFX'"
 }
 
 @test "helpers: bash-it help aliases without any aliases enabled" {
   run bash-it help aliases
-  assert_line "0" ""
+  assert_line -n 0 ""
 }
 
 @test "helpers: bash-it help list aliases without any aliases enabled" {
   run _help-list-aliases "$BASH_IT/aliases/available/ag.aliases.bash"
-  assert_line "0" "ag:"
+  assert_line -n 0 "ag:"
 }
 
 @test "helpers: bash-it help list aliases with ag aliases enabled" {
   ln -s $BASH_IT/aliases/available/ag.aliases.bash $BASH_IT/aliases/enabled/150---ag.aliases.bash
-  assert [ -L "$BASH_IT/aliases/enabled/150---ag.aliases.bash" ]
+  assert_link_exist "$BASH_IT/aliases/enabled/150---ag.aliases.bash"
 
   run _help-list-aliases "$BASH_IT/aliases/enabled/150---ag.aliases.bash"
-  assert_line "0" "ag:"
+  assert_line -n 0 "ag:"
 }
 
 @test "helpers: bash-it help list aliases with todo.txt-cli aliases enabled" {
   ln -s $BASH_IT/aliases/available/todo.txt-cli.aliases.bash $BASH_IT/aliases/enabled/150---todo.txt-cli.aliases.bash
-  assert [ -L "$BASH_IT/aliases/enabled/150---todo.txt-cli.aliases.bash" ]
+  assert_link_exist "$BASH_IT/aliases/enabled/150---todo.txt-cli.aliases.bash"
 
   run _help-list-aliases "$BASH_IT/aliases/enabled/150---todo.txt-cli.aliases.bash"
-  assert_line "0" "todo.txt-cli:"
+  assert_line -n 0 "todo.txt-cli:"
 }
 
 @test "helpers: bash-it help list aliases with docker-compose aliases enabled" {
   ln -s $BASH_IT/aliases/available/docker-compose.aliases.bash $BASH_IT/aliases/enabled/150---docker-compose.aliases.bash
-  assert [ -L "$BASH_IT/aliases/enabled/150---docker-compose.aliases.bash" ]
+  assert_link_exist "$BASH_IT/aliases/enabled/150---docker-compose.aliases.bash"
 
   run _help-list-aliases "$BASH_IT/aliases/enabled/150---docker-compose.aliases.bash"
-  assert_line "0" "docker-compose:"
+  assert_line -n 0 "docker-compose:"
 }
 
 @test "helpers: bash-it help list aliases with ag aliases enabled in global directory" {
   ln -s $BASH_IT/aliases/available/ag.aliases.bash $BASH_IT/enabled/150---ag.aliases.bash
-  assert [ -L "$BASH_IT/enabled/150---ag.aliases.bash" ]
+  assert_link_exist "$BASH_IT/enabled/150---ag.aliases.bash"
 
   run _help-list-aliases "$BASH_IT/enabled/150---ag.aliases.bash"
-  assert_line "0" "ag:"
+  assert_line -n 0 "ag:"
 }
 
 @test "helpers: bash-it help aliases one alias enabled in the old directory" {
   ln -s $BASH_IT/aliases/available/ag.aliases.bash $BASH_IT/aliases/enabled/150---ag.aliases.bash
-  assert [ -L "$BASH_IT/aliases/enabled/150---ag.aliases.bash" ]
+  assert_link_exist "$BASH_IT/aliases/enabled/150---ag.aliases.bash"
 
   run bash-it help aliases
-  assert_line "0" "ag:"
+  assert_line -n 0 "ag:"
 }
 
 @test "helpers: bash-it help aliases one alias enabled in global directory" {
   run bash-it enable alias "ag"
-  assert_line "0" 'ag enabled with priority 150.'
-  assert [ -L "$BASH_IT/enabled/150---ag.aliases.bash" ]
+  assert_line -n 0 'ag enabled with priority 150.'
+  assert_link_exist "$BASH_IT/enabled/150---ag.aliases.bash"
 
   run bash-it enable plugin "aws"
-  assert_line "0" 'aws enabled with priority 250.'
-  assert [ -L "$BASH_IT/enabled/250---aws.plugin.bash" ]
+  assert_line -n 0 'aws enabled with priority 250.'
+  assert_link_exist "$BASH_IT/enabled/250---aws.plugin.bash"
 
   run bash-it help aliases
-  assert_line "0" "ag:"
-  assert_line "1" "ag='ag --smart-case --pager=\"less -MIRFX'"
+  assert_line -n 0 "ag:"
+  assert_line -n 1 "ag='ag --smart-case --pager=\"less -MIRFX'"
 }
 
 @test "helpers: enable the todo.txt-cli aliases through the bash-it function" {
   run bash-it enable alias "todo.txt-cli"
-  assert_line "0" 'todo.txt-cli enabled with priority 150.'
-  assert [ -L "$BASH_IT/enabled/150---todo.txt-cli.aliases.bash" ]
+  assert_line -n 0 'todo.txt-cli enabled with priority 150.'
+  assert_link_exist "$BASH_IT/enabled/150---todo.txt-cli.aliases.bash"
 }
 
 @test "helpers: enable the curl aliases" {
   run _enable-alias "curl"
-  assert_line "0" 'curl enabled with priority 150.'
-  assert [ -L "$BASH_IT/enabled/150---curl.aliases.bash" ]
+  assert_line -n 0 'curl enabled with priority 150.'
+  assert_link_exist "$BASH_IT/enabled/150---curl.aliases.bash"
 }
 
 @test "helpers: enable the apm completion through the bash-it function" {
   run bash-it enable completion "apm"
-  assert_line "0" 'apm enabled with priority 350.'
-  assert [ -L "$BASH_IT/enabled/350---apm.completion.bash" ]
+  assert_line -n 0 'apm enabled with priority 350.'
+  assert_link_exist "$BASH_IT/enabled/350---apm.completion.bash"
 }
 
 @test "helpers: enable the brew completion" {
   run _enable-completion "brew"
-  assert_line "0" 'brew enabled with priority 350.'
-  assert [ -L "$BASH_IT/enabled/350---brew.completion.bash" ]
+  assert_line -n 0 'brew enabled with priority 350.'
+  assert_link_exist "$BASH_IT/enabled/350---brew.completion.bash"
 }
 
 @test "helpers: enable the node plugin" {
   run _enable-plugin "node"
-  assert_line "0" 'node enabled with priority 250.'
-  assert [ -L "$BASH_IT/enabled/250---node.plugin.bash" ]
-
-  assert_equal "../plugins/available/node.plugin.bash" "`readlink $BASH_IT/enabled/250---node.plugin.bash`"
+  assert_line -n 0 'node enabled with priority 250.'
+  assert_link_exist "$BASH_IT/enabled/250---node.plugin.bash" "../plugins/available/node.plugin.bash"
 }
 
 @test "helpers: enable the node plugin through the bash-it function" {
   run bash-it enable plugin "node"
-  assert_line "0" 'node enabled with priority 250.'
-  assert [ -L "$BASH_IT/enabled/250---node.plugin.bash" ]
+  assert_line -n 0 'node enabled with priority 250.'
+  assert_link_exist "$BASH_IT/enabled/250---node.plugin.bash"
 }
 
 @test "helpers: enable the node and nvm plugins through the bash-it function" {
   run bash-it enable plugin "node" "nvm"
-  assert_line "0" 'node enabled with priority 250.'
-  assert_line "1" 'nvm enabled with priority 225.'
-  assert [ -L "$BASH_IT/enabled/250---node.plugin.bash" ]
-  assert [ -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
+  assert_line -n 0 'node enabled with priority 250.'
+  assert_line -n 1 'nvm enabled with priority 225.'
+  assert_link_exist "$BASH_IT/enabled/250---node.plugin.bash"
+  assert_link_exist "$BASH_IT/enabled/225---nvm.plugin.bash"
 }
 
 @test "helpers: enable the foo-unkown and nvm plugins through the bash-it function" {
   run bash-it enable plugin "foo-unknown" "nvm"
-  assert_line "0" 'sorry, foo-unknown does not appear to be an available plugin.'
-  assert_line "1" 'nvm enabled with priority 225.'
-  assert [ -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
+  assert_line -n 0 'sorry, foo-unknown does not appear to be an available plugin.'
+  assert_line -n 1 'nvm enabled with priority 225.'
+  assert_link_exist "$BASH_IT/enabled/225---nvm.plugin.bash"
 }
 
 @test "helpers: enable the nvm plugin" {
   run _enable-plugin "nvm"
-  assert_line "0" 'nvm enabled with priority 225.'
-  assert [ -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
+  assert_line -n 0 'nvm enabled with priority 225.'
+  assert_link_exist "$BASH_IT/enabled/225---nvm.plugin.bash"
 }
 
 @test "helpers: enable an unknown plugin" {
   run _enable-plugin "unknown-foo"
-  assert_line "0" 'sorry, unknown-foo does not appear to be an available plugin.'
+  assert_line -n 0 'sorry, unknown-foo does not appear to be an available plugin.'
 
   # Check for both old an new structure
   assert [ ! -L "$BASH_IT/plugins/enabled/250---unknown-foo.plugin.bash" ]
@@ -193,7 +191,7 @@ function local_setup {
 @test "helpers: enable an unknown plugin through the bash-it function" {
   run bash-it enable plugin "unknown-foo"
   echo "${lines[@]}"
-  assert_line "0" 'sorry, unknown-foo does not appear to be an available plugin.'
+  assert_line -n 0 'sorry, unknown-foo does not appear to be an available plugin.'
 
   # Check for both old an new structure
   assert [ ! -L "$BASH_IT/plugins/enabled/250---unknown-foo.plugin.bash" ]
@@ -205,116 +203,116 @@ function local_setup {
 
 @test "helpers: disable a plugin that is not enabled" {
   run _disable-plugin "sdkman"
-  assert_line "0" 'sorry, sdkman does not appear to be an enabled plugin.'
+  assert_line -n 0 'sorry, sdkman does not appear to be an enabled plugin.'
 }
 
 @test "helpers: enable and disable the nvm plugin" {
   run _enable-plugin "nvm"
-  assert_line "0" 'nvm enabled with priority 225.'
-  assert [ -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
+  assert_line -n 0 'nvm enabled with priority 225.'
+  assert_link_exist "$BASH_IT/enabled/225---nvm.plugin.bash"
   assert [ ! -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
 
   run _disable-plugin "nvm"
-  assert_line "0" 'nvm disabled.'
+  assert_line -n 0 'nvm disabled.'
   assert [ ! -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
 }
 
 @test "helpers: disable the nvm plugin if it was enabled with a priority, but in the component-specific directory" {
   ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/225---nvm.plugin.bash
-  assert [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
+  assert_link_exist "$BASH_IT/plugins/enabled/225---nvm.plugin.bash"
   assert [ ! -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
 
   run _disable-plugin "nvm"
-  assert_line "0" 'nvm disabled.'
+  assert_line -n 0 'nvm disabled.'
   assert [ ! -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
   assert [ ! -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
 }
 
 @test "helpers: disable the nvm plugin if it was enabled without a priority" {
   ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/nvm.plugin.bash
-  assert [ -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
+  assert_link_exist "$BASH_IT/plugins/enabled/nvm.plugin.bash"
 
   run _disable-plugin "nvm"
-  assert_line "0" 'nvm disabled.'
+  assert_line -n 0 'nvm disabled.'
   assert [ ! -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
 }
 
 @test "helpers: enable the nvm plugin if it was enabled without a priority" {
   ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/nvm.plugin.bash
-  assert [ -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
+  assert_link_exist "$BASH_IT/plugins/enabled/nvm.plugin.bash"
 
   run _enable-plugin "nvm"
-  assert_line "0" 'nvm is already enabled.'
-  assert [ -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
+  assert_line -n 0 'nvm is already enabled.'
+  assert_link_exist "$BASH_IT/plugins/enabled/nvm.plugin.bash"
   assert [ ! -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
   assert [ ! -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
 }
 
 @test "helpers: enable the nvm plugin if it was enabled with a priority, but in the component-specific directory" {
   ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/225---nvm.plugin.bash
-  assert [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
+  assert_link_exist "$BASH_IT/plugins/enabled/225---nvm.plugin.bash"
 
   run _enable-plugin "nvm"
-  assert_line "0" 'nvm is already enabled.'
+  assert_line -n 0 'nvm is already enabled.'
   assert [ ! -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
-  assert [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
+  assert_link_exist "$BASH_IT/plugins/enabled/225---nvm.plugin.bash"
   assert [ ! -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
 }
 
 @test "helpers: enable the nvm plugin twice" {
   run _enable-plugin "nvm"
-  assert_line "0" 'nvm enabled with priority 225.'
-  assert [ -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
+  assert_line -n 0 'nvm enabled with priority 225.'
+  assert_link_exist "$BASH_IT/enabled/225---nvm.plugin.bash"
 
   run _enable-plugin "nvm"
-  assert_line "0" 'nvm is already enabled.'
-  assert [ -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
+  assert_line -n 0 'nvm is already enabled.'
+  assert_link_exist "$BASH_IT/enabled/225---nvm.plugin.bash"
 }
 
 @test "helpers: migrate plugins and completions that share the same name" {
   ln -s $BASH_IT/completion/available/dirs.completion.bash $BASH_IT/completion/enabled/350---dirs.completion.bash
-  assert [ -L "$BASH_IT/completion/enabled/350---dirs.completion.bash" ]
+  assert_link_exist "$BASH_IT/completion/enabled/350---dirs.completion.bash"
 
   ln -s $BASH_IT/plugins/available/dirs.plugin.bash $BASH_IT/plugins/enabled/250---dirs.plugin.bash
-  assert [ -L "$BASH_IT/plugins/enabled/250---dirs.plugin.bash" ]
+  assert_link_exist "$BASH_IT/plugins/enabled/250---dirs.plugin.bash"
 
   run _bash-it-migrate
-  assert_line "0" 'Migrating plugin dirs.'
-  assert_line "1" 'dirs disabled.'
-  assert_line "2" 'dirs enabled with priority 250.'
-  assert_line "3" 'Migrating completion dirs.'
-  assert_line "4" 'dirs disabled.'
-  assert_line "5" 'dirs enabled with priority 350.'
-  assert_line "6" 'If any migration errors were reported, please try the following: reload && bash-it migrate'
+  assert_line -n 0 'Migrating plugin dirs.'
+  assert_line -n 1 'dirs disabled.'
+  assert_line -n 2 'dirs enabled with priority 250.'
+  assert_line -n 3 'Migrating completion dirs.'
+  assert_line -n 4 'dirs disabled.'
+  assert_line -n 5 'dirs enabled with priority 350.'
+  assert_line -n 6 'If any migration errors were reported, please try the following: reload && bash-it migrate'
 
-  assert [ -L "$BASH_IT/enabled/350---dirs.completion.bash" ]
-  assert [ -L "$BASH_IT/enabled/250---dirs.plugin.bash" ]
+  assert_link_exist "$BASH_IT/enabled/350---dirs.completion.bash"
+  assert_link_exist "$BASH_IT/enabled/250---dirs.plugin.bash"
   assert [ ! -L "$BASH_IT/completion/enabled/350----dirs.completion.bash" ]
   assert [ ! -L "$BASH_IT/plugins/enabled/250----dirs.plugin.bash" ]
 }
 
 @test "helpers: migrate enabled plugins that don't use the new priority-based configuration" {
   ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/nvm.plugin.bash
-  assert [ -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
+  assert_link_exist "$BASH_IT/plugins/enabled/nvm.plugin.bash"
 
   ln -s $BASH_IT/plugins/available/node.plugin.bash $BASH_IT/plugins/enabled/node.plugin.bash
-  assert [ -L "$BASH_IT/plugins/enabled/node.plugin.bash" ]
+  assert_link_exist "$BASH_IT/plugins/enabled/node.plugin.bash"
 
   ln -s $BASH_IT/aliases/available/todo.txt-cli.aliases.bash $BASH_IT/aliases/enabled/todo.txt-cli.aliases.bash
-  assert [ -L "$BASH_IT/aliases/enabled/todo.txt-cli.aliases.bash" ]
+  assert_link_exist "$BASH_IT/aliases/enabled/todo.txt-cli.aliases.bash"
 
   run _enable-plugin "ssh"
-  assert [ -L "$BASH_IT/enabled/250---ssh.plugin.bash" ]
+  assert_link_exist "$BASH_IT/enabled/250---ssh.plugin.bash"
 
   run _bash-it-migrate
-  assert_line "0" 'Migrating alias todo.txt-cli.'
-  assert_line "1" 'todo.txt-cli disabled.'
-  assert_line "2" 'todo.txt-cli enabled with priority 150.'
+  assert_line -n 0 'Migrating alias todo.txt-cli.'
+  assert_line -n 1 'todo.txt-cli disabled.'
+  assert_line -n 2 'todo.txt-cli enabled with priority 150.'
 
-  assert [ -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
-  assert [ -L "$BASH_IT/enabled/250---node.plugin.bash" ]
-  assert [ -L "$BASH_IT/enabled/250---ssh.plugin.bash" ]
-  assert [ -L "$BASH_IT/enabled/150---todo.txt-cli.aliases.bash" ]
+  assert_link_exist "$BASH_IT/enabled/225---nvm.plugin.bash"
+  assert_link_exist "$BASH_IT/enabled/250---node.plugin.bash"
+  assert_link_exist "$BASH_IT/enabled/250---ssh.plugin.bash"
+  assert_link_exist "$BASH_IT/enabled/150---todo.txt-cli.aliases.bash"
   assert [ ! -L "$BASH_IT/plugins/enabled/node.plugin.bash" ]
   assert [ ! -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
   assert [ ! -L "$BASH_IT/aliases/enabled/todo.txt-cli.aliases.bash" ]
@@ -322,22 +320,22 @@ function local_setup {
 
 @test "helpers: migrate enabled plugins that use the new priority-based configuration in the individual directories" {
   ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/225---nvm.plugin.bash
-  assert [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
+  assert_link_exist "$BASH_IT/plugins/enabled/225---nvm.plugin.bash"
 
   ln -s $BASH_IT/plugins/available/node.plugin.bash $BASH_IT/plugins/enabled/250---node.plugin.bash
-  assert [ -L "$BASH_IT/plugins/enabled/250---node.plugin.bash" ]
+  assert_link_exist "$BASH_IT/plugins/enabled/250---node.plugin.bash"
 
   ln -s $BASH_IT/aliases/available/todo.txt-cli.aliases.bash $BASH_IT/aliases/enabled/250---todo.txt-cli.aliases.bash
-  assert [ -L "$BASH_IT/aliases/enabled/250---todo.txt-cli.aliases.bash" ]
+  assert_link_exist "$BASH_IT/aliases/enabled/250---todo.txt-cli.aliases.bash"
 
   run _enable-plugin "ssh"
-  assert [ -L "$BASH_IT/enabled/250---ssh.plugin.bash" ]
+  assert_link_exist "$BASH_IT/enabled/250---ssh.plugin.bash"
 
   run _bash-it-migrate
-  assert [ -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
-  assert [ -L "$BASH_IT/enabled/250---node.plugin.bash" ]
-  assert [ -L "$BASH_IT/enabled/250---ssh.plugin.bash" ]
-  assert [ -L "$BASH_IT/enabled/150---todo.txt-cli.aliases.bash" ]
+  assert_link_exist "$BASH_IT/enabled/225---nvm.plugin.bash"
+  assert_link_exist "$BASH_IT/enabled/250---node.plugin.bash"
+  assert_link_exist "$BASH_IT/enabled/250---ssh.plugin.bash"
+  assert_link_exist "$BASH_IT/enabled/150---todo.txt-cli.aliases.bash"
   assert [ ! -L "$BASH_IT/plugins/enabled/225----node.plugin.bash" ]
   assert [ ! -L "$BASH_IT/plugins/enabled/250----nvm.plugin.bash" ]
   assert [ ! -L "$BASH_IT/aliases/enabled/250----todo.txt-cli.aliases.bash" ]
@@ -349,10 +347,10 @@ function local_setup {
 
 @test "helpers: run the migrate command without anything to migrate" {
   run _enable-plugin "ssh"
-  assert [ -L "$BASH_IT/enabled/250---ssh.plugin.bash" ]
+  assert_link_exist "$BASH_IT/enabled/250---ssh.plugin.bash"
 
   run _bash-it-migrate
-  assert [ -L "$BASH_IT/enabled/250---ssh.plugin.bash" ]
+  assert_link_exist "$BASH_IT/enabled/250---ssh.plugin.bash"
 }
 
 function __migrate_all_components() {
@@ -430,36 +428,36 @@ function __migrate_all_components() {
 
 @test "helpers: verify that existing components are automatically migrated when something is enabled" {
   ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/nvm.plugin.bash
-  assert [ -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
+  assert_link_exist "$BASH_IT/plugins/enabled/nvm.plugin.bash"
 
   run bash-it enable plugin "node"
-  assert_line "0" 'Migrating plugin nvm.'
-  assert_line "1" 'nvm disabled.'
-  assert_line "2" 'nvm enabled with priority 225.'
-  assert_line "3" 'If any migration errors were reported, please try the following: reload && bash-it migrate'
-  assert_line "4" 'node enabled with priority 250.'
+  assert_line -n 0 'Migrating plugin nvm.'
+  assert_line -n 1 'nvm disabled.'
+  assert_line -n 2 'nvm enabled with priority 225.'
+  assert_line -n 3 'If any migration errors were reported, please try the following: reload && bash-it migrate'
+  assert_line -n 4 'node enabled with priority 250.'
   assert [ ! -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
-  assert [ -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
-  assert [ -L "$BASH_IT/enabled/250---node.plugin.bash" ]
+  assert_link_exist "$BASH_IT/enabled/225---nvm.plugin.bash"
+  assert_link_exist "$BASH_IT/enabled/250---node.plugin.bash"
 }
 
 @test "helpers: verify that existing components are automatically migrated when something is disabled" {
   ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/nvm.plugin.bash
-  assert [ -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
+  assert_link_exist "$BASH_IT/plugins/enabled/nvm.plugin.bash"
   ln -s $BASH_IT/plugins/available/node.plugin.bash $BASH_IT/plugins/enabled/250---node.plugin.bash
-  assert [ -L "$BASH_IT/plugins/enabled/250---node.plugin.bash" ]
+  assert_link_exist "$BASH_IT/plugins/enabled/250---node.plugin.bash"
 
   run bash-it disable plugin "node"
-  assert_line "0" 'Migrating plugin node.'
-  assert_line "1" 'node disabled.'
-  assert_line "2" 'node enabled with priority 250.'
-  assert_line "3" 'Migrating plugin nvm.'
-  assert_line "4" 'nvm disabled.'
-  assert_line "5" 'nvm enabled with priority 225.'
-  assert_line "6" 'If any migration errors were reported, please try the following: reload && bash-it migrate'
-  assert_line "7" 'node disabled.'
+  assert_line -n 0 'Migrating plugin node.'
+  assert_line -n 1 'node disabled.'
+  assert_line -n 2 'node enabled with priority 250.'
+  assert_line -n 3 'Migrating plugin nvm.'
+  assert_line -n 4 'nvm disabled.'
+  assert_line -n 5 'nvm enabled with priority 225.'
+  assert_line -n 6 'If any migration errors were reported, please try the following: reload && bash-it migrate'
+  assert_line -n 7 'node disabled.'
   assert [ ! -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
-  assert [ -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
+  assert_link_exist "$BASH_IT/enabled/225---nvm.plugin.bash"
   assert [ ! -L "$BASH_IT/plugins/enabled/250---node.plugin.bash" ]
   assert [ ! -L "$BASH_IT/enabled/250---node.plugin.bash" ]
 }
@@ -478,50 +476,50 @@ function __migrate_all_components() {
   assert_equal "$available" "$enabled"
 
   run _enable-alias "ag"
-  assert [ -L "$BASH_IT/enabled/150---ag.aliases.bash" ]
+  assert_link_exist "$BASH_IT/enabled/150---ag.aliases.bash"
 
   run _disable-plugin "all"
   local enabled2=$(find $BASH_IT/enabled -name [0-9]*.plugin.bash | wc -l | xargs)
   assert_equal "0" "$enabled2"
-  assert [ -L "$BASH_IT/enabled/150---ag.aliases.bash" ]
+  assert_link_exist "$BASH_IT/enabled/150---ag.aliases.bash"
 }
 
 @test "helpers: disable all plugins in the old directory structure" {
   ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/nvm.plugin.bash
-  assert [ -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
+  assert_link_exist "$BASH_IT/plugins/enabled/nvm.plugin.bash"
 
   ln -s $BASH_IT/plugins/available/node.plugin.bash $BASH_IT/plugins/enabled/node.plugin.bash
-  assert [ -L "$BASH_IT/plugins/enabled/node.plugin.bash" ]
+  assert_link_exist "$BASH_IT/plugins/enabled/node.plugin.bash"
 
   local enabled=$(find $BASH_IT/plugins/enabled -name *.plugin.bash | wc -l | xargs)
   assert_equal "2" "$enabled"
 
   run _enable-alias "ag"
-  assert [ -L "$BASH_IT/enabled/150---ag.aliases.bash" ]
+  assert_link_exist "$BASH_IT/enabled/150---ag.aliases.bash"
 
   run _disable-plugin "all"
   local enabled2=$(find $BASH_IT/plugins/enabled -name *.plugin.bash | wc -l | xargs)
   assert_equal "0" "$enabled2"
-  assert [ -L "$BASH_IT/enabled/150---ag.aliases.bash" ]
+  assert_link_exist "$BASH_IT/enabled/150---ag.aliases.bash"
 }
 
 @test "helpers: disable all plugins in the old directory structure with priority" {
   ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/250---nvm.plugin.bash
-  assert [ -L "$BASH_IT/plugins/enabled/250---nvm.plugin.bash" ]
+  assert_link_exist "$BASH_IT/plugins/enabled/250---nvm.plugin.bash"
 
   ln -s $BASH_IT/plugins/available/node.plugin.bash $BASH_IT/plugins/enabled/250---node.plugin.bash
-  assert [ -L "$BASH_IT/plugins/enabled/250---node.plugin.bash" ]
+  assert_link_exist "$BASH_IT/plugins/enabled/250---node.plugin.bash"
 
   local enabled=$(find $BASH_IT/plugins/enabled -name *.plugin.bash | wc -l | xargs)
   assert_equal "2" "$enabled"
 
   run _enable-alias "ag"
-  assert [ -L "$BASH_IT/enabled/150---ag.aliases.bash" ]
+  assert_link_exist "$BASH_IT/enabled/150---ag.aliases.bash"
 
   run _disable-plugin "all"
   local enabled2=$(find $BASH_IT/plugins/enabled -name *.plugin.bash | wc -l | xargs)
   assert_equal "0" "$enabled2"
-  assert [ -L "$BASH_IT/enabled/150---ag.aliases.bash" ]
+  assert_link_exist "$BASH_IT/enabled/150---ag.aliases.bash"
 }
 
 @test "helpers: disable all plugins without anything enabled" {
@@ -529,18 +527,18 @@ function __migrate_all_components() {
   assert_equal "0" "$enabled"
 
   run _enable-alias "ag"
-  assert [ -L "$BASH_IT/enabled/150---ag.aliases.bash" ]
+  assert_link_exist "$BASH_IT/enabled/150---ag.aliases.bash"
 
   run _disable-plugin "all"
   local enabled2=$(find $BASH_IT/enabled -name [0-9]*.plugin.bash | wc -l | xargs)
   assert_equal "0" "$enabled2"
-  assert [ -L "$BASH_IT/enabled/150---ag.aliases.bash" ]
+  assert_link_exist "$BASH_IT/enabled/150---ag.aliases.bash"
 }
 
 @test "helpers: enable the ansible aliases through the bash-it function" {
   run bash-it enable alias "ansible"
-  assert_line "0" 'ansible enabled with priority 150.'
-  assert [ -L "$BASH_IT/enabled/150---ansible.aliases.bash" ]
+  assert_line -n 0 'ansible enabled with priority 150.'
+  assert_link_exist "$BASH_IT/enabled/150---ansible.aliases.bash"
 }
 
 @test "helpers: describe the nvm plugin without enabling it" {
@@ -549,22 +547,22 @@ function __migrate_all_components() {
 
 @test "helpers: describe the nvm plugin after enabling it" {
   run _enable-plugin "nvm"
-  assert_line "0" 'nvm enabled with priority 225.'
-  assert [ -L "$BASH_IT/enabled/225---nvm.plugin.bash" ]
+  assert_line -n 0 'nvm enabled with priority 225.'
+  assert_link_exist "$BASH_IT/enabled/225---nvm.plugin.bash"
 
   _bash-it-plugins | grep "nvm" | grep "\[x\]"
 }
 
 @test "helpers: describe the nvm plugin after enabling it in the old directory" {
   ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/nvm.plugin.bash
-  assert [ -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
+  assert_link_exist "$BASH_IT/plugins/enabled/nvm.plugin.bash"
 
   _bash-it-plugins | grep "nvm" | grep "\[x\]"
 }
 
 @test "helpers: describe the nvm plugin after enabling it in the old directory with priority" {
   ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/225---nvm.plugin.bash
-  assert [ -L "$BASH_IT/plugins/enabled/225---nvm.plugin.bash" ]
+  assert_link_exist "$BASH_IT/plugins/enabled/225---nvm.plugin.bash"
 
   _bash-it-plugins | grep "nvm" | grep "\[x\]"
 }

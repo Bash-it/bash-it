@@ -18,7 +18,7 @@ function local_setup {
   lib_directory="$(cd "$(dirname "$0")" && pwd)"
   # Use rsync to copy Bash-it to the temp folder
   # rsync is faster than cp, since we can exclude the large ".git" folder
-  rsync -qavrKL -d --delete-excluded --exclude=.git $lib_directory/../.. "$BASH_IT"
+  rsync -qavrKL -d --delete-excluded --exclude=.git $lib_directory/../../.. "$BASH_IT"
 
   rm -rf "$BASH_IT"/enabled
   rm -rf "$BASH_IT"/aliases/enabled
@@ -42,7 +42,7 @@ function local_teardown {
 }
 
 @test "uninstall: verify that the uninstall script exists" {
-  assert [ -e "$BASH_IT/uninstall.sh" ]
+  assert_file_exist "$BASH_IT/uninstall.sh"
 }
 
 @test "uninstall: run the uninstall script with an existing backup file" {
@@ -56,9 +56,9 @@ function local_teardown {
 
   assert_success
 
-  assert [ ! -e "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.uninstall" ]
-  assert [ ! -e "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.bak" ]
-  assert [ -e "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE" ]
+  assert_file_not_exist "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.uninstall"
+  assert_file_not_exist "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.bak"
+  assert_file_exist "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE"
 
   local md5_conf=$(md5sum "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE" | awk '{print $1}')
 
@@ -75,9 +75,9 @@ function local_teardown {
 
   assert_success
 
-  assert [ -e "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.uninstall" ]
-  assert [ ! -e "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.bak" ]
-  assert [ ! -e "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE" ]
+  assert_file_exist "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.uninstall"
+  assert_file_not_exist "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.bak"
+  assert_file_not_exist "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE"
 
   local md5_uninstall=$(md5sum "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.uninstall" | awk '{print $1}')
 
