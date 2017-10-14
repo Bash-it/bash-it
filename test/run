@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 test_directory="$(cd "$(dirname "$0")" && pwd)"
-#bats_executable="${test_directory}/../bats/bin/bats"
 bats_executable="${test_directory}/../test_lib/bats-core/bin/bats"
 
 git submodule init && git submodule update
