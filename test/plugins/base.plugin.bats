@@ -51,6 +51,22 @@ load ../../plugins/available/base.plugin
 @test 'plugins base: buf()' {
   declare -r file="${BASH_IT_ROOT}/file"
   touch $file
+
+  # Take one timestamp before running the `buf` function
+  declare -r stamp1=$(date +%Y%m%d_%H%M%S)
+
   run buf $file
-  assert_file_exist ${file}_$(date +%Y%m%d_%H%M%S)
+
+  # Take another timestamp after running `buf`.
+  declare -r stamp2=$(date +%Y%m%d_%H%M%S)
+
+  # Verify that the backup file ends with one of the two timestamps.
+  # This is done to avoid race conditions where buf is run close to the end
+  # of a second, in which case the second timestamp might be in the next second,
+  # causing the test to fail.
+  # By using `or` for the two checks, we can verify that one of the two files is present.
+  # In most cases, it's going to have the same timestamp anyway.
+  # We can't use `assert_file_exist` here, since it only checks for a single file name.
+  assert [ -e "${file}_${stamp1}" \
+    -o -e "${file}_${stamp2}" ]
 }
