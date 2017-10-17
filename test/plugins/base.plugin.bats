@@ -36,8 +36,15 @@ load ../../plugins/available/base.plugin
 
 @test 'plugins base: mkcd()' {
   cd "${BASH_IT_ROOT}"
-  run mkcd -dir_with_dash
+  declare -r dir_name="-dir_with_dash"
+
+  # Make sure that the directory does not exist prior to the test
+  rm -rf "${BASH_IT_ROOT}/${dir_name}"
+
+  mkcd "${dir_name}"
   assert_success
+  assert_file_exist "${BASH_IT_ROOT}/${dir_name}"
+  assert_equal $(pwd) "${BASH_IT_ROOT}/${dir_name}"
 }
 
 @test 'plugins base: lsgrep()' {
@@ -45,7 +52,7 @@ load ../../plugins/available/base.plugin
   cd $BASH_IT_TEST_DIR
   run lsgrep 2
   assert_success
-  assert_equal 2 $output
+  assert_equal $output 2
 }
 
 @test 'plugins base: buf()' {
