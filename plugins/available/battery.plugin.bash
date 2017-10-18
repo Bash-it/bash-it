@@ -92,7 +92,13 @@ battery_percentage(){
         echo '100'
       ;;
       *)
-        echo $PMSET_OUTPUT | head -c 2
+        # This will cut off any decimals, and will get rid of the optional percentage sign at the end, too.
+        # Works for:
+        # - 100%
+        # - 100.0%
+        # - 99.8%
+        # - 4%
+        echo $PMSET_OUTPUT | grep -o "[0-9]\+" | head -1
       ;;
     esac
   elif _command_exists ioreg;

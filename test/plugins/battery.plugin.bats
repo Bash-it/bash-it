@@ -26,6 +26,15 @@ load ../../plugins/available/battery.plugin
   assert_output "98"
 }
 
+@test 'plugins battery: battery-percentage with pmset, 98.5%' {
+  function pmset {
+    echo "-InternalBattery-0 (id=12345)	98.5%; discharging; 16:00 remaining present: true"
+  }
+
+  run battery_percentage
+  assert_output "98"
+}
+
 @test 'plugins battery: battery-percentage with pmset, 4%' {
   function pmset {
     echo "-InternalBattery-0 (id=12345)	4%; discharging; 16:00 remaining present: true"
