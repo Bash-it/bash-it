@@ -10,12 +10,6 @@ load ../../plugins/available/battery.plugin
 function setup_command_exists_pmset {
   function _command_exists {
     case "$1" in
-      "upower")
-        false
-      ;;
-      "acpi")
-        false
-      ;;
       "pmset")
         true
       ;;
