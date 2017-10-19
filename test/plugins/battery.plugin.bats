@@ -26,12 +26,18 @@ function setup_command_exists_pmset {
   }
 }
 
+function setup_pmset {
+  percent="$1"
+
+  function pmset {
+    echo "-InternalBattery-0 (id=12345)	""${percent}""; discharging; 16:00 remaining present: true"
+  }
+}
+
 @test 'plugins battery: battery-percentage with pmset, 100%' {
   setup_command_exists_pmset
 
-  function pmset {
-    echo "-InternalBattery-0 (id=12345)	100%; discharging; 16:00 remaining present: true"
-  }
+  setup_pmset "100%"
 
   run battery_percentage
   assert_output "100"
@@ -40,9 +46,7 @@ function setup_command_exists_pmset {
 @test 'plugins battery: battery-percentage with pmset, 98%' {
   setup_command_exists_pmset
 
-  function pmset {
-    echo "-InternalBattery-0 (id=12345)	98%; discharging; 16:00 remaining present: true"
-  }
+  setup_pmset "98%"
 
   run battery_percentage
   assert_output "98"
@@ -51,9 +55,7 @@ function setup_command_exists_pmset {
 @test 'plugins battery: battery-percentage with pmset, 98.5%' {
   setup_command_exists_pmset
 
-  function pmset {
-    echo "-InternalBattery-0 (id=12345)	98.5%; discharging; 16:00 remaining present: true"
-  }
+  setup_pmset "98.5%"
 
   run battery_percentage
   assert_output "98"
@@ -62,9 +64,7 @@ function setup_command_exists_pmset {
 @test 'plugins battery: battery-percentage with pmset, 4%' {
   setup_command_exists_pmset
 
-  function pmset {
-    echo "-InternalBattery-0 (id=12345)	4%; discharging; 16:00 remaining present: true"
-  }
+  setup_pmset "4%"
 
   run battery_percentage
   assert_output "4"
