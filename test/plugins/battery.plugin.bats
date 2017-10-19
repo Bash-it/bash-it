@@ -5,10 +5,30 @@ load ../../lib/composure
 
 cite _about _param _example _group _author _version
 
-load ../../lib/helpers
 load ../../plugins/available/battery.plugin
 
+function setup_command_exists_pmset {
+  function _command_exists {
+    case "$1" in
+      "upower")
+        false
+      ;;
+      "acpi")
+        false
+      ;;
+      "pmset")
+        true
+      ;;
+      *)
+        false
+      ;;
+    esac
+  }
+}
+
 @test 'plugins battery: battery-percentage with pmset, 100%' {
+  setup_command_exists_pmset
+
   function pmset {
     echo "-InternalBattery-0 (id=12345)	100%; discharging; 16:00 remaining present: true"
   }
@@ -18,6 +38,8 @@ load ../../plugins/available/battery.plugin
 }
 
 @test 'plugins battery: battery-percentage with pmset, 98%' {
+  setup_command_exists_pmset
+
   function pmset {
     echo "-InternalBattery-0 (id=12345)	98%; discharging; 16:00 remaining present: true"
   }
@@ -27,6 +49,8 @@ load ../../plugins/available/battery.plugin
 }
 
 @test 'plugins battery: battery-percentage with pmset, 98.5%' {
+  setup_command_exists_pmset
+
   function pmset {
     echo "-InternalBattery-0 (id=12345)	98.5%; discharging; 16:00 remaining present: true"
   }
@@ -36,6 +60,8 @@ load ../../plugins/available/battery.plugin
 }
 
 @test 'plugins battery: battery-percentage with pmset, 4%' {
+  setup_command_exists_pmset
+
   function pmset {
     echo "-InternalBattery-0 (id=12345)	4%; discharging; 16:00 remaining present: true"
   }
