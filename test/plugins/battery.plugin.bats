@@ -7,10 +7,12 @@ cite _about _param _example _group _author _version
 
 load ../../plugins/available/battery.plugin
 
-function setup_command_exists_pmset {
+function setup_command_exists {
+  success_command="$1"
+
   function _command_exists {
     case "$1" in
-      "pmset")
+      "${success_command}")
         true
       ;;
       *)
@@ -29,7 +31,7 @@ function setup_pmset {
 }
 
 @test 'plugins battery: battery-percentage with pmset, 100%' {
-  setup_command_exists_pmset
+  setup_command_exists "pmset"
 
   setup_pmset "100%"
 
@@ -38,7 +40,7 @@ function setup_pmset {
 }
 
 @test 'plugins battery: battery-percentage with pmset, 98%' {
-  setup_command_exists_pmset
+  setup_command_exists "pmset"
 
   setup_pmset "98%"
 
@@ -47,7 +49,7 @@ function setup_pmset {
 }
 
 @test 'plugins battery: battery-percentage with pmset, 98.5%' {
-  setup_command_exists_pmset
+  setup_command_exists "pmset"
 
   setup_pmset "98.5%"
 
@@ -56,7 +58,7 @@ function setup_pmset {
 }
 
 @test 'plugins battery: battery-percentage with pmset, 4%' {
-  setup_command_exists_pmset
+  setup_command_exists "pmset"
 
   setup_pmset "4%"
 
