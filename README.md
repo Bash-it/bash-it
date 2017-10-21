@@ -41,7 +41,7 @@ When you run without the `--no-modify-config` switch, the Bash-it installer auto
 Use the `--no-modify-config` switch to avoid unwanted modifications, e.g. if your Bash config file already contains the code that loads Bash-it.
 
 **NOTE**: Keep in mind how Bash load its configuration files,
-`.bash_profile` for login shells (and in Mac OS X in terminal emulators like [Terminal.app](http://www.apple.com/osx/apps/) or 
+`.bash_profile` for login shells (and in macOS in terminal emulators like [Terminal.app](http://www.apple.com/osx/apps/) or 
 [iTerm2](https://www.iterm2.com/)) and `.bashrc` for interactive shells (default mode in most of the GNU/Linux terminal emulators),
 to ensure that Bash-it is loaded correctly.
 A good "practice" is sourcing `.bashrc` into `.bash_profile` to keep things working in all the scenarios. 
