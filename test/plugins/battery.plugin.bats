@@ -31,7 +31,7 @@ function setup_pmset {
   percent="$1"
 
   function pmset {
-    echo "-InternalBattery-0 (id=12345)	""${percent}""; discharging; 16:00 remaining present: true"
+    printf "\-InternalBattery-0 (id=12345)	%s; discharging; 16:00 remaining present: true" "${percent}"
   }
 }
 
