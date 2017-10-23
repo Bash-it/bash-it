@@ -78,37 +78,65 @@ function setup_pmset {
 
 function setup_acpi {
   percent="$1"
+  status="$2"
 
   function acpi {
-    printf "Battery 0: Charging, %s, 01:02:48 until charged" "${percent}"
+    printf "Battery 0: %s, %s, 01:02:48 until charged" "${status}" "${percent}"
   }
 }
 
-@test 'plugins battery: battery-percentage with acpi, 100%' {
+@test 'plugins battery: battery-percentage with acpi, 100% Full' {
   setup_command_exists "acpi"
 
-  setup_acpi "100%"
+  setup_acpi "100%" "Full"
 
   run battery_percentage
   assert_output "100"
 }
 
-@test 'plugins battery: battery-percentage with acpi, 98%' {
+@test 'plugins battery: battery-percentage with acpi, 98% Charging' {
   setup_command_exists "acpi"
 
-  setup_acpi "98%"
+  setup_acpi "98%" "Charging"
 
   run battery_percentage
   assert_output "98"
 }
 
-@test 'plugins battery: battery-percentage with acpi, 4%' {
+@test 'plugins battery: battery-percentage with acpi, 98% Discharging' {
   setup_command_exists "acpi"
 
-  setup_acpi "4%"
+  setup_acpi "98%" "Discharging"
+
+  run battery_percentage
+  assert_output "98"
+}
+
+@test 'plugins battery: battery-percentage with acpi, 98% Unknown' {
+  setup_command_exists "acpi"
+
+  setup_acpi "98%" "Unknown"
+
+  run battery_percentage
+  assert_output "98"
+}
+
+@test 'plugins battery: battery-percentage with acpi, 4% Charging' {
+  setup_command_exists "acpi"
+
+  setup_acpi "4%" "Charging"
 
   run battery_percentage
   assert_output "4"
+}
+
+@test 'plugins battery: battery-percentage with acpi, 4% no status' {
+  setup_command_exists "acpi"
+
+  setup_acpi "4%" ""
+
+  run battery_percentage
+  assert_output "-1"
 }
 
 #######################
