@@ -129,14 +129,14 @@ function setup_upower {
   percent="$1"
 
   function upower {
-    echo "-InternalBattery-0 (id=12345)	""${percent}""; discharging; 16:00 remaining present: true"
+    printf "voltage:             12.191 V\n    time to full:        57.3 minutes\n    percentage:          %s\n    capacity:            84.6964" "${percent}"
   }
 }
 
 @test 'plugins battery: battery-percentage with upower, 100%' {
   setup_command_exists "upower"
 
-  setup_upower "100%"
+  setup_upower "100.00%"
 
   run battery_percentage
   assert_output "100"
@@ -145,7 +145,7 @@ function setup_upower {
 @test 'plugins battery: battery-percentage with upower, 98%' {
   setup_command_exists "upower"
 
-  setup_upower "98%"
+  setup_upower "98.4567%"
 
   run battery_percentage
   assert_output "98"
@@ -163,10 +163,19 @@ function setup_upower {
 @test 'plugins battery: battery-percentage with upower, 4%' {
   setup_command_exists "upower"
 
-  setup_upower "4%"
+  setup_upower "4.2345%"
 
   run battery_percentage
   assert_output "4"
+}
+
+@test 'plugins battery: battery-percentage with upower, no output' {
+  setup_command_exists "upower"
+
+  setup_upower ""
+
+  run battery_percentage
+  assert_output "-1"
 }
 
 #######################
