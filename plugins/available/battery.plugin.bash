@@ -60,30 +60,8 @@ battery_percentage(){
   elif _command_exists acpi;
   then
     local ACPI_OUTPUT=$(acpi -b)
-    case $ACPI_OUTPUT in
-      *" Unknown"*)
-        local PERC_OUTPUT=$(echo $ACPI_OUTPUT | head -c 22 | tail -c 2)
-        case $PERC_OUTPUT in
-          *%)
-            echo "0${PERC_OUTPUT}" | head -c 2
-          ;;
-          *)
-            echo ${PERC_OUTPUT}
-          ;;
-        esac
-      ;;
-
-      *" Charging"* | *" Discharging"*)
-        local PERC_OUTPUT=$(echo $ACPI_OUTPUT | awk -F, '/,/{gsub(/ /, "", $0); gsub(/%/,"", $0); print $2}' )
-        echo ${PERC_OUTPUT}
-      ;;
-      *" Full"*)
-        echo '100'
-      ;;
-      *)
-        echo '-1'
-      ;;
-    esac
+    local PERC_OUTPUT=$(echo $ACPI_OUTPUT | awk -F, '/,/{gsub(/ /, "", $0); gsub(/%/,"", $0); print $2}' )
+    echo ${PERC_OUTPUT:--1}
   elif _command_exists pmset;
   then
     local PMSET_OUTPUT=$(pmset -g ps | sed -n 's/.*[[:blank:]]+*\(.*%\).*/\1/p')

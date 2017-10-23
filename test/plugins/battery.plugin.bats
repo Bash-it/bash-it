@@ -136,6 +136,15 @@ function setup_acpi {
   setup_acpi "4%" ""
 
   run battery_percentage
+  assert_output "4"
+}
+
+@test 'plugins battery: battery-percentage with acpi, no status' {
+  setup_command_exists "acpi"
+
+  setup_acpi "" ""
+
+  run battery_percentage
   assert_output "-1"
 }
 
