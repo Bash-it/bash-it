@@ -80,7 +80,7 @@ function setup_acpi {
   percent="$1"
 
   function acpi {
-    echo "-InternalBattery-0 (id=12345)	""${percent}""; discharging; 16:00 remaining present: true"
+    printf "Battery 0: Charging, %s, 01:02:48 until charged" "${percent}"
   }
 }
 
@@ -97,15 +97,6 @@ function setup_acpi {
   setup_command_exists "acpi"
 
   setup_acpi "98%"
-
-  run battery_percentage
-  assert_output "98"
-}
-
-@test 'plugins battery: battery-percentage with acpi, 98.5%' {
-  setup_command_exists "acpi"
-
-  setup_acpi "98.5%"
 
   run battery_percentage
   assert_output "98"
