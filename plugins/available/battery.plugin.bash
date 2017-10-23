@@ -64,32 +64,12 @@ battery_percentage(){
     echo ${PERC_OUTPUT:--1}
   elif _command_exists pmset;
   then
-    local PMSET_OUTPUT=$(pmset -g ps | sed -n 's/.*[[:blank:]]+*\(.*%\).*/\1/p')
-    case $PMSET_OUTPUT in
-      100*)
-        echo '100'
-      ;;
-      *)
-        # This will cut off any decimals, and will get rid of the optional percentage sign at the end, too.
-        # Works for:
-        # - 100%
-        # - 100.0%
-        # - 99.8%
-        # - 4%
-        echo $PMSET_OUTPUT | grep -o "[0-9]\+" | head -1
-      ;;
-    esac
+    local PMSET_OUTPUT=$(pmset -g ps | sed -n 's/.*[[:blank:]]+*\(.*%\).*/\1/p' | grep -o "[0-9]\+" | head -1)
+    echo ${PMSET_OUTPUT:--1}
   elif _command_exists ioreg;
   then
-    local IOREG_OUTPUT=$(ioreg -n AppleSmartBattery -r | awk '$1~/Capacity/{c[$1]=$3} END{OFMT="%05.2f%%"; max=c["\"MaxCapacity\""]; print (max>0? 100*c["\"CurrentCapacity\""]/max: "?")}')
-    case $IOREG_OUTPUT in
-      100*)
-        echo '100'
-      ;;
-      *)
-        echo $IOREG_OUTPUT | head -c 2
-      ;;
-    esac
+    local IOREG_OUTPUT=$(ioreg -n AppleSmartBattery -r | awk '$1~/Capacity/{c[$1]=$3} END{OFMT="%05.2f%%"; max=c["\"MaxCapacity\""]; print (max>0? 100*c["\"CurrentCapacity\""]/max: "?")}'  | grep -o "[0-9]\+" | head -1)
+    echo ${IOREG_OUTPUT:--1}
   elif _command_exists WMIC;
   then
     local WINPC=$(echo porcent=$(WMIC PATH Win32_Battery Get EstimatedChargeRemaining /Format:List) | grep -o '[0-9]*')
