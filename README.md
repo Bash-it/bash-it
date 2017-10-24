@@ -20,11 +20,11 @@ please feel free to read through this page if you're interested in how Bash-it l
 
 ## Install
 
-1. Check out a clone of this repo to a location of your choice, such as:
+1. Check out a clone of this repo to a location of your choice, such as
    `git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it`
 2. Run `~/.bash_it/install.sh` (it automatically backs up your `~/.bash_profile` or `~/.bashrc`, depending on your OS)
 3. Edit your modified config (`~/.bash_profile` or `~/.bashrc`) file in order to customize Bash-it.
-4. Check out available aliases, completions and plugins and enable the ones you want to use (see the next section for more details).
+4. Check out available aliases, completions, and plugins and enable the ones you want to use (see the next section for more details).
 
 ### INSTALL OPTIONS
 
@@ -53,17 +53,17 @@ if [ -f ~/.bashrc ]; then
 fi
 ```
 
-Refer to the official [Bash documention](https://www.gnu.org/software/bash/manual/bashref.html#Bash-Startup-Files) to get more info.
+Refer to the official [Bash documentation](https://www.gnu.org/software/bash/manual/bashref.html#Bash-Startup-Files) to get more info.
 
 
 ## Install using Docker
 
-You can try Bash-it in an isolated enviroment without changing any local files via a [Docker](https://www.docker.com/) Container.  
+You can try Bash-it in an isolated environment without changing any local files via a [Docker](https://www.docker.com/) Container.  
 (Bash Shell v4.4 with Bash-it, [bats](https://github.com/sstephenson/bats) and bash-completion based on [Alpine Linux](https://alpinelinux.org/)).   
 
 `docker pull ellerbrock/bash-it`
 
-Have a look at our [bash-it-docker respository](https://github.com/Bash-it/bash-it-docker) for further information.
+Have a look at our [bash-it-docker repository](https://github.com/Bash-it/bash-it-docker) for further information.
 
 
 ## Update
@@ -108,8 +108,8 @@ Search will find and print out modules with the name or description matching the
   bash-it search term1 [[-]term2] [[-]term3]....
 ```
 
-As an example, a ruby developer might want to enable everything related to the commands such as `ruby`, `rake`, `gem`, `bundler` and `rails`.
-Search command helps you find related modules, so that you can decide which of them you'd like to use:
+As an example, a ruby developer might want to enable everything related to the commands such as `ruby`, `rake`, `gem`, `bundler`, and `rails`.
+Search command helps you find related modules so that you can decide which of them you'd like to use:
 
 ```bash
 ❯ bash-it search ruby rake gem bundle irb rails
@@ -187,7 +187,7 @@ You can easily preview the themes in your own shell using `BASH_PREVIEW=true rel
 If you've created your own custom prompts, we'd love it if you shared with everyone else! Just submit a Pull Request.
 You can see theme screenshots on [wiki/Themes](https://github.com/Bash-it/bash-it/wiki/Themes).
 
-**NOTE**: Bash-it and some themes use UTF-8 characters, so to avoid strange behavior in your terminal, set your locale to `LC_ALL=en_US.UTF-8` or the equivalent to your language if isn't American English.
+**NOTE**: Bash-it and some themes use UTF-8 characters, so to avoid strange behavior in your terminal, set your locale to `LC_ALL=en_US.UTF-8` or the equivalent to your language if it isn't American English.
 
 ## Uninstalling
 
@@ -256,7 +256,7 @@ Set `SCM_GIT_SHOW_DETAILS` to 'false' to **don't show** it:
 
 #### Remotes and remote branches
 
-In some git workflows you must work with various remotes, for this reason, Bash-it can provide some useful information about your remotes and your remote branches, for example, the remote on you are working, or if your local branch is tracking a remote branch.
+In some git workflows, you must work with various remotes, for this reason, Bash-it can provide some useful information about your remotes and your remote branches, for example, the remote on you are working, or if your local branch is tracking a remote branch.
 
 You can control this feature with the flag `SCM_GIT_SHOW_REMOTE_INFO` as follows:
 
@@ -296,18 +296,18 @@ Also, with this flag to false, Bash-it will not show the repository as dirty whe
 
 #### Git user
 
-In some environments it is useful to know the value of the current git user, which is used to mark all new commits.
-For example, any organization that uses the practice of pair programming will typically author each commit with a [combined names of the two authors](https://github.com/pivotal/git_scripts).
+In some environments, it is useful to know the value of the current git user, which is used to mark all new commits.
+For example, any organization that uses the practice of pair programming will typically author each commit with [combined names of the two authors](https://github.com/pivotal/git_scripts).
 When another pair uses the same pairing station, the authors are changed at the beginning of the session.
 
 To get up and running with this technique, run `gem install pivotal_git_scripts`, and then edit your `~/.pairs` file, according to the specification on the [gem's homepage](https://github.com/pivotal/git_scripts).
-After that you should be able to run `git pair kg as` to set the author to, eg. "Konstantin Gredeskoul and Alex Saxby", assuming they've been added to the `~/.pairs` file.
+After that, you should be able to run `git pair kg as` to set the author to, eg. "Konstantin Gredeskoul and Alex Saxby", assuming they've been added to the `~/.pairs` file.
 Please see gem's documentation for more information.
 
 To enable the display of the current pair in the prompt, you must set `SCM_GIT_SHOW_CURRENT_USER` to `true`.
 Once set, the `SCM_CURRENT_USER` variable will be automatically populated with the initials of the git author(s).
 It will also be included in the default git prompt.
-Even if you do not have `git pair` installed, as long as your `user.name` is set, your initials will be computed from your name, and shown in the prompt.
+Even if you do not have `git pair` installed, as long as your `user.name` is set, your initials will be computed from your name and shown in the prompt.
 
 You can control the prefix and the suffix of this component using the two variables:
 
@@ -392,8 +392,8 @@ These variables are best defined in a custom script in Bash-it's custom script f
 
 Once you have defined these variables (and have run `reload` to load the changes), you can use the following commands to enable or disable the proxy settings in your current shell:
 
-* `enable-proxy`: This sets the shell's proxy environment variables and configures proxy support in your SVN, npm and SSH configuration files.
-* `disable-proxy`: This unsets the shell's proxy environment variables and disables proxy support in your SVN, npm and SSH configuration files.
+* `enable-proxy`: This sets the shell's proxy environment variables and configures proxy support in your SVN, npm, and SSH configuration files.
+* `disable-proxy`: This unsets the shell's proxy environment variables and disables proxy support in your SVN, npm, and SSH configuration files.
 
 There are many more proxy commands, e.g. for changing the local Git project's proxy settings.
 Run `glossary proxy` to show the available proxy functions with a short description.
