@@ -68,7 +68,7 @@ function setup_pmset {
   setup_pmset "4%"
 
   run battery_percentage
-  assert_output "4"
+  assert_output "04"
 }
 
 @test 'plugins battery: battery-percentage with pmset, no status' {
@@ -136,7 +136,7 @@ function setup_acpi {
   setup_acpi "4%" "Charging"
 
   run battery_percentage
-  assert_output "4"
+  assert_output "04"
 }
 
 @test 'plugins battery: battery-percentage with acpi, 4% no status' {
@@ -145,7 +145,7 @@ function setup_acpi {
   setup_acpi "4%" ""
 
   run battery_percentage
-  assert_output "4"
+  assert_output "04"
 }
 
 @test 'plugins battery: battery-percentage with acpi, no status' {
@@ -203,7 +203,7 @@ function setup_upower {
   setup_upower "4.2345%"
 
   run battery_percentage
-  assert_output "4"
+  assert_output "04"
 }
 
 @test 'plugins battery: battery-percentage with upower, no output' {
@@ -261,7 +261,7 @@ function setup_ioreg {
   setup_ioreg "4%"
 
   run battery_percentage
-  assert_output "4"
+  assert_output "04"
 }
 
 @test 'plugins battery: battery-percentage with ioreg, no status' {
@@ -270,7 +270,7 @@ function setup_ioreg {
   setup_ioreg ""
 
   run battery_percentage
-  assert_output "0"
+  assert_output "00"
 }
 
 #######################
@@ -319,7 +319,7 @@ function setup_WMIC {
   setup_WMIC "4%"
 
   run battery_percentage
-  assert_output "4"
+  assert_output "04"
 }
 
 @test 'plugins battery: battery-percentage with WMIC, no status' {
