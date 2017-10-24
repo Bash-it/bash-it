@@ -53,29 +53,28 @@ battery_percentage(){
   about 'displays battery charge as a percentage of full (100%)'
   group 'battery'
 
+  declare COMMAND_OUTPUT="no"
+
   if _command_exists upower;
   then
-    local UPOWER_OUTPUT=$(upower --show-info $(upower --enumerate | grep BAT) | grep percentage | grep -o "[0-9]\+" | head -1)
-    echo ${UPOWER_OUTPUT:--1}
+    COMMAND_OUTPUT=$(upower --show-info $(upower --enumerate | grep BAT) | grep percentage | grep -o "[0-9]\+" | head -1)
   elif _command_exists acpi;
   then
-    local PERC_OUTPUT=$(acpi -b | awk -F, '/,/{gsub(/ /, "", $0); gsub(/%/,"", $0); print $2}' )
-    echo ${PERC_OUTPUT:--1}
+    COMMAND_OUTPUT=$(acpi -b | awk -F, '/,/{gsub(/ /, "", $0); gsub(/%/,"", $0); print $2}' )
   elif _command_exists pmset;
   then
-    local PMSET_OUTPUT=$(pmset -g ps | sed -n 's/.*[[:blank:]]+*\(.*%\).*/\1/p' | grep -o "[0-9]\+" | head -1)
-    echo ${PMSET_OUTPUT:--1}
+    COMMAND_OUTPUT=$(pmset -g ps | sed -n 's/.*[[:blank:]]+*\(.*%\).*/\1/p' | grep -o "[0-9]\+" | head -1)
   elif _command_exists ioreg;
   then
-    local IOREG_OUTPUT=$(ioreg -n AppleSmartBattery -r | awk '$1~/Capacity/{c[$1]=$3} END{OFMT="%d"; max=c["\"MaxCapacity\""]; print (max>0? 100*c["\"CurrentCapacity\""]/max: "?")}')
-    echo ${IOREG_OUTPUT:--1}
+    COMMAND_OUTPUT=$(ioreg -n AppleSmartBattery -r | awk '$1~/Capacity/{c[$1]=$3} END{OFMT="%d"; max=c["\"MaxCapacity\""]; print (max>0? 100*c["\"CurrentCapacity\""]/max: "?")}')
   elif _command_exists WMIC;
   then
-    local WINPC=$(WMIC PATH Win32_Battery Get EstimatedChargeRemaining /Format:List | grep -o '[0-9]\+' | head -1)
-    echo ${WINPC:--1}
+    COMMAND_OUTPUT=$(WMIC PATH Win32_Battery Get EstimatedChargeRemaining /Format:List | grep -o '[0-9]\+' | head -1)
   else
-    echo "no"
+    COMMAND_OUTPUT="no"
   fi
+
+  echo ${COMMAND_OUTPUT:--1}
 }
 
 battery_charge(){
