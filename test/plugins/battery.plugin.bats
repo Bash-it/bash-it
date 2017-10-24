@@ -272,3 +272,61 @@ function setup_ioreg {
   run battery_percentage
   assert_output "0"
 }
+
+#######################
+#
+# WMIC
+#
+
+function setup_WMIC {
+  percent="$1"
+
+  function WMIC {
+    printf "Charge: %s" "${percent}"
+  }
+}
+
+@test 'plugins battery: battery-percentage with WMIC, 100%' {
+  setup_command_exists "WMIC"
+
+  setup_WMIC "100%"
+
+  run battery_percentage
+  assert_output "100"
+}
+
+@test 'plugins battery: battery-percentage with WMIC, 98%' {
+  setup_command_exists "WMIC"
+
+  setup_WMIC "98%"
+
+  run battery_percentage
+  assert_output "98"
+}
+
+@test 'plugins battery: battery-percentage with WMIC, 98.5%' {
+  setup_command_exists "WMIC"
+
+  setup_WMIC "98.5%"
+
+  run battery_percentage
+  assert_output "98"
+}
+
+@test 'plugins battery: battery-percentage with WMIC, 4%' {
+  setup_command_exists "WMIC"
+
+  setup_WMIC "4%"
+
+  run battery_percentage
+  assert_output "4"
+}
+
+@test 'plugins battery: battery-percentage with WMIC, no status' {
+  setup_command_exists "WMIC"
+
+  setup_WMIC ""
+
+  run battery_percentage
+  assert_output "-1"
+}

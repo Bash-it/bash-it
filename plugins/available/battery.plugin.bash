@@ -72,15 +72,8 @@ battery_percentage(){
     echo ${IOREG_OUTPUT:--1}
   elif _command_exists WMIC;
   then
-    local WINPC=$(echo porcent=$(WMIC PATH Win32_Battery Get EstimatedChargeRemaining /Format:List) | grep -o '[0-9]*')
-    case $WINPC in
-      100*)
-        echo '100'
-      ;;
-      *)
-        echo $WINPC
-      ;;
-    esac
+    local WINPC=$(WMIC PATH Win32_Battery Get EstimatedChargeRemaining /Format:List | grep -o '[0-9]\+' | head -1)
+    echo ${WINPC:--1}
   else
     echo "no"
   fi
