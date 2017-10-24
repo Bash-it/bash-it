@@ -59,8 +59,7 @@ battery_percentage(){
     echo ${UPOWER_OUTPUT:--1}
   elif _command_exists acpi;
   then
-    local ACPI_OUTPUT=$(acpi -b)
-    local PERC_OUTPUT=$(echo $ACPI_OUTPUT | awk -F, '/,/{gsub(/ /, "", $0); gsub(/%/,"", $0); print $2}' )
+    local PERC_OUTPUT=$(acpi -b | awk -F, '/,/{gsub(/ /, "", $0); gsub(/%/,"", $0); print $2}' )
     echo ${PERC_OUTPUT:--1}
   elif _command_exists pmset;
   then
