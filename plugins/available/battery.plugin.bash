@@ -68,7 +68,7 @@ battery_percentage(){
     echo ${PMSET_OUTPUT:--1}
   elif _command_exists ioreg;
   then
-    local IOREG_OUTPUT=$(ioreg -n AppleSmartBattery -r | awk '$1~/Capacity/{c[$1]=$3} END{OFMT="%05.2f%%"; max=c["\"MaxCapacity\""]; print (max>0? 100*c["\"CurrentCapacity\""]/max: "?")}'  | grep -o "[0-9]\+" | head -1)
+    local IOREG_OUTPUT=$(ioreg -n AppleSmartBattery -r | awk '$1~/Capacity/{c[$1]=$3} END{OFMT="%d"; max=c["\"MaxCapacity\""]; print (max>0? 100*c["\"CurrentCapacity\""]/max: "?")}')
     echo ${IOREG_OUTPUT:--1}
   elif _command_exists WMIC;
   then

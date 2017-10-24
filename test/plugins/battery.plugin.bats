@@ -71,6 +71,15 @@ function setup_pmset {
   assert_output "4"
 }
 
+@test 'plugins battery: battery-percentage with pmset, no status' {
+  setup_command_exists "pmset"
+
+  setup_pmset ""
+
+  run battery_percentage
+  assert_output "-1"
+}
+
 #######################
 #
 # acpi
@@ -253,4 +262,13 @@ function setup_ioreg {
 
   run battery_percentage
   assert_output "4"
+}
+
+@test 'plugins battery: battery-percentage with ioreg, no status' {
+  setup_command_exists "ioreg"
+
+  setup_ioreg ""
+
+  run battery_percentage
+  assert_output "0"
 }
