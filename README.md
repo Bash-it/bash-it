@@ -20,7 +20,7 @@ please feel free to read through this page if you're interested in how Bash-it l
 
 ## Install
 
-1. Check out a clone of this repo to a location of your choice, such as:
+1. Check out a clone of this repo to a location of your choice, such as
    `git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it`
 2. Run `~/.bash_it/install.sh` (it automatically backs up your `~/.bash_profile` or `~/.bashrc`, depending on your OS)
 3. Edit your modified config (`~/.bash_profile` or `~/.bashrc`) file in order to customize Bash-it.
@@ -53,7 +53,7 @@ if [ -f ~/.bashrc ]; then
 fi
 ```
 
-Refer to the official [Bash documention](https://www.gnu.org/software/bash/manual/bashref.html#Bash-Startup-Files) to get more info.
+Refer to the official [Bash documentation](https://www.gnu.org/software/bash/manual/bashref.html#Bash-Startup-Files) to get more info.
 
 
 ## Install using Docker
@@ -63,7 +63,7 @@ You can try Bash-it in an isolated environment without changing any local files 
 
 `docker pull ellerbrock/bash-it`
 
-Have a look at our [bash-it-docker respository](https://github.com/Bash-it/bash-it-docker) for further information.
+Have a look at our [bash-it-docker repository](https://github.com/Bash-it/bash-it-docker) for further information.
 
 
 ## Update
@@ -108,7 +108,7 @@ Search will find and print out modules with the name or description matching the
   bash-it search term1 [[-]term2] [[-]term3]....
 ```
 
-As an example, a ruby developer might want to enable everything related to the commands such as `ruby`, `rake`, `gem`, `bundler` and `rails`.
+As an example, a ruby developer might want to enable everything related to the commands such as `ruby`, `rake`, `gem`, `bundler`, and `rails`.
 Search command helps you find related modules so that you can decide which of them you'd like to use:
 
 ```bash
@@ -297,7 +297,7 @@ Also, with this flag to false, Bash-it will not show the repository as dirty whe
 #### Git user
 
 In some environments, it is useful to know the value of the current git user, which is used to mark all new commits.
-For example, any organization that uses the practice of pair programming will typically author each commit with a [combined names of the two authors](https://github.com/pivotal/git_scripts).
+For example, any organization that uses the practice of pair programming will typically author each commit with [combined names of the two authors](https://github.com/pivotal/git_scripts).
 When another pair uses the same pairing station, the authors are changed at the beginning of the session.
 
 To get up and running with this technique, run `gem install pivotal_git_scripts`, and then edit your `~/.pairs` file, according to the specification on the [gem's homepage](https://github.com/pivotal/git_scripts).
