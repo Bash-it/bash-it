@@ -66,7 +66,7 @@ battery_percentage(){
     COMMAND_OUTPUT=$(pmset -g ps | sed -n 's/.*[[:blank:]]+*\(.*%\).*/\1/p' | grep -o "[0-9]\+" | head -1)
   elif _command_exists ioreg;
   then
-    COMMAND_OUTPUT=$(ioreg -n AppleSmartBattery -r | awk '$1~/Capacity/{c[$1]=$3} END{OFMT="%d"; max=c["\"MaxCapacity\""]; print (max>0? 100*c["\"CurrentCapacity\""]/max: "?")}')
+    COMMAND_OUTPUT=$(ioreg -n AppleSmartBattery -r | awk '$1~/Capacity/{c[$1]=$3} END{OFMT="%05.2f"; max=c["\"MaxCapacity\""]; print (max>0? 100*c["\"CurrentCapacity\""]/max: "?")}' | grep -o "[0-9]\+" | head -1)
   elif _command_exists WMIC;
   then
     COMMAND_OUTPUT=$(WMIC PATH Win32_Battery Get EstimatedChargeRemaining /Format:List | grep -o '[0-9]\+' | head -1)
