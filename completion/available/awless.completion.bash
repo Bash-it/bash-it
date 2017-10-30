@@ -1,1 +1,1 @@
-[[ -x "$(which awsless)" ]] && source <(awless completion bash)
+[[ -x "$(which awless)" ]] && source <(awless completion bash)
