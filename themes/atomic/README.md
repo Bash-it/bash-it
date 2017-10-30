@@ -6,7 +6,7 @@ Supported on all operating systems.
 
 In constant maintenance and improvement
 
-![alt text](https://www.lfsystems.xyz/img/AtomicTheme.gif)
+![alt text](https://www.lfsystems.com.co/img/AtomicTheme.gif)
 
 ## Install Theme
 
