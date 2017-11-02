@@ -289,10 +289,13 @@ function setup_ioreg {
 @test 'plugins battery: battery-percentage with ioreg, no status' {
   setup_command_exists "ioreg"
 
-  setup_ioreg ""
+  # Simulate that no battery is present
+  function ioreg {
+    printf ""
+  }
 
   run battery_percentage
-  assert_output "00"
+  assert_output "-1"
 }
 
 #######################
