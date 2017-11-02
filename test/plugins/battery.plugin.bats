@@ -36,6 +36,18 @@ function setup_command_exists {
 
 #######################
 #
+# no tool
+#
+
+@test 'plugins battery: battery-percentage with no tool' {
+  setup_command_exists "fooooo"
+
+  run battery_percentage
+  assert_output "no"
+}
+
+#######################
+#
 # pmset
 #
 

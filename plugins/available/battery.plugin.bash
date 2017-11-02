@@ -74,7 +74,11 @@ battery_percentage(){
     COMMAND_OUTPUT="no"
   fi
 
-  printf "%02d" "${COMMAND_OUTPUT:--1}"
+  if [ "${COMMAND_OUTPUT}" != "no" ]; then
+    printf "%02d" "${COMMAND_OUTPUT:--1}"
+  else
+    echo "${COMMAND_OUTPUT}"
+  fi
 }
 
 battery_charge(){
