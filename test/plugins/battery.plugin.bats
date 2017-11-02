@@ -7,6 +7,18 @@ cite _about _param _example _group _author _version
 
 load ../../plugins/available/battery.plugin
 
+# Sets up the `_command_exists` function so that it only responds `true` if called with
+# the name of the function that was passed in as an argument to `setup_command_exists`.
+# This is used to ensure that the test cases can test the various energy management tools
+# without actually having them. When called like
+#
+# setup_command_exists "pmset"
+#
+# then calling `_command_exists "pmset"` will return `true`,
+# while calling `_command_exists "ioreg"` (or other commands) will return `false`.
+#
+# It's cool that Bash allows to define functions within functions, works almost like
+# a closure in JavaScript.
 function setup_command_exists {
   success_command="$1"
 
@@ -27,6 +39,8 @@ function setup_command_exists {
 # pmset
 #
 
+# Creates a `pmset` function that simulates output like the real `pmset` command.
+# The passed in parameter is used for the remaining battery percentage.
 function setup_pmset {
   percent="$1"
 
@@ -85,6 +99,10 @@ function setup_pmset {
 # acpi
 #
 
+# Creates a `acpi` function that simulates output like the real `acpi` command.
+# The passed in parameters are used for
+# 1) the remaining battery percentage.
+# 2) the battery status
 function setup_acpi {
   percent="$1"
   status="$2"
@@ -162,6 +180,8 @@ function setup_acpi {
 # upower
 #
 
+# Creates a `upower` function that simulates output like the real `upower` command.
+# The passed in parameter is used for the remaining battery percentage.
 function setup_upower {
   percent="$1"
 
@@ -220,6 +240,8 @@ function setup_upower {
 # ioreg
 #
 
+# Creates a `ioreg` function that simulates output like the real `ioreg` command.
+# The passed in parameter is used for the remaining battery percentage.
 function setup_ioreg {
   percent="$1"
 
@@ -278,6 +300,8 @@ function setup_ioreg {
 # WMIC
 #
 
+# Creates a `WMIC` function that simulates output like the real `WMIC` command.
+# The passed in parameter is used for the remaining battery percentage.
 function setup_WMIC {
   percent="$1"
 
