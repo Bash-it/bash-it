@@ -10,4 +10,10 @@ if [ -z "${BASH_IT}" ]; then
   export BASH_IT
 fi
 
-exec $bats_executable ${CI:+--tap} ${test_directory}/{bash_it,completion,install,lib,plugins,themes}
+if [ -z "$1" ]; then
+  test_dirs=( ${test_directory}/{bash_it,completion,install,lib,plugins,themes} )
+else
+  test_dirs=( "$1" )
+fi
+
+exec $bats_executable ${CI:+--tap} "${test_dirs[@]}"
