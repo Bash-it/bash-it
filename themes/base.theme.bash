@@ -499,23 +499,40 @@ function aws_profile {
   fi
 }
 
+function __check_precmd_conflict() {
+    local f
+    for f in "${precmd_functions[@]}"; do
+        if [[ "${f}" == "${1}" ]]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
 function safe_append_prompt_command {
     local prompt_re
 
-    # Set OS dependent exact match regular expression
-    if [[ ${OSTYPE} == darwin* ]]; then
-      # macOS
-      prompt_re="[[:<:]]${1}[[:>:]]"
+    if [ "${__bp_imported}" == "defined" ]; then
+        # We are using bash-preexec
+        if ! __check_precmd_conflict "${1}" ; then
+            precmd_functions+=("${1}")
+        fi
     else
-      # Linux, FreeBSD, etc.
-      prompt_re="\<${1}\>"
-    fi
+        # Set OS dependent exact match regular expression
+        if [[ ${OSTYPE} == darwin* ]]; then
+          # macOS
+          prompt_re="[[:<:]]${1}[[:>:]]"
+        else
+          # Linux, FreeBSD, etc.
+          prompt_re="\<${1}\>"
+        fi
 
-    if [[ ${PROMPT_COMMAND} =~ ${prompt_re} ]]; then
-      return
-    elif [[ -z ${PROMPT_COMMAND} ]]; then
-      PROMPT_COMMAND="${1}"
-    else
-      PROMPT_COMMAND="${1};${PROMPT_COMMAND}"
+        if [[ ${PROMPT_COMMAND} =~ ${prompt_re} ]]; then
+          return
+        elif [[ -z ${PROMPT_COMMAND} ]]; then
+          PROMPT_COMMAND="${1}"
+        else
+          PROMPT_COMMAND="${1};${PROMPT_COMMAND}"
+        fi
     fi
 }
