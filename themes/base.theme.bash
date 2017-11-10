@@ -39,6 +39,8 @@ SCM_GIT_BEHIND_CHAR="↓"
 SCM_GIT_UNTRACKED_CHAR="?:"
 SCM_GIT_UNSTAGED_CHAR="U:"
 SCM_GIT_STAGED_CHAR="S:"
+SCM_GIT_STASH_CHAR_PREFIX="{"
+SCM_GIT_STASH_CHAR_SUFFIX="}"
 
 SCM_HG='hg'
 SCM_HG_CHAR='☿'
@@ -271,7 +273,7 @@ function git_prompt_vars {
   [[ "${status}" =~ ${behind_re} ]] && SCM_BRANCH+=" ${SCM_GIT_BEHIND_CHAR}${BASH_REMATCH[1]}"
 
   local stash_count="$(git stash list 2> /dev/null | wc -l | tr -d ' ')"
-  [[ "${stash_count}" -gt 0 ]] && SCM_BRANCH+=" {${stash_count}}"
+  [[ "${stash_count}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_GIT_STASH_CHAR_PREFIX}${stash_count}${SCM_GIT_STASH_CHAR_SUFFIX}"
 
   SCM_BRANCH+=${details}
 
