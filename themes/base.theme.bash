@@ -383,13 +383,8 @@ function chruby_version_prompt {
   fi
 }
 
-function rb_interp_prompt {
-  rb_version=$(ruby --version | awk '{print $2;}') || return
-  echo -e "${RUBY_THEME_PROMPT_PREFIX}${rb_version}${RUBY_THEME_PROMPT_SUFFIX}"
-}
-
 function ruby_version_prompt {
-  echo -e "$(rbfu_version_prompt)$(rbenv_version_prompt)$(rvm_version_prompt)$(chruby_version_prompt)$(rb_interp_prompt)"
+  echo -e "$(rbfu_version_prompt)$(rbenv_version_prompt)$(rvm_version_prompt)$(chruby_version_prompt)"
 }
 
 function virtualenv_prompt {
