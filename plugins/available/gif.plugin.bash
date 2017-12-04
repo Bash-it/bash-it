@@ -78,7 +78,7 @@ function v2gif {
         ;;
       -f|--fps)
         # select fps
-        fps="$2"
+        infps="$2"
         giftag="${giftag}-f$2"
         shift 2
         ;;
