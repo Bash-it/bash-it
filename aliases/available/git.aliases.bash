@@ -39,7 +39,7 @@ alias gdv='git diff -w "$@" | vim -R -'
 alias gc='git commit -v'
 alias gca='git commit -v -a'
 alias gcm='git commit -v -m'
-alias gcam='git commit -v -a -m'
+alias gcam="git commit -v -am"
 alias gci='git commit --interactive'
 alias gb='git branch'
 alias gba='git branch -a'
@@ -72,7 +72,6 @@ alias gnew="git log HEAD@{1}..HEAD@{0}"
 # Add uncommitted and unstaged changes to the last commit
 alias gcaa="git commit -a --amend -C HEAD"
 alias ggui="git gui"
-alias gcam="git commit -am"
 alias gcsam="git commit -S -am"
 alias gstd="git stash drop"
 alias gstl="git stash list"
