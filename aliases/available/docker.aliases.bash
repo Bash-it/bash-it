@@ -10,6 +10,9 @@ alias dki='docker images'  # List Docker images
 alias dkrmac='docker rm $(docker ps -a -q)'  # Delete all Docker containers
 alias dkrmlc='docker-remove-most-recent-container'  # Delete most recent (i.e., last) Docker container
 case $OSTYPE in
+  bsd*)
+    alias dkrmui='docker images -q -f dangling=true |xargs docker rmi'  # Delete all untagged Docker images
+    ;;
   darwin*)
     alias dkrmui='docker images -q -f dangling=true |xargs docker rmi'  # Delete all untagged Docker images
     ;;
