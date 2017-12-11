@@ -1701,7 +1701,7 @@ _docker_service_tasks() {
 }
 
 _docker_service_update() {
-	local $subcommand="${words[$subcommand_pos]}"
+	local subcommand="${words[$subcommand_pos]}"
 
 	local options_with_args="
 		--constraint
