@@ -45,7 +45,7 @@ alias pager="$PAGER"
 
 alias q='exit'
 
-alias irc="$IRC_CLIENT"
+alias irc="${IRC_CLIENT:=irc}"
 
 # Language aliases
 alias rb='ruby'
