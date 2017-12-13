@@ -18,11 +18,11 @@ fe() {
   [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
 }
 
-fd() {
+fcd() {
   about "cd to the selected directory"
   group "fzf"
   param "1: Directory to browse, or . if omitted"
-  example "fd aliases"
+  example "fcd aliases"
 
   local dir
   dir=$(find ${1:-.} -path '*/\.*' -prune \
