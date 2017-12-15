@@ -75,6 +75,7 @@ alias ggui="git gui"
 alias gcsam="git commit -S -am"
 alias gstd="git stash drop"
 alias gstl="git stash list"
+alias gh='cd "$(git rev-parse --show-toplevel)"'
 
 case $OSTYPE in
   darwin*)
