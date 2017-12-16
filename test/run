@@ -1,12 +1,19 @@
 #!/usr/bin/env bash
 test_directory="$(cd "$(dirname "$0")" && pwd)"
-bats_executable="${test_directory}/../bats/bin/bats"
+bats_executable="${test_directory}/../test_lib/bats-core/bin/bats"
 
-[ ! -e $bats_executable ] && \
-  git clone --depth 1 https://github.com/sstephenson/bats.git ${test_directory}/../bats
+git submodule init && git submodule update
 
 if [ -z "${BASH_IT}" ]; then
-  export BASH_IT=$(cd ${test_directory} && dirname $(pwd))
+  declare BASH_IT
+  BASH_IT=$(cd ${test_directory} && dirname "$(pwd)")
+  export BASH_IT
 fi
 
-exec $bats_executable ${CI:+--tap} ${test_directory}/{lib,plugins}
+if [ -z "$1" ]; then
+  test_dirs=( ${test_directory}/{bash_it,completion,install,lib,plugins,themes} )
+else
+  test_dirs=( "$1" )
+fi
+
+exec $bats_executable ${CI:+--tap} "${test_dirs[@]}"

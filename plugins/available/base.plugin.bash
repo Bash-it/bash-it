@@ -7,7 +7,7 @@ function ips ()
     group 'base'
     if command -v ifconfig &>/dev/null
     then
-        ifconfig | awk '/inet /{ print $2 }'
+        ifconfig | awk '/inet /{ gsub(/addr:/, ""); print $2 }'
     elif command -v ip &>/dev/null
     then
         ip addr | grep -oP 'inet \K[\d.]+'
@@ -22,14 +22,22 @@ function down4me ()
     param '1: website url'
     example '$ down4me http://www.google.com'
     group 'base'
-    curl -s "http://www.downforeveryoneorjustme.com/$1" | sed '/just you/!d;s/<[^>]*>//g'
+    curl -Ls "http://downforeveryoneorjustme.com/$1" | sed '/just you/!d;s/<[^>]*>//g'
 }
 
 function myip ()
 {
     about 'displays your ip address, as seen by the Internet'
     group 'base'
-    res=$(curl -s checkip.dyndns.org | grep -Eo '[0-9\.]+')
+    list=("http://myip.dnsomatic.com/" "http://checkip.dyndns.com/" "http://checkip.dyndns.org/")
+    for url in ${list[*]}
+    do
+        res=$(curl -s "${url}")
+        if [ $? -eq 0 ];then
+            break;
+        fi
+    done
+    res=$(echo "$res" | grep -Eo '[0-9\.]+')
     echo -e "Your public IP is: ${echo_bold_green} $res ${echo_normal}"
 }
 
@@ -83,13 +91,14 @@ function pmdown ()
 
 function mkcd ()
 {
-    about 'make a directory and cd into it'
-    param 'path to create'
+    about 'make one or more directories and cd into the last one'
+    param 'one or more directories to create'
     example '$ mkcd foo'
     example '$ mkcd /tmp/img/photos/large'
+    example '$ mkcd foo foo1 foo2 fooN'
+    example '$ mkcd /tmp/img/photos/large /tmp/img/photos/self /tmp/img/photos/Beijing'
     group 'base'
-    mkdir -p -- "$*"
-    cd -- "$*"
+    mkdir -p -- "$@" && eval cd -- "\"\$$#\""
 }
 
 function lsgrep ()
@@ -136,7 +145,7 @@ function usage ()
     fi
 }
 
-if [ ! -e $BASH_IT/plugins/enabled/todo.plugin.bash ]; then
+if [ ! -e "${BASH_IT}/plugins/enabled/todo.plugin.bash" ] && [ ! -e "${BASH_IT}/plugins/enabled/*${BASH_IT_LOAD_PRIORITY_SEPARATOR}todo.plugin.bash" ]; then
 # if user has installed todo plugin, skip this...
     function t ()
     {
@@ -197,10 +206,10 @@ function buf ()
     cp -a "${filename}" "${filename}_${filetime}"
 }
 
-function del() { 
+function del() {
     about 'move files to hidden folder in tmp, that gets cleared on each reboot'
     param 'file or folder to be deleted'
     example 'del ./file.txt'
     group 'base'
-    mkdir -p /tmp/.trash && mv "$@" /tmp/.trash; 
+    mkdir -p /tmp/.trash && mv "$@" /tmp/.trash;
 }

@@ -1,3 +1,6 @@
+# Load after the other completions to understand what needs to be completed
+# BASH_IT_LOAD_PRIORITY: 365
+
 cite about-plugin
 about-plugin 'Automatic completion of aliases'
 
@@ -26,8 +29,7 @@ function alias_completion {
     (( ${#completions[@]} == 0 )) && return 0
 
     # create temporary file for wrapper functions and completions
-    rm -f "/tmp/${namespace}-*.tmp" # preliminary cleanup
-    local tmp_file; tmp_file="$(mktemp "/tmp/${namespace}-${RANDOM}XXX.tmp")" || return 1
+    local tmp_file; tmp_file="$(mktemp -t "${namespace}-${RANDOM}XXX.tmp")" || return 1
 
     local completion_loader; completion_loader="$(complete -p -D 2>/dev/null | sed -Ene 's/.* -F ([^ ]*).*/\1/p')"
 

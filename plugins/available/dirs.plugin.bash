@@ -11,7 +11,7 @@ about-plugin 'directory stack navigation'
 # Show directory stack
 alias d="dirs -v -l"
 
-# Change to location in stack bu number
+# Change to location in stack by number
 alias 1="pushd"
 alias 2="pushd +2"
 alias 3="pushd +3"
@@ -44,19 +44,19 @@ function dirs-help() {
   echo "po	: Remove current location from stack."
   echo "pc	: Adds current location to stack."
   echo "pu <dir>: Adds given location to stack."
-  echo "1	: Chance to stack location 1."
-  echo "2	: Chance to stack location 2."
-  echo "3	: Chance to stack location 3."
-  echo "4	: Chance to stack location 4."
-  echo "5	: Chance to stack location 5."
-  echo "6	: Chance to stack location 6."
-  echo "7	: Chance to stack location 7."
-  echo "8	: Chance to stack location 8."
-  echo "9	: Chance to stack location 9."
+  echo "1	: Change to stack location 1."
+  echo "2	: Change to stack location 2."
+  echo "3	: Change to stack location 3."
+  echo "4	: Change to stack location 4."
+  echo "5	: Change to stack location 5."
+  echo "6	: Change to stack location 6."
+  echo "7	: Change to stack location 7."
+  echo "8	: Change to stack location 8."
+  echo "9	: Change to stack location 9."
 }
 
-# ADD BOOKMARKing functionality
-# usage:
+# Add bookmarking functionality
+# Usage:
 
 if [ ! -f ~/.dirs ]; then  # if doesn't exist, create it
     touch ~/.dirs
@@ -66,7 +66,7 @@ fi
 
 alias L='cat ~/.dirs'
 
-# goes to distination dir otherwise, stay in the dir
+# Goes to destination dir, otherwise stay in the dir
 G () {
     about 'goes to destination dir'
     param '1: directory'
@@ -102,6 +102,6 @@ R () {
     \mv ~/.dirs1 ~/.dirs;
 }
 
-alias U='source ~/.dirs' 	# Update BOOKMARK stack
-# set the bash option so that no '$' is required when using the above facility
+alias U='source ~/.dirs' 	# Update bookmark stack
+# Set the Bash option so that no '$' is required when using the above facility
 shopt -s cdable_vars

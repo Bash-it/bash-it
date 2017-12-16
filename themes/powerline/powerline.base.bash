@@ -1,4 +1,8 @@
+# Define this here so it can be used by all of the Powerline themes
+THEME_CHECK_SUDO=${THEME_CHECK_SUDO:=true}
+
 function set_color {
+  set +u
   if [[ "${1}" != "-" ]]; then
     fg="38;5;${1}"
   fi
@@ -22,7 +26,7 @@ function __powerline_user_info_prompt {
       ;;
     *)
       if [[ -n "${SSH_CLIENT}" ]] || [[ -n "${SSH_CONNECTION}" ]]; then
-        user_info="${USER_INFO_SSH_CHAR}${USER}@${HOSTNAME}"
+        user_info="${USER_INFO_SSH_CHAR}${USER}"
       else
         user_info="${USER}"
       fi
@@ -34,9 +38,9 @@ function __powerline_user_info_prompt {
 function __powerline_ruby_prompt {
   local ruby_version=""
 
-  if command_exists rvm; then
+  if _command_exists rvm; then
     ruby_version="$(rvm_version_prompt)"
-  elif command_exists rbenv; then
+  elif _command_exists rbenv; then
     ruby_version=$(rbenv_version_prompt)
   fi
 
@@ -44,6 +48,7 @@ function __powerline_ruby_prompt {
 }
 
 function __powerline_python_venv_prompt {
+  set +u
   local python_venv=""
 
   if [[ -n "${CONDA_DEFAULT_ENV}" ]]; then
@@ -91,6 +96,13 @@ function __powerline_cwd_prompt {
 
 function __powerline_hostname_prompt {
     echo "$(hostname -s)|${HOST_THEME_PROMPT_COLOR}"
+<<<<<<< HEAD
+=======
+}
+
+function __powerline_wd_prompt {
+  echo "\W|${CWD_THEME_PROMPT_COLOR}"
+>>>>>>> master
 }
 
 function __powerline_clock_prompt {
@@ -154,12 +166,22 @@ function __powerline_prompt_command {
       LEFT_PROMPT+="$(set_color ${PROMPT_DISTRO_LOGO_COLOR} ${PROMPT_DISTRO_LOGO_COLORBG})${PROMPT_DISTRO_LOGO}$(set_color - -)"
   fi
 
+<<<<<<< HEAD
+=======
+  local OLD_IFS="${IFS}"; IFS=" "
+
+>>>>>>> master
   ## left prompt ##
   for segment in $POWERLINE_PROMPT; do
     local info="$(__powerline_${segment}_prompt)"
     [[ -n "${info}" ]] && __powerline_left_segment "${info}"
   done
 
+<<<<<<< HEAD
+=======
+  IFS="${OLD_IFS}"
+
+>>>>>>> master
   [[ "${last_status}" -ne 0 ]] && __powerline_left_segment $(__powerline_last_status_prompt ${last_status})
   [[ -n "${LEFT_PROMPT}" ]] && LEFT_PROMPT+="$(set_color ${LAST_SEGMENT_COLOR} -)${separator_char}${normal}"
 
