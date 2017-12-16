@@ -221,7 +221,7 @@ After the uninstall script finishes, remove the Bash-it directory from your mach
 
 ## Misc
 
-### Bash Profile Aliases
+#### Bash Profile Aliases
 
 Bash-it creates a `reload` alias that makes it convenient to reload
 your Bash profile when you make changes.
@@ -229,7 +229,7 @@ your Bash profile when you make changes.
 Additionally, if you export `BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE` as a non-null value,
 Bash-it will automatically reload itself after activating or deactivating plugins, aliases, or completions.
 
-### Prompt Version Control Check
+#### Prompt Version Control Check
 
 Bash-it provides prompt themes the ability to check and display version control information for the current directory.
 The information is retrieved for each directory and can slow down the navigation of projects with a large number of files and folders.
@@ -251,7 +251,7 @@ It is possible for themes to ignore the `SCM_CHECK` flag and query specific vers
 For example, themes that use functions like `git_prompt_vars` skip the `SCM_CHECK` flag to retrieve and display git prompt information.
 If you turned version control checking off and you still see version control information within your prompt, then functions like `git_prompt_vars` are most likely the reason why.
 
-### Git prompt
+#### Git prompt
 
 Bash-it has some nice features related to Git, continue reading to know more about these features.
 
@@ -364,7 +364,7 @@ $ git config --global --add bash-it.hide-status 1
 
 Setting this flag globally has the same effect as `SCM_CHECK=true`, but only for Git repos.
 
-### Pass function renamed to passgen
+#### Pass function renamed to passgen
 
 The Bash-it `pass` function has been renamed to `passgen` in order to avoid a naming conflict with the [pass password manager](https://www.passwordstore.org/).
 In order to minimize the impact on users of the legacy Bash-it `pass` function, Bash-it will create the alias `pass` that calls the new `passgen` function if the `pass` password manager command is not found on the `PATH` (default behavior).
@@ -379,7 +379,7 @@ Unset `BASH_IT_LEGACY_PASS` to have Bash-it **return to default behavior**:
 
 * `unset BASH_IT_LEGACY_PASS`
 
-### Proxy Support
+#### Proxy Support
 
 If you are working in a corporate environment where you have to go through a proxy server for internet access,
 then you know how painful it is to configure the OS proxy variables in the shell,
