@@ -1,3 +1,6 @@
 sudo: false
 script: test/run
 language: c
+os:
+  - linux
+  - osx

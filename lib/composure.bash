@@ -196,7 +196,7 @@ draft ()
         cmd=$(eval "history | grep '^[[:blank:]]*$num' | head -1" | sed 's/^[[:blank:][:digit:]]*//')
     fi
     eval "$func() { $cmd; }"
-    typeset file=$(mktemp /tmp/draft.XXXX)
+    typeset file=$(mktemp -t draft.XXXX)
     typeset -f $func > $file
     transcribe $func $file draft
     rm $file 2>/dev/null
@@ -300,7 +300,7 @@ revise ()
     group composure
 
     typeset func=$1
-    typeset temp=$(mktemp /tmp/revise.XXXX)
+    typeset temp=$(mktemp -t revise.XXXX)
 
     if [ -z "$func" ]; then
         printf '%s\n' 'missing parameter(s)'

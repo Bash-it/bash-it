@@ -1,13 +1,7 @@
 #!/usr/bin/env bash
 
-# Set term to 256color mode, if 256color is not supported, colors won't work properly
-if [[ $COLORTERM = gnome-* && $TERM = xterm ]] && infocmp gnome-256color >/dev/null 2>&1; then
-  export TERM=gnome-256color
-elif infocmp xterm-256color >/dev/null 2>&1; then
-  export TERM=xterm-256color
-fi
 
-# Detect whether a rebbot is required
+# Detect whether a reboot is required
 function show_reboot_required() {
   if [ ! -z "$_bf_prompt_reboot_info" ]; then
     if [ -f /var/run/reboot-required ]; then
