@@ -11,6 +11,24 @@ Bash-it provides a solid framework for using, developing and maintaining shell s
 If you're using the _Bourne Again Shell_ (Bash) on a regular basis and have been looking for an easy way on how to keep all of these nice little scripts and aliases under control, then Bash-it is for you!
 Stop polluting your `~/bin` directory and your `.bashrc` file, fork/clone Bash-it and start hacking away.
 
+- [Contributing](#contributing)
+- [Installation](#installation)
+  - [Install Options](#install-options)
+  - [via Docker](#install-using-docker)
+  - [Updating](#updating)
+- [Help](#help-screens)
+- [Search](#search)
+  - [Syntax](#syntax)
+  - [Searching with Negations](#searching-with-negations)
+  - [Using Search to Enable or Disable Components](#using-search-to-enable-or-disable-components)
+  - [Disabling ASCII Color](#disabling-ascii-color)
+- [Custom scripts, aliases, themes, and functions](#custom-scripts,-aliases,-themes,-and-functions)
+- [Themes](#themes)
+- [Uninstalling](#uninstalling)
+- [Misc](#misc)
+- [Help Out](#help-out)
+- [Contributors](#contributors)
+
 ## Contributing
 
 Please take a look at the [Contribution Guidelines](CONTRIBUTING.md) before reporting a bug or providing a new feature.
@@ -18,7 +36,7 @@ Please take a look at the [Contribution Guidelines](CONTRIBUTING.md) before repo
 The [Development Guidelines](DEVELOPMENT.md) have more information on some of the internal workings of Bash-it,
 please feel free to read through this page if you're interested in how Bash-it loads its components.
 
-## Install
+## Installation
 
 1. Check out a clone of this repo to a location of your choice, such as
    `git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it`
@@ -26,7 +44,7 @@ please feel free to read through this page if you're interested in how Bash-it l
 3. Edit your modified config (`~/.bash_profile` or `~/.bashrc`) file in order to customize Bash-it.
 4. Check out available aliases, completions, and plugins and enable the ones you want to use (see the next section for more details).
 
-### INSTALL OPTIONS
+#### INSTALL OPTIONS
 
 The install script can take the following options:
 
@@ -56,7 +74,7 @@ fi
 Refer to the official [Bash documentation](https://www.gnu.org/software/bash/manual/bashref.html#Bash-Startup-Files) to get more info.
 
 
-## Install using Docker
+#### Install using Docker
 
 You can try Bash-it in an isolated environment without changing any local files via a [Docker](https://www.docker.com/) Container.  
 (Bash Shell v4.4 with Bash-it, [bats](https://github.com/sstephenson/bats) and bash-completion based on [Alpine Linux](https://alpinelinux.org/)).   
@@ -66,7 +84,7 @@ You can try Bash-it in an isolated environment without changing any local files 
 Have a look at our [bash-it-docker repository](https://github.com/Bash-it/bash-it-docker) for further information.
 
 
-## Update
+#### Updating
 
 To update Bash-it to the latest version, simply run:
 
@@ -120,7 +138,7 @@ Search command helps you find related modules so that you can decide which of th
 
 Currently enabled modules will be shown in green.
 
-#### Search with Negations
+#### Searching with Negations
 
 You can prefix a search term with a "-" to exclude it from the results. 
 In the above example, if we wanted to hide `chruby` and `chruby-auto`,
@@ -150,7 +168,7 @@ Enabled components will then be shown with a checkmark:
   completions  =>   bundler gem rake
 ```
 
-## Your Custom scripts, aliases, themes, and functions
+## Custom scripts, aliases, themes, and functions
 
 For custom scripts, and aliases, just create the following files (they'll be ignored by the git repo):
 
