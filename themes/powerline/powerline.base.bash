@@ -90,19 +90,16 @@ function __powerline_cwd_prompt {
   #if [[ -n "${CWD_THEME_DIR_SEPARATOR}" ]]; then
     # todo
   #fi
-  
+
   echo "${cwd}|${CWD_THEME_PROMPT_COLOR}"
 }
 
 function __powerline_hostname_prompt {
     echo "$(hostname -s)|${HOST_THEME_PROMPT_COLOR}"
-<<<<<<< HEAD
-=======
 }
 
 function __powerline_wd_prompt {
   echo "\W|${CWD_THEME_PROMPT_COLOR}"
->>>>>>> master
 }
 
 function __powerline_clock_prompt {
@@ -166,22 +163,12 @@ function __powerline_prompt_command {
       LEFT_PROMPT+="$(set_color ${PROMPT_DISTRO_LOGO_COLOR} ${PROMPT_DISTRO_LOGO_COLORBG})${PROMPT_DISTRO_LOGO}$(set_color - -)"
   fi
 
-<<<<<<< HEAD
-=======
-  local OLD_IFS="${IFS}"; IFS=" "
-
->>>>>>> master
   ## left prompt ##
   for segment in $POWERLINE_PROMPT; do
     local info="$(__powerline_${segment}_prompt)"
     [[ -n "${info}" ]] && __powerline_left_segment "${info}"
   done
 
-<<<<<<< HEAD
-=======
-  IFS="${OLD_IFS}"
-
->>>>>>> master
   [[ "${last_status}" -ne 0 ]] && __powerline_left_segment $(__powerline_last_status_prompt ${last_status})
   [[ -n "${LEFT_PROMPT}" ]] && LEFT_PROMPT+="$(set_color ${LAST_SEGMENT_COLOR} -)${separator_char}${normal}"
 
