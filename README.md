@@ -44,7 +44,7 @@ please feel free to read through this page if you're interested in how Bash-it l
 3. Edit your modified config (`~/.bash_profile` or `~/.bashrc`) file in order to customize Bash-it.
 4. Check out available aliases, completions, and plugins and enable the ones you want to use (see the next section for more details).
 
-### INSTALL OPTIONS
+### Install Options
 
 The install script can take the following options:
 
