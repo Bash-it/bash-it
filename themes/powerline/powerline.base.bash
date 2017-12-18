@@ -14,14 +14,19 @@ function set_color {
 }
 
 function __powerline_user_info_prompt {
-  local user_info=${USER}
+  local user_info=""
   local color=${USER_INFO_THEME_PROMPT_COLOR}
+
+  if [[ "${THEME_CHECK_SUDO}" = true ]]; then
+    if sudo -n uptime 2>&1 | grep -q "load"; then
+      color=${USER_INFO_THEME_PROMPT_COLOR_SUDO}
+    fi
+  fi
 
   case "${POWERLINE_PROMPT_USER_INFO_MODE}" in
     "sudo")
-      if sudo -n true >/dev/null 2>&1; then
-        color=${USER_INFO_THEME_PROMPT_COLOR_SUDO}
-        user_info=${USER_INFO_SUDO_CHAR}${USER}
+      if [[ "${color}" = "${USER_INFO_THEME_PROMPT_COLOR_SUDO}" ]]; then
+        user_info="!"
       fi
       ;;
     *)
@@ -86,10 +91,6 @@ function __powerline_scm_prompt {
 
 function __powerline_cwd_prompt {
   local cwd=$(pwd | sed "s|^${HOME}|~|")
-
-  #if [[ -n "${CWD_THEME_DIR_SEPARATOR}" ]]; then
-    # todo
-  #fi
 
   echo "${cwd}|${CWD_THEME_PROMPT_COLOR}"
 }
