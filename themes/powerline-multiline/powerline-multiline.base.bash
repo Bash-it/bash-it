@@ -13,6 +13,7 @@ function __powerline_right_segment {
   local separator_color=""
 
   if [[ "${SEGMENTS_AT_RIGHT}" -eq 0 ]]; then
+    separator_char="${POWERLINE_RIGHT_END}"
     separator_color="$(set_color ${params[1]} -)"
   else
     separator_color="$(set_color ${params[1]} ${LAST_SEGMENT_COLOR})"
@@ -41,7 +42,7 @@ function __powerline_prompt_command {
     local info="$(__powerline_${segment}_prompt)"
     [[ -n "${info}" ]] && __powerline_left_segment "${info}"
   done
-  [[ -n "${LEFT_PROMPT}" ]] && LEFT_PROMPT+="$(set_color ${LAST_SEGMENT_COLOR} -)${separator_char}${normal}"
+  [[ -n "${LEFT_PROMPT}" ]] && LEFT_PROMPT+="$(set_color ${LAST_SEGMENT_COLOR} -)${POWERLINE_LEFT_END}${normal}"
 
   ## right prompt ##
   if [[ -n "${POWERLINE_RIGHT_PROMPT}" ]]; then
