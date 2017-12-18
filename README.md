@@ -11,6 +11,24 @@ Bash-it provides a solid framework for using, developing and maintaining shell s
 If you're using the _Bourne Again Shell_ (Bash) on a regular basis and have been looking for an easy way on how to keep all of these nice little scripts and aliases under control, then Bash-it is for you!
 Stop polluting your `~/bin` directory and your `.bashrc` file, fork/clone Bash-it and start hacking away.
 
+- [Contributing](#contributing)
+- [Installation](#installation)
+  - [Install Options](#install-options)
+  - [via Docker](#install-using-docker)
+  - [Updating](#updating)
+- [Help](#help-screens)
+- [Search](#search)
+  - [Syntax](#syntax)
+  - [Searching with Negations](#searching-with-negations)
+  - [Using Search to Enable or Disable Components](#using-search-to-enable-or-disable-components)
+  - [Disabling ASCII Color](#disabling-ascii-color)
+- [Custom scripts, aliases, themes, and functions](#custom-scripts,-aliases,-themes,-and-functions)
+- [Themes](#themes)
+- [Uninstalling](#uninstalling)
+- [Misc](#misc)
+- [Help Out](#help-out)
+- [Contributors](#contributors)
+
 ## Contributing
 
 Please take a look at the [Contribution Guidelines](CONTRIBUTING.md) before reporting a bug or providing a new feature.
@@ -18,7 +36,7 @@ Please take a look at the [Contribution Guidelines](CONTRIBUTING.md) before repo
 The [Development Guidelines](DEVELOPMENT.md) have more information on some of the internal workings of Bash-it,
 please feel free to read through this page if you're interested in how Bash-it loads its components.
 
-## Install
+## Installation
 
 1. Check out a clone of this repo to a location of your choice, such as
    `git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it`
@@ -26,7 +44,7 @@ please feel free to read through this page if you're interested in how Bash-it l
 3. Edit your modified config (`~/.bash_profile` or `~/.bashrc`) file in order to customize Bash-it.
 4. Check out available aliases, completions, and plugins and enable the ones you want to use (see the next section for more details).
 
-### INSTALL OPTIONS
+### Install Options
 
 The install script can take the following options:
 
@@ -56,7 +74,7 @@ fi
 Refer to the official [Bash documentation](https://www.gnu.org/software/bash/manual/bashref.html#Bash-Startup-Files) to get more info.
 
 
-## Install using Docker
+### Install using Docker
 
 You can try Bash-it in an isolated environment without changing any local files via a [Docker](https://www.docker.com/) Container.  
 (Bash Shell v4.4 with Bash-it, [bats](https://github.com/sstephenson/bats) and bash-completion based on [Alpine Linux](https://alpinelinux.org/)).   
@@ -66,7 +84,7 @@ You can try Bash-it in an isolated environment without changing any local files 
 Have a look at our [bash-it-docker repository](https://github.com/Bash-it/bash-it-docker) for further information.
 
 
-## Update
+### Updating
 
 To update Bash-it to the latest version, simply run:
 
@@ -102,7 +120,7 @@ bash-it help plugins        # shows help for installed plugins
 If you need to quickly find out which of the plugins, aliases or completions are available for a specific framework, programming language, or an environment, you can _search_ for multiple terms related to the commands you use frequently.
 Search will find and print out modules with the name or description matching the terms provided.
 
-#### Syntax
+### Syntax
 
 ```bash
   bash-it search term1 [[-]term2] [[-]term3]....
@@ -120,7 +138,7 @@ Search command helps you find related modules so that you can decide which of th
 
 Currently enabled modules will be shown in green.
 
-#### Search with Negations
+### Searching with Negations
 
 You can prefix a search term with a "-" to exclude it from the results. 
 In the above example, if we wanted to hide `chruby` and `chruby-auto`,
@@ -133,12 +151,12 @@ we could change the command as follows:
   completions:  bundler gem rake
 ```
 
-#### Using Search to Enable or Disable Components
+### Using Search to Enable or Disable Components
 
 By adding a `--enable` or `--disable` to the search command, you can automatically enable all modules that come up as a result of a search query.
 This could be quite handy if you like to enable a bunch of components related to the same topic.
 
-#### Disabling ASCII Color
+### Disabling ASCII Color
 
 To remove non-printing non-ASCII characters responsible for the coloring of the search output, you can set environment variable `NO_COLOR`.
 Enabled components will then be shown with a checkmark:
@@ -150,7 +168,7 @@ Enabled components will then be shown with a checkmark:
   completions  =>   bundler gem rake
 ```
 
-## Your Custom scripts, aliases, themes, and functions
+## Custom scripts, aliases, themes, and functions
 
 For custom scripts, and aliases, just create the following files (they'll be ignored by the git repo):
 
@@ -237,7 +255,7 @@ If you turned version control checking off and you still see version control inf
 
 Bash-it has some nice features related to Git, continue reading to know more about these features.
 
-#### Repository info in the prompt
+### Repository info in the prompt
 
 Bash-it can show some information about Git repositories in the shell prompt: the current branch, tag or commit you are at, how many commits the local branch is ahead or behind from the remote branch, and if you have changes stashed.
 
@@ -254,7 +272,7 @@ Set `SCM_GIT_SHOW_DETAILS` to 'false' to **don't show** it:
 
 **NOTE:** If using `SCM_GIT_SHOW_MINIMAL_INFO=true`, then the value of `SCM_GIT_SHOW_DETAILS` is ignored.
 
-#### Remotes and remote branches
+### Remotes and remote branches
 
 In some git workflows, you must work with various remotes, for this reason, Bash-it can provide some useful information about your remotes and your remote branches, for example, the remote on you are working, or if your local branch is tracking a remote branch.
 
@@ -274,7 +292,7 @@ Set `SCM_GIT_SHOW_REMOTE_INFO` to 'false' to **disable the feature**:
 
 **NOTE:** If using `SCM_GIT_SHOW_MINIMAL_INFO=true`, then the value of `SCM_GIT_SHOW_REMOTE_INFO` is ignored.
 
-#### Untracked files
+### Untracked files
 
 By default, the `git status` command shows information about *untracked* files. 
 This behavior can be controlled through command-line flags or git configuration files. 
@@ -294,7 +312,7 @@ Also, with this flag to false, Bash-it will not show the repository as dirty whe
 
 **NOTE:** If you set in git configuration file the option to ignore *untracked* files, this flag has no effect, and Bash-it will ignore *untracked* files always.
 
-#### Git user
+### Git user
 
 In some environments, it is useful to know the value of the current git user, which is used to mark all new commits.
 For example, any organization that uses the practice of pair programming will typically author each commit with [combined names of the two authors](https://github.com/pivotal/git_scripts).
@@ -315,11 +333,11 @@ You can control the prefix and the suffix of this component using the two variab
 
 And
 
-* `export SCM_THEME_CURRENT_USER_SUFFIX=' '``
+* `export SCM_THEME_CURRENT_USER_SUFFIX=' ☺︎ '` 
 
 **NOTE:** If using `SCM_GIT_SHOW_MINIMAL_INFO=true`, then the value of `SCM_GIT_SHOW_CURRENT_USER` is ignored.
 
-#### Git show minimal status info
+### Git show minimal status info
 
 To speed up the prompt while still getting minimal git status information displayed such as the value of `HEAD` and whether there are any dirty objects, you can set:
 
@@ -327,7 +345,7 @@ To speed up the prompt while still getting minimal git status information displa
 export SCM_GIT_SHOW_MINIMAL_INFO=true
 ```
 
-#### Ignore repo status
+### Ignore repo status
 
 When working in repos with a large codebase, Bash-it can slow down your prompt when checking the repo status.
 To avoid it, there is an option you can set via Git config to disable checking repo status in Bash-it.
