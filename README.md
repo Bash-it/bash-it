@@ -22,7 +22,7 @@ Stop polluting your `~/bin` directory and your `.bashrc` file, fork/clone Bash-i
   - [Searching with Negations](#searching-with-negations)
   - [Using Search to Enable or Disable Components](#using-search-to-enable-or-disable-components)
   - [Disabling ASCII Color](#disabling-ascii-color)
-- [Custom scripts, aliases, themes, and functions](#custom-scripts,-aliases,-themes,-and-functions)
+- [Custom scripts, aliases, themes, and functions](#custom-scripts-aliases-themes-and-functions)
 - [Themes](#themes)
 - [Uninstalling](#uninstalling)
 - [Misc](#misc)
