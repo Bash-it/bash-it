@@ -129,156 +129,68 @@ function scm_prompt_info_common {
   [[ ${SCM} == ${SCM_SVN} ]] && svn_prompt_info && return
 }
 
-# This is added to address bash shell interpolation vulnerability described
-# here: https://github.com/njhartwell/pw3nage
-function git_clean_branch {
-  local unsafe_ref=$(command git symbolic-ref -q HEAD 2> /dev/null)
-  local stripped_ref=${unsafe_ref##refs/heads/}
-  local clean_ref=${stripped_ref//[^a-zA-Z0-9\/]/-}
-  echo $clean_ref
-}
-
 function git_prompt_minimal_info {
-  local ref
-  local status
-  local git_status_flags=('--porcelain')
   SCM_STATE=${SCM_THEME_PROMPT_CLEAN}
 
-  if [[ "$(command git config --get bash-it.hide-status)" != "1" ]]; then
-    # Get the branch reference
-    ref=$(git_clean_branch) || \
-    ref=$(command git rev-parse --short HEAD 2> /dev/null) || return 0
-    SCM_BRANCH=${SCM_THEME_BRANCH_PREFIX}${ref}
+  _git-hide-status && return
 
-    # Get the status
-    [[ "${SCM_GIT_IGNORE_UNTRACKED}" = "true" ]] && git_status_flags+='-untracked-files=no'
-    status=$(command git status ${git_status_flags} 2> /dev/null | tail -n1)
+  SCM_BRANCH="${SCM_THEME_BRANCH_PREFIX}\$(_git-friendly-ref)"
 
-    if [[ -n ${status} ]]; then
-      SCM_DIRTY=1
-      SCM_STATE=${SCM_THEME_PROMPT_DIRTY}
-    fi
-
-    # Output the git prompt
-    SCM_PREFIX=${SCM_THEME_PROMPT_PREFIX}
-    SCM_SUFFIX=${SCM_THEME_PROMPT_SUFFIX}
-    echo -e "${SCM_PREFIX}${SCM_BRANCH}${SCM_STATE}${SCM_SUFFIX}"
+  if [[ -n "$(_git-status | tail -n1)" ]]; then
+    SCM_DIRTY=1
+    SCM_STATE=${SCM_THEME_PROMPT_DIRTY}
   fi
-}
 
-function git_status_summary {
-  awk '
-  BEGIN {
-    untracked=0;
-    unstaged=0;
-    staged=0;
-  }
-  {
-    if (!after_first && $0 ~ /^##.+/) {
-      print $0
-      seen_header = 1
-    } else if ($0 ~ /^\?\? .+/) {
-      untracked += 1
-    } else {
-      if ($0 ~ /^.[^ ] .+/) {
-        unstaged += 1
-      }
-      if ($0 ~ /^[^ ]. .+/) {
-        staged += 1
-      }
-    }
-    after_first = 1
-  }
-  END {
-    if (!seen_header) {
-      print
-    }
-    print untracked "\t" unstaged "\t" staged
-  }'
+  # Output the git prompt
+  SCM_PREFIX=${SCM_THEME_PROMPT_PREFIX}
+  SCM_SUFFIX=${SCM_THEME_PROMPT_SUFFIX}
+  echo -e "${SCM_PREFIX}${SCM_BRANCH}${SCM_STATE}${SCM_SUFFIX}"
 }
 
 function git_prompt_vars {
-  local details=''
+  if _git-branch &> /dev/null; then
+    SCM_GIT_DETACHED="false"
+    SCM_BRANCH="${SCM_THEME_BRANCH_PREFIX}\$(_git-friendly-ref)$(_git-remote-info)"
+  else
+    SCM_GIT_DETACHED="true"
+
+    local detached_prefix
+    if _git-tag &> /dev/null; then
+      detached_prefix=${SCM_THEME_TAG_PREFIX}
+    else
+      detached_prefix=${SCM_THEME_DETACHED_PREFIX}
+    fi
+    SCM_BRANCH="${detached_prefix}\$(_git-friendly-ref)"
+  fi
+
+  IFS=$'\t' read -r commits_behind commits_ahead <<< "$(_git-upstream-behind-ahead)"
+  [[ "${commits_ahead}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_GIT_AHEAD_CHAR}${commits_ahead}"
+  [[ "${commits_behind}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_GIT_BEHIND_CHAR}${commits_behind}"
+
+  local stash_count
+  stash_count="$(git stash list 2> /dev/null | wc -l | tr -d ' ')"
+  [[ "${stash_count}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_GIT_STASH_CHAR_PREFIX}${stash_count}${SCM_GIT_STASH_CHAR_SUFFIX}"
+
   SCM_STATE=${GIT_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
-  if [[ "$(git config --get bash-it.hide-status)" != "1" ]]; then
-    [[ "${SCM_GIT_IGNORE_UNTRACKED}" = "true" ]] && local git_status_flags='-uno'
-    local status_lines=$((git status --porcelain ${git_status_flags} -b 2> /dev/null ||
-                          git status --porcelain ${git_status_flags}    2> /dev/null) | git_status_summary)
-    local status=$(awk 'NR==1' <<< "$status_lines")
-    local counts=$(awk 'NR==2' <<< "$status_lines")
-    IFS=$'\t' read untracked_count unstaged_count staged_count <<< "$counts"
+  if ! _git-hide-status; then
+    IFS=$'\t' read -r untracked_count unstaged_count staged_count <<< "$(_git-status-counts)"
     if [[ "${untracked_count}" -gt 0 || "${unstaged_count}" -gt 0 || "${staged_count}" -gt 0 ]]; then
       SCM_DIRTY=1
       if [[ "${SCM_GIT_SHOW_DETAILS}" = "true" ]]; then
-        [[ "${staged_count}" -gt 0 ]] && details+=" ${SCM_GIT_STAGED_CHAR}${staged_count}" && SCM_DIRTY=3
-        [[ "${unstaged_count}" -gt 0 ]] && details+=" ${SCM_GIT_UNSTAGED_CHAR}${unstaged_count}" && SCM_DIRTY=2
-        [[ "${untracked_count}" -gt 0 ]] && details+=" ${SCM_GIT_UNTRACKED_CHAR}${untracked_count}" && SCM_DIRTY=1
+        [[ "${staged_count}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_GIT_STAGED_CHAR}${staged_count}" && SCM_DIRTY=3
+        [[ "${unstaged_count}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_GIT_UNSTAGED_CHAR}${unstaged_count}" && SCM_DIRTY=2
+        [[ "${untracked_count}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_GIT_UNTRACKED_CHAR}${untracked_count}" && SCM_DIRTY=1
       fi
       SCM_STATE=${GIT_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
     fi
   fi
 
-  [[ "${SCM_GIT_SHOW_CURRENT_USER}" == "true" ]] && details+="$(git_user_info)"
-
-  SCM_CHANGE=$(git rev-parse --short HEAD 2>/dev/null)
-
-  local ref=$(git_clean_branch)
-
-  if [[ -n "$ref" ]]; then
-    SCM_BRANCH="${SCM_THEME_BRANCH_PREFIX}${ref}"
-    local tracking_info="$(grep -- "${SCM_BRANCH}\.\.\." <<< "${status}")"
-    if [[ -n "${tracking_info}" ]]; then
-      [[ "${tracking_info}" =~ .+\[gone\]$ ]] && local branch_gone="true"
-      tracking_info=${tracking_info#\#\# ${SCM_BRANCH}...}
-      tracking_info=${tracking_info% [*}
-      local remote_name=${tracking_info%%/*}
-      local remote_branch=${tracking_info#${remote_name}/}
-      local remote_info=""
-      local num_remotes=$(git remote | wc -l 2> /dev/null)
-      [[ "${SCM_BRANCH}" = "${remote_branch}" ]] && local same_branch_name=true
-      if ([[ "${SCM_GIT_SHOW_REMOTE_INFO}" = "auto" ]] && [[ "${num_remotes}" -ge 2 ]]) ||
-          [[ "${SCM_GIT_SHOW_REMOTE_INFO}" = "true" ]]; then
-        remote_info="${remote_name}"
-        [[ "${same_branch_name}" != "true" ]] && remote_info+="/${remote_branch}"
-      elif [[ ${same_branch_name} != "true" ]]; then
-        remote_info="${remote_branch}"
-      fi
-      if [[ -n "${remote_info}" ]];then
-        if [[ "${branch_gone}" = "true" ]]; then
-          SCM_BRANCH+="${SCM_THEME_BRANCH_GONE_PREFIX}${remote_info}"
-        else
-          SCM_BRANCH+="${SCM_THEME_BRANCH_TRACK_PREFIX}${remote_info}"
-        fi
-      fi
-    fi
-    SCM_GIT_DETACHED="false"
-  else
-    local detached_prefix=""
-    ref=$(git describe --tags --exact-match 2> /dev/null)
-    if [[ -n "$ref" ]]; then
-      detached_prefix=${SCM_THEME_TAG_PREFIX}
-    else
-      ref=$(git describe --contains --all HEAD 2> /dev/null)
-      ref=${ref#remotes/}
-      [[ -z "$ref" ]] && ref=${SCM_CHANGE}
-      detached_prefix=${SCM_THEME_DETACHED_PREFIX}
-    fi
-    SCM_BRANCH=${detached_prefix}${ref}
-    SCM_GIT_DETACHED="true"
-  fi
-
-  local ahead_re='.+ahead ([0-9]+).+'
-  local behind_re='.+behind ([0-9]+).+'
-  [[ "${status}" =~ ${ahead_re} ]] && SCM_BRANCH+=" ${SCM_GIT_AHEAD_CHAR}${BASH_REMATCH[1]}"
-  [[ "${status}" =~ ${behind_re} ]] && SCM_BRANCH+=" ${SCM_GIT_BEHIND_CHAR}${BASH_REMATCH[1]}"
-
-  local stash_count="$(git stash list 2> /dev/null | wc -l | tr -d ' ')"
-  [[ "${stash_count}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_GIT_STASH_CHAR_PREFIX}${stash_count}${SCM_GIT_STASH_CHAR_SUFFIX}"
-
-  SCM_BRANCH+=${details}
+  [[ "${SCM_GIT_SHOW_CURRENT_USER}" == "true" ]] && SCM_BRANCH+="$(git_user_info)"
 
   SCM_PREFIX=${GIT_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
   SCM_SUFFIX=${GIT_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
+
+  SCM_CHANGE=$(_git-short-sha 2>/dev/null || echo "")
 }
 
 function svn_prompt_vars {
@@ -413,7 +325,7 @@ function git_user_info {
   # support two or more initials, set by 'git pair' plugin
   SCM_CURRENT_USER=$(git config user.initials | sed 's% %+%')
   # if `user.initials` weren't set, attempt to extract initials from `user.name`
-  [[ -z "${SCM_CURRENT_USER}" ]] && SCM_CURRENT_USER=$(printf "%s" $(for word in $(git config user.name | tr 'A-Z' 'a-z'); do printf "%1.1s" $word; done))
+  [[ -z "${SCM_CURRENT_USER}" ]] && SCM_CURRENT_USER=$(printf "%s" $(for word in $(git config user.name | PERLIO=:utf8 perl -pe '$_=lc'); do printf "%s" "${word:0:1}"; done))
   [[ -n "${SCM_CURRENT_USER}" ]] && printf "%s" "$SCM_THEME_CURRENT_USER_PREFFIX$SCM_CURRENT_USER$SCM_THEME_CURRENT_USER_SUFFIX"
 }
 
