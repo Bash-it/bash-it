@@ -134,7 +134,7 @@ function git_prompt_minimal_info {
 
   _git-hide-status && return
 
-  SCM_BRANCH="${SCM_THEME_BRANCH_PREFIX}$(_git-friendly-ref)"
+  SCM_BRANCH="${SCM_THEME_BRANCH_PREFIX}\$(_git-friendly-ref)"
 
   if [[ -n "$(_git-status | tail -n1)" ]]; then
     SCM_DIRTY=1
@@ -150,7 +150,7 @@ function git_prompt_minimal_info {
 function git_prompt_vars {
   if _git-branch &> /dev/null; then
     SCM_GIT_DETACHED="false"
-    SCM_BRANCH="${SCM_THEME_BRANCH_PREFIX}$(_git-friendly-ref)$(_git-remote-info)"
+    SCM_BRANCH="${SCM_THEME_BRANCH_PREFIX}\$(_git-friendly-ref)$(_git-remote-info)"
   else
     SCM_GIT_DETACHED="true"
 
@@ -160,7 +160,7 @@ function git_prompt_vars {
     else
       detached_prefix=${SCM_THEME_DETACHED_PREFIX}
     fi
-    SCM_BRANCH="${detached_prefix}$(_git-friendly-ref)"
+    SCM_BRANCH="${detached_prefix}\$(_git-friendly-ref)"
   fi
 
   IFS=$'\t' read -r commits_behind commits_ahead <<< "$(_git-upstream-behind-ahead)"
