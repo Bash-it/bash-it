@@ -20,6 +20,7 @@ function v2gif {
   param '6: -t       ; Optional: Tag the result with quality stamp for comparison use'
   param '7: -f <num> ; Optional: Change number of frames per second (default 10 or original FPS if mediainfo installed)'
   param '8: -a <num> ; Optional: Alert if resulting file is over <num> kilobytes (default is 5000, 0 turns off)'
+  param '9: -m       ; Optional: Also create a WebM file (will one day replace GIF, Smaller and higher quality than mp4)'
   example '$ v2gif foo.mov'
   example '$ v2gif foo.mov -w 600'
   example '$ v2gif -l 100 -d *.mp4'
@@ -27,7 +28,7 @@ function v2gif {
   example '$ v2gif -thw 600 *.avi *.mov'
 
   # Parse the options
-  local args=$(getopt -l "alert:" -l "lossy:" -l "width:" -l del,delete -l high -l tag -l "fps:" -o "a:l:w:f:dht" -- "$@")
+  local args=$(getopt -l "alert:" -l "lossy:" -l "width:" -l del,delete -l high -l tag -l "fps:" -l webm -o "a:l:w:f:dhmt" -- "$@")
 
   local use_gifski=""
   local del_after=""
@@ -39,6 +40,7 @@ function v2gif {
   local defaultfps=10
   local infps=""
   local fps=""
+  local make_webm=""
   local alert=5000
   eval set -- "$args"
   while [ $# -ge 1 ]; do
@@ -87,6 +89,11 @@ function v2gif {
         alert="$2"
         shift 2
         ;;
+      -m|--webm)
+        # set size alert
+        make_webm="true"
+        shift
+        ;;
     esac
   done
 
@@ -106,17 +113,20 @@ function v2gif {
 
     local output_file="${file%.*}${giftag}.gif"
 
+    if [[ "$make_webm" ]] ; then
+      ffmpeg -loglevel panic -i "$file" \
+        -c:v libvpx -crf 4 -threads 0 -an -b:v 2M -auto-alt-ref 0 -quality best \
+        "${file%.*}.webm" || return 2
+    fi
+
     # Set FPS to match the video if possible, otherwise fallback to default.
     if [[ "$infps" ]] ; then
       fps=$infps
     else
       fps=$defaultfps
       if [[ -x /usr/bin/mediainfo ]] ; then
-        if /usr/bin/mediainfo "$file" | grep -q "Frame rate mode *: Variable" ; then
-          fps=$(/usr/bin/mediainfo "$file" | grep "Minimum frame rate" |sed 's/.*: \([0-9.]\+\) .*/\1/' | head -1)
-        else
-          fps=$(/usr/bin/mediainfo "$file" | grep "Frame rate   " |sed 's/.*: \([0-9.]\+\) .*/\1/' | head -1)
-        fi
+        fps=$(/usr/bin/mediainfo "$file" | grep "Frame rate   " |sed 's/.*: \([0-9.]\+\) .*/\1/' | head -1)
+        [[ -z "$fps" ]] && fps=$(/usr/bin/mediainfo "$file" | grep "Minimum frame rate" |sed 's/.*: \([0-9.]\+\) .*/\1/' | head -1)
       fi
     fi
 
