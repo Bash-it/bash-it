@@ -1,7 +1,10 @@
 cite about-plugin
-about-plugin 'video to gif helper functions'
+about-plugin 'video to gif, gif to WebM helper functions'
 
-# From https://gist.github.com/SlexAxton/4989674#comment-1199058
+# Based loosely on:
+#  https://gist.github.com/SlexAxton/4989674#comment-1199058
+#  https://linustechtips.com/main/topic/343253-tutorial-convert-videogifs-to-webm/
+#  and other sources
 # Renamed gifify to v2gif to go avoid clobbering https://github.com/jclem/gifify
 # Requirements (Mac OS X using Homebrew): brew install ffmpeg giflossy imagemagick
 # Requirements on Ubuntu: sudo apt install ffmpeg imagemagick ; plus install https://github.com/pornel/giflossy
@@ -20,6 +23,7 @@ function v2gif {
   param '6: -t       ; Optional: Tag the result with quality stamp for comparison use'
   param '7: -f <num> ; Optional: Change number of frames per second (default 10 or original FPS if mediainfo installed)'
   param '8: -a <num> ; Optional: Alert if resulting file is over <num> kilobytes (default is 5000, 0 turns off)'
+  param '9: -m       ; Optional: Also create a WebM file (will one day replace GIF, Smaller and higher quality than mp4)'
   example '$ v2gif foo.mov'
   example '$ v2gif foo.mov -w 600'
   example '$ v2gif -l 100 -d *.mp4'
@@ -27,7 +31,7 @@ function v2gif {
   example '$ v2gif -thw 600 *.avi *.mov'
 
   # Parse the options
-  local args=$(getopt -l "alert:" -l "lossy:" -l "width:" -l del,delete -l high -l tag -l "fps:" -o "a:l:w:f:dht" -- "$@")
+  local args=$(getopt -l "alert:" -l "lossy:" -l "width:" -l del,delete -l high -l tag -l "fps:" -l webm -o "a:l:w:f:dhmt" -- "$@")
 
   local use_gifski=""
   local del_after=""
@@ -39,6 +43,7 @@ function v2gif {
   local defaultfps=10
   local infps=""
   local fps=""
+  local make_webm=""
   local alert=5000
   eval set -- "$args"
   while [ $# -ge 1 ]; do
@@ -87,6 +92,11 @@ function v2gif {
         alert="$2"
         shift 2
         ;;
+      -m|--webm)
+        # set size alert
+        make_webm="true"
+        shift
+        ;;
     esac
   done
 
@@ -106,17 +116,20 @@ function v2gif {
 
     local output_file="${file%.*}${giftag}.gif"
 
+    if [[ "$make_webm" ]] ; then
+      ffmpeg -loglevel panic -i "$file" \
+        -c:v libvpx -crf 4 -threads 0 -an -b:v 2M -auto-alt-ref 0 -quality best \
+        "${file%.*}.webm" || return 2
+    fi
+
     # Set FPS to match the video if possible, otherwise fallback to default.
     if [[ "$infps" ]] ; then
       fps=$infps
     else
       fps=$defaultfps
       if [[ -x /usr/bin/mediainfo ]] ; then
-        if /usr/bin/mediainfo "$file" | grep -q "Frame rate mode *: Variable" ; then
-          fps=$(/usr/bin/mediainfo "$file" | grep "Minimum frame rate" |sed 's/.*: \([0-9.]\+\) .*/\1/' | head -1)
-        else
-          fps=$(/usr/bin/mediainfo "$file" | grep "Frame rate   " |sed 's/.*: \([0-9.]\+\) .*/\1/' | head -1)
-        fi
+        fps=$(/usr/bin/mediainfo "$file" | grep "Frame rate   " |sed 's/.*: \([0-9.]\+\) .*/\1/' | head -1)
+        [[ -z "$fps" ]] && fps=$(/usr/bin/mediainfo "$file" | grep "Minimum frame rate" |sed 's/.*: \([0-9.]\+\) .*/\1/' | head -1)
       fi
     fi
 
@@ -133,6 +146,111 @@ function v2gif {
     fi
 
     rm v2gif-tmp-*.png
+
+    # Checking if the file is bigger than Twitter likes and warn
+    if [[ $alert -gt 0 ]] ; then
+      local out_size=$(wc --bytes < "$output_file")
+      if [[ $out_size -gt $(( alert * 1000 )) ]] ; then
+        echo "$(tput setaf 3)Warning: '$output_file' is $((out_size/1000))kb, keeping '$file' even if --del requested.$(tput sgr 0)"
+        del_after=""
+      fi
+    fi
+
+    [[ "$del_after" = "true" ]] && rm "$file"
+
+  done
+
+  echo "$(tput setaf 2)Done.$(tput sgr 0)"
+}
+
+function any2webm() {
+  about 'Converts an movies and Animated GIF files into an into a modern quality WebM video.'
+  group 'gif'
+  param '1: GIF/video file name(s)'
+  param '2: -s <WxH> ; Optional: set <W>idth and <H>eight in pixels'
+  param '3: -d       ; Optional: delete the original file if succeeded'
+  param '4: -t       ; Optional: Tag the result with quality stamp for comparison use'
+  param '5: -f <num> ; Optional: Change number of frames per second'
+  param '6: -b <num> ; Optional: Set Bandwidth (quality/size of resulting file), Defaults to 2M (bits/sec, accepts fractions)"'
+  param '7: -a <num> ; Optional: Alert if resulting file is over <num> kilobytes (default is 5000, 0 turns off)'
+  example '$ any2webm foo.gif'
+  example '$ any2webm *.mov -b 1.5M -s 600x480'
+
+  # Parse the options
+  local args=$(getopt -l alert -l "bandwidth:" -l "width:" -l del,delete -l tag -l "fps:" -l webm -o "a:b:w:f:dt" -- "$@")
+
+  local del_after=""
+  local size=""
+  local webmtagopt=""
+  local webmtag=""
+  local defaultfps=10
+  local fps=""
+  local bandwidth="2M"
+  local alert=5000
+  eval set -- "$args"
+  while [ $# -ge 1 ]; do
+    case "$1" in
+      --)
+        # No more options left.
+        shift
+        break
+        ;;
+      -d|--del|--delete)
+        # Delete after
+        del_after="true"
+        shift
+        ;;
+      -s|--size)
+        size="-s $2"
+        webmtag="${webmtag}-s$2"
+        shift 2
+        ;;
+      -t|--tag)
+        # mark with a quality tag
+        webmtagopt="true"
+        shift
+        ;;
+      -f|--fps)
+        # select fps
+        fps="-r $2"
+        webmtag="${webmtag}-f$2"
+        shift 2
+        ;;
+      -b|--bandwidth)
+        # select bandwidth
+        bandwidth="$2"
+        webmtag="${webmtag}-b$2"
+        shift 2
+        ;;
+      -a|--alert)
+        # set size alert
+        alert="$2"
+        shift 2
+        ;;
+    esac
+  done
+
+  # Done Parsing, all that's left are the filenames
+  local movies="$*"
+
+  if [[ -z "$movies" ]]; then
+    echo "$(tput setaf 1)No input files given. Example: any2webm file [file...] [-w <max width (pixels)>] < $(tput sgr 0)"
+    return 1
+  fi
+
+  # Prepare the quality tag if requested.
+  [[ -z "$webmtag" ]] && webmtag="-default"
+  [[ -z "$webmtagopt" ]] && webmtag=""
+
+  for file in $movies ; do
+
+    local output_file="${file%.*}${webmtag}.webm"
+
+    echo "$(tput setaf 2)Creating '$output_file' ...$(tput sgr 0)"
+
+    ffmpeg -loglevel panic -i "$file" \
+      -c:v libvpx -crf 4 -threads 0 -an -b:v $bandwidth -auto-alt-ref 0 \
+      -quality best $fps $size -pix_fmt yuva420p "$output_file" || return 2
 
     # Checking if the file is bigger than Twitter likes and warn
     if [[ $alert -gt 0 ]] ; then
