@@ -34,7 +34,7 @@ function v2gif {
   local args=$(getopt -l "alert:" -l "lossy:" -l "width:" -l del,delete -l high -l tag -l "fps:" -l webm -o "a:l:w:f:dhmt" -- "$@")
 
   local use_gifski=""
-  local del_after=""
+  local opt_del_after=""
   local maxsize=""
   local lossiness=""
   local maxwidthski=""
@@ -55,7 +55,7 @@ function v2gif {
         ;;
       -d|--del|--delete)
         # Delete after
-        del_after="true"
+        opt_del_after="true"
         shift
         ;;
       -h|--high)
@@ -115,6 +115,7 @@ function v2gif {
   for file in $movies ; do
 
     local output_file="${file%.*}${giftag}.gif"
+    local del_after=$opt_del_after
 
     if [[ "$make_webm" ]] ; then
       ffmpeg -loglevel panic -i "$file" \
@@ -151,7 +152,8 @@ function v2gif {
     if [[ $alert -gt 0 ]] ; then
       local out_size=$(wc --bytes < "$output_file")
       if [[ $out_size -gt $(( alert * 1000 )) ]] ; then
-        echo "$(tput setaf 3)Warning: '$output_file' is $((out_size/1000))kb, keeping '$file' even if --del requested.$(tput sgr 0)"
+        echo "$(tput setaf 3)Warning: '$output_file' is $((out_size/1000))kb.$(tput sgr 0)"
+        [[ "$del_after" == "true" ]] && echo "$(tput setaf 3)Warning: Keeping '$file' even though --del requested.$(tput sgr 0)"
         del_after=""
       fi
     fi
@@ -179,7 +181,7 @@ function any2webm() {
   # Parse the options
   local args=$(getopt -l alert -l "bandwidth:" -l "width:" -l del,delete -l tag -l "fps:" -l webm -o "a:b:w:f:dt" -- "$@")
 
-  local del_after=""
+  local opt_del_after=""
   local size=""
   local webmtagopt=""
   local webmtag=""
@@ -197,7 +199,7 @@ function any2webm() {
         ;;
       -d|--del|--delete)
         # Delete after
-        del_after="true"
+        opt_del_after="true"
         shift
         ;;
       -s|--size)
@@ -245,6 +247,7 @@ function any2webm() {
   for file in $movies ; do
 
     local output_file="${file%.*}${webmtag}.webm"
+    local del_after=$opt_del_after
 
     echo "$(tput setaf 2)Creating '$output_file' ...$(tput sgr 0)"
 
@@ -256,7 +259,8 @@ function any2webm() {
     if [[ $alert -gt 0 ]] ; then
       local out_size=$(wc --bytes < "$output_file")
       if [[ $out_size -gt $(( alert * 1000 )) ]] ; then
-        echo "$(tput setaf 3)Warning: '$output_file' is $((out_size/1000))kb, keeping '$file' even if --del requested.$(tput sgr 0)"
+        echo "$(tput setaf 3)Warning: '$output_file' is $((out_size/1000))kb.$(tput sgr 0)"
+        [[ "$del_after" == "true" ]] && echo "$(tput setaf 3)Warning: Keeping '$file' even though --del requested.$(tput sgr 0)"
         del_after=""
       fi
     fi
