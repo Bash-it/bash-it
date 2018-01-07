@@ -119,8 +119,8 @@ function v2gif {
 
     if [[ "$make_webm" ]] ; then
       ffmpeg -loglevel panic -i "$file" \
-        -c:v libvpx -crf 4 -threads 0 -an -b:v 2M -auto-alt-ref 0 -quality best \
-        "${file%.*}.webm" || return 2
+        -c:v libvpx -crf 4 -threads 0 -an -b:v 2M -auto-alt-ref 0 \
+        -quality best -loop 0 "${file%.*}.webm" || return 2
     fi
 
     # Set FPS to match the video if possible, otherwise fallback to default.
@@ -253,7 +253,7 @@ function any2webm() {
 
     ffmpeg -loglevel panic -i "$file" \
       -c:v libvpx -crf 4 -threads 0 -an -b:v $bandwidth -auto-alt-ref 0 \
-      -quality best $fps $size -pix_fmt yuva420p "$output_file" || return 2
+      -quality best $fps $size -loop 0 -pix_fmt yuva420p "$output_file" || return 2
 
     # Checking if the file is bigger than Twitter likes and warn
     if [[ $alert -gt 0 ]] ; then
