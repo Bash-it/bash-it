@@ -2,7 +2,10 @@
 
 load ../test_helper
 load ../../lib/composure
-load ../../plugins/available/base.plugin
+
+cite _about _param _example _group _author _version
+
+load ../../lib/helpers
 load ../../themes/base.theme
 
 @test 'themes base: battery_percentage should not exist' {
@@ -23,7 +26,7 @@ load ../../themes/base.theme
 
   run battery_char
   assert_success
-  assert_line "0" ""
+  assert_line -n 0 ""
 
   run type -a battery_char
   assert_line "    echo -n"
@@ -50,7 +53,7 @@ load ../../themes/base.theme
 
   run battery_charge
   assert_success
-  assert_line "0" ""
+  assert_line -n 0 ""
 }
 
 @test 'themes base: battery_charge should exist if battery plugin loaded' {

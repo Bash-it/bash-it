@@ -22,7 +22,7 @@ function down4me ()
     param '1: website url'
     example '$ down4me http://www.google.com'
     group 'base'
-    curl -s "http://www.downforeveryoneorjustme.com/$1" | sed '/just you/!d;s/<[^>]*>//g'
+    curl -Ls "http://downforeveryoneorjustme.com/$1" | sed '/just you/!d;s/<[^>]*>//g'
 }
 
 function myip ()

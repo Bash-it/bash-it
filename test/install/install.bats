@@ -14,10 +14,16 @@ case $OSTYPE in
 esac
 
 function local_setup {
-  mkdir -p $BASH_IT
+  mkdir -p "$BASH_IT"
   lib_directory="$(cd "$(dirname "$0")" && pwd)"
-  cp -r $lib_directory/../../* $BASH_IT/
-  rm -rf "$BASH_IT/aliases/enabled" "$BASH_IT/completion/enabled" "$BASH_IT/plugins/enabled"
+  # Use rsync to copy Bash-it to the temp folder
+  # rsync is faster than cp, since we can exclude the large ".git" folder
+  rsync -qavrKL -d --delete-excluded --exclude=.git $lib_directory/../../.. "$BASH_IT"
+
+  rm -rf "$BASH_IT"/enabled
+  rm -rf "$BASH_IT"/aliases/enabled
+  rm -rf "$BASH_IT"/completion/enabled
+  rm -rf "$BASH_IT"/plugins/enabled
 
   # Don't pollute the user's actual $HOME directory
   # Use a test home directory instead
@@ -36,7 +42,7 @@ function local_teardown {
 }
 
 @test "install: verify that the install script exists" {
-  assert [ -e "$BASH_IT/install.sh" ]
+  assert_file_exist "$BASH_IT/install.sh"
 }
 
 @test "install: run the install script silently" {
@@ -44,13 +50,13 @@ function local_teardown {
 
   ./install.sh --silent
 
-  assert [ -e "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE" ]
+  assert_file_exist "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE"
 
-  assert [ -L "$BASH_IT/aliases/enabled/150---general.aliases.bash" ]
-  assert [ -L "$BASH_IT/plugins/enabled/250---base.plugin.bash" ]
-  assert [ -L "$BASH_IT/plugins/enabled/365---alias-completion.plugin.bash" ]
-  assert [ -L "$BASH_IT/completion/enabled/350---bash-it.completion.bash" ]
-  assert [ -L "$BASH_IT/completion/enabled/350---system.completion.bash" ]
+  assert_link_exist "$BASH_IT/enabled/150---general.aliases.bash"
+  assert_link_exist "$BASH_IT/enabled/250---base.plugin.bash"
+  assert_link_exist "$BASH_IT/enabled/365---alias-completion.plugin.bash"
+  assert_link_exist "$BASH_IT/enabled/350---bash-it.completion.bash"
+  assert_link_exist "$BASH_IT/enabled/350---system.completion.bash"
 }
 
 @test "install: verify that a backup file is created" {
@@ -62,8 +68,8 @@ function local_teardown {
 
   ./install.sh --silent
 
-  assert [ -e "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE" ]
-  assert [ -e "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.bak" ]
+  assert_file_exist "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE"
+  assert_file_exist "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.bak"
 
   local md5_bak=$(md5sum "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.bak" | awk '{print $1}')
 

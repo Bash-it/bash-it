@@ -14,9 +14,16 @@ case $OSTYPE in
 esac
 
 function local_setup {
-  mkdir -p $BASH_IT
+  mkdir -p "$BASH_IT"
   lib_directory="$(cd "$(dirname "$0")" && pwd)"
-  cp -r $lib_directory/../../* $BASH_IT/
+  # Use rsync to copy Bash-it to the temp folder
+  # rsync is faster than cp, since we can exclude the large ".git" folder
+  rsync -qavrKL -d --delete-excluded --exclude=.git $lib_directory/../../.. "$BASH_IT"
+
+  rm -rf "$BASH_IT"/enabled
+  rm -rf "$BASH_IT"/aliases/enabled
+  rm -rf "$BASH_IT"/completion/enabled
+  rm -rf "$BASH_IT"/plugins/enabled
 
   # Don't pollute the user's actual $HOME directory
   # Use a test home directory instead
@@ -35,7 +42,7 @@ function local_teardown {
 }
 
 @test "uninstall: verify that the uninstall script exists" {
-  assert [ -e "$BASH_IT/uninstall.sh" ]
+  assert_file_exist "$BASH_IT/uninstall.sh"
 }
 
 @test "uninstall: run the uninstall script with an existing backup file" {
@@ -49,9 +56,9 @@ function local_teardown {
 
   assert_success
 
-  assert [ ! -e "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.uninstall" ]
-  assert [ ! -e "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.bak" ]
-  assert [ -e "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE" ]
+  assert_file_not_exist "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.uninstall"
+  assert_file_not_exist "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.bak"
+  assert_file_exist "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE"
 
   local md5_conf=$(md5sum "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE" | awk '{print $1}')
 
@@ -68,9 +75,9 @@ function local_teardown {
 
   assert_success
 
-  assert [ -e "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.uninstall" ]
-  assert [ ! -e "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.bak" ]
-  assert [ ! -e "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE" ]
+  assert_file_exist "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.uninstall"
+  assert_file_not_exist "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.bak"
+  assert_file_not_exist "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE"
 
   local md5_uninstall=$(md5sum "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.uninstall" | awk '{print $1}')
 

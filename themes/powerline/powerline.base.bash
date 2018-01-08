@@ -14,7 +14,6 @@ function set_color {
 }
 
 function __powerline_user_info_prompt {
-  set +u
   local user_info=""
   local color=${USER_INFO_THEME_PROMPT_COLOR}
 
@@ -23,15 +22,16 @@ function __powerline_user_info_prompt {
       color=${USER_INFO_THEME_PROMPT_COLOR_SUDO}
     fi
   fi
+
   case "${POWERLINE_PROMPT_USER_INFO_MODE}" in
     "sudo")
-      if [[ "${color}" == "${USER_INFO_THEME_PROMPT_COLOR_SUDO}" ]]; then
+      if [[ "${color}" = "${USER_INFO_THEME_PROMPT_COLOR_SUDO}" ]]; then
         user_info="!"
       fi
       ;;
     *)
-      if [[ -n "${SSH_CLIENT}" ]]; then
-        user_info="${USER_INFO_SSH_CHAR}${USER}@${HOSTNAME}"
+      if [[ -n "${SSH_CLIENT}" ]] || [[ -n "${SSH_CONNECTION}" ]]; then
+        user_info="${USER_INFO_SSH_CHAR}${USER}"
       else
         user_info="${USER}"
       fi
@@ -43,9 +43,9 @@ function __powerline_user_info_prompt {
 function __powerline_ruby_prompt {
   local ruby_version=""
 
-  if command_exists rvm; then
+  if _command_exists rvm; then
     ruby_version="$(rvm_version_prompt)"
-  elif command_exists rbenv; then
+  elif _command_exists rbenv; then
     ruby_version=$(rbenv_version_prompt)
   fi
 
@@ -90,7 +90,17 @@ function __powerline_scm_prompt {
 }
 
 function __powerline_cwd_prompt {
-  echo "$(pwd | sed "s|^${HOME}|~|")|${CWD_THEME_PROMPT_COLOR}"
+  local cwd=$(pwd | sed "s|^${HOME}|~|")
+
+  echo "${cwd}|${CWD_THEME_PROMPT_COLOR}"
+}
+
+function __powerline_hostname_prompt {
+    echo "$(hostname -s)|${HOST_THEME_PROMPT_COLOR}"
+}
+
+function __powerline_wd_prompt {
+  echo "\W|${CWD_THEME_PROMPT_COLOR}"
 }
 
 function __powerline_clock_prompt {
@@ -149,11 +159,17 @@ function __powerline_prompt_command {
   SEGMENTS_AT_LEFT=0
   LAST_SEGMENT_COLOR=""
 
+
+  if [[ -n "${POWERLINE_PROMPT_DISTRO_LOGO}" ]]; then
+      LEFT_PROMPT+="$(set_color ${PROMPT_DISTRO_LOGO_COLOR} ${PROMPT_DISTRO_LOGO_COLORBG})${PROMPT_DISTRO_LOGO}$(set_color - -)"
+  fi
+
   ## left prompt ##
   for segment in $POWERLINE_PROMPT; do
     local info="$(__powerline_${segment}_prompt)"
     [[ -n "${info}" ]] && __powerline_left_segment "${info}"
   done
+
   [[ "${last_status}" -ne 0 ]] && __powerline_left_segment $(__powerline_last_status_prompt ${last_status})
   [[ -n "${LEFT_PROMPT}" ]] && LEFT_PROMPT+="$(set_color ${LAST_SEGMENT_COLOR} -)${separator_char}${normal}"
 
@@ -164,3 +180,4 @@ function __powerline_prompt_command {
         LEFT_PROMPT \
         SEGMENTS_AT_LEFT
 }
+

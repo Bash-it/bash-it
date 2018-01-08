@@ -1,8 +1,8 @@
 # git theming
-ZSH_THEME_GIT_PROMPT_PREFIX="${bold_blue}(${yellow}%B"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%b${bold_blue})${reset_color} "
-ZSH_THEME_GIT_PROMPT_CLEAN=""
-ZSH_THEME_GIT_PROMPT_DIRTY="${bold_red}✗"
+SCM_THEME_PROMPT_PREFIX="${bold_blue}(${yellow}"
+SCM_THEME_PROMPT_SUFFIX="${bold_blue})${reset_color} "
+SCM_THEME_PROMPT_CLEAN=""
+SCM_THEME_PROMPT_DIRTY="${bold_red}✗"
 
 
 # LS colors, made with http://geoff.greer.fm/lscolors/
@@ -13,8 +13,7 @@ function prompt_command() {
 
     if [ "$(whoami)" = root ]; then no_color=$red; else no_color=$white; fi
 
-    PS1="${no_color}\u${reset_color}:${blue}\W/${reset_color} \[\$(scm_prompt_info)\]$ "
-    RPROMPT='[\t]'
+    PS1="${no_color}\u${reset_color}:${blue}\W/${reset_color} \[$(scm_prompt_info)\]${normal}$ "
 }
 
 safe_append_prompt_command prompt_command

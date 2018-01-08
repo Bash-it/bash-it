@@ -2,23 +2,23 @@ cite about-plugin
 about-plugin 'display info about your battery charge level'
 
 ac_adapter_connected(){
-  if command_exists upower;
+  if _command_exists upower;
   then
     upower -i $(upower -e | grep BAT) | grep 'state' | grep -q 'charging\|fully-charged'
     return $?
-  elif command_exists acpi;
+  elif _command_exists acpi;
   then
     acpi -a | grep -q "on-line"
     return $?
-  elif command_exists pmset;
+  elif _command_exists pmset;
   then
     pmset -g batt | grep -q 'AC Power'
     return $?
-  elif command_exists ioreg;
+  elif _command_exists ioreg;
   then
     ioreg -n AppleSmartBattery -r | grep -q '"ExternalConnected" = Yes'
     return $?
-  elif command_exists WMIC;
+  elif _command_exists WMIC;
   then
     WMIC Path Win32_Battery Get BatteryStatus /Format:List | grep -q 'BatteryStatus=2'
     return $?
@@ -26,23 +26,23 @@ ac_adapter_connected(){
 }
 
 ac_adapter_disconnected(){
-  if command_exists upower;
+  if _command_exists upower;
   then
     upower -i $(upower -e | grep BAT) | grep 'state' | grep -q 'discharging'
     return $?
-  elif command_exists acpi;
+  elif _command_exists acpi;
   then
     acpi -a | grep -q "off-line"
     return $?
-  elif command_exists pmset;
+  elif _command_exists pmset;
   then
     pmset -g batt | grep -q 'Battery Power'
     return $?
-  elif command_exists ioreg;
+  elif _command_exists ioreg;
   then
     ioreg -n AppleSmartBattery -r | grep -q '"ExternalConnected" = No'
     return $?
-  elif command_exists WMIC;
+  elif _command_exists WMIC;
   then
     WMIC Path Win32_Battery Get BatteryStatus /Format:List | grep -q 'BatteryStatus=1'
     return $?
@@ -52,80 +52,39 @@ ac_adapter_disconnected(){
 battery_percentage(){
   about 'displays battery charge as a percentage of full (100%)'
   group 'battery'
-  
-  if command_exists upower;
+
+  declare COMMAND_OUTPUT="no"
+
+  if _command_exists upower;
   then
-    local UPOWER_OUTPUT=$(upower --show-info $(upower --enumerate | grep BAT) | grep percentage | tail --bytes 5)
-    echo ${UPOWER_OUTPUT: : -1}
-  elif command_exists acpi;
+    COMMAND_OUTPUT=$(upower --show-info $(upower --enumerate | grep BAT) | grep percentage | grep -o "[0-9]\+" | head -1)
+  elif _command_exists acpi;
   then
-    local ACPI_OUTPUT=$(acpi -b)
-    case $ACPI_OUTPUT in
-      *" Unknown"*)
-        local PERC_OUTPUT=$(echo $ACPI_OUTPUT | head -c 22 | tail -c 2)
-        case $PERC_OUTPUT in
-          *%)
-            echo "0${PERC_OUTPUT}" | head -c 2
-          ;;
-          *)
-            echo ${PERC_OUTPUT}
-          ;;
-        esac
-      ;;
-      
-      *" Charging"* | *" Discharging"*)
-        local PERC_OUTPUT=$(echo $ACPI_OUTPUT | awk -F, '/,/{gsub(/ /, "", $0); gsub(/%/,"", $0); print $2}' )
-        echo ${PERC_OUTPUT}
-      ;;
-      *" Full"*)
-        echo '100'
-      ;;
-      *)
-        echo '-1'
-      ;;
-    esac
-  elif command_exists pmset;
+    COMMAND_OUTPUT=$(acpi -b | awk -F, '/,/{gsub(/ /, "", $0); gsub(/%/,"", $0); print $2}' )
+  elif _command_exists pmset;
   then
-    local PMSET_OUTPUT=$(pmset -g ps | sed -n 's/.*[[:blank:]]+*\(.*%\).*/\1/p')
-    case $PMSET_OUTPUT in
-      100*)
-        echo '100'
-      ;;
-      *)
-        echo $PMSET_OUTPUT | head -c 2
-      ;;
-    esac
-  elif command_exists ioreg;
+    COMMAND_OUTPUT=$(pmset -g ps | sed -n 's/.*[[:blank:]]+*\(.*%\).*/\1/p' | grep -o "[0-9]\+" | head -1)
+  elif _command_exists ioreg;
   then
-    local IOREG_OUTPUT=$(ioreg -n AppleSmartBattery -r | awk '$1~/Capacity/{c[$1]=$3} END{OFMT="%05.2f%%"; max=c["\"MaxCapacity\""]; print (max>0? 100*c["\"CurrentCapacity\""]/max: "?")}')
-    case $IOREG_OUTPUT in
-      100*)
-        echo '100'
-      ;;
-      *)
-        echo $IOREG_OUTPUT | head -c 2
-      ;;
-    esac
-  elif command_exists WMIC;
+    COMMAND_OUTPUT=$(ioreg -n AppleSmartBattery -r | awk '$1~/Capacity/{c[$1]=$3} END{OFMT="%05.2f"; max=c["\"MaxCapacity\""]; print (max>0? 100*c["\"CurrentCapacity\""]/max: "?")}' | grep -o "[0-9]\+" | head -1)
+  elif _command_exists WMIC;
   then
-    local WINPC=$(echo porcent=$(WMIC PATH Win32_Battery Get EstimatedChargeRemaining /Format:List) | grep -o '[0-9]*')
-    case $WINPC in
-      100*)
-        echo '100'
-      ;;
-      *)
-        echo $WINPC
-      ;;
-    esac
+    COMMAND_OUTPUT=$(WMIC PATH Win32_Battery Get EstimatedChargeRemaining /Format:List | grep -o '[0-9]\+' | head -1)
   else
-    echo "no"
+    COMMAND_OUTPUT="no"
+  fi
+
+  if [ "${COMMAND_OUTPUT}" != "no" ]; then
+    printf "%02d" "${COMMAND_OUTPUT:--1}"
+  else
+    echo "${COMMAND_OUTPUT}"
   fi
 }
 
 battery_charge(){
   about 'graphical display of your battery charge'
   group 'battery'
-  
+
   # Full char
   local F_C='▸'
   # Depleted char
@@ -136,7 +95,7 @@ battery_charge(){
   local DANGER_COLOR="${red}"
   local BATTERY_OUTPUT="${DEPLETED_COLOR}${D_C}${D_C}${D_C}${D_C}${D_C}"
   local BATTERY_PERC=$(battery_percentage)
-  
+
   case $BATTERY_PERC in
     no)
       echo ""

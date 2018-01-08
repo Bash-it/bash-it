@@ -45,7 +45,7 @@ alias pager="$PAGER"
 
 alias q='exit'
 
-alias irc="$IRC_CLIENT"
+alias irc="${IRC_CLIENT:=irc}"
 
 # Language aliases
 alias rb='ruby'
@@ -57,6 +57,7 @@ alias ipy='ipython'
 alias piano='pianobar'
 
 alias ..='cd ..'         # Go up one directory
+alias cd..='cd ..'       # Common misspelling for going up one directory
 alias ...='cd ../..'     # Go up two directories
 alias ....='cd ../../..' # Go up three directories
 alias -- -='cd -'        # Go back

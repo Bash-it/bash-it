@@ -3,10 +3,6 @@
 # Axin Bash Prompt, inspired by theme "Sexy" and "Bobby"
 # thanks to them
 
-if [[ $COLORTERM = gnome-* && $TERM = xterm ]]  && infocmp gnome-256color >/dev/null 2>&1; then export TERM=gnome-256color
-elif [[ $TERM != dumb ]] && infocmp xterm-256color >/dev/null 2>&1; then export TERM=xterm-256color
-fi
-
 if tput setaf 1 &> /dev/null; then
     if [[ $(tput colors) -ge 256 ]] 2>/dev/null; then
       MAGENTA=$(tput setaf 9)
@@ -34,7 +30,7 @@ else
 fi
 
 function prompt_command() {
-  PS1="\[${BOLD}${MAGENTA}\]\u \[$WHITE\]@ \[$ORANGE\]\h \[$WHITE\]in \[$GREEN\]\w\[$WHITE\]\[$SCM_THEME_PROMPT_PREFIX\]$(clock_prompt) \[$PURPLE\]\$(scm_prompt_info) \n\$ \[$RESET\]"
+  PS1="\[${BOLD}${MAGENTA}\]\u \[$WHITE\]@ \[$ORANGE\]\h \[$WHITE\]in \[$GREEN\]\w\[$WHITE\]\[$SCM_THEME_PROMPT_PREFIX\]$(clock_prompt) \[$PURPLE\]$(scm_prompt_info) \n\$ \[$RESET\]"
 }
 
 THEME_CLOCK_COLOR=${THEME_CLOCK_COLOR:-"${white}"}

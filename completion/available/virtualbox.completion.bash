@@ -111,7 +111,7 @@ __vboxmanage_default() {
 
     for WORD in $opts; do
 	MATCH=0
-	for OPT in ${COMP_WORDS[@]}; do
+	for OPT in "${COMP_WORDS[@]}"; do
 		    # opts=$(echo ${opts} | grep -v $OPT);
 	    if [ "$OPT" == "$WORD" ]; then
 		MATCH=1

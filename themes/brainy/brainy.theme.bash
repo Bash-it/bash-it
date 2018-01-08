@@ -152,7 +152,7 @@ ___brainy_prompt_clock() {
 }
 
 ___brainy_prompt_battery() {
-	! command_exists battery_percentage ||
+	! _command_exists battery_percentage ||
 	[ "${THEME_SHOW_BATTERY}" != "true" ] ||
 	[ "$(battery_percentage)" = "no" ] && return
 
@@ -164,7 +164,9 @@ ___brainy_prompt_battery() {
 		color=$bold_red
 	fi
 	box="[|]"
-	ac_adapter_connected && info+="+"
+	ac_adapter_connected && charging="+"
+  ac_adapter_disconnected && charging="-"
+  info+=$charging
 	[ "$info" == "100+" ] && info="AC"
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
 }
@@ -251,6 +253,8 @@ export RBFU_THEME_PROMPT_PREFIX=""
 export RBFU_THEME_PROMPT_SUFFIX=""
 export RVM_THEME_PROMPT_PREFIX=""
 export RVM_THEME_PROMPT_SUFFIX=""
+export VIRTUALENV_THEME_PROMPT_PREFIX=""
+export VIRTUALENV_THEME_PROMPT_SUFFIX=""
 
 export SCM_THEME_PROMPT_DIRTY=" ${bold_red}✗${normal}"
 export SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓${normal}"
