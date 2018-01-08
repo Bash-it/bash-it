@@ -9,7 +9,7 @@ function __powerline_right_segment {
   local params=( $1 )
   IFS="${OLD_IFS}"
   local separator_char="${POWERLINE_RIGHT_SEPARATOR}"
-  local padding=2
+  local padding="${POWERLINE_PADDING}"
   local separator_color=""
 
   if [[ "${SEGMENTS_AT_RIGHT}" -eq 0 ]]; then
