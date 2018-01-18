@@ -33,6 +33,12 @@ function v2gif {
   # Parse the options
   local args=$(getopt -l "alert:" -l "lossy:" -l "width:" -l del,delete -l high -l tag -l "fps:" -l webm -o "a:l:w:f:dhmt" -- "$@")
 
+  if [ $? -ne 0 ]; then
+    echo 'Terminating...' >&2
+    return 2
+  fi
+
+  eval set -- "$args"
   local use_gifski=""
   local opt_del_after=""
   local maxsize=""
@@ -45,7 +51,6 @@ function v2gif {
   local fps=""
   local make_webm=""
   local alert=5000
-  eval set -- "$args"
   while [ $# -ge 1 ]; do
     case "$1" in
       --)
@@ -100,10 +105,7 @@ function v2gif {
     esac
   done
 
-  # Done Parsing, all that's left are the filenames
-  local movies="$*"
-
-  if [[ -z "$movies" ]]; then
+  if [[ -z "$*" ]]; then
     echo "$(tput setaf 1)No input files given. Example: v2gif file [file...] [-w <max width (pixels)>] [-l <lossy level>] < $(tput sgr 0)"
     return 1
   fi
@@ -112,7 +114,7 @@ function v2gif {
   [[ -z "$giftag" ]] && giftag="-default"
   [[ -z "$giftagopt" ]] && giftag=""
 
-  for file in $movies ; do
+  for file ; do
 
     local output_file="${file%.*}${giftag}.gif"
     local del_after=$opt_del_after
@@ -181,6 +183,12 @@ function any2webm() {
   # Parse the options
   local args=$(getopt -l alert -l "bandwidth:" -l "width:" -l del,delete -l tag -l "fps:" -l webm -o "a:b:w:f:dt" -- "$@")
 
+  if [ $? -ne 0 ]; then
+    echo 'Terminating...' >&2
+    return 2
+  fi
+
+  eval set -- "$args"
   local opt_del_after=""
   local size=""
   local webmtagopt=""
@@ -189,7 +197,6 @@ function any2webm() {
   local fps=""
   local bandwidth="2M"
   local alert=5000
-  eval set -- "$args"
   while [ $# -ge 1 ]; do
     case "$1" in
       --)
@@ -232,10 +239,7 @@ function any2webm() {
     esac
   done
 
-  # Done Parsing, all that's left are the filenames
-  local movies="$*"
-
-  if [[ -z "$movies" ]]; then
+  if [[ -z "$*" ]]; then
     echo "$(tput setaf 1)No input files given. Example: any2webm file [file...] [-w <max width (pixels)>] < $(tput sgr 0)"
     return 1
   fi
@@ -244,7 +248,7 @@ function any2webm() {
   [[ -z "$webmtag" ]] && webmtag="-default"
   [[ -z "$webmtagopt" ]] && webmtag=""
 
-  for file in $movies ; do
+  for file ; do
 
     local output_file="${file%.*}${webmtag}.webm"
     local del_after=$opt_del_after
