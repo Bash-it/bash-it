@@ -236,11 +236,11 @@ svn-show-proxy ()
 	about 'Shows SVN proxy settings'
 	group 'proxy'
 
-	if $(command -v svn &> /dev/null) && $(command -v python &> /dev/null) ; then
+	if $(command -v svn &> /dev/null) && $(command -v python2 &> /dev/null) ; then
 		echo ""
 		echo "SVN Proxy Settings"
 		echo "=================="
-		python - <<END
+		python2 - <<END
 import ConfigParser, os
 config = ConfigParser.ConfigParser()
 config.read(os.path.expanduser('~/.subversion/servers'))
@@ -266,8 +266,8 @@ svn-disable-proxy ()
 	about 'Disables SVN proxy settings'
 	group 'proxy'
 
-	if $(command -v svn &> /dev/null) && $(command -v python &> /dev/null) ; then
-		python - <<END
+	if $(command -v svn &> /dev/null) && $(command -v python2 &> /dev/null) ; then
+		python2 - <<END
 import ConfigParser, os
 config = ConfigParser.ConfigParser()
 config.read(os.path.expanduser('~/.subversion/servers'))
@@ -295,10 +295,10 @@ svn-enable-proxy ()
 	about 'Enables SVN proxy settings'
 	group 'proxy'
 
-	if $(command -v svn &> /dev/null) && $(command -v python &> /dev/null) ; then
+	if $(command -v svn &> /dev/null) && $(command -v python2 &> /dev/null) ; then
 		local my_http_proxy=${1:-$BASH_IT_HTTP_PROXY}
 
-		python - "$my_http_proxy" "$BASH_IT_NO_PROXY" <<END
+		python2 - "$my_http_proxy" "$BASH_IT_NO_PROXY" <<END
 import ConfigParser, os, sys, urlparse
 pieces = urlparse.urlparse(sys.argv[1])
 host = pieces.hostname
