@@ -71,7 +71,7 @@ function _git-hide-status {
 }
 
 function _git-status {
-  [[ "${SCM_GIT_IGNORE_UNTRACKED}" = "true" ]] && local git_status_flags='-uno'
+  [[ "${SCM_GIT_IGNORE_UNTRACKED}" = "true" ]] && local git_status_flags='-uno' || true
   git status --porcelain ${git_status_flags} 2> /dev/null
 }
 
@@ -100,9 +100,9 @@ function _git-status-counts {
 }
 
 function _git-remote-info {
-  [[ "$(_git-upstream)" == "" ]] && return
+  [[ "$(_git-upstream)" == "" ]] && return || true
 
-  [[ "$(_git-branch)" == "$(_git-upstream-branch)" ]] && local same_branch_name=true
+  [[ "$(_git-branch)" == "$(_git-upstream-branch)" ]] && local same_branch_name=true || true
   if ([[ "${SCM_GIT_SHOW_REMOTE_INFO}" = "auto" ]] && [[ "$(_git-num-remotes)" -ge 2 ]]) ||
       [[ "${SCM_GIT_SHOW_REMOTE_INFO}" = "true" ]]; then
     if [[ "${same_branch_name}" != "true" ]]; then
