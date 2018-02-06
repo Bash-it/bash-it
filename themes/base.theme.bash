@@ -79,10 +79,10 @@ function scm {
 }
 
 function scm_prompt_char {
-  if [[ -z $SCM ]]; then scm; fi
-  if [[ $SCM == $SCM_GIT ]]; then SCM_CHAR=$SCM_GIT_CHAR
-  elif [[ $SCM == $SCM_HG ]]; then SCM_CHAR=$SCM_HG_CHAR
-  elif [[ $SCM == $SCM_SVN ]]; then SCM_CHAR=$SCM_SVN_CHAR
+  if [[ -z ${SCM:-} ]]; then scm; fi
+  if [[ ${SCM:-} == $SCM_GIT ]]; then SCM_CHAR=$SCM_GIT_CHAR
+  elif [[ ${SCM:-} == $SCM_HG ]]; then SCM_CHAR=$SCM_HG_CHAR
+  elif [[ ${SCM:-} == $SCM_SVN ]]; then SCM_CHAR=$SCM_SVN_CHAR
   else SCM_CHAR=$SCM_NONE_CHAR
   fi
 }
@@ -92,9 +92,9 @@ function scm_prompt_vars {
   scm_prompt_char
   SCM_DIRTY=0
   SCM_STATE=''
-  [[ $SCM == $SCM_GIT ]] && git_prompt_vars && return
-  [[ $SCM == $SCM_HG ]] && hg_prompt_vars && return
-  [[ $SCM == $SCM_SVN ]] && svn_prompt_vars && return
+  [[ ${SCM:-} == $SCM_GIT ]] && git_prompt_vars && return
+  [[ ${SCM:-} == $SCM_HG ]] && hg_prompt_vars && return
+  [[ ${SCM:-} == $SCM_SVN ]] && svn_prompt_vars && return
 }
 
 function scm_prompt_info {
@@ -113,7 +113,7 @@ function scm_prompt_info_common {
   SCM_DIRTY=0
   SCM_STATE=''
 
-  if [[ ${SCM} == ${SCM_GIT} ]]; then
+  if [[ ${SCM:-} == ${SCM_GIT} ]]; then
     if [[ ${SCM_GIT_SHOW_MINIMAL_INFO} == true ]]; then
       # user requests minimal git status information
       git_prompt_minimal_info
@@ -125,8 +125,8 @@ function scm_prompt_info_common {
   fi
 
   # TODO: consider adding minimal status information for hg and svn
-  [[ ${SCM} == ${SCM_HG} ]] && hg_prompt_info && return
-  [[ ${SCM} == ${SCM_SVN} ]] && svn_prompt_info && return
+  [[ ${SCM:-} == ${SCM_HG} ]] && hg_prompt_info && return
+  [[ ${SCM:-} == ${SCM_SVN} ]] && svn_prompt_info && return
 }
 
 function git_prompt_minimal_info {
