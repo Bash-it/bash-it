@@ -112,3 +112,11 @@ catt() {
     fi
   done
 }
+
+# mkdir & cd combo
+function mcd()
+{
+  mkdir -p $1
+  cd $1
+}
+
