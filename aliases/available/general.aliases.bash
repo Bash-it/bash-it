@@ -116,7 +116,12 @@ catt() {
 # mkdir & cd combo
 function mcd()
 {
-  mkdir -p $1
-  cd $1
+  mkdir -p $1 2> /dev/null
+
+  if [ -d $1 ]; then
+    cd $1
+  else
+    cd $(dirname $1)
+  fi
 }
 
