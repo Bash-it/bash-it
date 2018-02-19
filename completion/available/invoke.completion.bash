@@ -1,4 +1,5 @@
 # Invoke (pyinvoke.org) tab-completion script to be sourced with Bash shell.
+# https://github.com/pyinvoke/invoke/blob/master/completion/bash
 
 _complete_invoke() {
     local candidates
