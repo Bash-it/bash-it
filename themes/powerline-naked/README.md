@@ -56,7 +56,7 @@ The contents of the prompt can be "reordered", all the "segments" (every piece o
 * `wd` - Working directory, like `cwd` but doesn't show the full folder
   hierarchy, only the directory you're currently in.
 
-A variables can be defined to set the order of the prompt segments:
+A variable can be defined to set the order of the prompt segments:
 
     POWERLINE_PROMPT="user_info scm python_venv ruby cwd"
 
