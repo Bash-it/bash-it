@@ -29,7 +29,7 @@ function alias_completion {
     (( ${#completions[@]} == 0 )) && return 0
 
     # create temporary file for wrapper functions and completions
-    local tmp_file; tmp_file="$(mktemp -t "${namespace}-${RANDOM}XXX.tmp")" || return 1
+    local tmp_file; tmp_file="$(mktemp -t "${namespace}-${RANDOM}XXXXXX")" || return 1
 
     local completion_loader; completion_loader="$(complete -p -D 2>/dev/null | sed -Ene 's/.* -F ([^ ]*).*/\1/p')"
 
