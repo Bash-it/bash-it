@@ -248,6 +248,7 @@ _bash-it-version() {
 
   echo "Current git SHA: $BASH_IT_GIT_VERSION_INFO"
   echo "$BASH_IT_GIT_URL/commit/$BASH_IT_GIT_SHA"
+  echo "Compare to latest: $BASH_IT_GIT_URL/compare/$BASH_IT_GIT_SHA...master"
 
   cd - &> /dev/null || return
 }
