@@ -18,7 +18,5 @@ alias nod='npm outdated'
 alias nrb='npm rebuild'
 alias nud='npm update'
 alias nr='npm run'
-alias nls='npm list'
-alias nlsg='npm list --global'
-alias npml="npm list --depth=0 2>/dev/null"
-alias npmlg="npm list -g --depth=0 2>/dev/null"
+alias nls='npm list --depth=0 2>/dev/null'
+alias nlsg='npm list -g --depth=0 2>/dev/null'
