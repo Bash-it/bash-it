@@ -56,7 +56,7 @@ function alias_completion {
                 continue
             fi
         fi
-        local new_completion="$(complete -p "$alias_cmd")"
+        local new_completion="$(complete -p "$alias_cmd" 2>/dev/null)"
 
         # create a wrapper inserting the alias arguments if any
         if [[ -n $alias_args ]]; then
@@ -77,8 +77,10 @@ function alias_completion {
         fi
 
         # replace completion trigger by alias
-        new_completion="${new_completion% *} $alias_name"
-        echo "$new_completion" >> "$tmp_file"
+        if [[ -n $new_completion ]]; then
+            new_completion="${new_completion% *} $alias_name"
+            echo "$new_completion" >> "$tmp_file"
+        fi
     done < <(alias -p | sed -Ene "s/$alias_regex/\2 '\3' '\4'/p")
     source "$tmp_file" && rm -f "$tmp_file"
 }; alias_completion
