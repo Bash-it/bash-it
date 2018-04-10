@@ -3,7 +3,11 @@
 cite about-plugin
 about-plugin 'virtualenvwrapper helper functions'
 
-[[ `which virtualenvwrapper.sh` ]] && . virtualenvwrapper.sh
+if [[ `command -v pyenv` ]]; then
+  pyenv virtualenvwrapper
+else
+  [[ `which virtualenvwrapper.sh` ]] && . virtualenvwrapper.sh
+fi
 
 
 function mkvenv {
