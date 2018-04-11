@@ -1,9 +1,9 @@
 # make sure virtualenvwrapper is enabled if available
 
 cite about-plugin
-about-plugin 'virtualenvwrapper helper functions'
+about-plugin 'virtualenvwrapper and pyenv-virtualenvwrapper helper functions'
 
-if [[ `command -v pyenv` ]]; then
+if _command_exists pyenv; then
   pyenv virtualenvwrapper
 else
   [[ `which virtualenvwrapper.sh` ]] && . virtualenvwrapper.sh
