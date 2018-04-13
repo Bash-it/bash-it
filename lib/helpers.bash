@@ -96,8 +96,7 @@ bash-it ()
          version)
              func=_bash-it-version;;
          *)
-             reference bash-it
-             return;;
+             func=_bash-it-additional-$verb $component "$@"
     esac
 
     # pluralize component if necessary
@@ -107,6 +106,10 @@ bash-it ()
         else
             if _is_function ${func}es; then
                 func=${func}es
+            elif [[ $func =~ ^_bash-it-additional- ]]; then
+                echo "oops! $verb is not valid additional command"
+                reference bash-it
+                return
             else
                 echo "oops! $component is not a valid option!"
                 reference bash-it
