@@ -1,16 +1,6 @@
 #!/usr/bin/env bash
 # Initialize Bash It
 
-# Reload Library, replaced by lib/additionals.bash
-# case $OSTYPE in
-#   darwin*)
-#     alias reload='source ~/.bash_profile'
-#     ;;
-#   *)
-#     alias reload='source ~/.bashrc'
-#     ;;
-# esac
-
 # Only set $BASH_IT if it's not already set
 if [ -z "$BASH_IT" ];
 then
