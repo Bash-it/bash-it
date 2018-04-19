@@ -38,9 +38,9 @@ _terraform() {
 
 		elif [[ ${words[1]} != "--help" && ${words[1]} != "--version" && ${words[1]} != "version" ]] ; then
 
-			# Some commands acceps hyphened parameters,...
+			# Some commands accept hyphened parameters, ...
 			opts="$(terraform --help "${words[1]}" | grep -P '^\s+-' | awk '{print $1}' | awk -F '=' '{ if ($0 ~ /=/) {print $1"="} else {print $1} }')"
-			# but some other commands accept non hyphened parameters....
+			# but some other commands accept non-hyphened parameters.
 			opts="${opts} $(terraform --help "${words[1]}" | grep -P '^\s\s\s\s\S' | awk '{print $1}')"
 			# All of the commands accept the --help parameter which is not listed
 			# by the 'terraform --help <command>
