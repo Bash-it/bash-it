@@ -18,7 +18,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-_terraform() {
+_terraform()
+{
 	local cur prev words cword opts
 	_get_comp_words_by_ref -n : cur prev words cword
 	COMPREPLY=()
@@ -52,10 +53,10 @@ _terraform() {
 	COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
 
 	if [[ ${#COMPREPLY[*]} -eq 1 ]] ; then
-		if [[ ${COMPREPLY[0]} == *= ]]; then
+		if [[ ${COMPREPLY[0]} == *= ]] ; then
 			# When only one completion is left, check if there is an equal sign.
 			# If an equal sign, then add no space after the autocompleted word.
-			compopt -o nospace;
+			compopt -o nospace
 		fi
 	fi
 	return 0
