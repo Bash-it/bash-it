@@ -102,7 +102,8 @@ function __powerline_hostname_prompt {
 }
 
 function __powerline_wd_prompt {
-  echo "\W|${CWD_THEME_PROMPT_COLOR}"
+  local wd=${PWD##*/}
+  echo "${wd}|${WD_THEME_PROMPT_COLOR}"
 }
 
 function __powerline_clock_prompt {
