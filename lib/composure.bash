@@ -10,7 +10,7 @@
 
 composure_keywords ()
 {
-    echo "about author example group param reload version"
+    echo "about author example group param version"
 }
 
 letterpress ()
