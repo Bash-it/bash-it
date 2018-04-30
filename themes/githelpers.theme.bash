@@ -73,7 +73,7 @@ function _git-hide-status {
 function _git-status {
   local git_status_flags=
   [[ "${SCM_GIT_IGNORE_UNTRACKED}" = "true" ]] && git_status_flags='-uno'
-  git status --porcelain ${git_status_flags:-} 2> /dev/null
+  git status --porcelain ${git_status_flags} 2> /dev/null
 }
 
 function _git-status-counts {
