@@ -7,6 +7,8 @@ CLOCK_THEME_PROMPT_SUFFIX=''
 
 THEME_PROMPT_HOST='\H'
 
+SCM=
+
 SCM_CHECK=${SCM_CHECK:=true}
 
 SCM_THEME_PROMPT_DIRTY=' ✗'
@@ -63,6 +65,8 @@ RVM_THEME_PROMPT_SUFFIX='|'
 THEME_SHOW_USER_HOST=${THEME_SHOW_USER_HOST:=false}
 USER_HOST_THEME_PROMPT_PREFIX=''
 USER_HOST_THEME_PROMPT_SUFFIX=''
+
+VIRTUAL_ENV=
 
 VIRTUALENV_THEME_PROMPT_PREFIX=' |'
 VIRTUALENV_THEME_PROMPT_SUFFIX='|'
@@ -122,7 +126,7 @@ function scm_prompt_info_common {
   SCM_DIRTY=0
   SCM_STATE=''
 
-  if [[ ${SCM:-} == ${SCM_GIT} ]]; then
+  if [[ ${SCM} == ${SCM_GIT} ]]; then
     if [[ ${SCM_GIT_SHOW_MINIMAL_INFO} == true ]]; then
       # user requests minimal git status information
       git_prompt_minimal_info
