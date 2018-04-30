@@ -98,5 +98,18 @@ function prevcurl() {
   curl "$*" | open -fa $PREVIEW
 }
 
+function refresh-launchpad() {
+  about 'Reset launchpad layout in macOS'
+  example '$ refresh-launchpad'
+  group 'osx'
+
+  if [ $(uname) = "Darwin" ];then
+    defaults write com.apple.dock ResetLaunchPad -bool TRUE
+    killall Dock
+  else
+    echo "Sorry, this only works on Mac OS X"
+  fi
+}
+
 # Make this backwards compatible
 alias pcurl='prevcurl'

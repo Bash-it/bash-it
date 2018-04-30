@@ -60,6 +60,8 @@ done
 source "${BASH_IT}/themes/colors.theme.bash"
 # shellcheck source=./themes/githelpers.theme.bash
 source "${BASH_IT}/themes/githelpers.theme.bash"
+# shellcheck source=./themes/p4helpers.theme.bash
+source "${BASH_IT}/themes/p4helpers.theme.bash"
 # shellcheck source=./themes/base.theme.bash
 source "${BASH_IT}/themes/base.theme.bash"
 
