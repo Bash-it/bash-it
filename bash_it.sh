@@ -1,16 +1,6 @@
 #!/usr/bin/env bash
 # Initialize Bash It
 
-# Reload Library
-case $OSTYPE in
-  darwin*)
-    alias reload='source ~/.bash_profile'
-    ;;
-  *)
-    alias reload='source ~/.bashrc'
-    ;;
-esac
-
 # Only set $BASH_IT if it's not already set
 if [ -z "$BASH_IT" ];
 then
@@ -110,6 +100,18 @@ if [ -e "$HOME/.jekyllconfig" ]
 then
   # shellcheck disable=SC1090
   . "$HOME/.jekyllconfig"
+fi
+
+# BASH_IT_RELOAD_LEGACY is set.
+if ! command -v reload &>/dev/null && [ -n "$BASH_IT_RELOAD_LEGACY" ]; then
+  case $OSTYPE in
+    darwin*)
+      alias reload='source ~/.bash_profile'
+      ;;
+    *)
+      alias reload='source ~/.bashrc'
+      ;;
+  esac
 fi
 
 # Disable trap DEBUG on subshells - https://github.com/Bash-it/bash-it/pull/1040
