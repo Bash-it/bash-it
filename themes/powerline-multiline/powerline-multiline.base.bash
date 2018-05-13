@@ -51,6 +51,8 @@ function __powerline_prompt_command {
       local info="$(__powerline_${segment}_prompt)"
       [[ -n "${info}" ]] && __powerline_right_segment "${info}"
     done
+    RIGHT_PAD=$(printf "%.s " $(seq 1 $RIGHT_PROMPT_LENGTH))
+    LEFT_PROMPT+="${RIGHT_PAD}${move_cursor_rightmost}"
     LEFT_PROMPT+="\033[${RIGHT_PROMPT_LENGTH}D"
   fi
 
