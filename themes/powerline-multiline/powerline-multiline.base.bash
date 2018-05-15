@@ -46,7 +46,7 @@ function __powerline_prompt_command {
 
   ## right prompt ##
   if [[ -n "${POWERLINE_RIGHT_PROMPT}" ]]; then
-    LEFT_PROMPT+="${move_cursor_rightmost}"
+    # LEFT_PROMPT+="${move_cursor_rightmost}"
     for segment in $POWERLINE_RIGHT_PROMPT; do
       local info="$(__powerline_${segment}_prompt)"
       [[ -n "${info}" ]] && __powerline_right_segment "${info}"
