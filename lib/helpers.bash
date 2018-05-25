@@ -270,6 +270,8 @@ _bash-it-reload() {
       source ~/.bashrc
       ;;
   esac
+  
+  cd - &> /dev/null || return
 }
 
 _bash-it-describe ()
