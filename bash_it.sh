@@ -7,7 +7,8 @@ then
   # Setting $BASH to maintain backwards compatibility
   # TODO: warn users that they should upgrade their .bash_profile
   export BASH_IT=$BASH
-  export BASH="$(bash -c 'echo $BASH')"
+  BASH="$(bash -c 'echo $BASH')"
+  export BASH
 fi
 
 # For backwards compatibility, look in old BASH_THEME location
@@ -15,7 +16,7 @@ if [ -z "$BASH_IT_THEME" ];
 then
   # TODO: warn users that they should upgrade their .bash_profile
   export BASH_IT_THEME="$BASH_THEME";
-  unset $BASH_THEME;
+  unset BASH_THEME;
 fi
 
 # Load composure first, so we support function metadata
@@ -30,9 +31,9 @@ LIB="${BASH_IT}/lib/*.bash"
 APPEARANCE_LIB="${BASH_IT}/lib/appearance.bash"
 for config_file in $LIB
 do
-  if [ $config_file != $APPEARANCE_LIB ]; then
+  if [ "$config_file" != "$APPEARANCE_LIB" ]; then
     # shellcheck disable=SC1090
-    source $config_file
+    source "$config_file"
   fi
 done
 
@@ -57,7 +58,7 @@ source "${BASH_IT}/themes/base.theme.bash"
 
 # appearance (themes) now, after all dependencies
 # shellcheck source=./lib/appearance.bash
-source $APPEARANCE_LIB
+source "$APPEARANCE_LIB"
 
 # Load custom aliases, completion, plugins
 for file_type in "aliases" "completion" "plugins"
@@ -75,7 +76,7 @@ for config_file in $CUSTOM
 do
   if [ -e "${config_file}" ]; then
     # shellcheck disable=SC1090
-    source $config_file
+    source "$config_file"
   fi
 done
 
