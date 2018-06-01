@@ -200,7 +200,7 @@ export BASH_IT_THEME="powerline-multiline"
 export BASH_IT_THEME="/home/foo/my_theme/my_theme.theme.bash"
 ```
 
-You can easily preview the themes in your own shell using `BASH_PREVIEW=true reload`.
+You can easily preview the themes in your own shell using `BASH_PREVIEW=true bash-it reload`.
 
 If you've created your own custom prompts, we'd love it if you shared with everyone else! Just submit a Pull Request.
 You can see theme screenshots on [wiki/Themes](https://github.com/Bash-it/bash-it/wiki/Themes).
