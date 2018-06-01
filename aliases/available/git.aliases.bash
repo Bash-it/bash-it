@@ -1,6 +1,8 @@
 cite 'about-alias'
 about-alias 'common git abbreviations'
 
+source "${BASH_IT}/aliases/compat/git.aliases.zsh"
+
 # Aliases
 alias gcl='git clone'
 alias ga='git add'
