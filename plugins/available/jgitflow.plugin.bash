@@ -28,7 +28,7 @@ function feature-finish {
 
   mvn jgitflow:feature-finish ${JGITFLOW_MVN_ARGUMENTS}
   echo -e '\033[32m----------------------------------------------------------------\033[0m'
-  echo -e '\033[32m===== REMEMBER CREATE A NEW RELEASE FOR DEPLOY THIS FEATURE ====\033[0m'
+  echo -e '\033[32m===== REMEMBER TO CREATE A NEW RELEASE TO DEPLOY THIS FEATURE ====\033[0m'
   echo -e '\033[32m----------------------------------------------------------------\033[0m'
 }
 
