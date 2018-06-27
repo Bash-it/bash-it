@@ -11,11 +11,16 @@ _sshcomplete() {
       local OPTIONS=" -- ${CURRENT_PROMPT}"
     fi
 
-
-    # parse all defined hosts from .ssh/config
-    if [ -r "$HOME/.ssh/config" ]; then
-        COMPREPLY=($(compgen -W "$(grep -i ^Host "$HOME/.ssh/config" | awk '{for (i=2; i<=NF; i++) print $i}' )" ${OPTIONS}) )
-    fi
+    # parse all defined hosts from .ssh/config and files included there
+    for fl in "$HOME/.ssh/config" \
+        $(grep -P "^\s*Include" "$HOME/.ssh/config" | 
+            awk '{for (i=2; i<=NF; i++) print $i}' | 
+            sed "s|^~/|$HOME/|")
+    do
+        if [ -r "$fl" ]; then
+            COMPREPLY=( ${COMPREPLY[@]} $(compgen -W "$(grep -i ^Host "$fl" |grep -v '[*!]' | awk '{for (i=2; i<=NF; i++) print $i}' )" ${OPTIONS}) )
+        fi
+    done
 
     # parse all hosts found in .ssh/known_hosts
     if [ -r "$HOME/.ssh/known_hosts" ]; then
