@@ -389,6 +389,7 @@ function user_host_prompt {
 
 # backwards-compatibility
 function git_prompt_info {
+  _git-hide-status && return
   git_prompt_vars
   echo -e "${SCM_PREFIX}${SCM_BRANCH}${SCM_STATE}${SCM_SUFFIX}"
 }
