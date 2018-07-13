@@ -146,6 +146,14 @@ ___atomic_prompt_ruby() {
   printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_red}" "${box}"
 }
 
+___atomic_prompt_node() {
+  [ "${THEME_SHOW_NODE}" != "true" ] && return
+  color=$bold_green
+  box="[|]"
+  info="node  👻  $(node_version_prompt)"
+  printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
+}
+
 ___atomic_prompt_todo() {
   [ "${THEME_SHOW_TODO}" != "true" ] ||
   [ -z "$(which todo.sh)" ] && return
@@ -223,7 +231,7 @@ _atomic_completion() {
   cur="${COMP_WORDS[COMP_CWORD]}"
   _action="${COMP_WORDS[1]}"
   actions="show hide"
-  segments="battery clock exitcode python ruby scm sudo todo"
+  segments="battery clock exitcode python ruby node scm sudo todo"
   case "${_action}" in
     show)
       COMPREPLY=( $(compgen -W "${segments}" -- "${cur}") )
@@ -278,8 +286,9 @@ export SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓${normal}"
 THEME_SHOW_SUDO=${THEME_SHOW_SUDO:-"true"}
 THEME_SHOW_SCM=${THEME_SHOW_SCM:-"true"}
 THEME_SHOW_RUBY=${THEME_SHOW_RUBY:-"false"}
+THEME_SHOW_NODE=${THEME_SHOW_NODE:-"true"}
 THEME_SHOW_PYTHON=${THEME_SHOW_PYTHON:-"false"}
-THEME_SHOW_CLOCK=${THEME_SHOW_CLOCK:-"true"}
+THEME_SHOW_CLOCK=${THEME_SHOW_CLOCK:-"false"}
 THEME_SHOW_TODO=${THEME_SHOW_TODO:-"false"}
 THEME_SHOW_BATTERY=${THEME_SHOW_BATTERY:-"true"}
 THEME_SHOW_EXITCODE=${THEME_SHOW_EXITCODE:-"false"}
@@ -294,7 +303,7 @@ __ATOMIC_PROMPT_CHAR_PS1_SUDO=${THEME_PROMPT_CHAR_PS1_SUDO:-"${normal}${LineB}${
 __ATOMIC_PROMPT_CHAR_PS2_SUDO=${THEME_PROMPT_CHAR_PS2_SUDO:-"${normal}${LineB}${bold_red}${Face}"}
 
 ___ATOMIC_TOP_LEFT=${___ATOMIC_TOP_LEFT:-"user_info dir scm"}
-___ATOMIC_TOP_RIGHT=${___ATOMIC_TOP_RIGHT:-"exitcode python ruby todo clock battery"}
+___ATOMIC_TOP_RIGHT=${___ATOMIC_TOP_RIGHT:-"exitcode python ruby node todo clock battery"}
 ___ATOMIC_BOTTOM=${___ATOMIC_BOTTOM:-"char"}
 
 ############

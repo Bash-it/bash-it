@@ -355,6 +355,11 @@ function python_version_prompt {
   echo -e "$(virtualenv_prompt)$(condaenv_prompt)$(py_interp_prompt)"
 }
 
+function node_version_prompt {
+  node_version=$(node -v)
+  echo -e "${node_version}"
+}
+
 function git_user_info {
   # support two or more initials, set by 'git pair' plugin
   SCM_CURRENT_USER=$(git config user.initials | sed 's% %+%')
