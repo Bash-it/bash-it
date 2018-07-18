@@ -6,7 +6,9 @@ about-plugin 'load fzf, if you are using it'
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
-command -v fd &> /dev/null && export FZF_DEFAULT_COMMAND='fd --type f'
+if [ -z ${FZF_DEFAULT_COMMAND+x}  ]; then
+  command -v fd &> /dev/null && export FZF_DEFAULT_COMMAND='fd --type f'
+fi
 
 fe() {
   about "Open the selected file in the default editor"
