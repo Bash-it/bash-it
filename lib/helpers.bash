@@ -187,7 +187,7 @@ _bash-it_update() {
       _bash-it-migrate
       echo ""
       echo "All done, enjoy!"
-      reload
+      bash-it reload
     else
       echo "Error updating Bash-it, please, check if your Bash-it installation folder (${BASH_IT}) is clean."
     fi
