@@ -27,8 +27,12 @@ _sdkman_complete()
     esac
   elif [ $COMP_CWORD -eq 3 ]; then
     case "${COMP_WORDS[COMP_CWORD-2]}" in
-      "install" | "uninstall" | "rm" | "use" | "default" )
+      "uninstall" | "rm" | "use" | "default" )
         _sdkman_candidate_versions ${COMP_WORDS[COMP_CWORD-1]}
+        COMPREPLY=( $(compgen -W "$CANDIDATE_VERSIONS" -- ${COMP_WORDS[COMP_CWORD]}) )
+        ;;
+      "install")
+        _sdkman_candidate_not_installed_versions ${COMP_WORDS[COMP_CWORD-1]}
         COMPREPLY=( $(compgen -W "$CANDIDATE_VERSIONS" -- ${COMP_WORDS[COMP_CWORD]}) )
         ;;
       *)
@@ -49,6 +53,14 @@ _sdkman_candidate_versions(){
     CANDIDATE_VERSIONS="$(echo $CANDIDATE_ONLINE_VERSIONS $CANDIDATE_LOCAL_VERSIONS |sort | uniq ) "
   fi
 
+}
+
+_sdkman_candidate_not_installed_versions(){
+  CANDIDATE_LOCAL_VERSIONS=$(__sdkman_cleanup_local_versions $1)
+  if [ "$SDKMAN_OFFLINE_MODE" = "false" ]; then
+    CANDIDATE_ONLINE_VERSIONS="$(__sdkman_list_versions $1 | grep " " | grep "\." | cut -c 6-)"
+    CANDIDATE_VERSIONS="$(echo $CANDIDATE_ONLINE_VERSIONS $CANDIDATE_LOCAL_VERSIONS | tr ' ' '\n' | sort | uniq -u) "
+  fi
 }
 
 __sdkman_cleanup_local_versions(){
