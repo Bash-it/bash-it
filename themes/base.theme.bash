@@ -347,7 +347,7 @@ function condaenv_prompt {
 }
 
 function py_interp_prompt {
-  py_version=$(python --version 2>&1 | awk '{print "py-"$2;}') || return
+  py_version=$(python --version 2>&1 | awk 'NR==1{print "py-"$2;}') || return
   echo -e "${PYTHON_THEME_PROMPT_PREFIX}${py_version}${PYTHON_THEME_PROMPT_SUFFIX}"
 }
 
@@ -393,6 +393,7 @@ function user_host_prompt {
 
 # backwards-compatibility
 function git_prompt_info {
+  _git-hide-status && return
   git_prompt_vars
   echo -e "${SCM_PREFIX}${SCM_BRANCH}${SCM_STATE}${SCM_SUFFIX}"
 }
