@@ -61,7 +61,7 @@ function reload_plugins() {
 bash-it ()
 {
     about 'Bash-it help and maintenance'
-    param '1: verb [one of: help | show | enable | disable | migrate | update | search | version ] '
+    param '1: verb [one of: help | show | enable | disable | migrate | update | search | version | reload ] '
     param '2: component type [one of: alias(es) | completion(s) | plugin(s) ] or search term(s)'
     param '3: specific component [optional]'
     example '$ bash-it show plugins'
@@ -72,32 +72,35 @@ bash-it ()
     example '$ bash-it update'
     example '$ bash-it search ruby [[-]rake]... [--enable | --disable]'
     example '$ bash-it version'
+    example '$ bash-it reload'
     typeset verb=${1:-}
     shift
     typeset component=${1:-}
     shift
     typeset func
     case $verb in
-         show)
-             func=_bash-it-$component;;
-         enable)
-             func=_enable-$component;;
-         disable)
-             func=_disable-$component;;
-         help)
-             func=_help-$component;;
-         search)
-             _bash-it-search $component "$@"
-             return;;
-         update)
-             func=_bash-it_update;;
-         migrate)
-             func=_bash-it-migrate;;
-         version)
-             func=_bash-it-version;;
-         *)
-             reference bash-it
-             return;;
+      show)
+        func=_bash-it-$component;;
+      enable)
+        func=_enable-$component;;
+      disable)
+        func=_disable-$component;;
+      help)
+        func=_help-$component;;
+      search)
+        _bash-it-search $component "$@"
+        return;;
+      update)
+        func=_bash-it_update;;
+      migrate)
+        func=_bash-it-migrate;;
+      version)
+        func=_bash-it-version;;
+      reload)
+        func=_bash-it-reload;;
+      *)
+        reference bash-it
+        return;;
     esac
 
     # pluralize component if necessary
@@ -184,7 +187,7 @@ _bash-it_update() {
       _bash-it-migrate
       echo ""
       echo "All done, enjoy!"
-      reload
+      bash-it reload
     else
       echo "Error updating Bash-it, please, check if your Bash-it installation folder (${BASH_IT}) is clean."
     fi
@@ -248,6 +251,25 @@ _bash-it-version() {
 
   echo "Current git SHA: $BASH_IT_GIT_VERSION_INFO"
   echo "$BASH_IT_GIT_URL/commit/$BASH_IT_GIT_SHA"
+  echo "Compare to latest: $BASH_IT_GIT_URL/compare/$BASH_IT_GIT_SHA...master"
+
+  cd - &> /dev/null || return
+}
+
+_bash-it-reload() {
+  _about 'reloads a profile file'
+  _group 'lib'
+
+  cd "${BASH_IT}" || return
+
+  case $OSTYPE in
+    darwin*)
+      source ~/.bash_profile
+      ;;
+    *)
+      source ~/.bashrc
+      ;;
+  esac
 
   cd - &> /dev/null || return
 }

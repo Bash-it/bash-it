@@ -35,7 +35,10 @@ if command -v percol>/dev/null; then
         bind -x '"\C-r": _replace_by_history'
 
         # bind zz to percol if fasd enable
-        unalias zz
+        if [[ $(type -t zz) == 'alias'  ]]; then
+          unalias zz
+        fi
+
         if command -v fasd>/dev/null; then
             function zz() {
                 local l=$(fasd -d | awk '{print $2}' | percol)

@@ -33,8 +33,14 @@ function v2gif {
   # Parse the options
   local args=$(getopt -l "alert:" -l "lossy:" -l "width:" -l del,delete -l high -l tag -l "fps:" -l webm -o "a:l:w:f:dhmt" -- "$@")
 
+  if [ $? -ne 0 ]; then
+    echo 'Terminating...' >&2
+    return 2
+  fi
+
+  eval set -- "$args"
   local use_gifski=""
-  local del_after=""
+  local opt_del_after=""
   local maxsize=""
   local lossiness=""
   local maxwidthski=""
@@ -45,7 +51,6 @@ function v2gif {
   local fps=""
   local make_webm=""
   local alert=5000
-  eval set -- "$args"
   while [ $# -ge 1 ]; do
     case "$1" in
       --)
@@ -55,7 +60,7 @@ function v2gif {
         ;;
       -d|--del|--delete)
         # Delete after
-        del_after="true"
+        opt_del_after="true"
         shift
         ;;
       -h|--high)
@@ -100,10 +105,7 @@ function v2gif {
     esac
   done
 
-  # Done Parsing, all that's left are the filenames
-  local movies="$*"
-
-  if [[ -z "$movies" ]]; then
+  if [[ -z "$*" ]]; then
     echo "$(tput setaf 1)No input files given. Example: v2gif file [file...] [-w <max width (pixels)>] [-l <lossy level>] < $(tput sgr 0)"
     return 1
   fi
@@ -112,14 +114,15 @@ function v2gif {
   [[ -z "$giftag" ]] && giftag="-default"
   [[ -z "$giftagopt" ]] && giftag=""
 
-  for file in $movies ; do
+  for file ; do
 
     local output_file="${file%.*}${giftag}.gif"
+    local del_after=$opt_del_after
 
     if [[ "$make_webm" ]] ; then
       ffmpeg -loglevel panic -i "$file" \
-        -c:v libvpx -crf 4 -threads 0 -an -b:v 2M -auto-alt-ref 0 -quality best \
-        "${file%.*}.webm" || return 2
+        -c:v libvpx -crf 4 -threads 0 -an -b:v 2M -auto-alt-ref 0 \
+        -quality best -loop 0 "${file%.*}.webm" || return 2
     fi
 
     # Set FPS to match the video if possible, otherwise fallback to default.
@@ -151,7 +154,8 @@ function v2gif {
     if [[ $alert -gt 0 ]] ; then
       local out_size=$(wc --bytes < "$output_file")
       if [[ $out_size -gt $(( alert * 1000 )) ]] ; then
-        echo "$(tput setaf 3)Warning: '$output_file' is $((out_size/1000))kb, keeping '$file' even if --del requested.$(tput sgr 0)"
+        echo "$(tput setaf 3)Warning: '$output_file' is $((out_size/1000))kb.$(tput sgr 0)"
+        [[ "$del_after" == "true" ]] && echo "$(tput setaf 3)Warning: Keeping '$file' even though --del requested.$(tput sgr 0)"
         del_after=""
       fi
     fi
@@ -179,7 +183,13 @@ function any2webm() {
   # Parse the options
   local args=$(getopt -l alert -l "bandwidth:" -l "width:" -l del,delete -l tag -l "fps:" -l webm -o "a:b:w:f:dt" -- "$@")
 
-  local del_after=""
+  if [ $? -ne 0 ]; then
+    echo 'Terminating...' >&2
+    return 2
+  fi
+
+  eval set -- "$args"
+  local opt_del_after=""
   local size=""
   local webmtagopt=""
   local webmtag=""
@@ -187,7 +197,6 @@ function any2webm() {
   local fps=""
   local bandwidth="2M"
   local alert=5000
-  eval set -- "$args"
   while [ $# -ge 1 ]; do
     case "$1" in
       --)
@@ -197,7 +206,7 @@ function any2webm() {
         ;;
       -d|--del|--delete)
         # Delete after
-        del_after="true"
+        opt_del_after="true"
         shift
         ;;
       -s|--size)
@@ -230,10 +239,7 @@ function any2webm() {
     esac
   done
 
-  # Done Parsing, all that's left are the filenames
-  local movies="$*"
-
-  if [[ -z "$movies" ]]; then
+  if [[ -z "$*" ]]; then
     echo "$(tput setaf 1)No input files given. Example: any2webm file [file...] [-w <max width (pixels)>] < $(tput sgr 0)"
     return 1
   fi
@@ -242,21 +248,23 @@ function any2webm() {
   [[ -z "$webmtag" ]] && webmtag="-default"
   [[ -z "$webmtagopt" ]] && webmtag=""
 
-  for file in $movies ; do
+  for file ; do
 
     local output_file="${file%.*}${webmtag}.webm"
+    local del_after=$opt_del_after
 
     echo "$(tput setaf 2)Creating '$output_file' ...$(tput sgr 0)"
 
     ffmpeg -loglevel panic -i "$file" \
       -c:v libvpx -crf 4 -threads 0 -an -b:v $bandwidth -auto-alt-ref 0 \
-      -quality best $fps $size -pix_fmt yuva420p "$output_file" || return 2
+      -quality best $fps $size -loop 0 -pix_fmt yuva420p "$output_file" || return 2
 
     # Checking if the file is bigger than Twitter likes and warn
     if [[ $alert -gt 0 ]] ; then
       local out_size=$(wc --bytes < "$output_file")
       if [[ $out_size -gt $(( alert * 1000 )) ]] ; then
-        echo "$(tput setaf 3)Warning: '$output_file' is $((out_size/1000))kb, keeping '$file' even if --del requested.$(tput sgr 0)"
+        echo "$(tput setaf 3)Warning: '$output_file' is $((out_size/1000))kb.$(tput sgr 0)"
+        [[ "$del_after" == "true" ]] && echo "$(tput setaf 3)Warning: Keeping '$file' even though --del requested.$(tput sgr 0)"
         del_after=""
       fi
     fi

@@ -6,6 +6,10 @@ about-plugin 'load fzf, if you are using it'
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
+if [ -z ${FZF_DEFAULT_COMMAND+x}  ]; then
+  command -v fd &> /dev/null && export FZF_DEFAULT_COMMAND='fd --type f'
+fi
+
 fe() {
   about "Open the selected file in the default editor"
   group "fzf"
@@ -18,11 +22,11 @@ fe() {
   [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
 }
 
-fd() {
+fcd() {
   about "cd to the selected directory"
   group "fzf"
   param "1: Directory to browse, or . if omitted"
-  example "fd aliases"
+  example "fcd aliases"
 
   local dir
   dir=$(find ${1:-.} -path '*/\.*' -prune \
