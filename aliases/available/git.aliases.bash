@@ -42,7 +42,6 @@ alias gca='git commit -v -a'
 alias gcm='git commit -v -m'
 alias gcam="git commit -v -am"
 alias gci='git commit --interactive'
-alias gcam='git commit -a -m'
 alias gb='git branch'
 alias gba='git branch -a'
 alias gbt='git branch --track'
