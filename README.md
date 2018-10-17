@@ -312,6 +312,19 @@ Also, with this flag to false, Bash-it will not show the repository as dirty whe
 
 **NOTE:** If you set in git configuration file the option to ignore *untracked* files, this flag has no effect, and Bash-it will ignore *untracked* files always.
 
+### Stash item count
+
+When `SCM_GIT_SHOW_DETAILS` is enabled, you can get the count of *stashed* items. This feature can be useful when a user has a lot of stash items.
+This feature is controlled through the flag `SCM_GIT_SHOW_STASH_INFO` as follows:
+
+Set `SCM_GIT_SHOW_STASH_INFO` to 'true' (the default value) to **show** the count of stashed items:
+
+* `export SCM_GIT_SHOW_STASH_INFO=true`
+
+Set `SCM_GIT_SHOW_STASH_INFO` to 'false' to **don't show** it:
+
+* `export SCM_GIT_SHOW_STASH_INFO=false`
+
 ### Git user
 
 In some environments, it is useful to know the value of the current git user, which is used to mark all new commits.
