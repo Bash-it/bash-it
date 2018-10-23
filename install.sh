@@ -97,7 +97,7 @@ fi
 BASH_IT="$(cd "$(dirname "$0")" && pwd)"
 
 case $OSTYPE in
-  darwin*)
+  darwin* | freebsd*)
     CONFIG_FILE=.bash_profile
     ;;
   *)
