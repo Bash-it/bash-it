@@ -1,15 +1,9 @@
 #!/bin/bash
-# Usage:
-#
-# To enable bash <tab> completion for lerna, add the following line (minus the
-# leading #, which is the bash comment character) to your ~/.bashrc file:
-#
-# eval "$(lerna --completion=bash)"
-# Enable bash autocompletion.
+# Lerna autocompletion.
 function _lerna_completions() {
-  # The currently-being-completed word.
   local cur compls
 
+  # The currently-being-completed word.
   cur="${COMP_WORDS[COMP_CWORD]}"
 
   # Options
