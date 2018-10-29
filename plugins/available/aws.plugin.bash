@@ -72,14 +72,14 @@ function __awskeys_export {
                 export "$(echo ${key} | tr [:lower:] [:upper:])=${p_key#*=}"
             done
         fi
-        export AWS_DEFAULT_PROFILE="$1"
+        export AWS_PROFILE="$1"
     else
         echo "Profile $1 not found in credentials file"
     fi
 }
 
 function __awskeys_unset {
-    unset AWS_DEFAULT_PROFILE AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY
+    unset AWS_PROFILE AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY
 }
 
 function __awskeys_comp {
