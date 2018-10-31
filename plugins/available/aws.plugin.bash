@@ -37,7 +37,7 @@ function __awskeys_help {
 function __awskeys_get {
     local ln=$(grep -n "\[ *$1 *\]" ~/.aws/credentials | cut -d ":" -f 1)
     if [[ -n "${ln}" ]]; then
-        tail -n +${ln} ~/.aws/credentials | egrep -m 2 "aws_access_key_id|aws_secret_access_key"
+        tail -n +${ln} ~/.aws/credentials | egrep -m 3 "aws_access_key_id|aws_secret_access_key|aws_session_token"
     fi
 }
 
@@ -79,7 +79,7 @@ function __awskeys_export {
 }
 
 function __awskeys_unset {
-    unset AWS_PROFILE AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY
+    unset AWS_PROFILE AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
 }
 
 function __awskeys_comp {
