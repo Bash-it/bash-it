@@ -136,6 +136,12 @@ function __powerline_in_vim_prompt {
   fi
 }
 
+function __powerline_aws_profile_prompt {
+  if [[ -n "${AWS_PROFILE}" ]]; then
+    echo "${AWS_PROFILE_CHAR}${AWS_PROFILE}|${AWS_PROFILE_PROMPT_COLOR}"
+  fi
+}
+
 function __powerline_left_segment {
   local OLD_IFS="${IFS}"; IFS="|"
   local params=( $1 )
