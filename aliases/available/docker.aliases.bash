@@ -28,6 +28,6 @@ alias dkelc='docker exec -it `dklcid` bash' # Enter last container (works with D
 alias dkex='docker exec -it ' # Useful to run any commands into container without leaving host
 
 # Added more recent cleanup options from newer docker versions
-alias dkip=`docker image prune -a -f`
-alias dkvp=`docker volume prune -f`
-alias dksp=`docker system prune -a -f`
+alias dkip='docker image prune -a -f'
+alias dkvp='docker volume prune -f'
+alias dksp='docker system prune -a -f'
