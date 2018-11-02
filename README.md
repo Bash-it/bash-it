@@ -59,10 +59,10 @@ When you run without the `--no-modify-config` switch, the Bash-it installer auto
 Use the `--no-modify-config` switch to avoid unwanted modifications, e.g. if your Bash config file already contains the code that loads Bash-it.
 
 **NOTE**: Keep in mind how Bash load its configuration files,
-`.bash_profile` for login shells (and in macOS in terminal emulators like [Terminal.app](http://www.apple.com/osx/apps/) or 
+`.bash_profile` for login shells (and in macOS in terminal emulators like [Terminal.app](http://www.apple.com/osx/apps/) or
 [iTerm2](https://www.iterm2.com/)) and `.bashrc` for interactive shells (default mode in most of the GNU/Linux terminal emulators),
 to ensure that Bash-it is loaded correctly.
-A good "practice" is sourcing `.bashrc` into `.bash_profile` to keep things working in all the scenarios. 
+A good "practice" is sourcing `.bashrc` into `.bash_profile` to keep things working in all the scenarios.
 To achieve this, you can add this snippet in your `.bash_profile`:
 
 ```
@@ -76,8 +76,8 @@ Refer to the official [Bash documentation](https://www.gnu.org/software/bash/man
 
 ### Install using Docker
 
-You can try Bash-it in an isolated environment without changing any local files via a [Docker](https://www.docker.com/) Container.  
-(Bash Shell v4.4 with Bash-it, [bats](https://github.com/sstephenson/bats) and bash-completion based on [Alpine Linux](https://alpinelinux.org/)).   
+You can try Bash-it in an isolated environment without changing any local files via a [Docker](https://www.docker.com/) Container.
+(Bash Shell v4.4 with Bash-it, [bats](https://github.com/sstephenson/bats) and bash-completion based on [Alpine Linux](https://alpinelinux.org/)).
 
 `docker pull ellerbrock/bash-it`
 
@@ -140,7 +140,7 @@ Currently enabled modules will be shown in green.
 
 ### Searching with Negations
 
-You can prefix a search term with a "-" to exclude it from the results. 
+You can prefix a search term with a "-" to exclude it from the results.
 In the above example, if we wanted to hide `chruby` and `chruby-auto`,
 we could change the command as follows:
 
@@ -189,6 +189,7 @@ There are over 50+ Bash-it themes to pick from in `$BASH_IT/themes`.
 The default theme is `bobby`.
 Set `BASH_IT_THEME` to the theme name you want, or if you've developed your own custom theme outside of `$BASH_IT/themes`,
 point the `BASH_IT_THEME` variable directly to the theme file.
+To disable theming completely, leave the variable empty.
 
 Examples:
 
@@ -198,6 +199,9 @@ export BASH_IT_THEME="powerline-multiline"
 
 # Use a theme outside of the Bash-it folder
 export BASH_IT_THEME="/home/foo/my_theme/my_theme.theme.bash"
+
+# Disable theming
+export BASH_IT_THEME=""
 ```
 
 You can easily preview the themes in your own shell using `BASH_PREVIEW=true bash-it reload`.
@@ -294,8 +298,8 @@ Set `SCM_GIT_SHOW_REMOTE_INFO` to 'false' to **disable the feature**:
 
 ### Untracked files
 
-By default, the `git status` command shows information about *untracked* files. 
-This behavior can be controlled through command-line flags or git configuration files. 
+By default, the `git status` command shows information about *untracked* files.
+This behavior can be controlled through command-line flags or git configuration files.
 For big repositories, ignoring *untracked* files can make git faster.
 Bash-it uses `git status` to gather the repo information it shows in the prompt, so in some circumstances, it can be useful to instruct Bash-it to ignore these files.
 You can control this behavior with the flag `SCM_GIT_IGNORE_UNTRACKED`:
@@ -346,7 +350,7 @@ You can control the prefix and the suffix of this component using the two variab
 
 And
 
-* `export SCM_THEME_CURRENT_USER_SUFFIX=' ☺︎ '` 
+* `export SCM_THEME_CURRENT_USER_SUFFIX=' ☺︎ '`
 
 **NOTE:** If using `SCM_GIT_SHOW_MINIMAL_INFO=true`, then the value of `SCM_GIT_SHOW_CURRENT_USER` is ignored.
 
