@@ -46,19 +46,22 @@ do
   _load_bash_it_files $file_type
 done
 
-# Load colors and helpers first so they can be used in base theme
-# shellcheck source=./themes/colors.theme.bash
-source "${BASH_IT}/themes/colors.theme.bash"
-# shellcheck source=./themes/githelpers.theme.bash
-source "${BASH_IT}/themes/githelpers.theme.bash"
-# shellcheck source=./themes/p4helpers.theme.bash
-source "${BASH_IT}/themes/p4helpers.theme.bash"
-# shellcheck source=./themes/base.theme.bash
-source "${BASH_IT}/themes/base.theme.bash"
+# Load theme, if a theme was set
+if [[ ! -z "${BASH_IT_THEME}" ]]; then
+  # Load colors and helpers first so they can be used in base theme
+  # shellcheck source=./themes/colors.theme.bash
+  source "${BASH_IT}/themes/colors.theme.bash"
+  # shellcheck source=./themes/githelpers.theme.bash
+  source "${BASH_IT}/themes/githelpers.theme.bash"
+  # shellcheck source=./themes/p4helpers.theme.bash
+  source "${BASH_IT}/themes/p4helpers.theme.bash"
+  # shellcheck source=./themes/base.theme.bash
+  source "${BASH_IT}/themes/base.theme.bash"
 
-# appearance (themes) now, after all dependencies
-# shellcheck source=./lib/appearance.bash
-source "$APPEARANCE_LIB"
+  # appearance (themes) now, after all dependencies
+  # shellcheck source=./lib/appearance.bash
+  source "$APPEARANCE_LIB"
+fi
 
 # Load custom aliases, completion, plugins
 for file_type in "aliases" "completion" "plugins"
