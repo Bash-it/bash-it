@@ -25,3 +25,9 @@ alias dkrmi='docker-remove-images'  # Delete images for supplied IDs or all if n
 alias dkideps='docker-image-dependencies'  # Output a graph of image dependencies using Graphiz
 alias dkre='docker-runtime-environment'  # List environmental variables of the supplied image ID
 alias dkelc='docker exec -it `dklcid` bash' # Enter last container (works with Docker 1.3 and above)
+alias dkex='docker exec -it ' # Useful to run any commands into container without leaving host
+
+# Added more recent cleanup options from newer docker versions
+alias dkip='docker image prune -a -f'
+alias dkvp='docker volume prune -f'
+alias dksp='docker system prune -a -f'

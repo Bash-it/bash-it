@@ -86,6 +86,8 @@ function __powerline_scm_prompt {
       scm_prompt+="${SCM_CHAR}${SCM_BRANCH}${SCM_STATE}"
     elif [[ "${SCM_P4_CHAR}" == "${SCM_CHAR}" ]]; then
       scm_prompt+="${SCM_CHAR}${SCM_BRANCH}${SCM_STATE}"
+    elif [[ "${SCM_HG_CHAR}" == "${SCM_CHAR}" ]]; then
+      scm_prompt+="${SCM_CHAR}${SCM_BRANCH}${SCM_STATE}"
     fi
     echo "${scm_prompt}${scm}|${color}"
   fi
@@ -131,6 +133,12 @@ function __powerline_battery_prompt {
 function __powerline_in_vim_prompt {
   if [ -n "$VIMRUNTIME" ]; then
     echo "${IN_VIM_THEME_PROMPT_TEXT}|${IN_VIM_THEME_PROMPT_COLOR}"
+  fi
+}
+
+function __powerline_aws_profile_prompt {
+  if [[ -n "${AWS_PROFILE}" ]]; then
+    echo "${AWS_PROFILE_CHAR}${AWS_PROFILE}|${AWS_PROFILE_PROMPT_COLOR}"
   fi
 }
 

@@ -61,7 +61,7 @@ function reload_plugins() {
 bash-it ()
 {
     about 'Bash-it help and maintenance'
-    param '1: verb [one of: help | show | enable | disable | migrate | update | search | version | reload ] '
+    param '1: verb [one of: help | show | enable | disable | migrate | update | search | version | reload ] '
     param '2: component type [one of: alias(es) | completion(s) | plugin(s) ] or search term(s)'
     param '3: specific component [optional]'
     example '$ bash-it show plugins'
@@ -79,28 +79,28 @@ bash-it ()
     shift
     typeset func
     case $verb in
-         show)
-             func=_bash-it-$component;;
-         enable)
-             func=_enable-$component;;
-         disable)
-             func=_disable-$component;;
-         help)
-             func=_help-$component;;
-         search)
-             _bash-it-search $component "$@"
-             return;;
-         update)
-             func=_bash-it_update;;
-         migrate)
-             func=_bash-it-migrate;;
-         version)
-             func=_bash-it-version;;
-         reload)
-             func=_bash-it-reload;;
-         *)
-             reference bash-it
-             return;;
+      show)
+        func=_bash-it-$component;;
+      enable)
+        func=_enable-$component;;
+      disable)
+        func=_disable-$component;;
+      help)
+        func=_help-$component;;
+      search)
+        _bash-it-search $component "$@"
+        return;;
+      update)
+        func=_bash-it_update;;
+      migrate)
+        func=_bash-it-migrate;;
+      version)
+        func=_bash-it-version;;
+      reload)
+        func=_bash-it-reload;;
+      *)
+        reference bash-it
+        return;;
     esac
 
     # pluralize component if necessary
@@ -187,7 +187,7 @@ _bash-it_update() {
       _bash-it-migrate
       echo ""
       echo "All done, enjoy!"
-      reload
+      bash-it reload
     else
       echo "Error updating Bash-it, please, check if your Bash-it installation folder (${BASH_IT}) is clean."
     fi
@@ -270,7 +270,7 @@ _bash-it-reload() {
       source ~/.bashrc
       ;;
   esac
-  
+
   cd - &> /dev/null || return
 }
 
