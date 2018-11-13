@@ -336,6 +336,10 @@ function ruby_version_prompt {
   echo -e "$(rbfu_version_prompt)$(rbenv_version_prompt)$(rvm_version_prompt)$(chruby_version_prompt)"
 }
 
+function k8s_context_prompt {
+  echo -e "$(kubectl config current-context)"
+}
+
 function virtualenv_prompt {
   if [[ -n "$VIRTUAL_ENV" ]]; then
     virtualenv=`basename "$VIRTUAL_ENV"`
