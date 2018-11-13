@@ -167,6 +167,8 @@ _bash-it_update() {
   _about 'updates Bash-it'
   _group 'lib'
 
+  local old_pwd="${PWD}"
+
   cd "${BASH_IT}" || return
 
   if [ -z $BASH_IT_REMOTE ]; then
@@ -194,7 +196,7 @@ _bash-it_update() {
   else
     echo "Bash-it is up to date, nothing to do!"
   fi
-  cd - &> /dev/null || return
+  cd "${old_pwd}" &> /dev/null || return
 }
 
 _bash-it-migrate() {
