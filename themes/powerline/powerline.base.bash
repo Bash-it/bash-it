@@ -52,6 +52,16 @@ function __powerline_ruby_prompt {
   [[ -n "${ruby_version}" ]] && echo "${RUBY_CHAR}${ruby_version}|${RUBY_THEME_PROMPT_COLOR}"
 }
 
+function __powerline_k8s_context_prompt {
+  local kubernetes_context=""
+
+  if _command_exists kubectl; then
+    kubernetes_context="$(k8s_context_prompt)"
+  fi
+
+  [[ -n "${kubernetes_context}" ]] && echo "${KUBERNETES_CONTEXT_THEME_CHAR}${kubernetes_context}|${KUBERNETES_CONTEXT_THEME_PROMPT_COLOR}"
+}
+
 function __powerline_python_venv_prompt {
   set +u
   local python_venv=""
