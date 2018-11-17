@@ -82,18 +82,24 @@ function __powerline_scm_prompt {
 
   scm_prompt_vars
 
+  # echo "${scm}"
+
   if [[ "${SCM_NONE_CHAR}" != "${SCM_CHAR}" ]]; then
     if [[ "${SCM_DIRTY}" -eq 3 ]]; then
       color=${SCM_THEME_PROMPT_STAGED_COLOR}
       fg_color=124
     elif [[ "${SCM_DIRTY}" -eq 2 ]]; then
       color=${SCM_THEME_PROMPT_UNSTAGED_COLOR}
-      fg_color=255
+      fg_color=56
     elif [[ "${SCM_DIRTY}" -eq 1 ]]; then
       color=${SCM_THEME_PROMPT_DIRTY_COLOR}
-    else
+      fg_color=118
+    elif [[ "${SCM_DIRTY}" -eq 0 ]]; then
       color=${SCM_THEME_PROMPT_CLEAN_COLOR}
       fg_color=16
+    else
+      color=${SCM_THEME_PROMPT_COLOR}
+      fg_color=255
     fi
     # if [[ "${SCM_BRANCH}" == "master" ]]; then
     #   color=128
@@ -138,7 +144,7 @@ function __powerline_clock_prompt {
 function __powerline_battery_prompt {
   local color=""
   local battery_status="$(battery_percentage 2> /dev/null)"
-  local fg_color=206
+  local fg_color=255
 
   if [[ -z "${battery_status}" ]] || [[ "${battery_status}" = "-1" ]] || [[ "${battery_status}" = "no" ]]; then
     true
