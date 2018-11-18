@@ -2,6 +2,7 @@
 
 load ../test_helper
 load ../../lib/composure
+load ../../lib/search
 load ../../plugins/available/base.plugin
 
 cite _about _param _example _group _author _version
