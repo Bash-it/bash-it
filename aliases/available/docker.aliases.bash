@@ -26,6 +26,10 @@ alias dkideps='docker-image-dependencies'  # Output a graph of image dependencie
 alias dkre='docker-runtime-environment'  # List environmental variables of the supplied image ID
 alias dkelc='docker exec -it `dklcid` bash' # Enter last container (works with Docker 1.3 and above)
 alias dkex='docker exec -it ' # Useful to run any commands into container without leaving host
+alias dkri='docker run --rm -i '
+alias dkrit='docker run --rm -it '
+alias dkalp='docker run --rm -it alpine'
+alias dkubu='docker run --rm -it ubuntu'
 
 # Added more recent cleanup options from newer docker versions
 alias dkip='docker image prune -a -f'
