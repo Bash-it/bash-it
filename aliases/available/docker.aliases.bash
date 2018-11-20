@@ -1,6 +1,8 @@
 cite 'about-alias'
 about-alias 'docker abbreviations'
 
+alias d='docker'
+alias dk='docker'
 alias dklc='docker ps -l'  # List last Docker container
 alias dklcid='docker ps -l -q'  # List last Docker container ID
 alias dklcip='docker inspect -f "{{.NetworkSettings.IPAddress}}" $(docker ps -l -q)'  # Get IP of last Docker container
