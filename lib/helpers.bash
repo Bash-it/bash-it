@@ -14,16 +14,18 @@ function _command_exists ()
   type "$1" &> /dev/null ;
 }
 
-# Helper function loading various enable-able files
-function _load_bash_it_files() {
+# Helper function listing various enable-able files to be sourced
+# The files need to be sourced in global scope to preserve scope of 'declare'
+function _list_bash_it_files() {
   subdirectory="$1"
   if [ -d "${BASH_IT}/${subdirectory}/enabled" ]
   then
     FILES="${BASH_IT}/${subdirectory}/enabled/*.bash"
-    for config_file in $FILES
+
+    for _bash_it_config_file in $FILES
     do
-      if [ -e "${config_file}" ]; then
-        source $config_file
+      if [ -e "${_bash_it_config_file}" ]; then
+        _bash_it_list_bash_it_files_return+=("$_bash_it_config_file")
       fi
     done
   fi
@@ -43,20 +45,23 @@ function _load_global_bash_it_files() {
   fi
 }
 
-# Function for reloading aliases
-function reload_aliases() {
-  _load_bash_it_files "aliases"
+function _make_reload_alias() {
+  printf %s '\
+  _bash_it_list_bash_it_files_return=() ;\
+  _list_bash_it_files '"$1"' ;\
+  for _bash_it_config_file in "${_bash_it_list_bash_it_files_return[@]}"; do \
+    . "$_bash_it_config_file" ;\
+  done'
 }
 
-# Function for reloading auto-completion
-function reload_completion() {
-  _load_bash_it_files "completion"
-}
+# Alias for reloading aliases
+alias reload_aliases="$(_make_reload_alias aliases)"
 
-# Function for reloading plugins
-function reload_plugins() {
-  _load_bash_it_files "plugins"
-}
+# Alias for reloading auto-completion
+alias reload_completion="$(_make_reload_alias completion)"
+
+# Alias for reloading plugins
+alias reload_plugins="$(_make_reload_alias plugins)"
 
 bash-it ()
 {

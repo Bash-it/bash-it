@@ -43,8 +43,16 @@ _load_global_bash_it_files
 # Load enabled aliases, completion, plugins
 for file_type in "aliases" "plugins" "completion"
 do
-  _load_bash_it_files $file_type
+  _bash_it_list_bash_it_files_return=()
+  _list_bash_it_files $file_type
+
+  for config_file in "${_bash_it_list_bash_it_files_return[@]}" ; do
+    . "$config_file"
+  done
 done
+
+unset _bash_it_list_bash_it_files_return
+unset _bash_it_config_file
 
 # Load theme, if a theme was set
 if [[ ! -z "${BASH_IT_THEME}" ]]; then
