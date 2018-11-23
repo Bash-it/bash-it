@@ -51,7 +51,9 @@ function _make_reload_alias() {
   _list_bash_it_files '"$1"' ;\
   for _bash_it_config_file in "${_bash_it_list_bash_it_files_return[@]}"; do \
     . "$_bash_it_config_file" ;\
-  done'
+  done ;\
+  unset _bash_it_list_bash_it_files_return ;\
+  unset _bash_it_config_file'
 }
 
 # Alias for reloading aliases
