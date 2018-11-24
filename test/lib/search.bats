@@ -3,6 +3,7 @@
 load ../test_helper
 load ../../lib/composure
 load ../../lib/helpers
+load ../../lib/utilities
 load ../../lib/search
 load ../../plugins/available/base.plugin
 load ../../aliases/available/git.aliases
@@ -27,6 +28,7 @@ function local_setup {
   rm -rf "$BASH_IT"/aliases/enabled
   rm -rf "$BASH_IT"/completion/enabled
   rm -rf "$BASH_IT"/plugins/enabled
+  rm -rf "$BASH_IT"/tmp/cache
 
   mkdir -p "$BASH_IT"/enabled
   mkdir -p "$BASH_IT"/aliases/enabled

@@ -7,10 +7,11 @@
 #
 # Usage:
 #    ❯ bash-it search [-|@]term1 [-|@]term2 ... \
-#       [ --enable  | -e ] \
-#       [ --disable | -d ] \
-#       [ --refresh | -r ]
-#       [ --help    | -h ]
+#       [ --enable   | -e ] \
+#       [ --disable  | -d ] \
+#       [ --no-color | -c ] \
+#       [ --refresh  | -r ] \
+#       [ --help     | -h ]
 #
 #    Single dash, as in "-chruby", indicates a negative search term.
 #    Double dash indicates a command that is to be applied to the search result.
@@ -52,6 +53,8 @@ _bash-it-search() {
   _param '2: [ term2 ]...'
   _example '$ _bash-it-search @git ruby -rvm rake bundler'
 
+  [[ -z "$(type _bash-it-array-contains-element 2>/dev/null)" ]] && source "${BASH_IT}/lib/utilities.bash"
+
   local component
   export BASH_IT_SEARCH_USE_COLOR=true
   export BASH_IT_GREP=${BASH_IT_GREP:-$(which egrep)}
@@ -68,17 +71,19 @@ _bash-it-search() {
       _bash-it-search-help
       return 0
     elif [[ ${word} == "--refresh" || ${word} == "-r" ]]; then
-      _bash_it_search_cache_clean
-    elif [[ ${word} == "--no-color" ]]; then
+      _bash-it-clean-component-cache
+    elif [[ ${word} == "--no-color" || ${word} == '-c' ]]; then
       export BASH_IT_SEARCH_USE_COLOR=false
     else
       args=(${args[@]} ${word})
     fi
   done
 
-  for component in "${BASH_IT_COMPONENTS[@]}" ; do
-    _bash-it-search-component "${component}" "${args[@]}"
-  done
+  if [[ ${#args} -gt 0 ]]; then
+    for component in "${BASH_IT_COMPONENTS[@]}" ; do
+      _bash-it-search-component "${component}" "${args[@]}"
+    done
+  fi
 
   return 0
 }
@@ -88,7 +93,11 @@ _bash-it-search-help() {
 ${echo_underline_yellow}USAGE${echo_normal}
 
    bash-it search [-|@]term1 [-|@]term2 ... \\
-           [ --enable | --disable | --help | --refresh | --no-color ]
+     [ --enable   | -e ] \\
+     [ --disable  | -d ] \\
+     [ --no-color | -c ] \\
+     [ --refresh  | -r ] \\
+     [ --help     | -h ]
 
 ${echo_underline_yellow}DESCRIPTION${echo_normal}
 
@@ -110,11 +119,11 @@ ${echo_underline_yellow}DESCRIPTION${echo_normal}
         eg. '@git' would only match aliases, plugins and completions named 'git'.
 
 ${echo_underline_yellow}FLAGS${echo_normal}
-   --enable       ${echo_purple}Enable all matching componenents.${echo_normal}
-   --disable      ${echo_purple}Disable all matching componenents.${echo_normal}
-   --help         ${echo_purple}Print this help.${echo_normal}
-   --refresh      ${echo_purple}Force a refresh of the search cache.${echo_normal}
-   --no-color     ${echo_purple}Disable color output and use monochrome text.${echo_normal}
+   --enable   | -e    ${echo_purple}Enable all matching componenents.${echo_normal}
+   --disable  | -d    ${echo_purple}Disable all matching componenents.${echo_normal}
+   --help     | -h    ${echo_purple}Print this help.${echo_normal}
+   --refresh  | -r    ${echo_purple}Force a refresh of the search cache.${echo_normal}
+   --no-color | -c    ${echo_purple}Disable color output and use monochrome text.${echo_normal}
 
 ${echo_underline_yellow}EXAMPLES${echo_normal}
 
@@ -156,46 +165,6 @@ ${echo_underline_yellow}SUMMARY${echo_normal}
 "
 }
 
-_bash-it-cache-file() {
-  local component="${1}"
-  local file="/tmp/bash_it/${component}.status"
-  mkdir -p $(dirname ${file})
-  printf ${file}
-}
-
-_bash_it_search_cache_clean() {
-  local component="$1"
-  if [[ -z ${component} ]] ; then
-    for component in "${BASH_IT_COMPONENTS[@]}" ; do
-      _bash_it_search_cache_clean "${component}"
-    done
-  else
-    rm -f $(_bash-it-cache-file ${component})
-  fi
-}
-
-#———————————————————————————————————————————————————————————————————————————————
-# array=("something to search for" "a string" "test2000")
-# _bash-it-array-contains-element "a string" "${array[@]}"
-# ( prints "true" or "false" )
-_bash-it-array-contains-element () {
-  local e
-  local r=false
-  for e in "${@:2}"; do [[ "$e" == "$1" ]] && r=true; done
-  echo -n $r
-}
-
-_bash-it-array-dedup() {
-  echo "$*" | tr ' ' '\n' | sort -u | tr '\n' ' '
-}
-
-_bash-it-grep() {
-  if [[ -z "${BASH_IT_GREP}" ]] ; then
-    export BASH_IT_GREP="$(which egrep || which grep || '/usr/bin/grep')"
-  fi
-  printf "%s " "${BASH_IT_GREP}"
-}
-
 _bash-it-is-partial-match() {
   local component="$1"
   local term="$2"
@@ -212,51 +181,6 @@ _bash-it-component-term-matches-negation() {
   return 1
 }
 
-_bash-it-component-help() {
-  local component="$1"
-  local file=$(_bash-it-cache-file ${component})
-  if [[ ! -s "${file}" || -z $(find "${file}" -mmin -2) ]] ; then
-    rm -f "${file}" 2>/dev/null
-    local func="_bash-it-${component}"
-    ${func} | $(_bash-it-grep) -E '   \[' | cat > ${file}
-  fi
-  cat "${file}"
-}
-
-_bash-it-component-list() {
-  local component="$1"
-  _bash-it-component-help "${component}" | awk '{print $1}' | uniq | sort | tr '\n' ' '
-}
-
-_bash-it-component-list-matching() {
-  local component="$1"; shift
-  local term="$1"
-  _bash-it-component-help "${component}" | $(_bash-it-grep) -E -- "${term}" | awk '{print $1}' | sort | uniq
-}
-
-_bash-it-component-list-enabled() {
-  local component="$1"
-  _bash-it-component-help "${component}" | $(_bash-it-grep) -E  '\[x\]' | awk '{print $1}' | uniq | sort | tr '\n' ' '
-}
-
-_bash-it-component-list-disabled() {
-  local component="$1"
-  _bash-it-component-help "${component}" | $(_bash-it-grep) -E -v '\[x\]' | awk '{print $1}' | uniq | sort | tr '\n' ' '
-}
-
-_bash-it-component-item-is-enabled() {
-  local component="$1"
-  local item="$2"
-  _bash-it-component-help "${component}" | $(_bash-it-grep) -E '\[x\]' |  $(_bash-it-grep) -E -q -- "^${item}\s"
-}
-
-_bash-it-component-item-is-disabled() {
-  local component="$1"
-  local item="$2"
-  _bash-it-component-help "${component}" | $(_bash-it-grep) -E -v '\[x\]' |  $(_bash-it-grep) -E -q -- "^${item}\s"
-}
-
-
 _bash-it-search-component() {
   local component="$1"
   shift
@@ -272,7 +196,7 @@ _bash-it-search-component() {
   local component_singular action action_func
   local -a search_commands=(enable disable)
   for search_command in "${search_commands[@]}"; do
-    if [[ $(_bash-it-array-contains-element "--${search_command}" "$@") == "true" ]]; then
+    if $(_bash-it-array-contains-element "--${search_command}" "$@"); then
       component_singular=${component}
       component_singular=${component_singular/es/}  # aliases -> alias
       component_singular=${component_singular/ns/n} # plugins -> plugin
@@ -304,7 +228,7 @@ _bash-it-search-component() {
     elif [[ "${term:0:1}" == "-"  ]] ; then
       negative_terms=(${negative_terms[@]} "${search_term}")
     elif [[ "${term:0:1}" == "@"  ]] ; then
-      if [[ $(_bash-it-array-contains-element "${search_term}" "${component_list[@]}") == "true" ]]; then
+      if $(_bash-it-array-contains-element "${search_term}" "${component_list[@]}"); then
         exact_terms=(${exact_terms[@]} "${search_term}")
       fi
     else
@@ -358,9 +282,6 @@ _bash-it-search-result() {
   local match
   local modified=0
 
-  local flag="DEFER_CACHE_CLEANUP_FOR_${component}"
-  eval "export ${flag}=true"
-
   if [[ "${#matches[@]}" -gt 0 ]] ; then
     printf "${color_component}%13s${color_sep} ${color_off}" "${component}"
 
@@ -384,14 +305,9 @@ _bash-it-search-result() {
         compatible_action="enable"
       }
 
+      local m="${match}${suffix}"
       local len
-      if ( ${BASH_IT_SEARCH_USE_COLOR} ); then
-        local m="${match_color}${match}${suffix}"
-        len=${#m}
-      else
-        local m="${match}${suffix}"
-        len=${#m}
-      fi
+      len=${#m}
 
       printf " ${match_color}${match}${suffix}"  # print current state
       if [[ "${action}" == "${compatible_action}" ]]; then
@@ -411,7 +327,7 @@ _bash-it-search-result() {
       printf "${color_off}"
     done
 
-    [[ ${modified} -gt 0 ]] && _bash_it_search_cache_clean ${component}
+    [[ ${modified} -gt 0 ]] && _bash-it-clean-component-cache ${component}
     printf "\n"
   fi
 }

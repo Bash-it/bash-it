@@ -70,7 +70,7 @@ bash-it ()
     example '$ bash-it disable alias hg [tmux]...'
     example '$ bash-it migrate'
     example '$ bash-it update'
-    example '$ bash-it search [-|@]term1 [-|@]term2 ... [--enable | --disable | --help | --refresh | --no-color ]'
+    example '$ bash-it search [-|@]term1 [-|@]term2 ... [ -e/--enable ] [ -d/--disable ] [ -r/--refresh ] [ -c/--no-color ]'
     example '$ bash-it version'
     example '$ bash-it reload'
     typeset verb=${1:-}
@@ -78,6 +78,7 @@ bash-it ()
     typeset component=${1:-}
     shift
     typeset func
+
     case $verb in
       show)
         func=_bash-it-$component;;
@@ -393,8 +394,7 @@ _disable-thing ()
         fi
     fi
 
-    local flag="DEFER_CACHE_CLEANUP_FOR_${file_type}"
-    [[ -z ${!flag} ]] && _bash_it_search_cache_clean "${file_type}"
+    _bash-it-clean-component-cache "${file_type}"
 
     if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
         exec ${0/-/}
@@ -491,8 +491,7 @@ _enable-thing ()
         ln -s ../$subdirectory/available/$to_enable "${BASH_IT}/enabled/${use_load_priority}${BASH_IT_LOAD_PRIORITY_SEPARATOR}${to_enable}"
     fi
 
-    local flag="DEFER_CACHE_CLEANUP_FOR_${file_type}"
-    [[ -z ${!flag} ]] && _bash_it_search_cache_clean "${file_type}"
+    _bash-it-clean-component-cache "${file_type}"
 
     if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
         exec ${0/-/}
