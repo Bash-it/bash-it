@@ -1,7 +1,6 @@
 cite 'about-alias'
 about-alias 'docker abbreviations'
 
-alias d='docker'
 alias dk='docker'
 alias dklc='docker ps -l'  # List last Docker container
 alias dklcid='docker ps -l -q'  # List last Docker container ID
@@ -30,8 +29,6 @@ alias dkelc='docker exec -it `dklcid` bash' # Enter last container (works with D
 alias dkex='docker exec -it ' # Useful to run any commands into container without leaving host
 alias dkri='docker run --rm -i '
 alias dkrit='docker run --rm -it '
-alias dkalp='docker run --rm -it alpine'
-alias dkubu='docker run --rm -it ubuntu'
 
 # Added more recent cleanup options from newer docker versions
 alias dkip='docker image prune -a -f'
