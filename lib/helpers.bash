@@ -181,18 +181,31 @@ _bash-it_update() {
   status="$(git rev-list master..${BASH_IT_REMOTE}/master 2> /dev/null)"
 
   if [[ -n "${status}" ]]; then
-    git pull --rebase &> /dev/null
-    if [[ $? -eq 0 ]]; then
-      echo "Bash-it successfully updated."
-      echo ""
-      echo "Migrating your installation to the latest version now..."
-      _bash-it-migrate
-      echo ""
-      echo "All done, enjoy!"
-      bash-it reload
-    else
-      echo "Error updating Bash-it, please, check if your Bash-it installation folder (${BASH_IT}) is clean."
-    fi
+    git log --merges --format="%h: %b (%an)" master..${BASH_IT_REMOTE}/master
+    echo ""
+    read -e -n 1 -p "Would you like to update to $(git log -1 --format=%h origin/master)? [Y/n] " RESP
+    case $RESP in
+      [yY]|"")
+        git pull --rebase &> /dev/null
+        if [[ $? -eq 0 ]]; then
+          echo "Bash-it successfully updated."
+          echo ""
+          echo "Migrating your installation to the latest version now..."
+          _bash-it-migrate
+          echo ""
+          echo "All done, enjoy!"
+          bash-it reload
+        else
+          echo "Error updating Bash-it, please, check if your Bash-it installation folder (${BASH_IT}) is clean."
+        fi
+        ;;
+      [nN])
+        echo "Not upgrading…"
+        ;;
+      *)
+        echo -e "\033[91mPlease choose y or n.\033[m"
+        ;;
+      esac
   else
     echo "Bash-it is up to date, nothing to do!"
   fi
