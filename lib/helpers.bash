@@ -181,7 +181,16 @@ _bash-it_update() {
   status="$(git rev-list master..${BASH_IT_REMOTE}/master 2> /dev/null)"
 
   if [[ -n "${status}" ]]; then
-    git log --merges --format="%h: %b (%an)" master..${BASH_IT_REMOTE}/master
+
+    for i in $(git rev-list --merges master..${BASH_IT_REMOTE}); do
+      num_of_lines=$(git log -1 --format=%B $i | awk 'NF' | wc -l)
+      if [ $num_of_lines -eq 1 ]; then
+        description="%s"
+      else
+        description="%b"
+      fi
+      git log --format="%h: $description (%an)" -1 $i
+    done
     echo ""
     read -e -n 1 -p "Would you like to update to $(git log -1 --format=%h origin/master)? [Y/n] " RESP
     case $RESP in
