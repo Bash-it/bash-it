@@ -16,6 +16,7 @@ A colorful theme, where shows a lot information about your shell session.
 * An indicator when the current shell is inside the Vim editor
 * Battery charging status (depends on the [../../plugins/available/battery.plugin.bash](battery plugin))
 * SCM Repository status (e.g. Git, SVN)
+* The current Kubernetes environment
 * The current Python environment (Virtualenv, venv, and Conda are supported) in use
 * The current Ruby environment (rvm and rbenv are supported) in use
 * Last command exit code (only shown when the exit code is greater than 0)
@@ -44,16 +45,23 @@ The time/date is printed by the `date` command, so refer to its man page to chan
 
 The contents of the prompt can be "reordered", all the "segments" (every piece of information) can take any place. The currently available segments are:
 
-* battery
-* clock
-* cwd
-* in_vim
-* python_venv
-* ruby
-* scm
-* user_info
+* `aws_profile` - Show the current value of the `AWS_PROFILE` environment variable
+* `battery` - Battery information (you'll need to enable the `battery` plugin)
+* `clock` - Current time in `HH:MM:SS` format
+* `cwd` - Current working directory including full folder hierarchy (c.f. `wd`)
+* `hostname` - Host name of machine
+* `in_vim` - Show identifier if running in `:terminal` from vim
+* `k8s_context` - Show current kubernetes context
+* `last_status` - Exit status of last run command
+* `python_venv` - Python virtual environment information (`virtualenv`, `venv`
+  and `conda` supported)
+* `ruby` - Current ruby version if using `rvm`
+* `scm` - Version control information, `git`
+* `user_info` - Current user
+* `wd` - Working directory, like `cwd` but doesn't show the full folder
+  hierarchy, only the directory you're currently in.
 
-A variables can be defined to set the order of the prompt segments:
+A variable can be defined to set the order of the prompt segments:
 
     POWERLINE_PROMPT="user_info scm python_venv ruby cwd"
 

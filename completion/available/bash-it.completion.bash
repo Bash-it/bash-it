@@ -65,7 +65,7 @@ _bash-it-comp()
   prev="${COMP_WORDS[COMP_CWORD-1]}"
   chose_opt="${COMP_WORDS[1]}"
   file_type="${COMP_WORDS[2]}"
-  opts="disable enable help migrate search show update version"
+  opts="disable enable help migrate reload search show update version"
   case "${chose_opt}" in
     show)
       local show_args="aliases completions plugins"
@@ -82,7 +82,7 @@ _bash-it-comp()
         return 0
       fi
       ;;
-    update | search | migrate | version)
+    migrate | reload | search | update | version)
       return 0
       ;;
     enable | disable)

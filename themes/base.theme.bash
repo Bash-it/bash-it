@@ -7,6 +7,8 @@ CLOCK_THEME_PROMPT_SUFFIX=''
 
 THEME_PROMPT_HOST='\H'
 
+SCM=
+
 SCM_CHECK=${SCM_CHECK:=true}
 
 SCM_THEME_PROMPT_DIRTY=' ✗'
@@ -30,6 +32,7 @@ SCM_GIT_SHOW_REMOTE_INFO=${SCM_GIT_SHOW_REMOTE_INFO:=auto}
 SCM_GIT_IGNORE_UNTRACKED=${SCM_GIT_IGNORE_UNTRACKED:=false}
 SCM_GIT_SHOW_CURRENT_USER=${SCM_GIT_SHOW_CURRENT_USER:=false}
 SCM_GIT_SHOW_MINIMAL_INFO=${SCM_GIT_SHOW_MINIMAL_INFO:=false}
+SCM_GIT_SHOW_STASH_INFO=${SCM_GIT_SHOW_STASH_INFO:=true}
 
 SCM_GIT='git'
 SCM_GIT_CHAR='±'
@@ -41,6 +44,12 @@ SCM_GIT_UNSTAGED_CHAR="U:"
 SCM_GIT_STAGED_CHAR="S:"
 SCM_GIT_STASH_CHAR_PREFIX="{"
 SCM_GIT_STASH_CHAR_SUFFIX="}"
+
+SCM_P4='p4'
+SCM_P4_CHAR='⌛'
+SCM_P4_CHANGES_CHAR='C:'
+SCM_P4_DEFAULT_CHAR='D:'
+SCM_P4_OPENED_CHAR='O:'
 
 SCM_HG='hg'
 SCM_HG_CHAR='☿'
@@ -58,6 +67,8 @@ THEME_SHOW_USER_HOST=${THEME_SHOW_USER_HOST:=false}
 USER_HOST_THEME_PROMPT_PREFIX=''
 USER_HOST_THEME_PROMPT_SUFFIX=''
 
+VIRTUAL_ENV=
+
 VIRTUALENV_THEME_PROMPT_PREFIX=' |'
 VIRTUALENV_THEME_PROMPT_SUFFIX='|'
 
@@ -69,11 +80,12 @@ RBFU_THEME_PROMPT_SUFFIX='|'
 
 function scm {
   if [[ "$SCM_CHECK" = false ]]; then SCM=$SCM_NONE
-  elif [[ -f .git/HEAD ]]; then SCM=$SCM_GIT
+  elif [[ -f .git/HEAD ]] && which git &> /dev/null; then SCM=$SCM_GIT
   elif which git &> /dev/null && [[ -n "$(git rev-parse --is-inside-work-tree 2> /dev/null)" ]]; then SCM=$SCM_GIT
-  elif [[ -d .hg ]]; then SCM=$SCM_HG
+  elif which p4 &> /dev/null && [[ -n "$(p4 set P4CLIENT 2> /dev/null)" ]]; then SCM=$SCM_P4
+  elif [[ -d .hg ]] && which hg &> /dev/null; then SCM=$SCM_HG
   elif which hg &> /dev/null && [[ -n "$(hg root 2> /dev/null)" ]]; then SCM=$SCM_HG
-  elif [[ -d .svn ]]; then SCM=$SCM_SVN
+  elif [[ -d .svn ]] && which svn &> /dev/null; then SCM=$SCM_SVN
   else SCM=$SCM_NONE
   fi
 }
@@ -81,6 +93,7 @@ function scm {
 function scm_prompt_char {
   if [[ -z $SCM ]]; then scm; fi
   if [[ $SCM == $SCM_GIT ]]; then SCM_CHAR=$SCM_GIT_CHAR
+  elif [[ $SCM == $SCM_P4 ]]; then SCM_CHAR=$SCM_P4_CHAR
   elif [[ $SCM == $SCM_HG ]]; then SCM_CHAR=$SCM_HG_CHAR
   elif [[ $SCM == $SCM_SVN ]]; then SCM_CHAR=$SCM_SVN_CHAR
   else SCM_CHAR=$SCM_NONE_CHAR
@@ -93,6 +106,7 @@ function scm_prompt_vars {
   SCM_DIRTY=0
   SCM_STATE=''
   [[ $SCM == $SCM_GIT ]] && git_prompt_vars && return
+  [[ $SCM == $SCM_P4 ]] && p4_prompt_vars && return
   [[ $SCM == $SCM_HG ]] && hg_prompt_vars && return
   [[ $SCM == $SCM_SVN ]] && svn_prompt_vars && return
 }
@@ -125,8 +139,9 @@ function scm_prompt_info_common {
   fi
 
   # TODO: consider adding minimal status information for hg and svn
-  { [[ ${SCM:-} == ${SCM_HG} ]] && hg_prompt_info && return; } || true
-  { [[ ${SCM:-} == ${SCM_SVN} ]] && svn_prompt_info && return; } || true
+  { [[ ${SCM} == ${SCM_P4} ]] && p4_prompt_info && return; } || true
+  { [[ ${SCM} == ${SCM_HG} ]] && hg_prompt_info && return; } || true
+  { [[ ${SCM} == ${SCM_SVN} ]] && svn_prompt_info && return; } || true
 }
 
 function git_prompt_minimal_info {
@@ -167,9 +182,11 @@ function git_prompt_vars {
   [[ "${commits_ahead}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_GIT_AHEAD_CHAR}${commits_ahead}"
   [[ "${commits_behind}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_GIT_BEHIND_CHAR}${commits_behind}"
 
-  local stash_count
-  stash_count="$(git stash list 2> /dev/null | wc -l | tr -d ' ')"
-  [[ "${stash_count}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_GIT_STASH_CHAR_PREFIX}${stash_count}${SCM_GIT_STASH_CHAR_SUFFIX}"
+  if [[ "${SCM_GIT_SHOW_STASH_INFO}" = "true" ]]; then
+    local stash_count
+    stash_count="$(git stash list 2> /dev/null | wc -l | tr -d ' ')"
+    [[ "${stash_count}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_GIT_STASH_CHAR_PREFIX}${stash_count}${SCM_GIT_STASH_CHAR_SUFFIX}"
+  fi
 
   SCM_STATE=${GIT_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
   if ! _git-hide-status; then
@@ -191,6 +208,26 @@ function git_prompt_vars {
   SCM_SUFFIX=${GIT_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
 
   SCM_CHANGE=$(_git-short-sha 2>/dev/null || echo "")
+}
+
+function p4_prompt_vars {
+  IFS=$'\t' read -r \
+     opened_count non_default_changes default_count \
+     add_file_count edit_file_count delete_file_count \
+     <<< "$(_p4-opened-counts)"
+  if [[ "${opened_count}" -gt 0 ]]; then
+    SCM_DIRTY=1
+    SCM_STATE=${SCM_THEME_PROMPT_DIRTY}
+    [[ "${opened_count}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_P4_OPENED_CHAR}${opened_count}"
+    [[ "${non_default_changes}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_P4_CHANGES_CHAR}${non_default_changes}"
+    [[ "${default_count}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_P4_DEFAULT_CHAR}${default_count}"
+  else
+    SCM_DIRTY=0
+    SCM_STATE=${SCM_THEME_PROMPT_DIRTY}
+  fi
+
+  SCM_PREFIX=${P4_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
+  SCM_SUFFIX=${P4_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
 }
 
 function svn_prompt_vars {
@@ -299,6 +336,10 @@ function ruby_version_prompt {
   echo -e "$(rbfu_version_prompt)$(rbenv_version_prompt)$(rvm_version_prompt)$(chruby_version_prompt)"
 }
 
+function k8s_context_prompt {
+  echo -e "$(kubectl config current-context)"
+}
+
 function virtualenv_prompt {
   if [[ -n "$VIRTUAL_ENV" ]]; then
     virtualenv=`basename "$VIRTUAL_ENV"`
@@ -313,7 +354,7 @@ function condaenv_prompt {
 }
 
 function py_interp_prompt {
-  py_version=$(python --version 2>&1 | awk '{print "py-"$2;}') || return
+  py_version=$(python --version 2>&1 | awk 'NR==1{print "py-"$2;}') || return
   echo -e "${PYTHON_THEME_PROMPT_PREFIX}${py_version}${PYTHON_THEME_PROMPT_SUFFIX}"
 }
 
@@ -359,8 +400,14 @@ function user_host_prompt {
 
 # backwards-compatibility
 function git_prompt_info {
+  _git-hide-status && return
   git_prompt_vars
   echo -e "${SCM_PREFIX}${SCM_BRANCH}${SCM_STATE}${SCM_SUFFIX}"
+}
+
+function p4_prompt_info() {
+  p4_prompt_vars
+  echo -e "${SCM_PREFIX}${SCM_BRANCH}:${SCM_CHANGE}${SCM_STATE}${SCM_SUFFIX}"
 }
 
 function svn_prompt_info {

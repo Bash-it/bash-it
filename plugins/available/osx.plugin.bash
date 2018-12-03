@@ -5,7 +5,7 @@ about-plugin 'osx-specific functions'
 if [ $(uname) = "Darwin" ]; then
   if type update_terminal_cwd > /dev/null 2>&1 ; then
     if ! [[ $PROMPT_COMMAND =~ (^|;)update_terminal_cwd($|;) ]] ; then
-      PROMPT_COMMAND="$PROMPT_COMMAND;update_terminal_cwd"
+      PROMPT_COMMAND="${PROMPT_COMMAND%;};update_terminal_cwd"
       declared="$(declare -p PROMPT_COMMAND)"
       [[ "$declared" =~ \ -[aAilrtu]*x[aAilrtu]*\  ]] 2>/dev/null
       [[ $? -eq 0 ]] && export PROMPT_COMMAND
@@ -96,6 +96,19 @@ function prevcurl() {
     return 1
   fi
   curl "$*" | open -fa $PREVIEW
+}
+
+function refresh-launchpad() {
+  about 'Reset launchpad layout in macOS'
+  example '$ refresh-launchpad'
+  group 'osx'
+
+  if [ $(uname) = "Darwin" ];then
+    defaults write com.apple.dock ResetLaunchPad -bool TRUE
+    killall Dock
+  else
+    echo "Sorry, this only works on Mac OS X"
+  fi
 }
 
 # Make this backwards compatible

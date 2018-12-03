@@ -20,23 +20,23 @@ done
 
 
 function postgres_start {
-  about 'Starts PostgresSQL server'
+  about 'Starts PostgreSQL server'
   group 'postgres'
 
-  echo 'Starting PostgresSQL Server....'; 
+  echo 'Starting Postgres....'; 
   $POSTGRES_BIN/pg_ctl -D $PGDATA -l $PGDATA/logfile  start
 }
 
 function postgres_stop {
-  about 'Steps PostgresSQL server'
+  about 'Stops PostgreSQL server'
   group 'postgres'
 
-  echo 'Stopping PostgresSQL Server....'; 
+  echo 'Stopping Postgres....'; 
   $POSTGRES_BIN/pg_ctl -D $PGDATA -l $PGDATA/logfile stop -s -m fast
 }
 
 function postgres_status {
-  about 'Returns status of PostgresSQL server'
+  about 'Returns status of PostgreSQL server'
   group 'postgres'
 
   # $POSTGRES_BIN/pg_ctl -D $PGDATA status  
@@ -55,7 +55,7 @@ function is_postgres_running {
 
 
 function postgres_restart {
-  about 'Restarts status of PostgresSQL server'
+  about 'Restarts status of PostgreSQL server'
   group 'postgres'
 
   echo 'Restarting Postgres....'; 

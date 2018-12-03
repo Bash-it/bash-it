@@ -16,7 +16,7 @@ esac
 BACKUP_FILE=$CONFIG_FILE.bak
 
 if [ ! -e "$HOME/$BACKUP_FILE" ]; then
-  echo -e "\033[0;33mBackup file "$HOME/$BACKUP_FILE" not found.\033[0m" >&2
+  echo -e "\033[0;33mBackup file $HOME/$BACKUP_FILE not found.\033[0m" >&2
 
   test -w "$HOME/$CONFIG_FILE" &&
     mv "$HOME/$CONFIG_FILE" "$HOME/$CONFIG_FILE.uninstall" &&

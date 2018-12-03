@@ -5,7 +5,7 @@ explain () {
   about 'explain any bash command via mankier.com manpage API'
   param '1: Name of the command to explain'
   example '$ explain                # interactive mode. Type commands to explain in REPL'
-  example '$ explain 'cmd -o | ...' # one quoted command to explain it.'
+  example '$ explain '"'"'cmd -o | ...'"'"' # one quoted command to explain it.'
   group 'explain'
 
   if [ "$#" -eq 0 ]; then

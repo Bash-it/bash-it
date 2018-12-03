@@ -1,31 +1,22 @@
 #!/usr/bin/env bash
 # Initialize Bash It
 
-# Reload Library
-case $OSTYPE in
-  darwin*)
-    alias reload='source ~/.bash_profile'
-    ;;
-  *)
-    alias reload='source ~/.bashrc'
-    ;;
-esac
-
 # Only set $BASH_IT if it's not already set
 if [ -z "$BASH_IT" ];
 then
-    # Setting $BASH to maintain backwards compatibility
-    # TODO: warn users that they should upgrade their .bash_profile
-    export BASH_IT=$BASH
-    export BASH="$(bash -c 'echo $BASH')"
+  # Setting $BASH to maintain backwards compatibility
+  # TODO: warn users that they should upgrade their .bash_profile
+  export BASH_IT=$BASH
+  BASH="$(bash -c 'echo $BASH')"
+  export BASH
 fi
 
 # For backwards compatibility, look in old BASH_THEME location
 if [ -z "$BASH_IT_THEME" ];
 then
-    # TODO: warn users that they should upgrade their .bash_profile
-    export BASH_IT_THEME="$BASH_THEME";
-    unset $BASH_THEME;
+  # TODO: warn users that they should upgrade their .bash_profile
+  export BASH_IT_THEME="$BASH_THEME";
+  unset BASH_THEME;
 fi
 
 # Load composure first, so we support function metadata
@@ -40,9 +31,9 @@ LIB="${BASH_IT}/lib/*.bash"
 APPEARANCE_LIB="${BASH_IT}/lib/appearance.bash"
 for config_file in $LIB
 do
-  if [ $config_file != $APPEARANCE_LIB ]; then
+  if [ "$config_file" != "$APPEARANCE_LIB" ]; then
     # shellcheck disable=SC1090
-    source $config_file
+    source "$config_file"
   fi
 done
 
@@ -55,17 +46,22 @@ do
   _load_bash_it_files $file_type
 done
 
-# Load colors and helpers first so they can be used in base theme
-# shellcheck source=./themes/colors.theme.bash
-source "${BASH_IT}/themes/colors.theme.bash"
-# shellcheck source=./themes/githelpers.theme.bash
-source "${BASH_IT}/themes/githelpers.theme.bash"
-# shellcheck source=./themes/base.theme.bash
-source "${BASH_IT}/themes/base.theme.bash"
+# Load theme, if a theme was set
+if [[ ! -z "${BASH_IT_THEME}" ]]; then
+  # Load colors and helpers first so they can be used in base theme
+  # shellcheck source=./themes/colors.theme.bash
+  source "${BASH_IT}/themes/colors.theme.bash"
+  # shellcheck source=./themes/githelpers.theme.bash
+  source "${BASH_IT}/themes/githelpers.theme.bash"
+  # shellcheck source=./themes/p4helpers.theme.bash
+  source "${BASH_IT}/themes/p4helpers.theme.bash"
+  # shellcheck source=./themes/base.theme.bash
+  source "${BASH_IT}/themes/base.theme.bash"
 
-# appearance (themes) now, after all dependencies
-# shellcheck source=./lib/appearance.bash
-source $APPEARANCE_LIB
+  # appearance (themes) now, after all dependencies
+  # shellcheck source=./lib/appearance.bash
+  source "$APPEARANCE_LIB"
+fi
 
 # Load custom aliases, completion, plugins
 for file_type in "aliases" "completion" "plugins"
@@ -83,13 +79,13 @@ for config_file in $CUSTOM
 do
   if [ -e "${config_file}" ]; then
     # shellcheck disable=SC1090
-    source $config_file
+    source "$config_file"
   fi
 done
 
 unset config_file
 if [[ $PROMPT ]]; then
-    export PS1="\[""$PROMPT""\]"
+  export PS1="\[""$PROMPT""\]"
 fi
 
 # Adding Support for other OSes
@@ -108,6 +104,18 @@ if [ -e "$HOME/.jekyllconfig" ]
 then
   # shellcheck disable=SC1090
   . "$HOME/.jekyllconfig"
+fi
+
+# BASH_IT_RELOAD_LEGACY is set.
+if ! command -v reload &>/dev/null && [ -n "$BASH_IT_RELOAD_LEGACY" ]; then
+  case $OSTYPE in
+    darwin*)
+      alias reload='source ~/.bash_profile'
+      ;;
+    *)
+      alias reload='source ~/.bashrc'
+      ;;
+  esac
 fi
 
 # Disable trap DEBUG on subshells - https://github.com/Bash-it/bash-it/pull/1040
