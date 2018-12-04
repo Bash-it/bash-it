@@ -182,7 +182,7 @@ _bash-it_update() {
 
   if [[ -n "${status}" ]]; then
 
-    for i in $(git rev-list --merges master..${BASH_IT_REMOTE}); do
+    for i in $(git rev-list --merges --first-parent master..${BASH_IT_REMOTE}); do
       num_of_lines=$(git log -1 --format=%B $i | awk 'NF' | wc -l)
       if [ $num_of_lines -eq 1 ]; then
         description="%s"
