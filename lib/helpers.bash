@@ -53,6 +53,8 @@ function _list_global_bash_it_files() {
       fi
     done
   fi
+
+  popd >/dev/null
 }
 
 function _make_reload_alias() {
@@ -61,12 +63,13 @@ function _make_reload_alias() {
 
   printf %s '
   for _bash_it_config_file in $(_list_global_bash_it_files '"$global_family"'); do \
-    . "${BASH_IT}/$_bash_it_config_file" ;
-  done ;
-
-  for _bash_it_config_file in $(_list_bash_it_files '"$subdirectory"'); do
-    . "${BASH_IT}/$_bash_it_config_file" ;
-  done ;
+    . "${BASH_IT}/$_bash_it_config_file" ;\
+  done ;\
+  \
+  for _bash_it_config_file in $(_list_bash_it_files '"$subdirectory"'); do \
+    . "${BASH_IT}/$_bash_it_config_file" ;\
+  done ;\
+  \
   unset _bash_it_config_file'
 }
 
