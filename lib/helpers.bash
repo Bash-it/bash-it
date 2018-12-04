@@ -17,42 +17,54 @@ function _command_exists ()
 # Helper function listing various enable-able files to be sourced
 # The files need to be sourced in global scope to preserve scope of 'declare'
 function _list_bash_it_files() {
-  subdirectory="$1"
-  if [ -d "${BASH_IT}/${subdirectory}/enabled" ]
+  local subdirectory="$1"
+  pushd "${BASH_IT}" >/dev/null
+
+  if [ -d "./${subdirectory}/enabled" ]
   then
-    FILES="${BASH_IT}/${subdirectory}/enabled/*.bash"
+    local FILES="./${subdirectory}/enabled/*.bash"
+    local _bash_it_config_file
 
     for _bash_it_config_file in $FILES
     do
       if [ -e "${_bash_it_config_file}" ]; then
-        _bash_it_list_bash_it_files_return+=("$_bash_it_config_file")
+        printf "$_bash_it_config_file\n"
       fi
     done
   fi
+
+  popd >/dev/null
 }
 
-function _load_global_bash_it_files() {
+function _list_global_bash_it_files() {
+  local family="$1"
+  pushd "${BASH_IT}" >/dev/null
+
   # In the new structure
-  if [ -d "${BASH_IT}/enabled" ]
+  if [ -d "./enabled" ]
   then
-    FILES="${BASH_IT}/enabled/*.bash"
-    for config_file in $FILES
+    local FILES="./enabled/*$family.bash"
+    local _bash_it_config_file
+
+    for _bash_it_config_file in $FILES
     do
-      if [ -e "${config_file}" ]; then
-        source $config_file
+      if [ -e "${_bash_it_config_file}" ]; then
+        printf "$_bash_it_config_file\n"
       fi
     done
   fi
 }
 
 function _make_reload_alias() {
-  printf %s '\
-  _bash_it_list_bash_it_files_return=() ;\
-  _list_bash_it_files '"$1"' ;\
-  for _bash_it_config_file in "${_bash_it_list_bash_it_files_return[@]}"; do \
-    . "$_bash_it_config_file" ;\
-  done ;\
-  unset _bash_it_list_bash_it_files_return ;\
+  printf %s '
+
+  for _bash_it_config_file in $(_list_global_bash_it_files '"$1"'); do \
+    . "${BASH_IT}/$_bash_it_config_file" ;
+  done ;
+
+  for _bash_it_config_file in $(_list_bash_it_files '"$1"'); do
+    . "${BASH_IT}/$_bash_it_config_file" ;
+  done ;
   unset _bash_it_config_file'
 }
 
