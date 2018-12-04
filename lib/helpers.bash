@@ -56,26 +56,28 @@ function _list_global_bash_it_files() {
 }
 
 function _make_reload_alias() {
-  printf %s '
+  local global_family="$1"
+  local subdirectory="$2"
 
-  for _bash_it_config_file in $(_list_global_bash_it_files '"$1"'); do \
+  printf %s '
+  for _bash_it_config_file in $(_list_global_bash_it_files '"$global_family"'); do \
     . "${BASH_IT}/$_bash_it_config_file" ;
   done ;
 
-  for _bash_it_config_file in $(_list_bash_it_files '"$1"'); do
+  for _bash_it_config_file in $(_list_bash_it_files '"$subdirectory"'); do
     . "${BASH_IT}/$_bash_it_config_file" ;
   done ;
   unset _bash_it_config_file'
 }
 
 # Alias for reloading aliases
-alias reload_aliases="$(_make_reload_alias aliases)"
+alias reload_aliases="$(_make_reload_alias alias aliases)"
 
 # Alias for reloading auto-completion
-alias reload_completion="$(_make_reload_alias completion)"
+alias reload_completion="$(_make_reload_alias completion completion)"
 
 # Alias for reloading plugins
-alias reload_plugins="$(_make_reload_alias plugins)"
+alias reload_plugins="$(_make_reload_alias plugin plugins)"
 
 bash-it ()
 {
