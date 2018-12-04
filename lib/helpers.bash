@@ -62,14 +62,12 @@ function _make_reload_alias() {
   local subdirectory="$2"
 
   printf %s '
-  for _bash_it_config_file in $(_list_global_bash_it_files '"$global_family"'); do \
-    . "${BASH_IT}/$_bash_it_config_file" ;\
+  for _bash_it_config_file in $(_list_global_bash_it_files '"$global_family"'); do
+    . "${BASH_IT}/$_bash_it_config_file"
   done ;\
-  \
-  for _bash_it_config_file in $(_list_bash_it_files '"$subdirectory"'); do \
-    . "${BASH_IT}/$_bash_it_config_file" ;\
+  for _bash_it_config_file in $(_list_bash_it_files '"$subdirectory"'); do
+    . "${BASH_IT}/$_bash_it_config_file"
   done ;\
-  \
   unset _bash_it_config_file'
 }
 
