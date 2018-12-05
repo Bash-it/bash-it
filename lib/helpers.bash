@@ -36,39 +36,8 @@ function _list_bash_it_files() {
   popd >/dev/null
 }
 
-function _list_global_bash_it_files() {
-  local family="$1"
-  pushd "${BASH_IT}" >/dev/null
-
-  # In the new structure
-  if [ -d "./enabled" ]
-  then
-    local FILES="./enabled/*$family.bash"
-    local _bash_it_config_file
-
-    for _bash_it_config_file in $FILES
-    do
-      if [ -e "${_bash_it_config_file}" ]; then
-        printf "$_bash_it_config_file\n"
-      fi
-    done
-  fi
-
-  popd >/dev/null
-}
-
 function _make_reload_alias() {
-  local global_family="$1"
-  local subdirectory="$2"
-
-  printf %s '
-  for _bash_it_config_file in $(_list_global_bash_it_files '"$global_family"'); do
-    . "${BASH_IT}/$_bash_it_config_file"
-  done ;\
-  for _bash_it_config_file in $(_list_bash_it_files '"$subdirectory"'); do
-    . "${BASH_IT}/$_bash_it_config_file"
-  done ;\
-  unset _bash_it_config_file'
+  echo "source \${BASH_IT}/scripts/reloader.bash ${1} ${2}"
 }
 
 # Alias for reloading aliases
