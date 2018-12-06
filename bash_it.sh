@@ -46,7 +46,7 @@ source "${BASH_IT}/scripts/reloader.bash"
 for file_type in "aliases" "plugins" "completion"
 do
   # shellcheck source=./scripts/reloader.bash
-  source "${BASH_IT}/scripts/reloader.bash" "false" "$file_type"
+  source "${BASH_IT}/scripts/reloader.bash" "skip" "$file_type"
 done
 
 # Load theme, if a theme was set

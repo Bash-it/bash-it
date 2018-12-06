@@ -3,7 +3,7 @@ pushd "${BASH_IT}" >/dev/null || exit 1
 
 # TODO: Add debugging output
 
-if [ "$1" != "false" ] && [ -d "./enabled" ]; then
+if [ "$1" != "skip" ] && [ -d "./enabled" ]; then
   _bash_it_config_type=""
   if [[ "${1}" =~ ^(alias|completion|plugin)$ ]]; then
     _bash_it_config_type=$1
