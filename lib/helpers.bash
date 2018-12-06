@@ -14,28 +14,6 @@ function _command_exists ()
   type "$1" &> /dev/null ;
 }
 
-# Helper function listing various enable-able files to be sourced
-# The files need to be sourced in global scope to preserve scope of 'declare'
-function _list_bash_it_files() {
-  local subdirectory="$1"
-  pushd "${BASH_IT}" >/dev/null
-
-  if [ -d "./${subdirectory}/enabled" ]
-  then
-    local FILES="./${subdirectory}/enabled/*.bash"
-    local _bash_it_config_file
-
-    for _bash_it_config_file in $FILES
-    do
-      if [ -e "${_bash_it_config_file}" ]; then
-        printf "$_bash_it_config_file\n"
-      fi
-    done
-  fi
-
-  popd >/dev/null
-}
-
 function _make_reload_alias() {
   echo "source \${BASH_IT}/scripts/reloader.bash ${1} ${2}"
 }
