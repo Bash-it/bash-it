@@ -22,8 +22,7 @@ if [ ! -z "${2}" ] && [ -d "${2}/enabled" ]; then
       # shellcheck source=/dev/null
       source "$_bash_it_config_file"
     else
-      # TODO Display an error?
-      echo "Unable to locate ${_bash_it_config_file}" > /dev/null
+      echo "Unable to locate ${_bash_it_config_file}" > /dev/stderr
     fi
   done
 fi
