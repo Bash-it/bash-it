@@ -19,12 +19,15 @@ function _make_reload_alias() {
 }
 
 # Alias for reloading aliases
+# shellcheck disable=SC2139
 alias reload_aliases="$(_make_reload_alias alias aliases)"
 
 # Alias for reloading auto-completion
+# shellcheck disable=SC2139
 alias reload_completion="$(_make_reload_alias completion completion)"
 
 # Alias for reloading plugins
+# shellcheck disable=SC2139
 alias reload_plugins="$(_make_reload_alias plugin plugins)"
 
 bash-it ()
