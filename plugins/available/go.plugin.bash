@@ -6,9 +6,16 @@ about-plugin 'go environment variables & path configuration'
 [ ! command -v go &>/dev/null ] && return
 
 function _split_path_reverse() {
+  local a=( ${@//:/ } )
+  local i=${#a[@]}
   local r=
-  for p in ${@//:/ } ; do
-    r="$p $r"
+  while [ $i -gt 0 ] ; do
+    i=$(( i - 1 ))
+    if [ $(( i + 1 )) -eq ${#a[@]} ] ; then
+      r="${a[i]}"
+    else
+      r="${r} ${a[i]}"
+    fi
   done
   echo "$r"
 }
