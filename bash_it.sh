@@ -39,11 +39,13 @@ done
 
 # Load the global "enabled" directory
 # "family" param is empty so that files get sources in glob order
+# shellcheck source=./scripts/reloader.bash
 source "${BASH_IT}/scripts/reloader.bash"
 
 # Load enabled aliases, completion, plugins
 for file_type in "aliases" "plugins" "completion"
 do
+  # shellcheck source=./scripts/reloader.bash
   source "${BASH_IT}/scripts/reloader.bash" "false" "$file_type"
 done
 
