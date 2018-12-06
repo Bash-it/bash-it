@@ -29,6 +29,13 @@ load ../../plugins/available/go.plugin
   [ "$output" = "/bar /foo" ]
 }
 
+@test 'plugins go: single entry in GOPATH' {
+  export GOPATH="/foo"
+  load ../../plugins/available/go.plugin
+  echo "$(echo $PATH | cut -d':' -f1,2)"
+  [ "$(echo $PATH | cut -d':' -f1)" = "/foo/bin" ]
+}
+
 @test 'plugins go: multiple entries in GOPATH' {
   export GOPATH="/foo:/bar"
   load ../../plugins/available/go.plugin
