@@ -14,49 +14,21 @@ function _command_exists ()
   type "$1" &> /dev/null ;
 }
 
-# Helper function loading various enable-able files
-function _load_bash_it_files() {
-  subdirectory="$1"
-  if [ -d "${BASH_IT}/${subdirectory}/enabled" ]
-  then
-    FILES="${BASH_IT}/${subdirectory}/enabled/*.bash"
-    for config_file in $FILES
-    do
-      if [ -e "${config_file}" ]; then
-        source $config_file
-      fi
-    done
-  fi
+function _make_reload_alias() {
+  echo "source \${BASH_IT}/scripts/reloader.bash ${1} ${2}"
 }
 
-function _load_global_bash_it_files() {
-  # In the new structure
-  if [ -d "${BASH_IT}/enabled" ]
-  then
-    FILES="${BASH_IT}/enabled/*.bash"
-    for config_file in $FILES
-    do
-      if [ -e "${config_file}" ]; then
-        source $config_file
-      fi
-    done
-  fi
-}
+# Alias for reloading aliases
+# shellcheck disable=SC2139
+alias reload_aliases="$(_make_reload_alias alias aliases)"
 
-# Function for reloading aliases
-function reload_aliases() {
-  _load_bash_it_files "aliases"
-}
+# Alias for reloading auto-completion
+# shellcheck disable=SC2139
+alias reload_completion="$(_make_reload_alias completion completion)"
 
-# Function for reloading auto-completion
-function reload_completion() {
-  _load_bash_it_files "completion"
-}
-
-# Function for reloading plugins
-function reload_plugins() {
-  _load_bash_it_files "plugins"
-}
+# Alias for reloading plugins
+# shellcheck disable=SC2139
+alias reload_plugins="$(_make_reload_alias plugin plugins)"
 
 bash-it ()
 {
