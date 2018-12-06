@@ -19,7 +19,7 @@ if [ "$1" != "false" ] && [ -d "./enabled" ]; then
 fi
 
 
-if [ ! -z "${2}" ] && [ -d "${2}/enabled" ]; then
+if [ ! -z "${2}" ] && [[ "${2}" =~ ^(aliases|completion|plugins)$ ]] && [ -d "${2}/enabled" ]; then
   # TODO: We should warn users they're using legacy enabling
   for _bash_it_config_file in $(sort <(compgen -G "./${2}/enabled/*.bash")); do
     if [ -e "$_bash_it_config_file" ]; then
