@@ -32,6 +32,7 @@ SCM_GIT_SHOW_REMOTE_INFO=${SCM_GIT_SHOW_REMOTE_INFO:=auto}
 SCM_GIT_IGNORE_UNTRACKED=${SCM_GIT_IGNORE_UNTRACKED:=false}
 SCM_GIT_SHOW_CURRENT_USER=${SCM_GIT_SHOW_CURRENT_USER:=false}
 SCM_GIT_SHOW_MINIMAL_INFO=${SCM_GIT_SHOW_MINIMAL_INFO:=false}
+SCM_GIT_SHOW_STASH_INFO=${SCM_GIT_SHOW_STASH_INFO:=true}
 
 SCM_GIT='git'
 SCM_GIT_CHAR='±'
@@ -138,9 +139,9 @@ function scm_prompt_info_common {
   fi
 
   # TODO: consider adding minimal status information for hg and svn
-  [[ ${SCM} == ${SCM_P4} ]] && p4_prompt_info && return
-  [[ ${SCM} == ${SCM_HG} ]] && hg_prompt_info && return
-  [[ ${SCM} == ${SCM_SVN} ]] && svn_prompt_info && return
+  { [[ ${SCM} == ${SCM_P4} ]] && p4_prompt_info && return; } || true
+  { [[ ${SCM} == ${SCM_HG} ]] && hg_prompt_info && return; } || true
+  { [[ ${SCM} == ${SCM_SVN} ]] && svn_prompt_info && return; } || true
 }
 
 function git_prompt_minimal_info {
@@ -181,9 +182,11 @@ function git_prompt_vars {
   [[ "${commits_ahead}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_GIT_AHEAD_CHAR}${commits_ahead}"
   [[ "${commits_behind}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_GIT_BEHIND_CHAR}${commits_behind}"
 
-  local stash_count
-  stash_count="$(git stash list 2> /dev/null | wc -l | tr -d ' ')"
-  [[ "${stash_count}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_GIT_STASH_CHAR_PREFIX}${stash_count}${SCM_GIT_STASH_CHAR_SUFFIX}"
+  if [[ "${SCM_GIT_SHOW_STASH_INFO}" = "true" ]]; then
+    local stash_count
+    stash_count="$(git stash list 2> /dev/null | wc -l | tr -d ' ')"
+    [[ "${stash_count}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_GIT_STASH_CHAR_PREFIX}${stash_count}${SCM_GIT_STASH_CHAR_SUFFIX}"
+  fi
 
   SCM_STATE=${GIT_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
   if ! _git-hide-status; then
@@ -331,6 +334,10 @@ function chruby_version_prompt {
 
 function ruby_version_prompt {
   echo -e "$(rbfu_version_prompt)$(rbenv_version_prompt)$(rvm_version_prompt)$(chruby_version_prompt)"
+}
+
+function k8s_context_prompt {
+  echo -e "$(kubectl config current-context)"
 }
 
 function virtualenv_prompt {

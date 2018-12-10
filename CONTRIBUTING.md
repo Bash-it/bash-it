@@ -19,9 +19,13 @@ Most of this is common sense, but please try to stick to the conventions listed 
   Create a _Pull Request_ from your feature branch against Bash-it's _master_ branch.
 * Limit each Pull Request to one feature.
   Don't bundle multiple features/changes (e.g. a new _Theme_ and a fix to an existing plugin) into a single Pull Request - create one PR for the theme, and a separate PR for the fix.
-* For complex changes, try to _squash_ your changes into a single commit.
-  Don't create a PR consisting of 20 commits that show your work in progress.
-  Before you create the PR, _squash_ your changes into a single commit.
+* For complex changes, try to _squash_ your changes into a single commit before
+  pushing code. Once you've pushed your code and opened a PR, please refrain
+  from force-pushing changes to the PR branch – remember, Bash-it is a
+  distributed project and your branch may be in use already.
+* When in doubt, open a PR with too many commits. Bash-it is a learning project
+  for everyone involved. Showing your work provides a great history for folks
+  to learn what works and what didn't.
 
 ## Code Style
 
