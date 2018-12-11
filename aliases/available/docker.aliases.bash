@@ -19,7 +19,7 @@ case $OSTYPE in
     ;;
 esac
 
-if [ ! -z "$(command ls "${BASH_IT}/$subdirectory/"{[0-9][0-9][0-9]${BASH_IT_LOAD_PRIORITY_SEPARATOR}docker,docker}.plugin.bash 2>/dev/null | head -1)" ]; then
+if [ ! -z "$(command ls "${BASH_IT}/enabled/"{[0-9][0-9][0-9]${BASH_IT_LOAD_PRIORITY_SEPARATOR}docker,docker}.plugin.bash 2>/dev/null | head -1)" ]; then
 # Function aliases from docker plugin:
     alias dkrmlc='docker-remove-most-recent-container'  # Delete most recent (i.e., last) Docker container
     alias dkrmall='docker-remove-stale-assets'  # Delete all untagged images and exited containers
@@ -29,6 +29,7 @@ if [ ! -z "$(command ls "${BASH_IT}/$subdirectory/"{[0-9][0-9][0-9]${BASH_IT_LOA
     alias dkre='docker-runtime-environment'  # List environmental variables of the supplied image ID
 fi
 alias dkelc='docker exec -it $(dklcid) bash --login' # Enter last container (works with Docker 1.3 and above)
+alias dkrmflast='docker rm -f $(dklcid)'
 alias dkbash='dkelc'
 alias dkex='docker exec -it ' # Useful to run any commands into container without leaving host
 alias dkri='docker run --rm -i '
