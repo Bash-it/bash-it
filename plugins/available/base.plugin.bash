@@ -68,9 +68,9 @@ function passgen ()
     echo "Without (use this as the password): $(echo $pass | tr -d ' ')"
 }
 
-# Create alias pass to passgen when pass isn't installed or
+# Create alias pass to passgen when pass isn't installed and
 # BASH_IT_LEGACY_PASS is true.
-if ! command -v pass &>/dev/null || [ "$BASH_IT_LEGACY_PASS" = true ]
+if ! command -v pass &>/dev/null && [ "$BASH_IT_LEGACY_PASS" = true ]
 then
   alias pass=passgen
 fi
