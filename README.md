@@ -384,13 +384,8 @@ Setting this flag globally has the same effect as `SCM_CHECK=true`, but only for
 ### Pass function renamed to passgen
 
 The Bash-it `pass` function has been renamed to `passgen` in order to avoid a naming conflict with the [pass password manager](https://www.passwordstore.org/).
-In order to minimize the impact on users of the legacy Bash-it `pass` function, Bash-it will create the alias `pass` that calls the new `passgen` function if the `pass` password manager command is not found on the `PATH` (default behavior).
 
-This behavior can be overridden with the `BASH_IT_LEGACY_PASS` flag as follows:
-
-Set `BASH_IT_LEGACY_PASS` to 'true' to force Bash-it to always **create** the `pass` alias to `passgen`:
-
-* `export BASH_IT_LEGACY_PASS=true`
+Bash-it will create the alias `pass` that calls the new `passgen` function if the `pass` password manager command is not found on the `PATH` (default behavior) and `BASH_IT_LEGACY_PASS=true`.
 
 Unset `BASH_IT_LEGACY_PASS` to have Bash-it **return to default behavior**:
 
