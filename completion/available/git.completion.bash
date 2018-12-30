@@ -624,7 +624,13 @@ __git_commands () {
 	then
 		printf "%s" "${GIT_TESTING_COMMAND_COMPLETION}"
 	else
-		git help -a|egrep '^  [a-zA-Z0-9]'
+		git_cmd_list=$(git help -a|egrep '^  [a-zA-Z0-9]')
+		if [ ! -z "$git_cmd_list" ]
+		then
+			"$git_cmd_list"
+		else
+			git --list-cmds=main,others,alias,nohelpers
+		fi
 	fi
 }
 
