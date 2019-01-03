@@ -256,7 +256,7 @@ _bash-it-reload() {
   _about 'reloads a profile file'
   _group 'lib'
 
-  cd "${BASH_IT}" || return
+  pushd "${BASH_IT}" &> /dev/null || return
 
   case $OSTYPE in
     darwin*)
@@ -267,7 +267,7 @@ _bash-it-reload() {
       ;;
   esac
 
-  cd - &> /dev/null || return
+  popd &> /dev/null || return
 }
 
 _bash-it-describe ()
