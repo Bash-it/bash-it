@@ -44,7 +44,9 @@ _bash-it-clean-component-cache() {
     done
   else
     cache="$(_bash-it-component-cache-file ${component})"
-    [[ -f "${cache}" ]] && rm -f "${cache}"
+    if [[ -f "${cache}" ]] ; then
+      rm -f "${cache}"
+    fi
   fi
 }
 
