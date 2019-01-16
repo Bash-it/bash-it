@@ -452,6 +452,9 @@ _enable-thing ()
         for f in "${BASH_IT}/$subdirectory/available/"*.bash
         do
             to_enable=$(basename $f .$file_type.bash)
+            if [ "$file_type" = "alias" ]; then
+              to_enable=$(basename $f ".aliases.bash")
+            fi
             _enable-thing $subdirectory $file_type $to_enable $load_priority
         done
     else
