@@ -23,11 +23,11 @@ alias Yay5='sudo yay -Syy'#Obliga a actualizar los repos
 ############################################################
 # PAKKU                                                    #
 ############################################################
-alias Yay1='sudo pakku -Syu'#Actualizacion
-alias Yay2='sudo pakku -Ss' #Busca paquetes.
-alias Yay3='sudo pakku -S'  #Instalar 
-alias Yay='sudo pukku -Rs'  #Desinstala
-alias Yay5='sudo pakku -Syy'#Obliga a actualizar los repos
+alias Pakku1='sudo pakku -Syu'#Actualizacion
+alias Pakku2='sudo pakku -Ss' #Busca paquetes.
+alias Pakku3='sudo pakku -S'  #Instalar 
+alias Pakku4='sudo pukku -Rs'  #Desinstala
+alias Pakku5='sudo pakku -Syy'#Obliga a actualizar los repos
 
 ##################################
 #D I S F R U T A-T U-S Y S T E M #
