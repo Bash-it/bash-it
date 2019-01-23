@@ -1,5 +1,3 @@
-#Niil78
-#2019
 cite 'about-alias'
 about-alias 'Pacman system Arch'
 
