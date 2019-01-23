@@ -1,4 +1,3 @@
-#Niil78
 cite 'about-alias'
 about-alias 'Nmap scanner'
 
@@ -8,8 +7,8 @@ about-alias 'Nmap scanner'
 ###############################
 
 alias Nmap0='echo -e "Nmap1 Geografico/Geographical Scan";echo -e "Nmap2 Versines/Versions";echo -e "Nmap3 Paranoico/Paranoic";echo -e "Nmap4 Furtivo/Sneaky";echo -e "Nmap5 Cortes/Polite";echo -e "Nmap6 Normal";echo -e "Nmap 7 Agresivo/Agresive";echo -e "Nmap8 Insano/Insane";echo -e "Nmap9 WEB (vulscan)";'
-alias Nmap1='echo "geografico/GeoGrafic"; sudo nmap --script=asn-query,whois,ip-geolocation-maxmind' #Informacion Geografica.
-alias Nmap2='echo "script"; sudo nmap -sV -sC' #Informacion basica de versiones 
+alias Nmap1='echo "geografico/GeoGrafic"; sudo nmap --script=asn-query,whois,ip-geolocation-maxmind'
+alias Nmap2='echo "script"; sudo nmap -sV -sC' 
 alias Nmap3='echo "Paranoico/Paranoid (Lento/slow) "; sudo nmap -sSV -sC -p- -T0 '
 alias Nmap4='echo "Furtivo/Sneaky (Lento/slow)"; sudo nmap -sSV -sC -p- -T1'
 alias Nmap5='echo "Cortes/Polite (lento/slow)"; sudo nmap -sSV -sC -p- -T2'
