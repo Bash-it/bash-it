@@ -15,8 +15,13 @@ alias la='ls -AF'       # Compact view, show hidden
 alias ll='ls -al'
 alias l='ls -a'
 alias l1='ls -1'
+alias lisah='ls -lisah --color=auto'
 
 alias _="sudo"
+
+function mkdirr() {
+    mkdir $1 && cd $1 && ls
+}
 
 # Shortcuts to edit startup files
 alias vbrc="vim ~/.bashrc"
@@ -57,10 +62,15 @@ alias ipy='ipython'
 alias piano='pianobar'
 
 alias ..='cd ..'         # Go up one directory
+alias cdh='cd ~/'  # Go in home
 alias cd..='cd ..'       # Common misspelling for going up one directory
 alias ...='cd ../..'     # Go up two directories
 alias ....='cd ../../..' # Go up three directories
 alias -- -='cd -'        # Go back
+
+function cdls() {
+    cd $1 && ls
+}
 
 # Shell History
 alias h='history'
