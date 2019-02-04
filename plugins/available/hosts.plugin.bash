@@ -11,7 +11,7 @@ function hosts() {
           echo "Error : Provided IP is invalid"
       fi
   elif [ "$1" = "list" ]; then
-      cat hosts
+      cat /etc/hosts
   elif [ "$1" = "del" ] || [ "$1" = "remove" ]; then
       shift
       grep -v "$1" /etc/hosts > newhosts
