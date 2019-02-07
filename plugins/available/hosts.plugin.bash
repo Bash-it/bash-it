@@ -1,5 +1,8 @@
 # Requested by philipjohn here : https://github.com/Bash-it/bash-it/issues/1264
 
+cite about-plugin
+about-plugin 'add or remove hosts records'
+
 function hosts() {
   if [ ! "$(whoami)" = "root" ]; then echo "Error: Run this function as root (using sudo)" && exit 1; fi
   if [ "$1" = "add" ]; then
