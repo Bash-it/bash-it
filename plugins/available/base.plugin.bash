@@ -1,6 +1,14 @@
 cite about-plugin
 about-plugin 'miscellaneous tools'
 
+
+function mkdirr() {
+    mkdir $1 && cd $1 && ls
+}
+function cdls() {
+    cd $1 && ls
+}
+
 function ips ()
 {
     about 'display all ip addresses for this host'
