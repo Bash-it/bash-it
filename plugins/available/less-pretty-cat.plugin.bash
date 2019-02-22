@@ -6,8 +6,9 @@ if $(command -v pygmentize &> /dev/null) ; then
   CAT_BIN=$(which cat)
   LESS_BIN=$(which less)
 
-  # pigmentize cat and less outputs
-  function cat()
+  # pigmentize cat and less outputs - call them ccat and cless to avoid that
+  # especially cat'ed output in scripts gets mangled with pygemtized meta characters
+  function ccat()
   {
       about 'runs either pygmentize or cat on each file passed in'
       param '*: files to concatenate (as normally passed to cat)'
@@ -18,7 +19,7 @@ if $(command -v pygmentize &> /dev/null) ; then
       done
   }
 
-  function less()
+  function cless()
   {
       about 'it pigments the file passed in and passes it to less for pagination'
       param '$1: the file to paginate with less'
