@@ -1,5 +1,5 @@
 #!/usr/bin/bash
 
-if command -v flutter > /dev/null; then
+if _command_exists flutter; then
   eval "$(flutter bash-completion)"
 fi
