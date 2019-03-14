@@ -1,6 +1,4 @@
-#
-# ~/.bashrc
-#
+
 
 # git branch parser
 function parse_git_branch() {
