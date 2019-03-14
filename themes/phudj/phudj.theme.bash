@@ -15,7 +15,8 @@
 
       color_user="$bold_green"
       color_host="$green"
-      color_time="$bold_black"
+      color_time="$(echo_color rgb 265 265 265)"
+        color_at="$color_time"
       color_path="$cyan"
      color_clean="$bold_green"
      color_dirty="$(echo_color rgb 255 95 0)"
@@ -56,7 +57,7 @@ parse_git() {
 
 prompt_command() {
   [[ $? -eq 0 ]] && color_exit="$color_success" || color_exit="$color_failure"
-  PS1="${color_user}\u${color_host}@\h${color_time}·$(date +%H:%M:%S) ${color_path}\w$(parse_git) ${color_exit}${prompt_user} ${normal}"
+  PS1="${color_user}\u${color_at}@${color_host}\h${color_time}·$(date +%H:%M:%S) ${color_path}\w$(parse_git) ${color_exit}${prompt_user} ${normal}"
 }
 
 safe_append_prompt_command prompt_command
