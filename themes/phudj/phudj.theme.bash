@@ -15,15 +15,15 @@
 
       color_user="$bold_green"
       color_host="$green"
-      color_time="$(echo_color rgb 265 265 265)"
+      color_time="\[$(echo_color rgb 265 265 265)\]"
         color_at="$color_time"
       color_path="$cyan"
      color_clean="$bold_green"
-     color_dirty="$(echo_color rgb 255 95 0)"
+     color_dirty="\[$(echo_color rgb 255 95 0)\]"
      color_ahead="$bold_yellow"
     color_behind="$yellow"
    color_diverge="$bold_white"
-    color_branch="$(echo_color rgb 0 255 95)"
+    color_branch="\[$(echo_color rgb 0 255 95)\]"
    color_success="$bold_green"
    color_failure="$bold_red"
 
