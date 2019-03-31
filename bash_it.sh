@@ -12,7 +12,7 @@ then
 fi
 
 # For backwards compatibility, look in old BASH_THEME location
-if [ -z "$BASH_IT_THEME" ];
+if [ -z "$BASH_THEME" ];
 then
   # TODO: warn users that they should upgrade their .bash_profile
   export BASH_IT_THEME="$BASH_THEME";
