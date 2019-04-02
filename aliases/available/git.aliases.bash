@@ -18,7 +18,6 @@ alias gm="git merge"
 alias gmv='git mv'
 alias g='git'
 alias get='git'
-alias gst='git status'
 alias gs='git status'
 alias gss='git status -s'
 alias gsu='git submodule update --init --recursive'
