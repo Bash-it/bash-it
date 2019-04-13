@@ -111,5 +111,25 @@ function refresh-launchpad() {
   fi
 }
 
+function list-jvms(){
+  about 'List java virtual machines and their states in macOS'
+  example 'list-jvms'
+  group 'osx'
+
+  JDKS_DIR="/Library/Java/JavaVirtualMachines"
+  JDKS=( $(ls ${JDKS_DIR}) )
+  JDKS_STATES=()
+
+  # Map state of JDK
+  for (( i = 0; i < ${#JDKS[@]}; i++ )); do
+    if [[ -f "${JDKS_DIR}/${JDKS[$i]}/Contents/Info.plist" ]]; then
+      JDKS_STATES[${i}]=enable
+    else
+      JDKS_STATES[${i}]=disable
+    fi
+    echo "${i} ${JDKS[$i]} ${JDKS_STATES[$i]}"
+  done
+}
+
 # Make this backwards compatible
 alias pcurl='prevcurl'
