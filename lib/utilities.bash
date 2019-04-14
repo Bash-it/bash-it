@@ -86,7 +86,7 @@ _bash-it-array-dedup() {
   echo "$*" | tr ' ' '\n' | sort -u | tr '\n' ' '
 }
 
-# Outputs a full path of the gre found on the filesystem
+# Outputs a full path of the grep found on the filesystem
 _bash-it-grep() {
   if [[ -z "${BASH_IT_GREP}" ]] ; then
     export BASH_IT_GREP="$(which egrep || which grep || '/usr/bin/grep')"
