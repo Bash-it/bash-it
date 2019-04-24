@@ -80,6 +80,7 @@ alias gst="git stash"
 alias gstb="git stash branch"
 alias gstd="git stash drop"
 alias gstl="git stash list"
+alias gstp="git stash pop"
 alias gh='cd "$(git rev-parse --show-toplevel)"'
 # Show untracked files
 alias gu='git ls-files . --exclude-standard --others'
