@@ -22,6 +22,7 @@ if [ $(uname) = "Darwin" ] && command -v brew &>/dev/null ; then
 
  # homebrew/versions/bash-completion2 (required for projects.completion.bash) is installed to this path
   if [ "${BASH_VERSINFO}" -ge 4 ] && [ -f "$BREW_PREFIX"/share/bash-completion/bash_completion ]; then
+    export BASH_COMPLETION_COMPAT_DIR="$BREW_PREFIX"/etc/bash_completion.d
     . "$BREW_PREFIX"/share/bash-completion/bash_completion
   fi
 fi
