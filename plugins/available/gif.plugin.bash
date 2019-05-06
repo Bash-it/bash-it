@@ -152,8 +152,8 @@ function v2gif {
     else
       fps=$defaultfps
       if [[ -x $mediainfo ]] ; then
-        fps=$($mediainfo "$file" | grep "Frame rate   " |sed 's/.*: \([0-9.]\+\) .*/\1/' | head -1)
-        [[ -z "$fps" ]] && fps=$($mediainfo "$file" | grep "Minimum frame rate" |sed 's/.*: \([0-9.]\+\) .*/\1/' | head -1)
+        fps=$($mediainfo "$file" | grep "Frame rate   " |sed 's/.*: \([0-9.]\+\) .*/\1/' | head -n 1)
+        [[ -z "$fps" ]] && fps=$($mediainfo "$file" | grep "Minimum frame rate" |sed 's/.*: \([0-9.]\+\) .*/\1/' | head -n 1)
       fi
     fi
 

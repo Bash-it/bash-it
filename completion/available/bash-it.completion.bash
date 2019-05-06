@@ -16,8 +16,8 @@ _bash-it-comp-list-available-not-enabled()
     do
       file_entity=$(basename $f)
 
-      typeset enabled_component=$(command ls "${BASH_IT}/$subdirectory/enabled/"{[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity,$file_entity} 2>/dev/null | head -1)
-      typeset enabled_component_global=$(command ls "${BASH_IT}/enabled/"[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity 2>/dev/null | head -1)
+      typeset enabled_component=$(command ls "${BASH_IT}/$subdirectory/enabled/"{[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity,$file_entity} 2>/dev/null | head -n 1)
+      typeset enabled_component_global=$(command ls "${BASH_IT}/enabled/"[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity 2>/dev/null | head -n 1)
 
       if [ -z "$enabled_component" ] && [ -z "$enabled_component_global" ]
       then

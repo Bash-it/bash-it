@@ -70,7 +70,7 @@ function __fab_fabfile_mtime() {
     else
         # Suppose that it's a fabfile dir
         find $f/*.py -exec ${__FAB_COMPLETION_MTIME_COMMAND} {} + \
-            | xargs -n 1 expr | sort -n -r | head -1
+            | xargs -n 1 expr | sort -n -r | head -n 1
     fi
 }
 

@@ -10,7 +10,7 @@ function docker-remove-most-recent-container() {
 function docker-remove-most-recent-image() {
   about 'attempt to remove the most recent image from docker images'
   group 'docker'
-  docker images -q | head -1 | xargs docker rmi
+  docker images -q | head -n 1 | xargs docker rmi
 }
 
 function docker-remove-stale-assets() {

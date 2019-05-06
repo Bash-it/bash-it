@@ -371,13 +371,13 @@ _disable-thing ()
           rm "$f"
         done
     else
-        typeset plugin_global=$(command ls $ "${BASH_IT}/enabled/"[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity.$suffix.bash 2>/dev/null | head -1)
+        typeset plugin_global=$(command ls $ "${BASH_IT}/enabled/"[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity.$suffix.bash 2>/dev/null | head -n 1)
         if [ -z "$plugin_global" ]; then
           # Use a glob to search for both possible patterns
           # 250---node.plugin.bash
           # node.plugin.bash
           # Either one will be matched by this glob
-          typeset plugin=$(command ls $ "${BASH_IT}/$subdirectory/enabled/"{[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity.$suffix.bash,$file_entity.$suffix.bash} 2>/dev/null | head -1)
+          typeset plugin=$(command ls $ "${BASH_IT}/$subdirectory/enabled/"{[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity.$suffix.bash,$file_entity.$suffix.bash} 2>/dev/null | head -n 1)
           if [ -z "$plugin" ]; then
               printf '%s\n' "sorry, $file_entity does not appear to be an enabled $file_type."
               return
@@ -458,7 +458,7 @@ _enable-thing ()
             _enable-thing $subdirectory $file_type $to_enable $load_priority
         done
     else
-        typeset to_enable=$(command ls "${BASH_IT}/$subdirectory/available/"$file_entity.*bash 2>/dev/null | head -1)
+        typeset to_enable=$(command ls "${BASH_IT}/$subdirectory/available/"$file_entity.*bash 2>/dev/null | head -n 1)
         if [ -z "$to_enable" ]; then
             printf '%s\n' "sorry, $file_entity does not appear to be an available $file_type."
             return
@@ -466,13 +466,13 @@ _enable-thing ()
 
         to_enable=$(basename $to_enable)
         # Check for existence of the file using a wildcard, since we don't know which priority might have been used when enabling it.
-        typeset enabled_plugin=$(command ls "${BASH_IT}/$subdirectory/enabled/"{[0-9][0-9][0-9]$BASH_IT_LOAD_PRIORITY_SEPARATOR$to_enable,$to_enable} 2>/dev/null | head -1)
+        typeset enabled_plugin=$(command ls "${BASH_IT}/$subdirectory/enabled/"{[0-9][0-9][0-9]$BASH_IT_LOAD_PRIORITY_SEPARATOR$to_enable,$to_enable} 2>/dev/null | head -n 1)
         if [ ! -z "$enabled_plugin" ] ; then
           printf '%s\n' "$file_entity is already enabled."
           return
         fi
 
-        typeset enabled_plugin_global=$(command compgen -G "${BASH_IT}/enabled/[0-9][0-9][0-9]$BASH_IT_LOAD_PRIORITY_SEPARATOR$to_enable" 2>/dev/null | head -1)
+        typeset enabled_plugin_global=$(command compgen -G "${BASH_IT}/enabled/[0-9][0-9][0-9]$BASH_IT_LOAD_PRIORITY_SEPARATOR$to_enable" 2>/dev/null | head -n 1)
         if [ ! -z "$enabled_plugin_global" ] ; then
           printf '%s\n' "$file_entity is already enabled."
           return

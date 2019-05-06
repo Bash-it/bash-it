@@ -190,10 +190,10 @@ draft ()
         if [ -n "$myopic" ]; then
             lines=2
         fi
-        cmd=$(fc -ln -$lines | head -1 | sed 's/^[[:blank:]]*//')
+        cmd=$(fc -ln -$lines | head -n 1 | sed 's/^[[:blank:]]*//')
     else
         # parse command from history line number
-        cmd=$(eval "history | grep '^[[:blank:]]*$num' | head -1" | sed 's/^[[:blank:][:digit:]]*//')
+        cmd=$(eval "history | grep '^[[:blank:]]*$num' | head -n 1" | sed 's/^[[:blank:][:digit:]]*//')
     fi
     eval "$func() { $cmd; }"
     typeset file=$(mktemp -t draft.XXXX)
