@@ -111,5 +111,66 @@ function refresh-launchpad() {
   fi
 }
 
+function list-jvms(){
+  about 'List java virtual machines and their states in macOS'
+  example 'list-jvms'
+  group 'osx'
+
+  JVMS_DIR="/Library/Java/JavaVirtualMachines"
+  JVMS=( $(ls ${JVMS_DIR}) )
+  JVMS_STATES=()
+
+  # Map state of JVM
+  for (( i = 0; i < ${#JVMS[@]}; i++ )); do
+    if [[ -f "${JVMS_DIR}/${JVMS[$i]}/Contents/Info.plist" ]]; then
+      JVMS_STATES[${i}]=enabled
+    else
+      JVMS_STATES[${i}]=disabled
+    fi
+      echo "${i} ${JVMS[$i]} ${JVMS_STATES[$i]}"
+  done
+}
+
+function pick-default-jvm(){
+  about 'Pick the default Java Virtual Machines in system-wide scope in macOS'
+  example 'pick-default-jvm'
+
+  # Call function for listing
+  list-jvms
+
+  # Declare variables
+  local DEFAULT_JVM_DIR=""
+  local DEFAULT_JVM=""
+  local OPTION=""
+
+  # OPTION for default jdk and set variables
+  while [[ ! "$OPTION" =~ ^[0-9]+$ || OPTION -ge "${#JVMS[@]}" ]]; do
+    read -p "Enter Default JVM: "  OPTION
+      if [[ ! "$OPTION" =~ ^[0-9]+$  ]]; then
+        echo "Please enter a number"
+      fi
+
+      if [[ OPTION -ge "${#JVMS[@]}" ]]; then
+        echo "Please select one of the displayed JVMs"
+      fi
+  done
+
+  DEFAULT_JVM_DIR="${JVMS_DIR}/${JVMS[$OPTION]}"
+  DEFAULT_JVM="${JVMS[$OPTION]}"
+
+  # Disable all jdk
+  for (( i = 0; i < ${#JVMS[@]}; i++ )); do
+    if [[ -f "${JVMS_DIR}/${JVMS[$i]}/Contents/Info.plist" ]]; then
+      sudo mv "${JVMS_DIR}/${JVMS[$i]}/Contents/Info.plist" "${JVMS_DIR}/${JVMS[$i]}/Contents/Info.plist.disable"
+    fi
+  done
+
+  # Enable default jdk
+  if [[ -f "${DEFAULT_JVM_DIR}/Contents/Info.plist.disable" ]]; then
+    sudo mv "${DEFAULT_JVM_DIR}/Contents/Info.plist.disable" "${DEFAULT_JVM_DIR}/Contents/Info.plist"
+    echo "Enabled ${DEFAULT_JVM} as default JVM"
+  fi
+}
+
 # Make this backwards compatible
 alias pcurl='prevcurl'

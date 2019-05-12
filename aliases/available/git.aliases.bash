@@ -18,7 +18,6 @@ alias gm="git merge"
 alias gmv='git mv'
 alias g='git'
 alias get='git'
-alias gst='git status'
 alias gs='git status'
 alias gss='git status -s'
 alias gsu='git submodule update --init --recursive'
@@ -31,11 +30,13 @@ alias gp='git push'
 alias gpo='git push origin'
 alias gpu='git push --set-upstream'
 alias gpuo='git push --set-upstream origin'
+alias gpuoc='git push --set-upstream origin $(git symbolic-ref --short HEAD)'
 alias gpom='git push origin master'
 alias gr='git remote'
 alias grv='git remote -v'
 alias gra='git remote add'
 alias gd='git diff'
+alias gds='git diff --staged'
 alias gdv='git diff -w "$@" | vim -R -'
 alias gc='git commit -v'
 alias gca='git commit -v -a'
@@ -55,6 +56,7 @@ alias gcom='git checkout master'
 alias gcb='git checkout -b'
 alias gcob='git checkout -b'
 alias gct='git checkout --track'
+alias gcpd='git checkout master; git pull; git branch -D'
 alias gexport='git archive --format zip --output'
 alias gdel='git branch -D'
 alias gmu='git fetch origin -v; git fetch upstream -v; git merge upstream/master'
@@ -67,6 +69,7 @@ alias gt="git tag"
 alias gta="git tag -a"
 alias gtd="git tag -d"
 alias gtl="git tag -l"
+alias gpatch="git format-patch -1"
 # From http://blogs.atlassian.com/2014/10/advanced-git-aliases/
 # Show commits since last pull
 alias gnew="git log HEAD@{1}..HEAD@{0}"
@@ -74,9 +77,14 @@ alias gnew="git log HEAD@{1}..HEAD@{0}"
 alias gcaa="git commit -a --amend -C HEAD"
 alias ggui="git gui"
 alias gcsam="git commit -S -am"
+alias gst="git stash"
+alias gstb="git stash branch"
 alias gstd="git stash drop"
 alias gstl="git stash list"
+alias gstp="git stash pop"
 alias gh='cd "$(git rev-parse --show-toplevel)"'
+# Show untracked files
+alias gu='git ls-files . --exclude-standard --others'
 
 case $OSTYPE in
   darwin*)

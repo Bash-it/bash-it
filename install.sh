@@ -155,6 +155,7 @@ fi
 
 # Load dependencies for enabling components
 source "$BASH_IT/lib/composure.bash"
+source "$BASH_IT/lib/utilities.bash"
 cite _about _param _example _group _author _version
 source "$BASH_IT/lib/helpers.bash"
 

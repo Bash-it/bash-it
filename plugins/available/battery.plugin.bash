@@ -4,7 +4,7 @@ about-plugin 'display info about your battery charge level'
 ac_adapter_connected(){
   if _command_exists upower;
   then
-    upower -i $(upower -e | grep BAT) | grep 'state' | grep -q 'charging\|fully-charged'
+    upower -i $(upower -e | grep -i BAT) | grep 'state' | grep -q 'charging\|fully-charged'
     return $?
   elif _command_exists acpi;
   then
@@ -28,7 +28,7 @@ ac_adapter_connected(){
 ac_adapter_disconnected(){
   if _command_exists upower;
   then
-    upower -i $(upower -e | grep BAT) | grep 'state' | grep -q 'discharging'
+    upower -i $(upower -e | grep -i BAT) | grep 'state' | grep -q 'discharging'
     return $?
   elif _command_exists acpi;
   then
@@ -57,7 +57,7 @@ battery_percentage(){
 
   if _command_exists upower;
   then
-    COMMAND_OUTPUT=$(upower --show-info $(upower --enumerate | grep BAT) | grep percentage | grep -o "[0-9]\+" | head -1)
+    COMMAND_OUTPUT=$(upower --show-info $(upower --enumerate | grep -i BAT) | grep percentage | grep -o "[0-9]\+" | head -1)
   elif _command_exists acpi;
   then
     COMMAND_OUTPUT=$(acpi -b | awk -F, '/,/{gsub(/ /, "", $0); gsub(/%/,"", $0); print $2}' )
