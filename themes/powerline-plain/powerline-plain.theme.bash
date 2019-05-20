@@ -56,3 +56,5 @@ POWERLINE_PROMPT=${POWERLINE_PROMPT:="user_info scm python_venv ruby cwd"}
 
 safe_append_prompt_command __powerline_prompt_command
 
+
+HISTORY_AUTOSAVE=${HISTORY_AUTOSAVE:-0}
