@@ -337,7 +337,7 @@ function ruby_version_prompt {
 }
 
 function k8s_context_prompt {
-  echo -e "$(kubectl config current-context)"
+  echo -e "$(kubectl config current-context 2> /dev/null)"
 }
 
 function virtualenv_prompt {
