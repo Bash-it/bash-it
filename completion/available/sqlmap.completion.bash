@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# ---------------------------------------------------------------------------+
+#                                                                            |
+# Thanks to Alexander Korznikov                                                                 |
+# http://www.korznikov.com/2014/12/bash-tab-completion-for-awesome-tool.html |
+#                                                                            |        
+# ---------------------------------------------------------------------------+
+
 if command -v sqlmap > /dev/null; then
 
     _sqlmap()
