@@ -1,5 +1,5 @@
 cite 'about-alias'
-about-alias 'the nodejs environment aliases'
+about-alias 'the Node.js environment aliases'
 
 # alias to setup nodejs development environment
 alias node-dev='export NODE_ENV=development'
