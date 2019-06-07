@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# cite about-plugin
-# about-plugin '/etc/hosts based operations'
+cite about-plugin
+about-plugin '/etc/hosts based operations'
 
 FILE="/etc/hosts"
 
