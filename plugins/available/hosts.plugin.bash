@@ -3,10 +3,10 @@
 cite about-plugin
 about-plugin '/etc/hosts based operations'
 
-FILE="/etc/hosts"
+___HOST_FILE="/etc/hosts"
 
-function hosts_add {
-    local ENTRY=`grep "$2" $FILE`
+function ___hosts_add {
+    local ENTRY=`grep "$2" $_HOST_FILE`
     if  [[ $ENTRY != "" ]]
     then
         echo "Host "$2" already added"
@@ -18,15 +18,15 @@ function hosts_add {
     fi
 }
 
-function hosts_list {
-    cat $FILE
+function ___hosts_list {
+    cat $___HOST_FILE
 }
 
-function hosts_remove {
-    local ENTRY=`grep "$1" $FILE`
+function ___hosts_remove {
+    local ENTRY=`grep "$1" $_HOST_FILE`
     if  [[ $ENTRY != "" ]]
     then
-        DELETED=`grep -w -v $1 $FILE`
+        DELETED=`grep -w -v $1 $_HOST_FILE`
         echo "$DELETED" | sudo tee /etc/hosts > /dev/null
         echo "Removed \""$ENTRY"\" from hosts file"
     else
@@ -35,13 +35,13 @@ function hosts_remove {
     fi
 }
 
-function help {
+function ___hosts_help {
     echo -e "usage: hosts [add|list|remove] ip_address host_name"
     echo
     echo -e  "commands:"
-    echo -e "\tadd\tMaps the hostname with ip and adds it to $FILE"
-    echo -e "\tlist\tList all the hostname and ip in $FILE"
-    echo -e "\tremove\tRemoved the entry from $FILE based on host_name"
+    echo -e "\tadd\tMaps the hostname with ip and adds it to $___HOST_FILE"
+    echo -e "\tlist\tList all the hostname and ip in $___HOST_FILE"
+    echo -e "\tremove\tRemoved the entry from $___HOST_FILE based on host_name"
     echo
     echo -e "examples:"
     echo -e "\t$ host add 127.0.0.1 my_localhost"
@@ -49,7 +49,7 @@ function help {
 }
 
 # the validator function
-function validate {
+function ___hosts_validate {
     if [[ $1 == "" || $2 == "" ]]
     then
         return 0;
@@ -59,32 +59,34 @@ function validate {
 }
 
 
-# entry point
-case $1 in
-    "add")
-        validate $2 $3
-        if [[ $? == 0 ]]
-        then
-            help
-            exit 1
-        else
-            hosts_add $2 $3
-        fi
-    ;;
-    "list")
-        hosts_list
-    ;;
-    "remove")
-        validate $2 "dummy" # sending dummy to verify only one argument
-        if [[ $? == 0 ]]
-        then
-            help
-            exit 1
-        else
-            hosts_remove $2
-        fi
-    ;;
-    *)
-        help
-    ;;
-esac
+function hosts {
+    # entry point
+    case $1 in
+        "add")
+            ___hosts_validate $2 $3
+            if [[ $? == 0 ]]
+            then
+                ___hosts_help
+                exit 1
+            else
+                ___hosts_add $2 $3
+            fi
+        ;;
+        "list")
+            ___hosts_list
+        ;;
+        "remove")
+            ___hosts_validate $2 "dummy" # sending dummy to verify only one argument
+            if [[ $? == 0 ]]
+            then
+                ___hosts_help
+                exit 1
+            else
+                ___hosts_remove $2
+            fi
+        ;;
+        *)
+            ___hosts_help
+        ;;
+    esac
+}
