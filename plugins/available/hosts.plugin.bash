@@ -6,13 +6,13 @@ about-plugin '/etc/hosts based operations'
 ___HOST_FILE="/etc/hosts"
 
 function ___hosts_add {
-    local ENTRY=`grep "$2" $_HOST_FILE`
+    local ENTRY=`grep "$2" $___HOST_FILE`
     if  [[ $ENTRY != "" ]]
     then
         echo "Host "$2" already added"
         echo $ENTRY
     else
-        echo "$1 $2" | sudo tee -a /etc/hosts > /dev/null
+        echo "$1 $2" | sudo tee -a $___HOST_FILE > /dev/null
         echo "Added $1 $2 to hosts file"
         exit 1
     fi
@@ -23,11 +23,11 @@ function ___hosts_list {
 }
 
 function ___hosts_remove {
-    local ENTRY=`grep "$1" $_HOST_FILE`
+    local ENTRY=`grep "$1" $___HOST_FILE`
     if  [[ $ENTRY != "" ]]
     then
-        DELETED=`grep -w -v $1 $_HOST_FILE`
-        echo "$DELETED" | sudo tee /etc/hosts > /dev/null
+        DELETED=`grep -w -v $1 $___HOST_FILE`
+        echo "$DELETED" | sudo tee $___HOST_FILE > /dev/null
         echo "Removed \""$ENTRY"\" from hosts file"
     else
         echo "Host "$1" not found"
