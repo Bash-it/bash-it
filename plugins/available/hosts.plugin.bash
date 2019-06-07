@@ -30,7 +30,7 @@ function ___hosts_remove {
         echo "Removed \""$ENTRY"\" from hosts file"
     else
         echo "Host "$1" not found"
-        exit 1
+        
     fi
 }
 
@@ -66,7 +66,7 @@ function hosts {
             if [[ $? == 0 ]]
             then
                 ___hosts_help
-                exit 1
+                
             else
                 ___hosts_add $2 $3
             fi
@@ -79,7 +79,7 @@ function hosts {
             if [[ $? == 0 ]]
             then
                 ___hosts_help
-                exit 1
+                
             else
                 ___hosts_remove $2
             fi
