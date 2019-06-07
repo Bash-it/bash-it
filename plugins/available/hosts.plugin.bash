@@ -14,7 +14,6 @@ function ___hosts_add {
     else
         echo "$1 $2" | sudo tee -a $___HOST_FILE > /dev/null
         echo "Added $1 $2 to hosts file"
-        exit 1
     fi
 }
 
@@ -44,7 +43,7 @@ function ___hosts_help {
     echo -e "\tremove\tRemoved the entry from $___HOST_FILE based on host_name"
     echo
     echo -e "examples:"
-    echo -e "\t$ host add 127.0.0.1 my_localhost"
+    echo -e "\t$ hosts add 127.0.0.1 my_localhost"
     
 }
 
