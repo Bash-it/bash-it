@@ -14,7 +14,7 @@ function __powerline_prompt_command {
 
   LEFT_PROMPT=""
 
-  [[ $HISTORY_AUTOSAVE -eq 1 ]] && history -a && history -c && history -r
+  _save-and-reload-history "${HISTORY_AUTOSAVE:-0}"
 
   ## left prompt ##
   for segment in $POWERLINE_PROMPT; do
