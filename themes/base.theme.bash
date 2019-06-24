@@ -231,7 +231,7 @@ function p4_prompt_vars {
 }
 
 function svn_prompt_vars {
-  if [[ -n $(svn status 2> /dev/null) ]]; then
+  if [[ -n $(svn status |head -c1 2> /dev/null) ]]; then
     SCM_DIRTY=1
     SCM_STATE=${SVN_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
   else
@@ -240,8 +240,8 @@ function svn_prompt_vars {
   fi
   SCM_PREFIX=${SVN_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
   SCM_SUFFIX=${SVN_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
-  SCM_BRANCH=$(svn info 2> /dev/null | awk -F/ '/^URL:/ { for (i=0; i<=NF; i++) { if ($i == "branches" || $i == "tags" ) { print $(i+1); break }; if ($i == "trunk") { print $i; break } } }') || return
-  SCM_CHANGE=$(svn info 2> /dev/null | sed -ne 's#^Revision: ##p' )
+  SCM_BRANCH=$(svn info --show-item=url 2> /dev/null | awk -F/ '{ for (i=0; i<=NF; i++) { if ($i == "branches" || $i == "tags" ) { print $(i+1); break }; if ($i == "trunk") { print $i; break } } }') || return
+  SCM_CHANGE=$(svn info --show-item=revision 2> /dev/null)
 }
 
 # this functions returns absolute location of .hg directory if one exists
