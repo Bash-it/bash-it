@@ -4,6 +4,16 @@ load ../test_helper
 load ../../lib/helpers
 load ../../lib/composure
 
+function local_setup {
+  export OLD_PATH="$PATH"
+  export PATH="/usr/bin:/bin:/usr/sbin"
+}
+
+function local_teardown {
+  export PATH="$OLD_PATH"
+  unset OLD_PATH
+}
+
 @test 'plugins go: single entry in GOPATH' {
   export GOROOT='/baz'
   export GOPATH='/foo'
