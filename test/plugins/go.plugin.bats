@@ -8,7 +8,7 @@ load ../../lib/composure
   export GOPATH='/foo'
   load ../../plugins/available/go.plugin
 
-  [[ "$(cut -d':' -f1,2 <<<$PATH | tr -d '\n')" == '/foo/bin:/baz/bin' ]]
+  assert_equal $(cut -d':' -f1,2 <<<$PATH | tr -d '\n') '/foo/bin:/baz/bin'
 }
 
 @test 'plugins go: single entry in GOPATH, with space' {
