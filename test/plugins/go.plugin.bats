@@ -5,21 +5,13 @@ load ../../lib/helpers
 load ../../lib/composure
 load ../../plugins/available/go.plugin
 
-function local_setup {
-  export OLD_PATH="$PATH"
-  export PATH="/usr/bin:/bin:/usr/sbin"
-}
-
-function local_teardown {
-  export PATH="$OLD_PATH"
-  unset OLD_PATH
-}
 
 @test 'plugins go: single entry in GOPATH' {
   export GOROOT='/baz'
   export GOPATH='/foo'
   load ../../plugins/available/go.plugin
 
+  assert_equal $PATH 'foobar'
   assert_equal $(cut -d':' -f1,2 <<<$PATH | tr -d '\n') '/foo/bin:/baz/bin'
 }
 
