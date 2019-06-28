@@ -17,6 +17,10 @@ load ../../plugins/available/go.plugin
   assert_equal $(go env GOROOT) 'dummy'
 }
 
+@test 'ensure _go_pathmunge_wrap is defined' {
+  [[ $(type -t _go_pathmunge_wrap) = 'function' ]]
+}
+
 @test 'plugins go: single entry in GOPATH' {
   export GOROOT='/baz'
   export GOPATH='/foo'
