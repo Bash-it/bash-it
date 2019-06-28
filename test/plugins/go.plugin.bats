@@ -3,6 +3,7 @@
 load ../test_helper
 load ../../lib/helpers
 load ../../lib/composure
+load ../../plugins/available/go.plugin
 
 function local_setup {
   export OLD_PATH="$PATH"
