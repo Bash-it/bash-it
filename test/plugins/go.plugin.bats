@@ -5,6 +5,10 @@ load ../../lib/helpers
 load ../../lib/composure
 load ../../plugins/available/go.plugin
 
+@test 'debug where is go in travis' {
+  assert_equal $(which go) 'dummy'
+}
+
 @test 'debug gopath in travis' {
   assert_equal $(go env GOPATH) 'dummy'
 }
