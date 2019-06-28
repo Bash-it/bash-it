@@ -17,14 +17,13 @@ load ../../plugins/available/go.plugin
   assert_equal $(go env GOROOT) 'dummy'
 }
 
-#@test 'plugins go: single entry in GOPATH' {
-#  export GOROOT='/baz'
-#  export GOPATH='/foo'
-#  load ../../plugins/available/go.plugin
-#
-#  assert_equal $(cut -d':' -f1,2 <<<$PATH) '/foo/bin:/baz/bin'
-#}
-#
+@test 'plugins go: single entry in GOPATH' {
+  export GOROOT='/baz'
+  export GOPATH='/foo'
+  load ../../plugins/available/go.plugin
+  assert_equal $(cut -d':' -f1,2 <<<$PATH) '/foo/bin:/baz/bin'
+}
+
 #@test 'plugins go: single entry in GOPATH, with space' {
 #  export GOROOT="/baz"
 #  export GOPATH="/foo bar"
