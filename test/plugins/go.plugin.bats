@@ -8,11 +8,8 @@ load ../../lib/composure
   export GOPATH="/foo"
   load ../../plugins/available/go.plugin
 
-  echo "$(echo $PATH | cut -d':' -f1)"
-  [ "$(echo $PATH | cut -d':' -f1)" = "/foo/bin" ]
-
-  echo "$(echo $PATH | cut -d':' -f2)"
-  [ "$(echo $PATH | cut -d':' -f2)" = "/baz/bin" ]
+  [[ "$(echo $PATH | cut -d':' -f1)" = '/foo/bin' ]]
+  [[ "$(echo $PATH | cut -d':' -f2)" = '/baz/bin' ]]
 }
 
 @test 'plugins go: single entry in GOPATH, with space' {
