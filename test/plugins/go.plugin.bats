@@ -4,11 +4,11 @@ load ../../lib/helpers
 load ../../lib/composure
 
 @test 'plugins go: single entry in GOPATH' {
-  export GOROOT="/baz"
-  export GOPATH="/foo"
+  export GOROOT='/baz'
+  export GOPATH='/foo'
   load ../../plugins/available/go.plugin
 
-  [[ "$(cut -d':' -f1,2 <<<$PATH)" == '/foo/bin:/baz/bin' ]]
+  [[ "$(cut -d':' -f1,2 <<<$PATH | tr -d '\n')" == '/foo/bin:/baz/bin' ]]
 }
 
 @test 'plugins go: single entry in GOPATH, with space' {
