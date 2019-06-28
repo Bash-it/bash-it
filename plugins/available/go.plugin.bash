@@ -3,7 +3,7 @@
 cite about-plugin
 about-plugin 'go environment variables & path configuration'
 
-[ ! command -v go &>/dev/null ] && return
+command -v go &>/dev/null || return
 
 function _go_pathmunge_wrap() {
   IFS=':' local -a 'a=($1)'
