@@ -1,5 +1,11 @@
 #!/usr/bin/env bats
 
+##
+# Travis notes:
+#   - `which go`
+#     - /home/travis/.gimme/versions/go1.7.4.linux.amd64/bin/go
+#
+
 load ../test_helper
 load ../../lib/helpers
 load ../../lib/composure
@@ -9,23 +15,34 @@ load ../../lib/composure
   [[ $(type -t _go_pathmunge_wrap) = 'function' ]]
 }
 
-@test 'debug where is go in travis' {
-  assert_equal $(which go) 'dummy'
-}
-
 @test 'debug gopath in travis' {
   assert_equal $(go env GOPATH) 'dummy'
 }
 
+@test 'debug gopath in travis 2' {
+  assert_equal $GOPATH 'dummy'
+}
+
 @test 'debug goroot in travis' {
+  assert_equal $(go env GOROOT) 'dummy'
+}
+
+@test 'debug goroot in travis 2' {
   assert_equal $GOROOT 'dummy'
 }
 
 @test 'debug goroot in travis, after load' {
   export GOROOT='/tmp'
   load ../../plugins/available/go.plugin
-  assert_equal $GOROOT 'dummy'
+
   assert_equal $(go env GOROOT) 'dummy'
+}
+
+@test 'debug goroot in travis, after load 2' {
+  export GOROOT='/tmp'
+  load ../../plugins/available/go.plugin
+
+  assert_equal $GOROOT 'dummy'
 }
 
 @test 'plugins go: single entry in GOPATH' {
