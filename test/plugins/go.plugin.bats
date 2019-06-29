@@ -54,10 +54,11 @@ load ../../lib/composure
 @test 'debug travis' {
   export GOROOT='/foo'
   export GOPATH='/bar'
+  export PATH='/usr/bin:/bin:/usr/sbin'
 
   load ../../plugins/available/go.plugin
 
-  assert_line 'dummy'
+  assert_equal $PATH 'dummy'
 }
 
 #@test 'plugins go: single entry in GOPATH' {

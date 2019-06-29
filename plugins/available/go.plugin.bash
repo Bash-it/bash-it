@@ -10,8 +10,7 @@ function _go_pathmunge_wrap() {
   local i=${#a[@]}
   while [ $i -gt 0 ] ; do
     i=$(( i - 1 ))
-    echo "${a[i]}/bin"
-    # pathmunge "${a[i]}/bin"
+    pathmunge "${a[i]}/bin"
   done
 }
 
