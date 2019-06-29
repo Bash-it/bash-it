@@ -5,6 +5,10 @@ load ../../lib/helpers
 load ../../lib/composure
 load ../../plugins/available/go.plugin
 
+@test 'ensure _go_pathmunge_wrap is defined' {
+  [[ $(type -t _go_pathmunge_wrap) = 'function' ]]
+}
+
 @test 'debug where is go in travis' {
   assert_equal $(which go) 'dummy'
 }
@@ -17,8 +21,9 @@ load ../../plugins/available/go.plugin
   assert_equal $(go env GOROOT) 'dummy'
 }
 
-@test 'ensure _go_pathmunge_wrap is defined' {
-  [[ $(type -t _go_pathmunge_wrap) = 'function' ]]
+@test 'debug goroot in travis, after load' {
+  load ../../plugins/available/go.plugin
+  assert_equal $(go env GOROOT) 'dummy'
 }
 
 @test 'plugins go: single entry in GOPATH' {
