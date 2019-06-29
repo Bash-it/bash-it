@@ -57,7 +57,7 @@ load ../../lib/composure
 
   load ../../plugins/available/go.plugin
   run _go_pathmunge_wrap "${GOPATH}:${GOROOT}"
-  assert_equal $PATH 'dummy'
+  assert_line 'dummy'
 }
 
 #@test 'plugins go: single entry in GOPATH' {
