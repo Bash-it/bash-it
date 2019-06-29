@@ -2,12 +2,43 @@
 
 ##
 # Travis notes:
-#   - `which go`
-#     - /home/travis/.gimme/versions/go1.7.4.linux.amd64/bin/go
-#   - `go env GOROOT` & `$GOROOT`
-#     - /home/travis/.gimme/versions/go1.7.4.linux.amd64
-#   - `go env GOPATH` & `GOPATH`
-#     - /home/travis/gopath
+# - `$PATH`
+#   - /home/travis/build/Bash-it/bash-it/test_lib/bats-core/libexec
+#   - /home/travis/bin
+#   - /home/travis/.local/bin
+#   - /opt/pyenv/shims
+#   - /home/travis/.phpenv/shims
+#   - /home/travis/perl5/perlbrew/bin
+#   - /home/travis/.nvm/versions/node/v8.9.1/bin
+#   - /home/travis/.kiex/elixirs/elixir-1.4.5/bin
+#   - /home/travis/.kiex/bin
+#   - /home/travis/.rvm/gems/ruby-2.4.1/bin
+#   - /home/travis/.rvm/gems/ruby-2.4.1@global/bin
+#   - /home/travis/.rvm/rubies/ruby-2.4.1/bin
+#   - /home/travis/gopath/bin
+#   - /home/travis/.gimme/versions/go1.7.4.linux.amd64/bin
+#   - /usr/local/phantomjs/bin
+#   - /usr/local/phantomjs
+#   - /usr/local/neo4j-3.2.7/bin
+#   - /usr/local/maven-3.5.2/bin
+#   - /usr/local/cmake-3.9.2/bin
+#   - /usr/local/clang-5.0.0/bin
+#   - /usr/local/sbin
+#   - /usr/local/bin
+#   - /usr/sbin
+#   - /usr/bin
+#   - /sbin
+#   - /bin
+#   - /home/travis/.rvm/bin
+#   - /home/travis/.phpenv/bin
+#   - /opt/pyenv/bin
+#   - /home/travis/.yarn/bin
+# - `which go`
+#   - /home/travis/.gimme/versions/go1.7.4.linux.amd64/bin/go
+# - `go env GOROOT` & `$GOROOT`
+#   - /home/travis/.gimme/versions/go1.7.4.linux.amd64
+# - `go env GOPATH` & `GOPATH`
+#   - /home/travis/gopath
 #
 
 load ../test_helper
@@ -16,11 +47,8 @@ load ../../lib/composure
 
 @test 'ensure _go_pathmunge_wrap is defined' {
   load ../../plugins/available/go.plugin
-  [[ $(type -t _go_pathmunge_wrap) = 'function' ]]
-}
-
-@test 'debug path in travis' {
-  assert_equal $PATH 'dummy'
+  run type -t remove_gem
+  assert_line 'function'
 }
 
 @test 'debug travis' {
