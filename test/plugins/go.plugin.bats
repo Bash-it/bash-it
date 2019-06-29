@@ -18,10 +18,11 @@ load ../../plugins/available/go.plugin
 }
 
 @test 'debug goroot in travis' {
-  assert_equal $(go env GOROOT) 'dummy'
+  assert_equal $GOROOT 'dummy'
 }
 
 @test 'debug goroot in travis, after load' {
+  export GOROOT='/baz'
   load ../../plugins/available/go.plugin
   assert_equal $(go env GOROOT) 'dummy'
 }
