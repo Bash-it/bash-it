@@ -47,7 +47,7 @@ load ../../lib/composure
 
 @test 'ensure _go_pathmunge_wrap is defined' {
   load ../../plugins/available/go.plugin
-  run type -t remove_gem
+  run type -t _go_pathmunge_wrap
   assert_line 'function'
 }
 
