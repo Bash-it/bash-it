@@ -3,9 +3,9 @@
 load ../test_helper
 load ../../lib/helpers
 load ../../lib/composure
-load ../../plugins/available/go.plugin
 
 @test 'ensure _go_pathmunge_wrap is defined' {
+  load ../../plugins/available/go.plugin
   [[ $(type -t _go_pathmunge_wrap) = 'function' ]]
 }
 
