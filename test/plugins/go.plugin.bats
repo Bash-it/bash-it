@@ -54,7 +54,6 @@ load ../../lib/composure
 @test 'debug travis' {
   export GOROOT='/foo'
   export GOPATH='/bar'
-  export PATH='/usr/bin:/bin:/usr/sbin'
 
   load ../../plugins/available/go.plugin
 
