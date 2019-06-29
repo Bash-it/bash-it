@@ -4,6 +4,10 @@
 # Travis notes:
 #   - `which go`
 #     - /home/travis/.gimme/versions/go1.7.4.linux.amd64/bin/go
+#   - `go env GOROOT` & `$GOROOT`
+#     - /home/travis/.gimme/versions/go1.7.4.linux.amd64
+#   - `go env GOPATH` & `GOPATH`
+#     - /home/travis/gopath
 #
 
 load ../test_helper
@@ -15,43 +19,27 @@ load ../../lib/composure
   [[ $(type -t _go_pathmunge_wrap) = 'function' ]]
 }
 
-@test 'debug gopath in travis' {
-  assert_equal $(go env GOPATH) 'dummy'
+@test 'debug path in travis' {
+  assert_equal $PATH 'dummy'
 }
 
-@test 'debug gopath in travis 2' {
-  assert_equal $GOPATH 'dummy'
-}
+@test 'debug travis' {
+  export GOROOT='/foo'
+  export GOPATH='/bar'
+  local OLD_PATH=$PATH
 
-@test 'debug goroot in travis' {
-  assert_equal $(go env GOROOT) 'dummy'
-}
-
-@test 'debug goroot in travis 2' {
-  assert_equal $GOROOT 'dummy'
-}
-
-@test 'debug goroot in travis, after load' {
-  export GOROOT='/tmp'
   load ../../plugins/available/go.plugin
 
-  assert_equal $(go env GOROOT) 'dummy'
+  assert_equal $OLD_PATH $PATH
 }
 
-@test 'debug goroot in travis, after load 2' {
-  export GOROOT='/tmp'
-  load ../../plugins/available/go.plugin
-
-  assert_equal $GOROOT 'dummy'
-}
-
-@test 'plugins go: single entry in GOPATH' {
-  export GOROOT='/baz'
-  export GOPATH='/foo'
-  load ../../plugins/available/go.plugin
-  assert_equal $(cut -d':' -f1,2 <<<$PATH) '/foo/bin:/baz/bin'
-}
-
+#@test 'plugins go: single entry in GOPATH' {
+#  export GOROOT='/baz'
+#  export GOPATH='/foo'
+#  load ../../plugins/available/go.plugin
+#  assert_equal $(cut -d':' -f1,2 <<<$PATH) '/foo/bin:/baz/bin'
+#}
+#
 #@test 'plugins go: single entry in GOPATH, with space' {
 #  export GOROOT="/baz"
 #  export GOPATH="/foo bar"
