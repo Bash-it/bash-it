@@ -56,7 +56,7 @@ load ../../lib/composure
   export GOPATH='/bar'
 
   load ../../plugins/available/go.plugin
-
+  run _go_pathmunge_wrap "${GOPATH}:${GOROOT}"
   assert_equal $PATH 'dummy'
 }
 
