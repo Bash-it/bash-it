@@ -16,6 +16,4 @@ function _go_pathmunge_wrap() {
 
 export GOROOT="${GOROOT:-$(go env GOROOT)}"
 export GOPATH="${GOPATH:-$(go env GOPATH)}"
-echo $PATH
 _go_pathmunge_wrap "${GOPATH}:${GOROOT}"
-echo $PATH
