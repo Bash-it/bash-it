@@ -37,4 +37,4 @@ _sshcomplete() {
     return 0
 }
 
-complete -o default -o nospace -F _sshcomplete ssh scp
+complete -o default -o nospace -F _sshcomplete ssh scp slogin
