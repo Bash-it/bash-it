@@ -115,6 +115,8 @@ setup_repo_with_upstream() {
   git add file
   git stash
 
+  SCM_GIT_SHOW_STASH_INFO=true
+
   git_prompt_vars
   assert_equal "$SCM_BRANCH" "${pre} {1}"
 
@@ -319,6 +321,8 @@ setup_repo_with_upstream() {
 
   echo "line2" >> file1
   git add file1
+
+  SCM_GIT_SHOW_DETAILS=true
 
   git_prompt_vars
   assert_equal "$SCM_BRANCH" "${pre} S:1"
