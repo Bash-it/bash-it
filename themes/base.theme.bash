@@ -39,6 +39,7 @@ SCM_GIT_CHAR='±'
 SCM_GIT_DETACHED_CHAR='⌿'
 SCM_GIT_AHEAD_CHAR="↑"
 SCM_GIT_BEHIND_CHAR="↓"
+SCM_GIT_AHEAD_BEHIND_PREFIX_CHAR=" "
 SCM_GIT_UNTRACKED_CHAR="?:"
 SCM_GIT_UNSTAGED_CHAR="U:"
 SCM_GIT_STAGED_CHAR="S:"
@@ -179,8 +180,8 @@ function git_prompt_vars {
   fi
 
   IFS=$'\t' read -r commits_behind commits_ahead <<< "$(_git-upstream-behind-ahead)"
-  [[ "${commits_ahead}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_GIT_AHEAD_CHAR}${commits_ahead}"
-  [[ "${commits_behind}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_GIT_BEHIND_CHAR}${commits_behind}"
+  [[ "${commits_ahead}" -gt 0 ]] && SCM_BRANCH+="${SCM_GIT_AHEAD_BEHIND_PREFIX_CHAR}${SCM_GIT_AHEAD_CHAR}${commits_ahead}"
+  [[ "${commits_behind}" -gt 0 ]] && SCM_BRANCH+="${SCM_GIT_AHEAD_BEHIND_PREFIX_CHAR}${SCM_GIT_BEHIND_CHAR}${commits_behind}"
 
   if [[ "${SCM_GIT_SHOW_STASH_INFO}" = "true" ]]; then
     local stash_count
