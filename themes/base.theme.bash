@@ -499,3 +499,8 @@ function safe_append_prompt_command {
         fi
     fi
 }
+
+function _save-and-reload-history() {
+  local autosave=${1:-0}
+  [[ $autosave -eq 1 ]] && history -a && history -c && history -r
+}

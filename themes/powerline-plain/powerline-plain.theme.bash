@@ -55,4 +55,3 @@ HOST_THEME_PROMPT_COLOR=0
 POWERLINE_PROMPT=${POWERLINE_PROMPT:="user_info scm python_venv ruby cwd"}
 
 safe_append_prompt_command __powerline_prompt_command
-
