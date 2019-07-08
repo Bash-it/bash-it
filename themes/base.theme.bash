@@ -87,6 +87,7 @@ function scm {
   elif [[ -d .hg ]] && which hg &> /dev/null; then SCM=$SCM_HG
   elif which hg &> /dev/null && [[ -n "$(hg root 2> /dev/null)" ]]; then SCM=$SCM_HG
   elif [[ -d .svn ]] && which svn &> /dev/null; then SCM=$SCM_SVN
+  elif which svn &> /dev/null && [[ -n "$(svn info --show-item wc-root 2>/dev/null)" ]]; then SCM=$SCM_SVN
   else SCM=$SCM_NONE
   fi
 }
