@@ -72,6 +72,8 @@ setup_repo_with_upstream() {
   git clone "$remote" clone
   cd clone
 
+  SCM_GIT_SHOW_COMMIT_COUNT=true
+
   git_prompt_vars
   assert_equal "$SCM_BRANCH" "${pre}"
 
@@ -146,6 +148,7 @@ setup_repo_with_upstream() {
   pushd "${repo}"
 
   SCM_GIT_SHOW_REMOTE_INFO=true
+  SCM_GIT_SHOW_COMMIT_COUNT=true
 
   git_prompt_vars
   assert_equal "$SCM_BRANCH" "${pre}my-remote${post}"
@@ -166,6 +169,7 @@ setup_repo_with_upstream() {
   pushd "${repo}"
 
   SCM_GIT_SHOW_REMOTE_INFO=auto
+  SCM_GIT_SHOW_COMMIT_COUNT=true
 
   git_prompt_vars
   assert_equal "$SCM_BRANCH" "${pre}${post}"
@@ -202,6 +206,7 @@ setup_repo_with_upstream() {
   git remote add third-remote "$(mktemp -d)"
 
   SCM_GIT_SHOW_REMOTE_INFO=false
+  SCM_GIT_SHOW_COMMIT_COUNT=true
 
   git_prompt_vars
   assert_equal "$SCM_BRANCH" "${pre}${post}"
@@ -223,6 +228,7 @@ setup_repo_with_upstream() {
   pushd "${repo}"
 
   SCM_GIT_SHOW_REMOTE_INFO=true
+  SCM_GIT_SHOW_COMMIT_COUNT=true
 
   git_prompt_vars
   assert_equal "$SCM_BRANCH" "${pre} → my-remote${post}"
