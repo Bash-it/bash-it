@@ -14,6 +14,8 @@ function __powerline_prompt_command {
 
   LEFT_PROMPT=""
 
+  _save-and-reload-history "${HISTORY_AUTOSAVE:-0}"
+
   ## left prompt ##
   for segment in $POWERLINE_PROMPT; do
     local info="$(__powerline_${segment}_prompt)"

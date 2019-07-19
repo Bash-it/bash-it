@@ -86,6 +86,40 @@ _docker_machine_map_key_of_current_option() {
     [[ ${words[$glob_pos]} == $glob ]] && echo "$key"
 }
 
+# Finds the position of the first word that is neither option nor an option's argument.
+# If there are options that require arguments, you need to pass a glob describing
+# those options, e.g. "--option1|-o|--option2".
+# Use this function to restrict completions to exact positions after the options.
+_docker_machine_pos_first_nonflag() {
+    local argument_flags=$1
+
+    local counter=$((${subcommand_pos:-${command_pos}} + 1))
+    while [ "$counter" -le "$cword" ]; do
+       if [ -n "$argument_flags" ] && eval "case '${words[$counter]}' in $argument_flags) true ;; *) false ;; esac"; then
+          (( counter++ ))
+          # eat "=" in case of --option=arg syntax
+          [ "${words[$counter]}" = "=" ] && (( counter++ ))
+       else
+          case "${words[$counter]}" in
+             -*)
+                 ;;
+             *)
+                 break
+                 ;;
+          esac
+       fi
+
+       # Bash splits words at "=", retaining "=" as a word, examples:
+       # "--debug=false" => 3 words, "--log-opt syslog-facility=daemon" => 4 words
+       while [ "${words[$counter + 1]}" = "=" ] ; do
+               counter=$(( counter + 2))
+       done
+
+       (( counter++ ))
+    done
+
+    echo $counter
+}
 # --- completion functions ---------------------------------------------------
 
 _docker_machine_active() {
@@ -128,7 +162,7 @@ _docker_machine_create() {
 _docker_machine_env() {
     case "${prev}" in
         --shell)
-            COMPREPLY=($(compgen -W "cmd fish powershell tcsh" -- "${cur}"))
+            COMPREPLY=($(compgen -W "cmd emacs fish powershell tcsh" -- "${cur}"))
             return
             ;;
     esac
@@ -208,6 +242,21 @@ _docker_machine_ls() {
     fi
 }
 
+_docker_machine_mount() {
+    if [[ "${cur}" == -* ]]; then
+        COMPREPLY=($(compgen -W "--help --unmount -u" -- "${cur}"))
+    else
+        local pos=$(_docker_machine_pos_first_nonflag)
+        if [ "$cword" -eq "$pos" ]; then
+            # We can't complete remote filesystems. All we can do here is to complete the machine.
+            COMPREPLY=($(compgen -W "$(_docker_machine_machines --filter state=Running)" -S: -- "${cur}"))
+            _docker_machine_nospace
+        elif [ "$cword" -eq "$((pos + 1))" ]; then
+           _filedir -d
+        fi
+    fi
+}
+
 _docker_machine_provision() {
     if [[ "${cur}" == -* ]]; then
         COMPREPLY=($(compgen -W "--help" -- "${cur}"))
@@ -218,7 +267,7 @@ _docker_machine_provision() {
 
 _docker_machine_regenerate_certs() {
     if [[ "${cur}" == -* ]]; then
-        COMPREPLY=($(compgen -W "--force -f --help" -- "${cur}"))
+        COMPREPLY=($(compgen -W "--client-certs --force -f --help" -- "${cur}"))
     else
         COMPREPLY=($(compgen -W "$(_docker_machine_machines --filter state=Running)" -- "${cur}"))
     fi
@@ -250,7 +299,7 @@ _docker_machine_ssh() {
 
 _docker_machine_scp() {
     if [[ "${cur}" == -* ]]; then
-        COMPREPLY=($(compgen -W "--delta -d --help --recursive -r" -- "${cur}"))
+        COMPREPLY=($(compgen -W "--delta -d --help --quiet -q --recursive -r" -- "${cur}"))
     else
         _filedir
         # It would be really nice to ssh to the machine and ls to complete
@@ -329,7 +378,7 @@ _docker_machine_docker_machine() {
 
 _docker_machine() {
     COMPREPLY=()
-    local commands=(active config create env inspect ip kill ls provision regenerate-certs restart rm ssh scp start status stop upgrade url version help)
+    local commands=(active config create env inspect ip kill ls mount provision regenerate-certs restart rm ssh scp start status stop upgrade url version help)
 
     local flags=(--debug --native-ssh --github-api-token --bugsnag-api-token --help --version)
     local wants_dir=(--storage-path)
@@ -343,7 +392,7 @@ _docker_machine() {
     local cur prev words cword
     _get_comp_words_by_ref -n : cur prev words cword
     local i
-    local command=docker-machine
+    local command=docker-machine command_pos=0
 
     for (( i=1; i < ${cword}; ++i)); do
         local word=${words[i]}
@@ -352,6 +401,7 @@ _docker_machine() {
             (( ++i ))
         elif [[ " ${commands[*]} " =~ " ${word} " ]]; then
             command=${word}
+            command_pos=$i
         fi
     done
 

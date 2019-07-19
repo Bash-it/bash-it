@@ -30,8 +30,20 @@ function v2gif {
   example '$ v2gif -dh *.avi'
   example '$ v2gif -thw 600 *.avi *.mov'
 
+  local convert=$(which convert)     ; [[ -x "$convert" ]]   || { echo "No convert found!" ; return 2 ;}
+  local ffmpeg=$(which ffmpeg)       ; [[ -x "$ffmpeg" ]]    || { echo "No ffmpeg found!" ; return 2 ;}
+  local mediainfo=$(which mediainfo) ; [[ -x "$mediainfo" ]] || { echo "No mediainfo found!" ; return 2 ;}
+  local gifsicle=$(which gifsicle)   ; [[ -x "$gifsicle" ]]  || { echo "No gifsicle found!" ; return 2 ;}
+  local getopt=$(which getopt)
+
+  if [[ "$OSTYPE" == "darwin"* ]] ; then
+  # Getopt on BSD is incompatible with GNU
+    getopt=/usr/local/opt/gnu-getopt/bin/getopt
+    [[ -x "$getopt" ]] || { echo "No GNU-getopt found!" ; return 2 ;}
+  fi
+
   # Parse the options
-  local args=$(getopt -l "alert:" -l "lossy:" -l "width:" -l del,delete -l high -l tag -l "fps:" -l webm -o "a:l:w:f:dhmt" -- "$@")
+  local args=$($getopt -l "alert:" -l "lossy:" -l "width:" -l del,delete -l high -l tag -l "fps:" -l webm -o "a:l:w:f:dhmt" -- "$@")
 
   if [ $? -ne 0 ]; then
     echo 'Terminating...' >&2
@@ -65,6 +77,7 @@ function v2gif {
         ;;
       -h|--high)
         #High Quality, use gifski
+        local gifski=$(which gifski) ; [[ -x "$gifski" ]] || { echo "No gifski found!" ; return 2 ; }
         use_gifski=true
         giftag="${giftag}-h"
         shift
@@ -106,7 +119,15 @@ function v2gif {
   done
 
   if [[ -z "$*" ]]; then
-    echo "$(tput setaf 1)No input files given. Example: v2gif file [file...] [-w <max width (pixels)>] [-l <lossy level>] < $(tput sgr 0)"
+    echo "$(tput setaf 1)No input files given. Example: v2gif file [file...] [-w <max width (pixels)>] [-l <lossy level>] $(tput sgr 0)"
+    echo "-d/--del/--delete Delete original vid if done suceessfully (and file not over the size limit)"
+    echo "-h/--high         High Quality - use Gifski instead of gifsicle"
+    echo "-w/--width N      Lock maximum gif width to N pixels, resize if necessary"
+    echo "-t/--tag          Add a tag to the output gif describing the options used (useful for comparing several options)"
+    echo "-l/--lossy N      Use the Giflossy parameter for gifsicle (If your version supports it)"
+    echo "-f/--fps N        Override autodetection of incoming vid FPS (useful for downsampling)"
+    echo "-a/--alert N      Alert if over N kilobytes (Defaults to 5000)"
+    echo "-m/--webm         Also create a webm file"
     return 1
   fi
 
@@ -120,7 +141,7 @@ function v2gif {
     local del_after=$opt_del_after
 
     if [[ "$make_webm" ]] ; then
-      ffmpeg -loglevel panic -i "$file" \
+      $ffmpeg -loglevel panic -i "$file" \
         -c:v libvpx -crf 4 -threads 0 -an -b:v 2M -auto-alt-ref 0 \
         -quality best -loop 0 "${file%.*}.webm" || return 2
     fi
@@ -130,9 +151,9 @@ function v2gif {
       fps=$infps
     else
       fps=$defaultfps
-      if [[ -x /usr/bin/mediainfo ]] ; then
-        fps=$(/usr/bin/mediainfo "$file" | grep "Frame rate   " |sed 's/.*: \([0-9.]\+\) .*/\1/' | head -1)
-        [[ -z "$fps" ]] && fps=$(/usr/bin/mediainfo "$file" | grep "Minimum frame rate" |sed 's/.*: \([0-9.]\+\) .*/\1/' | head -1)
+      if [[ -x $mediainfo ]] ; then
+        fps=$($mediainfo "$file" | grep "Frame rate   " |sed 's/.*: \([0-9.]\+\) .*/\1/' | head -1)
+        [[ -z "$fps" ]] && fps=$($mediainfo "$file" | grep "Minimum frame rate" |sed 's/.*: \([0-9.]\+\) .*/\1/' | head -1)
       fi
     fi
 
@@ -140,12 +161,12 @@ function v2gif {
 
     if [[ "$use_gifski" = "true" ]] ; then
       # I trust @pornel to do his own resizing optimization choices
-      ffmpeg -loglevel panic -i "$file" -r $fps -vcodec png v2gif-tmp-%05d.png && \
-        gifski $maxwidthski --fps $(printf "%.0f" $fps) -o "$output_file" v2gif-tmp-*.png || return 2
+      $ffmpeg -loglevel panic -i "$file" -r $fps -vcodec png v2gif-tmp-%05d.png && \
+        $gifski $maxwidthski --fps $(printf "%.0f" $fps) -o "$output_file" v2gif-tmp-*.png || return 2
     else
-      ffmpeg -loglevel panic -i "$file" $maxsize -r $fps -vcodec png v2gif-tmp-%05d.png && \
-        convert +dither -layers Optimize v2gif-tmp-*.png GIF:- | \
-        gifsicle $lossiness --no-warnings --colors 256 --delay=$(echo "100/$fps"|bc) --loop --optimize=3 --multifile - > "$output_file" || return 2
+      $ffmpeg -loglevel panic -i "$file" $maxsize -r $fps -vcodec png v2gif-tmp-%05d.png && \
+        $convert +dither -layers Optimize v2gif-tmp-*.png GIF:- | \
+        $gifsicle $lossiness --no-warnings --colors 256 --delay=$(echo "100/$fps"|bc) --loop --optimize=3 --multifile - > "$output_file" || return 2
     fi
 
     rm v2gif-tmp-*.png
@@ -255,7 +276,7 @@ function any2webm() {
 
     echo "$(tput setaf 2)Creating '$output_file' ...$(tput sgr 0)"
 
-    ffmpeg -loglevel panic -i "$file" \
+    $ffmpeg -loglevel panic -i "$file" \
       -c:v libvpx -crf 4 -threads 0 -an -b:v $bandwidth -auto-alt-ref 0 \
       -quality best $fps $size -loop 0 -pix_fmt yuva420p "$output_file" || return 2
 

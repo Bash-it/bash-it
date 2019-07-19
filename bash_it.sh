@@ -29,21 +29,24 @@ cite _about _param _example _group _author _version
 # libraries, but skip appearance (themes) for now
 LIB="${BASH_IT}/lib/*.bash"
 APPEARANCE_LIB="${BASH_IT}/lib/appearance.bash"
-for config_file in $LIB
+for _bash_it_config_file in $LIB
 do
-  if [ "$config_file" != "$APPEARANCE_LIB" ]; then
+  if [ "$_bash_it_config_file" != "$APPEARANCE_LIB" ]; then
     # shellcheck disable=SC1090
-    source "$config_file"
+    source "$_bash_it_config_file"
   fi
 done
 
 # Load the global "enabled" directory
-_load_global_bash_it_files
+# "family" param is empty so that files get sources in glob order
+# shellcheck source=./scripts/reloader.bash
+source "${BASH_IT}/scripts/reloader.bash"
 
 # Load enabled aliases, completion, plugins
 for file_type in "aliases" "plugins" "completion"
 do
-  _load_bash_it_files $file_type
+  # shellcheck source=./scripts/reloader.bash
+  source "${BASH_IT}/scripts/reloader.bash" "skip" "$file_type"
 done
 
 # Load theme, if a theme was set
@@ -75,15 +78,15 @@ done
 
 # Custom
 CUSTOM="${BASH_IT_CUSTOM:=${BASH_IT}/custom}/*.bash ${BASH_IT_CUSTOM:=${BASH_IT}/custom}/**/*.bash"
-for config_file in $CUSTOM
+for _bash_it_config_file in $CUSTOM
 do
-  if [ -e "${config_file}" ]; then
+  if [ -e "${_bash_it_config_file}" ]; then
     # shellcheck disable=SC1090
-    source "$config_file"
+    source "$_bash_it_config_file"
   fi
 done
 
-unset config_file
+unset _bash_it_config_file
 if [[ $PROMPT ]]; then
   export PS1="\[""$PROMPT""\]"
 fi

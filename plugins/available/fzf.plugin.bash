@@ -4,7 +4,11 @@
 cite about-plugin
 about-plugin 'load fzf, if you are using it'
 
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+if [ -f ~/.fzf.bash ]; then
+  source ~/.fzf.bash
+elif [ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash ]; then
+  source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash
+fi
 
 if [ -z ${FZF_DEFAULT_COMMAND+x}  ]; then
   command -v fd &> /dev/null && export FZF_DEFAULT_COMMAND='fd --type f'
