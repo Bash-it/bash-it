@@ -20,6 +20,7 @@ function _set_pkg_aliases()
 		alias aptar="${BASHIT_USE_ROOT:+sudo }apt-get autoremove -y" # Advanced Packaging Tool Auto Remove
 		alias aptiv="${BASHIT_USE_ROOT:+sudo }apt-get install -V" # Advanced Packaging Tool Install Verbose
 		alias aptupd="${BASHIT_USE_ROOT:+sudo }apt-get update -y" # Advanced Packaging Tool UPDate
+		alias aptli="${OSH_ROOT:+sudo }apt list --installed" # Advanced Packaging Tool List installed
 
 		alias aptupg="${BASHIT_USE_ROOT:+sudo }apt-get dist-upgrade -V"
 		alias aptshow='apt-cache show'
