@@ -4,4 +4,4 @@ about-plugin 'Node.js helper functions'
 pathmunge ./node_modules/.bin
 
 # Make sure the global npm prefix is on the path
-[[ `which npm` ]] && pathmunge $(npm config get prefix)/bin
+[[ `which npm 2>/dev/null` ]] && pathmunge $(npm config get prefix)/bin
