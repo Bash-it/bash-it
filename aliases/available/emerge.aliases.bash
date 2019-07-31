@@ -7,7 +7,7 @@ about-alias 'emerge and ebuild aliases for gentoo-based distributions.'
 function _set_pkg_aliases()
 {
 	if [ -x $(which emerge) ]; then
-		if ! ((EUID)) && [ -n $BASHIT_ROOT ]; then BASHIT_USE_ROOT=true; fi
+		if ((EUID)) && [ -n "$BASHIT_ROOT" ]; then BASHIT_USE_ROOT=true; fi
 		# Emerge
 		alias em="${BASHIT_USE_ROOT:+sudo }emerge" # Enoch Merge
 		alias emfu="${BASHIT_USE_ROOT:+sudo }emerge --sync && emerge -uDUj @world"
