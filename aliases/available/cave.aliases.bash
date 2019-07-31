@@ -7,7 +7,7 @@ about-alias 'Cave frontend for paludis package manager.'
 function _set_pkg_aliases()
 {
 	if [ -x $(which cave) ]; then
-		if ()(EUID)) && [ -n "$BASHIT_ROOT" ]; then BASHIT_USE_ROOT=true; fi
+		if ((EUID)) && [ -n "$BASHIT_ROOT" ]; then BASHIT_USE_ROOT=true; fi
 		alias cave="${OSH_ROOT:+sudo }cave"
 		alias cr="${OSH_ROOT:+sudo }cave resolve" # Cave Resolve
 		alias cui="${OSH_ROOT:+sudo }cave uninstall" # Cave UnInstall
