@@ -9,7 +9,7 @@ about-alias 'Apt and dpkg aliases for Ubuntu and Debian distros.'
 function _set_pkg_aliases()
 {
 	# Wrapper for sudo if BASHIT_ROOT is non-zero
-	if ! ((EUID)) && [ -n $BASHIT_ROOT ]; then BASHIT_USE_ROOT=true; fi
+	if ((EUID)) && [ -n "$BASHIT_ROOT" ]; then BASHIT_USE_ROOT=true; fi
 
 	# Aliases
 	if [ -x $(which apt) ]; then
