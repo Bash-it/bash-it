@@ -25,7 +25,7 @@ function _set_pkg_aliases()
 		alias aptupg="${BASHIT_USE_ROOT:+sudo }apt-get dist-upgrade -V"
 		alias aptshow='apt-cache show'
 		alias aptupgd="${BASHIT_USE_ROOT:+sudo }apt-get update && sudo apt-get dist-upgrade -V && sudo apt-get autoremove"
-		alias aptp="${BASHIT_USE_ROOT:+sudo }apt-get remove --purge"#  Advanced Packating Tool Purge
+		alias aptp="${BASHIT_USE_ROOT:+sudo }apt-get remove --purge" # Advanced Packating Tool Purge
 
 		alias chkup='/usr/lib/update-notifier/apt-check -p --human-readable'
 		alias chkboot='cat /var/run/reboot-required'
