@@ -5,6 +5,16 @@ BASH_IT_LOAD_PRIORITY_DEFAULT_PLUGIN=${BASH_IT_LOAD_PRIORITY_DEFAULT_PLUGIN:-250
 BASH_IT_LOAD_PRIORITY_DEFAULT_COMPLETION=${BASH_IT_LOAD_PRIORITY_DEFAULT_COMPLETION:-350}
 BASH_IT_LOAD_PRIORITY_SEPARATOR="---"
 
+# Handle the different ways of running `sed` without generating a backup file based on OS
+# - GNU sed (Linux) uses `-i`
+# - BSD sed (macOS) uses `-i ''`
+# To use this in Bash-it for inline replacements with `sed`, use the following syntax:
+# sed "${BASH_IT_SED_I_PARAMETERS[@]}" -e "..." file
+BASH_IT_SED_I_PARAMETERS=(-i)
+case "$(uname)" in
+  Darwin*) BASH_IT_SED_I_PARAMETERS=(-i "")
+esac
+
 function _command_exists ()
 {
   _about 'checks for existence of a command'
