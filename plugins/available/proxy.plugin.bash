@@ -370,7 +370,7 @@ ssh-disable-proxy ()
 	group 'proxy'
 
 	if [ -f ~/.ssh/config ] ; then
-		sed -e's/^.*ProxyCommand/#	ProxyCommand/' -i ""  ~/.ssh/config
+		sed -e's/^.*ProxyCommand/#	ProxyCommand/' "${BASH_IT_SED_I_PARAMETERS[@]}"  ~/.ssh/config
 		echo "Disabled SSH config proxy settings"
 	fi
 }
@@ -382,7 +382,7 @@ ssh-enable-proxy ()
 	group 'proxy'
 
 	if [ -f ~/.ssh/config ] ; then
-		sed -e's/#	ProxyCommand/	ProxyCommand/' -i ""  ~/.ssh/config
+		sed -e's/#	ProxyCommand/	ProxyCommand/' "${BASH_IT_SED_I_PARAMETERS[@]}"  ~/.ssh/config
 		echo "Enabled SSH config proxy settings"
 	fi
 }
