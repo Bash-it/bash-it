@@ -329,6 +329,19 @@ Set `SCM_GIT_SHOW_STASH_INFO` to 'false' to **don't show** it:
 
 * `export SCM_GIT_SHOW_STASH_INFO=false`
 
+### Ahead/Behind Count
+
+When displaying information regarding whether or not the local branch is ahead or behind it's remote counterpart, you can opt to display the number of commits ahead/behind.
+This is useful if you only care whether or not you are ahead or behind and do not care how far ahead/behind you are.
+
+Set `SCM_GIT_SHOW_COMMIT_COUNT` to 'true' (the default value) to **show** the count of commits ahead/behind:
+
+* `export SCM_GIT_SHOW_COMMIT_COUNT=true`
+
+Set `SCM_GIT_SHOW_COMMIT_COUNT` to 'false' to **don't show** it:
+
+* `export SCM_GIT_SHOW_COMMIT_COUNT=false`
+
 ### Git user
 
 In some environments, it is useful to know the value of the current git user, which is used to mark all new commits.
