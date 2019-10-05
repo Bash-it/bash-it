@@ -13,9 +13,12 @@ if $(command -v pygmentize &> /dev/null) ; then
       about 'runs either pygmentize or cat on each file passed in'
       param '*: files to concatenate (as normally passed to cat)'
       example 'cat mysite/manage.py dir/text-file.txt'
+      if [ -z "$BASH_IT_CCAT_STYLE" ]; then
+          BASH_IT_CCAT_STYLE=default;
+      fi
       for var;
       do
-          pygmentize "$var" 2>/dev/null || "$CAT_BIN" "$var";
+          pygmentize -f 256 -O style="$BASH_IT_CCAT_STYLE" -g "$var" 2>/dev/null || "$CAT_BIN" "$var";
       done
   }
 
@@ -24,6 +27,9 @@ if $(command -v pygmentize &> /dev/null) ; then
       about 'it pigments the file passed in and passes it to less for pagination'
       param '$1: the file to paginate with less'
       example 'less mysite/manage.py'
-      pygmentize -g $* | "$LESS_BIN" -R
+      if [ -z "$BASH_IT_CLESS_STYLE" ]; then
+          BASH_IT_CLESS_STYLE=default;
+      fi
+      pygmentize -f 256 -O style="$BASH_IT_CLESS_STYLE" -g $* | "$LESS_BIN" -R
   }
 fi
