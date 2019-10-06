@@ -127,7 +127,7 @@ function _git-remote-info {
       if [[ "${same_branch_name}" != "true" ]]; then
         remote_info="\${VCS_STATUS_REMOTE_NAME}"
       else
-        remote_info="${VCS_STATUS_REMOTE_NAME}/${VCS_STATUS_REMOTE_BRANCH}"
+        remote_info="\${VCS_STATUS_REMOTE_NAME}/\${VCS_STATUS_REMOTE_BRANCH}"
       fi
     elif [[ ${same_branch_name} != "true" ]]; then
       remote_info="\${VCS_STATUS_REMOTE_BRANCH}"
