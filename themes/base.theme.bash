@@ -36,6 +36,7 @@ SCM_GIT_SHOW_STASH_INFO=${SCM_GIT_SHOW_STASH_INFO:=true}
 SCM_GIT_SHOW_COMMIT_COUNT=${SCM_GIT_SHOW_COMMIT_COUNT:=true}
 SCM_GIT_USE_GITSTATUSD=${SCM_GIT_USE_GITSTATUSD:=false}
 SCM_GIT_GITSTATUSD_LOC=${SCM_GIT_GITSTATUSD_LOC:="$HOME/gitstatus/gitstatus.plugin.sh"}
+SCM_GIT_GITSTATUSD_RAN=${SCM_GIT_GITSTATUSD_RAN:=false}
 
 SCM_GIT='git'
 SCM_GIT_CHAR='±'
@@ -173,13 +174,10 @@ function git_prompt_minimal_info {
 }
 
 function git_prompt_vars {
-  if ${SCM_GIT_USE_GITSTATUSD}; then # use faster gitstatusd
-    gitstatus_query # call gitstatusd
-    if [[ -z ${VCS_STATUS_WORKDIR} ]] ; then # this var is guaranteed to exist if query was successful
-      SCM_GIT_GITSTATUSD_RAN=false
-    else
-      SCM_GIT_GITSTATUSD_RAN=true # use this in githelpers and below to choose gitstatusd output
-    fi
+  if ${SCM_GIT_USE_GITSTATUSD} && gitstatus_query && [[ "${VCS_STATUS_RESULT}" == "ok-sync" ]]; then # use faster gitstatusd
+    SCM_GIT_GITSTATUSD_RAN=true # use this in githelpers and below to choose gitstatusd output
+  else
+    SCM_GIT_GITSTATUSD_RAN=false
   fi
 
   if _git-branch &> /dev/null; then
