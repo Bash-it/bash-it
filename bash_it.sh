@@ -121,5 +121,12 @@ if ! command -v reload &>/dev/null && [ -n "$BASH_IT_RELOAD_LEGACY" ]; then
   esac
 fi
 
+# If gitstatusd is requested for the current shell, launch it if the shell is interactive
+if [[ "${SCM_GIT_USE_GITSTATUSD}" == "true" ]] && [[ "$SCM_CHECK" == "true" ]] && [[ $- == *i* ]]; then
+  test -z "${SCM_GIT_GITSTATUSD_LOC}" || SCM_GIT_GITSTATUSD_LOC="$HOME/gitstatus/gitstatus.plugin.sh"
+  source "${SCM_GIT_GITSTATUSD_LOC}"
+  gitstatus_stop && gitstatus_start -s -1 -u -1 -c -1 -d -1
+fi
+
 # Disable trap DEBUG on subshells - https://github.com/Bash-it/bash-it/pull/1040
 set +T
