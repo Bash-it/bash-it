@@ -32,6 +32,12 @@ export TODO="t"
 
 # Set this to false to turn off version control status checking within the prompt for all themes
 export SCM_CHECK=true
+# when using Git, consider installing https://github.com/romkatv/gitstatus for faster status prompt
+# enable it here if you wish, change the LOC variable if you did not choose the standard location in your home
+#export SCM_GIT_USE_GITSTATUSD=true
+#export SCM_GIT_GITSTATUSD_LOC="$HOME/gitstatus/gitstatus.plugin.sh"
+# per default gitstatusd uses 2 times as many threads as CPU cores, you can change this here if you must
+#export GITSTATUS_NUM_THREADS=8
 
 # Set Xterm/screen/Tmux title with only a short hostname.
 # Uncomment this (or set SHORT_HOSTNAME to something else),
