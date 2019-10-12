@@ -6,6 +6,9 @@
 #   * To visualize python environment (virtualenv and conda) add in your .bash_profile the following line:
 #       export SEXY_THEME_SHOW_PYTHON=true
 
+# Default setting
+SEXY_THEME_SHOW_PYTHON="${SEXY_THEME_SHOW_PYTHON:=false}"
+
 if tput setaf 1 &> /dev/null; then
     if [[ $(tput colors) -ge 256 ]] 2>/dev/null; then
       MAGENTA=$(tput setaf 9)
