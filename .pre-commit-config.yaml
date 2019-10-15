@@ -9,20 +9,13 @@ repos:
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
-      - id: check-docstring-first
       - id: check-merge-conflict
-      - id: requirements-txt-fixer
-      - id: double-quote-string-fixer
-      - id: forbid-new-submodules
       - id: mixed-line-ending
       - id: check-added-large-files
   - repo: https://github.com/jumanjihouse/pre-commit-hooks
     rev: 1.11.0
     hooks:
-      - id: forbid-binary
       - id: git-check  # Configure in .gitattributes
-      - id: git-dirty  # Configure in .gitignore
-      - id: markdownlint  # Configure in .mdlrc
       - id: shellcheck
       - id: shfmt
   - repo: https://github.com/Lucas-C/pre-commit-hooks
@@ -33,3 +26,4 @@ repos:
       # - id: forbid-tabs
       - id: remove-tabs
         args: [--whitespaces-count, '2']  # defaults to: 4
+        exclude: .gitmodules
