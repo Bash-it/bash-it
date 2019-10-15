@@ -64,3 +64,11 @@ These items are subject to change. When making changes to the internal functiona
 
 Plugins can define a function that will be called when the plugin is being disabled.
 The callback name should be `{PLUGIN_NAME}_on_disable`, you can see `gitstatus` for usage example.
+
+## Using the pre-commit hook
+
+Note the file .pre-commit-config.yaml at the top of the repo.
+This file configures the behavior of the a pre-commit hook based on [the Pre-Commit framework](https://pre-commit.com/). Please see the site about
+installing it (with pip, brew or other tools) then run `pre-commit install` in the repo's root to activate the hook.
+For the full use of the tool, you may need to install also other third-party tools, such as
+[shellcheck](https://github.com/koalaman/shellcheck/) and [shfmt](https://github.com/mvdan/sh).
