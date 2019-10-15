@@ -43,3 +43,11 @@ For `aliases`, `plugins` and `completions`, the following rules are applied that
 Having the order based on a numeric priority in a common directory allows for more flexibility. While in general, aliases are loaded first (since their default priority is 150), it's possible to load some aliases after the plugins, or some plugins after completions by setting the items' load priority. This is more flexible than a fixed type-based order or a strict alphabetical order based on name.
 
 These items are subject to change. When making changes to the internal functionality, this page needs to be updated as well.
+
+## Using the pre-commit hook
+
+Note the file .pre-commit-config.yaml at the top of the repo.
+This file configures the behavior of the a pre-commit hook based on [the Pre-Commit framework](https://pre-commit.com/). Please see the site about
+installing it (with pip, brew or other tools) then run `pre-commit install` in the repo's root to activate the hook.
+For the full use of the tool, you may need to install also other third-party tools, such as
+[shellcheck](https://github.com/koalaman/shellcheck/) and [shfmt](https://github.com/mvdan/sh).
