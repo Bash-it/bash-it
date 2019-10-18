@@ -1,4 +1,4 @@
-# Define this here so it can be used by all of the Powerline themes
+# Sudo check after every command
 THEME_CHECK_SUDO=${THEME_CHECK_SUDO:=true}
 
 #To set color for foreground and background
@@ -75,7 +75,7 @@ function __powerline_python_venv_prompt {
   [[ -n "${python_venv}" ]] && echo "${PYTHON_VENV_CHAR}${python_venv}|${PYTHON_VENV_THEME_PROMPT_COLOR}|${fg_color}"
 }
 
-#Customising SCM Prompt
+#Customising SCM(GIT) Prompt
 function __powerline_scm_prompt {
   local color=""
   local scm_prompt=""
@@ -83,7 +83,6 @@ function __powerline_scm_prompt {
 
   scm_prompt_vars
 
-  # echo "${scm}"
 
   if [[ "${SCM_NONE_CHAR}" != "${SCM_CHAR}" ]]; then
     if [[ "${SCM_DIRTY}" -eq 3 ]]; then
@@ -102,10 +101,6 @@ function __powerline_scm_prompt {
       color=${SCM_THEME_PROMPT_COLOR}
       fg_color=255
     fi
-    # if [[ "${SCM_BRANCH}" == "master" ]]; then
-    #   color=128
-    #   fg_color=251
-    # fi
     if [[ "${SCM_GIT_CHAR}" == "${SCM_CHAR}" ]]; then
       scm_prompt+="${SCM_CHAR}${SCM_BRANCH}${SCM_STATE}"
     elif [[ "${SCM_P4_CHAR}" == "${SCM_CHAR}" ]]; then
@@ -191,7 +186,6 @@ function __powerline_left_segment {
     separator="$(set_color ${LAST_SEGMENT_COLOR} ${params[1]})${separator_char}${normal}"
   fi
   #change here to cahnge fg color
-  #echo "${params[0]} -> ${params[1]} -> ${params[2]}"
   LEFT_PROMPT+="${separator}$(set_color ${params[2]} ${params[1]}) ${params[0]} ${normal}"
   #seperator char color = current bg
   LAST_SEGMENT_COLOR=${params[1]}
