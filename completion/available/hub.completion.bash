@@ -6,8 +6,8 @@ if ! declare -F _git > /dev/null && declare -F _completion_loader > /dev/null; t
   _completion_loader git
 fi
 
-# Check that git tab completion is available
-if declare -F _git > /dev/null; then
+# Check that git tab completion is available and we haven't already set up completion
+if declare -F _git > /dev/null && ! declare -F __git_list_all_commands_without_hub > /dev/null; then
   # Duplicate and rename the 'list_all_commands' function
   eval "$(declare -f __git_list_all_commands | \
         sed 's/__git_list_all_commands/__git_list_all_commands_without_hub/')"
@@ -17,11 +17,16 @@ if declare -F _git > /dev/null; then
     cat <<-EOF
 alias
 pull-request
+pr
+issue
+release
 fork
 create
+delete
 browse
 compare
 ci-status
+sync
 EOF
     __git_list_all_commands_without_hub
   }
@@ -213,21 +218,36 @@ EOF
     esac
   }
 
-  # hub fork [--no-remote]
+  # hub fork [--no-remote] [--remote-name REMOTE] [--org ORGANIZATION]
   _git_fork() {
-    local i c=2 remote=yes
+    local i c=2 flags="--no-remote --remote-name --org"
     while [ $c -lt $cword ]; do
       i="${words[c]}"
       case "$i" in
+        --org)
+          ((c++))
+          flags=${flags/$i/}
+          ;;
+        --remote-name)
+          ((c++))
+          flags=${flags/$i/}
+          flags=${flags/--no-remote/}
+          ;;
         --no-remote)
-          unset remote
+          flags=${flags/$i/}
+          flags=${flags/--remote-name/}
           ;;
       esac
       ((c++))
     done
-    if [ -n "$remote" ]; then
-      __gitcomp "--no-remote"
-    fi
+    case "$prev" in
+      --remote-name|--org)
+        COMPREPLY=()
+        ;;
+      *)
+        __gitcomp "$flags"
+        ;;
+    esac
   }
 
   # hub pull-request [-f] [-m <MESSAGE>|-F <FILE>|-i <ISSUE>|<ISSUE-URL>] [-b <BASE>] [-h <HEAD>] [-a <USER>] [-M <MILESTONE>] [-l <LABELS>]
