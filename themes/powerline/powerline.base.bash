@@ -40,6 +40,13 @@ function __powerline_user_info_prompt {
   [[ -n "${user_info}" ]] && echo "${user_info}|${color}"
 }
 
+function __powerline_node_prompt {
+  local node_version=""
+
+  node_version="$(node_version_prompt)"
+  [[ -n "${node_version}" ]] && echo "${NODE_CHAR}${node_version}|${NODE_THEME_PROMPT_COLOR}"
+}
+
 function __powerline_ruby_prompt {
   local ruby_version=""
 

@@ -62,6 +62,9 @@ SCM_SVN_CHAR='⑆'
 SCM_NONE='NONE'
 SCM_NONE_CHAR='○'
 
+NVM_THEME_PROMPT_PREFIX=' |'
+NVM_THEME_PROMPT_SUFFIX='|'
+
 RVM_THEME_PROMPT_PREFIX=' |'
 RVM_THEME_PROMPT_SUFFIX='|'
 
@@ -304,6 +307,19 @@ function hg_prompt_vars {
     else
         SCM_CHANGE=$(hg summary 2> /dev/null | grep parent: | awk '{print $2}')
     fi
+}
+
+function nvm_version_prompt {
+  local node
+  if declare -f -F nvm &> /dev/null; then
+    node=$(nvm current 2> /dev/null)
+    [[ "${node}" == "system" ]] && return
+    echo -e "${NVM_THEME_PROMPT_PREFIX}${node}${NVM_THEME_PROMPT_SUFFIX}"
+  fi
+}
+
+function node_version_prompt {
+  echo -e "$(nvm_version_prompt)"
 }
 
 function rvm_version_prompt {
