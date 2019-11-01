@@ -170,6 +170,17 @@ function __powerline_shlvl_prompt {
   fi
 }
 
+function __powerline_dirstack_prompt {
+  if [[ "${#DIRSTACK[@]}" -gt 1 ]]; then
+    local depth=$(( ${#DIRSTACK[@]} - 1 ))
+    local prompt="${DIRSTACK_THEME_PROMPT_CHAR}"
+    if [[ "${depth}" -ge 2 ]]; then
+      prompt+="${depth}"
+    fi
+    echo "${prompt}|${DIRSTACK_THEME_PROMPT_COLOR}"
+  fi
+}
+
 function __powerline_left_segment {
   local OLD_IFS="${IFS}"; IFS="|"
   local params=( $1 )
