@@ -162,6 +162,14 @@ function __powerline_aws_profile_prompt {
   fi
 }
 
+function __powerline_shlvl_prompt {
+  if [[ "${SHLVL}" -gt 1 ]]; then
+    local prompt="${SHLVL_THEME_PROMPT_CHAR}"
+    local level=$(( ${SHLVL} - 1))
+    echo "${prompt}${level}|${SHLVL_THEME_PROMPT_COLOR}"
+  fi
+}
+
 function __powerline_left_segment {
   local OLD_IFS="${IFS}"; IFS="|"
   local params=( $1 )
