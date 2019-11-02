@@ -30,10 +30,11 @@ function __powerline_user_info_prompt {
       fi
       ;;
     *)
+      local user=${SHORT_USER:-${USER}}
       if [[ -n "${SSH_CLIENT}" ]] || [[ -n "${SSH_CONNECTION}" ]]; then
-        user_info="${USER_INFO_SSH_CHAR}${USER}"
+        user_info="${USER_INFO_SSH_CHAR}${user}"
       else
-        user_info="${USER}"
+        user_info="${user}"
       fi
       ;;
   esac
@@ -112,7 +113,7 @@ function __powerline_cwd_prompt {
 }
 
 function __powerline_hostname_prompt {
-    echo "$(hostname -s)|${HOST_THEME_PROMPT_COLOR}"
+    echo "${SHORT_HOSTNAME:-$(hostname -s)}|${HOST_THEME_PROMPT_COLOR}"
 }
 
 function __powerline_wd_prompt {
