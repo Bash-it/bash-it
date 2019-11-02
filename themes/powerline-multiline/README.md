@@ -9,6 +9,7 @@ A colorful multiline theme, where the first line shows information about your sh
 * Current path
 * Current username and hostname
 * Current time
+* Current shell level
 * An indicator when connected by SSH
 * An indicator when `sudo` has the credentials cached (see the `sudo` manpage for more info about this)
 * An indicator when the current shell is inside the Vim editor
@@ -61,6 +62,7 @@ The contents of both prompt sides can be "reordered", all the "segments" (every 
 * `user_info` - Current user
 * `wd` - Working directory, like `cwd` but doesn't show the full folder
   hierarchy, only the directory you're currently in.
+* `shlvl` - Show the current shell level (based on `SHLVL` environment variable), but only if you are not in root shell
 
 Two variables can be defined to set the order of the prompt segments:
 
