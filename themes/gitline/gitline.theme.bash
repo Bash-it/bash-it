@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-. "$BASH_IT/themes/redline/powerline.base.bash"
+. "$BASH_IT/themes/powerline/powerline.base.bash"
 
 #For the logo(Uncomment if you want a logo before your name)
 #PROMPT_DISTRO_LOGO="💻"
