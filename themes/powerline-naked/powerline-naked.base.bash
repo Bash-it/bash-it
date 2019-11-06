@@ -11,5 +11,6 @@ function __powerline_left_segment {
     separator="${separator_char}"
   fi
   LEFT_PROMPT+="${separator}$(set_color ${params[1]} -) ${params[0]} ${normal}"
+  LAST_SEGMENT_COLOR=${params[1]}
   (( SEGMENTS_AT_LEFT += 1 ))
 }
