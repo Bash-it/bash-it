@@ -33,6 +33,7 @@ SCM_GIT_IGNORE_UNTRACKED=${SCM_GIT_IGNORE_UNTRACKED:=false}
 SCM_GIT_SHOW_CURRENT_USER=${SCM_GIT_SHOW_CURRENT_USER:=false}
 SCM_GIT_SHOW_MINIMAL_INFO=${SCM_GIT_SHOW_MINIMAL_INFO:=false}
 SCM_GIT_SHOW_STASH_INFO=${SCM_GIT_SHOW_STASH_INFO:=true}
+SCM_GIT_SHOW_COMMIT_COUNT=${SCM_GIT_SHOW_COMMIT_COUNT:=true}
 
 SCM_GIT='git'
 SCM_GIT_CHAR='±'
@@ -79,15 +80,20 @@ RBENV_THEME_PROMPT_SUFFIX='|'
 RBFU_THEME_PROMPT_PREFIX=' |'
 RBFU_THEME_PROMPT_SUFFIX='|'
 
+GIT_EXE=`which git 2> /dev/null || true`
+P4_EXE=`which p4 2> /dev/null || true`
+HG_EXE=`which hg  2> /dev/null || true`
+SVN_EXE=`which svn  2> /dev/null || true`
+
 function scm {
   if [[ "$SCM_CHECK" = false ]]; then SCM=$SCM_NONE
-  elif [[ -f .git/HEAD ]] && which git &> /dev/null; then SCM=$SCM_GIT
-  elif which git &> /dev/null && [[ -n "$(git rev-parse --is-inside-work-tree 2> /dev/null)" ]]; then SCM=$SCM_GIT
-  elif which p4 &> /dev/null && [[ -n "$(p4 set P4CLIENT 2> /dev/null)" ]]; then SCM=$SCM_P4
-  elif [[ -d .hg ]] && which hg &> /dev/null; then SCM=$SCM_HG
-  elif which hg &> /dev/null && [[ -n "$(hg root 2> /dev/null)" ]]; then SCM=$SCM_HG
-  elif [[ -d .svn ]] && which svn &> /dev/null; then SCM=$SCM_SVN
-  elif which svn &> /dev/null && [[ -n "$(svn info --show-item wc-root 2>/dev/null)" ]]; then SCM=$SCM_SVN
+  elif [[ -f .git/HEAD ]] && [[ -x "$GIT_EXE" ]]; then SCM=$SCM_GIT
+  elif [[ -x "$GIT_EXE" ]] && [[ -n "$(git rev-parse --is-inside-work-tree 2> /dev/null)" ]]; then SCM=$SCM_GIT
+  elif [[ -x "$P4_EXE" ]] && [[ -n "$(p4 set P4CLIENT 2> /dev/null)" ]]; then SCM=$SCM_P4
+  elif [[ -d .hg ]] && [[ -x "$HG_EXE" ]]; then SCM=$SCM_HG
+  elif [[ -x "$HG_EXE" ]] && [[ -n "$(hg root 2> /dev/null)" ]]; then SCM=$SCM_HG
+  elif [[ -d .svn ]] && [[ -x "$SVN_EXE" ]]; then SCM=$SCM_SVN
+  elif [[ -x "$SVN_EXE" ]] && [[ -n "$(svn info --show-item wc-root 2>/dev/null)" ]]; then SCM=$SCM_SVN
   else SCM=$SCM_NONE
   fi
 }
@@ -181,8 +187,14 @@ function git_prompt_vars {
   fi
 
   IFS=$'\t' read -r commits_behind commits_ahead <<< "$(_git-upstream-behind-ahead)"
-  [[ "${commits_ahead}" -gt 0 ]] && SCM_BRANCH+="${SCM_GIT_AHEAD_BEHIND_PREFIX_CHAR}${SCM_GIT_AHEAD_CHAR}${commits_ahead}"
-  [[ "${commits_behind}" -gt 0 ]] && SCM_BRANCH+="${SCM_GIT_AHEAD_BEHIND_PREFIX_CHAR}${SCM_GIT_BEHIND_CHAR}${commits_behind}"
+  if [[ "${commits_ahead}" -gt 0 ]]; then
+    SCM_BRANCH+="${SCM_GIT_AHEAD_BEHIND_PREFIX_CHAR}${SCM_GIT_AHEAD_CHAR}"
+    [[ "${SCM_GIT_SHOW_COMMIT_COUNT}" = "true" ]] && SCM_BRANCH+="${commits_ahead}"
+  fi
+  if [[ "${commits_behind}" -gt 0 ]]; then
+    SCM_BRANCH+="${SCM_GIT_AHEAD_BEHIND_PREFIX_CHAR}${SCM_GIT_BEHIND_CHAR}"
+    [[ "${SCM_GIT_SHOW_COMMIT_COUNT}" = "true" ]] && SCM_BRANCH+="${commits_behind}"
+  fi
 
   if [[ "${SCM_GIT_SHOW_STASH_INFO}" = "true" ]]; then
     local stash_count

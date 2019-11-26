@@ -17,3 +17,10 @@ function sshlist() {
 
   awk '$1 ~ /Host$/ {for (i=2; i<=NF; i++) print $i}' ~/.ssh/config
 }
+
+function ssh-add-all() {
+  about 'add all ssh private keys to agent'
+  group 'ssh'
+
+  grep -slR "PRIVATE" ~/.ssh | xargs ssh-add
+}

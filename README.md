@@ -8,7 +8,7 @@
 Includes autocompletion, themes, aliases, custom functions, a few stolen pieces from Steve Losh, and more.
 
 Bash-it provides a solid framework for using, developing and maintaining shell scripts and custom commands for your daily work.
-If you're using the _Bourne Again Shell_ (Bash) on a regular basis and have been looking for an easy way on how to keep all of these nice little scripts and aliases under control, then Bash-it is for you!
+If you're using the _Bourne Again Shell_ (Bash) regularly and have been looking for an easy way on how to keep all of these nice little scripts and aliases under control, then Bash-it is for you!
 Stop polluting your `~/bin` directory and your `.bashrc` file, fork/clone Bash-it and start hacking away.
 
 - [Contributing](#contributing)
@@ -58,7 +58,7 @@ Feel free to enable the tools you want to use after the installation.
 When you run without the `--no-modify-config` switch, the Bash-it installer automatically modifies/replaces your existing config file.
 Use the `--no-modify-config` switch to avoid unwanted modifications, e.g. if your Bash config file already contains the code that loads Bash-it.
 
-**NOTE**: Keep in mind how Bash load its configuration files,
+**NOTE**: Keep in mind how Bash loads its configuration files,
 `.bash_profile` for login shells (and in macOS in terminal emulators like [Terminal.app](http://www.apple.com/osx/apps/) or
 [iTerm2](https://www.iterm2.com/)) and `.bashrc` for interactive shells (default mode in most of the GNU/Linux terminal emulators),
 to ensure that Bash-it is loaded correctly.
@@ -77,7 +77,7 @@ Refer to the official [Bash documentation](https://www.gnu.org/software/bash/man
 ### Install using Docker
 
 You can try Bash-it in an isolated environment without changing any local files via a [Docker](https://www.docker.com/) Container.
-(Bash Shell v4.4 with Bash-it, [bats](https://github.com/sstephenson/bats) and bash-completion based on [Alpine Linux](https://alpinelinux.org/)).
+(Bash Shell v4.4 with Bash-it, [bats](https://github.com/sstephenson/bats),and bash-completion based on [Alpine Linux](https://alpinelinux.org/)).
 
 `docker pull ellerbrock/bash-it`
 
@@ -206,7 +206,7 @@ export BASH_IT_THEME=""
 
 You can easily preview the themes in your own shell using `BASH_PREVIEW=true bash-it reload`.
 
-If you've created your own custom prompts, we'd love it if you shared with everyone else! Just submit a Pull Request.
+If you've created your own custom prompts, we'd love it if you shared them with everyone else! Just submit a Pull Request.
 You can see theme screenshots on [wiki/Themes](https://github.com/Bash-it/bash-it/wiki/Themes).
 
 **NOTE**: Bash-it and some themes use UTF-8 characters, so to avoid strange behavior in your terminal, set your locale to `LC_ALL=en_US.UTF-8` or the equivalent to your language if it isn't American English.
@@ -235,7 +235,7 @@ Bash-it will automatically reload itself after activating or deactivating plugin
 
 ### Prompt Version Control Check
 
-Bash-it provides prompt themes the ability to check and display version control information for the current directory.
+Bash-it provides prompt themes with the ability to check and display version control information for the current directory.
 The information is retrieved for each directory and can slow down the navigation of projects with a large number of files and folders.
 Turn version control checking off to prevent slow directory navigation within large projects.
 
@@ -328,6 +328,19 @@ Set `SCM_GIT_SHOW_STASH_INFO` to 'true' (the default value) to **show** the coun
 Set `SCM_GIT_SHOW_STASH_INFO` to 'false' to **don't show** it:
 
 * `export SCM_GIT_SHOW_STASH_INFO=false`
+
+### Ahead/Behind Count
+
+When displaying information regarding whether or not the local branch is ahead or behind its remote counterpart, you can opt to display the number of commits ahead/behind.
+This is useful if you only care whether or not you are ahead or behind and do not care how far ahead/behind you are.
+
+Set `SCM_GIT_SHOW_COMMIT_COUNT` to 'true' (the default value) to **show** the count of commits ahead/behind:
+
+* `export SCM_GIT_SHOW_COMMIT_COUNT=true`
+
+Set `SCM_GIT_SHOW_COMMIT_COUNT` to 'false' to **don't show** it:
+
+* `export SCM_GIT_SHOW_COMMIT_COUNT=false`
 
 ### Git user
 
