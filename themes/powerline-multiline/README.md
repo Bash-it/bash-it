@@ -56,6 +56,7 @@ The contents of both prompt sides can be "reordered", all the "segments" (every 
 * `python_venv` - Python virtual environment information (`virtualenv`, `venv`
   and `conda` supported)
 * `ruby` - Current ruby version if using `rvm`
+* `node` - Current node version (only `nvm` is supported)
 * `scm` - Version control information, `git` 
 * `user_info` - Current user
 * `wd` - Working directory, like `cwd` but doesn't show the full folder
