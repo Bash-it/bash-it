@@ -65,6 +65,20 @@ function backup_new() {
   echo -e "\033[0;32mCopied the template $CONFIG_FILE into ~/$CONFIG_FILE, edit this file to customize bash-it\033[0m"
 }
 
+# Append a target file so that it sources .bashrc
+function setup_interactive_dotfile() {
+tee -a "${1:?No Target Specified}" <<'EOF' >/dev/null
+
+# Test that we're running bash
+if [ -n "$BASH_VERSION" ]; then
+  # include .bashrc if it exists
+  if [ -r "$HOME/.bashrc" ]; then
+    . "$HOME/.bashrc"
+  fi
+fi
+EOF
+}
+
 for param in "$@"; do
   shift
   case "$param" in
@@ -96,15 +110,30 @@ fi
 
 BASH_IT="$(cd "$(dirname "$0")" && pwd)"
 
-case $OSTYPE in
-  darwin*)
-    CONFIG_FILE=.bash_profile
-    ;;
-  *)
-    CONFIG_FILE=.bashrc
-    ;;
-esac
+# The behaviour set below is that .profile, .bash_login or .bash_profile will be modified to load 
+# .bashrc, and .bashrc will be modified to load bash-it.  This means that .bash-it will work 
+# whether interactive or not (i.e. terminal emulator vs ssh session).
+# This brings the likes of OSX and Solaris into line with the behaviour of various Linux distros
 
+# Ensure we match at least one of .profile, .bash_login or .bash_profile
+# If none of these exist, we default to .bash_profile
+# The files are loaded in the order .bash_profile -> .bash_login -> .profile
+# So we work our way backwards to ensure that bash-it is loaded last in any scenario
+for fsobj in "$HOME/.profile" "$HOME/.bash_login" "$HOME/.bash_profile"; do
+  # If none exist, setup .bash_profile
+  case "$fsobj" in
+    (*.profile|*.bash_login) [[ ! -e "$fsobj" ]] && continue ;;
+    (*.bash_profile)         [[ ! -e "$fsobj" ]] && setup_interactive_dotfile "$fsobj" ;;
+  esac
+  # Next, if it exists and doesn't source .bashrc, then correct that
+  # shellcheck disable=SC2016
+  if ! grep -q '. "$HOME/.bashrc"' "$fsobj"; then
+    setup_interactive_dotfile "$fsobj"
+    break
+  fi
+done
+
+CONFIG_FILE=.bashrc
 BACKUP_FILE=$CONFIG_FILE.bak
 echo "Installing bash-it"
 if ! [[ $silent ]] && ! [[ $no_modify_config ]]; then
@@ -132,8 +161,8 @@ if ! [[ $silent ]] && ! [[ $no_modify_config ]]; then
     case $choice in
     [yY])
       test -w "$HOME/$CONFIG_FILE" &&
-      cp -aL "$HOME/$CONFIG_FILE" "$HOME/$CONFIG_FILE.bak" &&
-      echo -e "\033[0;32mYour original $CONFIG_FILE has been backed up to $CONFIG_FILE.bak\033[0m"
+      cp -aL "$HOME/$CONFIG_FILE" "$HOME/$BACKUP_FILE" &&
+      echo -e "\033[0;32mYour original $CONFIG_FILE has been backed up to $BACKUP_FILE\033[0m"
 
       (sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" | tail -n +2) >> "$HOME/$CONFIG_FILE"
       echo -e "\033[0;32mBash-it template has been added to your $CONFIG_FILE\033[0m"
@@ -154,9 +183,12 @@ elif [[ $silent ]] && ! [[ $no_modify_config ]]; then
 fi
 
 # Load dependencies for enabling components
+# shellcheck disable=SC1090
 source "$BASH_IT/lib/composure.bash"
+# shellcheck disable=SC1090
 source "$BASH_IT/lib/utilities.bash"
 cite _about _param _example _group _author _version
+# shellcheck disable=SC1090
 source "$BASH_IT/lib/helpers.bash"
 
 if [[ $interactive ]] && ! [[ $silent ]] ;
