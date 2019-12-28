@@ -11,6 +11,7 @@ load ../../plugins/available/ruby.plugin
 load ../../plugins/available/rails.plugin
 load ../../completion/available/bundler.completion
 load ../../completion/available/gem.completion
+load ../../completion/available/rails.completion
 load ../../completion/available/rake.completion
 
 cite _about _param _example _group _author _version
@@ -62,7 +63,7 @@ function local_teardown {
 
   assert_line -n 0 '      aliases:  bundler   rails  '
   assert_line -n 1 '      plugins:  chruby   chruby-auto   rails   ruby  '
-  assert_line -n 2 '  completions:  bundler   gem   rake  '
+  assert_line -n 2 '  completions:  bundler   gem   rails   rake  '
 }
 
 @test "search: rails ruby gem bundler rake -chruby" {
@@ -70,7 +71,7 @@ function local_teardown {
 
   assert_line -n 0 '      aliases:  bundler   rails  '
   assert_line -n 1 '      plugins:  rails   ruby  '
-  assert_line -n 2 '  completions:  bundler   gem   rake  '
+  assert_line -n 2 '  completions:  bundler   gem   rails   rake  '
 }
 
 @test "search: @git" {
