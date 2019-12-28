@@ -43,6 +43,10 @@ export THEME_CLOCK_FORMAT="%H:%M:%S"
 
 The time/date is printed by the `date` command, so refer to its man page to change the format.
 
+### Soft Separators
+
+Adjacent segments having the same background color will use a less-pronouced (i.e. soft) separator between them.
+
 ### Segment Order
 
 The contents of both prompt sides can be "reordered", all the "segments" (every piece of information) can take any place. The currently available segments are:

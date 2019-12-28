@@ -9,6 +9,7 @@ function __powerline_right_segment {
   local params=( $1 )
   IFS="${OLD_IFS}"
   local separator_char="${POWERLINE_RIGHT_SEPARATOR}"
+  local separator_char_soft="${POWERLINE_RIGHT_SEPARATOR_SOFT}"
   local padding="${POWERLINE_PADDING}"
   local separator_color=""
 
@@ -16,7 +17,12 @@ function __powerline_right_segment {
     separator_char="${POWERLINE_RIGHT_END}"
     separator_color="$(set_color ${params[1]} -)"
   else
-    separator_color="$(set_color ${params[1]} ${LAST_SEGMENT_COLOR})"
+      if [[ "${LAST_SEGMENT_COLOR}" -eq "${params[1]}" ]]; then
+        separator_color="$(set_color - ${LAST_SEGMENT_COLOR})"
+        separator_char=${separator_char_soft}
+      else
+        separator_color="$(set_color ${params[1]} ${LAST_SEGMENT_COLOR})"
+      fi
     (( padding += 1 ))
   fi
   RIGHT_PROMPT+="${separator_color}${separator_char}${normal}$(set_color - ${params[1]}) ${params[0]} ${normal}$(set_color - ${COLOR})${normal}"

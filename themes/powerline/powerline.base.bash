@@ -175,10 +175,15 @@ function __powerline_left_segment {
   local params=( $1 )
   IFS="${OLD_IFS}"
   local separator_char="${POWERLINE_LEFT_SEPARATOR}"
+  local separator_char_soft="${POWERLINE_LEFT_SEPARATOR_SOFT}"
   local separator=""
 
   if [[ "${SEGMENTS_AT_LEFT}" -gt 0 ]]; then
-    separator="$(set_color ${LAST_SEGMENT_COLOR} ${params[1]})${separator_char}${normal}"
+    if [[ "${LAST_SEGMENT_COLOR}" -eq "${params[1]}" ]]; then
+      separator="$(set_color - ${LAST_SEGMENT_COLOR})${separator_char_soft}${normal}"
+    else
+      separator="$(set_color ${LAST_SEGMENT_COLOR} ${params[1]})${separator_char}${normal}"
+    fi
   fi
   LEFT_PROMPT+="${separator}$(set_color - ${params[1]}) ${params[0]} ${normal}"
   LAST_SEGMENT_COLOR=${params[1]}
