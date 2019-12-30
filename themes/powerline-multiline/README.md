@@ -11,6 +11,8 @@ A colorful multiline theme, where the first line shows information about your sh
 * Current time
 * Current shell level
 * Current dirstack level (`pushd` / `popd`)
+* Current history number
+* Current command number
 * An indicator when connected by SSH
 * An indicator when `sudo` has the credentials cached (see the `sudo` manpage for more info about this)
 * An indicator when the current shell is inside the Vim editor
@@ -69,6 +71,8 @@ The contents of both prompt sides can be "reordered", all the "segments" (every 
   hierarchy, only the directory you're currently in.
 * `shlvl` - Show the current shell level (based on `SHLVL` environment variable), but only if you are not in root shell
 * `dirstack` - Show the current dirstack level (based on `DIRSTACK` environment variable), but only if the stack is not empty
+* `history_number` - Show current history number
+* `command_number` - Show current command number
 
 Two variables can be defined to set the order of the prompt segments:
 

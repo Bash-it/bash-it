@@ -181,6 +181,14 @@ function __powerline_dirstack_prompt {
   fi
 }
 
+function __powerline_history_number_prompt {
+  echo "${HISTORY_NUMBER_THEME_PROMPT_CHAR}\!|${HISTORY_NUMBER_THEME_PROMPT_COLOR}"
+}
+
+function __powerline_command_number_prompt {
+  echo "${COMMAND_NUMBER_THEME_PROMPT_CHAR}\#|${COMMAND_NUMBER_THEME_PROMPT_COLOR}"
+}
+
 function __powerline_left_segment {
   local OLD_IFS="${IFS}"; IFS="|"
   local params=( $1 )
