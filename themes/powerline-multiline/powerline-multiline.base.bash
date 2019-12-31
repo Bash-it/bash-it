@@ -8,7 +8,7 @@ function __powerline_right_segment {
   local OLD_IFS="${IFS}"; IFS="|"
   local params=( $1 )
   IFS="${OLD_IFS}"
-  local padding="${POWERLINE_PADDING}"
+  local padding=0
   local pad_before_segment=" "
 
   if [[ "${SEGMENTS_AT_RIGHT}" -eq 0 ]]; then
@@ -56,7 +56,7 @@ function __powerline_prompt_command {
 
   LEFT_PROMPT=""
   RIGHT_PROMPT=""
-  RIGHT_PROMPT_LENGTH=0
+  RIGHT_PROMPT_LENGTH=${POWERLINE_PADDING}
   SEGMENTS_AT_LEFT=0
   SEGMENTS_AT_RIGHT=0
   LAST_SEGMENT_COLOR=""
