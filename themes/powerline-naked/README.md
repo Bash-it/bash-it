@@ -73,3 +73,18 @@ A variable can be defined to set the order of the prompt segments:
     POWERLINE_PROMPT="user_info scm python_venv ruby cwd"
 
 The example values above are the current default values, but if you want to remove anything from the prompt, simply remove the "string" that represents the segment from the variable.
+
+### Compact Settings
+
+You can configure various aspects of the prompt to use less whitespace. Supported variables are:
+
+| Variable                             | Description
+|--------------------------------------|------------
+|POWERLINE_COMPACT_BEFORE_SEPARATOR    | Removes the leading space before each separator
+|POWERLINE_COMPACT_AFTER_SEPARATOR     | Removes the trailing space after each separator
+|POWERLINE_COMPACT_BEFOR_FIRST_SEGMENT | Removes the leading space on the first segment
+|POWERLINE_COMPACT_AFTER_LAST_SEGMENT  | Removes the trailing space on the last segment
+|POWERLINE_COMPACT_PROMPT              | Removes the space after the prompt character
+|POWERLINE_COMPACT                     | Enable all Compact settings (you can still override individual settings)
+
+The default value for all settings is `0` (disabled). Use `1` to enable.
