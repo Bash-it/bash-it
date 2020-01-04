@@ -144,3 +144,70 @@ _bash-it-grep() {
   fi
   printf "%s " "${BASH_IT_GREP}"
 }
+
+# Updates a git repo by presenting a list of commit messages since the current state.
+#
+# Returns:
+#   0 when updated successfully, otherwise 1
+#
+# Examples:
+#   _bash-it-update-repo 'bash-it' "${BASH_IT}" "${BASH_IT_REMOTE}"
+#
+_bash-it-update-repo() {
+  local name="$1"
+  local dir="$2"
+  local remote="${3:-origin}"
+  local old_pwd="${PWD}"
+
+  if [[ ! -d "${dir}" ]] ; then
+
+    return 1
+
+  else
+
+    cd "${dir}"
+
+    git fetch &> /dev/null
+
+    declare status
+    status="$(git rev-list master.."${remote}"/master 2> /dev/null)"
+
+    if [[ -n "${status}" ]]; then
+
+      for i in $(git rev-list --merges --first-parent master.."${remote}"); do
+        num_of_lines=$(git log -1 --format=%B "$i" | awk 'NF' | wc -l)
+        if [ "$num_of_lines" -eq 1 ]; then
+          description="%s"
+        else
+          description="%b"
+        fi
+        git --no-pager log --format="%h: $description (%an)" -1 "$i"
+      done
+      echo ""
+      read -e -n 1 -p "Would you like to update to $(git log -1 --format=%h origin/master)? [Y/n] " RESP
+
+      case $RESP in
+        [yY]|"")
+          if ! git pull --rebase &> /dev/null
+          then
+            echo "${name} successfully updated."
+          else
+            echo "Error updating ${name}, please, check if your ${name} installation folder (${dir}) is clean."
+          fi
+          ;;
+        [nN])
+          echo "Not upgrading…"
+          ;;
+        *)
+          echo -e "\033[91mPlease choose y or n.\033[m"
+          ;;
+      esac
+
+    else
+      echo "${name} is up to date, nothing to do!"
+    fi
+
+    cd "${old_pwd}" &> /dev/null || return 1
+
+  fi
+}

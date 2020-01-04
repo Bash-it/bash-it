@@ -150,58 +150,7 @@ _bash-it_update() {
   _about 'updates Bash-it'
   _group 'lib'
 
-  local old_pwd="${PWD}"
-
-  cd "${BASH_IT}" || return
-
-  if [ -z $BASH_IT_REMOTE ]; then
-    BASH_IT_REMOTE="origin"
-  fi
-
-  git fetch &> /dev/null
-
-  declare status
-  status="$(git rev-list master..${BASH_IT_REMOTE}/master 2> /dev/null)"
-
-  if [[ -n "${status}" ]]; then
-
-    for i in $(git rev-list --merges --first-parent master..${BASH_IT_REMOTE}); do
-      num_of_lines=$(git log -1 --format=%B $i | awk 'NF' | wc -l)
-      if [ $num_of_lines -eq 1 ]; then
-        description="%s"
-      else
-        description="%b"
-      fi
-      git log --format="%h: $description (%an)" -1 $i
-    done
-    echo ""
-    read -e -n 1 -p "Would you like to update to $(git log -1 --format=%h origin/master)? [Y/n] " RESP
-    case $RESP in
-      [yY]|"")
-        git pull --rebase &> /dev/null
-        if [[ $? -eq 0 ]]; then
-          echo "Bash-it successfully updated."
-          echo ""
-          echo "Migrating your installation to the latest version now..."
-          _bash-it-migrate
-          echo ""
-          echo "All done, enjoy!"
-          bash-it reload
-        else
-          echo "Error updating Bash-it, please, check if your Bash-it installation folder (${BASH_IT}) is clean."
-        fi
-        ;;
-      [nN])
-        echo "Not upgrading…"
-        ;;
-      *)
-        echo -e "\033[91mPlease choose y or n.\033[m"
-        ;;
-      esac
-  else
-    echo "Bash-it is up to date, nothing to do!"
-  fi
-  cd "${old_pwd}" &> /dev/null || return
+  _bash-it-update-repo 'bash-it' "${BASH_IT}" "${BASH_IT_REMOTE:-origin}"
 }
 
 _bash-it-migrate() {
