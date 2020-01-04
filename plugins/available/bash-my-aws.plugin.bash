@@ -15,6 +15,9 @@ __bma_load() {
 }
 
 install-bash-my-aws() {
+  about 'Install bash-my-aws'
+  group 'bash-my-aws'
+
   if [[ ! -d "$BASH_MY_AWS" ]] ; then
     git clone https://github.com/bash-my-aws/bash-my-aws.git $BASH_MY_AWS
     echo "bash-my-aws successfully installed."
