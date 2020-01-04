@@ -1,7 +1,7 @@
 cite about-plugin
 about-plugin 'Bash My AWS'
 
-export BASH_MY_AWS="$HOME/.bash-my-aws"
+export BASH_MY_AWS="${BASH_MY_AWS:-$HOME/.bash-my-aws}"
 
 __bma_load() {
   force=$1
