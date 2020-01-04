@@ -4,7 +4,7 @@ about-plugin 'Bash My AWS'
 export BASH_MY_AWS="${BASH_MY_AWS:-$HOME/.bash-my-aws}"
 
 __bma_load() {
-  force=$1
+  local force=$1
   if [[ -d "$BASH_MY_AWS" ]] ; then
     if [[ -z $force ]] || [[ ":$PATH:" != *":$BASH_MY_AWS/bin:"* ]] ; then
       pathmunge "$BASH_MY_AWS/bin"
@@ -35,7 +35,7 @@ update-bash-my-aws() {
   if [[ ! -d "$BASH_MY_AWS" ]] ; then
     install-bash-my-aws
   else
-    _bash-it-update-repo 'bash-my-aws' "${BASH_MY_AWS}"
+    _bash-it-update-repo 'bash-my-aws' "${BASH_MY_AWS}" "${BASH_MY_AWS_REMOTE:-origin}"
   fi
 
   __bma_load
