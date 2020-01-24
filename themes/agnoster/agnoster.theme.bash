@@ -210,7 +210,7 @@ prompt_virtualenv() {
     if [[ -n $VIRTUAL_ENV ]]; then
         color=cyan
         prompt_segment $color $PRIMARY_FG
-	ve=`basename "$VIRTUAL_ENV"`
+        ve=`basename "$VIRTUAL_ENV"`
         prompt_segment $color white "$ve"
     fi
 }
