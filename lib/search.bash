@@ -134,14 +134,14 @@ ${echo_underline_yellow}EXAMPLES${echo_normal}
 
          ${echo_bold_green}❯ bash-it search git${echo_bold_blue}
                ${echo_bold_yellow}aliases:  ${echo_bold_green}git ${echo_normal}gitsvn
-               ${echo_bold_yellow}plugins:  ${echo_normal}autojump fasd ${echo_bold_green}git ${echo_normal}git-subrepo jgitflow jump
+               ${echo_bold_yellow}plugins:  ${echo_normal}autojump ${echo_bold_green}git ${echo_normal}git-subrepo jgitflow jump
            ${echo_bold_yellow}completions:  ${echo_bold_green}git ${echo_normal}git_flow git_flow_avh${echo_normal}
 
    You can exclude some terms by prefixing a term with a minus, eg:
 
          ${echo_bold_green}❯ bash-it search git -flow -svn${echo_bold_blue}
                ${echo_bold_yellow}aliases:  ${echo_normal}git
-               ${echo_bold_yellow}plugins:  ${echo_normal}autojump fasd git git-subrepo jump
+               ${echo_bold_yellow}plugins:  ${echo_normal}autojump git git-subrepo jump
            ${echo_bold_yellow}completions:  ${echo_normal}git${echo_normal}
 
    Finally, if you prefix a term with '@' symbol, that indicates an exact
