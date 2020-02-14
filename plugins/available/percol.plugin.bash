@@ -1,5 +1,5 @@
 cite about-plugin
-about-plugin 'Search&Select history and fasd with percol'
+about-plugin 'Search&Select history with percol'
 
 # Notice
 ## You have to upgrade bash to bash 4.x on Mac OS X.
@@ -8,11 +8,9 @@ about-plugin 'Search&Select history and fasd with percol'
 # Install
 ## (sudo) pip install percol
 ## bash-it enable percol
-## optional: bash-it enable fasd
 
 # Usage
 ## C-r to search&select from history
-## zz to search&select from fasd
 
 _replace_by_history() {
     if command -v tac>/dev/null; then
@@ -33,17 +31,5 @@ if command -v percol>/dev/null; then
        echo -e "\033[91m         Your current Bash version is $BASH_VERSION.\033[m"
     else
         bind -x '"\C-r": _replace_by_history'
-
-        # bind zz to percol if fasd enable
-        if [[ $(type -t zz) == 'alias'  ]]; then
-          unalias zz
-        fi
-
-        if command -v fasd>/dev/null; then
-            function zz() {
-                local l=$(fasd -d | awk '{print $2}' | percol)
-                cd $l
-            }
-        fi
     fi
 fi
