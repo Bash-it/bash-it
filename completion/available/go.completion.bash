@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 # bash completion for go tool
 # https://github.com/posener/complete
