@@ -7,6 +7,7 @@ function add_ssh() {
   param '2: hostname'
   param '3: user'
   group 'ssh'
+
   [[ $# -ne 3 ]] && echo "add_ssh host hostname user" && return 1
   [[ ! -d ~/.ssh ]] && mkdir -m 700 ~/.ssh
   [[ ! -e ~/.ssh/config ]] && touch ~/.ssh/config && chmod 600 ~/.ssh/config
@@ -15,7 +16,8 @@ function add_ssh() {
 
 function sshlist() {
   about 'list hosts defined in ssh config'
-  group 'ssh'
+  group 'ssh
+
   awk '$1 ~ /Host$/ {for (i=2; i<=NF; i++) print $i}' ~/.ssh/config
 }
 
