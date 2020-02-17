@@ -33,7 +33,9 @@ alias dkrmflast='docker rm -f $(dklcid)'
 alias dkbash='dkelc'
 alias dkex='docker exec -it ' # Useful to run any commands into container without leaving host
 alias dkri='docker run --rm -i '
+alias dkric='docker run --rm -i -v $PWD:/cwd -w /cwd '
 alias dkrit='docker run --rm -it '
+alias dkritc='docker run --rm -it -v $PWD:/cwd -w /cwd '
 
 # Added more recent cleanup options from newer docker versions
 alias dkip='docker image prune -a -f'
