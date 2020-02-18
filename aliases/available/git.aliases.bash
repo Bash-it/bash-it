@@ -77,6 +77,9 @@ alias gpatch="git format-patch -1"
 alias gnew="git log HEAD@{1}..HEAD@{0}"
 # Add uncommitted and unstaged changes to the last commit
 alias gcaa="git commit -a --amend -C HEAD"
+# Rebase with latest remote master
+alias gprom="git fetch origin master && git rebase origin/master && git update-ref refs/heads/master origin/master"
+alias gpunch="git push --force-with-lease"
 alias ggui="git gui"
 alias gcsam="git commit -S -am"
 alias gst="git stash"
