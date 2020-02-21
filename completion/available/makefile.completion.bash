@@ -4,11 +4,15 @@
 # Loosely adapted from http://stackoverflow.com/a/38415982/1472048
 
 _makecomplete() {
+  COMPREPLY=()
+
   # https://www.gnu.org/software/make/manual/html_node/Makefile-Names.html
   local files=()
   while IFS='' read -r line; do
     files+=("$line")
   done < <(find . -maxdepth 1 -regextype posix-extended -regex '.*(GNU)?[Mm]akefile$' -printf '%f\n')
+
+  [ "${#files[@]}" -eq 0 ] && return 0
 
   # collect all targets
   local targets=()
@@ -18,11 +22,13 @@ _makecomplete() {
     done < <(grep -oE '^[a-zA-Z0-9_-]+:([^=]|$)' "$f" | cut -d':' -f1)
   done
 
-  # flatten the array for completion
-  COMPREPLY=()
+  [ "${#targets[@]}" -eq 0 ] && return 0
+
+  # use the targets for completion
   while IFS='' read -r line ; do
     COMPREPLY+=("$line")
   done < <(compgen -W "$(tr ' ' '\n' <<<"${targets[@]}" | sort -u)" -- "${COMP_WORDS[COMP_CWORD]}")
+
   return 0
 }
 
