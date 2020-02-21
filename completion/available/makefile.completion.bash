@@ -5,18 +5,24 @@
 
 _makecomplete() {
   # https://www.gnu.org/software/make/manual/html_node/Makefile-Names.html
-  local files=( $(find . -maxdepth 1 -regextype posix-extended -regex '.*(GNU)?[Mm]akefile$' -printf '%f ') )
+  local files=()
+  while IFS='' read -r line; do
+    files+=("$line")
+  done < <(find . -maxdepth 1 -regextype posix-extended -regex '.*(GNU)?[Mm]akefile$' -printf '%f\n')
 
   # collect all targets
-  local targets=''
-  for f in ${files[@]} ; do
-    for t in $(grep -oE '^[a-zA-Z0-9_-]+:([^=]|$)' $f | cut -d':' -f1) ; do
-      targets+="$t\n"
-    done
+  local targets=()
+  for f in "${files[@]}" ; do
+    while IFS='' read -r line ; do
+      targets+=("$line")
+    done < <(grep -oE '^[a-zA-Z0-9_-]+:([^=]|$)' "$f" | cut -d':' -f1)
   done
 
   # flatten the array for completion
-  COMPREPLY=($(compgen -W "$(echo -e "$targets" | head -c -1 | sort -u)" -- ${COMP_WORDS[COMP_CWORD]}))
+  COMPREPLY=()
+  while IFS='' read -r line ; do
+    COMPREPLY+=("$line")
+  done < <(compgen -W "$(tr ' ' '\n' <<<"${targets[@]}" | sort -u)" -- "${COMP_WORDS[COMP_CWORD]}")
   return 0
 }
 
