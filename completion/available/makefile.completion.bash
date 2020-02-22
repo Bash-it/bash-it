@@ -1,6 +1,4 @@
-#!/usr/bin/env bash
 # Bash completion for Makefile
-
 # Loosely adapted from http://stackoverflow.com/a/38415982/1472048
 
 _makecomplete() {
