@@ -8,9 +8,9 @@ _makecomplete() {
 
   # https://www.gnu.org/software/make/manual/html_node/Makefile-Names.html
   local files=()
-  while IFS='' read -r line; do
-    files+=("$line")
-  done < <(find . -maxdepth 1 -regextype posix-extended -regex '.*(GNU)?[Mm]akefile$' -printf '%f\n')
+  for f in 'GNUmakefile' 'makefile' 'Makefile' ; do
+    [ -f "$f" ] && files+=("$f")
+  done
 
   [ "${#files[@]}" -eq 0 ] && return 0
 
