@@ -63,6 +63,9 @@ function alias_completion {
             local compl_func="${new_completion/#* -F /}"; compl_func="${compl_func%% *}"
             # avoid recursive call loops by ignoring our own functions
             if [[ "${compl_func#_$namespace::}" == $compl_func ]]; then
+                if [[ $compl_func == _filedir_xspec ]]; then
+                    compl_func_args=$alias_cmd
+                fi
                 local compl_wrapper="_${namespace}::${alias_name}"
                     echo "function $compl_wrapper {
                         (( COMP_CWORD += ${#alias_arg_words[@]} ))
@@ -70,7 +73,7 @@ function alias_completion {
                         (( COMP_POINT -= \${#COMP_LINE} ))
                         COMP_LINE=\${COMP_LINE/$alias_name/$alias_cmd $alias_args}
                         (( COMP_POINT += \${#COMP_LINE} ))
-                        $compl_func
+                        $compl_func $compl_func_args
                     }" >> "$tmp_file"
                     new_completion="${new_completion/ -F $compl_func / -F $compl_wrapper }"
             fi
