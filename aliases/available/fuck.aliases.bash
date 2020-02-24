@@ -1,5 +1,4 @@
-# https://github.com/nvbn/thefuck
-alias fuck='eval $(thefuck $(fc -ln -1))'
-alias please='fuck'
-alias plz='sudo $(fc -ln -1)'
-alias fucking='sudo'
+alias please='sudo $(fc -ln -1)'
+alias plz=please
+alias fuck='sudo'
+alias fucking=fuck
