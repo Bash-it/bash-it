@@ -1,5 +1,10 @@
 cite 'about-alias'
-about-alias 'simple sudo please & fucking aliases'
+about-alias 'fuck/please to retry last command with sudo'
 
-alias please='sudo $(fc -ln -1)'
-alias fucking='sudo'
+# Play nicely with 'thefuck' plugin
+if ! command_exists fuck ; then
+    alias fuck='sudo $(fc -ln -1)'
+fi
+alias please=fuck
+alias plz=please
+alias fucking=sudo
