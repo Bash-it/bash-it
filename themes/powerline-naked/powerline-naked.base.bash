@@ -29,6 +29,6 @@ function __powerline_left_segment() {
   ((SEGMENTS_AT_LEFT += 1))
 }
 
-function __powerline_left_last_segment_padding() {
+function __powerline_left_last_segment_padding {
   LEFT_PROMPT+="$(set_color ${LAST_SEGMENT_COLOR} -) ${normal}"
 }

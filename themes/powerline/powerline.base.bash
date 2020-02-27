@@ -41,16 +41,7 @@ function __powerline_user_info_prompt {
   [[ -n "${user_info}" ]] && echo "${user_info}|${color}"
 }
 
-function __powerline_terraform_prompt() {
-  local terraform_workspace=""
-
-  if [ -d .terraform ]; then
-    terraform_workspace="$(command terraform workspace show 2>/dev/null)"
-    [[ -n "${terraform_workspace}" ]] && echo "${TERRAFORM_CHAR}${terraform_workspace}|${TERRAFORM_THEME_PROMPT_COLOR}"
-  fi
-}
-
-function __powerline_terraform_prompt() {
+function __powerline_terraform_prompt {
   local terraform_workspace=""
 
   if [ -d .terraform ]; then
