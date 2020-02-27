@@ -1,8 +1,7 @@
 . "$BASH_IT/themes/powerline/powerline.base.bash"
 
-function __powerline_left_segment() {
-  local OLD_IFS="${IFS}"
-  IFS="|"
+function __powerline_left_segment {
+  local OLD_IFS="${IFS}"; IFS="|"
   local params=( $1 )
   IFS="${OLD_IFS}"
   local separator=""
@@ -26,7 +25,7 @@ function __powerline_left_segment() {
 
   LEFT_PROMPT+="$(set_color ${params[1]} -)${pad_before_segment}${params[0]}${normal}"
   LAST_SEGMENT_COLOR=${params[1]}
-  ((SEGMENTS_AT_LEFT += 1))
+  (( SEGMENTS_AT_LEFT += 1 ))
 }
 
 function __powerline_left_last_segment_padding {
