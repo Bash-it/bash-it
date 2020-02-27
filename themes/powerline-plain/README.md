@@ -52,6 +52,7 @@ The contents of the prompt can be "reordered", all the "segments" (every piece o
 * `hostname` - Host name of machine
 * `in_vim` - Show identifier if running in `:terminal` from vim
 * `k8s_context` - Show current kubernetes context
+* `terraform` - Current terraform workspace
 * `last_status` - Exit status of last run command
 * `python_venv` - Python virtual environment information (`virtualenv`, `venv`
   and `conda` supported)
