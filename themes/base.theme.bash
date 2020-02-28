@@ -155,6 +155,14 @@ function scm_prompt_info_common {
   { [[ ${SCM} == ${SCM_SVN} ]] && svn_prompt_info && return; } || true
 }
 
+function terraform_workspace_prompt {
+    if _command_exists terraform ; then
+        if [ -d .terraform ]; then
+            echo -e "$(terraform workspace show 2>/dev/null)"
+        fi
+    fi
+}
+
 function git_prompt_minimal_info {
   SCM_STATE=${SCM_THEME_PROMPT_CLEAN}
 
