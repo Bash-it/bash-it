@@ -60,12 +60,14 @@ The contents of both prompt sides can be "reordered", all the "segments" (every 
 * `cwd` - Current working directory including full folder hierarchy (c.f. `wd`)
 * `hostname` - Host name of machine
 * `in_vim` - Show identifier if running in `:terminal` from vim
+* `k8s_context` - Show current kubernetes context
 * `last_status` - Exit status of last run command
 * `python_venv` - Python virtual environment information (`virtualenv`, `venv`
   and `conda` supported)
 * `ruby` - Current ruby version if using `rvm`
 * `node` - Current node version (only `nvm` is supported)
 * `scm` - Version control information, `git` 
+* `terraform` - Current terraform workspace
 * `user_info` - Current user
 * `wd` - Working directory, like `cwd` but doesn't show the full folder
   hierarchy, only the directory you're currently in.
