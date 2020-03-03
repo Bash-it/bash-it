@@ -1,4 +1,4 @@
-# Powerline Theme
+# Radek Theme
 
 A colorful theme for Python developers.
 It does not have any requirments.
