@@ -63,21 +63,23 @@ function alias_completion {
             local compl_func="${new_completion/#* -F /}"; compl_func="${compl_func%% *}"
             # avoid recursive call loops by ignoring our own functions
             if [[ "${compl_func#_$namespace::}" == $compl_func ]]; then
-                # the completion function stored in compl_func may need argument(s),
-                # in which case they should be provided in compl_func_args (see #1497)
-                local compl_func_args=
-                if [[ $compl_func == _filedir_xspec ]]; then
-                    compl_func_args=$alias_cmd
-                fi
-
                 local compl_wrapper="_${namespace}::${alias_name}"
                     echo "function $compl_wrapper {
+                        local compl_word=\$2
+                        local prec_word=\$3
+                        # check if prec_word is the alias itself. if so, replace it
+                        # with the last word in the unaliased form, i.e.,
+                        # alias_cmd + ' ' + alias_args.
+                        if [[ \$COMP_LINE == \"\$prec_word \$compl_word\" ]]; then
+                            prec_word=\"$alias_cmd $alias_args\"
+                            prec_word=\${prec_word#* }
+                        fi
                         (( COMP_CWORD += ${#alias_arg_words[@]} ))
                         COMP_WORDS=($alias_cmd $alias_args \${COMP_WORDS[@]:1})
                         (( COMP_POINT -= \${#COMP_LINE} ))
                         COMP_LINE=\${COMP_LINE/$alias_name/$alias_cmd $alias_args}
                         (( COMP_POINT += \${#COMP_LINE} ))
-                        $compl_func $compl_func_args
+                        $compl_func \"$alias_cmd\" \"\$compl_word\" \"\$prec_word\"
                     }" >> "$tmp_file"
                     new_completion="${new_completion/ -F $compl_func / -F $compl_wrapper }"
             fi
