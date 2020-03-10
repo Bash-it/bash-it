@@ -8,4 +8,3 @@
 if command -v pip3 >/dev/null; then
   eval "$(pip3 completion --bash)"
 fi
-

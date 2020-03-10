@@ -363,4 +363,3 @@ EOF
   complete -o bashdefault -o default -o nospace -F _git gh 2>/dev/null \
     || complete -o default -o nospace -F _git gh
 fi
-

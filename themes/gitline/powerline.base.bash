@@ -225,4 +225,3 @@ function __powerline_prompt_command {
         LEFT_PROMPT \
         SEGMENTS_AT_LEFT
 }
-

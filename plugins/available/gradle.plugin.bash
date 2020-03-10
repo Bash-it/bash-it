@@ -19,4 +19,3 @@ function gw() {
   # Call gradle
   "${result}" $*
 }
-

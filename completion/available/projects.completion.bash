@@ -36,4 +36,3 @@ _pj() {
 
 complete -F _pj -o nospace pj
 complete -F _pj -o nospace pjo
-

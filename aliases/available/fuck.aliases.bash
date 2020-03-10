@@ -8,4 +8,3 @@ fi
 alias please=fuck
 alias plz=please
 alias fucking=sudo
-
