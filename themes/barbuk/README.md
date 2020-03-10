@@ -84,7 +84,7 @@ chmod 400 /etc/sudoers.d/keepenv
 ### Clean
 
 ```bash
- ~ ❯ 
+ ~ ❯
 ```
 
 ### Git
