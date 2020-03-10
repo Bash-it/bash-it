@@ -7,7 +7,7 @@ if which brew >/dev/null 2>&1; then
   elif [ -f "$BREW_PREFIX"/completions/bash/brew ]; then
     # For the git-clone based installation, see here for more info:
     # https://github.com/Bash-it/bash-it/issues/1458
-    # https://docs.brew.sh/Shell-Completion   
+    # https://docs.brew.sh/Shell-Completion
     . "$BREW_PREFIX"/completions/bash/brew
   fi
 fi

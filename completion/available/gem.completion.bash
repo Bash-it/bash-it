@@ -6,7 +6,7 @@ _installcomp() {
   then
     REMOTE_GEMS=( $(gem list --remote --no-versions | tr '\n' ' ') )
   fi
-  
+
   local cur=${COMP_WORDS[COMP_CWORD]}
   COMPREPLY=( $(compgen -W "${REMOTE_GEMS[*]}" -- $cur) )
 }
@@ -16,7 +16,7 @@ _uninstallcomp() {
   then
     LOCAL_GEMS=( $(gem list --no-versions | sed 's/\*\*\* LOCAL GEMS \*\*\*//' | tr '\n' ' ') )
   fi
-  
+
   local cur=${COMP_WORDS[COMP_CWORD]}
   COMPREPLY=( $(compgen -W "${LOCAL_GEMS[*]}" -- $cur) )
 }

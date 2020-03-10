@@ -227,7 +227,7 @@ function gitignore-reload() {
   example '$ gitignore-reload'
 
     # The .gitignore file should not be reloaded if there are uncommited changes.
-  # Firstly, require a clean work tree. The function require_clean_work_tree() 
+  # Firstly, require a clean work tree. The function require_clean_work_tree()
   # was stolen with love from https://www.spinics.net/lists/git/msg142043.html
 
   # Begin require_clean_work_tree()
@@ -273,5 +273,3 @@ function gitignore-reload() {
     echo >&2 "Files readded. Commit your new changes now."
   fi
 }
-
-

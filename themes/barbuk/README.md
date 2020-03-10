@@ -14,7 +14,7 @@ A minimal theme with a clean git prompt
 ### Clean
 
 ```bash
- ~ ❯ 
+ ~ ❯
 ```
 
 ### Git
