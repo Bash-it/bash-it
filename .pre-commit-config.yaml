@@ -23,7 +23,3 @@ repos:
     hooks:
       # - id: forbid-crlf
       - id: remove-crlf
-      # - id: forbid-tabs
-      - id: remove-tabs
-        args: [--whitespaces-count, '2']  # defaults to: 4
-        exclude: .gitmodules
