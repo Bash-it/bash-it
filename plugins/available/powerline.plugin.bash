@@ -22,5 +22,5 @@ bashPowerlineInit=$(python -c \
 	'bindings', \
 	'bash', \
 	'powerline.sh'))")
-[ -e $bashPowerlineInit ] || return 
+[ -e $bashPowerlineInit ] || return
 . $bashPowerlineInit
