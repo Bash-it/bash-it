@@ -182,4 +182,3 @@ function powerline_prompt_command() {
 }
 
 PROMPT_COMMAND=powerline_prompt_command
-

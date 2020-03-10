@@ -185,4 +185,3 @@ _tmux() {
 complete -F _tmux tmux
 
 # END tmux completion
-
