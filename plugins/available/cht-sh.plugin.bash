@@ -14,6 +14,7 @@ if ! _command_exists cht.sh ; then
 		example '$ cht.sh rust :list'
 		group 'cht-sh'
 
+		# Separate arguments with '/', preserving spaces within them
 		local query=$(IFS=/ ; echo "$*")
 		curl "cht.sh/${query}"
 	}
