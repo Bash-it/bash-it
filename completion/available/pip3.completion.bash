@@ -7,6 +7,7 @@
 # you should first install pip for the corresponding environment.
 
 # Fix pip completion for running it within/outside of pyenv/virtualenv/venv/conda environment.
+_regex="(^|[ ]|;)_pip_completion_hook(;|[ ]|$)"
 
 _pip_completion_hook() {
   local _pip
@@ -21,13 +22,16 @@ _pip_completion_hook() {
   fi
   if [ -n "$_pip" ]; then
     eval "$($_pip completion --bash)"
-  fi  
+  fi 
+  unset _pip 
 }
 
-if ! [[ "$PROMPT_COMMAND" =~ _pip_completion_hook ]]; then
-  PROMPT_COMMAND="_pip_completion_hook;$PROMPT_COMMAND";
+
+if [ -z "$PROMPT_COMMAND" ]; then
+  PROMPT_COMMAND=_pip_completion_hook
+elif ! [[ "$PROMPT_COMMAND" =~ $_regex ]]; then
+  PROMPT_COMMAND="_pip_completion_hook;$PROMPT_COMMAND"
 fi
 
-
-
+unset _regex
 
