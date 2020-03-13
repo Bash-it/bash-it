@@ -7,7 +7,36 @@
 # you should first install pip for the corresponding environment.
 
 # Fix pip completion for running it within/outside of pyenv/virtualenv/venv/conda environment.
-_regex="(^|;[ ]*)_pip_completion_hook([ ]*;|$)"
+
+#https://github.com/Bash-it/bash-it/blob/b35d41464c0bd390e573f7423eaaa63666521c70/themes/base.theme.bash#L511
+function safe_append_prompt_command {
+    local prompt_re
+
+    if [ "${__bp_imported}" == "defined" ]; then
+        # We are using bash-preexec
+        if ! __check_precmd_conflict "${1}" ; then
+            precmd_functions+=("${1}")
+        fi
+    else
+        # Set OS dependent exact match regular expression
+        if [[ ${OSTYPE} == darwin* ]]; then
+          # macOS
+          prompt_re="[[:<:]]${1}[[:>:]]"
+        else
+          # Linux, FreeBSD, etc.
+          prompt_re="\<${1}\>"
+        fi
+
+        if [[ ${PROMPT_COMMAND} =~ ${prompt_re} ]]; then
+          return
+        elif [[ -z ${PROMPT_COMMAND} ]]; then
+          PROMPT_COMMAND="${1}"
+        else
+          PROMPT_COMMAND="${1};${PROMPT_COMMAND}"
+        fi
+    fi
+}
+
 
 _pip_completion_hook() {
   local _pip
@@ -21,17 +50,14 @@ _pip_completion_hook() {
     _pip=/usr/bin/pip
   fi
   if [ -n "$_pip" ]; then
-    eval "$($_pip completion --bash)"
+    if [ -z "$_pip_old" ] || [ "$_pip_old" != "$_pip" ]; then
+      eval "$($_pip completion --bash)"
+      export _pip_old=$_pip
+    fi  
   fi 
   unset _pip 
 }
 
+safe_append_prompt_command _pip_completion_hook
 
-if [ -z "$PROMPT_COMMAND" ]; then
-  PROMPT_COMMAND=_pip_completion_hook
-elif ! [[ "$PROMPT_COMMAND" =~ $_regex ]]; then
-  PROMPT_COMMAND="_pip_completion_hook;$PROMPT_COMMAND"
-fi
-
-unset _regex
 
