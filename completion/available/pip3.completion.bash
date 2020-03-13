@@ -50,9 +50,9 @@ _pip_completion_hook() {
     _pip=/usr/bin/pip3
   fi
   if [ -n "$_pip" ]; then
-    if [ -z "$_pip_command_path_old" ] || [ "$_pip_command_path_old" != "$_pip" ]; then
+    if [ -z "$_pip_command_path" ] || [ "$_pip_command_path" != "$_pip" ]; then
       eval "$($_pip completion --bash)"
-      export _pip_command_path_old=$_pip
+      export _pip_command_path=$_pip
     fi  
   fi 
   unset _pip 
