@@ -7,7 +7,7 @@
 # you should first install pip for the corresponding environment.
 
 # Fix pip completion for running it within/outside of pyenv/virtualenv/venv/conda environment.
-_regex="(^|[ ]|;)_pip_completion_hook(;|[ ]|$)"
+_regex="(^|;[ ]*)_pip_completion_hook([ ]*;|$)"
 
 _pip_completion_hook() {
   local _pip
