@@ -38,7 +38,7 @@ function safe_append_prompt_command {
 }
 
 
-_pip_completion_hook() {
+_pip_completion_bash() {
   local _pip
   # For pip resides within the pyenv/virtualenv/venv/conda environments:
   if [ -n "$VIRTUAL_ENV" ] && [ -x "$VIRTUAL_ENV/bin/pip" ]; then
@@ -49,6 +49,7 @@ _pip_completion_hook() {
   elif [ -x /usr/bin/pip ]; then
     _pip=/usr/bin/pip
   fi
+  # FIXME: do the trick without exporting variable into environment:
   if [ -n "$_pip" ]; then
     if [ -z "$_pip_command_path" ] || [ "$_pip_command_path" != "$_pip" ]; then
       eval "$($_pip completion --bash)"
@@ -58,6 +59,6 @@ _pip_completion_hook() {
   unset _pip 
 }
 
-safe_append_prompt_command _pip_completion_hook
+safe_append_prompt_command _pip_completion_bash
 
 
