@@ -6,8 +6,6 @@
 # If the pip package is installed within virtual environments,
 # you should first install pip for the corresponding environment.
 
-# Fix pip completion for running it within/outside of pyenv/virtualenv/venv/conda environment.
-
 #https://github.com/Bash-it/bash-it/blob/b35d41464c0bd390e573f7423eaaa63666521c70/themes/base.theme.bash#L511
 function safe_append_prompt_command {
     local prompt_re
@@ -39,26 +37,17 @@ function safe_append_prompt_command {
 
 
 _pip_completion_bash() {
-  local _pip
-  # For pip resides within the pyenv/virtualenv/venv/conda environments:
-  if [ -n "$VIRTUAL_ENV" ] && [ -x "$VIRTUAL_ENV/bin/pip" ]; then
-    _pip="$VIRTUAL_ENV/bin/pip"
-  elif [ -n "$CONDA_PREFIX" ] && [ -x "$CONDA_PREFIX/bin/pip" ]; then
-    _pip="$CONDA_PREFIX/bin/pip"
-  # For pip resides outside of a virtual environment:
-  elif [ -x /usr/bin/pip ]; then
-    _pip=/usr/bin/pip
-  fi
-  # FIXME: do the trick without exporting variable into environment:
-  if [ -n "$_pip" ]; then
-    if [ -z "$_pip_command_path" ] || [ "$_pip_command_path" != "$_pip" ]; then
-      eval "$($_pip completion --bash)"
-      export _pip_command_path=$_pip
-    fi  
+  # Based on the _pip_completion function defined by pip completion to determine 
+  # whether we should reevaluate the pip completion or not: 
+  if ! command -v _pip_completion >/dev/null && 
+       ( [ -n "$VIRTUAL_ENV" -a -x "$VIRTUAL_ENV/bin/pip" ] ||
+       [ -n "$CONDA_PREFIX" -a -x "$CONDA_PREFIX/bin/pip" ] ||
+       [ -x /usr/bin/pip ] ); then
+    eval "$(pip completion --bash)"
   fi 
-  unset _pip 
 }
 
 safe_append_prompt_command _pip_completion_bash
+
 
 
