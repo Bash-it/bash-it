@@ -123,7 +123,7 @@ function preexec_install () {
 
     # Finally, install the actual traps.
     if [[ ! -z "${PROMPT_COMMAND// }" ]]; then
-      PROMPT_COMMAND="${PROMPT_COMMAND};preexec_invoke_cmd"
+      PROMPT_COMMAND="${PROMPT_COMMAND}"$'\n'"preexec_invoke_cmd"
     else
       PROMPT_COMMAND="preexec_invoke_cmd"
     fi
