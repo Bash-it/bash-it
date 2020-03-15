@@ -36,18 +36,27 @@ function safe_append_prompt_command {
 }
 
 
-_pip_completion_bash() {
-  # Based on the _pip_completion function defined by pip completion to determine 
-  # whether we should reevaluate the pip completion or not: 
-  if ! command -v _pip_completion >/dev/null && 
-       ( [ -n "$VIRTUAL_ENV" -a -x "$VIRTUAL_ENV/bin/pip" ] ||
-       [ -n "$CONDA_PREFIX" -a -x "$CONDA_PREFIX/bin/pip" ] ||
-       [ -x /usr/bin/pip ] ); then
-    eval "$(pip completion --bash)"
-  fi 
+#_pip_completion_bash() {
+#  # Based on the _pip_completion function defined by pip completion to determine 
+#  # whether we should reevaluate the pip completion or not: 
+#  if ! command -v _pip_completion >/dev/null && 
+#       ( [ -n "$VIRTUAL_ENV" -a -x "$VIRTUAL_ENV/bin/pip" ] ||
+#       [ -n "$CONDA_PREFIX" -a -x "$CONDA_PREFIX/bin/pip" ] ||
+#       [ -x /usr/bin/pip ] ); then
+#    eval "$(pip completion --bash)"
+#  fi 
+#}
+
+#safe_append_prompt_command _pip_completion_bash
+
+# pip bash completion start
+_pip_completion()
+{
+    COMPREPLY=( $( COMP_WORDS="${COMP_WORDS[*]}" \
+                   COMP_CWORD=$COMP_CWORD \
+                   PIP_AUTO_COMPLETE=1 $1 2>/dev/null ) )
 }
-
-safe_append_prompt_command _pip_completion_bash
-
+complete -o default -F _pip_completion pip
+# pip bash completion end
 
 
