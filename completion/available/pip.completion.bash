@@ -1,5 +1,6 @@
 # https://pip.pypa.io/en/stable/user_guide/#command-completion
 
+# All of these codes are shipped within officical pip distribution.
 # Use the following commands to obtain these completion codes:
 #pip completion --bash 
 #pip3 completion --bash
