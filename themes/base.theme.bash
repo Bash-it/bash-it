@@ -371,7 +371,9 @@ function chruby_version_prompt {
 }
 
 function ruby_version_prompt {
-  echo -e "$(rbfu_version_prompt)$(rbenv_version_prompt)$(rvm_version_prompt)$(chruby_version_prompt)"
+  if [ -z "${RUBY_VERSION_PROMPT_DISABLED}" ]; then
+    echo -e "$(rbfu_version_prompt)$(rbenv_version_prompt)$(rvm_version_prompt)$(chruby_version_prompt)"
+  fi
 }
 
 function k8s_context_prompt {
