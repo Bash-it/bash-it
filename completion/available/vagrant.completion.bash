@@ -53,7 +53,7 @@ __vagrantinvestigate() {
 _vagrant() {
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    commands="snapshot box connect destroy docker-logs docker-run global-status halt help init list-commands login package plugin provision rdp reload resume rsync rsync-auto share ssh ssh-config status suspend up version"
+    commands="box cloud destroy global-status halt help hostmanager init login package plugin port powershell provision push rdp reload resume scp snapshot ssh ssh-config status suspend up upload validate vbguest version winrm winrm-config"
 
     if [ $COMP_CWORD == 1 ]
     then
@@ -91,12 +91,12 @@ _vagrant() {
                 return 0
                 ;;
             "box")
-                box_commands="add help list remove repackage"
+                box_commands="add list outdated prune remove repackage update"
                 COMPREPLY=($(compgen -W "${box_commands}" -- ${cur}))
                 return 0
                 ;;
             "plugin")
-                plugin_commands="install license list uninstall update"
+                plugin_commands="expunge install license list repair uninstall update"
                 COMPREPLY=($(compgen -W "${plugin_commands}" -- ${cur}))
                 return 0
                 ;;
@@ -105,7 +105,7 @@ _vagrant() {
                 return 0
                 ;;
             "snapshot")
-                snapshot_commands="back delete go list take"
+                snapshot_commands="delete list pop push restore save"
                 COMPREPLY=($(compgen -W "${snapshot_commands}" -- ${cur}))
                 return 0
                 ;;
@@ -135,12 +135,28 @@ _vagrant() {
               esac
               ;;
           "snapshot")
-              if [ "$prev" == "go" ]; then
-                  local snapshot_list=$(vagrant snapshot list | awk '/Name:/ { print $2 }')
+              if [ "$prev" == "restore" ]; then
+                  COMPREPLY=($(compgen -W "${vm_list}" -- ${cur}))
+                  return 0
+              fi
+              ;;
+      esac
+    fi
+
+    if [ $COMP_CWORD == 4 ]
+    then
+      action="${COMP_WORDS[COMP_CWORD-3]}"
+      prev="${COMP_WORDS[COMP_CWORD-2]}"
+      case "$action" in
+          "snapshot")
+              if [ "$prev" == "restore" ]; then
+                  local snapshot_list="$(vagrant snapshot list ${cur} 2>/dev/null | awk '{ORS=" "} /==>/ {next} {print}')"
                   COMPREPLY=($(compgen -W "${snapshot_list}" -- ${cur}))
                   return 0
               fi
               ;;
+          *)
+          ;;
       esac
     fi
 }
