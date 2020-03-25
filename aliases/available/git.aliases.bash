@@ -90,8 +90,8 @@ alias gstp="git stash pop"
 # Switch aliases - Requires git v2.23+
 alias gsw="git switch"
 alias gswm="git switch master"
-alias gswc="git switch -c"
-alias gswt="git switch -t"
+alias gswc="git switch --create"
+alias gswt="git switch --track"
 alias gh='cd "$(git rev-parse --show-toplevel)"'
 # Show untracked files
 alias gu='git ls-files . --exclude-standard --others'
