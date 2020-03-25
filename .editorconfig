@@ -2,7 +2,7 @@
 
 [*]
 indent_style = tab
-indent_size = 1
+indent_size = 4
 
 shell_variant      = bash
 binary_next_line   = true  # like -bn
@@ -23,7 +23,7 @@ indent_style = tab
 
 [*.*sh]
 indent_style = tab
-indent_size = 1
+indent_size = 4
 
 shell_variant      = bash
 binary_next_line   = true  # like -bn
