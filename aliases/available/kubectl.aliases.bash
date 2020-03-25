@@ -18,6 +18,7 @@ function _set_pkg_aliases()
     alias kcdn='kubectl describe node'
     alias kcgpan='kubectl get pods --all-namespaces'
     alias kcgdan='kubectl get deployments --all-namespaces'
+    alias kcnetshoot='kubectl run --generator=run-pod/v1 netshoot-$(uuidgen | tr A-Z a-z | sed 's/-//g') --rm -i --tty --image nicolaka/netshoot -- /bin/bash'
 	fi
 }
 
