@@ -11,9 +11,11 @@ A minimal theme with a clean git prompt
 
 ## Font
 
-A font with SCM glyph is required to display git remote tool logo.
+A font with SCM glyphs is required to display the default tool/host logos.
 You can use a font from https://www.nerdfonts.com/ or patch your own font with the tool
-provided by https://github.com/ryanoasis/nerd-fonts
+provided by https://github.com/ryanoasis/nerd-fonts.
+
+You can also override the default variables if you want to use different glyphs or standard ASCII characters.
 
 ## Examples
 
