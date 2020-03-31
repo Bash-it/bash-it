@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 # shellcheck disable=2034,2154
 
-SCM_GIT_CHAR_GITLAB='  '
-SCM_GIT_CHAR_BITBUCKET='  '
-SCM_GIT_CHAR_GITHUB='  '
-SCM_GIT_CHAR_DEFAULT='  '
-SCM_GIT_CHAR_ICON_BRANCH=''
+# Theme custom glyphs
+SCM_GIT_CHAR_GITLAB=${SCM_GITLAB_CHAR:='  '}
+SCM_GIT_CHAR_BITBUCKET=${SCM_GIT_CHAR_BITBUCKET:='  '}
+SCM_GIT_CHAR_GITHUB=${SCM_GIT_CHAR_GITHUB:='  '}
+SCM_GIT_CHAR_DEFAULT=${SCM_GIT_CHAR_DEFAULT:='  '}
+SCM_GIT_CHAR_ICON_BRANCH=${SCM_GIT_CHAR_ICON_BRANCH:=''}
+EXIT_CODE_ICON=${EXIT_CODE_ICON:=' '}
+
+# Bash-it default glyphs customization
 SCM_HG_CHAR='☿ '
 SCM_SVN_CHAR='⑆ '
 SCM_NONE_CHAR=
@@ -25,7 +29,6 @@ GIT_THEME_PROMPT_SUFFIX="${cyan}"
 SCM_THEME_BRANCH_TRACK_PREFIX="${normal} ⤏  ${cyan}"
 SCM_THEME_CURRENT_USER_PREFFIX='  '
 SCM_GIT_SHOW_CURRENT_USER=false
-EXIT_CODE_ICON=' '
 
 function _git-uptream-remote-logo {
     [[ "$(_git-upstream)" == "" ]] && return
