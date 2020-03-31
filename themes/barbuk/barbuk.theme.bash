@@ -11,6 +11,7 @@ EXIT_CODE_ICON=${EXIT_CODE_ICON:=' '}
 
 # Ssh user and fqdn display
 SSH_INFO=${BARBUK_SSH_INFO:=true}
+HOST_INFO=${BARBUK_HOST_INFO:=long}
 
 # Bash-it default glyphs customization
 SCM_HG_CHAR='☿ '
@@ -65,7 +66,7 @@ function _exit-code {
 }
 
 function _prompt {
-    local exit_code="$?" wrap_char=' ' dir_color=$green ssh_info=''
+    local exit_code="$?" wrap_char=' ' dir_color=$green ssh_info='' host
 
     _exit-code exit_code
     _git-uptream-remote-logo
@@ -79,7 +80,12 @@ function _prompt {
 
     # Detect ssh
     if [[ -n "${SSH_CONNECTION}" ]] && [ "$SSH_INFO" = true ]; then
-        ssh_info="${bold_blue}\u${bold_orange}@${cyan}\H ${bold_orange}in"
+        if [ "$HOST_INFO" = long ]; then
+            host="\H"
+        else
+            host="\h"
+        fi
+        ssh_info="${bold_blue}\u${bold_orange}@${cyan}$host ${bold_orange}in"
     fi
 
     PS1="\\n${ssh_info} ${purple}$(scm_char)${dir_color}\\w${normal}$(scm_prompt_info)${exit_code}"
