@@ -9,7 +9,7 @@ SCM_GIT_CHAR_DEFAULT=${SCM_GIT_CHAR_DEFAULT:='  '}
 SCM_GIT_CHAR_ICON_BRANCH=${SCM_GIT_CHAR_ICON_BRANCH:=''}
 EXIT_CODE_ICON=${EXIT_CODE_ICON:=' '}
 
-# Ssh user and fqdn display
+# Ssh user and hostname display
 SSH_INFO=${BARBUK_SSH_INFO:=true}
 HOST_INFO=${BARBUK_HOST_INFO:=long}
 

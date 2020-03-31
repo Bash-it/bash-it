@@ -8,7 +8,7 @@ A minimal theme with a clean git prompt
 * Current path (red when user is root)
 * Current git info
 * Last command exit code (only shown when the exit code is greater than 0)
-* user@host for ssh connection
+* user@hostname for ssh connection
 
 ## Fonts and glyphs
 
