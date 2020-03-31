@@ -9,6 +9,9 @@ SCM_GIT_CHAR_DEFAULT=${SCM_GIT_CHAR_DEFAULT:='  '}
 SCM_GIT_CHAR_ICON_BRANCH=${SCM_GIT_CHAR_ICON_BRANCH:=''}
 EXIT_CODE_ICON=${EXIT_CODE_ICON:=' '}
 
+# Ssh user and fqdn display
+SSH_INFO=${BARBUK_SSH_INFO:=true}
+
 # Bash-it default glyphs customization
 SCM_HG_CHAR='☿ '
 SCM_SVN_CHAR='⑆ '
@@ -75,7 +78,7 @@ function _prompt {
     fi
 
     # Detect ssh
-    if [[ -n "${SSH_CLIENT}" ]] || [[ -n "${SSH_CONNECTION}" ]]; then
+    if [[ -n "${SSH_CONNECTION}" ]] && [ "$SSH_INFO" = true ]; then
         ssh_info="${bold_blue}\u${bold_orange}@${cyan}\H ${bold_orange}in"
     fi
 
