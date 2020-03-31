@@ -17,14 +17,17 @@ set_xterm_title () {
     echo -ne "\033]0;$title\007"
 }
 
-precmd () {
+precmd_xterm_title () {
     set_xterm_title "${SHORT_USER:-${USER}}@${SHORT_HOSTNAME:-${HOSTNAME}} `_short-dirname` $PROMPTCHAR"
 }
 
-preexec () {
+preexec_xterm_title () {
     set_xterm_title "`_short-command $1` {`_short-dirname`} (${SHORT_USER:-${USER}}@${SHORT_HOSTNAME:-${HOSTNAME}})"
 }
 
 case "$TERM" in
-    xterm*|rxvt*) preexec_install;;
+    xterm*|rxvt*)
+        precmd_functions+=(precmd_xterm_title)
+        preexec_functions+=(preexec_xterm_title)
+        ;;
 esac
