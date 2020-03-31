@@ -45,7 +45,7 @@ source "$BASH_IT"/bash_it.sh
 When using a ssh session, the theme will display `user@hostname`.
 You can disable this information with `BARBUK_SSH_INFO`.
 
-The hostname is display in the FQDN format by default. You
+The hostname is displayed in the FQDN format by default. You
 can use the short hostname format with `BARBUK_HOST_INFO`.
 
 ```bash
