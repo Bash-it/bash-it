@@ -38,7 +38,19 @@ SCM_GIT_CHAR_GITHUB='•'
 source "$BASH_IT"/bash_it.sh
 ```
 
-## SSH prompt and sudoers
+## SSH prompt
+
+### Usage
+
+When using a ssh session, the theme will display `user@fqdn`.
+You can disable this information before sourcing bsah-it:
+
+```bash
+export BARBUK_SSH_INFO=false
+source "$BASH_IT"/bash_it.sh
+```
+
+### Keep theme with sudoer
 
 If you want the theme to persist using `sudo -s` in a ssh session, you need to configure sudo to keep the `HOME` and `SSH_CONNECTION` environment variables.
 
