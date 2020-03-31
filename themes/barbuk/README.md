@@ -8,6 +8,7 @@ A minimal theme with a clean git prompt
 * Current path (red when user is root)
 * Current git info
 * Last command exit code (only shown when the exit code is greater than 0)
+* user@host for ssh connection
 
 ## Fonts and glyphs
 
@@ -37,6 +38,26 @@ SCM_GIT_CHAR_GITHUB='•'
 source "$BASH_IT"/bash_it.sh
 ```
 
+## SSH prompt and sudoers
+
+If you want the theme to persist using `sudo -s` in a ssh session, you need to configure sudo to keep the `HOME` and `SSH_CONNECTION` environment variables.
+
+`HOME` contains the path to the home directory of the current user. Keeping it will allow to use your user dotfiles when elevating privileges.
+
+Keeping `SSH_CONNECTION` env is necessary for ssh detection in the theme.
+
+Please refer to the following documentation for more information:
+ -  [sudo manual](https://www.sudo.ws/man/1.8.13/sudoers.man.html) for `env_keep` configuration
+ -  [openssh manual](https://linux.die.net/man/1/ssh) for information about `SSH_CONNECTION` environment
+
+```bash
+cat << EOF > /etc/sudoers.d/keepenv
+Defaults env_keep += HOME
+Defaults env_keep += SSH_CONNECTION
+EOF
+chmod 400 /etc/sudoers.d/keepenv
+```
+
 ## Examples
 
 ### Clean
@@ -49,5 +70,10 @@ source "$BASH_IT"/bash_it.sh
 
 ```bash
    ~/.dotfiles on  master ⤏  origin ↑2 •7 ✗ ❯
- ```
+```
 
+### Ssh
+
+```bash
+user@fqdn in  ~/bash-it on  master ✓ ❯
+```
