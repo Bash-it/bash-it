@@ -36,7 +36,7 @@ BARBUK_EXIT_CODE_ICON=' '
 Define your custom glyphs before sourcing bash-it:
 
 ```bash
-SCM_GIT_CHAR_GITHUB='•'
+export BARBUK_GITHUB_CHAR='•'
 source "$BASH_IT"/bash_it.sh
 ```
 
