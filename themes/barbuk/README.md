@@ -42,10 +42,16 @@ source "$BASH_IT"/bash_it.sh
 
 ### Usage
 
-When using a ssh session, the theme will display `user@fqdn`.
-You can disable this information before sourcing bsah-it:
+When using a ssh session, the theme will display `user@hostname`.
+You can disable this information with `BARBUK_SSH_INFO`.
+
+The hostname is display in the FQDN format by default. You
+can use the short hostname format with `BARBUK_HOST_INFO`.
 
 ```bash
+# short or long
+export BARBUK_HOST_INFO=short
+# true or false
 export BARBUK_SSH_INFO=false
 source "$BASH_IT"/bash_it.sh
 ```
@@ -87,5 +93,5 @@ chmod 400 /etc/sudoers.d/keepenv
 ### Ssh
 
 ```bash
-user@fqdn in  ~/bash-it on  master ✓ ❯
+user@hostname in  ~/bash-it on  master ✓ ❯
 ```
