@@ -31,7 +31,7 @@ SCM_THEME_CURRENT_USER_PREFFIX='  '
 SCM_GIT_SHOW_CURRENT_USER=false
 
 function _git-uptream-remote-logo {
-    [[ "$(_git-upstream)" == "" ]] && return
+    [[ "$(_git-upstream)" == "" ]] && SCM_GIT_CHAR="$SCM_GIT_CHAR_DEFAULT"
 
     local remote remote_domain
     remote=$(_git-upstream-remote)
@@ -62,7 +62,7 @@ function _exit-code {
 }
 
 function _prompt {
-    local exit_code="$?" wrap_char=' ' dir_color=$green
+    local exit_code="$?" wrap_char=' ' dir_color=$green ssh_info=''
 
     _exit-code exit_code
     _git-uptream-remote-logo
@@ -74,7 +74,12 @@ function _prompt {
         dir_color=$red
     fi
 
-    PS1="\\n ${purple}$(scm_char)${dir_color}\\w${normal}$(scm_prompt_info)${exit_code}"
+    # Detect ssh
+    if [[ -n "${SSH_CLIENT}" ]] || [[ -n "${SSH_CONNECTION}" ]]; then
+        ssh_info="${bold_blue}\u${bold_orange}@${cyan}\H ${bold_orange}in"
+    fi
+
+    PS1="\\n${ssh_info} ${purple}$(scm_char)${dir_color}\\w${normal}$(scm_prompt_info)${exit_code}"
 
     [[ ${#PS1} -gt $((COLUMNS*3)) ]] && wrap_char="\\n"
     PS1="${PS1}${wrap_char}❯${normal} "
