@@ -43,16 +43,16 @@ source "$BASH_IT"/bash_it.sh
 ### Usage
 
 When using a ssh session, the theme will display `user@hostname`.
-You can disable this information with `BARBUK_SSH_INFO`.
+You can disable this information with `BASH_IT_THEME_BARBUK_SSH_INFO`.
 
 The hostname is displayed in the FQDN format by default. You
-can use the short hostname format with `BARBUK_HOST_INFO`.
+can use the short hostname format with `BASH_IT_THEME_BARBUK_HOST_INFO`.
 
 ```bash
 # short or long
-export BARBUK_HOST_INFO=short
+export BASH_IT_THEME_BARBUK_HOST_INFO=short
 # true or false
-export BARBUK_SSH_INFO=false
+export BASH_IT_THEME_BARBUK_SSH_INFO=false
 source "$BASH_IT"/bash_it.sh
 ```
 

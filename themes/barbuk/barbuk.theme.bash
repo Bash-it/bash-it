@@ -10,8 +10,8 @@ SCM_GIT_CHAR_ICON_BRANCH=${SCM_GIT_CHAR_ICON_BRANCH:=''}
 EXIT_CODE_ICON=${EXIT_CODE_ICON:=' '}
 
 # Ssh user and hostname display
-SSH_INFO=${BARBUK_SSH_INFO:=true}
-HOST_INFO=${BARBUK_HOST_INFO:=long}
+SSH_INFO=${BASH_IT_THEME_BARBUK_SSH_INFO:=true}
+HOST_INFO=${BASH_IT_THEME_BARBUK_HOST_INFO:=long}
 
 # Bash-it default glyphs customization
 SCM_HG_CHAR='☿ '
