@@ -23,7 +23,7 @@ load ../../plugins/available/base.plugin
   run myip
   assert_success
   declare -r mask_ip=$(echo $output | tr -s '[0-9]' '?')
-  [[ $mask_ip == 'Your public IP is: ?.?.?.?' ]]
+  [[ "$mask_ip" == "Your public IP is: ${bold_green}?.?.?.?${normal}" ]]
 }
 
 @test 'plugins base: pickfrom()' {
