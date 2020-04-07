@@ -82,10 +82,21 @@ alias gprom="git fetch origin master && git rebase origin/master && git update-r
 alias gpunch="git push --force-with-lease"
 alias ggui="git gui"
 alias gcsam="git commit -S -am"
+# Stash aliases
 alias gst="git stash"
 alias gstb="git stash branch"
 alias gstd="git stash drop"
 alias gstl="git stash list"
+# Push introduced in git v2.13.2
+alias gstpu="git stash push"
+alias gstpum="git stash push -m"
+# Save deprecated since git v2.16.0
+# - aliases now resolve to push
+alias gsts="git stash push"
+alias gstsm="git stash push -m"
+# Alias gstpo added for symmetry with gstpu (push)
+# - gstp remains as alias for pop due to long-standing usage
+alias gstpo="git stash pop"
 alias gstp="git stash pop"
 # Switch aliases - Requires git v2.23+
 alias gsw="git switch"
