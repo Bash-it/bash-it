@@ -16,10 +16,6 @@ load ../../plugins/available/base.plugin
 }
 
 @test 'plugins base: myip()' {
-  if [[ ! $SLOW_TESTS ]]; then
-    skip 'myip is slow - run only with SLOW_TESTS=true'
-  fi
-
   run myip
   assert_success
   declare -r mask_ip=$(echo $output | tr -s '[0-9]' '?')
