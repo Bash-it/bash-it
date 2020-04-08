@@ -21,12 +21,14 @@ You can also override the default variables if you want to use different glyphs 
 ### Default theme glyphs
 
 ```bash
-SCM_GIT_CHAR_GITLAB='  '
-SCM_GIT_CHAR_BITBUCKET='  '
-SCM_GIT_CHAR_GITHUB='  '
-SCM_GIT_CHAR_DEFAULT='  '
-SCM_GIT_CHAR_ICON_BRANCH=''
-EXIT_CODE_ICON=' '
+BARBUK_GITLAB_CHAR='  '
+BARBUK_BITBUCKET_CHAR='  '
+BARBUK_GITHUB_CHAR='  '
+BARBUK_GIT_DEFAULT_CHAR='  '
+BARBUK_GIT_BRANCH_ICON=''
+BARBUK_HG_CHAR='☿ '
+BARBUK_SVN_CHAR='⑆ '
+BARBUK_EXIT_CODE_ICON=' '
 ```
 
 ### Customize glyphs
@@ -34,7 +36,7 @@ EXIT_CODE_ICON=' '
 Define your custom glyphs before sourcing bash-it:
 
 ```bash
-SCM_GIT_CHAR_GITHUB='•'
+export BARBUK_GITHUB_CHAR='•'
 source "$BASH_IT"/bash_it.sh
 ```
 
