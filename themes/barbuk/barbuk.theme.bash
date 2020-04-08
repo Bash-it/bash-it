@@ -12,8 +12,8 @@ SCM_SVN_CHAR=${BARBUK_SVN_CHAR:='⑆ '}
 EXIT_CODE_ICON=${BARBUK_EXIT_CODE_ICON:=' '}
 
 # Ssh user and hostname display
-SSH_INFO=${BASH_IT_THEME_BARBUK_SSH_INFO:=true}
-HOST_INFO=${BASH_IT_THEME_BARBUK_HOST_INFO:=long}
+SSH_INFO=${BARBUK_SSH_INFO:=true}
+HOST_INFO=${BARBUK_HOST_INFO:=long}
 
 # Bash-it default glyphs customization
 SCM_NONE_CHAR=
