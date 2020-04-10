@@ -49,6 +49,13 @@ do
   fi
 done
 
+#Load external vendor libraries
+# See "${BASH_IT}/vendors/Makefile for comments
+for _bash_it_config_file in "${BASH_IT}/vendors/*/*.bash"
+do
+    source "$_bash_it_config_file"
+done
+
 # Load the global "enabled" directory
 # "family" param is empty so that files get sources in glob order
 # shellcheck source=./scripts/reloader.bash
