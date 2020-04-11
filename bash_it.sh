@@ -51,7 +51,7 @@ done
 
 #Load external vendor libraries
 # See "${BASH_IT}/vendors/Makefile for comments
-for _bash_it_config_file in "${BASH_IT}/vendors/*/*.bash"
+for _bash_it_config_file in ${BASH_IT}/vendors/*/*.bash
 do
     source "$_bash_it_config_file"
 done
