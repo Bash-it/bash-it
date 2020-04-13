@@ -1,5 +1,5 @@
 cite about-plugin
-about-plugin 'Toggle sudo before your current or last command'
+about-plugin 'Toggle sudo at the beginning of the current or the previous command'
 
 function sudo-command-line() {
   [[ ${#READLINE_LINE} -eq 0 ]] && READLINE_LINE=$(fc -l -n -1 | xargs)
