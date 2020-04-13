@@ -9,7 +9,7 @@ function local_setup {
   lib_directory="$(cd "$(dirname "$0")" && pwd)"
   # Use rsync to copy Bash-it to the temp folder
   # rsync is faster than cp, since we can exclude the large ".git" folder
-  rsync -qavrKL -d --delete-excluded --exclude=.git $lib_directory/../../.. "$BASH_IT"
+  rsync -qavrKL -d --delete-excluded --exclude=.git $lib_directory/../../../.. "$BASH_IT"
 
   rm -rf "$BASH_IT"/enabled
   rm -rf "$BASH_IT"/aliases/enabled
