@@ -3,7 +3,8 @@
 	url = https://github.com/bats-core/bats-core
 [submodule "test_lib/bats-support"]
 	path = test_lib/bats-support
-	url = https://github.com/ztombol/bats-support
+	url = https://github.com/bats-core/bats-support
+	branch = tags/v0.3.0
 [submodule "test_lib/bats-assert"]
 	path = test_lib/bats-assert
 	url = https://github.com/ztombol/bats-assert
