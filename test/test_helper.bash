@@ -50,7 +50,9 @@ setup_test_fixture() {
 }
 
 setup() {
-  TEST_TEMP_DIR="$(mktemp -d -t 'bash-it-test')"
+  # Temporarily using `mktemp` directly, since the bats-file function
+  # `temp_make` does not run on macOS
+  TEST_TEMP_DIR="$(mktemp -d -t 'bash-it-test.XXXX')"
   export TEST_TEMP_DIR
 
   export BASH_IT_TEST_DIR="${TEST_TEMP_DIR}/.bash_it"
