@@ -17,6 +17,23 @@ fi
 export TEST_MAIN_DIR="${BATS_TEST_DIRNAME}/.."
 export TEST_DEPS_DIR="${TEST_DEPS_DIR-${TEST_MAIN_DIR}/../test_lib}"
 
+# be independent of git's system configuration
+export GIT_CONFIG_NOSYSTEM
+
+# Some tools, e.g. `git` use configuration files from the $HOME directory,
+# which interferes with our tests. The only way to keep `git` from doing this
+# seems to set HOME explicitly to a separate location.
+# Refer to https://git-scm.com/docs/git-config#FILES.
+unset XDG_CONFIG_HOME
+export HOME="${BATS_TMPDIR}/home"
+mkdir -p "${HOME}"
+
+# For `git` tests to run well, user name and email need to be set.
+# Refer to https://git-scm.com/docs/git-commit#_commit_information.
+# This goes to the test-specific config, due to the $HOME overridden above.
+git config --global user.name "John Doe"
+git config --global user.email "johndoe@example.com"
+
 load "${TEST_DEPS_DIR}/bats-support/load.bash"
 load "${TEST_DEPS_DIR}/bats-assert/load.bash"
 load "${TEST_DEPS_DIR}/bats-file/load.bash"

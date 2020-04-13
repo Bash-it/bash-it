@@ -21,12 +21,14 @@ You can also override the default variables if you want to use different glyphs 
 ### Default theme glyphs
 
 ```bash
-SCM_GIT_CHAR_GITLAB='  '
-SCM_GIT_CHAR_BITBUCKET='  '
-SCM_GIT_CHAR_GITHUB='  '
-SCM_GIT_CHAR_DEFAULT='  '
-SCM_GIT_CHAR_ICON_BRANCH=''
-EXIT_CODE_ICON=' '
+BARBUK_GITLAB_CHAR='  '
+BARBUK_BITBUCKET_CHAR='  '
+BARBUK_GITHUB_CHAR='  '
+BARBUK_GIT_DEFAULT_CHAR='  '
+BARBUK_GIT_BRANCH_ICON=''
+BARBUK_HG_CHAR='☿ '
+BARBUK_SVN_CHAR='⑆ '
+BARBUK_EXIT_CODE_ICON=' '
 ```
 
 ### Customize glyphs
@@ -34,7 +36,7 @@ EXIT_CODE_ICON=' '
 Define your custom glyphs before sourcing bash-it:
 
 ```bash
-SCM_GIT_CHAR_GITHUB='•'
+export BARBUK_GITHUB_CHAR='•'
 source "$BASH_IT"/bash_it.sh
 ```
 
@@ -43,16 +45,16 @@ source "$BASH_IT"/bash_it.sh
 ### Usage
 
 When using a ssh session, the theme will display `user@hostname`.
-You can disable this information with `BASH_IT_THEME_BARBUK_SSH_INFO`.
+You can disable this information with `BARBUK_SSH_INFO`.
 
 The hostname is displayed in the FQDN format by default. You
-can use the short hostname format with `BASH_IT_THEME_BARBUK_HOST_INFO`.
+can use the short hostname format with `BARBUK_HOST_INFO`.
 
 ```bash
 # short or long
-export BASH_IT_THEME_BARBUK_HOST_INFO=short
+export BARBUK_HOST_INFO=short
 # true or false
-export BASH_IT_THEME_BARBUK_SSH_INFO=false
+export BARBUK_SSH_INFO=false
 source "$BASH_IT"/bash_it.sh
 ```
 
