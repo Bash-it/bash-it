@@ -16,4 +16,26 @@ else
   test_dirs=( "$1" )
 fi
 
-exec $bats_executable ${CI:+--tap} "${test_dirs[@]}"
+if command -v parallel &> /dev/null
+then
+  # Expect to run at least on a dual-core CPU; slightly degraded performance
+  # shouldn't matter otherwise.
+  declare -i -r test_jobs_default=2
+  declare -i -r test_jobs_effective="$(
+    if [ "${TEST_JOBS:-detect}" = "detect" ] \
+      && command -v nproc &> /dev/null
+    then
+      nproc
+    elif [ -n "${TEST_JOBS}" ] \
+      && [ "${TEST_JOBS}" != "detect" ]
+    then
+      echo "${TEST_JOBS}"
+    else
+      echo ${test_jobs_default}
+    fi
+  )"
+  exec "$bats_executable" ${CI:+--tap} --jobs ${test_jobs_effective} \
+    "${test_dirs[@]}"
+else
+  exec "$bats_executable" ${CI:+--tap} "${test_dirs[@]}"
+fi
