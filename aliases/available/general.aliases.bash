@@ -92,3 +92,5 @@ catt() {
     fi
   done
 }
+
+source "$BASH_IT/aliases/available/bash-it.aliases.bash"
