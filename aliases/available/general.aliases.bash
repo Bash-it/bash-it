@@ -93,4 +93,8 @@ catt() {
   done
 }
 
+# The bash-it aliases was move to bash-it.aliases.bash file. The intent of this
+# is to maintain the script readable and less bloated. If you don't need to use
+# those aliases, but you want the bash-it shortcuts, you can disable this 
+# script and enable the bash-it.
 source "$BASH_IT/aliases/available/bash-it.aliases.bash"

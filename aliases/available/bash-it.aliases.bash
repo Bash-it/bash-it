@@ -1,5 +1,5 @@
 cite about-alias
-about-alias 'Bash-it aliases'
+about-alias 'Aliases for the bash-it command (those aliases are also included with general aliases)'
 
 # Common misspellings of bash-it
 alias shit='bash-it'
