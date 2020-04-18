@@ -1,5 +1,7 @@
-script: test/run
 language: shell
-os:
-  - linux
-  - osx
+
+jobs:
+  - script: test/run
+    os: linux
+  - script: test/run
+    os: osx
