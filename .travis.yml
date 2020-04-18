@@ -1,5 +1,5 @@
 script: test/run
-language: c
+language: shell
 os:
   - linux
   - osx
