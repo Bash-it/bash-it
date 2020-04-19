@@ -39,7 +39,7 @@ load ../../plugins/available/base.plugin
 
   mkcd "${dir_name}"
   assert_success
-  assert_file_exist "${BASH_IT_ROOT}/${dir_name}"
+  assert_dir_exist "${BASH_IT_ROOT}/${dir_name}"
   assert_equal $(pwd) "${BASH_IT_ROOT}/${dir_name}"
 }
 
