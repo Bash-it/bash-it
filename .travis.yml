@@ -1,6 +1,15 @@
-sudo: false
-script: test/run
-language: c
-os:
-  - linux
-  - osx
+# YAML anchors need to appear first.
+# Keys starting with an underscore are the custom ones, refer to
+# https://docs.travis-ci.com/user/build-config-yaml#private-keys-as-yaml-anchors-and-aliases-and-external-tooling
+
+_native_job: &native_job
+  script: |
+    test/run
+
+language: shell
+
+jobs:
+  - <<: *native_job
+    os: linux
+  - <<: *native_job
+    os: osx
