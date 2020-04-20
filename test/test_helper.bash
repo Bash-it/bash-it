@@ -50,9 +50,9 @@ setup_test_fixture() {
 }
 
 setup() {
-  # Temporarily using `mktemp` directly, since the bats-file function
-  # `temp_make` does not run on macOS
-  TEST_TEMP_DIR="$(mktemp -d -t 'bash-it-test.XXXX')"
+  # The `temp_make` function from "bats-file" requires the tralston/bats-file fork,
+  # since the original ztombol/bats-file's `temp_make` does not work on macOS.
+  TEST_TEMP_DIR="$(temp_make --prefix 'bash-it-test-')"
   export TEST_TEMP_DIR
 
   export BASH_IT_TEST_DIR="${TEST_TEMP_DIR}/.bash_it"
