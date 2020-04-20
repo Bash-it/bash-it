@@ -1,6 +1,5 @@
 # Define this here so it can be used by all of the Powerline themes
 
-. "$BASH_IT/themes/powerline-multiline/powerline-multiline.theme.bash"
 . "$BASH_IT/themes/powerline-multiline/powerline-multiline.base.bash"
 
 function __powerline_scm_prompt {
