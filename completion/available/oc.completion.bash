@@ -1,2 +1,1 @@
-CMD="$(which oc)"
-[[ -x "$CMD" ]] && source <("$CMD" completion bash)
+_command_exists oc && source <(oc completion bash)
