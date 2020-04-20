@@ -1,2 +1,1 @@
-CMD="$(which minishift)"
-[[ -x "$CMD" ]] && source <("$CMD" completion bash)
+_command_exists minishift && source <(minishift completion bash)
