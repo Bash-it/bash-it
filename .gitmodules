@@ -12,4 +12,4 @@
 [submodule "test_lib/bats-file"]
 	path = test_lib/bats-file
 	url = https://github.com/tralston/bats-file
-  branch = tags/v0.3.0
+	branch = tags/v0.3.0
