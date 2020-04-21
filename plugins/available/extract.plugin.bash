@@ -5,7 +5,7 @@ about-plugin 'one command to extract them all...'
 extract() {
     local opt
     local OPTIND=1
-    while getopts "hdv" opt; do
+    while getopts "hv" opt; do
         case "$opt" in
             h)
                 cat <<End-Of-Usage
