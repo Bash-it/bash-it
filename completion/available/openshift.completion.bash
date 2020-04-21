@@ -1,3 +1,1 @@
-#!/usr/bin/env bash
-
-[ -x "$(which oc)" ] && eval "$(oc completion bash)" 
+_command_exists oc && source <(oc completion bash)
