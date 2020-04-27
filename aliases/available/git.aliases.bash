@@ -103,7 +103,11 @@ alias gsw="git switch"
 alias gswm="git switch master"
 alias gswc="git switch --create"
 alias gswt="git switch --track"
-alias gh='cd "$(git rev-parse --show-toplevel)"'
+# Git home
+alias ghm='cd "$(git rev-parse --show-toplevel)"'
+if ! _command_exists gh; then
+  alias gh='ghm'
+fi
 # Show untracked files
 alias gu='git ls-files . --exclude-standard --others'
 
