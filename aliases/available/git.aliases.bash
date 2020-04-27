@@ -106,7 +106,7 @@ alias gswt="git switch --track"
 # Git home
 alias ghm='cd "$(git rev-parse --show-toplevel)"'
 if ! _command_exists gh; then
-  alias gh='cd "$(git rev-parse --show-toplevel)"'
+  alias gh='ghm'
 fi
 # Show untracked files
 alias gu='git ls-files . --exclude-standard --others'
