@@ -54,7 +54,7 @@ function local_teardown {
   run _bash-it-search 'git' --no-color
   assert_line -n 0 '      aliases:  git   gitsvn  '
   assert_line -n 1 '      plugins:  autojump   git   git-subrepo   jgitflow   jump  '
-  assert_line -n 2 '  completions:  git   git_flow   git_flow_avh  '
+  assert_line -n 2 '  completions:  git   git_flow   git_flow_avh   github-cli  '
 }
 
 @test "search: ruby gem bundle rake rails" {
