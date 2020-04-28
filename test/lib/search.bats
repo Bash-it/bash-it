@@ -46,7 +46,7 @@ function local_teardown {
     echo $plugin
     assert_line -n 1 -p $plugin
   done
-  assert_line -n 2 '  completions:  git   git_flow   git_flow_avh  '
+  assert_line -n 2 '  completions:  git   git_flow   git_flow_avh   github-cli  '
 }
 
 @test "search: ruby gem bundle rake rails" {
