@@ -51,7 +51,12 @@ function __powerline_prompt_command {
     LEFT_PROMPT+=" "
   fi
 
-  PS1="${LEFT_PROMPT}"
+  ## after prompt ##
+  if [[ -n "${POWERLINE_PROMPT_AFTER}" ]]; then
+    PROMPT_AFTER="${POWERLINE_PROMPT_AFTER}"
+  fi
+
+  PS1="${LEFT_PROMPT}${PROMPT_AFTER}"
 
   ## cleanup ##
   unset LAST_SEGMENT_COLOR \
