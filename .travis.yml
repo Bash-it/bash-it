@@ -10,6 +10,8 @@ language: shell
 
 jobs:
   - <<: *native_job
+    name: default Ubuntu
     os: linux
   - <<: *native_job
+    name: MacOS
     os: osx
