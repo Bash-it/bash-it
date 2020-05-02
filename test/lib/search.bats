@@ -5,6 +5,9 @@ load ../../lib/composure
 load ../../lib/helpers
 load ../../lib/utilities
 load ../../lib/search
+
+cite _about _param _example _group _author _version
+
 load ../../plugins/available/base.plugin
 load ../../aliases/available/git.aliases
 load ../../plugins/available/ruby.plugin
@@ -12,8 +15,6 @@ load ../../plugins/available/rails.plugin
 load ../../completion/available/bundler.completion
 load ../../completion/available/gem.completion
 load ../../completion/available/rake.completion
-
-cite _about _param _example _group _author _version
 
 load ../../lib/helpers
 
