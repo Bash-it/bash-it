@@ -4,36 +4,10 @@ load ../test_helper
 load ../../lib/composure
 
 function local_setup {
-  mkdir -p "$BASH_IT"
-  lib_directory="$(cd "$(dirname "$0")" && pwd)"
-  echo "Bi : $BASH_IT"
-  echo "Lib: $lib_directory"
-  # Use rsync to copy Bash-it to the temp folder
-  # rsync is faster than cp, since we can exclude the large ".git" folder
-  rsync -qavrKL -d --delete-excluded --exclude=.git $lib_directory/../../.. "$BASH_IT"
-
-  rm -rf "$BASH_IT"/enabled
-  rm -rf "$BASH_IT"/aliases/enabled
-  rm -rf "$BASH_IT"/completion/enabled
-  rm -rf "$BASH_IT"/plugins/enabled
+  setup_test_fixture
 
   # Copy the test fixture to the Bash-it folder
   rsync -a "$BASH_IT/test/fixtures/bash_it/" "$BASH_IT/"
-
-  # Don't pollute the user's actual $HOME directory
-  # Use a test home directory instead
-  export BASH_IT_TEST_CURRENT_HOME="${HOME}"
-  export BASH_IT_TEST_HOME="$(cd "${BASH_IT}/.." && pwd)/BASH_IT_TEST_HOME"
-  mkdir -p "${BASH_IT_TEST_HOME}"
-  export HOME="${BASH_IT_TEST_HOME}"
-}
-
-function local_teardown {
-  export HOME="${BASH_IT_TEST_CURRENT_HOME}"
-
-  rm -rf "${BASH_IT_TEST_HOME}"
-
-  assert_equal "${BASH_IT_TEST_CURRENT_HOME}" "${HOME}"
 }
 
 @test "bash-it: verify that the test fixture is available" {
