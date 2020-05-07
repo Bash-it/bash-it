@@ -75,27 +75,6 @@ fi
 alias md='mkdir -p'
 alias rd='rmdir'
 
-# Common misspellings of bash-it
-alias shit='bash-it'
-alias batshit='bash-it'
-alias bashit='bash-it'
-alias batbsh='bash-it'
-alias babsh='bash-it'
-alias bash_it='bash-it'
-alias bash_ti='bash-it'
-
-# Additional bash-it aliases for help/show
-alias bshsa='bash-it show aliases'
-alias bshsc='bash-it show completions'
-alias bshsp='bash-it show plugins'
-alias bshha='bash-it help aliases'
-alias bshhc='bash-it help completions'
-alias bshhp='bash-it help plugins'
-alias bshsch="bash-it search"
-alias bshenp="bash-it enable plugin"
-alias bshena="bash-it enable alias"
-alias bshenc="bash-it enable completion"
-
 # Shorten extract
 alias xt="extract"
 
@@ -113,3 +92,9 @@ catt() {
     fi
   done
 }
+
+# The bash-it aliases was move to bash-it.aliases.bash file. The intent of this
+# is to maintain the script readable and less bloated. If you don't need to use
+# those aliases, but you want the bash-it shortcuts, you can disable this 
+# script and enable the bash-it.
+source "$BASH_IT/aliases/available/bash-it.aliases.bash"
