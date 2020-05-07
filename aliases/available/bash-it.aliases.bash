@@ -1,5 +1,5 @@
 cite about-alias
-about-alias 'Aliases for the bash-it command (those aliases are also included with general aliases)'
+about-alias 'Aliases for the bash-it command (these aliases are automatically included with the "general" aliases)'
 
 # Common misspellings of bash-it
 alias shit='bash-it'
@@ -21,4 +21,3 @@ alias bshsch="bash-it search"
 alias bshenp="bash-it enable plugin"
 alias bshena="bash-it enable alias"
 alias bshenc="bash-it enable completion"
-
