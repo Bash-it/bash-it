@@ -32,6 +32,7 @@ function __powerline_prompt_command {
   LEFT_PROMPT=""
   SEGMENTS_AT_LEFT=0
   LAST_SEGMENT_COLOR=""
+  PROMPT_AFTER="${POWERLINE_PROMPT_AFTER}"
 
   _save-and-reload-history "${HISTORY_AUTOSAVE:-0}"
 
@@ -51,7 +52,7 @@ function __powerline_prompt_command {
     LEFT_PROMPT+=" "
   fi
 
-  PS1="${LEFT_PROMPT}"
+  PS1="${LEFT_PROMPT}${PROMPT_AFTER}"
 
   ## cleanup ##
   unset LAST_SEGMENT_COLOR \

@@ -85,5 +85,6 @@ You can configure various aspects of the prompt to use less whitespace. Supporte
 |POWERLINE_COMPACT_AFTER_LAST_SEGMENT  | Removes the trailing space on the last segment
 |POWERLINE_COMPACT_PROMPT              | Removes the space after the prompt character
 |POWERLINE_COMPACT                     | Enable all Compact settings (you can still override individual settings)
+|POWERLINE_PROMPT_AFTER                | Adds characters after the prompt
 
 The default value for all settings is `0` (disabled). Use `1` to enable.
