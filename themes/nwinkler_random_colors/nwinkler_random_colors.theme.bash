@@ -15,7 +15,7 @@
 # The exit code functionality currently doesn't work if you are using the 'fasd' plugin,
 # since 'fasd' is messing with the $PROMPT_COMMAND
 
-RANDOM_COLOR_FILE=$HOME/.nwinkler_random_colors
+RANDOM_COLOR_FILE=${NWLINKLER_RANDOM_COLOR_FILE:-$HOME/.nwinkler_random_colors}
 
 function randomize_nwinkler {
   declare -a AVAILABLE_COLORS
