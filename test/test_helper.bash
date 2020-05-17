@@ -31,9 +31,21 @@ local_teardown() {
 setup_test_fixture() {
   mkdir -p "$BASH_IT"
   lib_directory="$(cd "$(dirname "$0")" && pwd)"
-  # Use rsync to copy Bash-it to the temp folder
-  # rsync is faster than cp, since we can exclude the large ".git" folder
-  rsync -qavrKL -d --delete-excluded --exclude=.git --exclude=enabled $lib_directory/../../../.. "$BASH_IT"
+  local src_topdir="$lib_directory/../../../.."
+
+  if command -v rsync &> /dev/null
+  then
+    # Use rsync to copy Bash-it to the temp folder
+    rsync -qavrKL -d --delete-excluded --exclude=.git --exclude=enabled "$src_topdir" "$BASH_IT"
+  else
+    rm -rf "$BASH_IT"
+    mkdir -p "$BASH_IT"
+
+    find "$src_topdir" \
+      -mindepth 1 -maxdepth 1 \
+      -not -name .git \
+      -exec cp -r {} "$BASH_IT" \;
+  fi
 
   rm -rf "$BASH_IT"/enabled
   rm -rf "$BASH_IT"/aliases/enabled
