@@ -28,7 +28,6 @@ alias vbpf="vim ~/.bash_profile"
 if grep --color=auto "a" "${BASH_IT}/"*.md &> /dev/null
 then
   alias grep='grep --color=auto'
-  export GREP_COLOR='1;33'
 fi
 
 if which gshuf &> /dev/null
