@@ -591,9 +591,55 @@ function safe_append_prompt_command {
 			PROMPT_COMMAND="${1};${PROMPT_COMMAND}"
 		fi
 	fi
+      }
+
+function safe_append_prompt_command_kig() {
+    local prompt_re
+
+    prompt_colorscheme
+
+    if [ "${__bp_imported}" == "defined" ]; then
+        # We are using bash-preexec
+        if ! __check_precmd_conflict "${1}" ; then
+            precmd_functions+=("${1}")
+        fi
+    else
+        # Set OS dependent exact match regular expression
+        if [[ ${OSTYPE} == darwin* ]]; then
+          # macOS
+          prompt_re="[[:<:]]${1}[[:>:]]"
+        else
+          # Linux, FreeBSD, etc.
+          prompt_re="\<${1}\>"
+        fi
+
+        if [[ ${PROMPT_COMMAND} =~ ${prompt_re} ]]; then
+          return
+        elif [[ -z ${PROMPT_COMMAND} ]]; then
+          PROMPT_COMMAND="${1}"
+        else
+          PROMPT_COMMAND="${1};${PROMPT_COMMAND}"
+        fi
+    fi
 }
 
 function _save-and-reload-history() {
 	local autosave=${1:-0}
 	[[ $autosave -eq 1 ]] && history -a && history -c && history -r
+}
+
+function prompt_colorscheme {
+   [[ -z "${BASH_IT_COLORSCHEME}" ]] && return
+
+   local -a colorscheme_locations=(
+     "${HOME}/.${BASH_IT_COLORSCHEME}.colorscheme.bash"
+     "$BASH_IT/custom/${BASH_IT_COLORSCHEME}.colorscheme.bash"
+     "$BASH_IT/colorschemes/${BASH_IT_COLORSCHEME}.colorscheme.bash"
+   )
+
+   for scheme_file in ${colorscheme_locations[@]}; do
+     if [[ -f ${scheme_file} ]]; then
+       source "${scheme_file}"
+     fi
+   done
 }
