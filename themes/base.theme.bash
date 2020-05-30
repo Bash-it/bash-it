@@ -513,6 +513,8 @@ function __check_precmd_conflict() {
 function safe_append_prompt_command {
     local prompt_re
 
+    prompt_colorscheme
+
     if [ "${__bp_imported}" == "defined" ]; then
         # We are using bash-preexec
         if ! __check_precmd_conflict "${1}" ; then
@@ -541,4 +543,20 @@ function safe_append_prompt_command {
 function _save-and-reload-history() {
   local autosave=${1:-0}
   [[ $autosave -eq 1 ]] && history -a && history -c && history -r
+}
+
+function prompt_colorscheme {
+   [[ -z "${BASH_IT_COLORSCHEME}" ]] && return
+
+   local -a colorscheme_locations=(
+     "${HOME}/.${BASH_IT_COLORSCHEME}.colorscheme.bash"
+     "$BASH_IT/custom/${BASH_IT_COLORSCHEME}.colorscheme.bash"
+     "$BASH_IT/colorschemes/${BASH_IT_COLORSCHEME}.colorscheme.bash"
+   )
+
+   for scheme_file in ${colorscheme_locations[@]}; do
+     if [[ -f ${scheme_file} ]]; then
+       source "${scheme_file}"
+     fi
+   done
 }

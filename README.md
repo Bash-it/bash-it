@@ -212,6 +212,45 @@ You can see theme screenshots on [wiki/Themes](https://github.com/Bash-it/bash-i
 
 **NOTE**: Bash-it and some themes use UTF-8 characters, so to avoid strange behavior in your terminal, set your locale to `LC_ALL=en_US.UTF-8` or the equivalent to your language if it isn't American English.
 
+### Color Schemes
+
+In addition to the several dozen themes, you can alter the coloring of the prompt components using an optional color scheme. The color scheme definitions are located in `$BASH_IT/colorschemes` folder, and follow a naming convention `<name>.colorscheme.bash`. You can set the color scheme with `BASH_IT_COLORSCHEME` variable, by assigning it the `<name>` portion of the color scheme filename.
+
+#### Why use color schema? 
+
+If you are using iTerm, for instance, then you have access to an environment variable iTerm sets, called `ITERM_PROFILE`. This allows you to choose a different prompt coloring depending on, say, if you are using a light iTerm color theme or a dark one. Here is an example:
+
+```bash
+# Set this variable before loading bash_it.sh
+if [[ "${ITERM_PROFILE}" =~ "Light" ]]; then
+  export BASH_IT_COLORSCHEME=light
+else
+  export BASH_IT_COLORSCHEME=dark
+fi
+
+source "${BASH_IT}"/bash_it.sh
+```
+
+You may place color scheme files in the following three locations (they are searched in this order) — in the example below we assume your color scheme is called "salmon":
+
+ 1. In your home directory:  
+    `~/.salmon.colorscheme.bash`
+
+ 2. In Bash-It's `custom` folder:  
+    `${BASH_IT}/custom/salmon.colorscheme.bash`
+
+ 3. In Bash-It's colorscheme folder:  
+    `${BASH_IT}/colorschemes/salmon.colorscheme.bash`
+
+Here is an example of the light terminal theme with a "light" BASH_IT color scheme:
+
+![light](images/light-colorscheme.png)
+
+And here is a dark terminal theme with a "dark" `BASH_IT` color scheme:
+
+![dark](images/dark-colorscheme.png)
+
+
 ## Uninstalling
 
 To uninstall Bash-it, run the `uninstall.sh` script found in the `$BASH_IT` directory:

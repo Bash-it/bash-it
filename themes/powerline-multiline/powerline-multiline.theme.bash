@@ -92,3 +92,4 @@ POWERLINE_LEFT_PROMPT=${POWERLINE_LEFT_PROMPT:="scm python_venv ruby node cwd"}
 POWERLINE_RIGHT_PROMPT=${POWERLINE_RIGHT_PROMPT:="in_vim clock battery user_info"}
 
 safe_append_prompt_command __powerline_prompt_command
+
