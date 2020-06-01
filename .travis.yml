@@ -12,14 +12,20 @@ os: linux
 
 dist: xenial
 
-# This is the default xcode version. The Xcode version defines what
-osx_image: xcode9.4
-
 jobs:
   - <<: *native_job
-    name: default Ubuntu
-    os: linux
+    name: Ubuntu 16.04
+  
   - <<: *native_job
-    name: MacOS
+    name: Ubuntu 18.04
+    dist: bionic
+    
+  - <<: *native_job
+    name: MacOS xcode9.4
     os: osx
- 
+    osx_image: xcode9.4 # Default xcode on Travis.
+    
+  - <<: *native_job
+    name: MacOS xcode11.5
+    os: osx
+    osx_image: xcode11.5 # Latest xcode on Travis.
