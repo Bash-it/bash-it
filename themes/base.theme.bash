@@ -83,10 +83,10 @@ RBENV_THEME_PROMPT_SUFFIX='|'
 RBFU_THEME_PROMPT_PREFIX=' |'
 RBFU_THEME_PROMPT_SUFFIX='|'
 
-GIT_EXE=`which git 2> /dev/null || true`
-P4_EXE=`which p4 2> /dev/null || true`
-HG_EXE=`which hg  2> /dev/null || true`
-SVN_EXE=`which svn  2> /dev/null || true`
+GIT_EXE=$(which git 2> /dev/null || true)
+P4_EXE=$(which p4 2> /dev/null || true)
+HG_EXE=$(which hg  2> /dev/null || true)
+SVN_EXE=$(which svn  2> /dev/null || true)
 
 function scm {
   if [[ "$SCM_CHECK" = false ]]; then SCM=$SCM_NONE
