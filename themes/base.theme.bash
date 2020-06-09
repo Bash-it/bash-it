@@ -88,6 +88,15 @@ P4_EXE=$(which p4 2> /dev/null || true)
 HG_EXE=$(which hg  2> /dev/null || true)
 SVN_EXE=$(which svn  2> /dev/null || true)
 
+# Check for broken SVN exe that is caused by some versions of Xcode.
+# See https://github.com/Bash-it/bash-it/issues/1612 for more details.
+if [[ -x "$SVN_EXE" ]] ; then
+  if "$SVN_EXE" 2>&1 | grep -q "subversion command line tools are no longer provided" ; then
+    # Unset the SVN exe variable so that SVN commands are avoided.
+    SVN_EXE=""
+  fi
+fi
+
 function scm {
   if [[ "$SCM_CHECK" = false ]]; then SCM=$SCM_NONE
   elif [[ -f .git/HEAD ]] && [[ -x "$GIT_EXE" ]]; then SCM=$SCM_GIT
