@@ -64,6 +64,43 @@ reset_svn_path() {
   reset_svn_path
 }
 
+@test 'themes base: SVN: detect SVN repo even from a subfolder' {
+  repo="$(setup_repo)"
+  pushd "$repo"
+
+  mkdir foo
+  pushd foo
+
+  setup_svn_path "$BASH_IT/test/fixtures/svn/working"
+
+  # Load the base theme again so that the working SVN script is detected
+  load ../../themes/base.theme
+
+  scm
+  # Make sure that the SVN command is used
+  assert_equal "$SCM" "$SCM_SVN"
+
+  reset_svn_path
+}
+
+@test 'themes base: SVN: no SCM if no .svn folder can be found' {
+  repo="$(setup_repo)"
+  pushd "$repo"
+
+  rm -rf .svn
+
+  setup_svn_path "$BASH_IT/test/fixtures/svn/working"
+
+  # Load the base theme again so that the working SVN script is detected
+  load ../../themes/base.theme
+
+  scm
+  # Make sure that the SVN command is used
+  assert_equal "$SCM" "$SCM_NONE"
+
+  reset_svn_path
+}
+
 @test 'themes base: SVN: ignore SVN repo when using broken SVN command' {
   repo="$(setup_repo)"
   pushd "$repo"
@@ -75,6 +112,25 @@ reset_svn_path() {
 
   scm
   # Make sure that the SVN command is not used
+  assert_equal "$SCM" "$SCM_NONE"
+
+  reset_svn_path
+}
+
+@test 'themes base: SVN: ignore SVN repo even from a subfolder when using a broken SVN' {
+  repo="$(setup_repo)"
+  pushd "$repo"
+
+  mkdir foo
+  pushd foo
+
+  setup_svn_path "$BASH_IT/test/fixtures/svn/broken"
+
+  # Load the base theme again so that the working SVN script is detected
+  load ../../themes/base.theme
+
+  scm
+  # Make sure that the SVN command is used
   assert_equal "$SCM" "$SCM_NONE"
 
   reset_svn_path
