@@ -119,7 +119,7 @@ function setup_svn_path {
 
   setup_svn_path "$BASH_IT/test/fixtures/svn/broken"
 
-  # Load the base theme again so that the working SVN script is detected
+  # Load the base theme again so that the broken SVN script is detected
   load ../../themes/base.theme
 
   scm
