@@ -92,7 +92,7 @@ function setup_svn_path {
   load ../../themes/base.theme
 
   scm
-  # Make sure that the SVN command is used
+  # Make sure that no SVN command is used
   assert_equal "$SCM" "$SCM_NONE"
 }
 
@@ -106,7 +106,7 @@ function setup_svn_path {
   load ../../themes/base.theme
 
   scm
-  # Make sure that the SVN command is not used
+  # Make sure that no SVN command is not used
   assert_equal "$SCM" "$SCM_NONE"
 }
 
@@ -123,6 +123,6 @@ function setup_svn_path {
   load ../../themes/base.theme
 
   scm
-  # Make sure that the SVN command is used
+  # Make sure that no SVN command is used
   assert_equal "$SCM" "$SCM_NONE"
 }
