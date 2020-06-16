@@ -20,9 +20,16 @@ function local_setup {
       -mindepth 1 -maxdepth 1 \
       -exec cp -r {} "$BASH_IT/" \;
   fi
+
+  export OLD_PATH="$PATH"
 }
 
-setup_repo() {
+function local_teardown {
+  export PATH="$OLD_PATH"
+  unset OLD_PATH
+}
+
+function setup_repo {
   upstream="$(mktemp -d)"
   pushd "$upstream" > /dev/null
   # Create a dummy SVN folder - this will not work with an actual `svn` command,
@@ -32,20 +39,14 @@ setup_repo() {
   echo "$upstream"
 }
 
-setup_svn_path() {
+function setup_svn_path {
   local svn_path="$1"
 
   # Make sure that the requested SVN script is available
   assert_file_exist "$svn_path/svn"
 
-  export OLD_PATH="$PATH"
   # Make sure that the requested SVN script is on the path
   export PATH="$svn_path:/usr/bin:/bin:/usr/sbin"
-}
-
-reset_svn_path() {
-  export PATH="$OLD_PATH"
-  unset OLD_PATH
 }
 
 @test 'themes base: SVN: detect SVN repo' {
@@ -60,8 +61,6 @@ reset_svn_path() {
   scm
   # Make sure that the SVN command is used
   assert_equal "$SCM" "$SCM_SVN"
-
-  reset_svn_path
 }
 
 @test 'themes base: SVN: detect SVN repo even from a subfolder' {
@@ -79,8 +78,6 @@ reset_svn_path() {
   scm
   # Make sure that the SVN command is used
   assert_equal "$SCM" "$SCM_SVN"
-
-  reset_svn_path
 }
 
 @test 'themes base: SVN: no SCM if no .svn folder can be found' {
@@ -97,8 +94,6 @@ reset_svn_path() {
   scm
   # Make sure that the SVN command is used
   assert_equal "$SCM" "$SCM_NONE"
-
-  reset_svn_path
 }
 
 @test 'themes base: SVN: ignore SVN repo when using broken SVN command' {
@@ -113,8 +108,6 @@ reset_svn_path() {
   scm
   # Make sure that the SVN command is not used
   assert_equal "$SCM" "$SCM_NONE"
-
-  reset_svn_path
 }
 
 @test 'themes base: SVN: ignore SVN repo even from a subfolder when using a broken SVN' {
@@ -132,6 +125,4 @@ reset_svn_path() {
   scm
   # Make sure that the SVN command is used
   assert_equal "$SCM" "$SCM_NONE"
-
-  reset_svn_path
 }
