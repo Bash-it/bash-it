@@ -118,33 +118,35 @@ function _git-status-counts {
 
 function _git-remote-info {
 
-  if [[ "${SCM_GIT_GITSTATUSD_RAN}" == "true" ]]; then # prompt handling only, reimplement because patching the routine below gets ugly
-    [[ "${VCS_STATUS_REMOTE_NAME}" == "" ]] && return || true
-    [[ "${VCS_STATUS_LOCAL_BRANCH}" == "${VCS_STATUS_REMOTE_BRANCH}" ]] && local same_branch_name=true || true
+  # prompt handling only, reimplement because patching the routine below gets ugly
+  if [[ "${SCM_GIT_GITSTATUSD_RAN}" == "true" ]]; then
+    [[ "${VCS_STATUS_REMOTE_NAME}" == "" ]] && return
+    [[ "${VCS_STATUS_LOCAL_BRANCH}" == "${VCS_STATUS_REMOTE_BRANCH}" ]] && local same_branch_name=true
     local same_branch_name=
     [[ "${VCS_STATUS_LOCAL_BRANCH}" == "${VCS_STATUS_REMOTE_BRANCH}" ]] && same_branch_name=true
-    if [[ "${SCM_GIT_SHOW_REMOTE_INFO}" = "true" ]] || [[ "${SCM_GIT_SHOW_REMOTE_INFO}" = "auto" ]]; then # no multiple remote support in gitstatusd
+    # no multiple remote support in gitstatusd
+    if [[ "${SCM_GIT_SHOW_REMOTE_INFO}" = "true" || "${SCM_GIT_SHOW_REMOTE_INFO}" = "auto" ]]; then
       if [[ "${same_branch_name}" != "true" ]]; then
-        remote_info="\${VCS_STATUS_REMOTE_NAME}"
+        remote_info="${VCS_STATUS_REMOTE_NAME}/${VCS_STATUS_REMOTE_BRANCH}"
       else
-        remote_info="\${VCS_STATUS_REMOTE_NAME}/\${VCS_STATUS_REMOTE_BRANCH}"
+        remote_info="${VCS_STATUS_REMOTE_NAME}"
       fi
     elif [[ ${same_branch_name} != "true" ]]; then
-      remote_info="\${VCS_STATUS_REMOTE_BRANCH}"
+      remote_info="${VCS_STATUS_REMOTE_BRANCH}"
     fi
     if [[ -n "${remote_info}" ]];then
-      local branch_prefix 
-      branch_prefix="${SCM_THEME_BRANCH_TRACK_PREFIX}" # no support for gone remote branches in gitstatusd
+      # no support for gone remote branches in gitstatusd
+      local branch_prefix="${SCM_THEME_BRANCH_TRACK_PREFIX}"
       echo "${branch_prefix}${remote_info}"
     fi
-  else 
-    [[ "$(_git-upstream)" == "" ]] && return || true
+  else
+    [[ "$(_git-upstream)" == "" ]] && return
 
-    [[ "$(_git-branch)" == "$(_git-upstream-branch)" ]] && local same_branch_name=true || true
+    [[ "$(_git-branch)" == "$(_git-upstream-branch)" ]] && local same_branch_name=true
     local same_branch_name=
     [[ "$(_git-branch)" == "$(_git-upstream-branch)" ]] && same_branch_name=true
-    if ([[ "${SCM_GIT_SHOW_REMOTE_INFO}" = "auto" ]] && [[ "$(_git-num-remotes)" -ge 2 ]]) ||
-        [[ "${SCM_GIT_SHOW_REMOTE_INFO}" = "true" ]]; then
+    if [[ ("${SCM_GIT_SHOW_REMOTE_INFO}" = "auto" && "$(_git-num-remotes)" -ge 2) ||
+           "${SCM_GIT_SHOW_REMOTE_INFO}" = "true" ]]; then
       if [[ "${same_branch_name}" != "true" ]]; then
         remote_info="\$(_git-upstream)"
       else
