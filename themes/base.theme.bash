@@ -265,8 +265,8 @@ function git_prompt_vars {
 
   SCM_PREFIX=${GIT_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
   SCM_SUFFIX=${GIT_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
-  SCM_CHANGE=$(_git-short-sha 2>/dev/null || echo "")
 
+  SCM_CHANGE=$(_git-short-sha 2>/dev/null || echo "")
 }
 
 function p4_prompt_vars {
