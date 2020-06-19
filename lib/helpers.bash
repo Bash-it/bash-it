@@ -162,14 +162,29 @@ _bash-it_update-dev() {
   _about 'updates Bash-it to the latest master'
   _group 'lib'
 
-  _bash-it_update- dev
+  _bash-it_update- dev "$@"
 }
 
 _bash-it_update-stable() {
   _about 'updates Bash-it to the latest tag'
   _group 'lib'
 
-  _bash-it_update- stable
+  _bash-it_update- stable "$@"
+}
+
+_bash-it_pull_and_update_inner() {
+  git checkout "$1" &> /dev/null
+  if [[ $? -eq 0 ]]; then
+    echo "Bash-it successfully updated."
+    echo ""
+    echo "Migrating your installation to the latest $2 version now..."
+    _bash-it-migrate
+    echo ""
+    echo "All done, enjoy!"
+    bash-it reload
+  else
+    echo "Error updating Bash-it, please, check if your Bash-it installation folder (${BASH_IT}) is clean."
+  fi
 }
 
 _bash-it_update-() {
@@ -177,6 +192,12 @@ _bash-it_update-() {
   _param '1: What kind of update to do (stable|dev)'
   _group 'lib'
 
+  declare silent
+  for word in $@; do
+    if [[ ${word} == "--silent" || ${word} == "-s" ]]; then
+      silent=true
+    fi
+  done
   local old_pwd="${PWD}"
 
   cd "${BASH_IT}" || return
@@ -218,29 +239,24 @@ _bash-it_update-() {
       git log --format="%h: $description (%an)" -1 $i
     done
     echo ""
-    read -e -n 1 -p "Would you like to update to ${TARGET}($(git log -1 --format=%h "${TARGET}"))? [Y/n] " RESP
-    case $RESP in
-      [yY]|"")
-        git checkout "${TARGET}" &> /dev/null
-        if [[ $? -eq 0 ]]; then
-          echo "Bash-it successfully updated."
-          echo ""
-          echo "Migrating your installation to the latest $version version now..."
-          _bash-it-migrate
-          echo ""
-          echo "All done, enjoy!"
-          bash-it reload
-        else
-          echo "Error updating Bash-it, please, check if your Bash-it installation folder (${BASH_IT}) is clean."
-        fi
-        ;;
-      [nN])
-        echo "Not upgrading…"
-        ;;
-      *)
-        echo -e "\033[91mPlease choose y or n.\033[m"
-        ;;
-      esac
+
+    if [[ $silent ]]; then
+      echo "Updating to ${TARGET}($(git log -1 --format=%h "${TARGET}"))..."
+      _bash-it_pull_and_update_inner $TARGET $version
+    else
+      read -e -n 1 -p "Would you like to update to ${TARGET}($(git log -1 --format=%h "${TARGET}"))? [Y/n] " RESP
+      case $RESP in
+        [yY]|"")
+          _bash-it_pull_and_update_inner $TARGET $version
+          ;;
+        [nN])
+          echo "Not upgrading…"
+          ;;
+        *)
+          echo -e "\033[91mPlease choose y or n.\033[m"
+          ;;
+        esac
+    fi
   else
     if [[ ${version} == "stable" ]]; then
       echo "You're on the latest stable version. If you want to check out the latest 'dev' version, please run \"bash-it update dev\""
