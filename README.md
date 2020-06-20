@@ -417,6 +417,20 @@ Unset `BASH_IT_LEGACY_PASS` to have Bash-it **return to default behavior**:
 
 * `unset BASH_IT_LEGACY_PASS`
 
+### Debugging
+
+If you encounter problems with any part of Bash-it, run the following command:
+```bash
+bash-it doctor
+```
+This will reload your bash profile and print out logs of various parts in Bash-it.
+Note that this command at default will print all logs, including debug logs.
+You can call it like this:
+```bash
+bash-it doctor [errors/warnings/all]
+```
+In order to get wanted verbosity.
+
 ### Proxy Support
 
 If you are working in a corporate environment where you have to go through a proxy server for internet access,
