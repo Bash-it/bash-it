@@ -1,6 +1,15 @@
 cite about-plugin
 about-plugin 'speeds up your life by using gitstatusd for git status calculations. install from https://github.com/romkatv/gitstatus'
 
+
+function gitstatusd_on_disable() {
+  about 'Destructor of gitstatusd plugin'
+  group 'gitstatusd'
+
+  unset SCM_GIT_USE_GITSTATUSD
+  gitstatus_stop
+}
+
 [[ "$SCM_CHECK" == "true" ]] || return # No scm-check
 
 [[ $- == *i* ]] || return  # non-interactive shell
