@@ -14,9 +14,9 @@ function gitstatusd_on_disable() {
 
 [[ $- == *i* ]] || return  # non-interactive shell
 
-SCM_GIT_GITSTATUSD_LOC=${SCM_GIT_GITSTATUSD_LOC:="$HOME/gitstatus/gitstatus.plugin.sh"}
-if [[ -f "${SCM_GIT_GITSTATUSD_LOC}" ]]; then
-  source "${SCM_GIT_GITSTATUSD_LOC}"
+SCM_GIT_GITSTATUSD_PLUGIN_SH_LOC=${SCM_GIT_GITSTATUSD_PLUGIN_SH_LOC:="$HOME/gitstatus/gitstatus.plugin.sh"}
+if [[ -f "${SCM_GIT_GITSTATUSD_PLUGIN_SH_LOC}" ]]; then
+  source "${SCM_GIT_GITSTATUSD_PLUGIN_SH_LOC}"
   # Start the actual gitstatusd binary
   gitstatus_stop && gitstatus_start -s -1 -u -1 -c -1 -d -1
   export SCM_GIT_USE_GITSTATUSD=true
