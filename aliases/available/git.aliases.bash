@@ -35,8 +35,12 @@ alias gpom='git push origin master'
 alias gr='git remote'
 alias grv='git remote -v'
 alias gra='git remote add'
+alias grb='git rebase'
+alias grm='git rebase master'
+alias grmi='git rebase master -i'
 alias gd='git diff'
 alias gds='git diff --staged'
+alias gdt='git difftool'
 alias gdv='git diff -w "$@" | vim -R -'
 alias gc='git commit -v'
 alias gca='git commit -v -a'
@@ -65,6 +69,7 @@ alias gmu='git fetch origin -v; git fetch upstream -v; git merge upstream/master
 alias gll='git log --graph --pretty=oneline --abbrev-commit'
 alias gg="git log --graph --pretty=format:'%C(bold)%h%Creset%C(magenta)%d%Creset %s %C(yellow)<%an> %C(cyan)(%cr)%Creset' --abbrev-commit --date=relative"
 alias ggs="gg --stat"
+alias gsh="git show"
 alias gsl="git shortlog -sn"
 alias gwc="git whatchanged"
 alias gt="git tag"
