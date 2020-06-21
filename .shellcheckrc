@@ -1,0 +1,6 @@
+# We use colors and not assigned
+disable=SC2154
+# Hard to fix
+disable=SC2155
+# shellcheck is wrong on some
+disable=SC2034
