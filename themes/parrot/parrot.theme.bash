@@ -20,9 +20,9 @@ function prompt() {
         # We have color support; assume it's compliant with Ecma-48
         # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
         # a case would tend to support setf rather than setaf.)
-        	local color_prompt=yes
+            local color_prompt=yes
         else
-        	local color_prompt=
+            local color_prompt=
         fi
     fi
 
