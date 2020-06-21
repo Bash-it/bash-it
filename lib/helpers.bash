@@ -322,7 +322,7 @@ _on-disable-callback()
 {
     _about 'Calls the disabled plugin destructor, if present'
     _param '1: plugin name'
-    _example '$ _on-disable-callback gitstatusd'
+    _example '$ _on-disable-callback gitstatus'
     _group 'lib'
 
     callback=$1_on_disable

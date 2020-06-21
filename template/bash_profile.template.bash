@@ -32,9 +32,9 @@ export TODO="t"
 
 # Set this to false to turn off version control status checking within the prompt for all themes
 export SCM_CHECK=true
-# Set to actual location of gitstatusd.plugin.sh if installed
-#export SCM_GIT_GITSTATUSD_PLUGIN_SH_LOC="$HOME/gitstatus/gitstatus.plugin.sh"
-# per default gitstatusd uses 2 times as many threads as CPU cores, you can change this here if you must
+# Set to actual location of gitstatus.plugin.sh if installed
+#export SCM_GIT_GITSTATUS_PLUGIN_SH_LOC="$HOME/gitstatus/gitstatus.plugin.sh"
+# per default gitstatus uses 2 times as many threads as CPU cores, you can change this here if you must
 #export GITSTATUS_NUM_THREADS=8
 
 # Set Xterm/screen/Tmux title with only a short hostname.

@@ -9,7 +9,7 @@ function _git-symbolic-ref {
 # same commit. _git-branch is used to explicitly choose the checked-out
 # branch.
 function _git-branch {
-  if [[ "${SCM_GIT_GITSTATUSD_RAN}" == "true" ]]; then
+  if [[ "${SCM_GIT_GITSTATUS_RAN}" == "true" ]]; then
     test -n "${VCS_STATUS_LOCAL_BRANCH}" && echo "${VCS_STATUS_LOCAL_BRANCH}" || return 1
   else 
     git symbolic-ref -q --short HEAD 2> /dev/null || return 1
@@ -17,7 +17,7 @@ function _git-branch {
 }
 
 function _git-tag {
-  if [[ "${SCM_GIT_GITSTATUSD_RAN}" == "true" ]]; then
+  if [[ "${SCM_GIT_GITSTATUS_RAN}" == "true" ]]; then
     test -n "${VCS_STATUS_TAG}" && echo "${VCS_STATUS_TAG}"
   else 
     git describe --tags --exact-match 2> /dev/null
@@ -29,7 +29,7 @@ function _git-commit-description {
 }
 
 function _git-short-sha {
-  if [[ "${SCM_GIT_GITSTATUSD_RAN}" == "true" ]]; then
+  if [[ "${SCM_GIT_GITSTATUS_RAN}" == "true" ]]; then
     echo ${VCS_STATUS_COMMIT:0:7}
   else
     git rev-parse --short HEAD
@@ -38,8 +38,8 @@ function _git-short-sha {
 
 # Try the checked-out branch first to avoid collision with branches pointing to the same ref.
 function _git-friendly-ref {
-  if [[ "${SCM_GIT_GITSTATUSD_RAN}" == "true" ]]; then
-    _git-branch || _git-tag || _git-short-sha # there is no tag based describe output in gitstatusd
+  if [[ "${SCM_GIT_GITSTATUS_RAN}" == "true" ]]; then
+    _git-branch || _git-tag || _git-short-sha # there is no tag based describe output in gitstatus
   else 
     _git-branch || _git-tag || _git-commit-description || _git-short-sha
   fi
@@ -119,7 +119,7 @@ function _git-status-counts {
 function _git-remote-info {
 
   # prompt handling only, reimplement because patching the routine below gets ugly
-  if [[ "${SCM_GIT_GITSTATUSD_RAN}" == "true" ]]; then
+  if [[ "${SCM_GIT_GITSTATUS_RAN}" == "true" ]]; then
     [[ "${VCS_STATUS_REMOTE_NAME}" == "" ]] && return
     [[ "${VCS_STATUS_LOCAL_BRANCH}" == "${VCS_STATUS_REMOTE_BRANCH}" ]] && local same_branch_name=true
     local same_branch_name=
