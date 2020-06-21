@@ -35,10 +35,10 @@ _salt(){
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
     if [ ${COMP_CWORD} -gt 2 ]; then
-	pprev="${COMP_WORDS[COMP_CWORD-2]}"
+    pprev="${COMP_WORDS[COMP_CWORD-2]}"
     fi
     if [ ${COMP_CWORD} -gt 3 ]; then
-	ppprev="${COMP_WORDS[COMP_CWORD-3]}"
+    ppprev="${COMP_WORDS[COMP_CWORD-3]}"
     fi
 
     opts="-h --help -d --doc --documentation --version --versions-report -c \
@@ -96,7 +96,7 @@ _salt(){
      -G|--grain|--grain-pcre)
         COMPREPLY=($(compgen -W "$(_salt_get_grains)" -- ${cur}))
         return 0
-	;;
+        ;;
      -C|--compound)
         COMPREPLY=() # TODO: finish this one? how?
         return 0
@@ -110,7 +110,7 @@ _salt(){
         return 0
         ;;
      -N|--nodegroup)
-	    MASTER_CONFIG='/etc/salt/master'
+        MASTER_CONFIG='/etc/salt/master'
         COMPREPLY=($(compgen -W "`awk -F ':'  'BEGIN {print_line = 0};  /^nodegroups/ {print_line = 1;getline } print_line && /^  */ {print $1} /^[^ ]/ {print_line = 0}' <${MASTER_CONFIG}`" -- ${cur}))
         return 0
      ;;
@@ -193,7 +193,7 @@ _saltkey(){
         return 0
      ;;
      --accept-all)
-	return 0
+        return 0
      ;;
     esac
     COMPREPLY=($(compgen -W "${opts} " -- ${cur}))
@@ -230,21 +230,21 @@ _saltcall(){
     fi
 
     case ${prev} in
-        -m|--module-dirs)
-                COMPREPLY=( $(compgen -d ${cur} ))
-		return 0
- 	 	;;
-	-l|--log-level)
-		COMPREPLY=( $(compgen -W "info none garbage trace warning error debug" -- ${cur}))
-		return 0
-		;;
-	-g|grains)
-                return 0
-		;;
-	salt-call)
-                COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
-	        return 0
-		;;
+    -m|--module-dirs)
+        COMPREPLY=( $(compgen -d ${cur} ))
+        return 0
+        ;;
+    -l|--log-level)
+        COMPREPLY=( $(compgen -W "info none garbage trace warning error debug" -- ${cur}))
+        return 0
+        ;;
+    -g|grains)
+        return 0
+        ;;
+    salt-call)
+        COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+        return 0
+        ;;
     esac
 
     _salt_coms="$(salt-call --out=txt -- sys.list_functions|sed 's/^.*\[//' | tr -d ",']"  )"
@@ -279,46 +279,46 @@ _saltcp(){
     fi
 
     case ${prev} in
- 	salt-cp)
-	    COMPREPLY=($(compgen -W "${opts} `salt-key -l acc --no-color`" -- ${cur}))
-	    return 0
-	;;
-        -t|--timeout)
-	    # those numbers are just a hint
-            COMPREPLY=($(compgen -W "2 3 4 8 10 15 20 25 30 40 60 90 120 180 240 300" -- ${cur} ))
-	    return 0
-        ;;
-	-E|--pcre)
-            COMPREPLY=($(compgen -W "`salt-key -l acc --no-color`" -- ${cur}))
-            return 0
-	;;
-	-L|--list)
-	    # IMPROVEMENTS ARE WELCOME
-	    prefpart="${cur%,*},"
-	    postpart=${cur##*,}
-	    filt="^\($(echo ${cur}| sed 's:,:\\|:g')\)$"
+    salt-cp)
+        COMPREPLY=($(compgen -W "${opts} `salt-key -l acc --no-color`" -- ${cur}))
+        return 0
+    ;;
+    -t|--timeout)
+        # those numbers are just a hint
+        COMPREPLY=($(compgen -W "2 3 4 8 10 15 20 25 30 40 60 90 120 180 240 300" -- ${cur} ))
+        return 0
+    ;;
+    -E|--pcre)
+        COMPREPLY=($(compgen -W "`salt-key -l acc --no-color`" -- ${cur}))
+        return 0
+    ;;
+    -L|--list)
+        # IMPROVEMENTS ARE WELCOME
+        prefpart="${cur%,*},"
+        postpart=${cur##*,}
+        filt="^\($(echo ${cur}| sed 's:,:\\|:g')\)$"
             helper=($(salt-key -l acc --no-color | grep -v "${filt}" | sed "s/^/${prefpart}/"))
-	    COMPREPLY=($(compgen -W "${helper[*]}" -- ${cur}))
+        COMPREPLY=($(compgen -W "${helper[*]}" -- ${cur}))
 
-	    return 0
-	;;
-	-G|--grain|--grain-pcre)
-            COMPREPLY=($(compgen -W "$(_salt_get_grains)" -- ${cur}))
-            return 0
-	    ;;
-	    # FIXME
-	-R|--range)
-	    # FIXME ??
-	    return 0
-	;;
-	-C|--compound)
-	    # FIXME ??
-	    return 0
-	;;
-	-c|--config)
-	    COMPREPLY=($(compgen -f -- ${cur}))
-	    return 0
-	;;
+        return 0
+    ;;
+    -G|--grain|--grain-pcre)
+        COMPREPLY=($(compgen -W "$(_salt_get_grains)" -- ${cur}))
+        return 0
+        ;;
+        # FIXME
+    -R|--range)
+        # FIXME ??
+        return 0
+    ;;
+    -C|--compound)
+        # FIXME ??
+        return 0
+    ;;
+    -c|--config)
+        COMPREPLY=($(compgen -f -- ${cur}))
+        return 0
+    ;;
     esac
 
    # default is using opts:
