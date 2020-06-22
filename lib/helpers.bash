@@ -77,7 +77,7 @@ bash-it ()
         _bash-it-search $component "$@"
         return;;
       update)
-        func=_bash-it_update;;
+        func=_bash-it_update-$component;;
       migrate)
         func=_bash-it-migrate;;
       version)
@@ -149,26 +149,49 @@ _bash-it-plugins ()
     _bash-it-describe "plugins" "a" "plugin" "Plugin"
 }
 
-_bash-it_update() {
+_bash-it_update-dev() {
+  _about 'updates Bash-it to the latest master'
+  _group 'lib'
+
+  _bash-it_update- dev
+}
+
+_bash-it_update-stable() {
+  _about 'updates Bash-it to the latest tag'
+  _group 'lib'
+
+  _bash-it_update- stable
+}
+
+_bash-it_update-() {
   _about 'updates Bash-it'
+  _param '1: What kind of update to do (stable|dev)'
   _group 'lib'
 
   local old_pwd="${PWD}"
 
   cd "${BASH_IT}" || return
 
-  if [ -z $BASH_IT_REMOTE ]; then
+  if [ -z "$BASH_IT_REMOTE" ]; then
     BASH_IT_REMOTE="origin"
   fi
+  # Defaults to stable update
+  if [ -z "$1" ] || [ "$1" == "stable" ]; then
+    version="stable"
+    TARGET=$(git describe --tags "$(git rev-list --tags --max-count=1)")
+  else
+    version="dev"
+    TARGET=${BASH_IT_REMOTE}/master
+  fi
 
-  git fetch &> /dev/null
+  git fetch $BASH_IT_REMOTE --tags &> /dev/null
 
   declare status
-  status="$(git rev-list master..${BASH_IT_REMOTE}/master 2> /dev/null)"
+  status="$(git rev-list HEAD.."${TARGET}" 2> /dev/null)"
 
   if [[ -n "${status}" ]]; then
 
-    for i in $(git rev-list --merges --first-parent master..${BASH_IT_REMOTE}); do
+    for i in $(git rev-list --merges --first-parent HEAD.."${TARGET}"); do
       num_of_lines=$(git log -1 --format=%B $i | awk 'NF' | wc -l)
       if [ $num_of_lines -eq 1 ]; then
         description="%s"
@@ -178,14 +201,14 @@ _bash-it_update() {
       git log --format="%h: $description (%an)" -1 $i
     done
     echo ""
-    read -e -n 1 -p "Would you like to update to $(git log -1 --format=%h origin/master)? [Y/n] " RESP
+    read -e -n 1 -p "Would you like to update to ${TARGET}($(git log -1 --format=%h "${TARGET}"))? [Y/n] " RESP
     case $RESP in
       [yY]|"")
-        git pull --rebase &> /dev/null
+        git checkout "${TARGET}" &> /dev/null
         if [[ $? -eq 0 ]]; then
           echo "Bash-it successfully updated."
           echo ""
-          echo "Migrating your installation to the latest version now..."
+          echo "Migrating your installation to the latest $version version now..."
           _bash-it-migrate
           echo ""
           echo "All done, enjoy!"
