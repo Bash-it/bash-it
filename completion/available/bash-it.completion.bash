@@ -87,7 +87,12 @@ _bash-it-comp()
       COMPREPLY=( $(compgen -W "${doctor_args}" -- ${cur}) )
       return 0
       ;;
-    migrate | reload | search | update | version)
+    update)
+      local update_args="stable dev"
+      COMPREPLY=( $(compgen -W "${update_args}" -- ${cur}) )
+      return 0
+      ;;
+    migrate | reload | search | version)
       return 0
       ;;
     enable | disable)
