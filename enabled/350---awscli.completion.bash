@@ -1,0 +1,1 @@
+../completion/available/awscli.completion.bash

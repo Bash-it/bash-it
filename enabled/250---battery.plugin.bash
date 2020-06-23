@@ -1,0 +1,1 @@
+../plugins/available/battery.plugin.bash

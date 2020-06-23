@@ -1,0 +1,1 @@
+../completion/available/gem.completion.bash

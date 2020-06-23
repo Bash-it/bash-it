@@ -1,0 +1,1 @@
+../plugins/available/nodenv.plugin.bash

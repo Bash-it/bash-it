@@ -1,0 +1,1 @@
+../plugins/available/powerline.plugin.bash

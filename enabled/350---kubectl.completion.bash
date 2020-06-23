@@ -1,0 +1,1 @@
+../completion/available/kubectl.completion.bash

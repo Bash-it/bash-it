@@ -1,0 +1,1 @@
+../completion/available/hub.completion.bash

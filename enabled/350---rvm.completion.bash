@@ -1,0 +1,1 @@
+../completion/available/rvm.completion.bash

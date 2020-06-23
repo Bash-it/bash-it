@@ -1,0 +1,1 @@
+../plugins/available/tmuxinator.plugin.bash

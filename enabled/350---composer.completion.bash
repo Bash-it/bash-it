@@ -1,0 +1,1 @@
+../completion/available/composer.completion.bash

@@ -1,0 +1,1 @@
+../completion/available/helm.completion.bash

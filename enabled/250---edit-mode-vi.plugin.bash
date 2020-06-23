@@ -1,0 +1,1 @@
+../plugins/available/edit-mode-vi.plugin.bash

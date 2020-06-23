@@ -1,0 +1,1 @@
+../plugins/available/xterm.plugin.bash

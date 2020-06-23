@@ -1,0 +1,1 @@
+../completion/available/gh.completion.bash
