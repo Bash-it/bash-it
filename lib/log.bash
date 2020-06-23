@@ -7,10 +7,11 @@ export BASH_IT_LOG_LEVEL_ALL=3
 function _log_general()
 {
   _about 'Internal function used for logging'
-  _param '1: message to log'
+  _param '1: color of the message'
+  _param '2: message to log'
   _group 'log'
 
-  echo -e "$1${echo_normal}"
+  _has_colors && echo -e "$1$2${echo_normal}" || echo -e "$2"
 }
 
 function _log_debug()
@@ -21,7 +22,7 @@ function _log_debug()
   _group 'log'
 
   [[ "$BASH_IT_LOG_LEVEL" -ge $BASH_IT_LOG_LEVEL_ALL ]] || return
-  _log_general "${echo_green}DEBUG: $1"
+  _log_general "${echo_green}" "DEBUG: $1"
 }
 
 function _log_warning()
@@ -32,7 +33,7 @@ function _log_warning()
   _group 'log'
 
   [[ "$BASH_IT_LOG_LEVEL" -ge $BASH_IT_LOG_LEVEL_WARNING ]] || return
-  _log_general "${echo_yellow} WARN: $1"
+  _log_general "${echo_yellow}" " WARN: $1"
 }
 
 function _log_error()
@@ -43,5 +44,5 @@ function _log_error()
   _group 'log'
 
   [[ "$BASH_IT_LOG_LEVEL" -ge $BASH_IT_LOG_LEVEL_ERROR ]] || return
-  _log_general "${echo_red}ERROR: $1"
+  _log_general "${echo_red}" "ERROR: $1"
 }
