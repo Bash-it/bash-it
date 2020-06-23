@@ -395,6 +395,13 @@ $ git config --global --add bash-it.hide-status 1
 
 Setting this flag globally has the same effect as `SCM_CHECK=true`, but only for Git repos.
 
+### Speed up git status calculations
+
+As an alternative to ignoring repo status entirely, you can try out the `gitstatus` plugin.
+This plugin speeds up all `git status` calculations by up to 10x times!
+
+**NOTE**: You will need to clone `gitstatus` repo from [here](https://github.com/romkatv/gitstatus).
+
 ### Pass function renamed to passgen
 
 The Bash-it `pass` function has been renamed to `passgen` in order to avoid a naming conflict with the [pass password manager](https://www.passwordstore.org/).

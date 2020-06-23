@@ -43,3 +43,8 @@ For `aliases`, `plugins` and `completions`, the following rules are applied that
 Having the order based on a numeric priority in a common directory allows for more flexibility. While in general, aliases are loaded first (since their default priority is 150), it's possible to load some aliases after the plugins, or some plugins after completions by setting the items' load priority. This is more flexible than a fixed type-based order or a strict alphabetical order based on name.
 
 These items are subject to change. When making changes to the internal functionality, this page needs to be updated as well.
+
+## Plugin Disable Callbacks
+
+Plugins can define a function that will be called when the plugin is being disabled.
+The callback name should be `{PLUGIN_NAME}_on_disable`, you can see `gitstatus` for usage example.

@@ -318,6 +318,17 @@ _bash-it-describe ()
     printf '%s\n' "$ bash-it disable $file_type <$file_type name> [$file_type name]... -or- $ bash-it disable $file_type all"
 }
 
+_on-disable-callback()
+{
+    _about 'Calls the disabled plugin destructor, if present'
+    _param '1: plugin name'
+    _example '$ _on-disable-callback gitstatus'
+    _group 'lib'
+
+    callback=$1_on_disable
+    _command_exists $callback && $callback
+}
+
 _disable-plugin ()
 {
     _about 'disables bash_it plugin'
@@ -326,6 +337,7 @@ _disable-plugin ()
     _group 'lib'
 
     _disable-thing "plugins" "plugin" $1
+    _on-disable-callback $1
 }
 
 _disable-alias ()
