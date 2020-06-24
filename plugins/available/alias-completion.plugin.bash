@@ -71,7 +71,7 @@ function alias_completion {
                         # with the last word in the unaliased form, i.e.,
                         # alias_cmd + ' ' + alias_args.
                         if [[ \$COMP_LINE == \"\$prec_word \$compl_word\" ]]; then
-                            prec_word=\"$alias_cmd $alias_args\"
+                            prec_word='$alias_cmd $alias_args'
                             prec_word=\${prec_word#* }
                         fi
                         (( COMP_CWORD += ${#alias_arg_words[@]} ))
