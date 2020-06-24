@@ -6,12 +6,13 @@ export BASH_IT_LOG_LEVEL_ALL=3
 
 function _log_general()
 {
-  _about 'Internal function used for logging'
+  _about 'Internal function used for logging, uses BASH_IT_LOG_PREFIX as a prefix'
   _param '1: color of the message'
   _param '2: message to log'
   _group 'log'
 
-  _has_colors && echo -e "$1$2${echo_normal}" || echo -e "$2"
+  message=${BASH_IT_LOG_PREFIX}$2
+  _has_colors && echo -e "$1${message}${echo_normal}" || echo -e "${message}"
 }
 
 function _log_debug()

@@ -4,11 +4,18 @@ This page summarizes a couple of rules to keep in mind when developing features 
 
 ## Debugging and Logging
 
+### General Logging
+
 While developing feature or making changes in general, you can log error/warning/debug
 using `_log_error` `_log_warning` and `_log_debug`. This will help you solve problems quicker
 and also propagate important notes to other users of Bash-it.
 You can see the logs by using `bash-it doctor` command to reload and see the logs.
 Alternatively, you can set `BASH_IT_LOG_LEVEL` to `BASH_IT_LOG_LEVEL_ERROR`, `BASH_IT_LOG_LEVEL_WARNING` or `BASH_IT_LOG_LEVEL_ALL`.
+
+### Log Prefix/Context
+
+You can define `BASH_IT_LOG_PREFIX` in your files in order to a have a constant prefix before your logs.
+Note that we prefer to uses "tags" based logging, i.e `plugins: git: DEBUG: Loading git plugin`.
 
 
 ## Load Order
