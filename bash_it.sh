@@ -6,11 +6,21 @@ BASH_IT_LOG_PREFIX="core: main: "
 if [ -z "$BASH_IT" ];
 then
   # Setting $BASH to maintain backwards compatibility
-  _log_warning "BASH_IT variable not initialized, please upgrade your bash-it version and reinstall it!"
   export BASH_IT=$BASH
   BASH="$(bash -c 'echo $BASH')"
   export BASH
+  BASH_IT_OLD_BASH_SETUP=true
 fi
+
+# Load composure first, so we support function metadata
+# shellcheck source=./lib/composure.bash
+source "${BASH_IT}/lib/composure.bash"
+# We need to load logging module first as well in order to be able to log
+# shellcheck source=./lib/log.bash
+source "${BASH_IT}/lib/log.bash"
+
+# We can only log it now
+[ -z "$BASH_IT_OLD_BASH_SETUP" ] || _log_warning "BASH_IT variable not initialized, please upgrade your bash-it version and reinstall it!"
 
 # For backwards compatibility, look in old BASH_THEME location
 if [ -z "$BASH_IT_THEME" ];
@@ -19,11 +29,6 @@ then
   export BASH_IT_THEME="$BASH_THEME";
   unset BASH_THEME;
 fi
-
-_log_debug "Loading composure..."
-# Load composure first, so we support function metadata
-# shellcheck source=./lib/composure.bash
-source "${BASH_IT}/lib/composure.bash"
 
 # support 'plumbing' metadata
 cite _about _param _example _group _author _version
