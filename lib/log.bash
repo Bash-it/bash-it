@@ -4,6 +4,16 @@ export BASH_IT_LOG_LEVEL_ERROR=1
 export BASH_IT_LOG_LEVEL_WARNING=2
 export BASH_IT_LOG_LEVEL_ALL=3
 
+function _has_colors()
+{
+  # Check that stdout is a terminal
+  test -t 1 || return 1
+
+  ncolors=$(tput colors)
+  test -n "$ncolors" && test "$ncolors" -ge 8 || return 1
+  return 0
+}
+
 function _log_general()
 {
   _about 'Internal function used for logging, uses BASH_IT_LOG_PREFIX as a prefix'
