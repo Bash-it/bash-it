@@ -6,6 +6,24 @@
 # Generic utilies
 ###########################################################################
 
+_bash-it-get-component-name-from-path() {
+  # filename without path
+  filename=${1##*/}
+  # filename without path or priority
+  filename=${filename##*---}
+  # filename without path, priority or extension
+  echo ${filename%.*.bash}
+}
+
+_bash-it-get-component-type-from-path() {
+  # filename without path
+  filename=${1##*/}
+  # filename without path or priority
+  filename=${filename##*---}
+  # extension
+  echo ${filename} | cut -d '.' -f 2
+}
+
 # This function searches an array for an exact match against the term passed
 # as the first argument to the function. This function exits as soon as
 # a match is found.
