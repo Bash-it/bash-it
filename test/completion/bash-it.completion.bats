@@ -43,6 +43,11 @@ function __check_completion () {
   echo "${COMPREPLY[@]}"
 }
 
+@test "completion bash-it: doctor - show options" {
+  run __check_completion 'bash-it doctor '
+  assert_line -n 0 "errors warnings all"
+}
+
 @test "completion bash-it: help - show options" {
   run __check_completion 'bash-it help '
   assert_line -n 0 "aliases completions migrate plugins update"
@@ -70,32 +75,32 @@ function __check_completion () {
 
 @test "completion bash-it: show options" {
   run __check_completion 'bash-it '
-  assert_line -n 0 "disable enable help migrate reload search show update version"
+  assert_line -n 0 "disable enable help migrate reload doctor search show update version"
 }
 
 @test "completion bash-it: bash-ti - show options" {
   run __check_completion 'bash-ti '
-  assert_line -n 0 "disable enable help migrate reload search show update version"
+  assert_line -n 0 "disable enable help migrate reload doctor search show update version"
 }
 
 @test "completion bash-it: shit - show options" {
   run __check_completion 'shit '
-  assert_line -n 0 "disable enable help migrate reload search show update version"
+  assert_line -n 0 "disable enable help migrate reload doctor search show update version"
 }
 
 @test "completion bash-it: bashit - show options" {
   run __check_completion 'bashit '
-  assert_line -n 0 "disable enable help migrate reload search show update version"
+  assert_line -n 0 "disable enable help migrate reload doctor search show update version"
 }
 
 @test "completion bash-it: batshit - show options" {
   run __check_completion 'batshit '
-  assert_line -n 0 "disable enable help migrate reload search show update version"
+  assert_line -n 0 "disable enable help migrate reload doctor search show update version"
 }
 
 @test "completion bash-it: bash_it - show options" {
   run __check_completion 'bash_it '
-  assert_line -n 0 "disable enable help migrate reload search show update version"
+  assert_line -n 0 "disable enable help migrate reload doctor search show update version"
 }
 
 @test "completion bash-it: show - show options" {

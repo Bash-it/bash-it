@@ -34,6 +34,8 @@ SCM_GIT_SHOW_CURRENT_USER=${SCM_GIT_SHOW_CURRENT_USER:=false}
 SCM_GIT_SHOW_MINIMAL_INFO=${SCM_GIT_SHOW_MINIMAL_INFO:=false}
 SCM_GIT_SHOW_STASH_INFO=${SCM_GIT_SHOW_STASH_INFO:=true}
 SCM_GIT_SHOW_COMMIT_COUNT=${SCM_GIT_SHOW_COMMIT_COUNT:=true}
+SCM_GIT_USE_GITSTATUS=${SCM_GIT_USE_GITSTATUS:=false}
+SCM_GIT_GITSTATUS_RAN=${SCM_GIT_GITSTATUS_RAN:=false}
 
 SCM_GIT='git'
 SCM_GIT_CHAR='±'
@@ -191,6 +193,12 @@ function git_prompt_minimal_info {
 }
 
 function git_prompt_vars {
+  if ${SCM_GIT_USE_GITSTATUS} && _command_exists gitstatus_query && gitstatus_query && [[ "${VCS_STATUS_RESULT}" == "ok-sync" ]]; then # use faster gitstatus
+    SCM_GIT_GITSTATUS_RAN=true # use this in githelpers and below to choose gitstatus output
+  else
+    SCM_GIT_GITSTATUS_RAN=false
+  fi
+
   if _git-branch &> /dev/null; then
     SCM_GIT_DETACHED="false"
     SCM_BRANCH="${SCM_THEME_BRANCH_PREFIX}\$(_git-friendly-ref)$(_git-remote-info)"
@@ -206,7 +214,12 @@ function git_prompt_vars {
     SCM_BRANCH="${detached_prefix}\$(_git-friendly-ref)"
   fi
 
-  IFS=$'\t' read -r commits_behind commits_ahead <<< "$(_git-upstream-behind-ahead)"
+  if [[ "${SCM_GIT_GITSTATUS_RAN}" == "true" ]]; then
+    commits_behind=${VCS_STATUS_COMMITS_BEHIND}
+    commits_ahead=${VCS_STATUS_COMMITS_AHEAD}
+  else
+    IFS=$'\t' read -r commits_behind commits_ahead <<< "$(_git-upstream-behind-ahead)"
+  fi
   if [[ "${commits_ahead}" -gt 0 ]]; then
     SCM_BRANCH+="${SCM_GIT_AHEAD_BEHIND_PREFIX_CHAR}${SCM_GIT_AHEAD_CHAR}"
     [[ "${SCM_GIT_SHOW_COMMIT_COUNT}" = "true" ]] && SCM_BRANCH+="${commits_ahead}"
@@ -218,13 +231,23 @@ function git_prompt_vars {
 
   if [[ "${SCM_GIT_SHOW_STASH_INFO}" = "true" ]]; then
     local stash_count
-    stash_count="$(git stash list 2> /dev/null | wc -l | tr -d ' ')"
+    if [[ "${SCM_GIT_GITSTATUS_RAN}" == "true" ]]; then
+      stash_count=${VCS_STATUS_STASHES}
+    else
+      stash_count="$(git stash list 2> /dev/null | wc -l | tr -d ' ')"
+    fi
     [[ "${stash_count}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_GIT_STASH_CHAR_PREFIX}${stash_count}${SCM_GIT_STASH_CHAR_SUFFIX}"
   fi
 
   SCM_STATE=${GIT_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
   if ! _git-hide-status; then
-    IFS=$'\t' read -r untracked_count unstaged_count staged_count <<< "$(_git-status-counts)"
+    if [[ "${SCM_GIT_GITSTATUS_RAN}" == "true" ]]; then
+      untracked_count=${VCS_STATUS_NUM_UNTRACKED}
+      unstaged_count=${VCS_STATUS_NUM_UNSTAGED}
+      staged_count=${VCS_STATUS_NUM_STAGED}
+    else
+      IFS=$'\t' read -r untracked_count unstaged_count staged_count <<< "$(_git-status-counts)"
+    fi
     if [[ "${untracked_count}" -gt 0 || "${unstaged_count}" -gt 0 || "${staged_count}" -gt 0 ]]; then
       SCM_DIRTY=1
       if [[ "${SCM_GIT_SHOW_DETAILS}" = "true" ]]; then
@@ -236,6 +259,7 @@ function git_prompt_vars {
     fi
   fi
 
+  # no if for gitstatus here, user extraction is not supported by it
   [[ "${SCM_GIT_SHOW_CURRENT_USER}" == "true" ]] && SCM_BRANCH+="$(git_user_info)"
 
   SCM_PREFIX=${GIT_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}

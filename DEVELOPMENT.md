@@ -2,6 +2,15 @@
 
 This page summarizes a couple of rules to keep in mind when developing features or making changes in Bash-it.
 
+## Debugging and Logging
+
+While developing feature or making changes in general, you can log error/warning/debug
+using `_log_error` `_log_warning` and `_log_debug`. This will help you solve problems quicker
+and also propagate important notes to other users of Bash-it.
+You can see the logs by using `bash-it doctor` command to reload and see the logs.
+Alternatively, you can set `BASH_IT_LOG_LEVEL` to `BASH_IT_LOG_LEVEL_ERROR`, `BASH_IT_LOG_LEVEL_WARNING` or `BASH_IT_LOG_LEVEL_ALL`.
+
+
 ## Load Order
 
 ### General Load Order
@@ -43,3 +52,8 @@ For `aliases`, `plugins` and `completions`, the following rules are applied that
 Having the order based on a numeric priority in a common directory allows for more flexibility. While in general, aliases are loaded first (since their default priority is 150), it's possible to load some aliases after the plugins, or some plugins after completions by setting the items' load priority. This is more flexible than a fixed type-based order or a strict alphabetical order based on name.
 
 These items are subject to change. When making changes to the internal functionality, this page needs to be updated as well.
+
+## Plugin Disable Callbacks
+
+Plugins can define a function that will be called when the plugin is being disabled.
+The callback name should be `{PLUGIN_NAME}_on_disable`, you can see `gitstatus` for usage example.

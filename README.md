@@ -395,6 +395,13 @@ $ git config --global --add bash-it.hide-status 1
 
 Setting this flag globally has the same effect as `SCM_CHECK=true`, but only for Git repos.
 
+### Speed up git status calculations
+
+As an alternative to ignoring repo status entirely, you can try out the `gitstatus` plugin.
+This plugin speeds up all `git status` calculations by up to 10x times!
+
+**NOTE**: You will need to clone `gitstatus` repo from [here](https://github.com/romkatv/gitstatus).
+
 ### Pass function renamed to passgen
 
 The Bash-it `pass` function has been renamed to `passgen` in order to avoid a naming conflict with the [pass password manager](https://www.passwordstore.org/).
@@ -409,6 +416,20 @@ Set `BASH_IT_LEGACY_PASS` to 'true' to force Bash-it to always **create** the `p
 Unset `BASH_IT_LEGACY_PASS` to have Bash-it **return to default behavior**:
 
 * `unset BASH_IT_LEGACY_PASS`
+
+### Debugging
+
+If you encounter problems with any part of Bash-it, run the following command:
+```bash
+bash-it doctor
+```
+This will reload your bash profile and print out logs of various parts in Bash-it.
+Note that this command at default will print all logs, including debug logs.
+You can call it like this:
+```bash
+bash-it doctor [errors/warnings/all]
+```
+In order to get wanted verbosity.
 
 ### Proxy Support
 
