@@ -16,10 +16,10 @@ function _has_colors()
 
 function _log_general()
 {
-  _about 'Internal function used for logging, uses BASH_IT_LOG_PREFIX as a prefix'
-  _param '1: color of the message'
-  _param '2: message to log'
-  _group 'log'
+  about 'Internal function used for logging, uses BASH_IT_LOG_PREFIX as a prefix'
+  param '1: color of the message'
+  param '2: message to log'
+  group 'log'
 
   message=${BASH_IT_LOG_PREFIX}$2
   _has_colors && echo -e "$1${message}${echo_normal}" || echo -e "${message}"
@@ -27,33 +27,33 @@ function _log_general()
 
 function _log_debug()
 {
-  _about 'log a debug message by echoing to the screen. needs BASH_IT_LOG_LEVEL >= BASH_IT_LOG_LEVEL_ALL'
-  _param '1: message to log'
-  _example '$ _log_debug "Loading plugin git..."'
-  _group 'log'
+  about 'log a debug message by echoing to the screen. needs BASH_IT_LOG_LEVEL >= BASH_IT_LOG_LEVEL_ALL'
+  param '1: message to log'
+  example '$ _log_debug "Loading plugin git..."'
+  group 'log'
 
-  [[ "$BASH_IT_LOG_LEVEL" -ge $BASH_IT_LOG_LEVEL_ALL ]] || return
+  [[ "$BASH_IT_LOG_LEVEL" -ge $BASH_IT_LOG_LEVEL_ALL ]] || return 0
   _log_general "${echo_green}" "DEBUG: $1"
 }
 
 function _log_warning()
 {
-  _about 'log a message by echoing to the screen. needs BASH_IT_LOG_LEVEL >= BASH_IT_LOG_LEVEL_WARNING'
-  _param '1: message to log'
-  _example '$ _log_warning "git binary not found, disabling git plugin..."'
-  _group 'log'
+  about 'log a message by echoing to the screen. needs BASH_IT_LOG_LEVEL >= BASH_IT_LOG_LEVEL_WARNING'
+  param '1: message to log'
+  example '$ _log_warning "git binary not found, disabling git plugin..."'
+  group 'log'
 
-  [[ "$BASH_IT_LOG_LEVEL" -ge $BASH_IT_LOG_LEVEL_WARNING ]] || return
+  [[ "$BASH_IT_LOG_LEVEL" -ge $BASH_IT_LOG_LEVEL_WARNING ]] || return 0
   _log_general "${echo_yellow}" " WARN: $1"
 }
 
 function _log_error()
 {
-  _about 'log a message by echoing to the screen. needs BASH_IT_LOG_LEVEL >= BASH_IT_LOG_LEVEL_ERROR'
-  _param '1: message to log'
-  _example '$ _log_error "Failed to load git plugin..."'
-  _group 'log'
+  about 'log a message by echoing to the screen. needs BASH_IT_LOG_LEVEL >= BASH_IT_LOG_LEVEL_ERROR'
+  param '1: message to log'
+  example '$ _log_error "Failed to load git plugin..."'
+  group 'log'
 
-  [[ "$BASH_IT_LOG_LEVEL" -ge $BASH_IT_LOG_LEVEL_ERROR ]] || return
+  [[ "$BASH_IT_LOG_LEVEL" -ge $BASH_IT_LOG_LEVEL_ERROR ]] || return 0
   _log_general "${echo_red}" "ERROR: $1"
 }
