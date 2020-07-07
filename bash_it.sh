@@ -106,7 +106,7 @@ do
   if [ -e "${_bash_it_config_file}" ]; then
     filename=$(basename "${_bash_it_config_file}")
     filename=${filename%*.bash}
-    BASH_IT_LOG_PREFIX="custom: $filename"
+    BASH_IT_LOG_PREFIX="custom: $filename: "
     _log_debug "Loading custom file..."
     # shellcheck disable=SC1090
     source "$_bash_it_config_file"
