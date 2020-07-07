@@ -21,7 +21,7 @@ function _command_exists ()
   _param '1: command to check'
   _example '$ _command_exists ls && echo exists'
   _group 'lib'
-  type "$1" &> /dev/null ;
+  type "$1" &> /dev/null || (_log_warning "Command $1 does not exist!" && return 1) ;
 }
 
 function _make_reload_alias() {
