@@ -9,6 +9,7 @@ complete -p git &>/dev/null && return
 _git_bash_completion_paths=(
   # Linux
   '/etc/bash_completion.d/git.sh'
+  '/usr/share/bash-completion/completions/git'
   # MacOS
   '/Library/Developer/CommandLineTools/usr/share/git-core/git-completion.bash'
   '/Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash'
