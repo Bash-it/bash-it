@@ -2,6 +2,7 @@
 
 load ../test_helper
 load ../../lib/composure
+load ../../lib/log
 load ../../lib/utilities
 load ../../lib/search
 load ../../plugins/available/base.plugin

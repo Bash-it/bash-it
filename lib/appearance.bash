@@ -1,15 +1,5 @@
 #!/usr/bin/env bash
 
-function _has_colors()
-{
-    # Check that stdout is a terminal
-    test -t 1 || return 1
-
-    ncolors=$(tput colors)
-    test -n "$ncolors" && test "$ncolors" -ge 8 || return 1
-    return 0
-}
-
 # colored ls
 export LSCOLORS='Gxfxcxdxdxegedabagacad'
 

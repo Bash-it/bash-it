@@ -77,3 +77,10 @@ load ../../lib/log
   run _log_error "test test test"
   refute_output
 }
+
+@test "lib log: logging with prefix" {
+  BASH_IT_LOG_LEVEL=$BASH_IT_LOG_LEVEL_ALL
+  BASH_IT_LOG_PREFIX="nice: prefix: "
+  run _log_debug "test test test"
+  assert_output "DEBUG: nice: prefix: test test test"
+}
