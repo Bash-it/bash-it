@@ -1,5 +1,13 @@
+# Ensure that we log to doctor so the user can address these issues
+_is_function _init_completion ||
+  _log_error '_init_completion not found. Ensure bash-completion 2.0 or newer is installed and configured properly.'
+_is_function _rl_enabled ||
+  _log_error '_rl_enabled not found. Ensure bash-completion 2.0 or newer is installed and configured properly.'
+
 _pj() {
-  [ -z "$PROJECT_PATHS" ] && return
+  _is_function _init_completion || return
+  _is_function _rl_enabled || return
+  [ -n "$PROJECT_PATHS" ] || return
   shift
   [ "$1" == "open" ] && shift
 
