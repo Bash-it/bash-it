@@ -99,6 +99,13 @@ If you want to update to the latest dev version (directly from master), run:
 bash-it update dev
 ```
 
+If you want to update automatically and unattended, you can add the optional
+`-s/--silent` flag, for example:
+
+```bash
+bash-it update dev --silent
+```
+
 If you are using an older version of Bash-it, it's possible that some functionality has changed, or that the internal structure of how Bash-it organizes its functionality has been updated.
 For these cases, we provide a `migrate` command:
 
