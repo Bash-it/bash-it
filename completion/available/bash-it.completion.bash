@@ -88,7 +88,11 @@ _bash-it-comp()
       return 0
       ;;
     update)
-      local update_args="stable dev"
+      if [[ ${cur} == -* ]];then
+        local update_args="-s --silent"
+      else
+        local update_args="stable dev"
+      fi
       COMPREPLY=( $(compgen -W "${update_args}" -- ${cur}) )
       return 0
       ;;
