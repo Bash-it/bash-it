@@ -63,6 +63,11 @@ function __check_completion () {
   assert_line -n 0 "stable dev"
 }
 
+@test "completion bash-it: update - show optional flags" {
+  run __check_completion 'bash-it update -'
+  assert_line -n 0 "-s --silent"
+}
+
 @test "completion bash-it: search - show no options" {
   run __check_completion 'bash-it search '
   assert_line -n 0 ""
