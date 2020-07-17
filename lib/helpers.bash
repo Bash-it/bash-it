@@ -181,6 +181,9 @@ _bash-it_update-() {
   if [ -z "$BASH_IT_REMOTE" ]; then
     BASH_IT_REMOTE="origin"
   fi
+  if [ -z "$BASH_IT_DEVELOPMENT_BRANCH" ]; then
+    BASH_IT_DEVELOPMENT_BRANCH="master"
+  fi
   # Defaults to stable update
   if [ -z "$1" ] || [ "$1" == "stable" ]; then
     version="stable"
@@ -192,7 +195,7 @@ _bash-it_update-() {
     fi
   else
     version="dev"
-    TARGET=${BASH_IT_REMOTE}/master
+    TARGET=${BASH_IT_REMOTE}/${BASH_IT_DEVELOPMENT_BRANCH}
   fi
 
   git fetch $BASH_IT_REMOTE --tags &> /dev/null
