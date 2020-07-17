@@ -184,7 +184,12 @@ _bash-it_update-() {
   # Defaults to stable update
   if [ -z "$1" ] || [ "$1" == "stable" ]; then
     version="stable"
-    TARGET=$(git describe --tags "$(git rev-list --tags --max-count=1)")
+    TARGET=$(git describe --tags "$(git rev-list --tags --max-count=1)" 2> /dev/null)
+
+    if [[ -z "$TARGET" ]]; then
+      echo "Can not find tags, so can not update to latest stable version..."
+      return
+    fi
   else
     version="dev"
     TARGET=${BASH_IT_REMOTE}/master
