@@ -242,7 +242,11 @@ _bash-it_update-() {
         ;;
       esac
   else
-    echo "Bash-it is up to date, nothing to do!"
+    if [[ ${version} == "stable" ]]; then
+      echo "You're on the latest stable version. If you want to check out the latest 'dev' version, please run \"bash-it update dev\""
+    else
+      echo "Bash-it is up to date, nothing to do!"
+    fi
   fi
   cd "${old_pwd}" &> /dev/null || return
 }
