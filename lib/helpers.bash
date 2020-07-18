@@ -202,6 +202,9 @@ _bash-it_update-() {
   if [ -z "$BASH_IT_REMOTE" ]; then
     BASH_IT_REMOTE="origin"
   fi
+
+  git fetch $BASH_IT_REMOTE --tags &> /dev/null
+
   if [ -z "$BASH_IT_DEVELOPMENT_BRANCH" ]; then
     BASH_IT_DEVELOPMENT_BRANCH="master"
   fi
@@ -218,8 +221,6 @@ _bash-it_update-() {
     version="dev"
     TARGET=${BASH_IT_REMOTE}/${BASH_IT_DEVELOPMENT_BRANCH}
   fi
-
-  git fetch $BASH_IT_REMOTE --tags &> /dev/null
 
   declare status
   status="$(git rev-list HEAD.."${TARGET}" 2> /dev/null)"
