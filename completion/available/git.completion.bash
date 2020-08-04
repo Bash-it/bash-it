@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 
+# Only operate on MacOS since there are no linux paths
+[ "$(uname -s)" == "Darwin" ] || return
+
 # Make sure git is installed
 _command_exists git || return
 
 # Don't handle completion if it's already managed
-complete -p git &>/dev/null && return
+! complete -p git &>/dev/null || return
 
 _git_bash_completion_paths=(
   # MacOS non-system locations
