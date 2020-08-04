@@ -25,4 +25,4 @@ done
 
 unset _git_bash_completion_paths
 
-(_log_warning "no completion files found - please try enabling the 'system' completion instead." && return 1)
+_log_warning "no completion files found - please try enabling the 'system' completion instead."
