@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Only operate on MacOS since there are no linux paths
-[[ "$(uname -s)" -eq 'Darwin' ]] || return
+[[ "$(uname -s)" == 'Darwin' ]] || return 0
 
 # Make sure git is installed
 _command_exists git || return
