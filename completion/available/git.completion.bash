@@ -4,10 +4,10 @@
 [[ "$(uname -s)" == 'Darwin' ]] || return 0
 
 # Make sure git is installed
-_command_exists git || return
+_command_exists git || return 0
 
 # Don't handle completion if it's already managed
-! complete -p git &>/dev/null || return
+! complete -p git &>/dev/null || return 0
 
 _git_bash_completion_paths=(
   # MacOS non-system locations
