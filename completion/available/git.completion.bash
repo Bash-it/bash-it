@@ -1,13 +1,19 @@
 #!/usr/bin/env bash
 
 # Only operate on MacOS since there are no linux paths
-[[ "$(uname -s)" == 'Darwin' ]] || return 0
+if [[ "$(uname -s)" == 'Darwin' ]] ; then
+  _log_warning "unsupported operating system - only 'Darwin' is supported"
+  return 0
+fi
 
 # Make sure git is installed
 _command_exists git || return 0
 
 # Don't handle completion if it's already managed
-! complete -p git &>/dev/null || return 0
+if complete -p git &>/dev/null ; then
+  _log_warning "completion already loaded - this usually means it is safe to stop using this completion"
+  return 0
+fi
 
 _git_bash_completion_found=false
 _git_bash_completion_paths=(
@@ -16,6 +22,7 @@ _git_bash_completion_paths=(
   '/Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash'
 )
 
+# Load the first completion file found
 for _comp_path in "${_git_bash_completion_paths[@]}" ; do
   if [ -r "$_comp_path" ] ; then
     _git_bash_completion_found=true
@@ -24,6 +31,7 @@ for _comp_path in "${_git_bash_completion_paths[@]}" ; do
   fi
 done
 
+# Cleanup
 if ! _git_bash_completion_found ; then
   _log_warning "no completion files found - please try enabling the 'system' completion instead."
 fi
