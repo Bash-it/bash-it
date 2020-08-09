@@ -32,7 +32,7 @@ for _comp_path in "${_git_bash_completion_paths[@]}" ; do
 done
 
 # Cleanup
-if ! _git_bash_completion_found ; then
+if [[ "${_git_bash_completion_found}" == false ]]; then
   _log_warning "no completion files found - please try enabling the 'system' completion instead."
 fi
 unset _git_bash_completion_paths
