@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Only operate on MacOS since there are no linux paths
-if [[ "$(uname -s)" == 'Darwin' ]] ; then
+if [[ "$(uname -s)" != 'Darwin' ]] ; then
   _log_warning "unsupported operating system - only 'Darwin' is supported"
   return 0
 fi
