@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Only operate on MacOS since there are no linux paths
-if [[ "$(uname -s)" == 'Darwin' ]] ; then
+if [[ "$(uname -s)" != 'Darwin' ]] ; then
   _log_warning "unsupported operating system - only 'Darwin' is supported"
   return 0
 fi
@@ -32,7 +32,7 @@ for _comp_path in "${_git_bash_completion_paths[@]}" ; do
 done
 
 # Cleanup
-if ! _git_bash_completion_found ; then
+if [[ "${_git_bash_completion_found}" == false ]]; then
   _log_warning "no completion files found - please try enabling the 'system' completion instead."
 fi
 unset _git_bash_completion_paths
