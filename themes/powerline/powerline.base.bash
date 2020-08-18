@@ -188,6 +188,23 @@ function __powerline_dirstack_prompt {
   fi
 }
 
+function __powerline_duration_prompt {
+  if [ -z $BASH_IT_LAST_COMMAND_STARTED ]; then
+    # either the duration plugin was not started,
+    # or this is the first time the prompt is displayed,
+    # therefore no command has run yet
+    return
+  fi
+
+  local cmd_end=${EPOCHSECONDS:-$(perl -e 'print time()')}
+  (( duration_seconds = cmd_end - BASH_IT_LAST_COMMAND_STARTED ))
+
+  if [ $duration_seconds -ge $DURATION_THRESHOLD ]; then
+    local human_duration=$(_bash-it-human-duration "$duration_seconds")
+    echo "${human_duration}|${DURATION_THEME_PROMPT_COLOR}"
+  fi
+}
+
 function __powerline_history_number_prompt {
   echo "${HISTORY_NUMBER_THEME_PROMPT_CHAR}\!|${HISTORY_NUMBER_THEME_PROMPT_COLOR}"
 }

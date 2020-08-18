@@ -91,3 +91,44 @@ function item_disabled() {
   run has_match xyz "${fruits[@]}"
   assert_line -n 0 ''
 }
+
+@test "_bash-it-human-duration() - under a minute only displays second count" {
+  run _bash-it-human-duration 2
+  [ "$output" = "2s" ]
+
+  run _bash-it-human-duration 30
+  [ "$output" = "30s" ]
+
+  run _bash-it-human-duration 59
+  [ "$output" = "59s" ]
+}
+
+@test "_bash-it-human-duration() - over a minute, but under an hour displays mm:ss" {
+  run _bash-it-human-duration 60
+  [ "$output" = "01m:00s" ]
+
+  run _bash-it-human-duration 83
+  [ "$output" = "01m:23s" ]
+
+  run _bash-it-human-duration 3599
+  [ "$output" = "59m:59s" ]
+}
+
+@test "_bash-it-human-duration() - over an hour, displays in the hh:mm:ss format" {
+  run _bash-it-human-duration 3600
+  [ "$output" = "01h:00m:00s" ]
+
+  run _bash-it-human-duration 3700
+  [ "$output" = "01h:01m:40s" ]
+
+  run _bash-it-human-duration $(( 3600 * 24 - 1 ))
+  [ "$output" = "23h:59m:59s" ]
+}
+
+@test "_bash-it-human-duration() - duration over 1 day - starts displaying number of days as well" {
+  run _bash-it-human-duration 86400
+  [ "$output" = "1 day(s), 00h:00m:00s" ]
+
+  run _bash-it-human-duration $(( 3600 * 24 * 3 + 3600 * 5 + 60 * 7 + 23 ))
+  [ "$output" = "3 day(s), 05h:07m:23s" ]
+}

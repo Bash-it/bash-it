@@ -162,3 +162,20 @@ _bash-it-component-item-is-disabled() {
   local item="$2"
   _bash-it-component-help "${component}" | $(_bash-it-grep) -E -v '\[x\]' |  $(_bash-it-grep) -E -q -- "^${item}\s"
 }
+
+# Given a number of seconds, transforms it into a human readable duration
+_bash-it-human-duration() {
+  local T=$1
+  if [ "$T" -lt 60 ]; then
+    printf '%ds' "$T"
+    return
+  fi
+  local D=$(( T / 60 / 60 / 24 ))
+  local H=$(( T / 60 / 60 % 24 ))
+  local M=$(( T / 60 % 60 ))
+  local S=$(( T % 60 ))
+  (( $D > 0 )) && printf '%d day(s), ' $D
+  (( $D > 0 || $H > 0 )) && printf '%02dh:' $H
+  (( $D > 0 || $H > 0 || $M > 0 )) && printf '%02dm:' $M
+  printf '%02ds' $S
+}
