@@ -12,7 +12,7 @@ function hotfix-finish {
   about 'helper function for finishing a hotfix'
   group 'jgitflow'
 
-  mvn jgitflow:hotfix-finish -Darguments="${JGITFLOW_MVN_ARGUMENTS}" && git push && git push origin master && git push --tags
+  mvn jgitflow:hotfix-finish -Darguments="${JGITFLOW_MVN_ARGUMENTS}" && git push && git push origin master && git push --tags && mvn clean
 }
 
 function feature-start {
@@ -26,7 +26,7 @@ function feature-finish {
   about 'helper function for finishing a feature'
   group 'jgitflow'
 
-  mvn jgitflow:feature-finish ${JGITFLOW_MVN_ARGUMENTS}
+  mvn jgitflow:feature-finish ${JGITFLOW_MVN_ARGUMENTS} && mvn clean
   echo -e '\033[32m----------------------------------------------------------------\033[0m'
   echo -e '\033[32m===== REMEMBER TO CREATE A NEW RELEASE TO DEPLOY THIS FEATURE ====\033[0m'
   echo -e '\033[32m----------------------------------------------------------------\033[0m'
@@ -43,5 +43,5 @@ function release-finish {
   about 'helper function for finishing a release'
   group 'jgitflow'
 
-  mvn jgitflow:release-finish -Darguments="${JGITFLOW_MVN_ARGUMENTS}" && git push && git push origin master && git push --tags
+  mvn jgitflow:release-finish -Darguments="${JGITFLOW_MVN_ARGUMENTS}" && git push && git push origin master && git push --tags && mvn clean
 }
