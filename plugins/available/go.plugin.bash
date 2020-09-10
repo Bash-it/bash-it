@@ -7,8 +7,7 @@ about-plugin 'go environment variables & path configuration'
 _command_exists go || return 0
 
 # If using goenv, make sure it can find go
-go version &>/dev/null
-[[ $? -eq 0 ]] || return 0
+go version &>/dev/null || return 0
 
 function _go_pathmunge_wrap() {
   IFS=':' local -a 'a=($1)'
