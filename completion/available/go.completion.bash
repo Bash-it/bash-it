@@ -9,5 +9,5 @@
 # gocomplete -install
 
 if _command_exists gocomplete && _command_exists go ; then
-  complete -C "${GOBIN}"/gocomplete go
+  complete -C gocomplete go
 fi

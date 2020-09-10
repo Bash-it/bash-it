@@ -1,9 +1,14 @@
-#!/usr/bin/env bash
-
 cite about-plugin
 about-plugin 'go environment variables & path configuration'
 
-command -v go &>/dev/null || return
+# Load late to ensure goenv runs first, if enabled
+# BASH_IT_LOAD_PRIORITY: 275
+
+_command_exists go || return 0
+
+# If using goenv, make sure it can find go
+go version &>/dev/null
+[[ $? -eq 0 ]] || return 0
 
 function _go_pathmunge_wrap() {
   IFS=':' local -a 'a=($1)'

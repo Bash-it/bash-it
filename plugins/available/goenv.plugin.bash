@@ -8,13 +8,15 @@ about-plugin 'load goenv, if you are using it'
 _command_exists goenv ||
   [[ -n "$GOENV_ROOT" && -x "$GOENV_ROOT/bin/goenv" ]] ||
   [[ -x "$HOME/.goenv/bin/goenv" ]] ||
-  return
+  return 0
 
 # Set GOENV_ROOT, if not already set
 export GOENV_ROOT="${GOENV_ROOT:-$HOME/.goenv}"
 
 # Add GOENV_ROOT/bin to PATH, if that's where it's installed
-! _command_exists goenv && [[ -x "$GOENV_ROOT/bin/goenv" ]] && pathmunge "$GOENV_ROOT/bin"
+if ! _command_exists goenv && [[ -x "$GOENV_ROOT/bin/goenv" ]] ; then
+  pathmunge "$GOENV_ROOT/bin"
+fi
 
 # Initialize goenv
 eval "$(goenv init - bash)"
