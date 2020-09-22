@@ -1,6 +1,8 @@
 # Define this here so it can be used by all of the Powerline themes
 THEME_CHECK_SUDO=${THEME_CHECK_SUDO:=true}
 
+. "$BASH_IT/themes/powerline/powerline.helpers.bash"
+
 function set_color {
   set +u
   if [[ "${1}" != "-" ]]; then
@@ -67,6 +69,32 @@ function __powerline_ruby_prompt {
   [[ -n "${ruby_version}" ]] && echo "${RUBY_CHAR}${ruby_version}|${RUBY_THEME_PROMPT_COLOR}"
 }
 
+function __find_nearest_go_mod() {
+  local path="${PWD}"
+  while true; do
+    [[ -z "${path}" || ${path} == "/" ]] && break
+    if [[ -f "${path}/go.mod" ]]; then
+      printf "${path}/go.mod"
+      return 0
+    fi
+    path=$(dirname ${path})
+  done
+}
+
+function __powerline_go_prompt {
+  local go_version=""
+
+  if _command_exists go ; then
+    local go_mod=$(__find_nearest_go_mod)
+    [[ -n "${go_mod}" && -f "${go_mod}" ]] || return
+    local -a go_version_output
+    mapfile -t go_version_output < <(egrep '^go ' ${go_mod} | tr ' ' '\n')
+    go_version="${go_version_output[1]}"
+  fi
+
+  [[ -n "${go_version}" ]] && echo "${GO_CHAR}${go_version}|${GO_THEME_PROMPT_COLOR}"
+}
+
 function __powerline_k8s_context_prompt {
   local kubernetes_context=""
 
@@ -121,8 +149,21 @@ function __powerline_scm_prompt {
 }
 
 function __powerline_cwd_prompt {
-  local cwd=$(pwd | sed "s|^${HOME}|~|")
+  local cwd
+  local max_width
+  local screen_width
+  if [[ -n "${CWD_SHORTEN_SCREEN_PERCENT}" ]]; then
+    screen_width=$(.powerline.screen-width)
+    max_width=$(( screen_width * CWD_SHORTEN_SCREEN_PERCENT / 100 ))
+  elif [[ -n "${CWD_SHORTEN_TO}" ]]; then
+    max_width=${CWD_SHORTEN_TO}
+  fi
 
+  if [[ -n ${max_width} ]]; then
+    cwd=$(cwd.shorten "${max_width}" "${PWD}")
+  else
+    cwd=$(pwd | sed "s|^${HOME}|~|")
+  fi
   echo "${cwd}|${CWD_THEME_PROMPT_COLOR}"
 }
 
