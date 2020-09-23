@@ -128,8 +128,8 @@ function local_setup {
 
 @test "helpers: enable the brew completion" {
   run _enable-completion "brew"
-  assert_line -n 0 'brew enabled with priority 350.'
-  assert_link_exist "$BASH_IT/enabled/350---brew.completion.bash"
+  assert_line -n 0 'brew enabled with priority 375.'
+  assert_link_exist "$BASH_IT/enabled/375---brew.completion.bash"
 }
 
 @test "helpers: enable the node plugin" {
