@@ -66,7 +66,7 @@ function _exit-code {
 }
 
 function _prompt {
-    local exit_code="$?" wrap_char=' ' dir_color=$green ssh_info='' host
+    local exit_code="$?" wrap_char=' ' dir_color=$green ssh_info='' python_venv='' host
 
     _exit-code exit_code
     _git-uptream-remote-logo
