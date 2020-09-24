@@ -39,6 +39,39 @@ function local_setup {
   assert_failure
 }
 
+@test 'helpers: pathmunge: ensure function is defined' {
+  run type -t pathmunge
+  assert_line 'function'
+}
+
+@test 'helpers: pathmunge: single path' {
+  new_paths='/tmp/fake-pathmunge-path'
+  old_path="${PATH}"
+  pathmunge "${new_paths}"
+  assert_equal "${new_paths}:${old_path}" "${PATH}"
+}
+
+@test 'helpers: pathmunge: single path, with space' {
+  new_paths='/tmp/fake pathmunge path'
+  old_path="${PATH}"
+  pathmunge "${new_paths}"
+  assert_equal "${new_paths}:${old_path}" "${PATH}"
+}
+
+@test 'helpers: pathmunge: multiple paths' {
+  new_paths='/tmp/fake-pathmunge-path1:/tmp/fake-pathmunge-path2'
+  old_path="${PATH}"
+  pathmunge "${new_paths}"
+  assert_equal "${new_paths}:${old_path}" "${PATH}"
+}
+
+@test 'helpers: pathmunge: multiple paths, with space' {
+  new_paths='/tmp/fake pathmunge path1:/tmp/fake pathmunge path2'
+  old_path="${PATH}"
+  pathmunge "${new_paths}"
+  assert_equal "${new_paths}:${old_path}" "${PATH}"
+}
+
 @test "helpers: bash-it help aliases ag" {
   run bash-it help aliases "ag"
   assert_line -n 0 "ag='ag --smart-case --pager=\"less -MIRFX'"

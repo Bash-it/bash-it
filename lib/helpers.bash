@@ -680,12 +680,18 @@ then
     example 'pathmunge /path/to/dir is equivalent to PATH=/path/to/dir:$PATH'
     example 'pathmunge /path/to/dir after is equivalent to PATH=$PATH:/path/to/dir'
 
-    if ! [[ $PATH =~ (^|:)$1($|:) ]] ; then
-      if [ "$2" = "after" ] ; then
-        export PATH=$PATH:$1
-      else
-        export PATH=$1:$PATH
+    IFS=':' local -a 'a=($1)'
+    local i=${#a[@]}
+    while [[ $i -gt 0 ]] ; do
+      i=$(( i - 1 ))
+      p=${a[i]}
+      if ! [[ $PATH =~ (^|:)$p($|:) ]] ; then
+        if [[ "$2" = "after" ]] ; then
+          export PATH=$PATH:$p
+        else
+          export PATH=$p:$PATH
+        fi
       fi
-    fi
+    done
   }
 fi
