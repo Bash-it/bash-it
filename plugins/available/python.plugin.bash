@@ -1,8 +1,13 @@
 cite about-plugin
 about-plugin 'alias "shttp" to SimpleHTTPServer'
 
-if [ $(uname) = "Linux" ]
-then
+# Load after pyenv
+# BASH_IT_LOAD_PRIORITY: 285
+
+# Check python version to ensure pyenv can find python
+{ _command_exists python && python --version &>/dev/null ; } || return 0
+
+if [[ "$(uname -s)" == 'Linux' ]] ; then
   alias shttp='python2 -m SimpleHTTPServer'
 else
   alias shttp='python -m SimpleHTTPServer'
@@ -14,9 +19,9 @@ function pyedit() {
     example '$ pyedit requests'
     group 'python'
 
-    xpyc=`python -c "import os, sys; f = open(os.devnull, 'w'); sys.stderr = f; module = __import__('$1'); sys.stdout.write(module.__file__)"`
+    xpyc=$(python -c "import os, sys; f = open(os.devnull, 'w'); sys.stderr = f; module = __import__('$1'); sys.stdout.write(module.__file__)")
 
-    if [ "$xpyc" == "" ]; then
+    if [[ "$xpyc" == "" ]]; then
         echo "Python module $1 not found"
         return -1
 
