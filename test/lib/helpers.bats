@@ -72,6 +72,14 @@ function local_setup {
   assert_equal "${new_paths}:${old_path}" "${PATH}"
 }
 
+@test 'helpers: pathmunge: multiple paths, with duplicate' {
+  new_paths='/tmp/fake-pathmunge-path1:/tmp/fake pathmunge path2:/tmp/fake-pathmunge-path1:/tmp/fake-pathmunge-path3'
+  want_paths='/tmp/fake pathmunge path2:/tmp/fake-pathmunge-path1:/tmp/fake-pathmunge-path3'
+  old_path="${PATH}"
+  pathmunge "${new_paths}"
+  assert_equal "${want_paths}:${old_path}" "${PATH}"
+}
+
 @test "helpers: bash-it help aliases ag" {
   run bash-it help aliases "ag"
   assert_line -n 0 "ag='ag --smart-case --pager=\"less -MIRFX'"
