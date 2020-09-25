@@ -4,15 +4,27 @@ load ../test_helper
 load ../../lib/helpers
 load ../../lib/composure
 
-@test 'ensure _go_pathmunge_wrap is defined' {
-  { [[ $CI ]] || _command_exists go; } || skip 'golang not found'
+function local_setup {
+  setup_test_fixture
+
+  # mock out go if it doesn't exist
+  if ! _command_exists go || ! go version &>/dev/null ; then
+    function go {
+      case "$2" in
+        GOROOT) echo '/tmp/goroot' ;;
+        GOPATH) echo '/tmp/gopath' ;;
+      esac
+    }
+  fi
+}
+
+@test 'plugins go: ensure _go_pathmunge_wrap is defined' {
   load ../../plugins/available/go.plugin
   run type -t _go_pathmunge_wrap
   assert_line 'function'
 }
 
 @test 'plugins go: single entry in GOPATH' {
-  { [[ $CI ]] || _command_exists go; } || skip 'golang not found'
   export GOPATH="/foo"
   export GOROOT="/baz"
   load ../../plugins/available/go.plugin
@@ -20,7 +32,6 @@ load ../../lib/composure
 }
 
 @test 'plugins go: single entry in GOPATH, with space' {
-  { [[ $CI ]] || _command_exists go; } || skip 'golang not found'
   export GOPATH="/foo bar"
   export GOROOT="/baz"
   load ../../plugins/available/go.plugin
@@ -28,7 +39,6 @@ load ../../lib/composure
 }
 
 @test 'plugins go: single entry in GOPATH, with escaped space' {
-  { [[ $CI ]] || _command_exists go; } || skip 'golang not found'
   export GOPATH="/foo\ bar"
   export GOROOT="/baz"
   load ../../plugins/available/go.plugin
@@ -36,7 +46,6 @@ load ../../lib/composure
 }
 
 @test 'plugins go: multiple entries in GOPATH' {
-  { [[ $CI ]] || _command_exists go; } || skip 'golang not found'
   export GOPATH="/foo:/bar"
   export GOROOT="/baz"
   load ../../plugins/available/go.plugin
@@ -44,7 +53,6 @@ load ../../lib/composure
 }
 
 @test 'plugins go: multiple entries in GOPATH, with space' {
-  { [[ $CI ]] || _command_exists go; } || skip 'golang not found'
   export GOPATH="/foo:/foo bar"
   export GOROOT="/baz"
   load ../../plugins/available/go.plugin
@@ -52,7 +60,6 @@ load ../../lib/composure
 }
 
 @test 'plugins go: multiple entries in GOPATH, with escaped space' {
-  { [[ $CI ]] || _command_exists go; } || skip 'golang not found'
   export GOPATH="/foo:/foo\ bar"
   export GOROOT="/baz"
   load ../../plugins/available/go.plugin

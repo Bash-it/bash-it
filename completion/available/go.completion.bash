@@ -8,6 +8,8 @@
 # go get -u github.com/posener/complete/gocomplete
 # gocomplete -install
 
-if _command_exists gocomplete && _command_exists go ; then
-  complete -C "${GOBIN}"/gocomplete go
+if _command_exists go ; then
+  if _command_exists gocomplete "gocomplete missing, please visit github.com/posener/complete/" ; then
+    complete -C gocomplete go
+  fi
 fi
