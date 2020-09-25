@@ -1,13 +1,17 @@
 cite about-plugin
 about-plugin 'Node.js helper functions'
 
-# Ensure local modules are preferred in PATH
-pathmunge "./node_modules/.bin" "after"
+# Load after nodenv
+# BASH_IT_LOAD_PRIORITY: 285
 
-# Check that we have npm
-out=$(command -v npm 2>&1) || return
+# Check node version to ensure nodenv can find node
+{ _command_exists node && node --version &>/dev/null ; } || return 0
 
-# If not using nodenv, ensure global modules are in PATH
-if [[ ! $out == *"nodenv/shims"* ]] ; then
-  pathmunge "$(npm config get prefix)/bin" "after"
-fi
+# Check npm version to ensure nodenv can find npm
+{ _command_exists npm && npm --version &>/dev/null ; } || return 0
+
+# Ensure global modules are in PATH
+pathmunge "$(npm config get prefix)/bin"
+
+# Ensure local modules are in PATH
+pathmunge './node_modules/.bin'

@@ -134,21 +134,21 @@ function local_setup {
 
 @test "helpers: enable the node plugin" {
   run _enable-plugin "node"
-  assert_line -n 0 'node enabled with priority 250.'
-  assert_link_exist "$BASH_IT/enabled/250---node.plugin.bash" "../plugins/available/node.plugin.bash"
+  assert_line -n 0 'node enabled with priority 285.'
+  assert_link_exist "$BASH_IT/enabled/285---node.plugin.bash" "../plugins/available/node.plugin.bash"
 }
 
 @test "helpers: enable the node plugin through the bash-it function" {
   run bash-it enable plugin "node"
-  assert_line -n 0 'node enabled with priority 250.'
-  assert_link_exist "$BASH_IT/enabled/250---node.plugin.bash"
+  assert_line -n 0 'node enabled with priority 285.'
+  assert_link_exist "$BASH_IT/enabled/285---node.plugin.bash"
 }
 
 @test "helpers: enable the node and nvm plugins through the bash-it function" {
   run bash-it enable plugin "node" "nvm"
-  assert_line -n 0 'node enabled with priority 250.'
+  assert_line -n 0 'node enabled with priority 285.'
   assert_line -n 1 'nvm enabled with priority 225.'
-  assert_link_exist "$BASH_IT/enabled/250---node.plugin.bash"
+  assert_link_exist "$BASH_IT/enabled/285---node.plugin.bash"
   assert_link_exist "$BASH_IT/enabled/225---nvm.plugin.bash"
 }
 
@@ -299,7 +299,7 @@ function local_setup {
   assert_line -n 2 'todo.txt-cli enabled with priority 150.'
 
   assert_link_exist "$BASH_IT/enabled/225---nvm.plugin.bash"
-  assert_link_exist "$BASH_IT/enabled/250---node.plugin.bash"
+  assert_link_exist "$BASH_IT/enabled/285---node.plugin.bash"
   assert_link_exist "$BASH_IT/enabled/250---ssh.plugin.bash"
   assert_link_exist "$BASH_IT/enabled/150---todo.txt-cli.aliases.bash"
   assert [ ! -L "$BASH_IT/plugins/enabled/node.plugin.bash" ]
@@ -311,8 +311,8 @@ function local_setup {
   ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/225---nvm.plugin.bash
   assert_link_exist "$BASH_IT/plugins/enabled/225---nvm.plugin.bash"
 
-  ln -s $BASH_IT/plugins/available/node.plugin.bash $BASH_IT/plugins/enabled/250---node.plugin.bash
-  assert_link_exist "$BASH_IT/plugins/enabled/250---node.plugin.bash"
+  ln -s $BASH_IT/plugins/available/node.plugin.bash $BASH_IT/plugins/enabled/285---node.plugin.bash
+  assert_link_exist "$BASH_IT/plugins/enabled/285---node.plugin.bash"
 
   ln -s $BASH_IT/aliases/available/todo.txt-cli.aliases.bash $BASH_IT/aliases/enabled/250---todo.txt-cli.aliases.bash
   assert_link_exist "$BASH_IT/aliases/enabled/250---todo.txt-cli.aliases.bash"
@@ -322,10 +322,10 @@ function local_setup {
 
   run _bash-it-migrate
   assert_link_exist "$BASH_IT/enabled/225---nvm.plugin.bash"
-  assert_link_exist "$BASH_IT/enabled/250---node.plugin.bash"
+  assert_link_exist "$BASH_IT/enabled/285---node.plugin.bash"
   assert_link_exist "$BASH_IT/enabled/250---ssh.plugin.bash"
   assert_link_exist "$BASH_IT/enabled/150---todo.txt-cli.aliases.bash"
-  assert [ ! -L "$BASH_IT/plugins/enabled/225----node.plugin.bash" ]
+  assert [ ! -L "$BASH_IT/plugins/enabled/250----node.plugin.bash" ]
   assert [ ! -L "$BASH_IT/plugins/enabled/250----nvm.plugin.bash" ]
   assert [ ! -L "$BASH_IT/aliases/enabled/250----todo.txt-cli.aliases.bash" ]
 }
@@ -424,22 +424,22 @@ function __migrate_all_components() {
   assert_line -n 1 'nvm disabled.'
   assert_line -n 2 'nvm enabled with priority 225.'
   assert_line -n 3 'If any migration errors were reported, please try the following: reload && bash-it migrate'
-  assert_line -n 4 'node enabled with priority 250.'
+  assert_line -n 4 'node enabled with priority 285.'
   assert [ ! -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
   assert_link_exist "$BASH_IT/enabled/225---nvm.plugin.bash"
-  assert_link_exist "$BASH_IT/enabled/250---node.plugin.bash"
+  assert_link_exist "$BASH_IT/enabled/285---node.plugin.bash"
 }
 
 @test "helpers: verify that existing components are automatically migrated when something is disabled" {
   ln -s $BASH_IT/plugins/available/nvm.plugin.bash $BASH_IT/plugins/enabled/nvm.plugin.bash
   assert_link_exist "$BASH_IT/plugins/enabled/nvm.plugin.bash"
-  ln -s $BASH_IT/plugins/available/node.plugin.bash $BASH_IT/plugins/enabled/250---node.plugin.bash
-  assert_link_exist "$BASH_IT/plugins/enabled/250---node.plugin.bash"
+  ln -s $BASH_IT/plugins/available/node.plugin.bash $BASH_IT/plugins/enabled/285---node.plugin.bash
+  assert_link_exist "$BASH_IT/plugins/enabled/285---node.plugin.bash"
 
   run bash-it disable plugin "node"
   assert_line -n 0 'Migrating plugin node.'
   assert_line -n 1 'node disabled.'
-  assert_line -n 2 'node enabled with priority 250.'
+  assert_line -n 2 'node enabled with priority 285.'
   assert_line -n 3 'Migrating plugin nvm.'
   assert_line -n 4 'nvm disabled.'
   assert_line -n 5 'nvm enabled with priority 225.'
@@ -447,8 +447,8 @@ function __migrate_all_components() {
   assert_line -n 7 'node disabled.'
   assert [ ! -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
   assert_link_exist "$BASH_IT/enabled/225---nvm.plugin.bash"
-  assert [ ! -L "$BASH_IT/plugins/enabled/250---node.plugin.bash" ]
-  assert [ ! -L "$BASH_IT/enabled/250---node.plugin.bash" ]
+  assert [ ! -L "$BASH_IT/plugins/enabled/285---node.plugin.bash" ]
+  assert [ ! -L "$BASH_IT/enabled/285---node.plugin.bash" ]
 }
 
 @test "helpers: enable all plugins" {
