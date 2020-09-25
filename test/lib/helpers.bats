@@ -20,7 +20,7 @@ function local_setup {
 # TODO Create global __get_enabled_name function
 
 @test "helpers: _command_exists function exists" {
-  type -a _command_exists &> /dev/null
+  run type -a _command_exists &> /dev/null
   assert_success
 }
 
