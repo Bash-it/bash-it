@@ -66,7 +66,7 @@ function _exit-code {
 }
 
 function _prompt {
-    local exit_code="$?" wrap_char=' ' dir_color=$green ssh_info='' host
+    local exit_code="$?" wrap_char=' ' dir_color=$green ssh_info='' python_venv='' host
 
     _exit-code exit_code
     _git-uptream-remote-logo
@@ -88,7 +88,14 @@ function _prompt {
         ssh_info="${bold_blue}\u${bold_orange}@${cyan}$host ${bold_orange}in"
     fi
 
-    PS1="\\n${ssh_info} ${purple}$(scm_char)${dir_color}\\w${normal}$(scm_prompt_info)${exit_code}"
+    # Detect python venv
+    if [[ -n "${CONDA_DEFAULT_ENV}" ]]; then
+        python_venv="${CONDA_DEFAULT_ENV}"
+    elif [[ -n "${VIRTUAL_ENV}" ]]; then
+        python_venv=$(basename "${VIRTUAL_ENV}")
+    fi
+
+    PS1="\\n${ssh_info} ${python_venv} ${purple}$(scm_char)${dir_color}\\w${normal}$(scm_prompt_info)${exit_code}"
 
     [[ ${#PS1} -gt $((COLUMNS*3)) ]] && wrap_char="\\n"
     PS1="${PS1}${wrap_char}❯${normal} "
