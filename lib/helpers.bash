@@ -114,6 +114,10 @@ bash-it ()
         do
             $func $arg
         done
+
+        if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
+          _bash-it-reload
+        fi
     else
         $func "$@"
     fi
@@ -238,6 +242,10 @@ _bash-it-migrate() {
       $enable_func $component_name
     done
   done
+
+  if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
+    _bash-it-reload
+  fi
 
   if [ "$migrated_something" = "true" ]; then
     echo ""
@@ -455,10 +463,6 @@ _disable-thing ()
 
     _bash-it-clean-component-cache "${file_type}"
 
-    if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
-        exec ${0/-/}
-    fi
-
     printf '%s\n' "$file_entity disabled."
 }
 
@@ -554,10 +558,6 @@ _enable-thing ()
     fi
 
     _bash-it-clean-component-cache "${file_type}"
-
-    if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
-        exec ${0/-/}
-    fi
 
     printf '%s\n' "$file_entity enabled with priority $use_load_priority."
 }
