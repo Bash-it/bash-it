@@ -251,7 +251,7 @@ _bash-it_update-() {
           _bash-it_pull_and_update_inner $TARGET $version
           ;;
         [nN])
-          echo "Not upgrading…"
+          echo "Not updating…"
           ;;
         *)
           echo -e "\033[91mPlease choose y or n.\033[m"
