@@ -222,19 +222,34 @@ _bash-it_update-() {
     TARGET=${BASH_IT_REMOTE}/${BASH_IT_DEVELOPMENT_BRANCH}
   fi
 
+  declare revision
+  revision="HEAD..${TARGET}"
   declare status
-  status="$(git rev-list HEAD.."${TARGET}" 2> /dev/null)"
+  status="$(git rev-list ${revision} 2> /dev/null)"
+  declare revert
+
+  if [[ -z "${status}" && ${version} == "stable" ]]; then
+    revision="${TARGET}..HEAD"
+    status="$(git rev-list ${revision} 2> /dev/null)"
+    revert=true
+  fi
 
   if [[ -n "${status}" ]]; then
+    if [[ $revert ]]; then
+      echo "Your version is a more recent development version ($(git log -1 --format=%h HEAD))"
+      echo "You can continue in order to revert and update to the latest stable version"
+      echo ""
+      log_color="%Cred"
+    fi
 
-    for i in $(git rev-list --merges --first-parent HEAD.."${TARGET}"); do
+    for i in $(git rev-list --merges --first-parent ${revision}); do
       num_of_lines=$(git log -1 --format=%B $i | awk 'NF' | wc -l)
       if [ $num_of_lines -eq 1 ]; then
         description="%s"
       else
         description="%b"
       fi
-      git log --format="%h: $description (%an)" -1 $i
+      git log --format="${log_color}%h: $description (%an)" -1 $i
     done
     echo ""
 
