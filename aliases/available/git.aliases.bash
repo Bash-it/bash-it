@@ -22,6 +22,7 @@ alias gs='git status'
 alias gss='git status -s'
 alias gsu='git submodule update --init --recursive'
 alias gl='git pull'
+alias gpl='git pull'
 alias glum='git pull upstream master'
 alias gpr='git pull --rebase'
 alias gpp='git pull && git push'
@@ -68,6 +69,7 @@ alias gdel='git branch -D'
 alias gmu='git fetch origin -v; git fetch upstream -v; git merge upstream/master'
 alias gll='git log --graph --pretty=oneline --abbrev-commit'
 alias gg="git log --graph --pretty=format:'%C(bold)%h%Creset%C(magenta)%d%Creset %s %C(yellow)<%an> %C(cyan)(%cr)%Creset' --abbrev-commit --date=relative"
+alias ggf="git log --graph --date=short --pretty=format:'%C(auto)%h %Cgreen%an%Creset %Cblue%cd%Creset %C(auto)%d %s'"
 alias ggs="gg --stat"
 alias gsh="git show"
 alias gsl="git shortlog -sn"
@@ -84,6 +86,7 @@ alias gnew="git log HEAD@{1}..HEAD@{0}"
 alias gcaa="git commit -a --amend -C HEAD"
 # Rebase with latest remote master
 alias gprom="git fetch origin master && git rebase origin/master && git update-ref refs/heads/master origin/master"
+alias gpf="git push --force"
 alias gpunch="git push --force-with-lease"
 alias ggui="git gui"
 alias gcsam="git commit -S -am"
