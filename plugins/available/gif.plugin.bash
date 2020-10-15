@@ -162,7 +162,7 @@ function v2gif {
     if [[ "$use_gifski" = "true" ]] ; then
       # I trust @pornel to do his own resizing optimization choices
       $ffmpeg -loglevel panic -i "$file" -r $fps -vcodec png v2gif-tmp-%05d.png && \
-        $gifski $maxwidthski --fps $(printf "%.0f" $fps) -o "$output_file" v2gif-tmp-*.png || return 2
+        $gifski v2gif-tmp-*.png $maxwidthski --fps $(printf "%.0f" $fps) -o "$output_file" || return 2
     else
       $ffmpeg -loglevel panic -i "$file" $maxsize -r $fps -vcodec png v2gif-tmp-%05d.png && \
         $convert +dither -layers Optimize v2gif-tmp-*.png GIF:- | \
