@@ -51,6 +51,8 @@ alias gci='git commit --interactive'
 alias gcamd='git commit --amend'
 alias gb='git branch'
 alias gba='git branch -a'
+# FROM https://stackoverflow.com/a/58623139/10362396
+alias gbc='git for-each-ref --format="%(authorname) %09 %(if)%(HEAD)%(then)*%(else)%(refname:short)%(end) %09 %(creatordate)" refs/remotes/ --sort=authorname DESC'
 alias gbt='git branch --track'
 alias gbm='git branch -m'
 alias gbd='git branch -d'
