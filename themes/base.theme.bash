@@ -34,6 +34,8 @@ SCM_GIT_SHOW_CURRENT_USER=${SCM_GIT_SHOW_CURRENT_USER:=false}
 SCM_GIT_SHOW_MINIMAL_INFO=${SCM_GIT_SHOW_MINIMAL_INFO:=false}
 SCM_GIT_SHOW_STASH_INFO=${SCM_GIT_SHOW_STASH_INFO:=true}
 SCM_GIT_SHOW_COMMIT_COUNT=${SCM_GIT_SHOW_COMMIT_COUNT:=true}
+SCM_GIT_USE_GITSTATUS=${SCM_GIT_USE_GITSTATUS:=false}
+SCM_GIT_GITSTATUS_RAN=${SCM_GIT_GITSTATUS_RAN:=false}
 
 SCM_GIT='git'
 SCM_GIT_CHAR='±'
@@ -62,14 +64,17 @@ SCM_SVN_CHAR='⑆'
 SCM_NONE='NONE'
 SCM_NONE_CHAR='○'
 
+NVM_THEME_PROMPT_PREFIX=' |'
+NVM_THEME_PROMPT_SUFFIX='|'
+
 RVM_THEME_PROMPT_PREFIX=' |'
 RVM_THEME_PROMPT_SUFFIX='|'
+
+THEME_SHOW_RUBY_PROMPT=${THEME_SHOW_RUBY_PROMPT:=true}
 
 THEME_SHOW_USER_HOST=${THEME_SHOW_USER_HOST:=false}
 USER_HOST_THEME_PROMPT_PREFIX=''
 USER_HOST_THEME_PROMPT_SUFFIX=''
-
-VIRTUAL_ENV=
 
 VIRTUALENV_THEME_PROMPT_PREFIX=' |'
 VIRTUALENV_THEME_PROMPT_SUFFIX='|'
@@ -80,10 +85,19 @@ RBENV_THEME_PROMPT_SUFFIX='|'
 RBFU_THEME_PROMPT_PREFIX=' |'
 RBFU_THEME_PROMPT_SUFFIX='|'
 
-GIT_EXE=`which git 2> /dev/null || true`
-P4_EXE=`which p4 2> /dev/null || true`
-HG_EXE=`which hg  2> /dev/null || true`
-SVN_EXE=`which svn  2> /dev/null || true`
+GIT_EXE=$(which git 2> /dev/null || true)
+P4_EXE=$(which p4 2> /dev/null || true)
+HG_EXE=$(which hg  2> /dev/null || true)
+SVN_EXE=$(which svn  2> /dev/null || true)
+
+# Check for broken SVN exe that is caused by some versions of Xcode.
+# See https://github.com/Bash-it/bash-it/issues/1612 for more details.
+if [[ -x "$SVN_EXE" ]] ; then
+  if ! "$SVN_EXE" --version > /dev/null 2>&1 ; then
+    # Unset the SVN exe variable so that SVN commands are avoided.
+    SVN_EXE=""
+  fi
+fi
 
 function scm {
   if [[ "$SCM_CHECK" = false ]]; then SCM=$SCM_NONE
@@ -152,6 +166,14 @@ function scm_prompt_info_common {
   { [[ ${SCM} == ${SCM_SVN} ]] && svn_prompt_info && return; } || true
 }
 
+function terraform_workspace_prompt {
+    if _command_exists terraform ; then
+        if [ -d .terraform ]; then
+            echo -e "$(terraform workspace show 2>/dev/null)"
+        fi
+    fi
+}
+
 function git_prompt_minimal_info {
   SCM_STATE=${SCM_THEME_PROMPT_CLEAN}
 
@@ -171,6 +193,12 @@ function git_prompt_minimal_info {
 }
 
 function git_prompt_vars {
+  if ${SCM_GIT_USE_GITSTATUS} && _command_exists gitstatus_query && gitstatus_query && [[ "${VCS_STATUS_RESULT}" == "ok-sync" ]]; then # use faster gitstatus
+    SCM_GIT_GITSTATUS_RAN=true # use this in githelpers and below to choose gitstatus output
+  else
+    SCM_GIT_GITSTATUS_RAN=false
+  fi
+
   if _git-branch &> /dev/null; then
     SCM_GIT_DETACHED="false"
     SCM_BRANCH="${SCM_THEME_BRANCH_PREFIX}\$(_git-friendly-ref)$(_git-remote-info)"
@@ -186,7 +214,12 @@ function git_prompt_vars {
     SCM_BRANCH="${detached_prefix}\$(_git-friendly-ref)"
   fi
 
-  IFS=$'\t' read -r commits_behind commits_ahead <<< "$(_git-upstream-behind-ahead)"
+  if [[ "${SCM_GIT_GITSTATUS_RAN}" == "true" ]]; then
+    commits_behind=${VCS_STATUS_COMMITS_BEHIND}
+    commits_ahead=${VCS_STATUS_COMMITS_AHEAD}
+  else
+    IFS=$'\t' read -r commits_behind commits_ahead <<< "$(_git-upstream-behind-ahead)"
+  fi
   if [[ "${commits_ahead}" -gt 0 ]]; then
     SCM_BRANCH+="${SCM_GIT_AHEAD_BEHIND_PREFIX_CHAR}${SCM_GIT_AHEAD_CHAR}"
     [[ "${SCM_GIT_SHOW_COMMIT_COUNT}" = "true" ]] && SCM_BRANCH+="${commits_ahead}"
@@ -198,13 +231,23 @@ function git_prompt_vars {
 
   if [[ "${SCM_GIT_SHOW_STASH_INFO}" = "true" ]]; then
     local stash_count
-    stash_count="$(git stash list 2> /dev/null | wc -l | tr -d ' ')"
+    if [[ "${SCM_GIT_GITSTATUS_RAN}" == "true" ]]; then
+      stash_count=${VCS_STATUS_STASHES}
+    else
+      stash_count="$(git stash list 2> /dev/null | wc -l | tr -d ' ')"
+    fi
     [[ "${stash_count}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_GIT_STASH_CHAR_PREFIX}${stash_count}${SCM_GIT_STASH_CHAR_SUFFIX}"
   fi
 
   SCM_STATE=${GIT_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
   if ! _git-hide-status; then
-    IFS=$'\t' read -r untracked_count unstaged_count staged_count <<< "$(_git-status-counts)"
+    if [[ "${SCM_GIT_GITSTATUS_RAN}" == "true" ]]; then
+      untracked_count=${VCS_STATUS_NUM_UNTRACKED}
+      unstaged_count=${VCS_STATUS_NUM_UNSTAGED}
+      staged_count=${VCS_STATUS_NUM_STAGED}
+    else
+      IFS=$'\t' read -r untracked_count unstaged_count staged_count <<< "$(_git-status-counts)"
+    fi
     if [[ "${untracked_count}" -gt 0 || "${unstaged_count}" -gt 0 || "${staged_count}" -gt 0 ]]; then
       SCM_DIRTY=1
       if [[ "${SCM_GIT_SHOW_DETAILS}" = "true" ]]; then
@@ -216,6 +259,7 @@ function git_prompt_vars {
     fi
   fi
 
+  # no if for gitstatus here, user extraction is not supported by it
   [[ "${SCM_GIT_SHOW_CURRENT_USER}" == "true" ]] && SCM_BRANCH+="$(git_user_info)"
 
   SCM_PREFIX=${GIT_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
@@ -300,10 +344,23 @@ function hg_prompt_vars {
 
     if [ -f "$HG_ROOT/dirstate" ]; then
         # Mercurial holds various information about the working directory in .hg/dirstate file. More on http://mercurial.selenic.com/wiki/DirState
-        SCM_CHANGE=$(hexdump -n 10 -e '1/1 "%02x"' "$HG_ROOT/dirstate" | cut -c-12)
+        SCM_CHANGE=$(hexdump -vn 10 -e '1/1 "%02x"' "$HG_ROOT/dirstate" | cut -c-12)
     else
         SCM_CHANGE=$(hg summary 2> /dev/null | grep parent: | awk '{print $2}')
     fi
+}
+
+function nvm_version_prompt {
+  local node
+  if declare -f -F nvm &> /dev/null; then
+    node=$(nvm current 2> /dev/null)
+    [[ "${node}" == "system" ]] && return
+    echo -e "${NVM_THEME_PROMPT_PREFIX}${node}${NVM_THEME_PROMPT_SUFFIX}"
+  fi
+}
+
+function node_version_prompt {
+  echo -e "$(nvm_version_prompt)"
 }
 
 function rvm_version_prompt {
@@ -347,7 +404,9 @@ function chruby_version_prompt {
 }
 
 function ruby_version_prompt {
-  echo -e "$(rbfu_version_prompt)$(rbenv_version_prompt)$(rvm_version_prompt)$(chruby_version_prompt)"
+  if [[ "${THEME_SHOW_RUBY_PROMPT}" = "true" ]]; then
+    echo -e "$(rbfu_version_prompt)$(rbenv_version_prompt)$(rvm_version_prompt)$(chruby_version_prompt)"
+  fi
 }
 
 function k8s_context_prompt {

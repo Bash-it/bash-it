@@ -11,6 +11,10 @@ A colorful theme, where shows a lot information about your shell session.
 * Current path
 * Current username and hostname
 * Current time
+* Current shell level
+* Current dirstack level (`pushd` / `popd`)
+* Current history number
+* Current command number
 * An indicator when connected by SSH
 * An indicator when `sudo` has the credentials cached (see the `sudo` manpage for more info about this)
 * An indicator when the current shell is inside the Vim editor
@@ -41,6 +45,10 @@ You can change the format using the following variable:
 
 The time/date is printed by the `date` command, so refer to its man page to change the format.
 
+### Soft Separators
+
+Adjacent segments having the same background color will use a less-pronouced (i.e. soft) separator between them.
+
 ### Segment Order
 
 The contents of the prompt can be "reordered", all the "segments" (every piece of information) can take any place. The currently available segments are:
@@ -56,13 +64,34 @@ The contents of the prompt can be "reordered", all the "segments" (every piece o
 * `python_venv` - Python virtual environment information (`virtualenv`, `venv`
   and `conda` supported)
 * `ruby` - Current ruby version if using `rvm`
+* `node` - Current node version (only `nvm` is supported)
 * `scm` - Version control information, `git`
+* `terraform` - Current terraform workspace
 * `user_info` - Current user
 * `wd` - Working directory, like `cwd` but doesn't show the full folder
   hierarchy, only the directory you're currently in.
+* `shlvl` - Show the current shell level (based on `SHLVL` environment variable), but only if you are not in root shell
+* `dirstack` - Show the current dirstack level (based on `DIRSTACK` environment variable), but only if the stack is not empty
+* `history_number` - Show current history number
+* `command_number` - Show current command number
 
 A variable can be defined to set the order of the prompt segments:
 
     POWERLINE_PROMPT="user_info scm python_venv ruby cwd"
 
 The example values above are the current default values, but if you want to remove anything from the prompt, simply remove the "string" that represents the segment from the variable.
+
+### Compact Settings
+
+You can configure various aspects of the prompt to use less whitespace. Supported variables are:
+
+| Variable                             | Description
+|--------------------------------------|------------
+|POWERLINE_COMPACT_BEFORE_SEPARATOR    | Removes the leading space before each separator
+|POWERLINE_COMPACT_AFTER_SEPARATOR     | Removes the trailing space after each separator
+|POWERLINE_COMPACT_BEFOR_FIRST_SEGMENT | Removes the leading space on the first segment
+|POWERLINE_COMPACT_AFTER_LAST_SEGMENT  | Removes the trailing space on the last segment
+|POWERLINE_COMPACT_PROMPT              | Removes the space after the prompt character
+|POWERLINE_COMPACT                     | Enable all Compact settings (you can still override individual settings)
+
+The default value for all settings is `0` (disabled). Use `1` to enable.

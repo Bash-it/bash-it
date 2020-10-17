@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# Simply return an error code to simulate a broken SVN installation
+exit 72

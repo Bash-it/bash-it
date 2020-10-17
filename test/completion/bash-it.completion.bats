@@ -5,36 +5,7 @@ load ../../lib/composure
 load ../../completion/available/bash-it.completion
 
 function local_setup {
-  mkdir -p "$BASH_IT"
-  lib_directory="$(cd "$(dirname "$0")" && pwd)"
-  # Use rsync to copy Bash-it to the temp folder
-  # rsync is faster than cp, since we can exclude the large ".git" folder
-  rsync -qavrKL -d --delete-excluded --exclude=.git $lib_directory/../../.. "$BASH_IT"
-
-  rm -rf "$BASH_IT"/enabled
-  rm -rf "$BASH_IT"/aliases/enabled
-  rm -rf "$BASH_IT"/completion/enabled
-  rm -rf "$BASH_IT"/plugins/enabled
-
-  mkdir -p "$BASH_IT"/enabled
-  mkdir -p "$BASH_IT"/aliases/enabled
-  mkdir -p "$BASH_IT"/completion/enabled
-  mkdir -p "$BASH_IT"/plugins/enabled
-
-  # Don't pollute the user's actual $HOME directory
-  # Use a test home directory instead
-  export BASH_IT_TEST_CURRENT_HOME="${HOME}"
-  export BASH_IT_TEST_HOME="$(cd "${BASH_IT}/.." && pwd)/BASH_IT_TEST_HOME"
-  mkdir -p "${BASH_IT_TEST_HOME}"
-  export HOME="${BASH_IT_TEST_HOME}"
-}
-
-function local_teardown {
-  export HOME="${BASH_IT_TEST_CURRENT_HOME}"
-
-  rm -rf "${BASH_IT_TEST_HOME}"
-
-  assert_equal "${BASH_IT_TEST_CURRENT_HOME}" "${HOME}"
+  setup_test_fixture
 }
 
 @test "completion bash-it: ensure that the _bash-it-comp function is available" {
@@ -72,6 +43,11 @@ function __check_completion () {
   echo "${COMPREPLY[@]}"
 }
 
+@test "completion bash-it: doctor - show options" {
+  run __check_completion 'bash-it doctor '
+  assert_line -n 0 "errors warnings all"
+}
+
 @test "completion bash-it: help - show options" {
   run __check_completion 'bash-it help '
   assert_line -n 0 "aliases completions migrate plugins update"
@@ -82,9 +58,14 @@ function __check_completion () {
   assert_line -n 0 "vagrant vault vim"
 }
 
-@test "completion bash-it: update - show no options" {
+@test "completion bash-it: update - show options" {
   run __check_completion 'bash-it update '
-  assert_line -n 0 ""
+  assert_line -n 0 "stable dev"
+}
+
+@test "completion bash-it: update - show optional flags" {
+  run __check_completion 'bash-it update -'
+  assert_line -n 0 "-s --silent"
 }
 
 @test "completion bash-it: search - show no options" {
@@ -99,32 +80,32 @@ function __check_completion () {
 
 @test "completion bash-it: show options" {
   run __check_completion 'bash-it '
-  assert_line -n 0 "disable enable help migrate reload search show update version"
+  assert_line -n 0 "disable enable help migrate reload restart doctor search show update version"
 }
 
 @test "completion bash-it: bash-ti - show options" {
   run __check_completion 'bash-ti '
-  assert_line -n 0 "disable enable help migrate reload search show update version"
+  assert_line -n 0 "disable enable help migrate reload restart doctor search show update version"
 }
 
 @test "completion bash-it: shit - show options" {
   run __check_completion 'shit '
-  assert_line -n 0 "disable enable help migrate reload search show update version"
+  assert_line -n 0 "disable enable help migrate reload restart doctor search show update version"
 }
 
 @test "completion bash-it: bashit - show options" {
   run __check_completion 'bashit '
-  assert_line -n 0 "disable enable help migrate reload search show update version"
+  assert_line -n 0 "disable enable help migrate reload restart doctor search show update version"
 }
 
 @test "completion bash-it: batshit - show options" {
   run __check_completion 'batshit '
-  assert_line -n 0 "disable enable help migrate reload search show update version"
+  assert_line -n 0 "disable enable help migrate reload restart doctor search show update version"
 }
 
 @test "completion bash-it: bash_it - show options" {
   run __check_completion 'bash_it '
-  assert_line -n 0 "disable enable help migrate reload search show update version"
+  assert_line -n 0 "disable enable help migrate reload restart doctor search show update version"
 }
 
 @test "completion bash-it: show - show options" {

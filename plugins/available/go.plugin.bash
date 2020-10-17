@@ -3,27 +3,17 @@
 cite about-plugin
 about-plugin 'go environment variables & path configuration'
 
-[ ! command -v go &>/dev/null ] && return
+command -v go &>/dev/null || return
 
-function _split_path_reverse() {
-  local a=( ${@//:/ } )
+function _go_pathmunge_wrap() {
+  IFS=':' local -a 'a=($1)'
   local i=${#a[@]}
-  local r=
   while [ $i -gt 0 ] ; do
     i=$(( i - 1 ))
-    if [ $(( i + 1 )) -eq ${#a[@]} ] ; then
-      r="${a[i]}"
-    else
-      r="${r} ${a[i]}"
-    fi
+    pathmunge "${a[i]}/bin"
   done
-  echo "$r"
 }
 
-export GOROOT=${GOROOT:-$(go env GOROOT)}
-pathmunge "${GOROOT}/bin"
-
-export GOPATH=${GOPATH:-$(go env GOPATH)}
-for p in $( _split_path_reverse ${GOPATH} ) ; do
-  pathmunge "${p}/bin"
-done
+export GOROOT="${GOROOT:-$(go env GOROOT)}"
+export GOPATH="${GOPATH:-$(go env GOPATH)}"
+_go_pathmunge_wrap "${GOPATH}:${GOROOT}"
