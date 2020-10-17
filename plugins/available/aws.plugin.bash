@@ -40,7 +40,8 @@ function __awskeys_help {
 function __awskeys_get {
     local ln=$(grep -n "\[ *$1 *\]" "${AWS_SHARED_CREDENTIALS_FILE}" | cut -d ":" -f 1)
     if [[ -n "${ln}" ]]; then
-        tail -n +${ln} "${AWS_SHARED_CREDENTIALS_FILE}" | egrep -m 3 "aws_access_key_id|aws_secret_access_key|aws_session_token"
+        tail -n +${ln} "${AWS_SHARED_CREDENTIALS_FILE}" | egrep -m 2 "aws_access_key_id|aws_secret_access_key"
+        tail -n +${ln} "${AWS_SHARED_CREDENTIALS_FILE}" | egrep -m 1 "aws_session_token"
     fi
 }
 

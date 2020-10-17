@@ -3,7 +3,7 @@ about-plugin 'automatically set your xterm title with host and location info'
 
 
 _short-dirname () {
-  local dir_name=`dirs -0`
+  local dir_name=`dirs +0`
   [ "$SHORT_TERM_LINE" = true ] && [ ${#dir_name} -gt 8 ] && echo ${dir_name##*/} || echo $dir_name
 }
 

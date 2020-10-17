@@ -94,7 +94,6 @@ function _ensure_valid_sshagent_env() {
     return
   fi
 
-  echo "There's a dead ssh-agent at the landing..."
   ssh-agent > "${SSH_AGENT_ENV}"
   return
 }

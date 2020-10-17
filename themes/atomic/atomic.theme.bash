@@ -30,7 +30,7 @@ Face="\342\230\273"
 ____atomic_top_left_parse() {
   ifs_old="${IFS}"
   IFS="|"
-  args=( $1 )
+  args=($1)
   IFS="${ifs_old}"
   if [ -n "${args[3]}" ]; then
     _TOP_LEFT+="${args[2]}${args[3]}"
@@ -45,7 +45,7 @@ ____atomic_top_left_parse() {
 ____atomic_top_right_parse() {
   ifs_old="${IFS}"
   IFS="|"
-  args=( $1 )
+  args=($1)
   IFS="${ifs_old}"
   _TOP_RIGHT+=" "
   if [ -n "${args[3]}" ]; then
@@ -55,14 +55,14 @@ ____atomic_top_right_parse() {
   if [ -n "${args[4]}" ]; then
     _TOP_RIGHT+="${args[2]}${args[4]}"
   fi
-  __TOP_RIGHT_LEN=$(( __TOP_RIGHT_LEN + ${#args[1]} + ${#args[3]} + ${#args[4]} + 1 ))
-  (( __SEG_AT_RIGHT += 1 ))
+  __TOP_RIGHT_LEN=$((__TOP_RIGHT_LEN + ${#args[1]} + ${#args[3]} + ${#args[4]} + 1))
+  ((__SEG_AT_RIGHT += 1))
 }
 
 ____atomic_bottom_parse() {
   ifs_old="${IFS}"
   IFS="|"
-  args=( $1 )
+  args=($1)
   IFS="${ifs_old}"
   _BOTTOM+="${args[0]}${args[1]}"
   [ ${#args[1]} -gt 0 ] && _BOTTOM+=" "
@@ -87,7 +87,7 @@ ____atomic_top() {
     [ -n "${info}" ] && ____atomic_top_right_parse "${info}"
   done
 
-  [ $__TOP_RIGHT_LEN -gt 0 ] && __TOP_RIGHT_LEN=$(( __TOP_RIGHT_LEN - 0 ))
+  [ $__TOP_RIGHT_LEN -gt 0 ] && __TOP_RIGHT_LEN=$((__TOP_RIGHT_LEN - 0))
   ___cursor_adjust="\e[${__TOP_RIGHT_LEN}D"
   _TOP_LEFT+="${___cursor_adjust}"
 
@@ -148,10 +148,10 @@ ___atomic_prompt_ruby() {
 
 ___atomic_prompt_todo() {
   [ "${THEME_SHOW_TODO}" != "true" ] ||
-  [ -z "$(which todo.sh)" ] && return
+    [ -z "$(which todo.sh)" ] && return
   color=$bold_white
   box="[|]"
-  info="t:$(todo.sh ls | egrep "TODO: [0-9]+ of ([0-9]+)" | awk '{ print $4 }' )"
+  info="t:$(todo.sh ls | egrep "TODO: [0-9]+ of ([0-9]+)" | awk '{ print $4 }')"
   printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_green}" "${box}"
 }
 
@@ -165,15 +165,15 @@ ___atomic_prompt_clock() {
 
 ___atomic_prompt_battery() {
   ! _command_exists battery_percentage ||
-  [ "${THEME_SHOW_BATTERY}" != "true" ] ||
-  [ "$(battery_percentage)" = "no" ] && return
+    [ "${THEME_SHOW_BATTERY}" != "true" ] ||
+    [ "$(battery_percentage)" = "no" ] && return
 
   batp=$(battery_percentage)
   if [ "$batp" -eq 50 ] || [ "$batp" -gt 50 ]; then
     color=$bold_green
-    elif [ "$batp" -lt 50 ] && [ "$batp" -gt 25 ]; then
+  elif [ "$batp" -lt 50 ] && [ "$batp" -gt 25 ]; then
     color=$bold_yellow
-    elif [ "$batp" -eq 25 ] || [ "$batp" -lt 25 ]; then
+  elif [ "$batp" -eq 25 ] || [ "$batp" -lt 25 ]; then
     color=$IRed
   fi
   box="[|]"
@@ -194,7 +194,7 @@ ___atomic_prompt_char() {
   color=$white
   prompt_char="${__ATOMIC_PROMPT_CHAR_PS1}"
   if [ "${THEME_SHOW_SUDO}" == "true" ]; then
-    if [ $(sudo -n id -u 2>&1 | grep 0) ]; then
+    if sudo -vn 1>/dev/null 2>&1; then
       prompt_char="${__ATOMIC_PROMPT_CHAR_PS1_SUDO}"
     fi
   fi
@@ -226,16 +226,16 @@ _atomic_completion() {
   segments="battery clock exitcode python ruby scm sudo todo"
   case "${_action}" in
     show)
-      COMPREPLY=( $(compgen -W "${segments}" -- "${cur}") )
+      COMPREPLY=($(compgen -W "${segments}" -- "${cur}"))
       return 0
-    ;;
+      ;;
     hide)
-      COMPREPLY=( $(compgen -W "${segments}" -- "${cur}") )
+      COMPREPLY=($(compgen -W "${segments}" -- "${cur}"))
       return 0
-    ;;
+      ;;
   esac
 
-  COMPREPLY=( $(compgen -W "${actions}" -- "${cur}") )
+  COMPREPLY=($(compgen -W "${actions}" -- "${cur}"))
   return 0
 }
 
@@ -246,9 +246,11 @@ atomic() {
   typeset func
   case $action in
     show)
-    func=__atomic_show;;
+      func=__atomic_show
+      ;;
     hide)
-    func=__atomic_hide;;
+      func=__atomic_hide
+      ;;
   esac
   for seg in ${segs}; do
     seg=$(printf "%s" "${seg}" | tr '[:lower:]' '[:upper:]')

@@ -2,9 +2,13 @@
 
 load ../test_helper
 load ../../lib/composure
+load ../../lib/log
 load ../../lib/helpers
 load ../../lib/utilities
 load ../../lib/search
+
+cite _about _param _example _group _author _version
+
 load ../../plugins/available/base.plugin
 load ../../aliases/available/git.aliases
 load ../../plugins/available/ruby.plugin
@@ -13,27 +17,10 @@ load ../../completion/available/bundler.completion
 load ../../completion/available/gem.completion
 load ../../completion/available/rake.completion
 
-cite _about _param _example _group _author _version
-
 load ../../lib/helpers
 
 function local_setup {
-  mkdir -p "$BASH_IT"
-  lib_directory="$(cd "$(dirname "$0")" && pwd)"
-  # Use rsync to copy Bash-it to the temp folder
-  # rsync is faster than cp, since we can exclude the large ".git" folder
-  rsync -qavrKL -d --delete-excluded --exclude=.git $lib_directory/../../.. "$BASH_IT"
-
-  rm -rf "$BASH_IT"/enabled
-  rm -rf "$BASH_IT"/aliases/enabled
-  rm -rf "$BASH_IT"/completion/enabled
-  rm -rf "$BASH_IT"/plugins/enabled
-  rm -rf "$BASH_IT"/tmp/cache
-
-  mkdir -p "$BASH_IT"/enabled
-  mkdir -p "$BASH_IT"/aliases/enabled
-  mkdir -p "$BASH_IT"/completion/enabled
-  mkdir -p "$BASH_IT"/plugins/enabled
+  setup_test_fixture
 
   export OLD_PATH="$PATH"
   export PATH="/usr/bin:/bin:/usr/sbin"
@@ -53,8 +40,13 @@ function local_teardown {
 @test "search: git" {
   run _bash-it-search 'git' --no-color
   assert_line -n 0 '      aliases:  git   gitsvn  '
-  assert_line -n 1 '      plugins:  autojump   git   git-subrepo   jgitflow   jump  '
-  assert_line -n 2 '  completions:  git   git_flow   git_flow_avh  '
+  assert_line -n 1 -p '      plugins:'
+  for plugin in "autojump" "git" "gitstatus" "git-subrepo" "jgitflow" "jump"
+  do
+    echo $plugin
+    assert_line -n 1 -p $plugin
+  done
+  assert_line -n 2 '  completions:  git   git_flow   git_flow_avh   github-cli  '
 }
 
 @test "search: ruby gem bundle rake rails" {

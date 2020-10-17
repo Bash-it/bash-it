@@ -90,7 +90,7 @@ ____brainy_bottom() {
 ___brainy_prompt_user_info() {
 	color=$bold_blue
 	if [ "${THEME_SHOW_SUDO}" == "true" ]; then
-		if [ $(sudo -n id -u 2>&1 | grep 0) ]; then
+		if sudo -vn 1>/dev/null 2>&1; then
 			color=$bold_red
 		fi
 	fi

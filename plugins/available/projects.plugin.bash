@@ -1,5 +1,5 @@
 cite about-plugin
-about-plugin 'add "export PROJECT_PATHS=~/projects:~/intertrode/projects" to navigate quickly to your project directories with `pj` and `pjo`'
+about-plugin 'quickly navigate configured paths with `pj` and `pjo`. example: "export PROJECT_PATHS=~/projects:~/work/projects"'
 
 function pj {
 about 'navigate quickly to your various project directories'

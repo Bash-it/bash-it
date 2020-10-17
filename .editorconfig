@@ -1,32 +1,15 @@
 # EditorConfig is awesome: http://EditorConfig.org
 
 [*]
-indent_style = tab
-indent_size = 4
-
-shell_variant      = bash
-binary_next_line   = true  # like -bn
-switch_case_indent = true  # like -ci
-space_redirects    = true  # like -sr
-keep_padding       = true  # like -kp
-end_of_line        = lf
-charset            = utf-8
+indent_style = space
+indent_size = 2
+end_of_line = lf
+charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
 
 [*.md]
 trim_trailing_whitespace = false
 
-[*.*sh]
+[.git*]
 indent_style = tab
-indent_size = 4
-
-shell_variant      = bash
-binary_next_line   = true  # like -bn
-switch_case_indent = true  # like -ci
-space_redirects    = true  # like -sr
-keep_padding       = true  # like -kp
-end_of_line        = lf
-charset            = utf-8
-trim_trailing_whitespace = true
-insert_final_newline = true
