@@ -45,7 +45,7 @@ alias reload_plugins="$(_make_reload_alias plugin plugins)"
 bash-it ()
 {
     about 'Bash-it help and maintenance'
-    param '1: verb [one of: help | show | enable | disable | migrate | update | search | version | reload | doctor ] '
+    param '1: verb [one of: help | show | enable | disable | migrate | update | search | version | reload | restart | doctor ] '
     param '2: component type [one of: alias(es) | completion(s) | plugin(s) ] or search term(s)'
     param '3: specific component [optional]'
     example '$ bash-it show plugins'
@@ -57,6 +57,7 @@ bash-it ()
     example '$ bash-it search [-|@]term1 [-|@]term2 ... [ -e/--enable ] [ -d/--disable ] [ -r/--refresh ] [ -c/--no-color ]'
     example '$ bash-it version'
     example '$ bash-it reload'
+    example '$ bash-it restart'
     example '$ bash-it doctor errors|warnings|all'
     typeset verb=${1:-}
     shift
@@ -79,11 +80,13 @@ bash-it ()
         _bash-it-search $component "$@"
         return;;
       update)
-        func=_bash-it_update;;
+        func=_bash-it_update-$component;;
       migrate)
         func=_bash-it-migrate;;
       version)
         func=_bash-it-version;;
+      restart)
+        func=_bash-it-restart;;
       reload)
         func=_bash-it-reload;;
       *)
@@ -114,6 +117,10 @@ bash-it ()
         do
             $func $arg
         done
+
+        if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
+          _bash-it-reload
+        fi
     else
         $func "$@"
     fi
@@ -151,60 +158,127 @@ _bash-it-plugins ()
     _bash-it-describe "plugins" "a" "plugin" "Plugin"
 }
 
-_bash-it_update() {
-  _about 'updates Bash-it'
+_bash-it_update-dev() {
+  _about 'updates Bash-it to the latest master'
   _group 'lib'
 
+  _bash-it_update- dev "$@"
+}
+
+_bash-it_update-stable() {
+  _about 'updates Bash-it to the latest tag'
+  _group 'lib'
+
+  _bash-it_update- stable "$@"
+}
+
+_bash-it_pull_and_update_inner() {
+  git checkout "$1" &> /dev/null
+  if [[ $? -eq 0 ]]; then
+    echo "Bash-it successfully updated."
+    echo ""
+    echo "Migrating your installation to the latest $2 version now..."
+    _bash-it-migrate
+    echo ""
+    echo "All done, enjoy!"
+    bash-it reload
+  else
+    echo "Error updating Bash-it, please, check if your Bash-it installation folder (${BASH_IT}) is clean."
+  fi
+}
+
+_bash-it_update-() {
+  _about 'updates Bash-it'
+  _param '1: What kind of update to do (stable|dev)'
+  _group 'lib'
+
+  declare silent
+  for word in $@; do
+    if [[ ${word} == "--silent" || ${word} == "-s" ]]; then
+      silent=true
+    fi
+  done
   local old_pwd="${PWD}"
 
   cd "${BASH_IT}" || return
 
-  if [ -z $BASH_IT_REMOTE ]; then
+  if [ -z "$BASH_IT_REMOTE" ]; then
     BASH_IT_REMOTE="origin"
   fi
 
-  git fetch &> /dev/null
+  git fetch $BASH_IT_REMOTE --tags &> /dev/null
 
+  if [ -z "$BASH_IT_DEVELOPMENT_BRANCH" ]; then
+    BASH_IT_DEVELOPMENT_BRANCH="master"
+  fi
+  # Defaults to stable update
+  if [ -z "$1" ] || [ "$1" == "stable" ]; then
+    version="stable"
+    TARGET=$(git describe --tags "$(git rev-list --tags --max-count=1)" 2> /dev/null)
+
+    if [[ -z "$TARGET" ]]; then
+      echo "Can not find tags, so can not update to latest stable version..."
+      return
+    fi
+  else
+    version="dev"
+    TARGET=${BASH_IT_REMOTE}/${BASH_IT_DEVELOPMENT_BRANCH}
+  fi
+
+  declare revision
+  revision="HEAD..${TARGET}"
   declare status
-  status="$(git rev-list master..${BASH_IT_REMOTE}/master 2> /dev/null)"
+  status="$(git rev-list ${revision} 2> /dev/null)"
+  declare revert
+
+  if [[ -z "${status}" && ${version} == "stable" ]]; then
+    revision="${TARGET}..HEAD"
+    status="$(git rev-list ${revision} 2> /dev/null)"
+    revert=true
+  fi
 
   if [[ -n "${status}" ]]; then
+    if [[ $revert ]]; then
+      echo "Your version is a more recent development version ($(git log -1 --format=%h HEAD))"
+      echo "You can continue in order to revert and update to the latest stable version"
+      echo ""
+      log_color="%Cred"
+    fi
 
-    for i in $(git rev-list --merges --first-parent master..${BASH_IT_REMOTE}); do
+    for i in $(git rev-list --merges --first-parent ${revision}); do
       num_of_lines=$(git log -1 --format=%B $i | awk 'NF' | wc -l)
       if [ $num_of_lines -eq 1 ]; then
         description="%s"
       else
         description="%b"
       fi
-      git log --format="%h: $description (%an)" -1 $i
+      git log --format="${log_color}%h: $description (%an)" -1 $i
     done
     echo ""
-    read -e -n 1 -p "Would you like to update to $(git log -1 --format=%h origin/master)? [Y/n] " RESP
-    case $RESP in
-      [yY]|"")
-        git pull --rebase &> /dev/null
-        if [[ $? -eq 0 ]]; then
-          echo "Bash-it successfully updated."
-          echo ""
-          echo "Migrating your installation to the latest version now..."
-          _bash-it-migrate
-          echo ""
-          echo "All done, enjoy!"
-          bash-it reload
-        else
-          echo "Error updating Bash-it, please, check if your Bash-it installation folder (${BASH_IT}) is clean."
-        fi
-        ;;
-      [nN])
-        echo "Not upgrading…"
-        ;;
-      *)
-        echo -e "\033[91mPlease choose y or n.\033[m"
-        ;;
-      esac
+
+    if [[ $silent ]]; then
+      echo "Updating to ${TARGET}($(git log -1 --format=%h "${TARGET}"))..."
+      _bash-it_pull_and_update_inner $TARGET $version
+    else
+      read -e -n 1 -p "Would you like to update to ${TARGET}($(git log -1 --format=%h "${TARGET}"))? [Y/n] " RESP
+      case $RESP in
+        [yY]|"")
+          _bash-it_pull_and_update_inner $TARGET $version
+          ;;
+        [nN])
+          echo "Not updating…"
+          ;;
+        *)
+          echo -e "\033[91mPlease choose y or n.\033[m"
+          ;;
+        esac
+    fi
   else
-    echo "Bash-it is up to date, nothing to do!"
+    if [[ ${version} == "stable" ]]; then
+      echo "You're on the latest stable version. If you want to check out the latest 'dev' version, please run \"bash-it update dev\""
+    else
+      echo "Bash-it is up to date, nothing to do!"
+    fi
   fi
   cd "${old_pwd}" &> /dev/null || return
 }
@@ -238,6 +312,10 @@ _bash-it-migrate() {
       $enable_func $component_name
     done
   done
+
+  if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
+    _bash-it-reload
+  fi
 
   if [ "$migrated_something" = "true" ]; then
     echo ""
@@ -304,6 +382,23 @@ _bash-it-doctor-() {
   _group 'lib'
 
   _bash-it-doctor-all
+}
+
+_bash-it-restart() {
+  _about 'restarts the shell in order to fully reload it'
+  _group 'lib'
+
+  saved_pwd=$(pwd)
+
+  case $OSTYPE in
+    darwin*)
+      init_file=.bash_profile
+      ;;
+    *)
+      init_file=.bashrc
+      ;;
+  esac
+  exec "${0/-/}" --rcfile <(echo "source \"$HOME/$init_file\"; cd \"$saved_pwd\"")
 }
 
 _bash-it-reload() {
@@ -455,10 +550,6 @@ _disable-thing ()
 
     _bash-it-clean-component-cache "${file_type}"
 
-    if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
-        exec ${0/-/}
-    fi
-
     printf '%s\n' "$file_entity disabled."
 }
 
@@ -554,10 +645,6 @@ _enable-thing ()
     fi
 
     _bash-it-clean-component-cache "${file_type}"
-
-    if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
-        exec ${0/-/}
-    fi
 
     printf '%s\n' "$file_entity enabled with priority $use_load_priority."
 }

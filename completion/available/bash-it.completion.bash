@@ -65,7 +65,7 @@ _bash-it-comp()
   prev="${COMP_WORDS[COMP_CWORD-1]}"
   chose_opt="${COMP_WORDS[1]}"
   file_type="${COMP_WORDS[2]}"
-  opts="disable enable help migrate reload doctor search show update version"
+  opts="disable enable help migrate reload restart doctor search show update version"
   case "${chose_opt}" in
     show)
       local show_args="aliases completions plugins"
@@ -87,7 +87,16 @@ _bash-it-comp()
       COMPREPLY=( $(compgen -W "${doctor_args}" -- ${cur}) )
       return 0
       ;;
-    migrate | reload | search | update | version)
+    update)
+      if [[ ${cur} == -* ]];then
+        local update_args="-s --silent"
+      else
+        local update_args="stable dev"
+      fi
+      COMPREPLY=( $(compgen -W "${update_args}" -- ${cur}) )
+      return 0
+      ;;
+    migrate | reload | search | version)
       return 0
       ;;
     enable | disable)
