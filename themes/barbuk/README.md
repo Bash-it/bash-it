@@ -29,6 +29,7 @@ BARBUK_GIT_BRANCH_ICON=''
 BARBUK_HG_CHAR='☿ '
 BARBUK_SVN_CHAR='⑆ '
 BARBUK_EXIT_CODE_ICON=' '
+BARBUK_COMMAND_DURATION_ICON='  '
 ```
 
 ### Customize glyphs
@@ -78,6 +79,14 @@ EOF
 chmod 400 /etc/sudoers.d/keepenv
 ```
 
+## Command duration
+
+Command duration is enabled by default and can be disabled:
+
+```bash
+export BARBUK_COMMAND_DURATION=false
+```
+
 ## Examples
 
 ### Clean
@@ -96,4 +105,11 @@ chmod 400 /etc/sudoers.d/keepenv
 
 ```bash
 user@hostname in  ~/bash-it on  master ✓ ❯
+```
+
+### Command duration
+
+```bash
+# sleep 3s
+user@hostname in  ~/bash-it on  master ✓  3s ❯
 ```
