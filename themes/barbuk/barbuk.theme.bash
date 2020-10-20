@@ -91,12 +91,12 @@ function _prompt {
 
     # Detect python venv
     if [[ -n "${CONDA_DEFAULT_ENV}" ]]; then
-        python_venv="$PYTHON_VENV_CHAR ${CONDA_DEFAULT_ENV}"
+        python_venv="$PYTHON_VENV_CHAR${CONDA_DEFAULT_ENV} "
     elif [[ -n "${VIRTUAL_ENV}" ]]; then
-        python_venv="$PYTHON_VENV_CHAR$(basename "${VIRTUAL_ENV}")"
+        python_venv="$PYTHON_VENV_CHAR$(basename "${VIRTUAL_ENV}") "
     fi
 
-    PS1="\\n${ssh_info} ${python_venv} ${purple}$(scm_char)${dir_color}\\w${normal}$(scm_prompt_info)${exit_code}"
+    PS1="\\n${ssh_info} ${purple}$(scm_char)${python_venv}${dir_color}\\w${normal}$(scm_prompt_info)${exit_code}"
 
     [[ ${#PS1} -gt $((COLUMNS*3)) ]] && wrap_char="\\n"
     PS1="${PS1}${wrap_char}❯${normal} "
