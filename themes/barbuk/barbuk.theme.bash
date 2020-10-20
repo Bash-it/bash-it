@@ -10,10 +10,15 @@ SCM_GIT_CHAR_ICON_BRANCH=${BARBUK_GIT_BRANCH_ICON:=''}
 SCM_HG_CHAR=${BARBUK_HG_CHAR:='☿ '}
 SCM_SVN_CHAR=${BARBUK_SVN_CHAR:='⑆ '}
 EXIT_CODE_ICON=${BARBUK_EXIT_CODE_ICON:=' '}
+COMMAND_DURATION_ICON=${BARBUK_COMMAND_DURATION_ICON:='  '}
 
 # Ssh user and hostname display
 SSH_INFO=${BARBUK_SSH_INFO:=true}
 HOST_INFO=${BARBUK_HOST_INFO:=long}
+
+# Command duration
+COMMAND_DURATION=${BARBUK_COMMAND_DURATION:=true}
+COMMAND_DURATION_FILE="/tmp/bashit_theme_execution_$$"
 
 # Bash-it default glyphs customization
 SCM_NONE_CHAR=
@@ -65,8 +70,50 @@ function _exit-code {
     fi
 }
 
+function _command_duration {
+    local command_duration command_start current_time="$1"
+
+    if [ "$COMMAND_DURATION" != true ]; then
+        return
+    fi
+
+    if [[ -f "$COMMAND_DURATION_FILE" ]]; then
+        command_start=$(< "$COMMAND_DURATION_FILE")
+        command_duration=$(( current_time - command_start ))
+        command rm "$COMMAND_DURATION_FILE"
+    else
+        command_duration=0
+    fi
+
+    if [[ "$command_duration" -gt 0 ]]; then
+        timer_m=$(( command_duration / 60 ))
+        timer_s=$(( command_duration % 60 ))
+    fi
+
+    if [[ "$timer_m" -gt 0 ]]; then
+        echo "${bold_blue}$COMMAND_DURATION_ICON${normal}${timer_m}m ${timer_s}s"
+    elif [[ "$timer_s" -gt 0 ]]; then
+        echo "${bold_blue}$COMMAND_DURATION_ICON${normal}${timer_s}s"
+    fi
+}
+
+function delete_temp_file() {
+    if [[ -f "$COMMAND_DURATION_FILE" ]]; then
+        rm -f "$COMMAND_DURATION_FILE"
+    fi
+}
+
+function _pre_exec {
+    date +%s > "$COMMAND_DURATION_FILE"
+}
+
+PS0="\[\$(_pre_exec)\]"
+
 function _prompt {
-    local exit_code="$?" wrap_char=' ' dir_color=$green ssh_info='' python_venv='' host
+    local exit_code="$?" wrap_char=' ' dir_color=$green ssh_info='' python_venv='' host current_time
+    current_time=$(date +%s)
+
+    trap delete_temp_file EXIT HUP INT TRAP TERM
 
     _exit-code exit_code
     _git-uptream-remote-logo
@@ -95,7 +142,7 @@ function _prompt {
         python_venv=$(basename "${VIRTUAL_ENV}")
     fi
 
-    PS1="\\n${ssh_info} ${python_venv} ${purple}$(scm_char)${dir_color}\\w${normal}$(scm_prompt_info)${exit_code}"
+    PS1="\\n${ssh_info} ${python_venv} ${purple}$(scm_char)${dir_color}\\w${normal}$(scm_prompt_info)$(_command_duration "$current_time")${exit_code}"
 
     [[ ${#PS1} -gt $((COLUMNS*3)) ]] && wrap_char="\\n"
     PS1="${PS1}${wrap_char}❯${normal} "
