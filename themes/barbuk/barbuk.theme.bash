@@ -10,6 +10,7 @@ SCM_GIT_CHAR_ICON_BRANCH=${BARBUK_GIT_BRANCH_ICON:=''}
 SCM_HG_CHAR=${BARBUK_HG_CHAR:='☿ '}
 SCM_SVN_CHAR=${BARBUK_SVN_CHAR:='⑆ '}
 EXIT_CODE_ICON=${BARBUK_EXIT_CODE_ICON:=' '}
+PYTHON_VENV_CHAR=${BARBUK_PYTHON_VENV_CHAR:=' '}
 
 # Ssh user and hostname display
 SSH_INFO=${BARBUK_SSH_INFO:=true}
@@ -90,12 +91,12 @@ function _prompt {
 
     # Detect python venv
     if [[ -n "${CONDA_DEFAULT_ENV}" ]]; then
-        python_venv="${CONDA_DEFAULT_ENV}"
+        python_venv="$PYTHON_VENV_CHAR${CONDA_DEFAULT_ENV} "
     elif [[ -n "${VIRTUAL_ENV}" ]]; then
-        python_venv=$(basename "${VIRTUAL_ENV}")
+        python_venv="$PYTHON_VENV_CHAR$(basename "${VIRTUAL_ENV}") "
     fi
 
-    PS1="\\n${ssh_info} ${python_venv} ${purple}$(scm_char)${dir_color}\\w${normal}$(scm_prompt_info)${exit_code}"
+    PS1="\\n${ssh_info} ${purple}$(scm_char)${python_venv}${dir_color}\\w${normal}$(scm_prompt_info)${exit_code}"
 
     [[ ${#PS1} -gt $((COLUMNS*3)) ]] && wrap_char="\\n"
     PS1="${PS1}${wrap_char}❯${normal} "
