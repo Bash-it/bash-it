@@ -26,6 +26,17 @@ function _command_exists ()
   type "$1" &> /dev/null || (_log_warning "$msg" && return 1) ;
 }
 
+function _binary_exists ()
+{
+  _about 'checks for existence of a binary'
+  _param '1: binary to check'
+  _param '2: (optional) log message to include when binary not found'
+  _example '$ _binary_exists ls && echo exists'
+  _group 'lib'
+  local msg="${2:-Binary '$1' does not exist!}"
+  type -P "$1" &> /dev/null || (_log_warning "$msg" && return 1) ;
+}
+
 function _make_reload_alias() {
   echo "source \${BASH_IT}/scripts/reloader.bash ${1} ${2}"
 }
