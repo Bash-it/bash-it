@@ -39,6 +39,26 @@ function local_setup {
   assert_failure
 }
 
+@test "helpers: _binary_exists function exists" {
+  run type -a _binary_exists &> /dev/null
+  assert_success
+}
+
+@test "helpers: _binary_exists function positive test ls" {
+  run _binary_exists ls
+  assert_success
+}
+
+@test "helpers: _binary_exists function negative test function" {
+  run _binary_exists _binary_exists
+  assert_failure
+}
+
+@test "helpers: _binary_exists function negative test" {
+  run _binary_exists __addfkds_dfdsjdf
+  assert_failure
+}
+
 @test "helpers: bash-it help aliases ag" {
   run bash-it help aliases "ag"
   assert_line -n 0 "ag='ag --smart-case --pager=\"less -MIRFX'"
