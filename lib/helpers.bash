@@ -91,7 +91,7 @@ bash-it ()
         _bash-it-search $component "$@"
         return;;
       update)
-        func=_bash-it_update-$component;;
+        func=_bash-it-update-$component;;
       migrate)
         func=_bash-it-migrate;;
       version)
@@ -169,18 +169,18 @@ _bash-it-plugins ()
     _bash-it-describe "plugins" "a" "plugin" "Plugin"
 }
 
-_bash-it_update-dev() {
+_bash-it-update-dev() {
   _about 'updates Bash-it to the latest master'
   _group 'lib'
 
-  _bash-it_update- dev "$@"
+  _bash-it-update- dev "$@"
 }
 
-_bash-it_update-stable() {
+_bash-it-update-stable() {
   _about 'updates Bash-it to the latest tag'
   _group 'lib'
 
-  _bash-it_update- stable "$@"
+  _bash-it-update- stable "$@"
 }
 
 _bash-it_pull_and_update_inner() {
@@ -198,7 +198,7 @@ _bash-it_pull_and_update_inner() {
   fi
 }
 
-_bash-it_update-() {
+_bash-it-update-() {
   _about 'updates Bash-it'
   _param '1: What kind of update to do (stable|dev)'
   _group 'lib'
