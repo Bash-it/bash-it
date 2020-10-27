@@ -347,12 +347,22 @@ _bash-it-version() {
   BASH_IT_GIT_REMOTE=$(git remote get-url $BASH_IT_REMOTE)
   BASH_IT_GIT_URL=${BASH_IT_GIT_REMOTE%.git}
 
-  BASH_IT_GIT_VERSION_INFO="$(git log --pretty=format:'%h on %aI' -n 1)"
-  BASH_IT_GIT_SHA=${BASH_IT_GIT_VERSION_INFO%% *}
+  current_tag=$(git describe --exact-match --tags 2> /dev/null)
 
-  echo "Current git SHA: $BASH_IT_GIT_VERSION_INFO"
-  echo "$BASH_IT_GIT_URL/commit/$BASH_IT_GIT_SHA"
-  echo "Compare to latest: $BASH_IT_GIT_URL/compare/$BASH_IT_GIT_SHA...master"
+  if [[ -z $current_tag ]]; then
+    BASH_IT_GIT_VERSION_INFO="$(git log --pretty=format:'%h on %aI' -n 1)"
+    TARGET=${BASH_IT_GIT_VERSION_INFO%% *}
+    echo "Version type: dev"
+    echo "Current git SHA: $BASH_IT_GIT_VERSION_INFO"
+    echo "Commit info: $BASH_IT_GIT_URL/commit/$TARGET"
+  else
+    TARGET=$current_tag
+    echo "Version type: stable"
+    echo "Current tag: $current_tag"
+    echo "Tag information: $BASH_IT_GIT_URL/releases/tag/$current_tag"
+  fi
+
+  echo "Compare to latest: $BASH_IT_GIT_URL/compare/$TARGET...master"
 
   cd - &> /dev/null || return
 }
