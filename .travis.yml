@@ -22,6 +22,15 @@ cache:
 
 jobs:
   include:
+  - language: python
+    python: 3.8
+    name: docs
+    dist: bionic
+    install:
+      pip3 install -r docs/requirements.txt;
+    script:
+      sphinx-build -W -b html docs docs/_build/html;
+
   - language: go
     go: "1.14"
     name: pre-commit lint
