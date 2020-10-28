@@ -21,8 +21,10 @@ Stop polluting your ``~/bin`` directory and your ``.bashrc`` file, fork/clone Ba
    commands/index
    custom
    themes
+   themes-list/index
    vcs_user
    misc
+   troubleshooting
    uninstalling
 
 
