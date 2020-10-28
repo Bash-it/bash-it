@@ -13,4 +13,3 @@ alias tgva='terragrunt validate-all'
 alias tgpa='terragrunt plan-all'
 alias tgaa='terragrunt apply-all'
 alias tgda='terragrunt destroy-all'
-
