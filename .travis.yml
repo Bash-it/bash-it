@@ -24,7 +24,7 @@ jobs:
   include:
   - language: go
     go: "1.14"
-    name: Ubuntu 18.04
+    name: pre-commit lint
     dist: bionic
     sudo: required
     before_script:
