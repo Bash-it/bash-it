@@ -3,10 +3,20 @@
 List of Themes
 ==============
 
-Below is a list of most of the themes (with screenshots) that `bash-it <https://github.com/Bash-it/bash-it/>`_ ships with.
+Below is a list of most of the themes (with screenshots) and their documentation that `bash-it <https://github.com/Bash-it/bash-it/>`_ ships with.
 
-Alphabetical List:
-------------------
+.. note::
+  Not all themes have documentation!
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Documentation of Themes
+   :glob:
+
+   *
+
+Alphabetical Screenshots List
+-----------------------------
 
 Bakke
 ^^^^^
@@ -303,6 +313,8 @@ n0Qorg
 
 
 ----
+
+.. _nwinkler_image:
 
 NWinkler
 ^^^^^^^^
