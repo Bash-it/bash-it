@@ -9,4 +9,4 @@ if [ -z "$TODOTXT_DEFAULT_ACTION" ]; then
   export TODOTXT_DEFAULT_ACTION=ls
 fi
 
-alias t='todo.sh'
+alias t="$TODO"
