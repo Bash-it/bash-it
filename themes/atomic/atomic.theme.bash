@@ -73,24 +73,24 @@ ____atomic_top() {
   _TOP_RIGHT=""
   __TOP_RIGHT_LEN=0
   __SEG_AT_RIGHT=0
-  
+
   for seg in ${___ATOMIC_TOP_LEFT}; do
     info="$(___atomic_prompt_"${seg}")"
     [ -n "${info}" ] && ____atomic_top_left_parse "${info}"
   done
-  
+
   ___cursor_right="\e[500C"
   _TOP_LEFT+="${___cursor_right}"
-  
+
   for seg in ${___ATOMIC_TOP_RIGHT}; do
     info="$(___atomic_prompt_"${seg}")"
     [ -n "${info}" ] && ____atomic_top_right_parse "${info}"
   done
-  
+
   [ $__TOP_RIGHT_LEN -gt 0 ] && __TOP_RIGHT_LEN=$(( __TOP_RIGHT_LEN - 0 ))
   ___cursor_adjust="\e[${__TOP_RIGHT_LEN}D"
   _TOP_LEFT+="${___cursor_adjust}"
-  
+
   printf "%s%s" "${_TOP_LEFT}" "${_TOP_RIGHT}"
 }
 
@@ -111,7 +111,7 @@ ___atomic_prompt_user_info() {
   color=$white
   box="${normal}${LineA}\$([[ \$? != 0 ]] && echo \"${BIWhite}[${IRed}${SX}${BIWhite}]${normal}${Line}\")${Line}${BIWhite}[|${BIWhite}]${normal}${Line}"
   info="${IYellow}\u${IRed}@${IGreen}\h"
-  
+
   printf "%s|%s|%s|%s" "${color}" "${info}" "${white}" "${box}"
 }
 
@@ -234,7 +234,7 @@ _atomic_completion() {
       return 0
     ;;
   esac
-  
+
   COMPREPLY=( $(compgen -W "${actions}" -- "${cur}") )
   return 0
 }
@@ -312,7 +312,7 @@ __atomic_ps2() {
 
 _atomic_prompt() {
   exitcode="$?"
-  
+
   PS1="$(__atomic_ps1)"
   PS2="$(__atomic_ps2)"
 }

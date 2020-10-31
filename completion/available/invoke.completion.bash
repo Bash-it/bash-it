@@ -28,4 +28,3 @@ _complete_invoke() {
 # * -o default: when function generates no results, use filenames.
 # * positional args: program names to complete for.
 complete -F _complete_invoke -o default invoke inv
-

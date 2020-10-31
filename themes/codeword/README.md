@@ -4,7 +4,7 @@
 Minimal theme overrides from bash_it base theming
 
 
-## `user@host:path[virt-env][scm] $` 
+## `user@host:path[virt-env][scm] $`
 Breakdown of the segments:
 
 - **user@host:path** - *convienient for LAN based `ssh` and `scp` tasks*

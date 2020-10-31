@@ -26,4 +26,3 @@ Here it is in action:
 ## Usage Scenario
 
 This theme is especially useful when connecting to many different machines and switching between them often. Yes, the hostname *is* present in the prompt. But I argue that it's a lot faster to get a "feel" of what machine you are currently on because of the custom colors on that machine's prompt than by reading the hostname.
-
