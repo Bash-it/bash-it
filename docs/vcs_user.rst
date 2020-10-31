@@ -28,6 +28,8 @@ It is possible for themes to ignore the ``SCM_CHECK`` flag and query specific ve
 For example, themes that use functions like ``git_prompt_vars`` skip the ``SCM_CHECK`` flag to retrieve and display git prompt information.
 If you turned version control checking off and you still see version control information within your prompt, then functions like ``git_prompt_vars`` are most likely the reason why.
 
+.. _git_prompt:
+
 Git prompt
 ^^^^^^^^^^
 
