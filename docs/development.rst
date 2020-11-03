@@ -96,9 +96,10 @@ For the full use of the tool, you may need to install also other third-party too
 Running pre-commit manually
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-| Once configured, pre-commit will auto-run against staged files as part
+Once configured, pre-commit will auto-run against staged files as part
 of the commit process.
-| You can also run pre-commit manually to check staged files without
+
+You can also run pre-commit manually to check staged files without
 having to initiate a commit:
 
 ::
