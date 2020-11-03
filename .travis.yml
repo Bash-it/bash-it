@@ -40,7 +40,7 @@ jobs:
       GO111MODULE=on go get mvdan.cc/sh/v3/cmd/shfmt;
       curl https://pre-commit.com/install-local.py | python3 -
     script:
-      pre-commit run --files `cat clean_files.txt`;
+      ./lint_clean_files.sh;
 
   - <<: *native_job
     name: Ubuntu 16.04
