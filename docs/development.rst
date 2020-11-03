@@ -116,11 +116,13 @@ the pre-commit script in the following manner:
 
     BASH_IT='' pre-commit
 
-| Doing this will help the schellcheck checker identify source includes
+Doing this will help the schellcheck checker identify source includes
 within your scripts that require a ``shellcheck sourc=`` directive.
-| Although not vital, these issues are likely to come up later within
+
+Although not vital, these issues are likely to come up later within
 the CI pipeline.
-| Catching and fixing them before creating a PR could save some time.
+
+Catching and fixing them before creating a PR could save some time.
 
 For more information:
 
