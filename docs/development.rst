@@ -94,7 +94,7 @@ For the full use of the tool, you may need to install also other third-party too
 `shellcheck <https://github.com/koalaman/shellcheck/>`_ and `shfmt <https://github.com/mvdan/sh>`_.
 
 Running pre-commit manually
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 | Once configured, pre-commit will auto-run against staged files as part
 of the commit process.
