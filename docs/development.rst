@@ -92,3 +92,36 @@ This file configures the behavior of the a pre-commit hook based on `the Pre-Com
 installing it (with pip, brew or other tools) then run ``pre-commit install`` in the repo's root to activate the hook.
 For the full use of the tool, you may need to install also other third-party tools, such as
 `shellcheck <https://github.com/koalaman/shellcheck/>`_ and `shfmt <https://github.com/mvdan/sh>`_.
+
+Running pre-commit manually
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+| Once configured, pre-commit will auto-run against staged files as part
+of the commit process.
+| You can also run pre-commit manually to check staged files without
+having to initiate a commit:
+
+::
+
+    $ pre-commit
+
+shellcheck and $BASH\_IT variable
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When doing local development within a bash-it shell, it is best to run
+the pre-commit script in the following manner:
+
+::
+
+    BASH_IT='' pre-commit
+
+| Doing this will help the schellcheck checker identify source includes
+within your scripts that require a ``shellcheck sourc=`` directive.
+| Although not vital, these issues are likely to come up later within
+the CI pipeline.
+| Catching and fixing them before creating a PR could save some time.
+
+For more information:
+
+-  `Shellcheck SC1090 - Can't follow non-constant
+   source <https://www.shellcheck.net/wiki/SC1090>`__
