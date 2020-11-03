@@ -25,3 +25,4 @@ repos:
     hooks:
       # - id: forbid-crlf
       - id: remove-crlf
+        exclude: ".bat$"
