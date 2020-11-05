@@ -13,4 +13,11 @@ mapfile -t FILES < <(
 		| xargs -n1 -I{} find "{}" -type f
 )
 
+# We clear the BASH_IT variable to help the shellcheck checker
+# identify source includes within our scripts that require a
+# 'source' directive.  For more information, see:
+#
+#    "Shellcheck SC1090 - Can't follow non-constant source"
+#     https://www.shellcheck.net/wiki/SC1090
+#
 BASH_IT='' pre-commit run --files "${FILES[@]}"
