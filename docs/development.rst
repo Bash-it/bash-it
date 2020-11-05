@@ -116,8 +116,8 @@ the pre-commit script in the following manner:
 
     BASH_IT='' pre-commit
 
-Doing this will help the schellcheck checker identify source includes
-within your scripts that require a ``shellcheck sourc=`` directive.
+Doing this will help the shellcheck checker identify source includes
+within our scripts that require a ``source`` directive.
 
 Although not vital, these issues are likely to come up later within
 the CI pipeline.
@@ -127,4 +127,4 @@ Catching and fixing them before creating a PR could save some time.
 For more information:
 
 -  `Shellcheck SC1090 - Can't follow non-constant
-   source <https://www.shellcheck.net/wiki/SC1090>`__
+   source <https://www.shellcheck.net/wiki/SC1090>`_
