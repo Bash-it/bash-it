@@ -1,2 +1,29 @@
+#######################################################################
+# Allow-list of files to be lint-checked by CI
+#
+# Directory Suport
+#   Directory references are allowed within the file, ie:
+#
+#       themes/powerline
+#
+#   All files under the referenced directory will be checked
+#
+# Checking Files Locally
+#   You can manually invoke the check via:
+#
+#       lint_clean_files.sh
+#
+
+# root directories
+#
+docs
+
+# root files
+#
+.gitattributes
 lint_clean_files.sh
-themes/90210/90210.theme.bash
+
+# themes
+#
+themes/90210
+themes/powerline
