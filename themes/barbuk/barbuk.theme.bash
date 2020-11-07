@@ -106,3 +106,4 @@ function _prompt {
 }
 
 safe_append_prompt_command _prompt
+
