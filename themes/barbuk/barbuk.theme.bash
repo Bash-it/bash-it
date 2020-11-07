@@ -69,7 +69,7 @@ function _exit-code {
 
 function _prompt {
     local exit_code="$?" wrap_char=' ' dir_color=$green ssh_info='' python_venv='' host command_duration
-    
+
     command_duration=$(_command_duration)
 
     _exit-code exit_code
@@ -106,4 +106,3 @@ function _prompt {
 }
 
 safe_append_prompt_command _prompt
-
