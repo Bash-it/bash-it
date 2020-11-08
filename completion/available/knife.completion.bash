@@ -98,7 +98,8 @@ _KAC_clean_cache()
 }
 
 # perform a cache cleaning when loading this file
-_KAC_clean_cache
+# On big systems this could baloon up to a 30 second run or more, so not enabling by default.
+[[ "${KNIFE_CACHE_CLEAN}" ]] && _KAC_clean_cache
 
 #####################################
 ### End of cache helper functions ###
