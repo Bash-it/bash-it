@@ -30,7 +30,6 @@ BARBUK_HG_CHAR='☿ '
 BARBUK_SVN_CHAR='⑆ '
 BARBUK_EXIT_CODE_ICON=' '
 BARBUK_PYTHON_VENV_CHAR=' '
-BARBUK_COMMAND_DURATION_ICON='  '
 ```
 
 ### Customize glyphs
@@ -82,10 +81,11 @@ chmod 400 /etc/sudoers.d/keepenv
 
 ## Command duration
 
-Command duration is enabled by default and can be disabled:
+Command duration require the the cmd-duration plugin.
+You can enable it with:
 
 ```bash
-export BARBUK_COMMAND_DURATION=false
+bash-it enable plugin cmd-duration
 ```
 
 ## Examples
