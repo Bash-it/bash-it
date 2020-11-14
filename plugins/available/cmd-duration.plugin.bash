@@ -19,7 +19,7 @@ _command_duration_pre_exec() {
     date +%s > "$COMMAND_DURATION_FILE"
 }
 
-function _command_duration {
+_command_duration() {
     local command_duration command_start current_time
     current_time=$(date +%s)
 
