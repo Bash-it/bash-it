@@ -6,6 +6,7 @@ COMMAND_DURATION_TMPDIR="${TMPDIR:-/tmp}"
 COMMAND_DURATION_FILE="$COMMAND_DURATION_TMPDIR/bashit_theme_execution_$BASHPID"
 
 COMMAND_DURATION_ICON='  '
+COMMAND_DURATION_MIN_SECONDS='0'
 
 trap _command_duration_delete_temp_file EXIT HUP INT TERM
 
@@ -47,14 +48,14 @@ _command_duration() {
         command_duration=0
     fi
 
-    if [[ "$command_duration" -gt 0 ]]; then
+    if (( command_duration > 0 )); then
         minutes=$(( command_duration / 60 ))
         seconds=$(( command_duration % 60 ))
     fi
 
-    if [[ "$minutes" -gt 0 ]]; then
+    if (( minutes > 0 )); then
         printf "%s%s%s%dm%d.%01ds" "${COMMAND_DURATION_COLOR}" "$COMMAND_DURATION_ICON" "$normal" "$minutes" "$seconds" "$deciseconds"
-    elif [[ "$deciseconds" -gt 0 ]]; then
+    elif (( seconds >= COMMAND_DURATION_MIN_SECONDS )); then
         printf "%s%s%s%d.%01ds" "${COMMAND_DURATION_COLOR}" "$COMMAND_DURATION_ICON" "$normal" "$seconds" "$deciseconds"
     fi
 }
