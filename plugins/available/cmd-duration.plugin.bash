@@ -37,7 +37,7 @@ _command_duration() {
         # seconds
         command_duration=$(( current_time_seconds - command_start_sseconds ))
 
-        if [ $current_time_deciseconds -gt $command_start_deciseconds ]; then
+        if (( current_time_deciseconds >= command_start_deciseconds )); then
             deciseconds=$(( (current_time_deciseconds - command_start_deciseconds) ))
         else
             ((command_duration-=1))
