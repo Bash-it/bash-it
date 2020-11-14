@@ -16,30 +16,46 @@ _command_duration_delete_temp_file() {
 }
 
 _command_duration_pre_exec() {
-    date +%s > "$COMMAND_DURATION_FILE"
+    date +%s.%1N > "$COMMAND_DURATION_FILE"
 }
 
 _command_duration() {
     local command_duration command_start current_time
-    current_time=$(date +%s)
+    local minutes seconds deciseconds
+    local command_start_sseconds current_time_seconds command_start_deciseconds current_time_deciseconds
+    current_time=$(date +%s.%1N)
 
     if [[ -f "$COMMAND_DURATION_FILE" ]]; then
         command_start=$(< "$COMMAND_DURATION_FILE")
-        command_duration=$(( current_time - command_start ))
+        command_start_sseconds=${command_start%.*}
+        current_time_seconds=${current_time%.*}
+
+        command_start_deciseconds=$((10#${command_start#*.}))
+        current_time_deciseconds=$((10#${current_time#*.}))
+
+        # seconds
+        command_duration=$(( current_time_seconds - command_start_sseconds ))
+
+        if [ $current_time_deciseconds -gt $command_start_deciseconds ]; then
+            deciseconds=$(( (current_time_deciseconds - command_start_deciseconds) ))
+        else
+            ((command_duration-=1))
+            deciseconds=$(( 10 - ( (command_start_deciseconds - current_time_deciseconds) ) ))
+        fi
         command rm "$COMMAND_DURATION_FILE"
     else
         command_duration=0
     fi
 
     if [[ "$command_duration" -gt 0 ]]; then
-        timer_m=$(( command_duration / 60 ))
-        timer_s=$(( command_duration % 60 ))
+        minutes=$(( command_duration / 60 ))
+        seconds=$(( command_duration % 60 ))
     fi
 
-    if [[ "$timer_m" -gt 0 ]]; then
-        echo "${COMMAND_DURATION_COLOR}$COMMAND_DURATION_ICON$normal${timer_m}m ${timer_s}s"
-    elif [[ "$timer_s" -gt 0 ]]; then
-        echo "${COMMAND_DURATION_COLOR}$COMMAND_DURATION_ICON$normal${timer_s}s"
+    if [[ "$minutes" -gt 0 ]]; then
+        printf "%s%s%s%dm%d.%01ds" "${COMMAND_DURATION_COLOR}" "$COMMAND_DURATION_ICON" "$normal" "$minutes" "$seconds" "$deciseconds"
+    elif [[ "$deciseconds" -gt 0 ]]; then
+        printf "%s%s%s%d.%01ds" "${COMMAND_DURATION_COLOR}" "$COMMAND_DURATION_ICON" "$normal" "$seconds" "$deciseconds"
     fi
 }
 

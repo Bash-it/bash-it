@@ -102,8 +102,7 @@ function _prompt {
     fi
 
     PS1="\\n${ssh_info} ${purple}$(scm_char)${python_venv}${dir_color}\\w${normal}$(scm_prompt_info)${command_duration}${exit_code}"
-
-    [[ ${#PS1} -gt $((COLUMNS*3)) ]] && wrap_char="\\n"
+    [[ ${#PS1} -gt $((COLUMNS*2)) ]] && wrap_char="\\n"
     PS1="${PS1}${wrap_char}❯${normal} "
 }
 
