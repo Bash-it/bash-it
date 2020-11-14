@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ -z "$BASHIT_COMMAND_DURATION" ] || [ "$BASHIT_COMMAND_DURATION" != true ]; then
+if [ -z "$BASH_IT_COMMAND_DURATION" ] || [ "$BASH_IT_COMMAND_DURATION" != true ]; then
     return
 fi
 
