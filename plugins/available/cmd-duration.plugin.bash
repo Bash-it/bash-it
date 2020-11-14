@@ -43,4 +43,8 @@ _command_duration() {
     fi
 }
 
-PS0="\[\$(_command_duration_pre_exec)\]"
+preexec() (
+    _command_duration_pre_exec
+)
+
+preexec_install
