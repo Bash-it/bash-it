@@ -1,5 +1,8 @@
-cite about-plugin
-about-plugin 'keep track of the moment when the last command started, to be able to compute its duration'
+#!/usr/bin/env bash
+
+if [ -z "$BASHIT_COMMAND_DURATION" ] || [ "$BASHIT_COMMAND_DURATION" != true ]; then
+    return
+fi
 
 # Define tmp dir and file
 COMMAND_DURATION_TMPDIR="${TMPDIR:-/tmp}"

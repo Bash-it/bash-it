@@ -74,6 +74,9 @@ if [[ ! -z "${BASH_IT_THEME}" ]]; then
   BASH_IT_LOG_PREFIX="themes: p4helpers: "
   # shellcheck source=./themes/p4helpers.theme.bash
   source "${BASH_IT}/themes/p4helpers.theme.bash"
+  BASH_IT_LOG_PREFIX="themes: command_duration: "
+  # shellcheck source=./themes/command_duration.theme.bash
+  source "${BASH_IT}/themes/command_duration.theme.bash"
   BASH_IT_LOG_PREFIX="themes: base: "
   # shellcheck source=./themes/base.theme.bash
   source "${BASH_IT}/themes/base.theme.bash"
