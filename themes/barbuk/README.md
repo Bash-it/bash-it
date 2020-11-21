@@ -30,6 +30,7 @@ BARBUK_HG_CHAR='☿ '
 BARBUK_SVN_CHAR='⑆ '
 BARBUK_EXIT_CODE_ICON=' '
 BARBUK_PYTHON_VENV_CHAR=' '
+BARBUK_COMMAND_DURATION_ICON='  '
 ```
 
 ### Customize glyphs
@@ -81,11 +82,21 @@ chmod 400 /etc/sudoers.d/keepenv
 
 ## Command duration
 
-Command duration require the the cmd-duration plugin.
-You can enable it with:
+Command duration reports the duration of the last command.
+
+### Usage
+
+Command duration can be enabled by exporting `BASH_IT_COMMAND_DURATION`:
 
 ```bash
-bash-it enable plugin cmd-duration
+export BASH_IT_COMMAND_DURATION=true
+```
+
+All duration of one second and more are displayed.
+You can customize the minimum time in seconds before command duration is displayed in your `.bashrc`:
+
+```bash
+export COMMAND_DURATION_MIN_SECONDS=5
 ```
 
 ## Examples
@@ -118,5 +129,5 @@ user@hostname in  ~/bash-it on  master ✓ ❯
 
 ```bash
 # sleep 3s
-user@hostname in  ~/bash-it on  master ✓  3s ❯
+user@hostname in  ~/bash-it on  master ✓  3.2s ❯
 ```
