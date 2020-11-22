@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
 if [ -z "$BASH_IT_COMMAND_DURATION" ] || [ "$BASH_IT_COMMAND_DURATION" != true ]; then
+    _command_duration() {
+        echo -n
+    }
     return
 fi
 
