@@ -235,9 +235,15 @@ function __powerline_last_status_prompt {
   [[ "$1" -ne 0 ]] && echo "${1}|${LAST_STATUS_THEME_PROMPT_COLOR}"
 }
 
+function __powerline_duration_prompt {
+  [[ ${#command_duration} -gt 0 ]] && echo "${command_duration}|${LAST_STATUS_THEME_PROMPT_COLOR}"
+}
+
 function __powerline_prompt_command {
   local last_status="$?" ## always the first
   local separator_char="${POWERLINE_PROMPT_CHAR}"
+
+  command_duration=$(_command_duration)
 
   LEFT_PROMPT=""
   SEGMENTS_AT_LEFT=0
