@@ -60,7 +60,7 @@ _command_duration() {
     fi
 
     if (( minutes > 0 )); then
-        printf "%s%s%dm%d.%01ds" "$COMMAND_DURATION_ICON" "$COMMAND_DURATION_COLOR" "$minutes" "$seconds" "$deciseconds"
+        printf "%s%s%dm %ds" "$COMMAND_DURATION_ICON" "$COMMAND_DURATION_COLOR" "$minutes" "$seconds"
     elif (( seconds >= COMMAND_DURATION_MIN_SECONDS )); then
         printf "%s%s%d.%01ds" "$COMMAND_DURATION_ICON" "$COMMAND_DURATION_COLOR" "$seconds" "$deciseconds"
     fi
