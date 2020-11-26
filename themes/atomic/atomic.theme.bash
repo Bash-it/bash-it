@@ -117,7 +117,7 @@ ___atomic_prompt_user_info() {
 
 ___atomic_prompt_dir() {
   color=${IRed}
-  box="[|]${normal}${Line}"
+  box="[|]${normal}"
   info="\w"
   printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
 }
@@ -125,7 +125,7 @@ ___atomic_prompt_dir() {
 ___atomic_prompt_scm() {
   [ "${THEME_SHOW_SCM}" != "true" ] && return
   color=$bold_green
-  box="[${IWhite}$(scm_char)] "
+  box="${Line}[${IWhite}$(scm_char)] "
   info="$(scm_prompt_info)"
   printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
 }
