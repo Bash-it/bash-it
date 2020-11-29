@@ -176,7 +176,7 @@ function __powerline_aws_profile_prompt {
 function __powerline_in_toolbox_prompt {
   local fg_color=206
 
-  if [[ -e /run/.toolboxenv ]]; then
+  if [ -f /run/.containerenv ] && [ -f /run/.toolboxenv ]; then
     echo "${IN_TOOLBOX_THEME_PROMPT_TEXT}|${IN_TOOLBOX_THEME_PROMPT_COLOR}|${fg_color}"
   fi
 }
