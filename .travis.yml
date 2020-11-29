@@ -12,19 +12,48 @@ os: linux
 
 dist: xenial
 
+cache:
+  directories:
+  - "${HOME}/.cache/pip"
+  - "${HOME}/.cache/pre-commit"
+  - "${HOME}/.pre-commit-venv"
+  - "${HOME}/bin"
+  - /usr/lib/python3.8
+
 jobs:
+  include:
+  - language: python
+    python: 3.8
+    name: docs
+    dist: bionic
+    install:
+      pip3 install -r docs/requirements.txt;
+    script:
+      sphinx-build -W -b html docs docs/_build/html;
+
+  - language: go
+    go: "1.14"
+    name: pre-commit lint
+    dist: bionic
+    sudo: required
+    before_script:
+      GO111MODULE=on go get mvdan.cc/sh/v3/cmd/shfmt;
+      curl https://pre-commit.com/install-local.py | python3 -
+    script:
+      ./lint_clean_files.sh;
+
   - <<: *native_job
     name: Ubuntu 16.04
-  
+
   - <<: *native_job
     name: Ubuntu 18.04
     dist: bionic
-    
+
   - <<: *native_job
     name: MacOS xcode9.4
     os: osx
     osx_image: xcode9.4 # Default xcode on Travis.
-    
+
   - <<: *native_job
     name: MacOS xcode11.5
     os: osx

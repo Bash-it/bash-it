@@ -4,7 +4,7 @@
 #                                                                            |
 # Thanks to Alexander Korznikov                                                                 |
 # http://www.korznikov.com/2014/12/bash-tab-completion-for-awesome-tool.html |
-#                                                                            |        
+#                                                                            |
 # ---------------------------------------------------------------------------+
 
 if command -v sqlmap > /dev/null; then
@@ -18,7 +18,7 @@ if command -v sqlmap > /dev/null; then
         prev=$(_get_pword)
 
         case $prev in
-        
+
     # List directory content
     --tamper)
         COMPREPLY=( $( compgen -W "$tamper" -- "$cur" ) )
@@ -108,7 +108,7 @@ if command -v sqlmap > /dev/null; then
         -z --alert --answers --beep --check-waf --cleanup \
         --dependencies --disable-coloring --gpage --identify-waf \
         --mobile --page-rank --purge-output --smart \
-        --sqlmap-shell --wizard' -- "$cur" ) )     
+        --sqlmap-shell --wizard' -- "$cur" ) )
         # this removes any options from the list of completions that have
         # already been specified somewhere on the command line, as long as
         # these options can only be used once (in a word, "options", in
@@ -155,7 +155,7 @@ if command -v sqlmap > /dev/null; then
                 done
                 printf '%s ' "${COMPREPLY[@]}") <<<"${COMP_WORDS[@]}"
             ) )
-        
+
     #    else
     #        _filedir bat
         fi

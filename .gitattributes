@@ -1,2 +1,5 @@
 *.sh text eol=lf
 *.bash text eol=lf
+
+# Windows files
+*.bat text eol=crlf

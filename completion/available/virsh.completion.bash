@@ -10,7 +10,7 @@ _contain_cmd()
 {
     local e f
     local array1=($1) array2=($2)
-    
+
     for e in "${array1[@]}"
     do
         for f in "${array2[@]}"
@@ -80,7 +80,7 @@ _virsh_list_nwfilters()
     virsh -q nwfilter-list | cut -d\  -f4 | awk '{print $1}'
 }
 
-_virsh() 
+_virsh()
 {
     local cur prev cmds doms options nets pools cmds_help
     local flag_all=1 array ret a b ifaces nwfilters files

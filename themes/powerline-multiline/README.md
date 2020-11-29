@@ -66,7 +66,7 @@ The contents of both prompt sides can be "reordered", all the "segments" (every 
   and `conda` supported)
 * `ruby` - Current ruby version if using `rvm`
 * `node` - Current node version (only `nvm` is supported)
-* `scm` - Version control information, `git` 
+* `scm` - Version control information, `git`
 * `terraform` - Current terraform workspace
 * `user_info` - Current user
 * `wd` - Working directory, like `cwd` but doesn't show the full folder
