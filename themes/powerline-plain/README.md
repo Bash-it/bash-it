@@ -50,6 +50,7 @@ The contents of the prompt can be "reordered", all the "segments" (every piece o
 * `clock` - Current time in `HH:MM:SS` format
 * `cwd` - Current working directory including full folder hierarchy (c.f. `wd`)
 * `hostname` - Host name of machine
+* `in_toolbox` - Show identifier if running inside a [toolbox](https://github.com/containers/toolbox)
 * `in_vim` - Show identifier if running in `:terminal` from vim
 * `k8s_context` - Show current kubernetes context
 * `last_status` - Exit status of last run command
