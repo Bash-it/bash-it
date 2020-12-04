@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # cargo (Rust package manager) completion
+# This script is taken and modified from https://github.com/rust-lang/cargo/blob/master/src/etc/cargo.bashcomp.sh
 
 source $HOME/.cargo/env
 
