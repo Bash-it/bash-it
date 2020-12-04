@@ -1,0 +1,60 @@
+name: CI
+
+# Triggers the workflow on push or pull request events
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  bats-test:
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, ubuntu-18.04, ubuntu-16.04, macos-10.15, macos-11.0]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install greadlink
+      if: startsWith(runner.os, 'macOS')
+      run: brew install coreutils
+    - name: Test code
+      run: test/run
+
+  build-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - name: Install docs dependencies
+      run: python3 -m pip install -r docs/requirements.txt
+    - name: Build the docs
+      run: sphinx-build -W -b html docs docs/_build/html
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.14
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - name: Install shfmt
+      run: GO111MODULE=on go get mvdan.cc/sh/v3/cmd/shfmt
+    - name: Install shellcheck
+      run: brew install shellcheck
+    - name: Install pre-commit
+      run: python3 -m pip install -r test/lint-requirements.txt
+    - name: Run lint
+      run: ./lint_clean_files.sh
