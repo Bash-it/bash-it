@@ -1,3 +1,6 @@
+cite about-plugin
+about-plugin 'pip upgrade/uninstall all packages'
+
 pip-upgrade-all() {
     local outdated_packages="$(pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1)"
     if [ -z $outdated_packages ]
