@@ -31,3 +31,7 @@ themes/powerline
 # completions
 #
 completion/available/rustup.completion.bash
+
+# plugins
+#
+plugins/available/pip.plugin.bash
