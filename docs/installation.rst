@@ -19,6 +19,7 @@ The install script can take the following options:
 * ``--interactive``\ : Asks the user which aliases, completions and plugins to enable.
 * ``--silent``\ : Ask nothing and install using default settings.
 * ``--no-modify-config``\ : Do not modify the existing config file (\ ``~/.bash_profile`` or ``~/.bashrc``\ ).
+* ``--append-to-config``\ : Back up existing config file and append bash-it templates at the end.
 
 When run without the ``--interactive`` switch, Bash-it only enables a sane default set of functionality to keep your shell clean and to avoid issues with missing dependencies.
 Feel free to enable the tools you want to use after the installation.
