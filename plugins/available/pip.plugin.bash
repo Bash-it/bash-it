@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 cite about-plugin
 about-plugin 'pip upgrade/uninstall all packages'
 
