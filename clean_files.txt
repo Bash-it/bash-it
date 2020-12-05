@@ -31,3 +31,4 @@ themes/powerline
 # completions
 #
 completion/available/rustup.completion.bash
+completion/available/cargo.completion.bash
