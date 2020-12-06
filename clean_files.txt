@@ -30,5 +30,6 @@ themes/powerline
 
 # completions
 #
-completion/available/rustup.completion.bash
+completion/available/cargo.completion.bash
 completion/available/pipx.completion.bash
+completion/available/rustup.completion.bash
