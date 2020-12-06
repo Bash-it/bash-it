@@ -100,7 +100,10 @@ done
 # Custom
 BASH_IT_LOG_PREFIX="core: main: "
 _log_debug "Loading general custom files..."
+# We use globstar here
+shopt -s globstar
 CUSTOM="${BASH_IT_CUSTOM:=${BASH_IT}/custom}/*.bash ${BASH_IT_CUSTOM:=${BASH_IT}/custom}/**/*.bash"
+shopt -u globstar
 for _bash_it_config_file in $CUSTOM
 do
   if [ -e "${_bash_it_config_file}" ]; then
