@@ -171,6 +171,8 @@ elif [[ $silent ]] && ! [[ $no_modify_config ]]; then
   backup_new
 fi
 
+# Disable auto-reload in case its enabled
+export BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE=''
 # Load dependencies for enabling components
 source "$BASH_IT/lib/composure.bash"
 source "$BASH_IT/lib/utilities.bash"
