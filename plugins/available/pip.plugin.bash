@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 
 cite about-plugin
-about-plugin 'pip upgrade/uninstall all packages'
+about-plugin 'pip helper functions'
 
 pip-upgrade-all() {
+	about 'upgrades all user-installed pip packages'
+	group 'pip'
+
 	local outdated_packages="$(pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1)"
 	if [ -z "$outdated_packages" ]; then
 		echo "pip: everything is up to date."
@@ -15,6 +18,9 @@ pip-upgrade-all() {
 }
 
 pip-uninstall-all() {
+	about 'uninstalls all user-installed pip packages'
+	group 'pip'
+
 	local installed_packages="$(pip list --user --format=freeze | grep -v '^\-e' | cut -d = -f 1)"
 	if [ -z "$installed_packages" ]; then
 		echo "pip: nothing has been installed."
