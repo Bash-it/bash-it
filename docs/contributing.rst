@@ -38,8 +38,9 @@ Code Style
 ----------
 
 
-* Try to stick to the existing code style. Please don't reformat or change the syntax of existing code simply because you don't like that style.
-* Indentation is using spaces, not tabs. Most of the code is indented with 2 spaces, some with 4 spaces. Please try to stick to 2 spaces.
+* When adding new files, be sure to add them into `clean_files.txt`, which is a growing list of linted files in the project.
+* When changing existing files, consider also adding them into `clean_files.txt` and fixing the linting errors that arise.
+* Indentation is using tabs, not spaces. Most of the code is indented with 2 spaces, some with 4 spaced tabs. Please try to stick to tabs.
   If you're using an editor that supports `EditorConfig <http://EditorConfig.org>`_\ , the editor should automatically use the settings defined in Bash-it's `.editorconfig file <.editorconfig>`_.
 * When creating new functions, please use a dash ("-") to separate the words of the function's name, e.g. ``my-new-function``.
   Don't use underscores, e.g. ``my_new_function``.
