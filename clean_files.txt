@@ -27,3 +27,9 @@ lint_clean_files.sh
 #
 themes/90210
 themes/powerline
+
+# completions
+#
+completion/available/cargo.completion.bash
+completion/available/pipx.completion.bash
+completion/available/rustup.completion.bash

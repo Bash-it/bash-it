@@ -169,6 +169,12 @@ function __powerline_aws_profile_prompt() {
 	fi
 }
 
+function __powerline_in_toolbox_prompt() {
+	if [ -f /run/.containerenv ] && [ -f /run/.toolboxenv ]; then
+		echo "${IN_TOOLBOX_THEME_PROMPT_TEXT}|${IN_TOOLBOX_THEME_PROMPT_COLOR}"
+	fi
+}
+
 function __powerline_shlvl_prompt() {
 	if [[ "${SHLVL}" -gt 1 ]]; then
 		local prompt="${SHLVL_THEME_PROMPT_CHAR}"
