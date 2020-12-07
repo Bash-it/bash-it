@@ -4,7 +4,7 @@ cite about-plugin
 about-plugin 'pip helper functions'
 
 pip-upgrade-all() {
-	about 'upgrades all user-installed pip packages'
+	about 'upgrades all system- and user-installed pip packages to user home'
 	group 'pip'
 
 	local outdated_packages="$(pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1)"
