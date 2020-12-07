@@ -1,6 +1,5 @@
 # Bash-it
-
-[![Build Status](https://travis-ci.com/Bash-it/bash-it.svg?branch=master)](https://travis-ci.com/Bash-it/bash-it)
+![Build Status](https://github.com/Bash-it/bash-it/workflows/CI/badge.svg?branch=master)
 [![Join the chat at https://gitter.im/Bash-it/bash-it](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Bash-it/bash-it?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 **Bash-it** is a collection of community Bash commands and scripts for Bash 3.2+.
