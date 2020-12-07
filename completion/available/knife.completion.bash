@@ -44,20 +44,22 @@ _KAC_regen_cache() {
 	local CACHE_PATH="$_KNIFE_AUTOCOMPLETE_CACHE_DIR/$CACHE_NAME"
 	local TMP_FILE=$(mktemp "$_KAC_CACHE_TMP_DIR/$CACHE_NAME.XXXX")
 	shift 1
-	"$@" > "$TMP_FILE" 2> /dev/null
 	# discard the temp file if it's empty AND the previous command didn't exit successfully, but still mark the cache as updated
-	[[ $? != 0 ]] && [[ $(wc -l "$TMP_FILE") == 0 ]] && rm -f "$TMP_FILE" && touch "$CACHE_PATH" && return 1 \
-		|| mv -f "$TMP_FILE" "$CACHE_PATH"
+	if ! "$@" > "$TMP_FILE" 2> /dev/null; then
+		[[ $(wc -l "$TMP_FILE") == 0 ]] && rm -f "$TMP_FILE" && touch "$CACHE_PATH" && return 1
+	else
+		mv -f "$TMP_FILE" "$CACHE_PATH"
+	fi
 }
 
 # cached files can't have spaces in their names
 _KAC_get_cache_name_from_command() {
-	echo "$@" | sed 's/ /_SPACE_/g'
+	echo "${@/ /_SPACE_}"
 }
 
 # the reverse operation from the function above
 _KAC_get_command_from_cache_name() {
-	echo "$@" | sed 's/_SPACE_/ /g'
+	echo "${@/_SPACE_/ }"
 }
 
 # given a command as argument, it fetches the cache for that command if it can find it
@@ -82,7 +84,7 @@ _KAC_get_and_regen_cache() {
 _KAC_clean_cache() {
 	local FILE CMD
 	# delete all obsolete temp files, could be lingering there for any kind of crash in the caching process
-	for FILE in $(\ls "$_KAC_CACHE_TMP_DIR"); do
+	for FILE in "$_KAC_CACHE_TMP_DIR"/*; do
 		_KAC_is_file_newer_than "$FILE" "$_KNIFE_AUTOCOMPLETE_MAX_CACHE_AGE" || rm -f "$FILE"
 	done
 	# refresh really stale caches
@@ -192,8 +194,8 @@ _knife() {
 		_KAC_get_and_regen_cache "$REGEN_CMD"
 		LIST="$LIST $(cat "$_KAC_CACHE_PATH")"
 	done
+	# shellcheck disable=SC2207,SC2086
 	COMPREPLY=($(compgen -W "${LIST}" -- ${COMP_WORDS[COMP_CWORD]}))
 }
 
-#complete -f -F _knife knife
 complete -F _knife knife
