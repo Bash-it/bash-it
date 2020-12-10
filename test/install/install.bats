@@ -79,8 +79,8 @@ function local_setup {
   assert_file_exist "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE"
   assert_file_exist "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.bak"
 
-  echo "$(cat $BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE)"
+  run cat $BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE
 
   assert_line "test file content"
-  assert_line "source \"$BASH_IT\"/bash_it.sh"
+  assert_line "source \"\$BASH_IT\"/bash_it.sh"
 }
