@@ -91,7 +91,7 @@ for param in "$@"; do
 done
 
 OPTIND=1
-while getopts "hsin" opt
+while getopts "hsina" opt
 do
   case "$opt" in
   "h") show_usage; exit 0 ;;
