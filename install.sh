@@ -10,6 +10,7 @@ function show_usage() {
   echo "--silent (-s): Install default settings without prompting for input";
   echo "--interactive (-i): Interactively choose plugins"
   echo "--no-modify-config (-n): Do not modify existing config file"
+  echo "--append-to-config (-a): Keep existing config file and append bash-it templates at the end"
   exit 0;
 }
 
@@ -56,13 +57,25 @@ function load_some() {
   done
 }
 
-# Back up existing profile and create new one for bash-it
-function backup_new() {
+# Back up existing profile
+function backup() {
   test -w "$HOME/$CONFIG_FILE" &&
   cp -aL "$HOME/$CONFIG_FILE" "$HOME/$CONFIG_FILE.bak" &&
   echo -e "\033[0;32mYour original $CONFIG_FILE has been backed up to $CONFIG_FILE.bak\033[0m"
+}
+
+# Back up existing profile and create new one for bash-it
+function backup_new() {
+  backup
   sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" > "$HOME/$CONFIG_FILE"
   echo -e "\033[0;32mCopied the template $CONFIG_FILE into ~/$CONFIG_FILE, edit this file to customize bash-it\033[0m"
+}
+
+# Back up existing profile and append bash-it templates at the end
+function backup_append() {
+	backup
+	(sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" | tail -n +2) >> "$HOME/$CONFIG_FILE"
+	echo -e "\033[0;32mBash-it template has been added to your $CONFIG_FILE\033[0m"
 }
 
 for param in "$@"; do
@@ -72,18 +85,20 @@ for param in "$@"; do
     "--silent")             set -- "$@" "-s" ;;
     "--interactive")        set -- "$@" "-i" ;;
     "--no-modify-config")   set -- "$@" "-n" ;;
+    "--append-to-config")   set -- "$@" "-a" ;;
     *)                      set -- "$@" "$param"
   esac
 done
 
 OPTIND=1
-while getopts "hsin" opt
+while getopts "hsina" opt
 do
   case "$opt" in
   "h") show_usage; exit 0 ;;
   "s") silent=true ;;
   "i") interactive=true ;;
   "n") no_modify_config=true ;;
+  "a") append_to_config=true ;;
   "?") show_usage >&2; exit 1 ;;
   esac
 done
@@ -91,6 +106,11 @@ shift $(expr $OPTIND - 1)
 
 if [[ $silent ]] && [[ $interactive ]]; then
   echo -e "\033[91mOptions --silent and --interactive are mutually exclusive. Please choose one or the other.\033[m"
+  exit 1;
+fi
+
+if [[ $no_modify_config ]] && [[ $append_to_config ]]; then
+  echo -e "\033[91mOptions --no-modify-config and --append-to-config are mutually exclusive. Please choose one or the other.\033[m"
   exit 1;
 fi
 
@@ -127,16 +147,11 @@ if ! [[ $silent ]] && ! [[ $no_modify_config ]]; then
     done
   fi
 
-  while ! [ $silent ]; do
+  while ! [ $append_to_config ]; do
     read -e -n 1 -r -p "Would you like to keep your $CONFIG_FILE and append bash-it templates at the end? [y/N] " choice
     case $choice in
     [yY])
-      test -w "$HOME/$CONFIG_FILE" &&
-      cp -aL "$HOME/$CONFIG_FILE" "$HOME/$CONFIG_FILE.bak" &&
-      echo -e "\033[0;32mYour original $CONFIG_FILE has been backed up to $CONFIG_FILE.bak\033[0m"
-
-      (sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" | tail -n +2) >> "$HOME/$CONFIG_FILE"
-      echo -e "\033[0;32mBash-it template has been added to your $CONFIG_FILE\033[0m"
+      backup_append
       break
       ;;
     [nN]|"")
@@ -148,6 +163,9 @@ if ! [[ $silent ]] && ! [[ $no_modify_config ]]; then
       ;;
     esac
   done
+elif [[ $append_to_config ]]; then
+  # backup/append
+  backup_append
 elif [[ $silent ]] && ! [[ $no_modify_config ]]; then
   # backup/new by default
   backup_new
