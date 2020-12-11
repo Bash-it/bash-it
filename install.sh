@@ -147,7 +147,7 @@ if ! [[ $silent ]] && ! [[ $no_modify_config ]]; then
     done
   fi
 
-  while ! [ $silent ]; do
+  while ! [ $append_to_config ]; do
     read -e -n 1 -r -p "Would you like to keep your $CONFIG_FILE and append bash-it templates at the end? [y/N] " choice
     case $choice in
     [yY])
@@ -163,7 +163,7 @@ if ! [[ $silent ]] && ! [[ $no_modify_config ]]; then
       ;;
     esac
   done
-elif [[ $silent ]] && [[ $append_to_config ]]; then
+elif [[ $append_to_config ]]; then
   # backup/append
   backup_append
 elif [[ $silent ]] && ! [[ $no_modify_config ]]; then
