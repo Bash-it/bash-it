@@ -11,6 +11,7 @@ Bash-it provides a solid framework for using, developing and maintaining shell s
 If you're using the _Bourne Again Shell_ (Bash) regularly and have been looking for an easy way on how to keep all of these nice little scripts and aliases under control, then Bash-it is for you!
 Stop polluting your `~/bin` directory and your `.bashrc` file, fork/clone Bash-it and start hacking away.
 
+- [Main Page](https://bash-it.readthedocs.io/en/latest)
 - [Contributing](#contributing)
 - [Installation](https://bash-it.readthedocs.io/en/latest/installation)
   - [Install Options](https://bash-it.readthedocs.io/en/latest/installation/#install-options)
