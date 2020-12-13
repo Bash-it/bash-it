@@ -105,5 +105,14 @@ Themes
 
 * When adding a new theme, please include a screenshot and a short description about what makes this theme unique in the Pull Request's description field.
   Please do not add theme screenshots to the repo itself, as they will add unnecessary bloat to the repo.
-  The project's docs has a `Themes page <https://github.com/Bash-it/bash-it/blob/master/docs/themes-list/index.rst>`_ where you can add a screenshot if you want (by link).
+  The project's docs has a `Themes page <https://github.com/Bash-it/bash-it/blob/master/docs/themes-list/index.rst>`_ where you should add a screenshot, see how :ref:`here<add_screenshot>`.
 * Ideally, you should add a ``<theme_name>.rst`` file describing the theme and its configuration options to ``docs/themes-list`` folder.
+
+.. _add_screenshot:
+
+Adding a Screenshot
+-------------------
+
+In order to add a new screenshot, use the ``gh-pages`` branch.
+Add your new screenshot to the ``docs/images`` folder, and open a PR.
+In the `Themes page <https://github.com/Bash-it/bash-it/blob/master/docs/themes-list/index.rst>`_, see the other screenshots to know what kind of link you should use.
