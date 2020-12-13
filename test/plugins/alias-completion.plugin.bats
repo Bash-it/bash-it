@@ -22,3 +22,10 @@ load ../../completion/available/git.completion
 
   assert_success
 }
+
+@test "alias-completion: See that having aliased rm command does not output unnecessary output" {
+  alias rm='rm -v'
+  load ../../plugins/available/alias-completion.plugin
+
+  refute_output
+}
