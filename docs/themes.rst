@@ -29,6 +29,41 @@ You can see theme screenshots on `wiki/Themes <https://github.com/Bash-it/bash-i
 
 **NOTE**\ : Bash-it and some themes use UTF-8 characters, so to avoid strange behavior in your terminal, set your locale to ``LC_ALL=en_US.UTF-8`` or the equivalent to your language if it isn't American English.
 
+List of Themes
+^^^^^^^^^^^^^^
+
+See :ref:`here <list_of_themes>`.
+
+Theme Switches & Variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Clock Related
+=============
+
+function: ``clock_char``
+########################
+
+Prints a character indicating clock.
+
+
+* ``THEME_SHOW_CLOCK_CHAR`` : **true**\ /false
+
+* ``THEME_CLOCK_CHAR`` : "\ **⌚**\ "
+
+* ``THEME_CLOCK_CHAR_COLOR`` : "\ **$normal**\ "
+
+function: ``clock_prompt``
+##########################
+
+Prints the clock prompt (date, time).
+
+
+* ``THEME_SHOW_CLOCK`` : **true**\ /false
+
+* ``THEME_CLOCK_COLOR`` :  "\ **$normal**\ "
+
+* ``THEME_CLOCK_FORMAT`` : "\ **%H:%M:%S**\ "
+
 Contributing a new theme
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
