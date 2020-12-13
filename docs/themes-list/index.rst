@@ -3,7 +3,7 @@
 List of Themes
 ==============
 
-Below is a list of all of the themes (with screenshots) that `bash-it <https://github.com/Bash-it/bash-it/>`_ ships with.
+Below is a list of most of the themes (with screenshots) that `bash-it <https://github.com/Bash-it/bash-it/>`_ ships with.
 
 Alphabetical List:
 ------------------
@@ -12,13 +12,13 @@ Bakke
 ^^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/bakke-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/bakke-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/bakke-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/bakke-black.jpg
    :alt: Bakke
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/bakke-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/bakke-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/bakke-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/bakke-white.jpg
    :alt: Bakke
 
 
@@ -28,13 +28,13 @@ BarbUk
 ^^^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/BarbUk-black.png
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/BarbUk-black.png
+.. image:: https://bash-it.github.io/bash-it/docs/images/BarbUk-black.png
+   :target: https://bash-it.github.io/bash-it/docs/images/BarbUk-black.png
    :alt: BarbUk
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/BarbUk-white.png
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/BarbUk-white.png
+.. image:: https://bash-it.github.io/bash-it/docs/images/BarbUk-white.png
+   :target: https://bash-it.github.io/bash-it/docs/images/BarbUk-white.png
    :alt: BarbUk
 
 
@@ -44,13 +44,13 @@ Bobby
 ^^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/bobby-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/bobby-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/bobby-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/bobby-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/bobby-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/bobby-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/bobby-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/bobby-white.jpg
    :alt:
 
 
@@ -60,8 +60,8 @@ Brunton
 ^^^^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/brunton-black.png
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/brunton-black.png
+.. image:: https://bash-it.github.io/bash-it/docs/images/brunton-black.png
+   :target: https://bash-it.github.io/bash-it/docs/images/brunton-black.png
    :alt:
 
 
@@ -71,13 +71,13 @@ Candy
 ^^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/candy-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/candy-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/candy-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/candy-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/candy-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/candy-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/candy-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/candy-white.jpg
    :alt:
 
 
@@ -87,13 +87,13 @@ Clean
 ^^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/clean-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/clean-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/clean-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/clean-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/clean-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/clean-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/clean-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/clean-white.jpg
    :alt:
 
 
@@ -103,13 +103,13 @@ Demula
 ^^^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/demula-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/demula-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/demula-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/demula-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/demula-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/demula-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/demula-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/demula-white.jpg
    :alt:
 
 
@@ -119,13 +119,13 @@ DOS
 ^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/dos-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/dos-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/dos-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/dos-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/dos-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/dos-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/dos-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/dos-white.jpg
    :alt:
 
 
@@ -135,13 +135,13 @@ DoubleTime
 ^^^^^^^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/doubletime-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/doubletime-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/doubletime-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/doubletime-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/doubletime-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/doubletime-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/doubletime-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/doubletime-white.jpg
    :alt:
 
 
@@ -151,13 +151,13 @@ DoubleTime Multiline
 ^^^^^^^^^^^^^^^^^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/doubletime_multiline-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/doubletime_multiline-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/doubletime_multiline-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/doubletime_multiline-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/doubletime_multiline-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/doubletime_multiline-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/doubletime_multiline-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/doubletime_multiline-white.jpg
    :alt:
 
 
@@ -167,13 +167,13 @@ Doubletime Multiline Python Only
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/doubletime_multiline_pyonly-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/doubletime_multiline_pyonly-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/doubletime_multiline_pyonly-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/doubletime_multiline_pyonly-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/doubletime_multiline_pyonly-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/doubletime_multiline_pyonly-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/doubletime_multiline_pyonly-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/doubletime_multiline_pyonly-white.jpg
    :alt:
 
 
@@ -183,13 +183,13 @@ Envy
 ^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/envy-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/envy-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/envy-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/envy-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/envy-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/envy-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/envy-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/envy-white.jpg
    :alt:
 
 
@@ -217,13 +217,13 @@ Mr Briggs
 ^^^^^^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/mbriggs-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/mbriggs-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/mbriggs-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/mbriggs-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/mbriggs-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/mbriggs-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/mbriggs-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/mbriggs-white.jpg
    :alt:
 
 
@@ -233,13 +233,13 @@ Minimal
 ^^^^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/minimal-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/minimal-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/minimal-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/minimal-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/minimal-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/minimal-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/minimal-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/minimal-white.jpg
    :alt:
 
 
@@ -249,13 +249,13 @@ Modern
 ^^^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/modern-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/modern-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/modern-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/modern-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/modern-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/modern-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/modern-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/modern-white.jpg
    :alt:
 
 
@@ -265,13 +265,13 @@ Modern T
 ^^^^^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/modern-t-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/modern-t-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/modern-t-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/modern-t-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/modern-t-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/modern-t-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/modern-t-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/modern-t-white.jpg
    :alt:
 
 
@@ -292,13 +292,13 @@ n0Qorg
 ^^^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/n0qorg-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/n0qorg-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/n0qorg-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/n0qorg-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/n0qorg-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/n0qorg-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/n0qorg-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/n0qorg-white.jpg
    :alt:
 
 
@@ -308,13 +308,13 @@ NWinkler
 ^^^^^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/nwinkler-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/nwinkler-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/nwinkler-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/nwinkler-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/nwinkler-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/nwinkler-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/nwinkler-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/nwinkler-white.jpg
    :alt:
 
 
@@ -324,13 +324,13 @@ Pete
 ^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/pete-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/pete-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/pete-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/pete-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/pete-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/pete-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/pete-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/pete-white.jpg
    :alt:
 
 
@@ -340,13 +340,13 @@ Powerline
 ^^^^^^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/powerline-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/powerline-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/powerline-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/powerline-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/powerline-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/powerline-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/powerline-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/powerline-white.jpg
    :alt:
 
 
@@ -356,13 +356,13 @@ Powerline Naked
 ^^^^^^^^^^^^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/powerline-naked-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/powerline-naked-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/powerline-naked-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/powerline-naked-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/powerline-naked-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/powerline-naked-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/powerline-naked-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/powerline-naked-white.jpg
    :alt:
 
 
@@ -372,13 +372,13 @@ Powerline Plain
 ^^^^^^^^^^^^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/powerline-plain-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/powerline-plain-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/powerline-plain-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/powerline-plain-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/powerline-plain-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/powerline-plain-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/powerline-plain-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/powerline-plain-white.jpg
    :alt:
 
 
@@ -388,13 +388,13 @@ Pure
 ^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/pure-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/pure-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/pure-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/pure-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/pure-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/pure-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/pure-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/pure-white.jpg
    :alt:
 
 
@@ -404,13 +404,13 @@ RainbowBrite
 ^^^^^^^^^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/rainbowbrite-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/rainbowbrite-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/rainbowbrite-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/rainbowbrite-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/rainbowbrite-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/rainbowbrite-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/rainbowbrite-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/rainbowbrite-white.jpg
    :alt:
 
 
@@ -420,13 +420,13 @@ R Jorgenson
 ^^^^^^^^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/rjorgenson-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/rjorgenson-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/rjorgenson-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/rjorgenson-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/rjorgenson-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/rjorgenson-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/rjorgenson-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/rjorgenson-white.jpg
    :alt:
 
 
@@ -436,13 +436,13 @@ Sexy
 ^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/sexy-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/sexy-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/sexy-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/sexy-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/sexy-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/sexy-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/sexy-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/sexy-white.jpg
    :alt:
 
 
@@ -452,13 +452,13 @@ Simple
 ^^^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/simple-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/simple-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/simple-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/simple-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/simple-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/simple-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/simple-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/simple-white.jpg
    :alt:
 
 
@@ -468,13 +468,13 @@ SirUp
 ^^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/sirup-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/sirup-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/sirup-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/sirup-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/sirup-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/sirup-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/sirup-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/sirup-white.jpg
    :alt:
 
 
@@ -484,13 +484,13 @@ Standard
 ^^^^^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/standard-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/standard-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/standard-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/standard-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/standard-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/standard-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/standard-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/standard-white.jpg
    :alt:
 
 
@@ -500,13 +500,13 @@ Tonka
 ^^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/tonka-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/tonka-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/tonka-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/tonka-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/tonka-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/tonka-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/tonka-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/tonka-white.jpg
    :alt:
 
 
@@ -516,13 +516,13 @@ Tylenol
 ^^^^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/tylenol-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/tylenol-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/tylenol-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/tylenol-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/tylenol-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/tylenol-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/tylenol-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/tylenol-white.jpg
    :alt:
 
 
@@ -532,13 +532,13 @@ Zitron
 ^^^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/zitron-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/zitron-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/zitron-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/zitron-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/zitron-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/zitron-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/zitron-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/zitron-white.jpg
    :alt:
 
 
@@ -548,11 +548,11 @@ Zork
 ^^^^
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/zork-black.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/zork-black.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/zork-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/zork-black.jpg
    :alt:
 
 
-.. image:: https://raw.github.com/wiki/revans/bash-it/images/screenshots/zork-white.jpg
-   :target: https://raw.github.com/wiki/revans/bash-it/images/screenshots/zork-white.jpg
+.. image:: https://bash-it.github.io/bash-it/docs/images/zork-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/zork-white.jpg
    :alt:
