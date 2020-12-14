@@ -38,6 +38,7 @@ Default theme glyphs
    BARBUK_SVN_CHAR='⑆ '
    BARBUK_EXIT_CODE_ICON=' '
    BARBUK_PYTHON_VENV_CHAR=' '
+   BARBUK_COMMAND_DURATION_ICON='  '
 
 Customize glyphs
 ^^^^^^^^^^^^^^^^
@@ -92,6 +93,29 @@ Please refer to the following documentation for more information:
    EOF
    chmod 400 /etc/sudoers.d/keepenv
 
+Command duration
+----------------
+
+Command duration reports the duration of the last command.
+
+Usage
+^^^^^
+
+Command duration can be enabled by exporting ``BASH_IT_COMMAND_DURATION``:
+
+.. code-block:: bash
+
+   export BASH_IT_COMMAND_DURATION=true
+
+
+All duration of one second and more are displayed.
+You can customize the minimum time in seconds before command duration is displayed in your ``.bashrc``:
+
+.. code-block:: bash
+
+   export COMMAND_DURATION_MIN_SECONDS=5
+
+
 Examples
 --------
 
@@ -122,3 +146,11 @@ Python venv
 .. code-block:: bash
 
      flask ~/test on  master ✓ ❯
+
+Command duration
+^^^^^^^^^^^^^^^^
+
+.. code-block:: bash
+
+   # sleep 3s
+   user@hostname in  ~/bash-it on  master ✓  3.2s ❯
