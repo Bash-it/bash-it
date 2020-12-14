@@ -1,6 +1,7 @@
 # Bash-it
 ![Build Status](https://github.com/Bash-it/bash-it/workflows/CI/badge.svg?branch=master)
-[![Join the chat at https://gitter.im/Bash-it/bash-it](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Bash-it/bash-it?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+![Docs Status](https://readthedocs.org/projects/bash-it/badge/)
+[![Join the chat at https://webchat.freenode.net/?channel=#bash-it](https://img.shields.io/badge/chat-on%20freenode-brightgreen.svg)](https://webchat.freenode.net/?channel=#bash-it)
 
 **Bash-it** is a collection of community Bash commands and scripts for Bash 3.2+.
 (And a shameless ripoff of [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) :smiley:)
