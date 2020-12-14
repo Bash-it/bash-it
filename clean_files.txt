@@ -35,6 +35,7 @@ completion/available/knife.completion.bash
 completion/available/packer.completion.bash
 completion/available/pipx.completion.bash
 completion/available/rustup.completion.bash
+completion/available/vault.completion.bash
 
 # aliases
 aliases/available/vim.aliases.bash
