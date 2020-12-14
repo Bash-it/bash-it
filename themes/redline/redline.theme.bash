@@ -55,6 +55,9 @@ THEME_CLOCK_FORMAT=${THEME_CLOCK_FORMAT:="%H:%M:%S"}
 IN_VIM_THEME_PROMPT_COLOR=245
 IN_VIM_THEME_PROMPT_TEXT="vim"
 
+IN_TOOLBOX_THEME_PROMPT_COLOR=125
+IN_TOOLBOX_THEME_PROMPT_TEXT="⬢ "
+
 POWERLINE_PROMPT=${POWERLINE_PROMPT:="python_venv ruby user_info hostname cwd scm"}
 
 safe_append_prompt_command __powerline_prompt_command

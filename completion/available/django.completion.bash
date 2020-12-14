@@ -69,4 +69,3 @@ else
 fi
 
 complete -F _python_django_completion -o default $pythons
-

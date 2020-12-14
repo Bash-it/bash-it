@@ -13,7 +13,7 @@ function rvm_version_prompt {
 
   [ "$full" != "" ] && echo "$full"
 }
- 
+
 function prompt_command() {
     # Check http://github.com/Sirupsen/dotfiles for screenshot
     PS1="$blue\W/$bold_blue$(rvm_version_prompt)$bold_green$(__git_ps1 " (%s)") ${normal}$ "

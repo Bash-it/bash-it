@@ -54,7 +54,7 @@ function _exit-status-prompt() {
     local -r exit_status_color="${bold_red}"
   fi
 
-  echo -ne "${exit_status_color}" 
+  echo -ne "${exit_status_color}"
   if [[ "${prompt_string}" -eq 1 ]]; then
     # $PS1:
     echo -e " +${normal} "

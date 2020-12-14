@@ -10,6 +10,6 @@ if command -v vue > /dev/null; then
             fi
         done
     }
-    
+
     complete -F __vuejs_completion vue
 fi

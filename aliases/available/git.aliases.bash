@@ -28,6 +28,7 @@ alias gpr='git pull --rebase'
 alias gpp='git pull && git push'
 alias gup='git fetch && git rebase'
 alias gp='git push'
+alias gpd='git push --delete'
 alias gpo='git push origin HEAD'
 alias gpu='git push --set-upstream'
 alias gpuo='git push --set-upstream origin'
@@ -64,6 +65,7 @@ alias gco='git checkout'
 alias gcom='git checkout master'
 alias gcb='git checkout -b'
 alias gcob='git checkout -b'
+alias gcobu='git checkout -b ${USER}/'
 alias gct='git checkout --track'
 alias gcpd='git checkout master; git pull; git branch -D'
 alias gexport='git archive --format zip --output'
@@ -120,6 +122,10 @@ if ! _command_exists gh; then
 fi
 # Show untracked files
 alias gu='git ls-files . --exclude-standard --others'
+
+# Git SVN
+alias gsr='git svn rebase'
+alias gsd='git svn dcommit'
 
 case $OSTYPE in
   darwin*)

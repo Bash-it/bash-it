@@ -120,13 +120,13 @@ function __powerline_cwd_prompt {
 }
 
 function __powerline_hostname_prompt {
-    local fg_color=206
+  local fg_color=206
 
-    echo "$(hostname -s)|${HOST_THEME_PROMPT_COLOR}|${fg_color}"
+  echo "$(hostname -s)|${HOST_THEME_PROMPT_COLOR}|${fg_color}"
 }
 
 function __powerline_wd_prompt {
-    local fg_color=206
+  local fg_color=206
 
   echo "\W|${CWD_THEME_PROMPT_COLOR}|${fg_color}"
 }
@@ -158,7 +158,7 @@ function __powerline_battery_prompt {
 }
 
 function __powerline_in_vim_prompt {
-    local fg_color=206
+  local fg_color=206
 
   if [ -n "$VIMRUNTIME" ]; then
     echo "${IN_VIM_THEME_PROMPT_TEXT}|${IN_VIM_THEME_PROMPT_COLOR}|${fg_color}"
@@ -166,10 +166,18 @@ function __powerline_in_vim_prompt {
 }
 
 function __powerline_aws_profile_prompt {
-    local fg_color=206
+  local fg_color=206
 
   if [[ -n "${AWS_PROFILE}" ]]; then
     echo "${AWS_PROFILE_CHAR}${AWS_PROFILE}|${AWS_PROFILE_PROMPT_COLOR}|${fg_color}"
+  fi
+}
+
+function __powerline_in_toolbox_prompt {
+  local fg_color=206
+
+  if [ -f /run/.containerenv ] && [ -f /run/.toolboxenv ]; then
+    echo "${IN_TOOLBOX_THEME_PROMPT_TEXT}|${IN_TOOLBOX_THEME_PROMPT_COLOR}|${fg_color}"
   fi
 }
 
@@ -225,4 +233,3 @@ function __powerline_prompt_command {
         LEFT_PROMPT \
         SEGMENTS_AT_LEFT
 }
-

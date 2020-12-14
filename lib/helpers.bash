@@ -26,6 +26,17 @@ function _command_exists ()
   type "$1" &> /dev/null || (_log_warning "$msg" && return 1) ;
 }
 
+function _binary_exists ()
+{
+  _about 'checks for existence of a binary'
+  _param '1: binary to check'
+  _param '2: (optional) log message to include when binary not found'
+  _example '$ _binary_exists ls && echo exists'
+  _group 'lib'
+  local msg="${2:-Binary '$1' does not exist!}"
+  type -P "$1" &> /dev/null || (_log_warning "$msg" && return 1) ;
+}
+
 function _make_reload_alias() {
   echo "source \${BASH_IT}/scripts/reloader.bash ${1} ${2}"
 }
@@ -80,7 +91,7 @@ bash-it ()
         _bash-it-search $component "$@"
         return;;
       update)
-        func=_bash-it_update-$component;;
+        func=_bash-it-update-$component;;
       migrate)
         func=_bash-it-migrate;;
       version)
@@ -158,18 +169,18 @@ _bash-it-plugins ()
     _bash-it-describe "plugins" "a" "plugin" "Plugin"
 }
 
-_bash-it_update-dev() {
+_bash-it-update-dev() {
   _about 'updates Bash-it to the latest master'
   _group 'lib'
 
-  _bash-it_update- dev "$@"
+  _bash-it-update- dev "$@"
 }
 
-_bash-it_update-stable() {
+_bash-it-update-stable() {
   _about 'updates Bash-it to the latest tag'
   _group 'lib'
 
-  _bash-it_update- stable "$@"
+  _bash-it-update- stable "$@"
 }
 
 _bash-it_pull_and_update_inner() {
@@ -187,7 +198,7 @@ _bash-it_pull_and_update_inner() {
   fi
 }
 
-_bash-it_update-() {
+_bash-it-update-() {
   _about 'updates Bash-it'
   _param '1: What kind of update to do (stable|dev)'
   _group 'lib'
@@ -336,12 +347,22 @@ _bash-it-version() {
   BASH_IT_GIT_REMOTE=$(git remote get-url $BASH_IT_REMOTE)
   BASH_IT_GIT_URL=${BASH_IT_GIT_REMOTE%.git}
 
-  BASH_IT_GIT_VERSION_INFO="$(git log --pretty=format:'%h on %aI' -n 1)"
-  BASH_IT_GIT_SHA=${BASH_IT_GIT_VERSION_INFO%% *}
+  current_tag=$(git describe --exact-match --tags 2> /dev/null)
 
-  echo "Current git SHA: $BASH_IT_GIT_VERSION_INFO"
-  echo "$BASH_IT_GIT_URL/commit/$BASH_IT_GIT_SHA"
-  echo "Compare to latest: $BASH_IT_GIT_URL/compare/$BASH_IT_GIT_SHA...master"
+  if [[ -z $current_tag ]]; then
+    BASH_IT_GIT_VERSION_INFO="$(git log --pretty=format:'%h on %aI' -n 1)"
+    TARGET=${BASH_IT_GIT_VERSION_INFO%% *}
+    echo "Version type: dev"
+    echo "Current git SHA: $BASH_IT_GIT_VERSION_INFO"
+    echo "Commit info: $BASH_IT_GIT_URL/commit/$TARGET"
+  else
+    TARGET=$current_tag
+    echo "Version type: stable"
+    echo "Current tag: $current_tag"
+    echo "Tag information: $BASH_IT_GIT_URL/releases/tag/$current_tag"
+  fi
+
+  echo "Compare to latest: $BASH_IT_GIT_URL/compare/$TARGET...master"
 
   cd - &> /dev/null || return
 }

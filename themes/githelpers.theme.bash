@@ -11,7 +11,7 @@ function _git-symbolic-ref {
 function _git-branch {
   if [[ "${SCM_GIT_GITSTATUS_RAN}" == "true" ]]; then
     test -n "${VCS_STATUS_LOCAL_BRANCH}" && echo "${VCS_STATUS_LOCAL_BRANCH}" || return 1
-  else 
+  else
     git symbolic-ref -q --short HEAD 2> /dev/null || return 1
   fi
 }
@@ -19,7 +19,7 @@ function _git-branch {
 function _git-tag {
   if [[ "${SCM_GIT_GITSTATUS_RAN}" == "true" ]]; then
     test -n "${VCS_STATUS_TAG}" && echo "${VCS_STATUS_TAG}"
-  else 
+  else
     git describe --tags --exact-match 2> /dev/null
   fi
 }
@@ -40,7 +40,7 @@ function _git-short-sha {
 function _git-friendly-ref {
   if [[ "${SCM_GIT_GITSTATUS_RAN}" == "true" ]]; then
     _git-branch || _git-tag || _git-short-sha # there is no tag based describe output in gitstatus
-  else 
+  else
     _git-branch || _git-tag || _git-commit-description || _git-short-sha
   fi
 }
