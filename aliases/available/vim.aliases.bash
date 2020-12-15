@@ -7,7 +7,7 @@ MVIM=$(command -v mvim)
 
 # open the vim help in fullscreen incorporated from
 # https://stackoverflow.com/a/4687513
-alias vimh='${VIM} -c ":h | only"' 
+alias vimh='${VIM} -c ":h | only"'
 
 [[ -n $VIM ]] && alias v=$VIM
 
