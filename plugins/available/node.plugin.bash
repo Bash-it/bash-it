@@ -1,7 +1,13 @@
 cite about-plugin
 about-plugin 'Node.js helper functions'
 
-pathmunge ./node_modules/.bin
+# Ensure local modules are preferred in PATH
+pathmunge "./node_modules/.bin" "after"
 
-# Make sure the global npm prefix is on the path
-[[ `which npm` ]] && pathmunge $(npm config get prefix)/bin
+# Check that we have npm
+out=$(command -v npm 2>&1) || return
+
+# If not using nodenv, ensure global modules are in PATH
+if [[ ! $out == *"nodenv/shims"* ]] ; then
+  pathmunge "$(npm config get prefix)/bin" "after"
+fi

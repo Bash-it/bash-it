@@ -28,4 +28,3 @@ __kitchen_options () {
   esac
 }
 complete -F __kitchen_options kitchen
-

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# If the info command is called
+# AND the parent folder contains the .svn folder
+# THEN return the current path, similar to what `svn info` does
+if [[ "$1" == "info" ]] && [[ -d "../.svn" ]]; then
+  echo "$PWD"
+fi
+
+exit 0

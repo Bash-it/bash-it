@@ -14,31 +14,7 @@ case $OSTYPE in
 esac
 
 function local_setup {
-  mkdir -p "$BASH_IT"
-  lib_directory="$(cd "$(dirname "$0")" && pwd)"
-  # Use rsync to copy Bash-it to the temp folder
-  # rsync is faster than cp, since we can exclude the large ".git" folder
-  rsync -qavrKL -d --delete-excluded --exclude=.git $lib_directory/../../.. "$BASH_IT"
-
-  rm -rf "$BASH_IT"/enabled
-  rm -rf "$BASH_IT"/aliases/enabled
-  rm -rf "$BASH_IT"/completion/enabled
-  rm -rf "$BASH_IT"/plugins/enabled
-
-  # Don't pollute the user's actual $HOME directory
-  # Use a test home directory instead
-  export BASH_IT_TEST_CURRENT_HOME="${HOME}"
-  export BASH_IT_TEST_HOME="$(cd "${BASH_IT}/.." && pwd)/BASH_IT_TEST_HOME"
-  mkdir -p "${BASH_IT_TEST_HOME}"
-  export HOME="${BASH_IT_TEST_HOME}"
-}
-
-function local_teardown {
-  export HOME="${BASH_IT_TEST_CURRENT_HOME}"
-
-  rm -rf "${BASH_IT_TEST_HOME}"
-
-  assert_equal "${BASH_IT_TEST_CURRENT_HOME}" "${HOME}"
+  setup_test_fixture
 }
 
 @test "install: verify that the install script exists" {
@@ -82,4 +58,29 @@ function local_teardown {
   run ./install.sh --silent --interactive
 
   assert_failure
+}
+
+@test "install: verify that no-modify-config and append-to-config can not be used at the same time" {
+  cd "$BASH_IT"
+
+  run ./install.sh --silent --no-modify-config --append-to-config
+
+  assert_failure
+}
+
+@test "install: verify that the template is appended" {
+  cd "$BASH_IT"
+
+  touch "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE"
+  echo "test file content" > "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE"
+
+  ./install.sh --silent --append-to-config
+
+  assert_file_exist "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE"
+  assert_file_exist "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.bak"
+
+  run cat $BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE
+
+  assert_line "test file content"
+  assert_line "source \"\$BASH_IT\"/bash_it.sh"
 }

@@ -2,6 +2,7 @@
 
 load ../test_helper
 load ../../lib/composure
+load ../../lib/log
 load ../../lib/utilities
 load ../../lib/search
 load ../../plugins/available/base.plugin
@@ -11,21 +12,7 @@ cite _about _param _example _group _author _version
 load ../../lib/helpers
 
 function local_setup {
-  mkdir -p "$BASH_IT"
-  lib_directory="$(cd "$(dirname "$0")" && pwd)"
-  # Use rsync to copy Bash-it to the temp folder
-  # rsync is faster than cp, since we can exclude the large ".git" folder
-  rsync -qavrKL -d --delete-excluded --exclude=.git $lib_directory/../../.. "$BASH_IT"
-
-  rm -rf "$BASH_IT"/enabled
-  rm -rf "$BASH_IT"/aliases/enabled
-  rm -rf "$BASH_IT"/completion/enabled
-  rm -rf "$BASH_IT"/plugins/enabled
-
-  mkdir -p "$BASH_IT"/enabled
-  mkdir -p "$BASH_IT"/aliases/enabled
-  mkdir -p "$BASH_IT"/completion/enabled
-  mkdir -p "$BASH_IT"/plugins/enabled
+  setup_test_fixture
 }
 
 # TODO Create global __is_enabled function
@@ -33,7 +20,7 @@ function local_setup {
 # TODO Create global __get_enabled_name function
 
 @test "helpers: _command_exists function exists" {
-  type -a _command_exists &> /dev/null
+  run type -a _command_exists &> /dev/null
   assert_success
 }
 
@@ -49,6 +36,26 @@ function local_setup {
 
 @test "helpers: _command_exists function negative test" {
   run _command_exists __addfkds_dfdsjdf
+  assert_failure
+}
+
+@test "helpers: _binary_exists function exists" {
+  run type -a _binary_exists &> /dev/null
+  assert_success
+}
+
+@test "helpers: _binary_exists function positive test ls" {
+  run _binary_exists ls
+  assert_success
+}
+
+@test "helpers: _binary_exists function negative test function" {
+  run _binary_exists _binary_exists
+  assert_failure
+}
+
+@test "helpers: _binary_exists function negative test" {
+  run _binary_exists __addfkds_dfdsjdf
   assert_failure
 }
 
@@ -141,8 +148,8 @@ function local_setup {
 
 @test "helpers: enable the brew completion" {
   run _enable-completion "brew"
-  assert_line -n 0 'brew enabled with priority 350.'
-  assert_link_exist "$BASH_IT/enabled/350---brew.completion.bash"
+  assert_line -n 0 'brew enabled with priority 375.'
+  assert_link_exist "$BASH_IT/enabled/375---brew.completion.bash"
 }
 
 @test "helpers: enable the node plugin" {

@@ -49,7 +49,7 @@ modern_scm_prompt() {
 # show chroot if exist
 chroot(){
     if [ -n "$debian_chroot" ]
-    then 
+    then
         my_ps_chroot="${bold_cyan}$debian_chroot${normal}";
         echo "($my_ps_chroot)";
     fi
@@ -63,7 +63,7 @@ my_ve(){
         my_ps_ve="${bold_purple}${CONDA_DEFAULT_ENV}${normal}";
         echo "($my_ps_ve)";
     elif [ -n "$VIRTUAL_ENV" ]
-    then 
+    then
         my_ps_ve="${bold_purple}$ve${normal}";
         echo "($my_ps_ve)";
     fi
@@ -75,13 +75,13 @@ prompt() {
     my_ps_host="${green}\h${normal}";
     # yes, these are the the same for now ...
     my_ps_host_root="${green}\h${normal}";
- 
+
     my_ps_user="${bold_green}\u${normal}"
     my_ps_root="${bold_red}\u${normal}";
 
     if [ -n "$VIRTUAL_ENV" ]
     then
-        ve=`basename $VIRTUAL_ENV`;
+        ve=`basename "$VIRTUAL_ENV"`;
     fi
 
     # nice prompt

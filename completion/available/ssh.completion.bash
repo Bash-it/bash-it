@@ -13,9 +13,9 @@ _sshcomplete() {
 
     # parse all defined hosts from .ssh/config and files included there
     for fl in "$HOME/.ssh/config" \
-        $(grep "^\s*Include" "$HOME/.ssh/config" | 
-            awk '{for (i=2; i<=NF; i++) print $i}' | 
-            sed "s|^~/|$HOME/|")
+        $(grep "^\s*Include" "$HOME/.ssh/config" |
+            awk '{for (i=2; i<=NF; i++) print $i}' |
+            sed -Ee "s|^([^/~])|$HOME/.ssh/\1|" -e "s|^~/|$HOME/|")
     do
         if [ -r "$fl" ]; then
             COMPREPLY=( ${COMPREPLY[@]} $(compgen -W "$(grep -i ^Host "$fl" |grep -v '[*!]' | awk '{for (i=2; i<=NF; i++) print $i}' )" ${OPTIONS}) )
@@ -37,4 +37,4 @@ _sshcomplete() {
     return 0
 }
 
-complete -o default -o nospace -F _sshcomplete ssh scp
+complete -o default -o nospace -F _sshcomplete ssh scp slogin sftp
