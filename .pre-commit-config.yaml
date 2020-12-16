@@ -9,6 +9,7 @@ repos:
     rev: v2.3.0
     hooks:
       - id: trailing-whitespace
+        exclude: ".(md|rst)$"
       - id: end-of-file-fixer
       - id: check-merge-conflict
       - id: mixed-line-ending
