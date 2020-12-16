@@ -14,7 +14,7 @@ Stop polluting your `~/bin` directory and your `.bashrc` file, fork/clone Bash-i
 
 - [Main Page](https://bash-it.readthedocs.io/en/latest)
 - [Contributing](#contributing)
-- [Installation](https://bash-it.readthedocs.io/en/latest/installation)
+- [Installation](#installation)
   - [Install Options](https://bash-it.readthedocs.io/en/latest/installation/#install-options)
   - [via Docker](https://bash-it.readthedocs.io/en/latest/installation/#install-using-docker)
   - [Updating](https://bash-it.readthedocs.io/en/latest/installation/#updating)
@@ -32,6 +32,17 @@ Stop polluting your `~/bin` directory and your `.bashrc` file, fork/clone Bash-i
 - [Misc](https://bash-it.readthedocs.io/en/latest/misc)
 - [Help Out](https://bash-it.readthedocs.io/en/latest/#help-out)
 - [Contributors](#contributors)
+
+## Installation
+
+1) Check out a clone of this repo to a location of your choice, such as
+   ``git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it``
+2) Run ``~/.bash_it/install.sh``
+
+Thats it! :smiley:  
+You can check out more components of Bash-it, and customize it to your desire.  
+For more information, see detailed instructions [here](https://bash-it.readthedocs.io/en/latest/installation/).
+
 
 ## Contributing
 
