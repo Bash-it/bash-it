@@ -46,5 +46,7 @@ completion/available/vault.completion.bash
 completion/available/sdkman.completion.bash
 
 # aliases
+#
 aliases/available/dnf.aliases.bash
 aliases/available/vim.aliases.bash
+aliases/available/git.aliases.bash
