@@ -11,12 +11,15 @@ function _set-prefix-based-on-path()
 
 if [ "$1" != "skip" ] && [ -d "./enabled" ]; then
   _bash_it_config_type=""
-  if [[ "${1}" =~ ^(alias|completion|plugin)$ ]]; then
-    _bash_it_config_type=$1
-    _log_debug "Loading enabled $1 components..."
-  else
-    _log_debug "Loading all enabled components..."
-  fi
+
+  case $1 in
+    alias|completion|plugin)
+      _bash_it_config_type=$1
+      _log_debug "Loading enabled $1 components..." ;;
+    *|'')
+      _log_debug "Loading all enabled components..." ;;
+  esac
+
   for _bash_it_config_file in $(sort <(compgen -G "./enabled/*${_bash_it_config_type}.bash")); do
     if [ -e "${_bash_it_config_file}" ]; then
       _set-prefix-based-on-path "${_bash_it_config_file}"
