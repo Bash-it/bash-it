@@ -92,3 +92,21 @@ This file configures the behavior of the a pre-commit hook based on `the Pre-Com
 installing it (with pip, brew or other tools) then run ``pre-commit install`` in the repo's root to activate the hook.
 For the full use of the tool, you may need to install also other third-party tools, such as
 `shellcheck <https://github.com/koalaman/shellcheck/>`_ and `shfmt <https://github.com/mvdan/sh>`_.
+
+
+.. _linting_your_changes:
+
+Linting Your Changes
+--------------------
+
+In order to properly lint your changes, you should use our linting script,
+by simply running ``./lint_clean_files.sh``. This script iterates over all marked-as-clean
+files, and runs the pre-commit hook on them.
+
+Please note that most of the files in the project are currently not linted,
+as we want to make the linting process easier.
+In order to add your changed/added files to the linting process,
+please add your files to ``clean_files.txt``. This way ``lint_clean_files.sh``
+will know to pick them up and lint them.
+
+Thank you for helping clean up Bash-it, and making it a nicer and better project |:heart:|
