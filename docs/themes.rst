@@ -37,7 +37,7 @@ See :ref:`here <list_of_themes>`.
 Theme Switches & Variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. command_duration:
+.. _command_duration:
 
 Command duration
 ================
