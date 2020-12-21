@@ -93,29 +93,6 @@ Please refer to the following documentation for more information:
    EOF
    chmod 400 /etc/sudoers.d/keepenv
 
-Command duration
-----------------
-
-Command duration reports the duration of the last command.
-
-Usage
-^^^^^
-
-Command duration can be enabled by exporting ``BASH_IT_COMMAND_DURATION``:
-
-.. code-block:: bash
-
-   export BASH_IT_COMMAND_DURATION=true
-
-
-All duration of one second and more are displayed.
-You can customize the minimum time in seconds before command duration is displayed in your ``.bashrc``:
-
-.. code-block:: bash
-
-   export COMMAND_DURATION_MIN_SECONDS=5
-
-
 Examples
 --------
 
