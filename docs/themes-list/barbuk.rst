@@ -96,7 +96,7 @@ Please refer to the following documentation for more information:
 Command duration
 ----------------
 
-See :ref:`command_duration`.
+See :ref:`Command duration <command_duration>`.
 
 Examples
 --------
