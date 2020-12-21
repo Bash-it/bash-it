@@ -93,6 +93,11 @@ Please refer to the following documentation for more information:
    EOF
    chmod 400 /etc/sudoers.d/keepenv
 
+Command duration
+----------------
+
+See :ref:`command_duration`.
+
 Examples
 --------
 
