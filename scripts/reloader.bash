@@ -16,7 +16,7 @@ if [ "$1" != "skip" ] && [ -d "./enabled" ]; then
     alias|completion|plugin)
       _bash_it_config_type=$1
       _log_debug "Loading enabled $1 components..." ;;
-    *|'')
+    *|)
       _log_debug "Loading all enabled components..." ;;
   esac
 
