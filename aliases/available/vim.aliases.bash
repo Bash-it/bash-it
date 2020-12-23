@@ -9,15 +9,15 @@ MVIM=$(command -v mvim)
 # https://stackoverflow.com/a/4687513
 alias vimh='${VIM} -c ":h | only"'
 
-[[ -n $VIM ]] && alias v=$VIM
+[[ -n $VIM ]] && alias v='$VIM'
 
 # open vim in new tab is taken from
 # http://stackoverflow.com/questions/936501/let-gvim-always-run-a-single-instancek
 case $OSTYPE in
-  darwin*)
-	[[ -n $MVIM ]] && function mvimt { command mvim --remote-tab-silent "$@" || command mvim "$@"; }
-    ;;
-  *)
-    [[ -n $GVIM ]] && function gvimt { command gvim --remote-tab-silent "$@" || command gvim "$@"; }
-    ;;
+	darwin*)
+		[[ -n $MVIM ]] && function mvimt { command mvim --remote-tab-silent "$@" || command mvim "$@"; }
+		;;
+	*)
+		[[ -n $GVIM ]] && function gvimt { command gvim --remote-tab-silent "$@" || command gvim "$@"; }
+		;;
 esac
