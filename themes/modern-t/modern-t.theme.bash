@@ -1,3 +1,10 @@
+# The "modern-t" theme is a "modern" theme variant with support
+# for "t", the minimalist python todo list utility by Steve Losh.
+# Get and install "t" at https://github.com/sjl/t#installing-t
+#
+# Warning: The Bash-it plugin "todo.plugin" breaks the "t"
+# prompt integration, please disable it while using this theme.
+
 SCM_THEME_PROMPT_PREFIX=""
 SCM_THEME_PROMPT_SUFFIX=""
 
