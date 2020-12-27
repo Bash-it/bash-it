@@ -11,6 +11,11 @@ SCM_HG_CHAR=${BARBUK_HG_CHAR:='☿ '}
 SCM_SVN_CHAR=${BARBUK_SVN_CHAR:='⑆ '}
 EXIT_CODE_ICON=${BARBUK_EXIT_CODE_ICON:=' '}
 PYTHON_VENV_CHAR=${BARBUK_PYTHON_VENV_CHAR:=' '}
+COMMAND_DURATION_ICON=${BARBUK_COMMAND_DURATION_ICON:-"$bold_blue  "}
+
+# Command duration
+COMMAND_DURATION_MIN_SECONDS=${COMMAND_DURATION_MIN_SECONDS:-1}
+COMMAND_DURATION_COLOR="$normal"
 
 # Ssh user and hostname display
 SSH_INFO=${BARBUK_SSH_INFO:=true}
@@ -67,7 +72,9 @@ function _exit-code {
 }
 
 function _prompt {
-    local exit_code="$?" wrap_char=' ' dir_color=$green ssh_info='' python_venv='' host
+    local exit_code="$?" wrap_char=' ' dir_color=$green ssh_info='' python_venv='' host command_duration=
+
+    command_duration=$(_command_duration)
 
     _exit-code exit_code
     _git-uptream-remote-logo
@@ -96,9 +103,8 @@ function _prompt {
         python_venv="$PYTHON_VENV_CHAR$(basename "${VIRTUAL_ENV}") "
     fi
 
-    PS1="\\n${ssh_info} ${purple}$(scm_char)${python_venv}${dir_color}\\w${normal}$(scm_prompt_info)${exit_code}"
-
-    [[ ${#PS1} -gt $((COLUMNS*3)) ]] && wrap_char="\\n"
+    PS1="\\n${ssh_info} ${purple}$(scm_char)${python_venv}${dir_color}\\w${normal}$(scm_prompt_info)${command_duration}${exit_code}"
+    [[ ${#PS1} -gt $((COLUMNS*2)) ]] && wrap_char="\\n"
     PS1="${PS1}${wrap_char}❯${normal} "
 }
 

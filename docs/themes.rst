@@ -37,6 +37,29 @@ See :ref:`here <list_of_themes>`.
 Theme Switches & Variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+.. _command_duration:
+
+Command duration
+================
+
+Prints last command duration
+
+Usage
+#####
+
+Command duration can be enabled by exporting ``BASH_IT_COMMAND_DURATION``:
+
+.. code-block:: bash
+
+   export BASH_IT_COMMAND_DURATION=true
+
+The default configuration display last command duration for command lasting one second or more.
+You can customize the minimum time in seconds before command duration is displayed in your ``.bashrc``:
+
+.. code-block:: bash
+
+   export COMMAND_DURATION_MIN_SECONDS=5
+
 Clock Related
 =============
 
