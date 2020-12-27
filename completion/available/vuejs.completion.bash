@@ -2,7 +2,7 @@
 
 if command -v vue > /dev/null; then
     __vuejs_completion()  {
-        local OPTS=("--version --help create add invoke inspect serve build ui init config upgrade info")
+        local OPTS=("--version --help create add invoke inspect serve build ui init config outdated upgrade migrate info")
         COMPREPLY=()
         for _opt_ in ${OPTS[@]}; do
             if [[ "$_opt_" == "$2"* ]]; then
