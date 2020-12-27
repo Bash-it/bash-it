@@ -275,6 +275,9 @@ function gitignore-reload() {
 }
 
 function git-changelog(){
+    # ---------------------------------------------------------------
+    #  ORIGINAL ANSWER: https://stackoverflow.com/a/2979587/10362396 |
+    # ---------------------------------------------------------------
     about 'Creates the git changelog from one point to another by date'
     group 'git'
     example '$ git-changelog origin/master...origin/release [md|txt]'
