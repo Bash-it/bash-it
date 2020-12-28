@@ -346,6 +346,11 @@ _bash-it-version() {
 
   BASH_IT_GIT_REMOTE=$(git remote get-url $BASH_IT_REMOTE)
   BASH_IT_GIT_URL=${BASH_IT_GIT_REMOTE%.git}
+  if [[ "$BASH_IT_GIT_URL" == *"git@"* ]]; then
+    # Fix URL in case it is ssh based URL
+    BASH_IT_GIT_URL=${BASH_IT_GIT_URL/://}
+    BASH_IT_GIT_URL=${BASH_IT_GIT_URL/git@/https://}
+  fi
 
   current_tag=$(git describe --exact-match --tags 2> /dev/null)
 
