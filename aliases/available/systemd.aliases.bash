@@ -4,12 +4,14 @@ about-alias 'systemd service'
 case $OSTYPE in
     linux*)
 	alias sc='systemctl'
-	alias scr='systemctl daemon-reload'
 	alias scu='systemctl --user'
-	alias scur='systemctl --user daemon-reload'
+	alias scd='systemctl daemon-reload'
+	alias scdu='systemctl --user daemon-reload'
+	alias scr='systemctl restart'
+	alias scru='systemctl --user restart'
 	alias sce='systemctl stop'
-	alias scue='systemctl --user stop'
+	alias sceu='systemctl --user stop'
 	alias scs='systemctl start'
-	alias scus='systemctl --user start'
+	alias scsu='systemctl --user start'
     ;;
 esac
