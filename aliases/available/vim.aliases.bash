@@ -5,10 +5,12 @@ VIM=$(command -v vim)
 GVIM=$(command -v gvim)
 MVIM=$(command -v mvim)
 
-[[ -n $VIM ]] && alias v='$VIM'
-# open the vim help in fullscreen incorporated from
-# https://stackoverflow.com/a/4687513
-[[ -n $VIM ]] && alias vimh='${VIM} -c ":h | only"'
+if [[ -n $VIM ]]; then
+	alias v='$VIM'
+	# open the vim help in fullscreen incorporated from
+	# https://stackoverflow.com/a/4687513
+	alias vimh='${VIM} -c ":h | only"'
+fi
 
 # open vim in new tab is taken from
 # http://stackoverflow.com/questions/936501/let-gvim-always-run-a-single-instancek
