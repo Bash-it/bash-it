@@ -42,6 +42,8 @@ Code Style
 * When changing existing files, consider also adding them into `clean_files.txt` and fixing the linting errors that arise. See :ref:`linting_your_changes` for more information.
 * Indentation is using tabs, not spaces. Most of the code is indented with 2 spaces, some with 4 spaced tabs. Please try to stick to tabs.
   If you're using an editor that supports `EditorConfig <http://EditorConfig.org>`_\ , the editor should automatically use the settings defined in Bash-it's `.editorconfig file <.editorconfig>`_.
+* Prefer to invoke commands directly using the ``command`` shell builtin. This way, your code
+  will always execute the command you wanted and not an alias/function that overrides the name of the command. (For example, use ``command rm`` instead of ``rm``)
 * When creating new functions, please use a dash ("-") to separate the words of the function's name, e.g. ``my-new-function``.
   Don't use underscores, e.g. ``my_new_function``.
 * Internal functions that aren't to be used by the end user should start with an underscore, e.g. ``_my-new-internal-function``.
