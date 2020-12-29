@@ -59,8 +59,8 @@ Unit Tests
 When adding features or making changes/fixes, please run our growing unit test suite to ensure that you did not break existing functionality.
 The test suite does not cover all aspects of Bash-it, but please run it anyway to verify that you did not introduce any regression issues.
 
-Any code pushed to GitHub as part of a Pull Request will automatically trigger a continuous integration build on `Travis CI <https://travis-ci.org/Bash-it/bash-it>`_\ , where the test suite is run on both Linux and macOS.
-The Pull Request will then show the result of the Travis build, indicating whether all tests ran fine, or whether there were issues.
+Any code pushed to GitHub as part of a Pull Request will automatically trigger a continuous integration build on `GitHub Actions <https://github.com/Bash-it/bash-it/actions>`_\ , where the test suite is run on both Linux and macOS.
+The Pull Request will then show the result of the CI build, indicating whether all tests ran fine, or whether there were issues.
 Please pay attention to this, Pull Requests with build issues will not be merged.
 
 Adding new functionality or changing existing functionality is a good opportunity to increase Bash-it's test coverage.
