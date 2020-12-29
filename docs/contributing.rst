@@ -10,11 +10,6 @@ Issues
 ------
 
 
-* When opening a new issue in the issue tracker, please include information about which *Operating System* you're using, and which version of *Bash*.
-* In many cases, it also makes sense to show which Bash-it plugins you are using.
-  This information can be obtained using ``bash-it show plugins``.
-* If the issue happens while loading Bash-it, please also include your ``~/.bash_profile`` or ``~/.bashrc`` file,
-  as well as the install location of Bash-it (default should be ``~/.bash_it``\ ).
 * When reporting a bug or requesting a new feature, consider providing a Pull Request that fixes the issue or can be used as a starting point for the new feature.
   Don't be afraid, most things aren't that complex...
 
