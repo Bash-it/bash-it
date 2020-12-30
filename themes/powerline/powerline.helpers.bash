@@ -104,7 +104,7 @@ function powerline.prompt.git.default() {
   if [[ $os == 'Darwin' ]]; then
     w=$(stty -a 2>/dev/null | grep columns | awk '{print $6}');
   else
-    w=$(stty -a 2>/dev/null | grep columns | awk '{print $7}' | sedx 's/;//g');
+    w=$(stty -a 2>/dev/null | grep columns | awk '{print $7}' | sed -E 's/;//g');
   fi
   printf -- "%d" ${w}
 }
