@@ -28,6 +28,10 @@ lint_clean_files.sh
 themes/90210
 themes/powerline
 
+# plugins
+#
+plugins/available/basher.plugin.bash
+
 # completions
 #
 completion/available/cargo.completion.bash
