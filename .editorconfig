@@ -15,7 +15,7 @@ trim_trailing_whitespace = false
 [.git*]
 indent_style = tab
 
-[**.*sh]
+[{**.*sh,test/run}]
 indent_style = tab
 indent_size = 4
 
