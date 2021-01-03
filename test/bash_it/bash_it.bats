@@ -1,20 +1,10 @@
 #!/usr/bin/env bats
 
 load ../test_helper
-load ../../lib/composure
 
 function local_setup {
   setup_test_fixture
-
-  # Copy the test fixture to the Bash-it folder
-  if command -v rsync &> /dev/null
-  then
-    rsync -a "$BASH_IT/test/fixtures/bash_it/" "$BASH_IT/"
-  else
-    find "$BASH_IT/test/fixtures/bash_it" \
-      -mindepth 1 -maxdepth 1 \
-      -exec cp -r {} "$BASH_IT/" \;
-  fi
+  copy_test_fixtures
 }
 
 @test "bash-it: verify that the test fixture is available" {
