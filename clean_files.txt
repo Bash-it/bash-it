@@ -24,6 +24,10 @@ docs
 bash_it.sh
 lint_clean_files.sh
 
+# libs
+#
+lib/appearance.bash
+
 # themes
 #
 themes/90210
