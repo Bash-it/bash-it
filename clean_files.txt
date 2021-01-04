@@ -27,6 +27,7 @@ lint_clean_files.sh
 # libs
 #
 lib/appearance.bash
+lib/history.bash
 
 # themes
 #

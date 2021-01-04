@@ -7,6 +7,6 @@ export HISTCONTROL=${HISTCONTROL:-ignorespace:erasedups} # erase duplicates; alt
 export HISTSIZE=${HISTSIZE:-5000}                        # resize history size
 export AUTOFEATURE=${AUTOFEATURE:-true autotest}         # Cucumber / Autotest integration
 
-function rh {
-  history | awk '{a[$2]++}END{for(i in a){print a[i] " " i}}' | sort -rn | head
+rh() {
+	history | awk '{a[$2]++}END{for(i in a){print a[i] " " i}}' | sort -rn | head
 }
