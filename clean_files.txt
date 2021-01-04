@@ -21,6 +21,7 @@ docs
 # root files
 #
 .gitattributes
+bash_it.sh
 lint_clean_files.sh
 
 # themes
