@@ -1,9 +1,11 @@
 cite about-plugin
-about-plugin 'history manipulation'
-# enter a few characters and press UpArrow/DownArrow
-# to search backwards/forwards through the history
-if [[ ${SHELLOPTS} =~ (vi|emacs) ]]
-then
-    bind '"[A":history-search-backward'
-    bind '"[B":history-search-forward'
-fi
+about-plugin 'improve history handling with sane defaults'
+
+# append to bash_history if Terminal.app quits
+shopt -s histappend
+
+# erase duplicates; alternative option: export HISTCONTROL=ignoredups
+export HISTCONTROL=${HISTCONTROL:-ignorespace:erasedups}
+
+# resize history to 100x the default (500)
+export HISTSIZE=${HISTSIZE:-50000}
