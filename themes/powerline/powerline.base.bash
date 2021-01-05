@@ -1,3 +1,5 @@
+#!/usr/bin/env echo run from bash: .
+# shellcheck shell=bash disable=SC2148,SC2096
 # Define this here so it can be used by all of the Powerline themes
 THEME_CHECK_SUDO=${THEME_CHECK_SUDO:=true}
 

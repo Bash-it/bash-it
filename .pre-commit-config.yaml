@@ -28,3 +28,17 @@ repos:
       # - id: forbid-crlf
       - id: remove-crlf
         exclude: ".bat$"
+  - repo: local
+    hooks:
+      - id: dot-sh
+        name: Check .sh files against bash-it requirements
+        entry: ./hooks/dot-sh.sh
+        language: system
+        files: "\\.sh$"
+        types: [file]
+      - id: dot-bash
+        name: Check .bash files against bash-it requirements
+        entry: ./hooks/dot-bash.sh
+        language: system
+        files: "\\.bash$"
+        types: [file]

@@ -1,3 +1,5 @@
+#!/usr/bin/env echo run from bash: .
+# shellcheck shell=bash disable=SC2148,SC2096
 cite about-plugin
 about-plugin 'initializes basher, the shell package manager'
 
