@@ -27,6 +27,7 @@ lint_clean_files.sh
 #
 themes/90210
 themes/powerline
+themes/barbuk
 
 # plugins
 #
