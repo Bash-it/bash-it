@@ -51,10 +51,10 @@ function _git-uptream-remote-logo {
 	remote_domain=${remote_domain//\//}
 
 	case $remote_domain in
-		github)    SCM_GIT_CHAR="$SCM_GIT_CHAR_GITHUB" ;;
-		gitlab)    SCM_GIT_CHAR="$SCM_GIT_CHAR_GITLAB" ;;
-		bitbucket)    SCM_GIT_CHAR="$SCM_GIT_CHAR_BITBUCKET" ;;
-		*)    SCM_GIT_CHAR="$SCM_GIT_CHAR_DEFAULT" ;;
+		github)  SCM_GIT_CHAR="$SCM_GIT_CHAR_GITHUB" ;;
+		gitlab)  SCM_GIT_CHAR="$SCM_GIT_CHAR_GITLAB" ;;
+		bitbucket)  SCM_GIT_CHAR="$SCM_GIT_CHAR_BITBUCKET" ;;
+		*)  SCM_GIT_CHAR="$SCM_GIT_CHAR_DEFAULT" ;;
 	esac
 }
 
@@ -88,7 +88,7 @@ function _prompt {
 
 	# Detect ssh
 	if [[ -n "${SSH_CONNECTION}" ]] && [ "$SSH_INFO" = true ]; then
-		if   [ "$HOST_INFO" = long ]; then
+		if [ "$HOST_INFO" = long ]; then
 			host="\H"
 		else
 			host="\h"
@@ -100,7 +100,7 @@ function _prompt {
 	if [[ -n "${CONDA_DEFAULT_ENV}" ]]; then
 		python_venv="$PYTHON_VENV_CHAR${CONDA_DEFAULT_ENV} "
 	elif [[ -n "${VIRTUAL_ENV}" ]]; then
-		python_venv="$PYTHON_VENV_CHAR$(  basename "${VIRTUAL_ENV}") "
+		python_venv="$PYTHON_VENV_CHAR$(basename "${VIRTUAL_ENV}") "
 	fi
 
 	PS1="\\n${ssh_info} ${purple}$(scm_char)${python_venv}${dir_color}\\w${normal}$(scm_prompt_info)${command_duration}${exit_code}"
