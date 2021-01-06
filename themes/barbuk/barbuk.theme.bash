@@ -51,10 +51,10 @@ function _git-uptream-remote-logo {
 	remote_domain=${remote_domain//\//}
 
 	case $remote_domain in
-		github)  SCM_GIT_CHAR="$SCM_GIT_CHAR_GITHUB" ;;
-		gitlab)  SCM_GIT_CHAR="$SCM_GIT_CHAR_GITLAB" ;;
-		bitbucket)  SCM_GIT_CHAR="$SCM_GIT_CHAR_BITBUCKET" ;;
-		*)  SCM_GIT_CHAR="$SCM_GIT_CHAR_DEFAULT" ;;
+		github) SCM_GIT_CHAR="$SCM_GIT_CHAR_GITHUB" ;;
+		gitlab) SCM_GIT_CHAR="$SCM_GIT_CHAR_GITLAB" ;;
+		bitbucket) SCM_GIT_CHAR="$SCM_GIT_CHAR_BITBUCKET" ;;
+		*) SCM_GIT_CHAR="$SCM_GIT_CHAR_DEFAULT" ;;
 	esac
 }
 
