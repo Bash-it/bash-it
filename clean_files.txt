@@ -25,6 +25,7 @@ lint_clean_files.sh
 
 # themes
 #
+themes/agnoster
 themes/90210
 themes/powerline
 themes/barbuk
