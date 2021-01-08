@@ -39,10 +39,13 @@ themes/barbuk
 themes/atomic
 themes/axin
 themes/base.theme.bash
+themes/command_duration.theme.bash
 
 # plugins
 #
 plugins/available/basher.plugin.bash
+plugins/available/cmd-returned-notify.plugin.bash
+plugins/available/xterm.plugin.bash
 
 # completions
 #
