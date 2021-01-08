@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 # shellcheck disable=2034,2154
 
 # Theme custom glyphs
