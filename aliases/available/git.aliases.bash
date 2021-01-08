@@ -2,6 +2,7 @@ cite 'about-alias'
 about-alias 'common git abbreviations'
 
 alias g='git'
+alias get='git'
 
 # add
 alias ga='git add'
@@ -17,7 +18,7 @@ alias gbm='git branch -m'
 alias gbt='git branch --track'
 alias gdel='git branch -D'
 
-# odds and ends
+# for-each-ref
 alias gbc='git for-each-ref --format="%(authorname) %09 %(if)%(HEAD)%(then)*%(else)%(refname:short)%(end) %09 %(creatordate)" refs/remotes/ --sort=authorname DESC' # FROM https://stackoverflow.com/a/58623139/10362396
 
 # commit
@@ -39,10 +40,11 @@ alias gcom='git checkout master'
 alias gcpd='git checkout master; git pull; git branch -D'
 alias gct='git checkout --track'
 
-# odds and ends
+# clone
 alias gcl='git clone'
+
+# clean
 alias gclean='git clean -fd'
-alias gcount='git shortlog -sn'
 
 # cherry-pick
 alias gcp='git cherry-pick'
@@ -53,10 +55,7 @@ alias gd='git diff'
 alias gds='git diff --staged'
 alias gdt='git difftool'
 
-# Another Git alias
-alias get='git'
-
-# odds and ends
+# archive
 alias gexport='git archive --format zip --output'
 
 # fetch
@@ -65,6 +64,7 @@ alias gft='git fetch --all --prune --tags'
 alias gftv='git fetch --all --prune --tags --verbose'
 alias gfv='git fetch --all --prune --verbose'
 alias gmu='git fetch origin -v; git fetch upstream -v; git merge upstream/master'
+alias gup='git fetch && git rebase'
 
 # log
 alias gg='git log --graph --pretty=format:'\''%C(bold)%h%Creset%C(magenta)%d%Creset %s %C(yellow)<%an> %C(cyan)(%cr)%Creset'\'' --abbrev-commit --date=relative'
@@ -72,12 +72,28 @@ alias ggf='git log --graph --date=short --pretty=format:'\''%C(auto)%h %Cgreen%a
 alias ggs='gg --stat'
 alias gll='git log --graph --pretty=oneline --abbrev-commit'
 alias gnew='git log HEAD@{1}..HEAD@{0}' # Show commits since last pull, see http://blogs.atlassian.com/2014/10/advanced-git-aliases/
+alias gwc='git whatchanged'
 
-# odds and ends
+# ls-files
+alias gu='git ls-files . --exclude-standard --others' # Show untracked files
+
+# gui
 alias ggui='git gui'
+
+# home
 alias ghm='cd '\''$(git rev-parse --show-toplevel)'\''' # Git home
+# appendage to ghm
+if ! _command_exists gh; then
+	alias gh='ghm'
+fi
+
+# merge
 alias gm='git merge'
+
+# mv
 alias gmv='git mv'
+
+# patch
 alias gpatch='git format-patch -1'
 
 # push
@@ -98,31 +114,37 @@ alias gpl='git pull'
 alias gpp='git pull && git push'
 alias gpr='git pull --rebase'
 
-# odds and ends
-alias gpristine='git reset --hard && git clean -dfx'
-alias gprom='git fetch origin master && git rebase origin/master && git update-ref refs/heads/master origin/master' # Rebase with latest remote master
-
 # remote
 alias gr='git remote'
 alias gra='git remote add'
 alias grv='git remote -v'
 
-# odds and ends
+# rm
 alias grm='git rm'
 
 # rebase
 alias grb='git rebase'
 alias grm='git rebase master'
 alias grmi='git rebase master -i'
+alias gprom='git fetch origin master && git rebase origin/master && git update-ref refs/heads/master origin/master' # Rebase with latest remote master
+
+# reset
+alias gus='git reset HEAD'
+alias gpristine='git reset --hard && git clean -dfx'
 
 # status
 alias gs='git status'
 alias gss='git status -s'
 
-# odds and ends
-alias gsd='git svn dcommit'
-alias gsh='git show'
+# shortlog
+alias gcount='git shortlog -sn'
 alias gsl='git shortlog -sn'
+
+# show
+alias gsh='git show'
+
+# svn
+alias gsd='git svn dcommit'
 alias gsr='git svn rebase' # Git SVN
 
 # stash
@@ -141,7 +163,7 @@ alias gstpum='git stash push -m'
 alias gsts='git stash push'
 alias gstsm='git stash push -m'
 
-# odds and ends
+# submodules
 alias gsu='git submodule update --init --recursive'
 
 # switch
@@ -157,18 +179,6 @@ alias gta='git tag -a'
 alias gtd='git tag -d'
 alias gtl='git tag -l'
 
-# odds and ends
-alias gu='git ls-files . --exclude-standard --others' # Show untracked files
-alias gup='git fetch && git rebase'
-alias gus='git reset HEAD'
-alias gwc='git whatchanged'
-
-# appendage to ghm
-# it's here as there is a command called gh on some machines
-if ! _command_exists gh; then
-	alias gh='ghm'
-fi
-
 case $OSTYPE in
 	darwin*)
 		alias gtls="git tag -l | gsort -V"
@@ -179,6 +189,6 @@ case $OSTYPE in
 esac
 
 # functions
-gdv() {
+function gdv() {
 	git diff --ignore-all-space "$@" | vim -R -
 }
