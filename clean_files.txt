@@ -43,6 +43,7 @@ completion/available/packer.completion.bash
 completion/available/pipx.completion.bash
 completion/available/rustup.completion.bash
 completion/available/vault.completion.bash
+completion/available/sdkman.completion.bash
 
 # aliases
 aliases/available/vim.aliases.bash
