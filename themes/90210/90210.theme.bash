@@ -1,5 +1,4 @@
-#!/usr/bin/env echo run from bash: .
-# shellcheck shell=bash disable=SC2148,SC2096
+# shellcheck shell=bash
 SCM_THEME_PROMPT_DIRTY=" ${red}✗"
 SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓"
 SCM_THEME_PROMPT_PREFIX=" |"

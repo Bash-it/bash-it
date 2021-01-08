@@ -1,5 +1,4 @@
-#!/usr/bin/env echo run from bash: .
-# shellcheck shell=bash disable=SC2148,SC2096
+# shellcheck shell=bash
 
 # Published originally as public domain code at https://github.com/wk8/knife-bash-autocomplete
 

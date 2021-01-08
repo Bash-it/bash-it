@@ -2,8 +2,6 @@
 
 exit_code=0
 for file in "$@"; do
-	# TODO Confirm file has '.sh' extension
-
 	# Confirm file is executable
 	#
 	if [[ ! -x "${file}" ]]; then

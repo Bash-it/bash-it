@@ -1,5 +1,4 @@
-#!/usr/bin/env echo run from bash: .
-# shellcheck shell=bash disable=SC2148,SC2096
+# shellcheck shell=bash
 # pipx completion
 
 if _command_exists register-python-argcomplete && _command_exists pipx; then

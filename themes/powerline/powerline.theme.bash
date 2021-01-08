@@ -1,5 +1,4 @@
-#!/usr/bin/env echo run from bash: .
-# shellcheck shell=bash disable=SC2148,SC2096
+# shellcheck shell=bash
 
 # shellcheck source=../../themes/powerline/powerline.base.bash
 . "$BASH_IT/themes/powerline/powerline.base.bash"

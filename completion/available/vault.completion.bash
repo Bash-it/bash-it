@@ -1,5 +1,4 @@
-#!/usr/bin/env echo run from bash: .
-# shellcheck shell=bash disable=SC2148,SC2096
+# shellcheck shell=bash
 cite "about-completion"
 about-completion "vault completion"
 
