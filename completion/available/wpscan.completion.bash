@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-if command -v wpscan > /dev/null; then
+if _command_exists wpscan; then
 
     _wpscan_completions()   {
 
