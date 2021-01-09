@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 _sdkman_complete() {
 	local CANDIDATES
 	local CANDIDATE_VERSIONS

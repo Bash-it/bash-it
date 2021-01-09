@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-# shellcheck disable=2034,2154
+# shellcheck shell=bash
 
 # Theme custom glyphs
 SCM_GIT_CHAR_GITLAB=${BARBUK_GITLAB_CHAR:='  '}
