@@ -2,7 +2,7 @@
 
 if _command_exists wpscan; then
 
-    _wpscan_completions()   {
+    __wpscan_completion()   {
 
         local cur prev
         COMREPLY=()
@@ -58,5 +58,5 @@ if _command_exists wpscan; then
         esac
     }
 
-    complete   -F _wpscan_completions wpscan
+    complete -F __wpscan_completion wpscan
 fi
