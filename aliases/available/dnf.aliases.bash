@@ -1,9 +1,7 @@
-#!/bin/bash
-#zuck007
+# shellcheck shell=bash
 cite 'about-alias'
 about-alias 'dnf aliases for fedora 22+ distros'
 
-      
 alias dnfl="dnf list"                       # List packages
 alias dnfli="dnf list installed"            # List installed packages
 alias dnfgl="dnf grouplist"                 # List package groups
