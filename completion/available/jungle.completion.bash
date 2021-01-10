@@ -1,1 +1,1 @@
-[[ -x "$(which jungle)" ]] && eval "$(_JUNGLE_COMPLETE=source jungle)"
+if _command_exists jungle; then eval "$(_JUNGLE_COMPLETE=source jungle)"; fi
