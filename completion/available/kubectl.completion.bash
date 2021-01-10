@@ -2,7 +2,7 @@
 
 # kubectl (Kubernetes CLI) completion
 
-if command -v kubectl &>/dev/null
+if _command_exists kubectl
 then
-  eval "$(kubectl completion bash)"
+    eval "$(kubectl completion bash)"
 fi
