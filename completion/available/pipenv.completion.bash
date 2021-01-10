@@ -1,1 +1,4 @@
-[[ -x "$(which pipenv)" ]] && eval "$(pipenv --completion)"
+if _command_exists pipenv
+then
+    eval "$(pipenv --completion)"
+fi
