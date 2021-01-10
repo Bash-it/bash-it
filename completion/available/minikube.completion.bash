@@ -2,7 +2,7 @@
 
 # minikube (Local Kubernetes) completion
 
-if command -v minikube &>/dev/null
+if _command_exists minikube
 then
-  eval "$(minikube completion bash)"
+    eval "$(minikube completion bash)"
 fi
