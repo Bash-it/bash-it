@@ -1,8 +1,7 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
+cite "about-completion"
+about-completion "kubectl (Kubernetes CLI) completion"
 
-# kubectl (Kubernetes CLI) completion
-
-if command -v kubectl &>/dev/null
-then
-  eval "$(kubectl completion bash)"
+if _binary_exists kubectl; then
+	eval "$(kubectl completion bash)"
 fi

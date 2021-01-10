@@ -70,6 +70,7 @@ completion/available/helm.completion.bash
 completion/available/jungle.completion.bash
 completion/available/knife.completion.bash
 completion/available/kontena.completion.bash
+completion/available/kubectl.completion.bash
 completion/available/packer.completion.bash
 completion/available/pip.completion.bash
 completion/available/pip3.completion.bash
