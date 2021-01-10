@@ -71,6 +71,7 @@ completion/available/jungle.completion.bash
 completion/available/knife.completion.bash
 completion/available/kontena.completion.bash
 completion/available/kubectl.completion.bash
+completion/available/lerna.completion.bash
 completion/available/minikube.completion.bash
 completion/available/npm.completion.bash
 completion/available/packer.completion.bash
