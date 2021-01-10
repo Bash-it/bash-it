@@ -3,6 +3,7 @@ about-alias 'systemd service'
 
 case $OSTYPE in
     linux*)
+# Improve aliases by bringing the common root `sc|scd` + `sre` for action + `u` for user
 	alias sc='systemctl'
 	alias scu='systemctl --user'
 	alias scdr='systemctl daemon-reload'
