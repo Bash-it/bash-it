@@ -57,6 +57,7 @@ plugins/available/xterm.plugin.bash
 
 # completions
 #
+completion/available/awless.completion.bash
 completion/available/brew.completion.bash
 completion/available/cargo.completion.bash
 completion/available/knife.completion.bash
