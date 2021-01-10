@@ -61,6 +61,7 @@ completion/available/awless.completion.bash
 completion/available/brew.completion.bash
 completion/available/cargo.completion.bash
 completion/available/conda.completion.bash
+completion/available/consul.completion.bash
 completion/available/knife.completion.bash
 completion/available/packer.completion.bash
 completion/available/pipx.completion.bash

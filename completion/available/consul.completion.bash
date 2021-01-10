@@ -1,10 +1,7 @@
-# bash completion support for Hashicorp consul
+# shellcheck shell=bash
+cite "about-completion"
+about-completion "Hashicorp consul completion"
 
-CONSUL_BIN=$(command -v consul 2>/dev/null)
-
-if [[ -x "$CONSUL_BIN" ]]
-then
-  complete -C "$CONSUL_BIN" consul
+if _command_exists consul; then
+	complete -C "$(which consul)" consul
 fi
-
-unset CONSUL_BIN
