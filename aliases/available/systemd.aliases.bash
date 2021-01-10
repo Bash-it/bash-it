@@ -6,7 +6,7 @@ case $OSTYPE in
 	alias sc='systemctl'
 	alias scu='systemctl --user'
 	alias scdr='systemctl daemon-reload'
-	alias scdu='systemctl --user daemon-reload'
+	alias scdru='systemctl --user daemon-reload'
 	alias scr='systemctl restart'
 	alias scru='systemctl --user restart'
 	alias sce='systemctl stop'
