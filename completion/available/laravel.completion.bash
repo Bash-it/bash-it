@@ -1,15 +1,10 @@
-#!/usr/bin/bash
+# shellcheck shell=bash
 
-if command -v laravel > /dev/null; then
-    __laravel_completion()  {
-        local OPTS=("-h --help -q --quiet --ansi --no-ansi -n --no-interaction -v -vv -vvv --verbose help list new")
-        COMPREPLY=()
-        for _opt_ in ${OPTS[@]}; do
-            if [[ "$_opt_" == "$2"* ]]; then
-                COMPREPLY+=("$_opt_")
-            fi
-        done
-    }
+if _command_exists laravel; then
+	__laravel_completion() {
+		local curr=$(_get_cword)
+		COMPREPLY=($(compgen -W "list --raw --format -h --help -q --quiet -V --version --ansi --no-ansi -n --no-interaction -v -vv -vvv --verbose" -- "$curr"))
+	}
 
-    complete -F __laravel_completion laravel
+	complete -F __laravel_completion laravel
 fi

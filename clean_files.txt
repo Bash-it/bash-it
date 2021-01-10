@@ -53,6 +53,7 @@ completion/available/pipx.completion.bash
 completion/available/rustup.completion.bash
 completion/available/vault.completion.bash
 completion/available/sdkman.completion.bash
+completion/available/laravel.completion.bash
 
 # aliases
 #
