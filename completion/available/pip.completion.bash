@@ -5,6 +5,6 @@
 # If the pip package is installed within virtual environments, say, python managed by pyenv,
 # you should first initilization the corresponding environment.
 # So that the pip/pip3 is in system's path.
-if command -v pip >/dev/null; then
-  eval "$(pip completion --bash)"
+if _command_exists pip; then
+    eval "$(pip completion --bash)"
 fi
