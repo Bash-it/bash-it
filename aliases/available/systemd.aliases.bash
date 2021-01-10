@@ -14,7 +14,6 @@ case $OSTYPE in
 	alias sceu='systemctl --user stop'
 	alias scs='systemctl start'
 	alias scsu='systemctl --user start'
-	
 # Keeping previous aliases for a non-braking change.
 	alias scue='systemctl --user stop'
 	alias scus='systemctl --user start'
