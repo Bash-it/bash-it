@@ -1,1 +1,4 @@
-[[ -x "$(which awless)" ]] && source <(awless completion bash)
+if _command_exists awless
+then
+    source <(awless completion bash)
+fi
