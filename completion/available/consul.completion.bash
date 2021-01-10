@@ -4,4 +4,3 @@ if _command_exists consul
 then
     complete -C "$(which consul)" consul
 fi
-
