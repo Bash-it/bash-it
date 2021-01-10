@@ -72,6 +72,7 @@ completion/available/knife.completion.bash
 completion/available/kontena.completion.bash
 completion/available/kubectl.completion.bash
 completion/available/minikube.completion.bash
+completion/available/npm.completion.bash
 completion/available/packer.completion.bash
 completion/available/pip.completion.bash
 completion/available/pip3.completion.bash
