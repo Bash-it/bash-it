@@ -30,6 +30,7 @@ themes/agnoster
 themes/90210
 themes/powerline
 themes/barbuk
+themes/base.theme.bash
 
 # plugins
 #
