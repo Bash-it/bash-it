@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 
 CLOCK_CHAR_THEME_PROMPT_PREFIX=''
 CLOCK_CHAR_THEME_PROMPT_SUFFIX=''
@@ -123,13 +123,13 @@ function scm {
 
 function scm_prompt_char {
 	if [[ -z $SCM ]]; then scm; fi
-	if [[ $SCM == $SCM_GIT ]]; then
+	if [[ $SCM == "$SCM_GIT" ]]; then
 		SCM_CHAR=$SCM_GIT_CHAR
-	elif [[ $SCM == $SCM_P4 ]]; then
+	elif [[ $SCM == "$SCM_P4" ]]; then
 		SCM_CHAR=$SCM_P4_CHAR
-	elif [[ $SCM == $SCM_HG ]]; then
+	elif [[ $SCM == "$SCM_HG" ]]; then
 		SCM_CHAR=$SCM_HG_CHAR
-	elif [[ $SCM == $SCM_SVN ]]; then
+	elif [[ $SCM == "$SCM_SVN" ]]; then
 		SCM_CHAR=$SCM_SVN_CHAR
 	else
 		SCM_CHAR=$SCM_NONE_CHAR
@@ -141,10 +141,10 @@ function scm_prompt_vars {
 	scm_prompt_char
 	SCM_DIRTY=0
 	SCM_STATE=''
-	[[ $SCM == $SCM_GIT ]] && git_prompt_vars && return
-	[[ $SCM == $SCM_P4 ]] && p4_prompt_vars && return
-	[[ $SCM == $SCM_HG ]] && hg_prompt_vars && return
-	[[ $SCM == $SCM_SVN ]] && svn_prompt_vars && return
+	[[ $SCM == "$SCM_GIT" ]] && git_prompt_vars && return
+	[[ $SCM == "$SCM_P4" ]] && p4_prompt_vars && return
+	[[ $SCM == "$SCM_HG" ]] && hg_prompt_vars && return
+	[[ $SCM == "$SCM_SVN" ]] && svn_prompt_vars && return
 }
 
 function scm_prompt_info {
@@ -163,7 +163,7 @@ function scm_prompt_info_common {
 	SCM_DIRTY=0
 	SCM_STATE=''
 
-	if [[ ${SCM} == ${SCM_GIT} ]]; then
+	if [[ ${SCM} == "${SCM_GIT}" ]]; then
 		if [[ ${SCM_GIT_SHOW_MINIMAL_INFO} == true ]]; then
 			# user requests minimal git status information
 			git_prompt_minimal_info
@@ -175,9 +175,9 @@ function scm_prompt_info_common {
 	fi
 
 	# TODO: consider adding minimal status information for hg and svn
-	{ [[ ${SCM} == ${SCM_P4} ]] && p4_prompt_info && return; } || true
-	{ [[ ${SCM} == ${SCM_HG} ]] && hg_prompt_info && return; } || true
-	{ [[ ${SCM} == ${SCM_SVN} ]] && svn_prompt_info && return; } || true
+	{ [[ ${SCM} == "${SCM_P4}" ]] && p4_prompt_info && return; } || true
+	{ [[ ${SCM} == "${SCM_HG}" ]] && hg_prompt_info && return; } || true
+	{ [[ ${SCM} == "${SCM_SVN}" ]] && svn_prompt_info && return; } || true
 }
 
 function terraform_workspace_prompt {
@@ -332,7 +332,7 @@ function get_hg_root {
 			return
 		fi
 
-		CURRENT_DIR=$(dirname $CURRENT_DIR)
+		CURRENT_DIR=$(dirname "$CURRENT_DIR")
 	done
 }
 
@@ -389,8 +389,8 @@ function rvm_version_prompt {
 function rbenv_version_prompt {
 	if which rbenv &> /dev/null; then
 		rbenv=$(rbenv version-name) || return
-		$(rbenv commands | grep -q gemset) && gemset=$(rbenv gemset active 2> /dev/null) && rbenv="$rbenv@${gemset%% *}"
-		if [ $rbenv != "system" ]; then
+		$rbenv commands | grep -q gemset && gemset=$(rbenv gemset active 2> /dev/null) && rbenv="$rbenv@${gemset%% *}"
+		if [ "$rbenv" != "system" ]; then
 			echo -e "$RBENV_THEME_PROMPT_PREFIX$rbenv$RBENV_THEME_PROMPT_SUFFIX"
 		fi
 	fi
@@ -410,7 +410,7 @@ function chruby_version_prompt {
 
 		ruby_version=$(ruby --version | awk '{print $1, $2;}') || return
 
-		if [[ ! $(chruby | grep '\*') ]]; then
+		if ! chruby | grep -q '\*'; then
 			ruby_version="${ruby_version} (system)"
 		fi
 		echo -e "${CHRUBY_THEME_PROMPT_PREFIX}${ruby_version}${CHRUBY_THEME_PROMPT_SUFFIX}"
@@ -453,7 +453,7 @@ function git_user_info {
 	# support two or more initials, set by 'git pair' plugin
 	SCM_CURRENT_USER=$(git config user.initials | sed 's% %+%')
 	# if `user.initials` weren't set, attempt to extract initials from `user.name`
-	[[ -z "${SCM_CURRENT_USER}" ]] && SCM_CURRENT_USER=$(printf "%s" $(for word in $(git config user.name | PERLIO=:utf8 perl -pe '$_=lc'); do printf "%s" "${word:0:1}"; done))
+	[[ -z "${SCM_CURRENT_USER}" ]] && SCM_CURRENT_USER=$(printf "%s" "$(for word in $(git config user.name | PERLIO=:utf8 perl -pe '$_=lc'); do printf "%s" "${word:0:1}"; done)")
 	[[ -n "${SCM_CURRENT_USER}" ]] && printf "%s" "$SCM_THEME_CURRENT_USER_PREFFIX$SCM_CURRENT_USER$SCM_THEME_CURRENT_USER_SUFFIX"
 }
 
@@ -470,7 +470,7 @@ function clock_char {
 function clock_prompt {
 	CLOCK_COLOR=${THEME_CLOCK_COLOR:-"$normal"}
 	CLOCK_FORMAT=${THEME_CLOCK_FORMAT:-"%H:%M:%S"}
-	[ -z $THEME_SHOW_CLOCK ] && THEME_SHOW_CLOCK=${THEME_CLOCK_CHECK:-"true"}
+	[ -z "$THEME_SHOW_CLOCK" ] && THEME_SHOW_CLOCK=${THEME_CLOCK_CHECK:-"true"}
 	SHOW_CLOCK=$THEME_SHOW_CLOCK
 
 	if [[ "${SHOW_CLOCK}" = "true" ]]; then
