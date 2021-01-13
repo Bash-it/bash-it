@@ -2,13 +2,11 @@
 cite 'about-alias'
 about-alias 'xclip shortcuts'
 
-if _command_exists xclip; then
-    alias pbcopy="xclip -selection clipboard"
-    alias pbpaste="xclip -selection clipboard -o"
+alias pbcopy="xclip -selection clipboard"
+alias pbpaste="xclip -selection clipboard -o"
 
-    alias xcpy="xclip -selection clipboard"
-    alias xpst="xclip -selection clipboard -o"
-fi
+alias xcpy="xclip -selection clipboard"
+alias xpst="xclip -selection clipboard -o"
 # to use it just install xclip on your distribution and it would work like:
 # $ echo "hello" | xcpy
 # $ xpst
