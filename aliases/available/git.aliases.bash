@@ -77,6 +77,8 @@ alias gwc='git whatchanged'
 
 # ls-files
 alias gu='git ls-files . --exclude-standard --others' # Show untracked files
+alias glsut='gu'
+alias glsum='git diff --name-only --diff-filter=U' # Show unmerged (conflicted) files
 
 # gui
 alias ggui='git gui'
