@@ -55,7 +55,6 @@ alias gcpx='git cherry-pick -x'
 alias gd='git diff'
 alias gds='git diff --staged'
 alias gdt='git difftool'
-alias glsu='git diff --name-only --diff-filter=U' # lists only the names of conflicted files
 
 # archive
 alias gexport='git archive --format zip --output'
@@ -78,6 +77,8 @@ alias gwc='git whatchanged'
 
 # ls-files
 alias gu='git ls-files . --exclude-standard --others' # Show untracked files
+alias glsut='gu'
+alias glsum='git diff --name-only --diff-filter=U' # Show unmerged (conflicted) files
 
 # gui
 alias ggui='git gui'
