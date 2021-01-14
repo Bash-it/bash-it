@@ -30,6 +30,8 @@ themes/agnoster
 themes/90210
 themes/powerline
 themes/barbuk
+themes/atomic
+themes/axin
 themes/base.theme.bash
 
 # plugins
