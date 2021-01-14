@@ -59,8 +59,18 @@ _sdkman_candidate_all_versions() {
 	if [ "$SDKMAN_OFFLINE_MODE" = "true" ]; then
 		CANDIDATE_VERSIONS=$CANDIDATE_LOCAL_VERSIONS
 	else
-		CANDIDATE_ONLINE_VERSIONS="$(__sdkman_list_versions "$1" | grep " " | grep "\." | cut -c 62-)"
-		CANDIDATE_VERSIONS="$(echo "$CANDIDATE_ONLINE_VERSIONS $CANDIDATE_LOCAL_VERSIONS" | tr ' ' '\n' | sort | uniq -u) "
+		# sdkman has a specific output format for Java candidate since
+		# there are multiple vendors and builds.
+		if [ "$candidate" = "java" ]; then
+			CANDIDATE_ONLINE_VERSIONS="$(__sdkman_list_versions "$candidate" | grep " " | grep "\." | cut -c 62-)"
+		else
+			CANDIDATE_ONLINE_VERSIONS="$(__sdkman_list_versions "$candidate" | grep " " | grep "\." | cut -c 6-)"
+		fi
+		# the last grep is used to filter out sdkman flags, such as:
+		# "+" - local version
+		# "*" - installed
+		# ">" - currently in use
+		CANDIDATE_VERSIONS="$(echo "$CANDIDATE_ONLINE_VERSIONS $CANDIDATE_LOCAL_VERSIONS" | tr ' ' '\n' | grep -v -e '^[[:space:]|\*|\>|\+]*$' | sort | uniq -u) "
 	fi
 
 }

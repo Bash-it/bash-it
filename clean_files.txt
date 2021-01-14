@@ -32,6 +32,7 @@ themes/powerline
 themes/barbuk
 themes/atomic
 themes/axin
+themes/base.theme.bash
 
 # plugins
 #
@@ -48,5 +49,7 @@ completion/available/vault.completion.bash
 completion/available/sdkman.completion.bash
 
 # aliases
+#
 aliases/available/dnf.aliases.bash
 aliases/available/vim.aliases.bash
+aliases/available/git.aliases.bash
