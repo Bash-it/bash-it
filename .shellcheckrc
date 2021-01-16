@@ -4,3 +4,5 @@ disable=SC2154
 disable=SC2155
 # shellcheck is wrong on some
 disable=SC2034
+# Messing with our COMPREPLY completions
+disable=SC2207
