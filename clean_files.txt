@@ -24,6 +24,12 @@ hooks
 .gitattributes
 lint_clean_files.sh
 
+# plugins
+#
+plugins/available/history.plugin.bash
+plugins/available/history-search.plugin.bash
+plugins/available/history-substring-search.plugin.bash
+
 # themes
 #
 themes/agnoster
