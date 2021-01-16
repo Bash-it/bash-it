@@ -208,16 +208,15 @@ _brainy_completion() {
 	segments="battery clock exitcode python ruby scm sudo todo"
 	case "${_action}" in
 		show)
-			read -r -a COMPREPLY <<< "$(compgen -W "${segments}" -- "${cur}")"
+			while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "${segments}" -- "${cur}")
 			return 0
 			;;
 		hide)
-			read -r -a COMPREPLY <<< "$(compgen -W "${segments}" -- "${cur}")"
+			while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "${segments}" -- "${cur}")
 			return 0
 			;;
 	esac
-
-	read -r -a COMPREPLY <<< "$(compgen -W "${actions}" -- "${cur}")"
+	while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "${actions}" -- "${cur}")
 	return 0
 }
 
