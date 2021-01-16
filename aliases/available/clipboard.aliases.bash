@@ -1,20 +1,17 @@
+# shellcheck shell=bash
 cite 'about-alias'
-about-alias 'pbcopy and pbpaste shortcuts to linux'
+about-alias 'xclip shortcuts'
 
-case $OSTYPE in
-  linux*)
-    XCLIP=$(command -v xclip)
-    [[ $XCLIP ]] && \
-    alias pbcopy="$XCLIP -selection clipboard" && \
-    alias pbpaste="$XCLIP -selection clipboard -o"
-    ;;
-esac
+alias pbcopy="xclip -selection clipboard"
+alias pbpaste="xclip -selection clipboard -o"
 
+alias xcpy="xclip -selection clipboard"
+alias xpst="xclip -selection clipboard -o"
 # to use it just install xclip on your distribution and it would work like:
-# $ echo "hello" | pbcopy
-# $ pbpaste
+# $ echo "hello" | xcpy
+# $ xpst
 # hello
 
 # very useful for things like:
-# cat ~/.ssh/id_rsa.pub | pbcopy
+# cat ~/.ssh/id_rsa.pub | xcpy
 # have fun!
