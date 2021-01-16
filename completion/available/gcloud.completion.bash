@@ -1,5 +1,6 @@
 # shellcheck shell=bash
-# Bash completion for Google Cloud SDK
+cite "about-completion"
+about-completion "Google Cloud SDK completion"
 
 if _command_exists gcloud; then
 	# get install path
