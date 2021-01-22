@@ -35,18 +35,22 @@ modern_scm_prompt() {
 	fi
 }
 
-prompt() {
-	if [ $? -ne 0 ]
-	then
-		# Yes, the indenting on these is weird, but it has to be like
-		# this otherwise it won't display properly.
-
-    PS1="${TITLEBAR}${bold_red}┌─${reset_color}$(modern_scm_prompt)[${cyan}\W${normal}][$(battery_charge)]$(is_vim_shell)
-${bold_red}└─▪${normal} "
-	else
-		PS1="${TITLEBAR}┌─$(modern_scm_prompt)[${cyan}\W${normal}][$(battery_charge)]$(is_vim_shell)
-└─▪ "
+detect_venv() {
+	python_venv=""
+	# Detect python venv
+	if [[ -n "${CONDA_DEFAULT_ENV}" ]]; then
+		python_venv="($PYTHON_VENV_CHAR${CONDA_DEFAULT_ENV})"
+	elif [[ -n "${VIRTUAL_ENV}" ]]; then
+		python_venv="($PYTHON_VENV_CHAR$(basename "${VIRTUAL_ENV}"))"
 	fi
+
+}
+prompt() {
+	detect_venv
+	
+	PS1="${TITLEBAR}┌─$(modern_scm_prompt)[${cyan}\u${normal}][${cyan}\w${normal}]$(is_vim_shell)
+└─▪ ${python_venv}${dir_color} "
+
 }
 
 PS2="└─▪ "
