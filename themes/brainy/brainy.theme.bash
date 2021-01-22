@@ -207,16 +207,15 @@ _brainy_completion() {
 	actions="show hide"
 	segments="battery clock exitcode python ruby scm sudo todo"
 	case "${_action}" in
-		show)
-			while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "${segments}" -- "${cur}")
-			return 0
-			;;
-		hide)
-			while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "${segments}" -- "${cur}")
+		show | hide)
+			# shellcheck disable=SC2207
+			COMPREPLY=($(compgen -W "${segments}" -- "${cur}"))
 			return 0
 			;;
 	esac
-	while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "${actions}" -- "${cur}")
+
+	# shellcheck disable=SC2207
+	COMPREPLY=($(compgen -W "${actions}" -- "${cur}"))
 	return 0
 }
 
