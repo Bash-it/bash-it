@@ -16,6 +16,7 @@ function __lerna_completion() {
 	--version"
 
 	# Tell complete what stuff to show.
+	# shellcheck disable=2207
 	COMPREPLY=($(compgen -W "$compls" -- "$cur"))
 }
 complete -o default -F __lerna_completion lerna
