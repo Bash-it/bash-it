@@ -114,6 +114,7 @@ function _composer() {
 
 		esac
 
+		# shellcheck disable=SC2207
 		COMPREPLY=($(compgen -W "${opts}" -- "${cur}"))
 		__ltrim_colon_completions "$cur"
 
@@ -124,6 +125,7 @@ function _composer() {
 	if [[ "$cur" == "$com" ]]; then
 		coms="about archive browse clear-cache config create-project depends diagnose dump-autoload exec global help init install licenses list outdated prohibits remove require run-script search self-update show status suggests update validate"
 
+		# shellcheck disable=SC2207
 		COMPREPLY=($(compgen -W "${coms}" -- "${cur}"))
 		__ltrim_colon_completions "$cur"
 
