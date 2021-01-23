@@ -9,26 +9,24 @@ SCM_HG_CHAR="${bold_red}☿${normal}"
 
 case $TERM in
 	xterm*)
-	TITLEBAR="\[\033]0;\w\007\]"
-	;;
+		TITLEBAR="\[\033]0;\w\007\]"
+		;;
 	*)
-	TITLEBAR=""
-	;;
+		TITLEBAR=""
+		;;
 esac
 
 PS3=">> "
 
 is_vim_shell() {
-	if [ ! -z "$VIMRUNTIME" ]
-	then
+	if [ ! -z "$VIMRUNTIME" ]; then
 		echo "[${cyan}vim shell${normal}]"
 	fi
 }
 
 modern_scm_prompt() {
 	CHAR=$(scm_char)
-	if [ $CHAR = $SCM_NONE_CHAR ]
-	then
+	if [ $CHAR = $SCM_NONE_CHAR ]; then
 		return
 	else
 		echo "[$(scm_char)][$(scm_prompt_info)]"
@@ -58,4 +56,3 @@ prompt() {
 PS2="└─▪ "
 
 safe_append_prompt_command prompt
-
