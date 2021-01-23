@@ -1,6 +1,7 @@
 #!/usr/bin/env bats
 
 load ../test_helper
+load ../../lib/helpers
 load ../../lib/composure
 
 load ../../plugins/available/xterm.plugin
@@ -9,8 +10,7 @@ function local_setup {
   setup_test_fixture
 
   # Copy the test fixture to the Bash-it folder
-  if command_exists -v rsync
-  then
+  if _command_exists rsync; then
     rsync -a "$BASH_IT/test/fixtures/plugin/xterm/" "$BASH_IT/"
   else
     find "$BASH_IT/test/fixtures/plugin/xterm" \
