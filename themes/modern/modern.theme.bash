@@ -47,14 +47,11 @@ detect_venv() {
 }
 prompt() {
 	detect_venv
-	
-	PS1="${TITLEBAR}┌─$(modern_scm_prompt)[${cyan}\u${normal}][${cyan}\w${normal}]$(is_vim_shell)
-└─▪ ${python_venv}${dir_color} "
+
+	PS1="${TITLEBAR}┌─$(modern_scm_prompt)[${cyan}\u${normal}][${cyan}\w${normal}]$(is_vim_shell)\n└─▪ ${python_venv}${dir_color} "
 
 }
 
 PS2="└─▪ "
-
-
 
 safe_append_prompt_command prompt
