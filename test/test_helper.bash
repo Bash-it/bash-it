@@ -1,3 +1,6 @@
+#!/usr/bin/env bats
+load ../../lib/composure
+
 unset BASH_IT_THEME
 unset GIT_HOSTING
 unset NGINX_PATH
@@ -15,6 +18,9 @@ export GIT_CONFIG_NOSYSTEM
 load "${TEST_DEPS_DIR}/bats-support/load.bash"
 load "${TEST_DEPS_DIR}/bats-assert/load.bash"
 load "${TEST_DEPS_DIR}/bats-file/load.bash"
+
+# support 'plumbing' metadata
+cite _about _param _example _group _author _version
 
 local_setup() {
   true
