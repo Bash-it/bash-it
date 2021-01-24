@@ -155,7 +155,7 @@ alias gst='git stash'
 alias gstb='git stash branch'
 alias gstd='git stash drop'
 alias gstl='git stash list'
-alias gstp='git stash pop' # kept due to long-standing usage
+alias gstp='git stash pop'  # kept due to long-standing usage
 alias gstpo='git stash pop' # recommended for it's symmetry with gstpu (push)
 
 ## 'stash push' introduced in git v2.13.2

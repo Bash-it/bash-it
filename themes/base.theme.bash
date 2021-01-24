@@ -87,8 +87,8 @@ RBFU_THEME_PROMPT_SUFFIX='|'
 
 GIT_EXE=$(which git 2> /dev/null || true)
 P4_EXE=$(which p4 2> /dev/null || true)
-HG_EXE=$(which hg  2> /dev/null || true)
-SVN_EXE=$(which svn  2> /dev/null || true)
+HG_EXE=$(which hg 2> /dev/null || true)
+SVN_EXE=$(which svn 2> /dev/null || true)
 
 # Check for broken SVN exe that is caused by some versions of Xcode.
 # See https://github.com/Bash-it/bash-it/issues/1612 for more details.
@@ -207,8 +207,10 @@ function git_prompt_minimal_info {
 }
 
 function git_prompt_vars {
-	if ${SCM_GIT_USE_GITSTATUS} && _command_exists gitstatus_query && gitstatus_query && [[ "${VCS_STATUS_RESULT}" == "ok-sync" ]]; then # use faster gitstatus
-		SCM_GIT_GITSTATUS_RAN=true # use this in githelpers and below to choose gitstatus output
+	if ${SCM_GIT_USE_GITSTATUS} && _command_exists gitstatus_query && gitstatus_query && [[ "${VCS_STATUS_RESULT}" == "ok-sync" ]]; then
+		# we can use faster gitstatus
+		# use this variable in githelpers and below to choose gitstatus output
+		SCM_GIT_GITSTATUS_RAN=true
 	else
 		SCM_GIT_GITSTATUS_RAN=false
 	fi
