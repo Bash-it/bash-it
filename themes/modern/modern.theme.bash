@@ -46,7 +46,8 @@ detect_venv() {
 }
 
 prompt() {
-	if [ $? -ne 0 ]; then
+	retval=$?
+	if [[ retval -ne 0 ]]; then
 		PS1="${TITLEBAR}${bold_red}┌─${reset_color}$(modern_scm_prompt)[${cyan}\u${normal}][${cyan}\w${normal}]$(is_vim_shell)\n${bold_red}└─▪${normal} "
 	else
 		PS1="${TITLEBAR}┌─$(modern_scm_prompt)[${cyan}\u${normal}][${cyan}\w${normal}]$(is_vim_shell)\n└─▪ "
