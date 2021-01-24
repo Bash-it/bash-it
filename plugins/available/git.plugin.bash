@@ -4,11 +4,11 @@ cite about-plugin
 about-plugin 'git helper functions'
 
 function git_remote {
-	about 'adds remote $GIT_HOSTING:$1 to current repo'
-	group 'git'
+	about "adds remote $GIT_HOSTING:$1 to current repo"
+	group "git"
 
 	echo "Running: git remote add origin ${GIT_HOSTING}:$1.git"
-	git remote add origin $GIT_HOSTING:$1.git
+	git remote add origin "$GIT_HOSTING:$1".git
 }
 
 function git_first_push {
@@ -25,15 +25,15 @@ function git_pub() {
 	BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 	echo "Publishing ${BRANCH} to remote origin"
-	git push -u origin $BRANCH
+	git push -u origin "$BRANCH"
 }
 
 function git_revert() {
 	about 'applies changes to HEAD that revert all changes after this commit'
 	group 'git'
 
-	git reset $1
-	git reset --soft HEAD@{1}
+	git reset "$1"
+	git reset --soft "HEAD@{1}"
 	git commit -m "Revert to ${1}"
 	git reset --hard
 }
@@ -50,7 +50,7 @@ function git_rollback() {
 	}
 
 	function commit_exists() {
-		git rev-list --quiet $1
+		git rev-list --quiet "$1"
 		status=$?
 		if [ $status -ne 0 ]; then
 			echo "Commit ${1} does not exist"
@@ -60,17 +60,18 @@ function git_rollback() {
 
 	function keep_changes() {
 		while true; do
+			# shellcheck disable=SC2162
 			read -p "Do you want to keep all changes from rolled back revisions in your working tree? [Y/N]" RESP
 			case $RESP in
 
 				[yY])
 					echo "Rolling back to commit ${1} with unstaged changes"
-					git reset $1
+					git reset "$1"
 					break
 					;;
 				[nN])
 					echo "Rolling back to commit ${1} with a clean working tree"
-					git reset --hard $1
+					git reset --hard "$1"
 					break
 					;;
 				*)
@@ -82,14 +83,15 @@ function git_rollback() {
 
 	if [ -n "$(git symbolic-ref HEAD 2> /dev/null)" ]; then
 		is_clean
-		commit_exists $1
+		commit_exists "$1"
 
 		while true; do
+			# shellcheck disable=SC2162
 			read -p "WARNING: This will change your history and move the current HEAD back to commit ${1}, continue? [Y/N]" RESP
 			case $RESP in
 
 				[yY])
-					keep_changes $1
+					keep_changes "$1"
 					break
 					;;
 				[nN])
@@ -133,8 +135,8 @@ function git_info() {
 
 		# print all remotes and thier details
 		for remote in $(git remote show); do
-			echo $remote:
-			git remote show $remote
+			echo "$remote":
+			git remote show "$remote"
 			echo
 		done
 
@@ -186,13 +188,13 @@ function git_stats {
 			echo '-------------------'
 			echo "Statistics for: $a"
 			echo -n "Number of files changed: "
-			git log $LOGOPTS --all --numstat --format="%n" --author=$a | cut -f3 | sort -iu | wc -l
+			git log "$LOGOPTS" --all --numstat --format="%n" --author="$a" | cut -f3 | sort -iu | wc -l
 			echo -n "Number of lines added: "
-			git log $LOGOPTS --all --numstat --format="%n" --author=$a | cut -f1 | awk '{s+=$1} END {print s}'
+			git log "$LOGOPTS" --all --numstat --format="%n" --author="$a" | cut -f1 | awk '{s+=$1} END {print s}'
 			echo -n "Number of lines deleted: "
-			git log $LOGOPTS --all --numstat --format="%n" --author=$a | cut -f2 | awk '{s+=$1} END {print s}'
+			git log "$LOGOPTS" --all --numstat --format="%n" --author="$a" | cut -f2 | awk '{s+=$1} END {print s}'
 			echo -n "Number of merges: "
-			git log $LOGOPTS --all --merges --author=$a | grep -c '^commit'
+			git log "$LOGOPTS" --all --merges --author="$a" | grep -c '^commit'
 		done
 	else
 		echo "you're currently not in a git repository"
@@ -290,7 +292,8 @@ function git-changelog() {
 	if [[ "$2" == "md" ]]; then
 		echo "# CHANGELOG $1"
 
-		git log $1 --no-merges --format="%cd" --date=short | sort -u -r | while read DATE; do
+		# shellcheck disable=SC2162
+		git log "$1" --no-merges --format="%cd" --date=short | sort -u -r | while read DATE; do
 			echo
 			echo "### $DATE"
 			git log --no-merges --format=" * (%h) %s by [%an](mailto:%ae)" --since="$DATE 00:00:00" --until="$DATE 24:00:00"
@@ -299,7 +302,9 @@ function git-changelog() {
 	else
 		echo "CHANGELOG $1"
 		echo ----------------------
-		git log $1 --no-merges --format="%cd" --date=short | sort -u -r | while read DATE; do
+
+		# shellcheck disable=SC2162
+		git log "$1" --no-merges --format="%cd" --date=short | sort -u -r | while read DATE; do
 			echo
 			echo [$DATE]
 			git log --no-merges --format=" * (%h) %s by %an <%ae>" --since="$DATE 00:00:00" --until="$DATE 24:00:00"
