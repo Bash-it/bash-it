@@ -43,6 +43,7 @@ themes/base.theme.bash
 # plugins
 #
 plugins/available/basher.plugin.bash
+plugins/available/git.plugin.bash
 
 # completions
 #
