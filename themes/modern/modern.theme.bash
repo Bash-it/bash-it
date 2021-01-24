@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 SCM_THEME_PROMPT_PREFIX=""
 SCM_THEME_PROMPT_SUFFIX=""
 
@@ -19,14 +21,14 @@ esac
 PS3=">> "
 
 is_vim_shell() {
-	if [ ! -z "$VIMRUNTIME" ]; then
+	if [ -n "$VIMRUNTIME" ]; then
 		echo "[${cyan}vim shell${normal}]"
 	fi
 }
 
 modern_scm_prompt() {
 	CHAR=$(scm_char)
-	if [ $CHAR = $SCM_NONE_CHAR ]; then
+	if [ "$CHAR" = "$SCM_NONE_CHAR" ]; then
 		return
 	else
 		echo "[$(scm_char)][$(scm_prompt_info)]"
