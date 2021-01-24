@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-
+# shellcheck shell=bash
 # cargo (Rust package manager) completion
 
 if _binary_exists rustup && _binary_exists cargo; then

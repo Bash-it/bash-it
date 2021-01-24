@@ -51,6 +51,13 @@ export SCM_CHECK=true
 # Will otherwise fall back on $USER.
 #export SHORT_USER=${USER:0:8}
 
+# If your theme use command duration, uncomment this to
+# enable display of last command duration.
+#export BASH_IT_COMMAND_DURATION=true
+# You can choose the minimum time in seconds before
+# command duration is displayed.
+#export COMMAND_DURATION_MIN_SECONDS=1
+
 # Set Xterm/screen/Tmux title with shortened command and directory.
 # Uncomment this to set.
 #export SHORT_TERM_LINE=true

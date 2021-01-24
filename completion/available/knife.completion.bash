@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 
 # Published originally as public domain code at https://github.com/wk8/knife-bash-autocomplete
 
