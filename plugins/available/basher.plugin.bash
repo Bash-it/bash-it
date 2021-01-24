@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 cite about-plugin
 about-plugin 'initializes basher, the shell package manager'
 

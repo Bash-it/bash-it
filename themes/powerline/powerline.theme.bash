@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 
 # shellcheck source=../../themes/powerline/powerline.base.bash
 . "$BASH_IT/themes/powerline/powerline.base.bash"

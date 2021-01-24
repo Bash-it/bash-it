@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 cite 'about-alias'
 about-alias 'vim abbreviations'
 
