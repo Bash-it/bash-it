@@ -39,6 +39,13 @@ themes/barbuk
 themes/atomic
 themes/axin
 themes/base.theme.bash
+themes/bakke
+themes/binaryanomaly
+themes/bira
+themes/bobby
+themes/bobby-python
+themes/brainy
+themes/brunton
 
 # plugins
 #
