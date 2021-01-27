@@ -70,3 +70,6 @@ completion/available/vuejs.completion.bash
 aliases/available/dnf.aliases.bash
 aliases/available/vim.aliases.bash
 aliases/available/git.aliases.bash
+
+# vendor init files
+vendor/init.d
