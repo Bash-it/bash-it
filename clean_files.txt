@@ -46,10 +46,13 @@ themes/bobby
 themes/bobby-python
 themes/brainy
 themes/brunton
+themes/command_duration.theme.bash
 
 # plugins
 #
 plugins/available/basher.plugin.bash
+plugins/available/cmd-returned-notify.plugin.bash
+plugins/available/xterm.plugin.bash
 
 # completions
 #
@@ -67,3 +70,6 @@ completion/available/vuejs.completion.bash
 aliases/available/dnf.aliases.bash
 aliases/available/vim.aliases.bash
 aliases/available/git.aliases.bash
+
+# vendor init files
+vendor/init.d
