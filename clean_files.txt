@@ -39,6 +39,13 @@ themes/barbuk
 themes/atomic
 themes/axin
 themes/base.theme.bash
+themes/bakke
+themes/binaryanomaly
+themes/bira
+themes/bobby
+themes/bobby-python
+themes/brainy
+themes/brunton
 themes/command_duration.theme.bash
 
 # plugins
@@ -56,6 +63,7 @@ completion/available/pipx.completion.bash
 completion/available/rustup.completion.bash
 completion/available/vault.completion.bash
 completion/available/sdkman.completion.bash
+completion/available/vuejs.completion.bash
 
 # aliases
 #
