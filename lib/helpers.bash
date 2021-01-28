@@ -37,6 +37,17 @@ function _binary_exists ()
   type -P "$1" &> /dev/null || (_log_warning "$msg" && return 1) ;
 }
 
+function _completion_exists ()
+{
+  _about 'checks for existence of a completion'
+  _param '1: command to check'
+  _param '2: (optional) log message to include when completion is found'
+  _example '$ _completion_exists gh && echo exists'
+  _group 'lib'
+  local msg="${2:-Completion for '$1' already exists!}"
+  complete -p "$1" &> /dev/null && _log_warning "$msg" ;
+}
+
 function _make_reload_alias() {
   echo "source \${BASH_IT}/scripts/reloader.bash ${1} ${2}"
 }
