@@ -23,6 +23,8 @@ hooks
 #
 .gitattributes
 lint_clean_files.sh
+install.sh
+bash_it.sh
 
 # plugins
 #
@@ -92,5 +94,9 @@ aliases/available/dnf.aliases.bash
 aliases/available/vim.aliases.bash
 aliases/available/git.aliases.bash
 
+# tests
+test/test_helper.bash
+
 # vendor init files
+vendor/.gitattributes
 vendor/init.d

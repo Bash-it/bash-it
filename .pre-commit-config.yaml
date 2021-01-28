@@ -38,6 +38,7 @@ repos:
         types: [file]
       - id: dot-bash
         name: Check .bash files against bash-it requirements
+        exclude: "test/test_helper.bash"
         entry: ./hooks/dot-bash.sh
         language: system
         files: "\\.bash$"

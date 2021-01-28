@@ -1,5 +1,5 @@
 #!/usr/bin/env bats
-load ../../lib/composure
+load "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
 
 unset BASH_IT_THEME
 unset GIT_HOSTING
@@ -23,11 +23,11 @@ load "${TEST_DEPS_DIR}/bats-file/load.bash"
 cite _about _param _example _group _author _version
 
 local_setup() {
-  true
+	true
 }
 
 local_teardown() {
-  true
+	true
 }
 
 # This function sets up a local test fixture, i.e. a completely
@@ -35,71 +35,70 @@ local_teardown() {
 # messing with your own Bash-it source directory.
 # If you need this, call it in your .bats file's `local_setup` function.
 setup_test_fixture() {
-  mkdir -p "$BASH_IT"
-  lib_directory="$(cd "$(dirname "$0")" && pwd)"
-  local src_topdir="$lib_directory/../../../.."
+	mkdir -p "$BASH_IT"
+	lib_directory="$(cd "$(dirname "$0")" && pwd)"
+	local src_topdir="$lib_directory/../../../.."
 
-  if command -v rsync &> /dev/null
-  then
-    # Use rsync to copy Bash-it to the temp folder
-    rsync -qavrKL -d --delete-excluded --exclude=.git --exclude=enabled "$src_topdir" "$BASH_IT"
-  else
-    rm -rf "$BASH_IT"
-    mkdir -p "$BASH_IT"
+	if command -v rsync &> /dev/null; then
+		# Use rsync to copy Bash-it to the temp folder
+		rsync -qavrKL -d --delete-excluded --exclude=.git --exclude=enabled "$src_topdir" "$BASH_IT"
+	else
+		rm -rf "$BASH_IT"
+		mkdir -p "$BASH_IT"
 
-    find "$src_topdir" \
-      -mindepth 1 -maxdepth 1 \
-      -not -name .git \
-      -exec cp -r {} "$BASH_IT" \;
-  fi
+		find "$src_topdir" \
+			-mindepth 1 -maxdepth 1 \
+			-not -name .git \
+			-exec cp -r {} "$BASH_IT" \;
+	fi
 
-  rm -rf "$BASH_IT"/enabled
-  rm -rf "$BASH_IT"/aliases/enabled
-  rm -rf "$BASH_IT"/completion/enabled
-  rm -rf "$BASH_IT"/plugins/enabled
+	rm -rf "$BASH_IT"/enabled
+	rm -rf "$BASH_IT"/aliases/enabled
+	rm -rf "$BASH_IT"/completion/enabled
+	rm -rf "$BASH_IT"/plugins/enabled
 
-  mkdir -p "$BASH_IT"/enabled
-  mkdir -p "$BASH_IT"/aliases/enabled
-  mkdir -p "$BASH_IT"/completion/enabled
-  mkdir -p "$BASH_IT"/plugins/enabled
+	mkdir -p "$BASH_IT"/enabled
+	mkdir -p "$BASH_IT"/aliases/enabled
+	mkdir -p "$BASH_IT"/completion/enabled
+	mkdir -p "$BASH_IT"/plugins/enabled
 
-  # Some tests use the BASH_IT_TEST_HOME variable, e.g. install/uninstall
-  export BASH_IT_TEST_HOME="$TEST_TEMP_DIR"
+	# Some tests use the BASH_IT_TEST_HOME variable, e.g. install/uninstall
+	export BASH_IT_TEST_HOME="$TEST_TEMP_DIR"
 }
 
 setup() {
-  # The `temp_make` function from "bats-file" requires the tralston/bats-file fork,
-  # since the original ztombol/bats-file's `temp_make` does not work on macOS.
-  TEST_TEMP_DIR="$(temp_make --prefix 'bash-it-test-')"
-  export TEST_TEMP_DIR
+	# The `temp_make` function from "bats-file" requires the tralston/bats-file fork,
+	# since the original ztombol/bats-file's `temp_make` does not work on macOS.
+	TEST_TEMP_DIR="$(temp_make --prefix 'bash-it-test-')"
+	export TEST_TEMP_DIR
 
-  export BASH_IT_TEST_DIR="${TEST_TEMP_DIR}/.bash_it"
+	export BASH_IT_TEST_DIR="${TEST_TEMP_DIR}/.bash_it"
 
-  export BASH_IT_ROOT="${BASH_IT_TEST_DIR}/root"
-  export BASH_IT=$BASH_IT_TEST_DIR
+	export BASH_IT_ROOT="${BASH_IT_TEST_DIR}/root"
+	export BASH_IT=$BASH_IT_TEST_DIR
 
-  mkdir -p -- "${BASH_IT_ROOT}"
+	mkdir -p -- "${BASH_IT_ROOT}"
 
-  # Some tools, e.g. `git` use configuration files from the $HOME directory,
-  # which interferes with our tests. The only way to keep `git` from doing this
-  # seems to set HOME explicitly to a separate location.
-  # Refer to https://git-scm.com/docs/git-config#FILES.
-  unset XDG_CONFIG_HOME
-  export HOME="${TEST_TEMP_DIR}"
-  mkdir -p "${HOME}"
+	# Some tools, e.g. `git` use configuration files from the $HOME directory,
+	# which interferes with our tests. The only way to keep `git` from doing this
+	# seems to set HOME explicitly to a separate location.
+	# Refer to https://git-scm.com/docs/git-config#FILES.
+	unset XDG_CONFIG_HOME
+	export HOME="${TEST_TEMP_DIR}"
+	mkdir -p "${HOME}"
 
-  # For `git` tests to run well, user name and email need to be set.
-  # Refer to https://git-scm.com/docs/git-commit#_commit_information.
-  # This goes to the test-specific config, due to the $HOME overridden above.
-  git config --global user.name "John Doe"
-  git config --global user.email "johndoe@example.com"
+	# For `git` tests to run well, user name and email need to be set.
+	# Refer to https://git-scm.com/docs/git-commit#_commit_information.
+	# This goes to the test-specific config, due to the $HOME overridden above.
+	git config --global user.name "John Doe"
+	git config --global user.email "johndoe@example.com"
 
-  local_setup
+	local_setup
 }
 
 teardown() {
-  local_teardown
+	local_teardown
 
-  rm -rf "${BASH_IT_TEST_DIR}"
-  temp_del "${TEST_TEMP_DIR}"
+	rm -rf "${BASH_IT_TEST_DIR}"
+	temp_del "${TEST_TEMP_DIR}"
 }
