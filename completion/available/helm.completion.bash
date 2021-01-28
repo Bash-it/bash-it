@@ -1,8 +1,7 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
+cite "about-completion"
+about-completion "helm (Kubernetes Package Manager) completion"
 
-# helm (Kubernetes Package Manager) completion
-
-if command -v helm &>/dev/null
-then
-  eval "$(helm completion bash)"
+if _command_exists helm; then
+	eval "$(helm completion bash)"
 fi
