@@ -67,6 +67,7 @@ completion/available/gcloud.completion.bash
 completion/available/gem.completion.bash
 completion/available/github-cli.completion.bash
 completion/available/helm.completion.bash
+completion/available/jungle.completion.bash
 completion/available/knife.completion.bash
 completion/available/packer.completion.bash
 completion/available/pip.completion.bash
