@@ -23,6 +23,17 @@ function local_setup {
 
   run source "${BASH_IT}/scripts/reloader.bash"
   assert_success
+
+  # test that loading proceeds properly
+  assert_line 'DEBUG: plugin: zz: Loading component...'
+  assert_line 'DEBUG: plugin: zz: Loading component successful!'
+  assert_line 'You found me!'
+
+  # test that the expected plugin is acting as expected
+  assert_line 'DEBUG: bash: exit-nonzero.bash: Loading component...'
+  assert_line 'ERROR: bash: exit-nonzero.bash: Loading component failed...'
+  assert_line 'ERROR: bash: exit-nonzero.bash: exit-nonzero: stdout message'
+  assert_line 'ERROR: bash: exit-nonzero.bash: exit-nonzero: stderr message'
 }
 
 @test "reloader: exit-zero" {
@@ -37,6 +48,15 @@ function local_setup {
 
   run source "${BASH_IT}/scripts/reloader.bash"
   assert_success
+
+  assert_line 'DEBUG: plugin: zz: Loading component...'
+  assert_line 'DEBUG: plugin: zz: Loading component successful!'
+  assert_line 'You found me!'
+
+  assert_line 'DEBUG: bash: exit-zero.bash: Loading component...'
+  assert_line 'DEBUG: bash: exit-zero.bash: Loading component successful!'
+  assert_line 'exit-zero: stdout message'
+  assert_line 'exit-zero: stderr message'
 }
 
 @test "reloader: return-nonzero" {
@@ -52,12 +72,14 @@ function local_setup {
   run source "${BASH_IT}/scripts/reloader.bash"
   assert_success
 
-  assert_line 'DEBUG: bash: return-nonzero.bash: Loading component...'
-  assert_line 'return-nonzero: stdout message'
-  assert_line 'return-nonzero: stderr message'
-
   assert_line 'DEBUG: plugin: zz: Loading component...'
+  assert_line 'DEBUG: plugin: zz: Loading component successful!'
   assert_line 'You found me!'
+
+  assert_line 'DEBUG: bash: return-nonzero.bash: Loading component...'
+  assert_line 'ERROR: bash: return-nonzero.bash: Loading component failed...'
+  assert_line 'ERROR: bash: return-nonzero.bash: return-nonzero: stdout message'
+  assert_line 'ERROR: bash: return-nonzero.bash: return-nonzero: stderr message'
 }
 
 @test "reloader: return-zero" {
@@ -73,10 +95,12 @@ function local_setup {
   run source "${BASH_IT}/scripts/reloader.bash"
   assert_success
 
+  assert_line 'DEBUG: plugin: zz: Loading component...'
+  assert_line 'DEBUG: plugin: zz: Loading component successful!'
+  assert_line 'You found me!'
+
   assert_line 'DEBUG: bash: return-zero.bash: Loading component...'
+  assert_line 'DEBUG: bash: return-zero.bash: Loading component successful!'
   assert_line 'return-zero: stdout message'
   assert_line 'return-zero: stderr message'
-
-  assert_line 'DEBUG: plugin: zz: Loading component...'
-  assert_line 'You found me!'
 }
