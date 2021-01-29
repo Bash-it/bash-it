@@ -10,11 +10,6 @@ Issues
 ------
 
 
-* When opening a new issue in the issue tracker, please include information about which *Operating System* you're using, and which version of *Bash*.
-* In many cases, it also makes sense to show which Bash-it plugins you are using.
-  This information can be obtained using ``bash-it show plugins``.
-* If the issue happens while loading Bash-it, please also include your ``~/.bash_profile`` or ``~/.bashrc`` file,
-  as well as the install location of Bash-it (default should be ``~/.bash_it``\ ).
 * When reporting a bug or requesting a new feature, consider providing a Pull Request that fixes the issue or can be used as a starting point for the new feature.
   Don't be afraid, most things aren't that complex...
 
@@ -38,9 +33,12 @@ Code Style
 ----------
 
 
-* Try to stick to the existing code style. Please don't reformat or change the syntax of existing code simply because you don't like that style.
-* Indentation is using spaces, not tabs. Most of the code is indented with 2 spaces, some with 4 spaces. Please try to stick to 2 spaces.
+* When adding new files, be sure to add them into `clean_files.txt`, which is a growing list of linted files in the project.
+* When changing existing files, consider also adding them into `clean_files.txt` and fixing the linting errors that arise. See :ref:`linting_your_changes` for more information.
+* Indentation is using tabs, not spaces. Most of the code is indented with 2 spaces, some with 4 spaced tabs. Please try to stick to tabs.
   If you're using an editor that supports `EditorConfig <http://EditorConfig.org>`_\ , the editor should automatically use the settings defined in Bash-it's `.editorconfig file <.editorconfig>`_.
+* Prefer to invoke commands directly using the ``command`` shell builtin. This way, your code
+  will always execute the command you wanted and not an alias/function that overrides the name of the command. (For example, use ``command rm`` instead of ``rm``)
 * When creating new functions, please use a dash ("-") to separate the words of the function's name, e.g. ``my-new-function``.
   Don't use underscores, e.g. ``my_new_function``.
 * Internal functions that aren't to be used by the end user should start with an underscore, e.g. ``_my-new-internal-function``.
@@ -58,8 +56,8 @@ Unit Tests
 When adding features or making changes/fixes, please run our growing unit test suite to ensure that you did not break existing functionality.
 The test suite does not cover all aspects of Bash-it, but please run it anyway to verify that you did not introduce any regression issues.
 
-Any code pushed to GitHub as part of a Pull Request will automatically trigger a continuous integration build on `Travis CI <https://travis-ci.org/Bash-it/bash-it>`_\ , where the test suite is run on both Linux and macOS.
-The Pull Request will then show the result of the Travis build, indicating whether all tests ran fine, or whether there were issues.
+Any code pushed to GitHub as part of a Pull Request will automatically trigger a continuous integration build on `GitHub Actions <https://github.com/Bash-it/bash-it/actions>`_\ , where the test suite is run on both Linux and macOS.
+The Pull Request will then show the result of the CI build, indicating whether all tests ran fine, or whether there were issues.
 Please pay attention to this, Pull Requests with build issues will not be merged.
 
 Adding new functionality or changing existing functionality is a good opportunity to increase Bash-it's test coverage.
@@ -103,6 +101,15 @@ Themes
 
 
 * When adding a new theme, please include a screenshot and a short description about what makes this theme unique in the Pull Request's description field.
-  Please do not add theme screenshots to the repo itself, as they will add unnecessary bloat to the repo.
-  The project's Wiki has a *Themes* page where you can add a screenshot if you want.
-* Ideally, each theme's folder should contain a ``README.md`` file describing the theme and its configuration options.
+  Please do not add theme screenshots to the main PR itself, as they will add unnecessary bloat to the main branch in the repo.
+  The project's docs has a `Themes page <https://github.com/Bash-it/bash-it/blob/master/docs/themes-list/index.rst>`_ where you should add a screenshot, see how :ref:`here<add_screenshot>`.
+* Ideally, you should add a ``<theme_name>.rst`` file describing the theme and its configuration options to ``docs/themes-list`` folder.
+
+.. _add_screenshot:
+
+Adding a Screenshot
+-------------------
+
+In order to add a new screenshot, use the ``gh-pages`` branch.
+Add your new screenshot to the ``docs/images`` folder, and open a PR.
+In the `Themes page <https://github.com/Bash-it/bash-it/blob/master/docs/themes-list/index.rst>`_, see the other screenshots to know what kind of link you should use.

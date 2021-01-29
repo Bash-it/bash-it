@@ -9,13 +9,13 @@ charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
 
-[*.md]
+[**.{md,rst}]
 trim_trailing_whitespace = false
 
 [.git*]
 indent_style = tab
 
-[*.*sh]
+[{**.*sh,test/run}]
 indent_style = tab
 indent_size = 4
 
@@ -23,7 +23,7 @@ shell_variant      = bash
 binary_next_line   = true  # like -bn
 switch_case_indent = true  # like -ci
 space_redirects    = true  # like -sr
-keep_padding       = true  # like -kp
+keep_padding       = false  # like -kp
 end_of_line        = lf
 charset            = utf-8
 trim_trailing_whitespace = true

@@ -38,6 +38,7 @@ The main ``bash_it.sh`` script loads the frameworks individual components in the
 
 
 * ``lib/composure.bash``
+* ``vendor/init.d/*.bash``
 * Files in ``lib`` with the exception of ``appearance.bash`` - this means that ``composure.bash`` is loaded again here (possible improvement?)
 * Enabled ``aliases``
 * Enabled ``plugins``
@@ -78,6 +79,65 @@ Having the order based on a numeric priority in a common directory allows for mo
 
 These items are subject to change. When making changes to the internal functionality, this page needs to be updated as well.
 
+Working with vendored libs
+--------------------------
+
+Vendored libs are external libraries, meaning source code not maintained by Bash-it
+developers.
+They are ``git subtrees`` curated in the ``vendor/`` folder. To ease the work with git
+vendored libs as subtrees we use the `git-vendor <https://github.com/Tyrben/git-vendor>`_ tool.
+The `original repo <https://github.com/brettlangdon/git-vendor>`_ for git vendor is
+unmaintained so for now we are recommending Tyrben's fork.
+
+For more information on ``git vendor`` there are a short `usage description <https://github.com/Tyrben/git-vendor#usage>`_ 
+in the repositories ``README`` file and a website for the original repository has a `manual page <https://brettlangdon.github.io/git-vendor/>`_ which is also included in both
+repositories.
+
+To support a flexible loading of external libraries, a file unique to the vendored
+library must be placed in ``vendor/init.d/`` with the ``.bash`` extension.
+
+Rebasing a feature branch with an added/updated vendored library
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If your feature branch with a newly added/updated vendored lib has fallen behind master
+you might need to rebase it before creating a PR. However rebasing with dangling
+subtree commits can cause problems.
+The following rebase strategy will pause the rebase at the point where you added a 
+subtree and let you add it again before continuing the rebasing.
+
+::
+
+    [feature/branch] $ git rebase --rebase-merges --strategy subtree master
+    fatal: refusing to merge unrelated histories
+    Could not apply 0d6a56b... Add-preexec-from-https-github-com-rcaloras-bash-preexec-0-4-1- # Add "preexec" from "https://github.com/rcaloras/bash-preexec@0.4.1"
+    [feature/branch] $ git vendor add preexec https://github.com/rcaloras/bash-preexec 0.4.1
+    ...
+    [feature/branch] $ git rebase --continue
+
+If rebasing makes you a little uneasy (as it probably should). You can always test in
+another branch.
+
+::
+
+    [feater/branch] $ git checkout -b feature/branch-test-rebase
+    [feater/branch-test-rebase] $ git rebase --rebase-merges --strategy subtree master
+    ...
+
+Afterwards you can make sure the rebase was successful by running ``git vendor list``
+to see if your library is still recognized as a vendored lib
+
+::
+
+    [feature/branch] $ git vendor list
+    preexec@0.4.1:
+        name:   preexec
+        dir:    vendor/github.com/rcaloras/bash-preexec
+        repo:   https://github.com/rcaloras/bash-preexec
+        ref:    0.4.1
+        commit: 8fe585c5cf377a3830b895fe26e694b020d8db1a
+    [feature/branch] $
+
+
 Plugin Disable Callbacks
 ------------------------
 
@@ -92,3 +152,21 @@ This file configures the behavior of the a pre-commit hook based on `the Pre-Com
 installing it (with pip, brew or other tools) then run ``pre-commit install`` in the repo's root to activate the hook.
 For the full use of the tool, you may need to install also other third-party tools, such as
 `shellcheck <https://github.com/koalaman/shellcheck/>`_ and `shfmt <https://github.com/mvdan/sh>`_.
+
+
+.. _linting_your_changes:
+
+Linting Your Changes
+--------------------
+
+In order to properly lint your changes, you should use our linting script,
+by simply running ``./lint_clean_files.sh``. This script iterates over all marked-as-clean
+files, and runs the pre-commit hook on them.
+
+Please note that most of the files in the project are currently not linted,
+as we want to make the linting process easier.
+In order to add your changed/added files to the linting process,
+please add your files to ``clean_files.txt``. This way ``lint_clean_files.sh``
+will know to pick them up and lint them.
+
+Thank you for helping clean up Bash-it, and making it a nicer and better project |:heart:|

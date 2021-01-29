@@ -11,12 +11,15 @@ function _set-prefix-based-on-path()
 
 if [ "$1" != "skip" ] && [ -d "./enabled" ]; then
   _bash_it_config_type=""
-  if [[ "${1}" =~ ^(alias|completion|plugin)$ ]]; then
-    _bash_it_config_type=$1
-    _log_debug "Loading enabled $1 components..."
-  else
-    _log_debug "Loading all enabled components..."
-  fi
+
+  case $1 in
+    alias|completion|plugin)
+      _bash_it_config_type=$1
+      _log_debug "Loading enabled $1 components..." ;;
+    *|'')
+      _log_debug "Loading all enabled components..." ;;
+  esac
+
   for _bash_it_config_file in $(sort <(compgen -G "./enabled/*${_bash_it_config_type}.bash")); do
     if [ -e "${_bash_it_config_file}" ]; then
       _set-prefix-based-on-path "${_bash_it_config_file}"
@@ -29,19 +32,21 @@ if [ "$1" != "skip" ] && [ -d "./enabled" ]; then
   done
 fi
 
-
-if [ ! -z "${2}" ] && [[ "${2}" =~ ^(aliases|completion|plugins)$ ]] && [ -d "${2}/enabled" ]; then
-  _log_warning "Using legacy enabling for $2, please update your bash-it version and migrate"
-  for _bash_it_config_file in $(sort <(compgen -G "./${2}/enabled/*.bash")); do
-    if [ -e "$_bash_it_config_file" ]; then
-      _set-prefix-based-on-path "${_bash_it_config_file}"
-      _log_debug "Loading component..."
-      # shellcheck source=/dev/null
-      source "$_bash_it_config_file"
-    else
-      echo "Unable to locate ${_bash_it_config_file}" > /dev/stderr
-    fi
-  done
+if [ -n "${2}" ] && [ -d "${2}/enabled" ]; then
+  case $2 in
+    aliases|completion|plugins)
+      _log_warning "Using legacy enabling for $2, please update your bash-it version and migrate"
+      for _bash_it_config_file in $(sort <(compgen -G "./${2}/enabled/*.bash")); do
+        if [ -e "$_bash_it_config_file" ]; then
+          _set-prefix-based-on-path "${_bash_it_config_file}"
+          _log_debug "Loading component..."
+          # shellcheck source=/dev/null
+          source "$_bash_it_config_file"
+        else
+          echo "Unable to locate ${_bash_it_config_file}" > /dev/stderr
+        fi
+      done ;;
+  esac
 fi
 
 unset _bash_it_config_file
