@@ -23,8 +23,10 @@ _bash-it-load-sources() {
 		_log_debug "Loading component..."
 		output=$(
 			set -e
+			BASH_IT_LOG_PREFIX=""
 			# shellcheck disable=SC1090
 			(source "$current") 2>&1
+			BASH_IT_LOG_PREFIX="$extension: $filename: "
 		)
 		retval=$?
 		set +e
