@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 
 # Brainy Bash Prompt for Bash-it
 # by MunifTanjim
@@ -10,7 +10,7 @@
 ____brainy_top_left_parse() {
 	ifs_old="${IFS}"
 	IFS="|"
-	args=( $1 )
+	read -r -a args <<< "$@"
 	IFS="${ifs_old}"
 	if [ -n "${args[3]}" ]; then
 		_TOP_LEFT+="${args[2]}${args[3]}"
@@ -25,7 +25,7 @@ ____brainy_top_left_parse() {
 ____brainy_top_right_parse() {
 	ifs_old="${IFS}"
 	IFS="|"
-	args=( $1 )
+	read -r -a args <<< "$@"
 	IFS="${ifs_old}"
 	_TOP_RIGHT+=" "
 	if [ -n "${args[3]}" ]; then
@@ -35,14 +35,14 @@ ____brainy_top_right_parse() {
 	if [ -n "${args[4]}" ]; then
 		_TOP_RIGHT+="${args[2]}${args[4]}"
 	fi
-	__TOP_RIGHT_LEN=$(( __TOP_RIGHT_LEN + ${#args[1]} + ${#args[3]} + ${#args[4]} + 1 ))
-	(( __SEG_AT_RIGHT += 1 ))
+	__TOP_RIGHT_LEN=$((__TOP_RIGHT_LEN + ${#args[1]} + ${#args[3]} + ${#args[4]} + 1))
+	((__SEG_AT_RIGHT += 1))
 }
 
 ____brainy_bottom_parse() {
 	ifs_old="${IFS}"
 	IFS="|"
-	args=( $1 )
+	read -r -a args <<< "$@"
 	IFS="${ifs_old}"
 	_BOTTOM+="${args[0]}${args[1]}"
 	[ ${#args[1]} -gt 0 ] && _BOTTOM+=" "
@@ -67,7 +67,7 @@ ____brainy_top() {
 		[ -n "${info}" ] && ____brainy_top_right_parse "${info}"
 	done
 
-	[ $__TOP_RIGHT_LEN -gt 0 ] && __TOP_RIGHT_LEN=$(( __TOP_RIGHT_LEN - 1 ))
+	[ $__TOP_RIGHT_LEN -gt 0 ] && __TOP_RIGHT_LEN=$((__TOP_RIGHT_LEN - 1))
 	___cursor_adjust="\033[${__TOP_RIGHT_LEN}D"
 	_TOP_LEFT+="${___cursor_adjust}"
 
@@ -90,7 +90,7 @@ ____brainy_bottom() {
 ___brainy_prompt_user_info() {
 	color=$bold_blue
 	if [ "${THEME_SHOW_SUDO}" == "true" ]; then
-		if sudo -vn 1>/dev/null 2>&1; then
+		if sudo -vn 1> /dev/null 2>&1; then
 			color=$bold_red
 		fi
 	fi
@@ -135,11 +135,11 @@ ___brainy_prompt_ruby() {
 }
 
 ___brainy_prompt_todo() {
-	[ "${THEME_SHOW_TODO}" != "true" ] ||
-	[ -z "$(which todo.sh)" ] && return
+	[ "${THEME_SHOW_TODO}" != "true" ] \
+		|| [ -z "$(which todo.sh)" ] && return
 	color=$bold_white
 	box="[|]"
-	info="t:$(todo.sh ls | egrep "TODO: [0-9]+ of ([0-9]+)" | awk '{ print $4 }' )"
+	info="t:$(todo.sh ls | grep -E "TODO: [0-9]+ of ([0-9]+)" | awk '{ print $4 }')"
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_green}" "${box}"
 }
 
@@ -152,9 +152,9 @@ ___brainy_prompt_clock() {
 }
 
 ___brainy_prompt_battery() {
-	! _command_exists battery_percentage ||
-	[ "${THEME_SHOW_BATTERY}" != "true" ] ||
-	[ "$(battery_percentage)" = "no" ] && return
+	! _command_exists battery_percentage \
+		|| [ "${THEME_SHOW_BATTERY}" != "true" ] \
+		|| [ "$(battery_percentage)" = "no" ] && return
 
 	info=$(battery_percentage)
 	color=$bold_green
@@ -165,8 +165,8 @@ ___brainy_prompt_battery() {
 	fi
 	box="[|]"
 	ac_adapter_connected && charging="+"
-  ac_adapter_disconnected && charging="-"
-  info+=$charging
+	ac_adapter_disconnected && charging="-"
+	info+=$charging
 	[ "$info" == "100+" ] && info="AC"
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
 }
@@ -188,15 +188,15 @@ ___brainy_prompt_char() {
 #########
 
 __brainy_show() {
-  typeset _seg=${1:-}
+	typeset _seg=${1:-}
 	shift
-	export THEME_SHOW_${_seg}=true
+	export "THEME_SHOW_${_seg}"=true
 }
 
 __brainy_hide() {
 	typeset _seg=${1:-}
 	shift
-	export THEME_SHOW_${_seg}=false
+	export "THEME_SHOW_${_seg}"=false
 }
 
 _brainy_completion() {
@@ -207,17 +207,15 @@ _brainy_completion() {
 	actions="show hide"
 	segments="battery clock exitcode python ruby scm sudo todo"
 	case "${_action}" in
-		show)
-			COMPREPLY=( $(compgen -W "${segments}" -- "${cur}") )
-			return 0
-			;;
-		hide)
-			COMPREPLY=( $(compgen -W "${segments}" -- "${cur}") )
+		show | hide)
+			# shellcheck disable=SC2207
+			COMPREPLY=($(compgen -W "${segments}" -- "${cur}"))
 			return 0
 			;;
 	esac
 
-	COMPREPLY=( $(compgen -W "${actions}" -- "${cur}") )
+	# shellcheck disable=SC2207
+	COMPREPLY=($(compgen -W "${actions}" -- "${cur}"))
 	return 0
 }
 
@@ -228,9 +226,11 @@ brainy() {
 	typeset func
 	case $action in
 		show)
-			func=__brainy_show;;
+			func=__brainy_show
+			;;
 		hide)
-			func=__brainy_hide;;
+			func=__brainy_hide
+			;;
 	esac
 	for seg in ${segs}; do
 		seg=$(printf "%s" "${seg}" | tr '[:lower:]' '[:upper:]')
@@ -292,10 +292,10 @@ __brainy_ps2() {
 }
 
 _brainy_prompt() {
-    exitcode="$?"
+	exitcode="$?"
 
-    PS1="$(__brainy_ps1)"
-    PS2="$(__brainy_ps2)"
+	PS1="$(__brainy_ps1)"
+	PS2="$(__brainy_ps2)"
 }
 
 safe_append_prompt_command _brainy_prompt

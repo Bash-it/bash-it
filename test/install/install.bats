@@ -59,3 +59,28 @@ function local_setup {
 
   assert_failure
 }
+
+@test "install: verify that no-modify-config and append-to-config can not be used at the same time" {
+  cd "$BASH_IT"
+
+  run ./install.sh --silent --no-modify-config --append-to-config
+
+  assert_failure
+}
+
+@test "install: verify that the template is appended" {
+  cd "$BASH_IT"
+
+  touch "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE"
+  echo "test file content" > "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE"
+
+  ./install.sh --silent --append-to-config
+
+  assert_file_exist "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE"
+  assert_file_exist "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.bak"
+
+  run cat $BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE
+
+  assert_line "test file content"
+  assert_line "source \"\$BASH_IT\"/bash_it.sh"
+}

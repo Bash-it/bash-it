@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 
 # shellcheck source=../../themes/powerline/powerline.base.bash
 . "$BASH_IT/themes/powerline/powerline.base.bash"
@@ -70,6 +70,9 @@ THEME_CLOCK_FORMAT=${THEME_CLOCK_FORMAT:="%H:%M:%S"}
 
 IN_VIM_THEME_PROMPT_COLOR=${POWERLINE_IN_VIM_COLOR:=245}
 IN_VIM_THEME_PROMPT_TEXT=${POWERLINE_IN_VIM_TEXT:="vim"}
+
+IN_TOOLBOX_THEME_PROMPT_COLOR=${POWERLINE_IN_TOOLBOX_COLOR:=125}
+IN_TOOLBOX_THEME_PROMPT_TEXT=${POWERLINE_IN_TOOLBOX_TEXT:="⬢ "}
 
 HOST_THEME_PROMPT_COLOR=${POWERLINE_HOST_COLOR:=0}
 

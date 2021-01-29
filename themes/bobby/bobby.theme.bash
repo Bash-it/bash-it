@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 
 SCM_THEME_PROMPT_DIRTY=" ${red}✗"
 SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓"
@@ -14,21 +14,21 @@ RVM_THEME_PROMPT_PREFIX="|"
 RVM_THEME_PROMPT_SUFFIX="|"
 
 __bobby_clock() {
-  printf "$(clock_prompt) "
+	printf '%s' "$(clock_prompt) "
 
-  if [ "${THEME_SHOW_CLOCK_CHAR}" == "true" ]; then
-    printf "$(clock_char) "
-  fi
+	if [ "${THEME_SHOW_CLOCK_CHAR}" == "true" ]; then
+		printf '%s' "$(clock_char) "
+	fi
 }
 
 function prompt_command() {
-    PS1="\n$(battery_char) $(__bobby_clock)"
-    PS1+="${yellow}$(ruby_version_prompt) "
-    PS1+="${purple}\h "
-    PS1+="${reset_color}in "
-    PS1+="${green}\w\n"
-    PS1+="${bold_cyan}$(scm_prompt_char_info) "
-    PS1+="${green}→${reset_color} "
+	PS1="\n$(battery_char) $(__bobby_clock)"
+	PS1+="${yellow}$(ruby_version_prompt) "
+	PS1+="${purple}\h "
+	PS1+="${reset_color}in "
+	PS1+="${green}\w\n"
+	PS1+="${bold_cyan}$(scm_prompt_char_info) "
+	PS1+="${green}→${reset_color} "
 }
 
 THEME_SHOW_CLOCK_CHAR=${THEME_SHOW_CLOCK_CHAR:-"true"}
