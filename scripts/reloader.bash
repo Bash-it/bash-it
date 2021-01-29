@@ -1,5 +1,4 @@
 # shellcheck shell=bash
-# shellcheck disable=SC1090,SC2221,SC2222,SC2145,SC2064
 
 BASH_IT_LOG_PREFIX="core: reloader: "
 pushd "${BASH_IT}" > /dev/null || exit 1
@@ -24,12 +23,13 @@ _bash-it-load-sources() {
 		_log_debug "Loading component..."
 		output=$(
 			set -e
+			# shellcheck disable=SC1090
 			(source "$current") 2>&1
 		)
 		retval=$?
 		set +e
 
-		trap "_bash-it-load-sources ${scripts[@]}" EXIT
+		trap '_bash-it-load-sources ${scripts[@]}' EXIT
 		if [[ $retval -gt 0 ]]; then
 			_log_error 'Loading component failed...'
 			if [[ -n "$output" ]]; then
@@ -37,6 +37,7 @@ _bash-it-load-sources() {
 			fi
 		else
 			_log_debug 'Loading component successful!'
+			# shellcheck disable=SC1090
 			source "$current"
 		fi
 		trap - EXIT
@@ -51,6 +52,7 @@ _bash-it-load-sources() {
 if [[ "$1" != "skip" ]] && [[ -d "./enabled" ]]; then
 	_bash_it_config_type=""
 
+	# shellcheck disable=SC2221,SC2222
 	case $1 in
 		alias | completion | plugin)
 			_bash_it_config_type=$1
