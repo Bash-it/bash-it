@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Define this here so it can be used by all of the Powerline themes
 THEME_CHECK_SUDO=${THEME_CHECK_SUDO:=true}
 
@@ -166,6 +167,12 @@ function __powerline_in_vim_prompt() {
 function __powerline_aws_profile_prompt() {
 	if [[ -n "${AWS_PROFILE}" ]]; then
 		echo "${AWS_PROFILE_CHAR}${AWS_PROFILE}|${AWS_PROFILE_PROMPT_COLOR}"
+	fi
+}
+
+function __powerline_in_toolbox_prompt() {
+	if [ -f /run/.containerenv ] && [ -f /run/.toolboxenv ]; then
+		echo "${IN_TOOLBOX_THEME_PROMPT_TEXT}|${IN_TOOLBOX_THEME_PROMPT_COLOR}"
 	fi
 }
 
