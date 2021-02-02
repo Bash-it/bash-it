@@ -24,12 +24,6 @@ hooks
 .gitattributes
 lint_clean_files.sh
 
-# plugins
-#
-plugins/available/history.plugin.bash
-plugins/available/history-search.plugin.bash
-plugins/available/history-substring-search.plugin.bash
-
 # themes
 #
 themes/agnoster
@@ -54,6 +48,11 @@ themes/modern
 plugins/available/basher.plugin.bash
 plugins/available/cmd-returned-notify.plugin.bash
 plugins/available/docker-machine.plugin.bash
+plugins/available/go.plugin.bash
+plugins/available/goenv.plugin.bash
+plugins/available/history.plugin.bash
+plugins/available/history-search.plugin.bash
+plugins/available/history-substring-search.plugin.bash
 plugins/available/xterm.plugin.bash
 
 # completions
