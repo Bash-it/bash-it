@@ -2,7 +2,7 @@
 
 load ../test_helper
 load ../../lib/helpers
-load ../../lib/composure
+load "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
 load ../../plugins/available/ruby.plugin
 
 function local_setup {
