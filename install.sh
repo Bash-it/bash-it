@@ -11,6 +11,7 @@ function show_usage() {
 	echo "--interactive (-i): Interactively choose plugins"
 	echo "--no-modify-config (-n): Do not modify existing config file"
 	echo "--append-to-config (-a): Keep existing config file and append bash-it templates at the end"
+	echo "--overwrite-backup (-f): Overwrite existing backup"
 	exit 0
 }
 
@@ -77,17 +78,21 @@ function backup_append() {
 }
 
 function check_for_backup() {
-	if [ -e "$HOME/$BACKUP_FILE" ]; then
-		echo -e "\033[0;33mBackup file already exists. Make sure to backup your .bashrc before running this installation.\033[0m" >&2
+	if ! [ -e "$HOME/$BACKUP_FILE" ]; then
+		return
+	fi
+	echo -e "\033[0;33mBackup file already exists. Make sure to backup your .bashrc before running this installation.\033[0m" >&2
+
+	if ! [[ $overwrite_backup ]]; then
 		while ! [[ $silent ]]; do
 			read -e -n 1 -r -p "Would you like to overwrite the existing backup? This will delete your existing backup file ($HOME/$BACKUP_FILE) [y/N] " RESP
 			case $RESP in
 				[yY])
+					overwrite_backup=true
 					break
 					;;
 				[nN] | "")
-					echo -e "\033[91mInstallation aborted. Please come back soon!\033[m"
-					exit 1
+					break
 					;;
 				*)
 					echo -e "\033[91mPlease choose y or n.\033[m"
@@ -95,12 +100,21 @@ function check_for_backup() {
 			esac
 		done
 	fi
+	if ! [[ $overwrite_backup ]]; then
+		echo -e "\033[91mInstallation aborted. Please come back soon!\033[m"
+		if [[ $silent ]]; then
+			echo -e "\033[91mUse \"-f\" flag to force overwrite of backup.\033[m"
+		fi
+		exit 1
+	else
+		echo -e "\033[0;32mOverwriting backup...\033[m"
+	fi
 }
 
 function modify_config_files() {
-	if ! [[ $silent ]]; then
-		check_for_backup
+	check_for_backup
 
+	if ! [[ $silent ]]; then
 		while ! [[ $append_to_config ]]; do
 			read -e -n 1 -r -p "Would you like to keep your $CONFIG_FILE and append bash-it templates at the end? [y/N] " choice
 			case $choice in
@@ -134,12 +148,13 @@ for param in "$@"; do
 		"--interactive") set -- "$@" "-i" ;;
 		"--no-modify-config") set -- "$@" "-n" ;;
 		"--append-to-config") set -- "$@" "-a" ;;
+		"--overwrite-backup") set -- "$@" "-f" ;;
 		*) set -- "$@" "$param" ;;
 	esac
 done
 
 OPTIND=1
-while getopts "hsina" opt; do
+while getopts "hsinaf" opt; do
 	case "$opt" in
 		"h")
 			show_usage
@@ -149,6 +164,7 @@ while getopts "hsina" opt; do
 		"i") interactive=true ;;
 		"n") no_modify_config=true ;;
 		"a") append_to_config=true ;;
+		"f") overwrite_backup=true ;;
 		"?")
 			show_usage >&2
 			exit 1
