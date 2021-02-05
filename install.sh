@@ -76,26 +76,30 @@ function backup_append() {
 	echo -e "\033[0;32mBash-it template has been added to your $CONFIG_FILE\033[0m"
 }
 
+function check_for_backup() {
+	if [ -e "$HOME/$BACKUP_FILE" ]; then
+		echo -e "\033[0;33mBackup file already exists. Make sure to backup your .bashrc before running this installation.\033[0m" >&2
+		while ! [[ $silent ]]; do
+			read -e -n 1 -r -p "Would you like to overwrite the existing backup? This will delete your existing backup file ($HOME/$BACKUP_FILE) [y/N] " RESP
+			case $RESP in
+				[yY])
+					break
+					;;
+				[nN] | "")
+					echo -e "\033[91mInstallation aborted. Please come back soon!\033[m"
+					exit 1
+					;;
+				*)
+					echo -e "\033[91mPlease choose y or n.\033[m"
+					;;
+			esac
+		done
+	fi
+}
+
 function modify_config_files() {
 	if ! [[ $silent ]]; then
-		if [ -e "$HOME/$BACKUP_FILE" ]; then
-			echo -e "\033[0;33mBackup file already exists. Make sure to backup your .bashrc before running this installation.\033[0m" >&2
-			while ! [[ $silent ]]; do
-				read -e -n 1 -r -p "Would you like to overwrite the existing backup? This will delete your existing backup file ($HOME/$BACKUP_FILE) [y/N] " RESP
-				case $RESP in
-					[yY])
-						break
-						;;
-					[nN] | "")
-						echo -e "\033[91mInstallation aborted. Please come back soon!\033[m"
-						exit 1
-						;;
-					*)
-						echo -e "\033[91mPlease choose y or n.\033[m"
-						;;
-				esac
-			done
-		fi
+		check_for_backup
 
 		while ! [[ $append_to_config ]]; do
 			read -e -n 1 -r -p "Would you like to keep your $CONFIG_FILE and append bash-it templates at the end? [y/N] " choice
