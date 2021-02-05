@@ -50,6 +50,7 @@ themes/modern
 plugins/available/basher.plugin.bash
 plugins/available/cmd-returned-notify.plugin.bash
 plugins/available/docker-machine.plugin.bash
+plugins/available/git.plugin.bash
 plugins/available/go.plugin.bash
 plugins/available/goenv.plugin.bash
 plugins/available/history.plugin.bash
