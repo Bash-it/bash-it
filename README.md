@@ -238,3 +238,5 @@ text](http://mitpress.mit.edu/sicp/full-text/book/book.html):
 ## Known Issues
 
 'glossary ()' and 'reference ()' do not support nested functions with metadata.
+
+`revise` works well if your editor is terminal-based, like Emacs or Vim. If you use a windowed editor like Atom, VSCode, or Sublime, you will need to check to see if your editor supports a flag argument that allows it to wait for the files to be closed before returning. If this is supported, you can create a small script to launch your editor in this mode, and specify that script path in your `EDITOR` var. See https://github.com/erichs/composure/issues/10.
