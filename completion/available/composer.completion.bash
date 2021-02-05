@@ -3,16 +3,9 @@ cite "about-completion"
 about-completion "composer completion"
 
 function _composer() {
-	local cur script coms opts com
+	local cur coms opts com
 	COMPREPLY=()
 	_get_comp_words_by_ref -n : cur words
-
-	# for an alias, get the real script behind it
-	if [[ $(type -t "${words[0]}") == "alias" ]]; then
-		script=$(alias "${words[0]}" | sed -E "s/alias ${words[0]}='(.*)'/\1/")
-	else
-		script=${words[0]}
-	fi
 
 	# lookup for command
 	for word in "${words[@]:1}"; do
