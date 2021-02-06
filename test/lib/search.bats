@@ -39,7 +39,14 @@ function local_teardown {
 
 @test "search: git" {
   run _bash-it-search 'git' --no-color
-  assert_line -n 0 '      aliases:  git   gitsvn  '
+
+  assert_line -n 0 -p '      aliases:'
+  for alias in 'git' 'gitsvn' 'git-omz'
+  do
+    echo $alias
+    assert_line -n 0 -p $alias
+  done
+
   assert_line -n 1 -p '      plugins:'
   for plugin in "autojump" "git" "gitstatus" "git-subrepo" "jgitflow" "jump"
   do
