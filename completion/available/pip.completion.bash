@@ -7,5 +7,13 @@
 # you should first initialize the corresponding environment.
 # So that pip is in the system's path.
 if _command_exists pip; then
-	eval "$(pip completion --bash)"
+	function __bash_it_complete_pip() {
+		if _command_exists _pip_completion; then
+			_pip_completion "$@"
+		else
+			eval "$(pip completion --bash)"
+			_pip_completion "$@"
+		fi
+	}
+	complete -o default -F __bash_it_complete_pip pip
 fi
