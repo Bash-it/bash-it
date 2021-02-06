@@ -63,6 +63,7 @@ plugins/available/xterm.plugin.bash
 completion/available/awless.completion.bash
 completion/available/brew.completion.bash
 completion/available/cargo.completion.bash
+completion/available/composer.completion.bash
 completion/available/conda.completion.bash
 completion/available/consul.completion.bash
 completion/available/docker.completion.bash
