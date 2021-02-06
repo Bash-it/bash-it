@@ -30,6 +30,7 @@ lint_clean_files.sh
 # aliases
 #
 aliases/available/dnf.aliases.bash
+aliases/available/git-omz.aliases.bash
 aliases/available/git.aliases.bash
 aliases/available/vim.aliases.bash
 
