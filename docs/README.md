@@ -55,4 +55,8 @@ please feel free to read through this page if you're interested in how Bash-it l
 
 * [List of contributors][contribute]
 
+## License
+
+Bash-it is licensed under the [MIT License](https://github.com/Bash-it/bash-it/blob/master/LICENSE).
+
 [contribute]: https://github.com/Bash-it/bash-it/contributors
