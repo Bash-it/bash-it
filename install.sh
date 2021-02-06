@@ -78,7 +78,7 @@ function backup_append() {
 }
 
 function check_for_backup() {
-	if ! [ -e "$HOME/$BACKUP_FILE" ]; then
+	if ! [[ -e "$HOME/$BACKUP_FILE" ]]; then
 		return
 	fi
 	echo -e "\033[0;33mBackup file already exists. Make sure to backup your .bashrc before running this installation.\033[0m" >&2
