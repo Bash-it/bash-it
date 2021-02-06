@@ -2,7 +2,7 @@
 # bash-it installer
 
 # Show how to use this installer
-function show_usage() {
+function _bash-it_show_usage() {
 	echo -e "\n$0 : Install bash-it"
 	echo -e "Usage:\n$0 [arguments] \n"
 	echo "Arguments:"
@@ -16,7 +16,7 @@ function show_usage() {
 }
 
 # enable a thing
-function load_one() {
+function _bash-it_load_one() {
 	file_type=$1
 	file_to_enable=$2
 	mkdir -p "$BASH_IT/${file_type}/enabled"
@@ -30,7 +30,7 @@ function load_one() {
 }
 
 # Interactively enable several things
-function load_some() {
+function _bash-it_load_some() {
 	file_type=$1
 	single_type=$(echo "$file_type" | sed -e "s/aliases$/alias/g" | sed -e "s/plugins$/plugin/g")
 	enable_func="_enable-$single_type"
@@ -57,27 +57,27 @@ function load_some() {
 }
 
 # Back up existing profile
-function backup() {
+function _bash-it_backup() {
 	test -w "$HOME/$CONFIG_FILE" \
 		&& cp -aL "$HOME/$CONFIG_FILE" "$HOME/$CONFIG_FILE.bak" \
 		&& echo -e "\033[0;32mYour original $CONFIG_FILE has been backed up to $CONFIG_FILE.bak\033[0m"
 }
 
 # Back up existing profile and create new one for bash-it
-function backup_new() {
-	backup
+function _bash-it_backup_new() {
+	_bash-it_backup
 	sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" > "$HOME/$CONFIG_FILE"
 	echo -e "\033[0;32mCopied the template $CONFIG_FILE into ~/$CONFIG_FILE, edit this file to customize bash-it\033[0m"
 }
 
 # Back up existing profile and append bash-it templates at the end
-function backup_append() {
-	backup
+function _bash-it_backup_append() {
+	_bash-it_backup
 	(sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" | tail -n +2) >> "$HOME/$CONFIG_FILE"
 	echo -e "\033[0;32mBash-it template has been added to your $CONFIG_FILE\033[0m"
 }
 
-function check_for_backup() {
+function _bash-it_check_for_backup() {
 	if ! [[ -e "$HOME/$BACKUP_FILE" ]]; then
 		return
 	fi
@@ -111,8 +111,8 @@ function check_for_backup() {
 	fi
 }
 
-function modify_config_files() {
-	check_for_backup
+function _bash-it_modify_config_files() {
+	_bash-it_check_for_backup
 
 	if ! [[ $silent ]]; then
 		while ! [[ $append_to_config ]]; do
@@ -133,10 +133,10 @@ function modify_config_files() {
 	fi
 	if [[ $append_to_config ]]; then
 		# backup/append
-		backup_append
+		_bash-it_backup_append
 	else
 		# backup/new by default
-		backup_new
+		_bash-it_backup_new
 	fi
 }
 
@@ -157,7 +157,7 @@ OPTIND=1
 while getopts "hsinaf" opt; do
 	case "$opt" in
 		"h")
-			show_usage
+			_bash-it_show_usage
 			exit 0
 			;;
 		"s") silent=true ;;
@@ -166,7 +166,7 @@ while getopts "hsinaf" opt; do
 		"a") append_to_config=true ;;
 		"f") overwrite_backup=true ;;
 		"?")
-			show_usage >&2
+			_bash-it_show_usage >&2
 			exit 1
 			;;
 	esac
@@ -197,7 +197,7 @@ esac
 BACKUP_FILE=$CONFIG_FILE.bak
 echo "Installing bash-it"
 if ! [[ $no_modify_config ]]; then
-	modify_config_files
+	_bash-it_modify_config_files
 fi
 
 # Disable auto-reload in case its enabled
@@ -214,7 +214,7 @@ source "$BASH_IT/lib/helpers.bash"
 if [[ $interactive ]] && ! [[ $silent ]]; then
 	for type in "aliases" "plugins" "completion"; do
 		echo -e "\033[0;32mEnabling $type\033[0m"
-		load_some $type
+		_bash-it_load_some $type
 	done
 else
 	echo ""
