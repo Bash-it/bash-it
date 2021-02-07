@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
 load ../test_helper
-load ../../lib/composure
+load "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
 
 function local_setup {
   setup_test_fixture

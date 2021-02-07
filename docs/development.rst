@@ -37,9 +37,12 @@ General Load Order
 The main ``bash_it.sh`` script loads the frameworks individual components in the following order:
 
 
-* ``lib/composure.bash``
+
+
+* ``vendor/github.com/erichs/composure/composure.sh``
+* ``lib/log.bash``
 * ``vendor/init.d/*.bash``
-* Files in ``lib`` with the exception of ``appearance.bash`` - this means that ``composure.bash`` is loaded again here (possible improvement?)
+* Files in ``lib`` with the exception of ``appearance.bash`` - this means that ``log.bash`` is loaded again here (possible improvement?)
 * Enabled ``aliases``
 * Enabled ``plugins``
 * Enabled ``completions``
