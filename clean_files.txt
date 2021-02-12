@@ -60,6 +60,7 @@ plugins/available/xterm.plugin.bash
 
 # completions
 #
+completion/available/apm.completion.bash
 completion/available/awless.completion.bash
 completion/available/brew.completion.bash
 completion/available/cargo.completion.bash
