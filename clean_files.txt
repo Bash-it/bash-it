@@ -60,12 +60,14 @@ plugins/available/xterm.plugin.bash
 
 # completions
 #
+completion/available/apm.completion.bash
 completion/available/awless.completion.bash
 completion/available/brew.completion.bash
 completion/available/cargo.completion.bash
 completion/available/composer.completion.bash
 completion/available/conda.completion.bash
 completion/available/consul.completion.bash
+completion/available/django.completion.bash
 completion/available/docker.completion.bash
 completion/available/docker-machine.completion.bash
 completion/available/gcloud.completion.bash
@@ -79,6 +81,7 @@ completion/available/kontena.completion.bash
 completion/available/kubectl.completion.bash
 completion/available/lerna.completion.bash
 completion/available/minikube.completion.bash
+completion/available/notify-send.completion.bash
 completion/available/npm.completion.bash
 completion/available/packer.completion.bash
 completion/available/pip.completion.bash
