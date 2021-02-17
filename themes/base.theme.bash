@@ -465,7 +465,9 @@ function python_version_prompt {
 
 function git_user_info {
 	# support two or more initials, set by 'git pair' plugin
-	SCM_CURRENT_USER=$(git config user.initials | sed 's% %+%')
+	local raw_initials=`git config user.initials`
+	SCM_CURRENT_USER=${raw_initials// /+}
+
 	# if `user.initials` weren't set, attempt to extract initials from `user.name`
 	[[ -z "${SCM_CURRENT_USER}" ]] && SCM_CURRENT_USER=$(printf "%s" "$(for word in $(git config user.name | PERLIO=:utf8 perl -pe '$_=lc'); do printf "%s" "${word:0:1}"; done)")
 	[[ -n "${SCM_CURRENT_USER}" ]] && printf "%s" "$SCM_THEME_CURRENT_USER_PREFFIX$SCM_CURRENT_USER$SCM_THEME_CURRENT_USER_SUFFIX"
