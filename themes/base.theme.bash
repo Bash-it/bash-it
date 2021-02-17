@@ -248,7 +248,9 @@ function git_prompt_vars {
 		if [[ "${SCM_GIT_GITSTATUS_RAN}" == "true" ]]; then
 			stash_count=${VCS_STATUS_STASHES}
 		else
-			stash_count="$(git stash list 2> /dev/null | wc -l | tr -d ' ')"
+			local Data
+			readarray Data <<< "$(git stash list 2> /dev/null)"
+			stash_count=${Data//[![:digit:]]/}
 		fi
 		[[ "${stash_count}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_GIT_STASH_CHAR_PREFIX}${stash_count}${SCM_GIT_STASH_CHAR_SUFFIX}"
 	fi
