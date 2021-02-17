@@ -281,7 +281,7 @@ function git_prompt_vars {
 	SCM_PREFIX=${GIT_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}
 	SCM_SUFFIX=${GIT_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}
 
-	SCM_CHANGE=$(_git-short-sha 2> /dev/null || echo "")
+	SCM_CHANGE=$(_git-short-sha 2> /dev/null || echo)
 }
 
 function p4_prompt_vars {
@@ -391,7 +391,17 @@ function rvm_version_prompt {
 function rbenv_version_prompt {
 	if which rbenv &> /dev/null; then
 		rbenv=$(rbenv version-name) || return
-		rbenv commands | grep -q gemset && gemset=$(rbenv gemset active 2> /dev/null) && rbenv="$rbenv@${gemset%% *}"
+
+		while read; do
+			if [[ $REPLY == *gemset* ]]; then
+				if gemset=$(rbenv gemset active 2> /dev/null); then
+					rbenv="$rbenv@${gemset%% *}"
+				fi
+
+				break
+			fi
+		done <<< "$(rbenv commands)"
+
 		if [ "$rbenv" != "system" ]; then
 			echo -e "$RBENV_THEME_PROMPT_PREFIX$rbenv$RBENV_THEME_PROMPT_SUFFIX"
 		fi
