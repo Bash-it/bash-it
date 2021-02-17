@@ -420,7 +420,7 @@ function chruby_version_prompt {
 			chruby_auto
 		fi
 
-		ruby_version=$(ruby --version | awk '{print $1, $2;}') || return
+		read _ ruby_version _ <<< "$(ruby --version)" || return
 
 		if ! chruby | grep -q '\*'; then
 			ruby_version="${ruby_version} (system)"
