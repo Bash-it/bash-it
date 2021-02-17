@@ -104,7 +104,7 @@ function scm {
 		SCM=$SCM_NONE
 	elif [[ -f .git/HEAD ]] && [[ -x "$GIT_EXE" ]]; then
 		SCM=$SCM_GIT
-	elif [[ -x "$GIT_EXE" ]] && git rev-parse --is-inside-work-tree &> /dev/null; then
+	elif [[ -x "$GIT_EXE" ]] && [[ -n "$(git rev-parse --is-inside-work-tree 2> /dev/null)" ]]; then
 		SCM=$SCM_GIT
 	elif [[ -x "$P4_EXE" ]] && [[ -n "$(p4 set P4CLIENT 2> /dev/null)" ]]; then
 		SCM=$SCM_P4
@@ -181,8 +181,10 @@ function scm_prompt_info_common {
 }
 
 function terraform_workspace_prompt {
-	if _command_exists terraform && [ -d .terraform ]; then
-		echo -e "$(terraform workspace show 2> /dev/null)"
+	if _command_exists terraform; then
+		if [ -d .terraform ]; then
+			echo -e "$(terraform workspace show 2> /dev/null)"
+		fi
 	fi
 }
 
