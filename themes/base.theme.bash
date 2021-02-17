@@ -193,7 +193,7 @@ function git_prompt_minimal_info {
 
 	SCM_BRANCH="${SCM_THEME_BRANCH_PREFIX}\$(_git-friendly-ref)"
 
-	if [[ -n "$(_git-status | tail -n1)" ]]; then
+	if [[ -n $(_git-status) ]]; then
 		SCM_DIRTY=1
 		SCM_STATE=${SCM_THEME_PROMPT_DIRTY}
 	fi
