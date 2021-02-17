@@ -181,10 +181,8 @@ function scm_prompt_info_common {
 }
 
 function terraform_workspace_prompt {
-	if _command_exists terraform; then
-		if [ -d .terraform ]; then
-			echo -e "$(terraform workspace show 2> /dev/null)"
-		fi
+	if _command_exists terraform && [ -d .terraform ]; then
+		echo -e "$(terraform workspace show 2> /dev/null)"
 	fi
 }
 
