@@ -453,7 +453,9 @@ function condaenv_prompt {
 }
 
 function py_interp_prompt {
-	py_version=$(python --version 2>&1 | awk 'NR==1{print "py-"$2;}') || return
+	read _ py_version _ <<< "$(python --version 2>&1)" || return
+	[ $? -gt 0 ] && py_version="py-$py_version"
+
 	echo -e "${PYTHON_THEME_PROMPT_PREFIX}${py_version}${PYTHON_THEME_PROMPT_SUFFIX}"
 }
 
