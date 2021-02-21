@@ -17,6 +17,6 @@ case $OSTYPE in
 # Keeping previous aliases for a non-breaking change.
 	alias scue='systemctl --user stop'
 	alias scus='systemctl --user start'
-	alias scur='systemctl --user daemon-reload'
+	alias scur='scdru'
     ;;
 esac
