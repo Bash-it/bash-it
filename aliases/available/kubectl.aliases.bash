@@ -18,7 +18,7 @@ function _set_pkg_aliases()
     alias kcgpan='kubectl get pods --all-namespaces'
     alias kcgdan='kubectl get deployments --all-namespaces'
     # launches a disposable netshoot pod in the k8s cluster
-    alias kcnetshoot='kubectl run --generator=run-pod/v1 netshoot-$(date +%s) --rm -i --tty --image nicolaka/netshoot -- /bin/bash'
+    alias kcnetshoot='kubectl run netshoot-$(date +%s) --rm -i --tty --image nicolaka/netshoot -- /bin/bash'
   fi
 }
 
