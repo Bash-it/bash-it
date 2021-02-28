@@ -84,7 +84,7 @@ alias glsum='git diff --name-only --diff-filter=U' # Show unmerged (conflicted) 
 alias ggui='git gui'
 
 # home
-alias ghm='cd '\''$(git rev-parse --show-toplevel)'\''' # Git home
+alias ghm='cd "$(git rev-parse --show-toplevel)"' # Git home
 # appendage to ghm
 if ! _command_exists gh; then
 	alias gh='ghm'
