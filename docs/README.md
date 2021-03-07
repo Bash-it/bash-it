@@ -1,4 +1,5 @@
-# Bash-it
+![logo](https://github.com/Bash-it/media/raw/master/media/Bash-it.png)
+
 ![Build Status](https://github.com/Bash-it/bash-it/workflows/CI/badge.svg?branch=master)
 ![Docs Status](https://readthedocs.org/projects/bash-it/badge/)
 [![Join the chat at https://webchat.freenode.net/?channel=#bash-it](https://img.shields.io/badge/chat-on%20freenode-brightgreen.svg)](https://webchat.freenode.net/?channel=#bash-it)
