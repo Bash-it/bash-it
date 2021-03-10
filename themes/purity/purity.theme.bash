@@ -14,9 +14,21 @@ STATUS_THEME_PROMPT_BAD="${bold_red}❯${reset_color}${normal} "
 STATUS_THEME_PROMPT_OK="${bold_green}❯${reset_color}${normal} "
 PURITY_THEME_PROMPT_COLOR="${PURITY_THEME_PROMPT_COLOR:=$blue}"
 
+detect_venv() {
+	python_venv=""
+	# Detect python venv
+	if [[ -n "${CONDA_DEFAULT_ENV}" ]]; then
+		python_venv="($PYTHON_VENV_CHAR${CONDA_DEFAULT_ENV}) "
+	elif [[ -n "${VIRTUAL_ENV}" ]]; then
+		python_venv="($PYTHON_VENV_CHAR$(basename "${VIRTUAL_ENV}")) "
+	fi
+}
+
 function prompt_command() {
     local ret_status="$( [ $? -eq 0 ] && echo -e "$STATUS_THEME_PROMPT_OK" || echo -e "$STATUS_THEME_PROMPT_BAD")"
-    PS1="\n${PURITY_THEME_PROMPT_COLOR}\w $(scm_prompt_info)\n${ret_status} "
+    PS1="\n${PURITY_THEME_PROMPT_COLOR}\w $(scm_prompt_info)\n${ret_status}"
+    detect_venv
+    PS1+="${python_venv}"
 }
 
 safe_append_prompt_command prompt_command
