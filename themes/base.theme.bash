@@ -188,7 +188,7 @@ function terraform_workspace_prompt {
 	fi
 }
 
-function gcloud_account_prompt {
+function active_gcloud_account_prompt {
 	if _command_exists gcloud; then
 		echo -e "$(gcloud config list account --format "value(core.account)" 2> /dev/null)"
 	fi
