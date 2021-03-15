@@ -33,10 +33,12 @@ __ngrok_completion() {
 			# shellcheck disable=SC2207
 			COMPREPLY=($(compgen -W "$BASE_NO_CONF --channel" -- "$curr"))
 			;;
-		*)
+		ngrok)
 			# shellcheck disable=SC2207
 			COMPREPLY=($(compgen -W "authtoken credits http start tcp tls update version help" -- "$curr"))
 			;;
+		*) ;;
+
 	esac
 }
 
