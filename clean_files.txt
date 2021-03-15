@@ -68,6 +68,7 @@ completion/available/cargo.completion.bash
 completion/available/composer.completion.bash
 completion/available/conda.completion.bash
 completion/available/consul.completion.bash
+completion/available/dart.completion.bash
 completion/available/django.completion.bash
 completion/available/docker.completion.bash
 completion/available/docker-machine.completion.bash
