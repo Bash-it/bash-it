@@ -49,6 +49,13 @@ function __powerline_terraform_prompt() {
 	fi
 }
 
+function __powerline_gcloud_prompt() {
+	local active_gcloud_account=""
+
+	active_gcloud_account="$(active_gcloud_account_prompt)"
+	[[ -n "${active_gcloud_account}" ]] && echo "${GCLOUD_CHAR}${active_gcloud_account}|${GCLOUD_THEME_PROMPT_COLOR}"
+}
+
 function __powerline_node_prompt() {
 	local node_version=""
 

@@ -188,6 +188,12 @@ function terraform_workspace_prompt {
 	fi
 }
 
+function active_gcloud_account_prompt {
+	if _command_exists gcloud; then
+		echo -e "$(gcloud config list account --format "value(core.account)" 2> /dev/null)"
+	fi
+}
+
 function git_prompt_minimal_info {
 	SCM_STATE=${SCM_THEME_PROMPT_CLEAN}
 
