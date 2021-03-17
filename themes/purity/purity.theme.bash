@@ -21,8 +21,8 @@ venv_prompt() {
 		python_venv="($PYTHON_VENV_CHAR${CONDA_DEFAULT_ENV}) "
 	elif [[ -n "${VIRTUAL_ENV}" ]]; then
 		python_venv="($PYTHON_VENV_CHAR$(basename "${VIRTUAL_ENV}")) "
-	[[ -n "${python_venv}" ]] && echo "${python_venv}"
 	fi
+	[[ -n "${python_venv}" ]] && echo "${python_venv}"
 }
 
 function prompt_command() {
