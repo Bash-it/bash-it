@@ -69,6 +69,11 @@ function local_setup {
   assert_line -n 0 ""
 }
 
+@test "helpers: bash-it help plugins" {
+  run bash-it help plugins
+  assert_line -n 1 "base:"
+}
+
 @test "helpers: bash-it help list aliases without any aliases enabled" {
   run _help-list-aliases "$BASH_IT/aliases/available/ag.aliases.bash"
   assert_line -n 0 "ag:"
