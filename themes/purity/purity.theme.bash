@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 
 SCM_THEME_PROMPT_DIRTY=" ${bold_red}⊘${normal}"
 SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓${normal}"
@@ -26,8 +26,9 @@ venv_prompt() {
 }
 
 function prompt_command() {
-    local ret_status="$( [ $? -eq 0 ] && echo -e "$STATUS_THEME_PROMPT_OK" || echo -e "$STATUS_THEME_PROMPT_BAD")"
-    PS1="\n${PURITY_THEME_PROMPT_COLOR}\w $(scm_prompt_info)\n${ret_status}$(venv_prompt)"
+	retval=$?
+	local ret_status="$([ $retval -eq 0 ] && echo -e "$STATUS_THEME_PROMPT_OK" || echo -e "$STATUS_THEME_PROMPT_BAD")"
+	PS1="\n${PURITY_THEME_PROMPT_COLOR}\w $(scm_prompt_info)\n${ret_status}$(venv_prompt)"
 }
 
 safe_append_prompt_command prompt_command
