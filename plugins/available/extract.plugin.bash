@@ -63,7 +63,7 @@ End-Of-Usage
                 *.xz) xz --decompress "$1" ;;
                 *.zip|*.war|*.jar|*.nupkg) unzip "$1" -d "$filedirname/$targetdirname" ;;
                 *.Z) uncompress "$1" ;;
-                *.7z) 7za x "$1" ;;
+                *.7z) 7za x -o"$filedirname/$targetdirname" "$1" ;;
                 *) echo "'$1' cannot be extracted via extract" >&2;;
             esac
         fi
