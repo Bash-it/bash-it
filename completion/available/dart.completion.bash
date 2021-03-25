@@ -6,7 +6,6 @@ __dart_completion() {
 
 	local HELP="--help -h"
 	local VERBOSE="-v --verbose"
-	local DEFAULT="$BASE --authtoken --region"
 
 	case $prev in
 		analyze)
@@ -37,7 +36,7 @@ __dart_completion() {
 			# shellcheck disable=SC2207
 			COMPREPLY=($(compgen -W "$HELP --observe --enable-vm-service --no-pause-isolates-on-exit --no-pause-isolates-on-unhandled-exceptions --no-warn-on-pause-with-no-debugger --pause-isolates-on-exit --pause-isolates-on-unhandled-exceptions --warn-on-pause-with-no-debugger" -- "$curr"))
 			;;
-		*)
+		dart)
 			# shellcheck disable=SC2207
 			COMPREPLY=($(compgen -W "$HELP $VERBOSE --version --enable-analytics --disable-analytics help analyze compile create format pub run test" -- "$curr"))
 			;;
