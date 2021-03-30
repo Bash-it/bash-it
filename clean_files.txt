@@ -69,6 +69,7 @@ completion/available/composer.completion.bash
 completion/available/conda.completion.bash
 completion/available/consul.completion.bash
 completion/available/django.completion.bash
+completion/available/dmidecode.completion.bash
 completion/available/docker.completion.bash
 completion/available/docker-machine.completion.bash
 completion/available/gcloud.completion.bash
