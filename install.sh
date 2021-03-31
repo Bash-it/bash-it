@@ -171,7 +171,8 @@ while getopts "hsinaf" opt; do
 			;;
 	esac
 done
-shift $(("$OPTIND" - 1))
+
+shift $((OPTIND - 1))
 
 if [[ $silent ]] && [[ $interactive ]]; then
 	echo -e "\033[91mOptions --silent and --interactive are mutually exclusive. Please choose one or the other.\033[m"
