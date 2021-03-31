@@ -189,6 +189,22 @@ Doubletime Multiline Python Only
 
 ----
 
+Easy
+^^^^
+
+
+.. image:: https://bash-it.github.io/bash-it/docs/images/easy-black.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/easy-black.jpg
+   :alt:
+
+
+.. image:: https://bash-it.github.io/bash-it/docs/images/easy-white.jpg
+   :target: https://bash-it.github.io/bash-it/docs/images/easy-white.jpg
+   :alt:
+
+
+----
+
 Envy
 ^^^^
 
