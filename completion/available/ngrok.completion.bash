@@ -4,7 +4,7 @@ __ngrok_completion() {
 	local prev=$(_get_pword)
 	local curr=$(_get_cword)
 
-	local BASE_NO_CONF="--log --log-format --log-level"
+	local BASE_NO_CONF="--log --log-format --log-level --help"
 	local BASE="--config $BASE_NO_CONF"
 	local DEFAULT="$BASE --authtoken --region"
 
