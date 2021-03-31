@@ -43,6 +43,7 @@ themes/bobby-python
 themes/brainy
 themes/brunton
 themes/command_duration.theme.bash
+themes/easy
 themes/modern
 themes/purity
 
