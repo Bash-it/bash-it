@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
 load ../test_helper
-load ../../lib/composure
+load "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
 load ../../lib/log
 load ../../lib/utilities
 load ../../lib/search
@@ -67,6 +67,11 @@ function local_setup {
 @test "helpers: bash-it help aliases without any aliases enabled" {
   run bash-it help aliases
   assert_line -n 0 ""
+}
+
+@test "helpers: bash-it help plugins" {
+  run bash-it help plugins
+  assert_line -n 1 "base:"
 }
 
 @test "helpers: bash-it help list aliases without any aliases enabled" {

@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
 load ../test_helper
-load ../../lib/composure
+load "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
 
 cite _about _param _example _group _author _version
 

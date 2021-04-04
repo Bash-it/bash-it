@@ -84,7 +84,7 @@ alias glsum='git diff --name-only --diff-filter=U' # Show unmerged (conflicted) 
 alias ggui='git gui'
 
 # home
-alias ghm='cd '\''$(git rev-parse --show-toplevel)'\''' # Git home
+alias ghm='cd "$(git rev-parse --show-toplevel)"' # Git home
 # appendage to ghm
 if ! _command_exists gh; then
 	alias gh='ghm'
@@ -127,6 +127,7 @@ alias grm='git rm'
 
 # rebase
 alias grb='git rebase'
+alias grbc='git rebase --continue'
 alias grm='git rebase master'
 alias grmi='git rebase master -i'
 alias gprom='git fetch origin master && git rebase origin/master && git update-ref refs/heads/master origin/master' # Rebase with latest remote master

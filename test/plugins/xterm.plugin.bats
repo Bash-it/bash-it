@@ -2,7 +2,11 @@
 
 load ../test_helper
 load ../../lib/helpers
+<<<<<<< HEAD
 load ../../lib/composure
+=======
+load "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
+>>>>>>> 30eda03f30af6d62452ca1efdec919031f83c013
 
 load ../../plugins/available/xterm.plugin
 

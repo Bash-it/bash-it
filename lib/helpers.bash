@@ -742,14 +742,14 @@ _help-plugins()
     printf '%s' 'please wait, building help...'
     typeset grouplist=$(mktemp -t grouplist.XXXXXX)
     typeset func
-    for func in $(typeset_functions)
+    for func in $(_typeset_functions)
     do
         typeset group="$(typeset -f $func | metafor group)"
         if [ -z "$group" ]; then
             group='misc'
         fi
         typeset about="$(typeset -f $func | metafor about)"
-        letterpress "$about" $func >> $grouplist.$group
+        _letterpress "$about" $func >> $grouplist.$group
         echo $grouplist.$group >> $grouplist
     done
     # clear progress message
@@ -788,7 +788,7 @@ all_groups ()
 
     typeset func
     typeset file=$(mktemp -t composure.XXXX)
-    for func in $(typeset_functions)
+    for func in $(_typeset_functions)
     do
         typeset -f $func | metafor group >> $file
     done
