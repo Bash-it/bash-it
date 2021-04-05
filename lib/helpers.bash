@@ -492,6 +492,25 @@ _bash-it-reload() {
   popd &> /dev/null || return
 }
 
+_bash-it-process-component ()
+{
+  _about 'internal function used to process component name and check if its enabled'
+  _param '1: full path to available component file'
+  _example '$ _bash-it-process-component "${BASH_IT}/plugins/available/git.plugin.bash'
+
+  # Check for both the old format without the load priority, and the extended format with the priority
+  declare enabled_files enabled_file
+  enabled_file="${f##*/}"
+  enabled_file_clean=$(echo "$enabled_file" | sed -e 's/\(.*\)\..*\.bash/\1/g')
+  enabled_files=$(sort <(compgen -G "${BASH_IT}/enabled/*$BASH_IT_LOAD_PRIORITY_SEPARATOR${enabled_file}") <(compgen -G "${BASH_IT}/$subdirectory/enabled/${enabled_file}") <(compgen -G "${BASH_IT}/$subdirectory/enabled/*$BASH_IT_LOAD_PRIORITY_SEPARATOR${enabled_file}") | wc -l)
+
+  if [ "$enabled_files" -gt 0 ]; then
+      enabled='x'
+  else
+      enabled=' '
+  fi
+}
+
 _bash-it-describe ()
 {
     _about 'summarizes available bash_it components'
@@ -511,17 +530,8 @@ _bash-it-describe ()
     printf "%-20s%-10s%s\n" "$column_header" 'Enabled?' 'Description'
     for f in "${BASH_IT}/$subdirectory/available/"*.bash
     do
-        # Check for both the old format without the load priority, and the extended format with the priority
-        declare enabled_files enabled_file
-		enabled_file="${f##*/}"
-        enabled_files=$(sort <(compgen -G "${BASH_IT}/enabled/*$BASH_IT_LOAD_PRIORITY_SEPARATOR${enabled_file}") <(compgen -G "${BASH_IT}/$subdirectory/enabled/${enabled_file}") <(compgen -G "${BASH_IT}/$subdirectory/enabled/*$BASH_IT_LOAD_PRIORITY_SEPARATOR${enabled_file}") | wc -l)
-
-        if [ $enabled_files -gt 0 ]; then
-            enabled='x'
-        else
-            enabled=' '
-        fi
-        printf "%-20s%-10s%s\n" "$(basename $f | sed -e 's/\(.*\)\..*\.bash/\1/g')" "  [$enabled]" "$(cat $f | metafor about-$file_type)"
+        _bash-it-process-component "$f"
+        printf "%-20s%-10s%s\n" "$enabled_file_clean" "  [$enabled]" "$(cat $f | metafor about-$file_type)"
     done
     printf '\n%s\n' "to enable $preposition $file_type, do:"
     printf '%s\n' "$ bash-it enable $file_type  <$file_type name> [$file_type name]... -or- $ bash-it enable $file_type all"
