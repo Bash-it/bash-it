@@ -650,6 +650,12 @@ _enable-plugin ()
     _enable-thing "plugins" "plugin" $1 $BASH_IT_LOAD_PRIORITY_DEFAULT_PLUGIN
 }
 
+_enable-plugins ()
+{
+    _about 'alias of _enable-plugin'
+    _enable-plugin "$@"
+}
+
 _enable-alias ()
 {
     _about 'enables bash_it alias'
@@ -658,6 +664,12 @@ _enable-alias ()
     _group 'lib'
 
     _enable-thing "aliases" "alias" $1 $BASH_IT_LOAD_PRIORITY_DEFAULT_ALIAS
+}
+
+_enable-aliases ()
+{
+    _about 'alias of _enable-alias'
+    _enable-alias "$@"
 }
 
 _enable-completion ()
