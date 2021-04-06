@@ -42,7 +42,8 @@ Stop polluting your `~/bin` directory and your `.bashrc` file, fork/clone Bash-i
    ``git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it``
 2) Run ``~/.bash_it/install.sh``
 
-Thats it! :smiley:  
+That's it! :smiley:  
+
 You can check out more components of Bash-it, and customize it to your desire.  
 For more information, see detailed instructions [here](https://bash-it.readthedocs.io/en/latest/installation/).
 
@@ -56,10 +57,8 @@ please feel free to read through this page if you're interested in how Bash-it l
 
 ## Contributors
 
-* [List of contributors][contribute]
+[List of contributors](https://github.com/Bash-it/bash-it/contributors)
 
 ## License
 
 Bash-it is licensed under the [MIT License](https://github.com/Bash-it/bash-it/blob/master/LICENSE).
-
-[contribute]: https://github.com/Bash-it/bash-it/contributors
