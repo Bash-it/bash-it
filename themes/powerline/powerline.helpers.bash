@@ -177,37 +177,32 @@ function powerline.prompt.choose() {
 	}
 
 	local left="$1"
-	local rigth="$2"
+	local right="$2"
 
 	if [[ -z ${right} ]]; then
 		export BASH_IT_THEME="powerline"
+		export POWERLINE_PROMPT="$(powerline.filter-and-print "$*")"
 	else
 		export BASH_IT_THEME="powerline-multiline"
-	fi
 
-	for component_string in "left" "right"; do
-		local -a components
-		# shellcheck disable=2206
-		components=(${!component_string})
+    for component_string in "left" "right"; do
+      local -a components
+      # shellcheck disable=2206
+      components=(${!component_string})
 
-		# shellcheck disable=2207
-		components=($(powerline.filter-and-print "${components[@]}"))
-	done
-
-	[[ -z ${right} ]] && {
-		# Single-line Powerline Prompts
-		export POWERLINE_PROMPT="${POWERLINE_LEFT_PROMPT}"
-	}
+      # shellcheck disable=2207
+      components=($(powerline.filter-and-print "${components[*]}"))
+    done
+  fi
 }
 
 # usage: powerline.prompt.randomize [ lang [ lang ]... ]
 #    eg: powerline.prompt.randomize cwd ruby go node battery
 function powerline.prompt.randomize() {
 	local -a components
-	local -a randomized
 	if [[ -z $* ]];  then
 		# shellcheck disable=2207
-		components=($(powerline.components.array))
+		components=($( array.random-sort $(powerline.components.array)))
 	else
 		# shellcheck disable=2207
 		components=($(powerline.filter-and-print "$@"))
@@ -260,18 +255,21 @@ function powerline.prompt.variable-name() {
   fi
 }
 
-# @description Set left, right or the middle promps itts
+# @description Set left, right or the unified prompt
+# @example
+#    powerline.prompt.set left "scm git"
 function powerline.prompt.set() {
 	if [[ $BASH_IT_THEME =~ "multiline" ]]; then
     local side="$1"; shift
 
-    if [[ ${side} == left || ${side} == right ]] ; then
-      echo "USAGE: powerline.prompt.side [ left | right ] <component....  >"
+    if [[ ${side} != left && ${side} != right ]] ; then
+      echo "USAGE: powerline.prompt.set[ left | right ] <component....  >" >&2
       return 1
     fi
 
-    local var="$(powerline.prompt.echo-prompt "${side}")"
-
+    local func="powerline.prompt.${side}"
+    eval "${func} \"$*\""
+  else
     if [[ -z $* ]]; then
       echo "${POWERLINE_PROMPT}"
     else
@@ -341,9 +339,7 @@ function powerline.prompt.min() {
 }
 
 function powerline.prompt.all() {
-	powerline.prompt
-	export POWERLINE_LEFT_PROMPT="scm clock cwd"
-	export POWERLINE_RIGHT_PROMPT="user_info hostname battery"
+  powerline.prompt.randomize
 }
 
 function powerline.prompt.default() {
@@ -352,7 +348,7 @@ function powerline.prompt.default() {
 }
 
 function powerline.default() {
-	powerline-max
+  powerline.prompt.choose "scm cwd" "clock user"
 }
 
 function powerline.prompt.alternative-symbols() {
