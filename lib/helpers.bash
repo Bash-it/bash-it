@@ -505,7 +505,7 @@ _bash-it-profile-save() {
     echo "" >> "$profile_path"
     echo "# $subdirectory" >> "$profile_path"
     for f in "${BASH_IT}/$subdirectory/available/"*.bash; do
-      _bash-it-process-component "$f"
+      _bash-it-determine-component-status-from-path "$f"
       if [ "$enabled" == "x" ]; then
         echo "$subdirectory $enabled_file_clean" >> "$profile_path"
       fi
@@ -613,11 +613,11 @@ _bash-it-reload() {
   popd &> /dev/null || return
 }
 
-_bash-it-process-component ()
+_bash-it-determine-component-status-from-path ()
 {
   _about 'internal function used to process component name and check if its enabled'
   _param '1: full path to available component file'
-  _example '$ _bash-it-process-component "${BASH_IT}/plugins/available/git.plugin.bash'
+  _example '$ _bash-it-determine-component-status-from-path "${BASH_IT}/plugins/available/git.plugin.bash'
 
   # Check for both the old format without the load priority, and the extended format with the priority
   declare enabled_files enabled_file
@@ -651,7 +651,7 @@ _bash-it-describe ()
     printf "%-20s%-10s%s\n" "$column_header" 'Enabled?' 'Description'
     for f in "${BASH_IT}/$subdirectory/available/"*.bash
     do
-        _bash-it-process-component "$f"
+        _bash-it-determine-component-status-from-path "$f"
         printf "%-20s%-10s%s\n" "$enabled_file_clean" "  [$enabled]" "$(cat $f | metafor about-$file_type)"
     done
     printf '\n%s\n' "to enable $preposition $file_type, do:"
