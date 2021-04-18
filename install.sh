@@ -208,6 +208,8 @@ export BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE=''
 source "${BASH_IT}"/vendor/github.com/erichs/composure/composure.sh
 # shellcheck source=./lib/utilities.bash
 source "$BASH_IT/lib/utilities.bash"
+# shellcheck source=./lib/log.bash
+source "${BASH_IT}/lib/log.bash"
 cite _about _param _example _group _author _version
 # shellcheck source=./lib/helpers.bash
 source "$BASH_IT/lib/helpers.bash"
