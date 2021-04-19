@@ -46,6 +46,7 @@ themes/command_duration.theme.bash
 themes/easy
 themes/modern
 themes/purity
+themes/candy
 
 # plugins
 #
