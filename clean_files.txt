@@ -28,14 +28,13 @@ bash_it.sh
 
 # themes
 #
-themes/agnoster
 themes/90210
-themes/powerline
-themes/barbuk
+themes/agnoster
 themes/atomic
 themes/axin
-themes/base.theme.bash
 themes/bakke
+themes/barbuk
+themes/base.theme.bash
 themes/binaryanomaly
 themes/bira
 themes/bobby
@@ -46,6 +45,7 @@ themes/candy
 themes/command_duration.theme.bash
 themes/easy
 themes/modern
+themes/powerline
 themes/purity
 
 # plugins
