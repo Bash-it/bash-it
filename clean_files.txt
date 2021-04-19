@@ -42,11 +42,11 @@ themes/bobby
 themes/bobby-python
 themes/brainy
 themes/brunton
+themes/candy
 themes/command_duration.theme.bash
 themes/easy
 themes/modern
 themes/purity
-themes/candy
 
 # plugins
 #
