@@ -50,6 +50,7 @@ themes/purity
 
 # plugins
 #
+plugins/available/alias-completion.plugin.bash
 plugins/available/basher.plugin.bash
 plugins/available/cmd-returned-notify.plugin.bash
 plugins/available/docker-machine.plugin.bash
@@ -104,6 +105,7 @@ aliases/available/vim.aliases.bash
 aliases/available/git.aliases.bash
 
 # tests
+test/alias-completion.plugin.bats
 test/test_helper.bash
 
 # vendor init files
