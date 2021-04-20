@@ -105,11 +105,7 @@ aliases/available/vim.aliases.bash
 aliases/available/git.aliases.bash
 
 # tests
-<<<<<<< Updated upstream
 test/plugins/alias-completion.plugin.bats
-=======
-test/alias-completion.plugin.bats
->>>>>>> Stashed changes
 test/test_helper.bash
 
 # vendor init files
