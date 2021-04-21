@@ -50,15 +50,16 @@ themes/purity
 
 # plugins
 #
+plugins/available/alias-completion.plugin.bash
 plugins/available/basher.plugin.bash
 plugins/available/cmd-returned-notify.plugin.bash
 plugins/available/docker-machine.plugin.bash
 plugins/available/git.plugin.bash
 plugins/available/go.plugin.bash
 plugins/available/goenv.plugin.bash
-plugins/available/history.plugin.bash
 plugins/available/history-search.plugin.bash
 plugins/available/history-substring-search.plugin.bash
+plugins/available/history.plugin.bash
 plugins/available/xterm.plugin.bash
 
 # completions
@@ -105,6 +106,7 @@ aliases/available/vim.aliases.bash
 aliases/available/git.aliases.bash
 
 # tests
+test/plugins/alias-completion.plugin.bats
 test/test_helper.bash
 
 # vendor init files
