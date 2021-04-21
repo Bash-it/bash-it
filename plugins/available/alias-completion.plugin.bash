@@ -96,7 +96,7 @@ function alias_completion {
 			echo "$new_completion" >> "$tmp_file"
 		fi
 	done < <(alias -p | sed -Ene "s/$alias_regex/\2 '\3' '\4'/p")
-	# shellcheck disable=SC1090
+	# shellcheck source=/dev/null
 	source "$tmp_file" && command rm -f "$tmp_file"
 }
 
