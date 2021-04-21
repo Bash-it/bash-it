@@ -43,3 +43,8 @@ repos:
         language: system
         files: "\\.bash$"
         types: [file]
+      - id: clean-files-txt
+        name: Check that clean_files.txt is sorted alphabetically.
+        entry: ./hooks/check-clean-files-txt.sh
+        language: system
+        files: clean_files.txt
