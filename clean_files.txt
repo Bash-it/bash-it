@@ -1,7 +1,7 @@
 #######################################################################
 # Allow-list of files to be lint-checked by CI
 #
-# Directory Suport
+# Directory Support
 #   Directory references are allowed within the file, ie:
 #
 #       themes/powerline
@@ -106,9 +106,11 @@ aliases/available/vim.aliases.bash
 aliases/available/git.aliases.bash
 
 # tests
+#
 test/plugins/alias-completion.plugin.bats
 test/test_helper.bash
 
 # vendor init files
+#
 vendor/.gitattributes
 vendor/init.d
