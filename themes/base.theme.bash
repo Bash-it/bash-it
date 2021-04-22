@@ -359,7 +359,9 @@ function hg_prompt_vars {
 
 	if [ -f "$HG_ROOT/branch" ]; then
 		# Mercurial holds it's current branch in .hg/branch file
-		SCM_BRANCH=$(cat "$HG_ROOT/branch")
+		SCM_BRANCH=$(< "${HG_ROOT}/branch")
+		local bookmark=${HG_ROOT}/bookmarks.current
+		[[ -f ${bookmark} ]] && SCM_BRANCH+=:$(< "${bookmark}")
 	else
 		SCM_BRANCH=$(hg summary 2> /dev/null | grep branch: | awk '{print $2}')
 	fi
