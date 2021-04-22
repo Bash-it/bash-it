@@ -22,6 +22,9 @@ function compare_lines() {
 	done <<< "$1"
 }
 
+# We compare using the legacy way
+shopt -s compat31
+
 # Test root files
 compare_lines "$(grep -v "/" "$file")"
 
@@ -31,5 +34,6 @@ compare_lines "$(grep "/$" "$file")"
 # Test non root directories
 compare_lines "$(grep "/." "$file")"
 
+shopt -u compat31
 # Yay, all good!
 exit 0
