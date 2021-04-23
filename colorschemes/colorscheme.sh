@@ -44,9 +44,10 @@ function powerline.prompt.templates() {
 	bashit.colorsscheme "$@"
 }
 
-powerline.prompt.git.default
-powerline.prompt.left   scm ruby cwd
-powerline.prompt.right  go clock battery
+powerline.prompt.git.max
+
+powerline.prompt.left   aws ruby haskell go scm cwd
+powerline.prompt.right  user_info clock battery
 
 bashit.colorscheme dark
 
