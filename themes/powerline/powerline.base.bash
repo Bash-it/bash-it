@@ -85,7 +85,7 @@ function __find_nearest_go_mod() {
 			printf "${path}/go.mod"
 			return 0
 		fi
-		path=$(dirname ${path})
+		path=$(dirname ${path} 2>/dev/null)
 	done
 }
 
