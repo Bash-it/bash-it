@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+# vim: ft=bash
 # A bunch of Powerline Prompt Helper functions that
 # change which compnents are shown, and to what level of detail to
 # render the Git/SCM info.
