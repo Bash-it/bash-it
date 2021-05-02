@@ -51,6 +51,8 @@ completion/available/gem.completion.bash
 completion/available/github-cli.completion.bash
 completion/available/go.completion.bash
 completion/available/helm.completion.bash
+completion/available/jboss5.completion.bash
+completion/available/jboss7.completion.bash
 completion/available/jungle.completion.bash
 completion/available/knife.completion.bash
 completion/available/kontena.completion.bash
