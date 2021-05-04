@@ -37,7 +37,6 @@ function git_revert() {
 	git reset --hard
 }
 
-
 function git_restore_file() {
 	about 'restore the deleted file from HEAD'
 	group 'git'
