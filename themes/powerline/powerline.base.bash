@@ -21,23 +21,23 @@ function __powerline_user_info_prompt() {
 	local color=${USER_INFO_THEME_PROMPT_COLOR}
 
 	if [[ "${THEME_CHECK_SUDO}" = true ]]; then
-		sudo -vn 1> /dev/null 2>&1 && color=${USER_INFO_THEME_PROMPT_COLOR_SUDO}
+		sudo -vn 1>/dev/null 2>&1 && color=${USER_INFO_THEME_PROMPT_COLOR_SUDO}
 	fi
 
 	case "${POWERLINE_PROMPT_USER_INFO_MODE}" in
-		"sudo")
-			if [[ "${color}" = "${USER_INFO_THEME_PROMPT_COLOR_SUDO}" ]]; then
-				user_info="!"
-			fi
-			;;
-		*)
-			local user=${SHORT_USER:-${USER}}
-			if [[ -n "${SSH_CLIENT}" ]] || [[ -n "${SSH_CONNECTION}" ]]; then
-				user_info="${USER_INFO_SSH_CHAR}${user}"
-			else
-				user_info="${user}"
-			fi
-			;;
+	"sudo")
+		if [[ "${color}" = "${USER_INFO_THEME_PROMPT_COLOR_SUDO}" ]]; then
+			user_info="!"
+		fi
+		;;
+	*)
+		local user=${SHORT_USER:-${USER}}
+		if [[ -n "${SSH_CLIENT}" ]] || [[ -n "${SSH_CONNECTION}" ]]; then
+			user_info="${USER_INFO_SSH_CHAR}${user}"
+		else
+			user_info="${user}"
+		fi
+		;;
 	esac
 	[[ -n "${user_info}" ]] && echo "${user_info}|${color}"
 }
@@ -78,29 +78,29 @@ function __powerline_ruby_prompt() {
 }
 
 function __find_nearest_go_mod() {
-  local path="${PWD}"
-  while true; do
-    [[ -z "${path}" || ${path} == "/" ]] && break
-    if [[ -f "${path}/go.mod" ]]; then
-      printf "${path}/go.mod"
-      return 0
-    fi
-    path=$(dirname ${path})
-  done
+	local path="${PWD}"
+	while true; do
+		[[ -z "${path}" || ${path} == "/" ]] && break
+		if [[ -f "${path}/go.mod" ]]; then
+			printf "${path}/go.mod"
+			return 0
+		fi
+		path=$(dirname ${path} 2>/dev/null)
+	done
 }
 
 function __powerline_go_prompt {
-  local go_version=""
+	local go_version=""
 
-  if _command_exists go ; then
-    local go_mod=$(__find_nearest_go_mod)
-    [[ -n "${go_mod}" && -f "${go_mod}" ]] || return
-    local -a go_version_output
-    mapfile -t go_version_output < <(egrep '^go ' ${go_mod} | tr ' ' '\n')
-    go_version="${go_version_output[1]}"
-  fi
+	if _command_exists go; then
+		local go_mod=$(__find_nearest_go_mod)
+		[[ -n "${go_mod}" && -f "${go_mod}" ]] || return
+		local -a go_version_output
+		mapfile -t go_version_output < <(egrep '^go ' ${go_mod} | tr ' ' '\n')
+		go_version="${go_version_output[1]}"
+	fi
 
-  [[ -n "${go_version}" ]] && echo "${GO_CHAR}${go_version}|${GO_THEME_PROMPT_COLOR}"
+	[[ -n "${go_version}" ]] && echo "${GO_CHAR}${go_version}|${GO_THEME_PROMPT_COLOR}"
 }
 
 function __powerline_k8s_context_prompt() {
@@ -158,21 +158,21 @@ function __powerline_scm_prompt() {
 
 function __powerline_cwd_prompt() {
 	local cwd
-  local max_width
-  local screen_width
-  if [[ -n "${CWD_SHORTEN_SCREEN_PERCENT}" ]]; then
-    screen_width=$(.powerline.screen-width)
-    max_width=$(( screen_width * CWD_SHORTEN_SCREEN_PERCENT / 100 ))
-  elif [[ -n "${CWD_SHORTEN_TO}" ]]; then
-    max_width=${CWD_SHORTEN_TO}
-  fi
+	local max_width
+	local screen_width
+	if [[ -n "${CWD_SHORTEN_SCREEN_PERCENT}" ]]; then
+		screen_width=$(.powerline.screen-width)
+		max_width=$((screen_width * CWD_SHORTEN_SCREEN_PERCENT / 100))
+	elif [[ -n "${CWD_SHORTEN_TO}" ]]; then
+		max_width=${CWD_SHORTEN_TO}
+	fi
 
 	if [[ -n ${max_width} ]]; then
-    cwd=$(cwd.shorten "${max_width}" "${PWD}")
-  else
-    cwd=$(pwd | sed "s|^${HOME}|~|")
-  fi
-  echo "${cwd}|${CWD_THEME_PROMPT_COLOR}"
+		cwd=$(cwd.shorten "${max_width}" "${PWD}")
+	else
+		cwd=$(pwd | sed "s|^${HOME}|~|")
+	fi
+	echo "${cwd}|${CWD_THEME_PROMPT_COLOR}"
 }
 
 function __powerline_hostname_prompt() {
@@ -189,7 +189,7 @@ function __powerline_clock_prompt() {
 
 function __powerline_battery_prompt() {
 	local color=""
-	local battery_status="$(battery_percentage 2> /dev/null)"
+	local battery_status="$(battery_percentage 2>/dev/null)"
 
 	if [[ -z "${battery_status}" ]] || [[ "${battery_status}" = "-1" ]] || [[ "${battery_status}" = "no" ]]; then
 		true
@@ -253,7 +253,7 @@ function __powerline_command_number_prompt() {
 
 function __powerline_left_segment() {
 	local params
-	IFS="|" read -ra params <<< "${1}"
+	IFS="|" read -ra params <<<"${1}"
 	local pad_before_segment=" "
 
 	if [[ "${SEGMENTS_AT_LEFT}" -eq 0 ]]; then
