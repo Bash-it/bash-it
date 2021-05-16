@@ -31,15 +31,6 @@ function set_user_color() {
 	esac
 }
 
-scm_prompt() {
-	CHAR=$(scm_char)
-	if [ "$CHAR" = "$SCM_NONE_CHAR" ]; then
-		return
-	else
-		echo "[$(scm_char)$(scm_prompt_info)]"
-	fi
-}
-
 # Define custom colors we need
 # non-printable bytes in PS1 need to be contained within \[ \].
 # Otherwise, bash will count them in the length of the prompt
