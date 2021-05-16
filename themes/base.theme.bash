@@ -121,6 +121,18 @@ function scm {
 	fi
 }
 
+scm_prompt() {
+	local CHAR=$(scm_char)
+	local format=${SCM_PROMPT_FORMAT:-'[%s%s]'}
+
+	if [[ $CHAR = "$SCM_NONE_CHAR" ]]; then
+		return
+	else
+		# shellcheck disable=2059
+		printf "$format\n" "$CHAR" "$(scm_prompt_info)"
+	fi
+}
+
 function scm_prompt_char {
 	if [[ -z $SCM ]]; then scm; fi
 	if [[ $SCM == "$SCM_GIT" ]]; then
