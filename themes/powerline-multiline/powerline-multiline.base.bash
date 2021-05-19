@@ -60,6 +60,7 @@ function __powerline_prompt_command {
   SEGMENTS_AT_LEFT=0
   SEGMENTS_AT_RIGHT=0
   LAST_SEGMENT_COLOR=""
+  _save-and-reload-history "${HISTORY_AUTOSAVE:-0}"
 
   ## left prompt ##
   for segment in $POWERLINE_LEFT_PROMPT; do
