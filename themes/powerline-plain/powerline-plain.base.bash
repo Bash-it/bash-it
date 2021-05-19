@@ -44,8 +44,7 @@ function __powerline_prompt_command {
 		[[ -n "${info}" ]] && __powerline_left_segment "${info}"
 	done
 
-	# shellcheck disable=SC2046
-	[[ "${last_status}" -ne 0 ]] && __powerline_left_segment $(__powerline_last_status_prompt ${last_status})
+	[[ "${last_status}" -ne 0 ]] && __powerline_left_segment "$(__powerline_last_status_prompt ${last_status})"
 
 	if [[ -n "${LEFT_PROMPT}" ]] && [[ "${POWERLINE_COMPACT_AFTER_LAST_SEGMENT}" -eq 0 ]]; then
 		__powerline_left_last_segment_padding
