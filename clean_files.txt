@@ -111,6 +111,9 @@ themes/command_duration.theme.bash
 themes/easy
 themes/modern
 themes/powerline
+themes/powerline-multiline
+themes/powerline-naked
+themes/powerline-plain
 themes/purity
 
 # vendor init files
