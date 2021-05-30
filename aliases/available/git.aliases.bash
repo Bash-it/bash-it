@@ -37,8 +37,6 @@ alias gcb='git checkout -b'
 alias gco='git checkout'
 alias gcob='git checkout -b'
 alias gcobu='git checkout -b ${USER}/'
-alias gcom='git checkout master'
-alias gcpd='git checkout master; git pull; git branch -D'
 alias gct='git checkout --track'
 
 # clone
@@ -195,4 +193,18 @@ esac
 # functions
 function gdv() {
 	git diff --ignore-all-space "$@" | vim -R -
+}
+
+function gcom() {
+	if git branch | grep -q main; then
+	    git checkout main
+	else
+	    git checkout master
+	fi
+}
+
+function gcpd() {
+	gcom
+	git pull
+	git branch -D
 }
