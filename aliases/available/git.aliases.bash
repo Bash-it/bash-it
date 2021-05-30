@@ -197,9 +197,9 @@ function gdv() {
 
 function gcom() {
 	if git branch | grep -q main; then
-	    git checkout main
+		git checkout main
 	else
-	    git checkout master
+		git checkout master
 	fi
 }
 
