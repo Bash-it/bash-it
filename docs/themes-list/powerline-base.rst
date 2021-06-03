@@ -75,6 +75,7 @@ The contents of the prompt can be "reordered", all the "segments" (every piece o
 * ``in_toolbox`` - Show identifier if running inside a `toolbox <https://github.com/containers/toolbox>`_
 * ``in_vim`` - Show identifier if running in ``:terminal`` from vim
 * ``k8s_context`` - Show current kubernetes context
+* ``k8s_namespace_prompt`` - Show current kubernetes namespace
 * ``last_status`` - Exit status of last run command
 * ``python_venv`` - Python virtual environment information (\ ``virtualenv``\ , ``venv``
   and ``conda`` supported)

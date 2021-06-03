@@ -437,6 +437,10 @@ function k8s_context_prompt {
 	echo -e "$(kubectl config current-context 2> /dev/null)"
 }
 
+function k8s_namespace_prompt {
+	echo -e "$(kubectl config view --minify --output 'jsonpath={..namespace}' 2> /dev/null)"
+}
+
 function virtualenv_prompt {
 	if [[ -n "$VIRTUAL_ENV" ]]; then
 		virtualenv=$(basename "$VIRTUAL_ENV")
