@@ -210,6 +210,11 @@ function __powerline_command_number_prompt() {
 	echo "${COMMAND_NUMBER_THEME_PROMPT_CHAR}\#|${COMMAND_NUMBER_THEME_PROMPT_COLOR}"
 }
 
+function __powerline_duration_prompt() {
+	local duration=$(_command_duration)
+	[[ -n "$duration" ]] && echo "${duration}|${COMMAND_DURATION_PROMPT_COLOR}"
+}
+
 function __powerline_left_segment() {
 	local params
 	IFS="|" read -ra params <<< "${1}"
