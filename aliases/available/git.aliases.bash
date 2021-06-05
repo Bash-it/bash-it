@@ -37,6 +37,8 @@ alias gcb='git checkout -b'
 alias gco='git checkout'
 alias gcob='git checkout -b'
 alias gcobu='git checkout -b ${USER}/'
+alias gcom='git checkout $(get_default_branch)'
+alias gcpd='git checkout $(get_default_branch); git pull; git branch -D'
 alias gct='git checkout --track'
 
 # clone
@@ -62,7 +64,7 @@ alias gf='git fetch --all --prune'
 alias gft='git fetch --all --prune --tags'
 alias gftv='git fetch --all --prune --tags --verbose'
 alias gfv='git fetch --all --prune --verbose'
-alias gmu='git fetch origin -v; git fetch upstream -v; git merge upstream/master'
+alias gmu='git fetch origin -v; git fetch upstream -v; git merge upstream/$(get_default_branch)'
 alias gup='git fetch && git rebase'
 
 # log
@@ -102,7 +104,7 @@ alias gp='git push'
 alias gpd='git push --delete'
 alias gpf='git push --force'
 alias gpo='git push origin HEAD'
-alias gpom='git push origin master'
+alias gpom='git push origin $(get_default_branch)'
 alias gpu='git push --set-upstream'
 alias gpunch='git push --force-with-lease'
 alias gpuo='git push --set-upstream origin'
@@ -110,7 +112,7 @@ alias gpuoc='git push --set-upstream origin $(git symbolic-ref --short HEAD)'
 
 # pull
 alias gl='git pull'
-alias glum='git pull upstream master'
+alias glum='git pull upstream $(get_default_branch)'
 alias gpl='git pull'
 alias gpp='git pull && git push'
 alias gpr='git pull --rebase'
@@ -126,9 +128,9 @@ alias grm='git rm'
 # rebase
 alias grb='git rebase'
 alias grbc='git rebase --continue'
-alias grm='git rebase master'
-alias grmi='git rebase master -i'
-alias gprom='git fetch origin master && git rebase origin/master && git update-ref refs/heads/master origin/master' # Rebase with latest remote master
+alias grm='git rebase $(get_default_branch)'
+alias grmi='git rebase $(get_default_branch) -i'
+alias gprom='git fetch origin $(get_default_branch) && git rebase origin/$(get_default_branch) && git update-ref refs/heads/$(get_default_branch) origin/$(get_default_branch)' # Rebase with latest remote
 
 # reset
 alias gus='git reset HEAD'
@@ -172,7 +174,7 @@ alias gsu='git submodule update --init --recursive'
 # these aliases requires git v2.23+
 alias gsw='git switch'
 alias gswc='git switch --create'
-alias gswm='git switch master'
+alias gswm='git switch $(get_default_branch)'
 alias gswt='git switch --track'
 
 # tag
@@ -195,16 +197,10 @@ function gdv() {
 	git diff --ignore-all-space "$@" | vim -R -
 }
 
-function gcom() {
+function get_default_branch() {
 	if git branch | grep -q main; then
-		git checkout main
+		echo main
 	else
-		git checkout master
+		echo master
 	fi
-}
-
-function gcpd() {
-	gcom
-	git pull
-	git branch -D
 }
