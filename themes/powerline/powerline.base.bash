@@ -85,6 +85,16 @@ function __powerline_k8s_context_prompt() {
 	[[ -n "${kubernetes_context}" ]] && echo "${KUBERNETES_CONTEXT_THEME_CHAR}${kubernetes_context}|${KUBERNETES_CONTEXT_THEME_PROMPT_COLOR}"
 }
 
+function __powerline_k8s_namespace_prompt() {
+	local kubernetes_namespace=""
+
+	if _command_exists kubectl; then
+		kubernetes_namespace="$(k8s_namespace_prompt)"
+	fi
+
+	[[ -n "${kubernetes_namespace}" ]] && echo "${KUBERNETES_NAMESPACE_THEME_CHAR}${kubernetes_namespace}|${KUBERNETES_NAMESPACE_THEME_PROMPT_COLOR}"
+}
+
 function __powerline_python_venv_prompt() {
 	set +u
 	local python_venv=""
