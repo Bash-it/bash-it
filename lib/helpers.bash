@@ -225,7 +225,7 @@ _bash-it-update-() {
   cd "${BASH_IT}" || return
 
   DIFF=$(git diff --name-status)
-  [ ${#DIFF} -gt 0 ] && echo -e "Either commit your changes using git commit, or clean them...\n\n$DIFF" && return 1
+  [ ${#DIFF} -gt 0 ] && echo -e "Either commit your changes using git commit, or clean them...\n$DIFF" && return 1
   
 
   if [ -z "$BASH_IT_REMOTE" ]; then
