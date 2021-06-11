@@ -226,7 +226,6 @@ _bash-it-update-() {
 
   DIFF=$(git diff --name-status)
   [ ${#DIFF} -gt 0 ] && echo -e "Either commit your changes using git commit, or clean them...\n$DIFF" && return 1
-  
 
   if [ -z "$BASH_IT_REMOTE" ]; then
     BASH_IT_REMOTE="origin"
