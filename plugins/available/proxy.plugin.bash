@@ -133,7 +133,7 @@ npm-disable-proxy ()
 	if $(command -v npm &> /dev/null) ; then
 		npm config delete proxy
 		npm config delete https-proxy
-		npm config delete noproxy
+		npm config delete no_proxy
 		echo "Disabled npm proxy settings"
 	fi
 }
@@ -150,7 +150,7 @@ npm-enable-proxy ()
 	if $(command -v npm &> /dev/null) ; then
 		npm config set proxy $my_http_proxy
 		npm config set https-proxy $my_https_proxy
-		npm config set noproxy $my_no_proxy
+		npm config set no_proxy $my_no_proxy
 		echo "Enabled npm proxy settings"
 	fi
 }
