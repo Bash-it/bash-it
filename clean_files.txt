@@ -71,6 +71,7 @@ completion/available/rustup.completion.bash
 completion/available/sdkman.completion.bash
 completion/available/vault.completion.bash
 completion/available/vuejs.completion.bash
+completion/available/wpscan.completion.bash
 
 # plugins
 #
