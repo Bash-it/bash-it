@@ -18,6 +18,7 @@ alias gbd='git branch -d'
 alias gbm='git branch -m'
 alias gbt='git branch --track'
 alias gdel='git branch -D'
+alias gbup='git log --branches --not --remotes --no-walk --decorate --oneline' # FROM https://stackoverflow.com/questions/39220870/in-git-list-names-of-branches-with-unpushed-commits
 
 # for-each-ref
 alias gbc='git for-each-ref --format="%(authorname) %09 %(if)%(HEAD)%(then)*%(else)%(refname:short)%(end) %09 %(creatordate)" refs/remotes/ --sort=authorname DESC' # FROM https://stackoverflow.com/a/58623139/10362396
