@@ -224,6 +224,9 @@ _bash-it-update-() {
 
   cd "${BASH_IT}" || return
 
+  DIFF=$(git diff --name-status)
+  [ -n "$DIFF" ] && echo -e "Local changes detected in bash-it directory. Clean '$BASH_IT' directory to proceed.\n$DIFF" && return 1
+
   if [ -z "$BASH_IT_REMOTE" ]; then
     BASH_IT_REMOTE="origin"
   fi
