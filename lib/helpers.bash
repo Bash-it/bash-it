@@ -203,7 +203,7 @@ _bash-it_pull_and_update_inner() {
     _bash-it-migrate
     echo ""
     echo "All done, enjoy!"
-    bash-it reload
+    bash-it restart
   else
     echo "Error updating Bash-it, please, check if your Bash-it installation folder (${BASH_IT}) is clean."
   fi
