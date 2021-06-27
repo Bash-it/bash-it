@@ -203,7 +203,7 @@ _bash-it_pull_and_update_inner() {
     _bash-it-migrate
     echo ""
     echo "All done, enjoy!"
-    bash-it reload
+    bash-it restart
   else
     echo "Error updating Bash-it, please, check if your Bash-it installation folder (${BASH_IT}) is clean."
   fi
@@ -223,6 +223,9 @@ _bash-it-update-() {
   local old_pwd="${PWD}"
 
   cd "${BASH_IT}" || return
+
+  DIFF=$(git diff --name-status)
+  [ -n "$DIFF" ] && echo -e "Local changes detected in bash-it directory. Clean '$BASH_IT' directory to proceed.\n$DIFF" && return 1
 
   if [ -z "$BASH_IT_REMOTE" ]; then
     BASH_IT_REMOTE="origin"
