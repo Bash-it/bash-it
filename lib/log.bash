@@ -45,7 +45,7 @@ function _log_warning()
   group 'log'
 
   [[ "${BASH_IT_LOG_LEVEL:-1}" -ge $BASH_IT_LOG_LEVEL_WARNING ]] || return 0
-  _log_general "${echo_yellow}" " WARN: " "$1"
+  _log_general "${echo_yellow:-}" " WARN: " "$1"
 }
 
 function _log_error()
