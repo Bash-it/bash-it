@@ -2,6 +2,13 @@
 #
 # A collection of reusable functions.
 
+# Avoid duplicate inclusion
+if [[ -n "${__bash_it_lib_utilities:-}" ]]
+then
+    return 0
+fi
+__bash_it_lib_utilities="loaded"
+
 ###########################################################################
 # Generic utilies
 ###########################################################################
