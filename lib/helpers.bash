@@ -156,7 +156,7 @@ bash-it ()
             $func $arg
         done
 
-        if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
+        if [ -n "${BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE:-}" ]; then
           _bash-it-reload
         fi
     else
