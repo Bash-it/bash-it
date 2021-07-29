@@ -104,18 +104,18 @@ function scm {
 		SCM=$SCM_NONE
 	elif [[ -f .git/HEAD ]] && [[ -x "$GIT_EXE" ]]; then
 		SCM=$SCM_GIT
-	elif [[ -x "$GIT_EXE" ]] && [[ -n "$(git rev-parse --is-inside-work-tree 2> /dev/null)" ]]; then
-		SCM=$SCM_GIT
-	elif [[ -x "$P4_EXE" ]] && [[ -n "$(p4 set P4CLIENT 2> /dev/null)" ]]; then
-		SCM=$SCM_P4
 	elif [[ -d .hg ]] && [[ -x "$HG_EXE" ]]; then
-		SCM=$SCM_HG
-	elif [[ -x "$HG_EXE" ]] && [[ -n "$(hg root 2> /dev/null)" ]]; then
 		SCM=$SCM_HG
 	elif [[ -d .svn ]] && [[ -x "$SVN_EXE" ]]; then
 		SCM=$SCM_SVN
+	elif [[ -x "$GIT_EXE" ]] && [[ -n "$(git rev-parse --is-inside-work-tree 2> /dev/null)" ]]; then
+		SCM=$SCM_GIT
+	elif [[ -x "$HG_EXE" ]] && [[ -n "$(hg root 2> /dev/null)" ]]; then
+		SCM=$SCM_HG
 	elif [[ -x "$SVN_EXE" ]] && [[ -n "$(svn info --show-item wc-root 2> /dev/null)" ]]; then
 		SCM=$SCM_SVN
+	elif [[ -x "$P4_EXE" ]] && [[ -n "$(p4 set P4CLIENT 2> /dev/null)" ]]; then
+		SCM=$SCM_P4
 	else
 		SCM=$SCM_NONE
 	fi
