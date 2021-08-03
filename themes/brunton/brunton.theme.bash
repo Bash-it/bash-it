@@ -15,16 +15,8 @@ is_vim_shell() {
 	fi
 }
 
-scm_prompt() {
-	CHAR=$(scm_char)
-	if [ "$CHAR" = "$SCM_NONE_CHAR" ]; then
-		return
-	else
-		echo " $(scm_char) (${white}$(scm_prompt_info)${normal})"
-	fi
-}
-
 prompt() {
+	SCM_PROMPT_FORMAT=' %s (%s)'
 	PS1="${white}${background_blue} \u${normal}${background_blue}@${red}${background_blue}\h $(clock_prompt) ${reset_color}${normal} $(battery_charge)\n${bold_black}${background_white} \w ${normal}$(scm_prompt)$(is_vim_shell)\n${white}>${normal} "
 }
 
