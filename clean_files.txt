@@ -42,6 +42,7 @@ completion/available/cargo.completion.bash
 completion/available/composer.completion.bash
 completion/available/conda.completion.bash
 completion/available/consul.completion.bash
+completion/available/dart.completion.bash
 completion/available/django.completion.bash
 completion/available/dmidecode.completion.bash
 completion/available/docker-machine.completion.bash
@@ -112,6 +113,7 @@ themes/command_duration.theme.bash
 themes/easy
 themes/modern
 themes/powerline
+themes/pure
 themes/purity
 
 # vendor init files

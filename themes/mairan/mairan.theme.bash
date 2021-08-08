@@ -69,16 +69,6 @@ is_vim_shell() {
         fi
 }
 
-modern_scm_prompt() {
-        CHAR=$(scm_char)
-        if [ $CHAR = $SCM_NONE_CHAR ]
-        then
-                return
-        else
-                echo "[$(scm_char)][$GREEN$(scm_prompt_info)]"
-        fi
-}
-
 # show chroot if exist
 chroot(){
     if [ -n "$debian_chroot" ]
@@ -99,7 +89,7 @@ my_ve(){
     }
 
 prompt() {
-
+	SCM_PROMPT_FORMAT="[%s$GREEN%s]"
     my_ps_host="$BOLD$ORANGE\h${normal}";
     # yes, these are the the same for now ...
     my_ps_host_root="$ORANGE\h${normal}";
@@ -114,10 +104,10 @@ prompt() {
 
     # nice prompt
     case "`id -u`" in
-        0) PS1="\n${TITLEBAR}${BRACKET_COLOR}┌─${normal}$(my_ve)$(chroot)[$my_ps_root][$my_ps_host_root]$(modern_scm_prompt)$(__my_rvm_ruby_version)[${green}\w${normal}]$(is_vim_shell)${BRACKET_COLOR}
+        0) PS1="\n${TITLEBAR}${BRACKET_COLOR}┌─${normal}$(my_ve)$(chroot)[$my_ps_root][$my_ps_host_root]$(scm_prompt)$(__my_rvm_ruby_version)[${green}\w${normal}]$(is_vim_shell)${BRACKET_COLOR}
 └─▪ ${prompt_symbol} ${normal}"
         ;;
-        *) PS1="\n${TITLEBAR}${BRACKET_COLOR}┌─${normal}$(my_ve)$(chroot)[$my_ps_user][$my_ps_host]$(modern_scm_prompt)${normal}$(__my_rvm_ruby_version)[${green}\w${normal}]$(is_vim_shell)${BRACKET_COLOR}
+        *) PS1="\n${TITLEBAR}${BRACKET_COLOR}┌─${normal}$(my_ve)$(chroot)[$my_ps_user][$my_ps_host]$(scm_prompt)${normal}$(__my_rvm_ruby_version)[${green}\w${normal}]$(is_vim_shell)${BRACKET_COLOR}
 └─▪ ${prompt_symbol} ${normal}"
         ;;
     esac

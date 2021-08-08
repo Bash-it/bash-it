@@ -32,26 +32,17 @@ is_vim_shell() {
 	fi
 }
 
-modern_scm_prompt() {
-	CHAR=$(scm_char)
-	if [ $CHAR = $SCM_NONE_CHAR ]
-	then
-		return
-	else
-		echo "[$(scm_char)][$(scm_prompt_info)]"
-	fi
-}
-
 prompt() {
+	SCM_PROMPT_FORMAT='[%s][%s]'
 	if [ $? -ne 0 ]
 	then
 		# Yes, the indenting on these is weird, but it has to be like
 		# this otherwise it won't display properly.
 
-		PS1="${TITLEBAR}${bold_red}┌─[${cyan}$(t | wc -l | sed -e's/ *//')${reset_color}]${reset_color}$(modern_scm_prompt)[${cyan}\W${normal}]$(is_vim_shell)
+		PS1="${TITLEBAR}${bold_red}┌─[${cyan}$(t | wc -l | sed -e's/ *//')${reset_color}]${reset_color}$(scm_prompt)[${cyan}\W${normal}]$(is_vim_shell)
 ${bold_red}└─▪${normal} "
 	else
-		PS1="${TITLEBAR}┌─[${cyan}$(t | wc -l | sed -e's/ *//')${reset_color}]$(modern_scm_prompt)[${cyan}\W${normal}]$(is_vim_shell)
+		PS1="${TITLEBAR}┌─[${cyan}$(t | wc -l | sed -e's/ *//')${reset_color}]$(scm_prompt)[${cyan}\W${normal}]$(is_vim_shell)
 └─▪ "
 	fi
 }

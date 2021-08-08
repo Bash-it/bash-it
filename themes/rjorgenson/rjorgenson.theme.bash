@@ -57,16 +57,6 @@ todo_txt_count() {
     fi
 }
 
-modern_scm_prompt() {
-        CHAR=$(scm_char)
-        if [ $CHAR = $SCM_NONE_CHAR ]
-        then
-                return
-        else
-                echo "${BRACKET_COLOR}[${CHAR}${BRACKET_COLOR}][${STRING_COLOR}$(scm_prompt_info)${BRACKET_COLOR}]$normal"
-        fi
-}
-
 my_prompt_char() {
     if [[ $OSTYPE =~ "darwin" ]]; then
         echo "${BRACKET_COLOR}➞  ${normal}"
@@ -76,6 +66,7 @@ my_prompt_char() {
 }
 
 prompt() {
+	SCM_PROMPT_FORMAT="${BRACKET_COLOR}[%s${BRACKET_COLOR}][${STRING_COLOR}%s${BRACKET_COLOR}]"
 
     my_ps_host="${STRING_COLOR}\h${normal}";
     my_ps_user="${STRING_COLOR}\u${normal}";
@@ -84,10 +75,10 @@ prompt() {
 
     # nice prompt
     case "`id -u`" in
-        0) PS1="${TITLEBAR}${BRACKET_COLOR}┌─[$my_ps_root${BRACKET_COLOR}][$my_ps_host${BRACKET_COLOR}]$(modern_scm_prompt)$(__my_rvm_ruby_version)${BRACKET_COLOR}[${STRING_COLOR}\w${BRACKET_COLOR}]$(is_vim_shell)
+        0) PS1="${TITLEBAR}${BRACKET_COLOR}┌─[$my_ps_root${BRACKET_COLOR}][$my_ps_host${BRACKET_COLOR}]$(scm_prompt)$(__my_rvm_ruby_version)${BRACKET_COLOR}[${STRING_COLOR}\w${BRACKET_COLOR}]$(is_vim_shell)
 ${BRACKET_COLOR}└─$(my_prompt_char)${normal}"
         ;;
-        *) PS1="${TITLEBAR}${BRACKET_COLOR}┌─[$my_ps_user${BRACKET_COLOR}][$my_ps_host${BRACKET_COLOR}]$(modern_scm_prompt)$(__my_rvm_ruby_version)${BRACKET_COLOR}[${STRING_COLOR}\w${BRACKET_COLOR}]$(is_vim_shell)
+        *) PS1="${TITLEBAR}${BRACKET_COLOR}┌─[$my_ps_user${BRACKET_COLOR}][$my_ps_host${BRACKET_COLOR}]$(scm_prompt)$(__my_rvm_ruby_version)${BRACKET_COLOR}[${STRING_COLOR}\w${BRACKET_COLOR}]$(is_vim_shell)
 ${BRACKET_COLOR}└─$(todo_txt_count)$(my_prompt_char)"
         ;;
     esac
