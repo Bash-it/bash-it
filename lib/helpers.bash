@@ -48,6 +48,19 @@ function _completion_exists ()
   complete -p "$1" &> /dev/null && _log_warning "$msg" ;
 }
 
+function _bash_it_homebrew_check()
+{
+	if [[ "${BASH_IT_HOMEBREW_PREFIX:-unset}" == 'unset' ]]
+	then # variable isn't set
+		if _binary_exists 'brew'
+		then # Homebrew is installed
+			BASH_IT_HOMEBREW_PREFIX="$(brew --prefix)"
+		else # Homebrew is not installed.
+			false # return failure if brew not installed.
+		fi
+	fi
+}
+
 function _make_reload_alias() {
   echo "source \${BASH_IT}/scripts/reloader.bash ${1} ${2}"
 }
