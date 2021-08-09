@@ -11,8 +11,8 @@ BASH_IT_LOAD_PRIORITY_SEPARATOR="---"
 # To use this in Bash-it for inline replacements with `sed`, use the following syntax:
 # sed "${BASH_IT_SED_I_PARAMETERS[@]}" -e "..." file
 BASH_IT_SED_I_PARAMETERS=(-i)
-case "$(uname)" in
-  Darwin*) BASH_IT_SED_I_PARAMETERS=(-i "")
+case "$OSTYPE" in
+  'darwin'*) BASH_IT_SED_I_PARAMETERS=(-i "")
 esac
 
 function _command_exists ()
