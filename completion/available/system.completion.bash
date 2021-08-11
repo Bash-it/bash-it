@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
-
+#
 # Loads the system's Bash completion modules.
 # If Homebrew is installed (OS X), it's Bash completion modules are loaded.
 
-if [[ -r /etc/bash_completion ]] ; then
+if [[ -r "${BASH_COMPLETION:-}" ]] ; then
+	source "${BASH_COMPLETION}"
+elif [[ -r /etc/bash_completion ]] ; then
   # shellcheck disable=SC1091
   source /etc/bash_completion
 
@@ -12,14 +14,12 @@ elif [[ -r /etc/profile.d/bash_completion.sh ]] ; then
   # shellcheck disable=SC1091
   source /etc/profile.d/bash_completion.sh
 
-fi
-
-if [[ "$(uname -s)" == 'Darwin' ]] && _command_exists brew ; then
+elif [[ $OSTYPE == 'darwin'* ]] && _command_exists brew ; then
   BREW_PREFIX=${BREW_PREFIX:-$(brew --prefix)}
 
   # homebrew/versions/bash-completion2 (required for projects.completion.bash) is installed to this path
-  if [[ -r "$BREW_PREFIX"/etc/profile.d/bash_completion.sh ]] ; then
+  if [[ -r "$BREW_PREFIX"/etc/bash_completion ]] ; then
     # shellcheck disable=SC1090
-    source "$BREW_PREFIX"/etc/profile.d/bash_completion.sh
+    source "$BREW_PREFIX"/etc/bash_completion
   fi
 fi
