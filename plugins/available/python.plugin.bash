@@ -1,11 +1,12 @@
 cite about-plugin
 about-plugin 'alias "shttp" to SimpleHTTPServer'
 
-if [[ "$OSTYPE" == 'linux'* ]]
-then
-  alias shttp='python2 -m SimpleHTTPServer'
+if _command_exists python2; then
+	alias shttp='python2 -m SimpleHTTPServer'
+elif _command_exists python
+	alias shttp='python -m SimpleHTTPServer'
 else
-  alias shttp='python -m SimpleHTTPServer'
+	return 1
 fi
 
 function pyedit() {
@@ -14,18 +15,18 @@ function pyedit() {
     example '$ pyedit requests'
     group 'python'
 
-    xpyc=`python -c "import os, sys; f = open(os.devnull, 'w'); sys.stderr = f; module = __import__('$1'); sys.stdout.write(module.__file__)"`
+    xpyc="$(python -c "import os, sys; f = open(os.devnull, 'w'); sys.stderr = f; module = __import__('$1'); sys.stdout.write(module.__file__)")"
 
     if [[ "$xpyc" == "" ]]; then
         echo "Python module $1 not found"
         return -1
 
-    elif [[ $xpyc == *__init__.py* ]]; then
-        xpydir=`dirname $xpyc`;
+    elif [[ "$xpyc" == *__init__.py* ]]; then
+        xpydir="${xpyc%/*}";
         echo "$EDITOR $xpydir";
-        $EDITOR "$xpydir";
+        ${VISUAL:-${EDITOR:-${ALTERNATE_EDITOR:-nano}}} "$xpydir";
     else
         echo "$EDITOR ${xpyc%.*}.py";
-        $EDITOR "${xpyc%.*}.py";
+        ${VISUAL:-${EDITOR:-${ALTERNATE_EDITOR:-nano}}} "${xpyc%.*}.py";
     fi
 }
