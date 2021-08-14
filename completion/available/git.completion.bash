@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Only operate on MacOS since there are no linux paths
-if [[ "$(uname -s)" != 'Darwin' ]] ; then
+if [[ "$OSTYPE" != 'darwin'* ]] ; then
   _log_warning "unsupported operating system - only 'Darwin' is supported"
   return 0
 fi
@@ -24,7 +24,7 @@ _git_bash_completion_paths=(
 
 # Load the first completion file found
 for _comp_path in "${_git_bash_completion_paths[@]}" ; do
-  if [ -r "$_comp_path" ] ; then
+  if [[ -r "$_comp_path" ]] ; then
     _git_bash_completion_found=true
     source "$_comp_path"
     break
