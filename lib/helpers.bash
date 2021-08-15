@@ -50,14 +50,17 @@ function _completion_exists ()
 
 function _bash_it_homebrew_check()
 {
-	if [[ "${BASH_IT_HOMEBREW_PREFIX:-unset}" == 'unset' ]]
-	then # variable isn't set
-		if _binary_exists 'brew'
-		then # Homebrew is installed
+	if _binary_exists 'brew'
+	then # Homebrew is installed
+		if [[ "${BASH_IT_HOMEBREW_PREFIX:-unset}" == 'unset' ]]
+		then # variable isn't set
 			BASH_IT_HOMEBREW_PREFIX="$(brew --prefix)"
-		else # Homebrew is not installed.
-			false # return failure if brew not installed.
+		else
+			true # Variable is set already, don't invoke `brew`.
 		fi
+	else # Homebrew is not installed.
+		BASH_IT_HOMEBREW_PREFIX= # clear variable, if set to anything.
+		false # return failure if brew not installed.
 	fi
 }
 
