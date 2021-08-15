@@ -30,7 +30,7 @@ then
 
   case "${BASH_VERSION}" in
   1*|2*|3.0*|3.1*)
-    _log_warning "Cannot load completion due to version of shell."
+    _log_warning "Cannot load completion due to version of shell. Are you using Bash 3.2+?"
     ;;
   3.2*|4.0*|4.1*)
     # Import version 1.x of bash-completion, if installed.
