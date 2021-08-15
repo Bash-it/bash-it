@@ -33,7 +33,7 @@ function myip ()
     for url in ${list[*]}
     do
         res=$(curl -fs "${url}")
-        if [ $? -eq 0 ];then
+        if [[ $? -eq 0 ]];then
             break;
         fi
     done
@@ -48,7 +48,7 @@ function pickfrom ()
     example '$ pickfrom /usr/share/dict/words'
     group 'base'
     local file=$1
-    [ -z "$file" ] && reference $FUNCNAME && return
+    [[ -z "$file" ]] && reference $FUNCNAME && return
     length=$(cat $file | wc -l)
     n=$(expr $RANDOM \* $length \/ 32768 + 1)
     head -n $n $file | tail -1
@@ -70,7 +70,7 @@ function passgen ()
 
 # Create alias pass to passgen when pass isn't installed or
 # BASH_IT_LEGACY_PASS is true.
-if ! command -v pass &>/dev/null || [ "$BASH_IT_LEGACY_PASS" = true ]
+if ! command -v pass &>/dev/null || [[ "$BASH_IT_LEGACY_PASS" = true ]]
 then
   alias pass=passgen
 fi
@@ -129,15 +129,15 @@ function usage ()
     about 'disk usage per directory, in Mac OS X and Linux'
     param '1: directory name'
     group 'base'
-    if [ $(uname) = "Darwin" ]; then
+    if [[ "$OSTYPE" == 'darwin'* ]]; then
         if [ -n "$1" ]; then
             du -hd 1 "$1"
         else
             du -hd 1
         fi
 
-    elif [ $(uname) = "Linux" ]; then
-        if [ -n "$1" ]; then
+    elif [[ "$OSTYPE" = 'linux'* ]]; then
+        if [[ -n "$1" ]]; then
             du -h --max-depth=1 "$1"
         else
             du -h --max-depth=1
@@ -145,7 +145,8 @@ function usage ()
     fi
 }
 
-if [ ! -e "${BASH_IT}/plugins/enabled/todo.plugin.bash" ] && [ ! -e "${BASH_IT}/plugins/enabled/*${BASH_IT_LOAD_PRIORITY_SEPARATOR}todo.plugin.bash" ]; then
+if [[ ! -e "${BASH_IT}/plugins/enabled/todo.plugin.bash" ]] && [[ ! -e "${BASH_IT}/plugins/enabled/*${BASH_IT_LOAD_PRIORITY_SEPARATOR}todo.plugin.bash" ]]
+then
 # if user has installed todo plugin, skip this...
     function t ()
     {
@@ -180,11 +181,11 @@ mkiso ()
     group 'base'
 
     if type "mkisofs" > /dev/null; then
-        [ -z ${1+x} ] && local isoname=${PWD##*/} || local isoname=$1
-        [ -z ${2+x} ] && local destpath=../ || local destpath=$2
-        [ -z ${3+x} ] && local srcpath=${PWD} || local srcpath=$3
+        [[ -z ${1+x} ]] && local isoname=${PWD##*/} || local isoname=$1
+        [[ -z ${2+x} ]] && local destpath=../ || local destpath=$2
+        [[ -z ${3+x} ]] && local srcpath=${PWD} || local srcpath=$3
 
-        if [ ! -f "${destpath}${isoname}.iso" ]; then
+        if [[ ! -f "${destpath}${isoname}.iso" ]]; then
             echo "writing ${isoname}.iso to ${destpath} from ${srcpath}"
             mkisofs -V ${isoname} -iso-level 3 -r -o "${destpath}${isoname}.iso" "${srcpath}"
         else

@@ -1,7 +1,7 @@
 cite about-plugin
 about-plugin 'alias "shttp" to SimpleHTTPServer'
 
-if [ $(uname) = "Linux" ]
+if [[ "$OSTYPE" == 'linux'* ]]
 then
   alias shttp='python2 -m SimpleHTTPServer'
 else
@@ -16,7 +16,7 @@ function pyedit() {
 
     xpyc=`python -c "import os, sys; f = open(os.devnull, 'w'); sys.stderr = f; module = __import__('$1'); sys.stdout.write(module.__file__)"`
 
-    if [ "$xpyc" == "" ]; then
+    if [[ "$xpyc" == "" ]]; then
         echo "Python module $1 not found"
         return -1
 

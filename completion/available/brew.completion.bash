@@ -5,7 +5,7 @@ about-completion "brew completion"
 # Load late to make sure `system` completion loads first
 # BASH_IT_LOAD_PRIORITY: 375
 
-if [[ "$(uname -s)" != 'Darwin' ]]; then
+if [[ "$OSTYPE" != 'darwin'* ]]; then
 	_log_warning "unsupported operating system - only 'Darwin' is supported"
 	return 0
 fi

@@ -13,7 +13,7 @@ _defaults_domains()
     COMPREPLY=()
     cur=${COMP_WORDS[COMP_CWORD]}
 
-	local domains=$( defaults domains | sed -e 's/, /:/g' | tr : '\n' | sed -e 's/ /\\ /g' | grep -i "^$cur" )
+	local domains=$( defaults domains | sed -e 's/, /:/g' | tr : '\n' | sed -e 's/ /\\ /g' | grep "^$cur" )
 	local IFS=$'\n'
 	COMPREPLY=( $domains )
 	if [[ $( echo '-app' | grep "^$cur" ) ]]; then
@@ -56,7 +56,7 @@ _defaults()
 
 	# Both a domain and command have been specified
 
-	if [[ ${COMP_WORDS[1]} == [${cmds// /|}] ]]; then
+	if [[ ${COMP_WORDS[1]} =~ [${cmds// /|}] ]]; then
 		cmd=${COMP_WORDS[1]}
 		domain=${COMP_WORDS[2]}
 		key_index=3
