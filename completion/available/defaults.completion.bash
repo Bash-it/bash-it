@@ -41,8 +41,8 @@ _defaults()
 			COMPREPLY=( $( compgen -W "$cmds" -- $cur ) )
 			return 0
 		elif [[ "$prev" == "-host" ]]; then
-			return 0
 			_known_hosts -a
+			return 0
 		else
 			_defaults_domains
 			return 0
@@ -56,7 +56,7 @@ _defaults()
 
 	# Both a domain and command have been specified
 
-	if [[ ${COMP_WORDS[1]} =~ [${cmds// /|}] ]]; then
+	if [[ ${COMP_WORDS[1]} == [${cmds// /|}] ]]; then
 		cmd=${COMP_WORDS[1]}
 		domain=${COMP_WORDS[2]}
 		key_index=3
