@@ -243,6 +243,7 @@ _bash-it-update-() {
 
     if [[ -z "$TARGET" ]]; then
       echo "Can not find tags, so can not update to latest stable version..."
+      cd "${old_pwd}" &> /dev/null
       return
     fi
   else
