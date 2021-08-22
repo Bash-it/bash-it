@@ -56,7 +56,7 @@ _defaults()
 
 	# Both a domain and command have been specified
 
-	if [[ ${COMP_WORDS[1]} == [${cmds// /|}] ]]; then
+	if [[ ${COMP_WORDS[1]} =~ [${cmds// /|}] ]]; then
 		cmd=${COMP_WORDS[1]}
 		domain=${COMP_WORDS[2]}
 		key_index=3
