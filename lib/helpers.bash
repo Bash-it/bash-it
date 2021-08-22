@@ -194,7 +194,10 @@ _bash-it-update-stable() {
   _bash-it-update- stable "$@"
 }
 
-_bash-it_pull_and_update_inner() {
+_bash-it_update_migrate_and_restart() {
+	_about 'Checks out the wanted version, pops directory and restart. Does not return (because of the restart!)'
+  _param '1: Which branch to checkout to'
+  _param '2: Which type of version we are using'
   git checkout "$1" &> /dev/null
   if [[ $? -eq 0 ]]; then
     echo "Bash-it successfully updated."
@@ -203,7 +206,9 @@ _bash-it_pull_and_update_inner() {
     _bash-it-migrate
     echo ""
     echo "All done, enjoy!"
-    bash-it restart
+    # Don't forget to restore the original pwd!
+    popd &> /dev/null
+    _bash-it-restart
   else
     echo "Error updating Bash-it, please, check if your Bash-it installation folder (${BASH_IT}) is clean."
   fi
@@ -220,9 +225,8 @@ _bash-it-update-() {
       silent=true
     fi
   done
-  local old_pwd="${PWD}"
 
-  cd "${BASH_IT}" || return
+  pushd "${BASH_IT}" &> /dev/null || return
 
   DIFF=$(git diff --name-status)
   [ -n "$DIFF" ] && echo -e "Local changes detected in bash-it directory. Clean '$BASH_IT' directory to proceed.\n$DIFF" && return 1
@@ -243,6 +247,7 @@ _bash-it-update-() {
 
     if [[ -z "$TARGET" ]]; then
       echo "Can not find tags, so can not update to latest stable version..."
+      popd &> /dev/null
       return
     fi
   else
@@ -283,12 +288,12 @@ _bash-it-update-() {
 
     if [[ $silent ]]; then
       echo "Updating to ${TARGET}($(git log -1 --format=%h "${TARGET}"))..."
-      _bash-it_pull_and_update_inner $TARGET $version
+      _bash-it_update_migrate_and_restart $TARGET $version
     else
       read -e -n 1 -p "Would you like to update to ${TARGET}($(git log -1 --format=%h "${TARGET}"))? [Y/n] " RESP
       case $RESP in
         [yY]|"")
-          _bash-it_pull_and_update_inner $TARGET $version
+          _bash-it_update_migrate_and_restart $TARGET $version
           ;;
         [nN])
           echo "Not updating…"
@@ -305,7 +310,7 @@ _bash-it-update-() {
       echo "Bash-it is up to date, nothing to do!"
     fi
   fi
-  cd "${old_pwd}" &> /dev/null || return
+  popd &> /dev/null
 }
 
 _bash-it-migrate() {
