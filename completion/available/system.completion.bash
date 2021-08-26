@@ -14,12 +14,11 @@ elif [[ -r /etc/profile.d/bash_completion.sh ]] ; then
   # shellcheck disable=SC1091
   source /etc/profile.d/bash_completion.sh
 
-elif [[ $OSTYPE == 'darwin'* ]] && _command_exists brew ; then
-  BREW_PREFIX=${BREW_PREFIX:-$(brew --prefix)}
-
+elif _bash_it_homebrew_check
+then
   # homebrew/versions/bash-completion2 (required for projects.completion.bash) is installed to this path
-  if [[ -r "$BREW_PREFIX"/etc/bash_completion ]] ; then
+  if [[ -r "$BASH_IT_HOMEBREW_PREFIX"/etc/profile.d/bash_completion.sh ]] ; then
     # shellcheck disable=SC1090
-    source "$BREW_PREFIX"/etc/bash_completion
+    source "$BASH_IT_HOMEBREW_PREFIX"/etc/profile.d/bash_completion.sh
   fi
 fi
