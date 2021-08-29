@@ -9,9 +9,9 @@ about-plugin 'node version manager configuration'
 
 export NVM_DIR=${NVM_DIR:-$HOME/.nvm}
 # This loads nvm
-if command -v brew &>/dev/null && [ -s $(brew --prefix nvm)/nvm.sh ]
+if _bash_it_homebrew_check && [ -s "${BASH_IT_HOMEBREW_PREFIX}/nvm.sh" ]
 then
-  . $(brew --prefix nvm)/nvm.sh
+  . "${BASH_IT_HOMEBREW_PREFIX}/nvm.sh"
 else
   [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 fi
