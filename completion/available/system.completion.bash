@@ -3,6 +3,14 @@
 # Loads the system's Bash completion modules.
 # If Homebrew is installed (OS X), it's Bash completion modules are loaded.
 
+if shopt -qo nounset
+then # Bash-completion is too large and complex to expect to handle unbound variables throughout the whole codebase.
+	BASH_IT_RESTORE_NOUNSET=true
+	shopt -uo nounset
+else
+	BASH_IT_RESTORE_NOUNSET=false
+fi
+
 if [[ -r "${BASH_COMPLETION:-}" ]] ; then
 	source "${BASH_COMPLETION}"
 elif [[ -r /etc/bash_completion ]] ; then
@@ -22,3 +30,9 @@ then
     source "$BASH_IT_HOMEBREW_PREFIX"/etc/profile.d/bash_completion.sh
   fi
 fi
+
+if $BASH_IT_RESTORE_NOUNSET
+then
+	shopt -so nounset
+fi
+unset BASH_IT_RESTORE_NOUNSET

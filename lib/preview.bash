@@ -1,4 +1,4 @@
-if [[ $BASH_PREVIEW ]];
+if [[ "${BASH_PREVIEW:-}" ]];
 then
   unset BASH_PREVIEW #Prevent infinite looping
   echo "

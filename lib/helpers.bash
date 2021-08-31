@@ -156,7 +156,7 @@ bash-it ()
             $func $arg
         done
 
-        if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
+        if [ -n "${BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE:-}" ]; then
           _bash-it-reload
         fi
     else
@@ -354,8 +354,8 @@ _bash-it-migrate() {
       disable_func="_disable-$single_type"
       enable_func="_enable-$single_type"
 
-      $disable_func $component_name
-      $enable_func $component_name
+      $disable_func "$component_name"
+      $enable_func "$component_name"
     done
   done
 
@@ -375,7 +375,7 @@ _bash-it-version() {
 
   cd "${BASH_IT}" || return
 
-  if [ -z $BASH_IT_REMOTE ]; then
+  if [ -z "${BASH_IT_REMOTE:-}" ]; then
     BASH_IT_REMOTE="origin"
   fi
 
