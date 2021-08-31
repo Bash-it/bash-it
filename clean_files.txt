@@ -101,6 +101,7 @@ plugins/available/java.plugin.bash
 plugins/available/jekyll.plugin.bash
 plugins/available/jump.plugin.bash
 plugins/available/less-pretty-cat.plugin.bash
+plugins/available/man.plugin.bash
 plugins/available/node.plugin.bash
 plugins/available/nodenv.plugin.bash
 plugins/available/percol.plugin.bash
