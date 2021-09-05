@@ -30,7 +30,7 @@ __gradle-set-project-root-dir() {
             project_root_dir=$dir
             return 0
         fi
-        dir="$(dirname "$dir")"
+        dir="${dir%/*}"
     done
     return 1
 }

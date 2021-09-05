@@ -352,7 +352,7 @@ function get_hg_root {
 			return
 		fi
 
-		CURRENT_DIR=$(dirname "$CURRENT_DIR")
+		CURRENT_DIR="${CURRENT_DIR%/*}"
 	done
 }
 

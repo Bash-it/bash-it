@@ -12,7 +12,7 @@ function gw() {
       result="${curr_path}/${file}"
       break
     else
-      curr_path=$(dirname "${curr_path}")
+      curr_path="${curr_path%/*}"
     fi
   done
 

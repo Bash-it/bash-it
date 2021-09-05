@@ -21,7 +21,7 @@ function pyedit() {
         return -1
 
     elif [[ $xpyc == *__init__.py* ]]; then
-        xpydir=`dirname $xpyc`;
+        xpydir=${xpyc%/*};
         echo "$EDITOR $xpydir";
         $EDITOR "$xpydir";
     else

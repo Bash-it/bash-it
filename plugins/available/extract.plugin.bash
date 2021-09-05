@@ -35,8 +35,8 @@ End-Of-Usage
             continue
         fi
 
-        local -r filename=$(basename -- $1)
-        local -r filedirname=$(dirname -- $1)
+		local -r filename=${1##*/}
+		local -r filedirname=${1%/*}
         local targetdirname=$(sed 's/\(\.tar\.bz2$\|\.tbz$\|\.tbz2$\|\.tar\.gz$\|\.tgz$\|\.tar$\|\.tar\.xz$\|\.txz$\|\.tar\.Z$\|\.7z$\|\.nupkg$\|\.zip$\|\.war$\|\.jar$\)//g' <<< $filename)
         if [ "$filename" = "$targetdirname" ]; then
             # archive type either not supported or it doesn't need dir creation
