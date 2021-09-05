@@ -15,7 +15,7 @@ function time-machine-list-machines() {
   local tmdest="$(time-machine-destination)/Backups.backupdb"
 
   find "$tmdest" -maxdepth 1 -mindepth 1 -type d | grep -v "/\." | while read line ; do
-    echo "$(basename "$line")"
+    echo "${line##*/}"
   done
 }
 
