@@ -11,19 +11,19 @@ load ../../lib/log
 @test "lib log: basic debug logging with BASH_IT_LOG_LEVEL_ALL" {
   BASH_IT_LOG_LEVEL=$BASH_IT_LOG_LEVEL_ALL
   run _log_debug "test test test"
-  assert_output "DEBUG: test test test"
+  assert_output "DEBUG: default: test test test"
 }
 
 @test "lib log: basic warning logging with BASH_IT_LOG_LEVEL_ALL" {
   BASH_IT_LOG_LEVEL=$BASH_IT_LOG_LEVEL_ALL
   run _log_warning "test test test"
-  assert_output " WARN: test test test"
+  assert_output " WARN: default: test test test"
 }
 
 @test "lib log: basic error logging with BASH_IT_LOG_LEVEL_ALL" {
   BASH_IT_LOG_LEVEL=$BASH_IT_LOG_LEVEL_ALL
   run _log_error "test test test"
-  assert_output "ERROR: test test test"
+  assert_output "ERROR: default: test test test"
 }
 
 @test "lib log: basic debug logging with BASH_IT_LOG_LEVEL_WARNING" {
@@ -35,13 +35,13 @@ load ../../lib/log
 @test "lib log: basic warning logging with BASH_IT_LOG_LEVEL_WARNING" {
   BASH_IT_LOG_LEVEL=$BASH_IT_LOG_LEVEL_WARNING
   run _log_warning "test test test"
-  assert_output " WARN: test test test"
+  assert_output " WARN: default: test test test"
 }
 
 @test "lib log: basic error logging with BASH_IT_LOG_LEVEL_WARNING" {
   BASH_IT_LOG_LEVEL=$BASH_IT_LOG_LEVEL_WARNING
   run _log_error "test test test"
-  assert_output "ERROR: test test test"
+  assert_output "ERROR: default: test test test"
 }
 
 
@@ -60,7 +60,7 @@ load ../../lib/log
 @test "lib log: basic error logging with BASH_IT_LOG_LEVEL_ERROR" {
   BASH_IT_LOG_LEVEL=$BASH_IT_LOG_LEVEL_ERROR
   run _log_error "test test test"
-  assert_output "ERROR: test test test"
+  assert_output "ERROR: default: test test test"
 }
 
 @test "lib log: basic debug silent logging" {

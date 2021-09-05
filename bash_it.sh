@@ -3,7 +3,7 @@
 BASH_IT_LOG_PREFIX="core: main: "
 
 # Only set $BASH_IT if it's not already set
-if [ -z "$BASH_IT" ]; then
+if [ -z "${BASH_IT:-}" ]; then
 	# Setting $BASH to maintain backwards compatibility
 	export BASH_IT=$BASH
 	BASH="$(bash -c 'echo $BASH')"
@@ -20,12 +20,12 @@ source "${BASH_IT}"/vendor/github.com/erichs/composure/composure.sh
 source "${BASH_IT}/lib/log.bash"
 
 # We can only log it now
-[ -z "$BASH_IT_OLD_BASH_SETUP" ] || _log_warning "BASH_IT variable not initialized, please upgrade your bash-it version and reinstall it!"
+[ -z "${BASH_IT_OLD_BASH_SETUP:-}" ] || _log_warning "BASH_IT variable not initialized, please upgrade your bash-it version and reinstall it!"
 
 # For backwards compatibility, look in old BASH_THEME location
-if [ -z "$BASH_IT_THEME" ]; then
+if [ -z "${BASH_IT_THEME:-}" ]; then
 	_log_warning "BASH_IT_THEME variable not initialized, please upgrade your bash-it version and reinstall it!"
-	export BASH_IT_THEME="$BASH_THEME"
+	export BASH_IT_THEME="${BASH_THEME:-}"
 	unset BASH_THEME
 fi
 
@@ -122,7 +122,7 @@ for _bash_it_config_file in $CUSTOM; do
 done
 
 unset _bash_it_config_file
-if [[ $PROMPT ]]; then
+if [[ "${PROMPT:-}" ]]; then
 	export PS1="\[""$PROMPT""\]"
 fi
 
@@ -144,7 +144,7 @@ if [ -e "$HOME/.jekyllconfig" ]; then
 fi
 
 # BASH_IT_RELOAD_LEGACY is set.
-if ! command -v reload &> /dev/null && [ -n "$BASH_IT_RELOAD_LEGACY" ]; then
+if ! command -v reload &> /dev/null && [ -n "${BASH_IT_RELOAD_LEGACY:-}" ]; then
 	case $OSTYPE in
 		darwin*)
 			alias reload='source ~/.bash_profile'
