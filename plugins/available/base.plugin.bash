@@ -169,13 +169,13 @@ function mkiso()
     example 'mkiso ISO-Name dest/path src/path'
     group 'base'
 
-    [ -z ${1+x} ] && local isoname=${PWD##*/} || local isoname=$1
-    [ -z ${2+x} ] && local destpath=../ || local destpath=$2
-    [ -z ${3+x} ] && local srcpath=${PWD} || local srcpath=$3
+	local isoname="${1:-${PWD##*/}}"
+	local destpath="${2:-../}"
+	local srcpath="${3:-${PWD}}"
 
     if [ ! -f "${destpath}${isoname}.iso" ]; then
         echo "writing ${isoname}.iso to ${destpath} from ${srcpath}"
-        mkisofs -V ${isoname} -iso-level 3 -r -o "${destpath}${isoname}.iso" "${srcpath}"
+		mkisofs -V "${isoname}" -iso-level 3 -r -o "${destpath}${isoname}.iso" "${srcpath}"
     else
         echo "${destpath}${isoname}.iso already exists"
     fi
