@@ -93,7 +93,7 @@ function mkcd() {
     example '$ mkcd foo foo1 foo2 fooN'
     example '$ mkcd /tmp/img/photos/large /tmp/img/photos/self /tmp/img/photos/Beijing'
     group 'base'
-    mkdir -p -- "$@" && cd -- "${!#}"
+	mkdir -p -- "$@" && cd -- "${!#}" || return
 }
 
 function lsgrep ()
