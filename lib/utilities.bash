@@ -118,8 +118,8 @@ _bash-it-clean-component-cache() {
 
 # Returns an array of items within each compoenent.
 _bash-it-component-list() {
-  local component="$1"
-  _bash-it-component-help "${component}" | awk '{print $1}' | uniq | sort | tr '\n' ' '
+  local IFS=$'\n' component="$1"
+  _bash-it-component-help "${component}" | awk '{print $1}' | sort -u
 }
 
 _bash-it-component-list-matching() {
