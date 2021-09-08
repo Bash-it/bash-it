@@ -55,7 +55,8 @@ _bash-it-array-contains-element() {
 
 # Dedupe a simple array of words without spaces.
 _bash-it-array-dedup() {
-  echo "$*" | tr ' ' '\n' | sort -u | tr '\n' ' '
+	local IFS=$'\n'
+  echo "$@" | tr ' ' '\n' | sort -u
 }
 
 # Outputs a full path of the grep found on the filesystem
