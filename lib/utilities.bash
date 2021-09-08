@@ -60,11 +60,10 @@ _bash-it-array-dedup() {
 }
 
 # Outputs a full path of the grep found on the filesystem
-_bash-it-grep() {
-  if [[ -z "${BASH_IT_GREP:-}" ]] ; then
-    export BASH_IT_GREP="$(which egrep || which grep || '/usr/bin/grep')"
-  fi
-  printf "%s " "${BASH_IT_GREP}"
+function _bash-it-grep()
+{
+	: "${BASH_IT_GREP:=$(type -p egrep || type -p grep)}"
+	printf "%s" "${BASH_IT_GREP:-'/usr/bin/grep'}"
 }
 
 
