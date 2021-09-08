@@ -129,8 +129,8 @@ _bash-it-component-list-matching() {
 }
 
 _bash-it-component-list-enabled() {
-  local component="$1"
-  _bash-it-component-help "${component}" | $(_bash-it-grep) -E  '\[x\]' | awk '{print $1}' | uniq | sort | tr '\n' ' '
+  local IFS=$'\n' component="$1"
+  _bash-it-component-help "${component}" | $(_bash-it-grep) -E  '\[x\]' | awk '{print $1}' | sort -u
 }
 
 _bash-it-component-list-disabled() {
