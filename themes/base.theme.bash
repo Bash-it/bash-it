@@ -85,10 +85,10 @@ RBENV_THEME_PROMPT_SUFFIX='|'
 RBFU_THEME_PROMPT_PREFIX=' |'
 RBFU_THEME_PROMPT_SUFFIX='|'
 
-GIT_EXE=$(which git 2> /dev/null || true)
-P4_EXE=$(which p4 2> /dev/null || true)
-HG_EXE=$(which hg 2> /dev/null || true)
-SVN_EXE=$(which svn 2> /dev/null || true)
+GIT_EXE=$(command -v git 2> /dev/null || true)
+P4_EXE=$(command -v p4 2> /dev/null || true)
+HG_EXE=$(command -v hg 2> /dev/null || true)
+SVN_EXE=$(command -v svn 2> /dev/null || true)
 
 # Check for broken SVN exe that is caused by some versions of Xcode.
 # See https://github.com/Bash-it/bash-it/issues/1612 for more details.
@@ -400,7 +400,7 @@ function node_version_prompt {
 }
 
 function rvm_version_prompt {
-	if which rvm &> /dev/null; then
+	if command -v rvm &> /dev/null; then
 		rvm=$(rvm-prompt) || return
 		if [ -n "$rvm" ]; then
 			echo -e "$RVM_THEME_PROMPT_PREFIX$rvm$RVM_THEME_PROMPT_SUFFIX"
@@ -409,7 +409,7 @@ function rvm_version_prompt {
 }
 
 function rbenv_version_prompt {
-	if which rbenv &> /dev/null; then
+	if command -v rbenv &> /dev/null; then
 		rbenv=$(rbenv version-name) || return
 		rbenv commands | grep -q gemset && gemset=$(rbenv gemset active 2> /dev/null) && rbenv="$rbenv@${gemset%% *}"
 		if [ "$rbenv" != "system" ]; then

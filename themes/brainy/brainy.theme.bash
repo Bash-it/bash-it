@@ -136,7 +136,7 @@ ___brainy_prompt_ruby() {
 
 ___brainy_prompt_todo() {
 	[ "${THEME_SHOW_TODO}" != "true" ] \
-		|| [ -z "$(which todo.sh)" ] && return
+		|| [ -z "$(command -v todo.sh)" ] && return
 	color=$bold_white
 	box="[|]"
 	info="t:$(todo.sh ls | grep -E "TODO: [0-9]+ of ([0-9]+)" | awk '{ print $4 }')"
