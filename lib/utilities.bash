@@ -125,7 +125,7 @@ _bash-it-component-list() {
 _bash-it-component-list-matching() {
   local component="$1"; shift
   local term="$1"
-  _bash-it-component-help "${component}" | $(_bash-it-grep) -E -- "${term}" | awk '{print $1}' | sort | uniq
+  _bash-it-component-help "${component}" | $(_bash-it-grep) -E -- "${term}" | awk '{print $1}' | sort -u
 }
 
 _bash-it-component-list-enabled() {
