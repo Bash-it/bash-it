@@ -134,8 +134,8 @@ _bash-it-component-list-enabled() {
 }
 
 _bash-it-component-list-disabled() {
-  local component="$1"
-  _bash-it-component-help "${component}" | $(_bash-it-grep) -E -v '\[x\]' | awk '{print $1}' | uniq | sort | tr '\n' ' '
+  local IFS=$'\n' component="$1"
+  _bash-it-component-help "${component}" | $(_bash-it-grep) -E -v '\[x\]' | awk '{print $1}' | sort -u
 }
 
 # Checks if a given item is enabled for a particular component/file-type.
