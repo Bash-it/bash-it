@@ -8,8 +8,6 @@ function local_setup {
 
   export OLD_PATH="$PATH"
   export PATH="/usr/bin:/bin:/usr/sbin"
-
-  load ../../plugins/available/ruby.plugin
 }
 
 function local_teardown {
@@ -18,15 +16,21 @@ function local_teardown {
 }
 
 @test "plugins ruby: remove_gem is defined" {
+  load ../../plugins/available/ruby.plugin
+
   run type remove_gem
   assert_line -n 1 "remove_gem () "
 }
 
 @test "plugins ruby: PATH includes ~/.gem/ruby/bin" {
-  if ! which ruby >/dev/null; then
+  if ! type ruby >/dev/null; then
     skip 'ruby not installed'
   fi
 
-  local last_path_entry=$(echo $PATH | tr ":" "\n" | tail -1)
-  [[ "${last_path_entry}" == "${HOME}"/.gem/ruby/*/bin ]]
+  mkdir -p "$(ruby -e 'print Gem.user_dir')/bin"
+
+  load ../../plugins/available/ruby.plugin
+
+  local last_path_entry="$(tail -1 <<<"${PATH//:/$'\n'}")"
+  [[ "${last_path_entry}" == "$(ruby -e 'print Gem.user_dir')/bin" ]]
 }
