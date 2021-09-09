@@ -145,7 +145,7 @@ if [ -e "$HOME/.jekyllconfig" ]; then
 fi
 
 # BASH_IT_RELOAD_LEGACY is set.
-if ! command -v reload &> /dev/null && [ -n "${BASH_IT_RELOAD_LEGACY:-}" ]; then
+if ! _command_exists reload && [[ -n "${BASH_IT_RELOAD_LEGACY:-}" ]]; then
 	case $OSTYPE in
 		darwin*)
 			alias reload='source ~/.bash_profile'
