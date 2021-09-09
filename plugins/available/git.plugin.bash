@@ -309,7 +309,7 @@ function git-changelog() {
 		# shellcheck disable=SC2162
 		git log "$1" --no-merges --format="%cd" --date=short | sort -u -r | while read DATE; do
 			echo
-			echo [$DATE]
+			echo "[$DATE]"
 			git log --no-merges --format=" * (%h) %s by %an <%ae>" --since="$DATE 00:00:00" --until="$DATE 24:00:00"
 			NEXT=$DATE
 		done
