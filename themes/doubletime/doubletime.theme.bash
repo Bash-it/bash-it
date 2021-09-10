@@ -1,5 +1,17 @@
 # shellcheck shell=bash
 
+case $HISTCONTROL in
+*'auto'*)
+	: # Do nothing, already configured.
+	;;
+*)
+	# Append new history lines to history file
+	HISTCONTROL="${HISTCONTROL:-}${HISTCONTROL:+:}autosave"
+	;;
+esac
+safe_append_preexec '_bash-it-history-auto-load'
+safe_append_prompt_command '_bash-it-history-auto-save'
+
 SCM_THEME_PROMPT_DIRTY=''
 SCM_THEME_PROMPT_CLEAN=''
 SCM_GIT_CHAR="${bold_cyan}±${normal}"
@@ -29,8 +41,6 @@ else
 fi
 
 function prompt_setter() {
-  # Save history
-  _save-and-reload-history 1
   PS1="
 $(clock_prompt) $(scm_char) [${THEME_PROMPT_HOST_COLOR}\u@${THEME_PROMPT_HOST}$reset_color] $(virtualenv_prompt)$(ruby_version_prompt)\w
 $(scm_prompt)$reset_color $ "
