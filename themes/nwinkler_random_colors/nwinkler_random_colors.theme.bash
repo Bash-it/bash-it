@@ -95,12 +95,22 @@ prompt_setter() {
   if [[ $exit_status -eq 0 ]]; then PROMPT_END=$PROMPT_END_CLEAN
     else PROMPT_END=$PROMPT_END_DIRTY
   fi
-  # Save history
-  _save-and-reload-history 1
   PS1="($(clock_prompt)${reset_color}) $(scm_char) [${USERNAME_COLOR}\u${reset_color}@${HOSTNAME_COLOR}\H${reset_color}] ${PATH_COLOR}\w${reset_color}$(scm_prompt_info) ${reset_color}\n$(prompt_end) "
   PS2='> '
   PS4='+ '
 }
+
+case $HISTCONTROL in
+*'auto'*)
+	: # Do nothing, already configured.
+	;;
+*)
+	# Append new history lines to history file
+	HISTCONTROL="${HISTCONTROL:-}${HISTCONTROL:+:}autosave"
+	;;
+esac
+safe_append_preexec '_bash-it-history-auto-load'
+safe_append_prompt_command '_bash-it-history-auto-save'
 
 safe_append_prompt_command prompt_setter
 
