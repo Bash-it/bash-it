@@ -80,7 +80,7 @@ function _prompt {
 	_exit-code exit_code
 	_git-uptream-remote-logo
 
-	history -a
+	HISTCONTROL="${HISTCONTROL:-}:autosave" _bash_it_history_auto_save
 
 	# Detect root shell
 	if [ "$(whoami)" = root ]; then

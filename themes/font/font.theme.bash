@@ -56,7 +56,7 @@ function prompt_command() {
     fi
 
     # Append new history lines to history file
-    history -a
+    HISTCONTROL="${HISTCONTROL:-}:autosave" _bash_it_history_auto_save
 
     PS1="$(clock_prompt)${virtualenv}$(user_host_prompt)${bold_cyan}\W $(scm_prompt_char_info)${ret_status}→ ${normal}"
 }
