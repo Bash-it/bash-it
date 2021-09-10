@@ -41,6 +41,16 @@ USER_HOST_THEME_PROMPT_SUFFIX=" "
 VIRTUALENV_THEME_PROMPT_PREFIX='('
 VIRTUALENV_THEME_PROMPT_SUFFIX=') '
 
+case $HISTCONTROL in
+*'auto'*)
+	: # Do nothing, already configured.
+	;;
+*)
+	# Append new history lines to history file
+	HISTCONTROL="${HISTCONTROL:-}${HISTCONTROL:+:}autosave"
+	;;
+esac
+
 function prompt_command() {
     # This needs to be first to save last command return code
     local RC="$?"
@@ -55,10 +65,8 @@ function prompt_command() {
         ret_status="${bold_red}"
     fi
 
-    # Append new history lines to history file
-    HISTCONTROL="${HISTCONTROL:-}:autosave" _bash_it_history_auto_save
-
     PS1="$(clock_prompt)${virtualenv}$(user_host_prompt)${bold_cyan}\W $(scm_prompt_char_info)${ret_status}→ ${normal}"
 }
 
+save_append_preexec _bash-it-history-auto-save
 safe_append_prompt_command prompt_command
