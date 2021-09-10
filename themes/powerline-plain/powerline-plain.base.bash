@@ -1,4 +1,17 @@
+# shellcheck shell=bash
 . "$BASH_IT/themes/powerline/powerline.base.bash"
+
+case $HISTCONTROL in
+*'auto'*)
+	: # Do nothing, already configured.
+	;;
+*)
+	# Append new history lines to history file
+	HISTCONTROL="${HISTCONTROL:-}${HISTCONTROL:+:}autosave"
+	;;
+esac
+safe_append_preexec '_bash-it-history-auto-load'
+safe_append_prompt_command '_bash-it-history-auto-save'
 
 function __powerline_left_segment {
   local OLD_IFS="${IFS}"; IFS="|"
@@ -33,8 +46,6 @@ function __powerline_prompt_command {
   SEGMENTS_AT_LEFT=0
   LAST_SEGMENT_COLOR=""
   PROMPT_AFTER="${POWERLINE_PROMPT_AFTER}"
-
-  _save-and-reload-history "${HISTORY_AUTOSAVE:-0}"
 
   ## left prompt ##
   for segment in $POWERLINE_PROMPT; do
