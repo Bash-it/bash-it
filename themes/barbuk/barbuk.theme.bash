@@ -41,6 +41,16 @@ SCM_THEME_BRANCH_TRACK_PREFIX="${normal} ⤏  ${cyan}"
 SCM_THEME_CURRENT_USER_PREFFIX='  '
 SCM_GIT_SHOW_CURRENT_USER=false
 
+case $HISTCONTROL in
+	*'auto'*)
+		: # Do nothing, already configured.
+		;;
+	*)
+		# Append new history lines to history file
+		HISTCONTROL="${HISTCONTROL:-}${HISTCONTROL:+:}autosave"
+		;;
+esac
+
 function _git-uptream-remote-logo {
 	[[ "$(_git-upstream)" == "" ]] && SCM_GIT_CHAR="$SCM_GIT_CHAR_DEFAULT"
 
@@ -80,8 +90,6 @@ function _prompt {
 	_exit-code exit_code
 	_git-uptream-remote-logo
 
-	HISTCONTROL="${HISTCONTROL:-}:autosave" _bash_it_history_auto_save
-
 	# Detect root shell
 	if [ "$(whoami)" = root ]; then
 		dir_color=$red
@@ -109,4 +117,5 @@ function _prompt {
 	PS1="${PS1}${wrap_char}❯${normal} "
 }
 
+safe_append_preexec _bash-it-history-auto-save
 safe_append_prompt_command _prompt
