@@ -92,7 +92,7 @@ SVN_EXE=$(which svn 2> /dev/null || true)
 
 # Check for broken SVN exe that is caused by some versions of Xcode.
 # See https://github.com/Bash-it/bash-it/issues/1612 for more details.
-if [[ -x "$SVN_EXE" ]]; then
+if [[ -x "$SVN_EXE" && -x "${SVN_EXE%/*}/xcrun" ]]; then
 	if ! "$SVN_EXE" --version > /dev/null 2>&1; then
 		# Unset the SVN exe variable so that SVN commands are avoided.
 		SVN_EXE=""
