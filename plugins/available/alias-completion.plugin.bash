@@ -70,7 +70,7 @@ function alias_completion {
 			local compl_func="${new_completion/#* -F /}"
 			compl_func="${compl_func%% *}"
 			# avoid recursive call loops by ignoring our own functions
-			if [[ "${compl_func#_$namespace::}" == "$compl_func" ]]; then
+			if [[ "${compl_func#_"$namespace"::}" == "$compl_func" ]]; then
 				local compl_wrapper="_${namespace}::${alias_name}"
 				echo "function $compl_wrapper {
                         local compl_word=\$2
