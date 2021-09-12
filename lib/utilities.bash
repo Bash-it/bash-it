@@ -71,12 +71,12 @@ _bash-it-grep() {
 ###########################################################################
 
 _bash-it-component-help() {
-  local component=$(_bash-it-pluralize-component "${1}")
-  local file=$(_bash-it-component-cache-file ${component})
+  local component="$(_bash-it-pluralize-component "${1}")"
+  local file="$(_bash-it-component-cache-file "${component}")"
   if [[ ! -s "${file}" || -z $(find "${file}" -mmin -300) ]] ; then
     rm -f "${file}" 2>/dev/null
     local func="_bash-it-${component}"
-    ${func} | $(_bash-it-grep) -E '   \[' | cat > ${file}
+    "${func}" | $(_bash-it-grep) -E '   \[' | cat > "${file}"
   fi
   cat "${file}"
 }
@@ -84,7 +84,7 @@ _bash-it-component-help() {
 _bash-it-component-cache-file() {
   local component=$(_bash-it-pluralize-component "${1}")
   local file="${BASH_IT}/tmp/cache/${component}"
-  [[ -f ${file} ]] || mkdir -p $(dirname ${file})
+  [[ -f "${file}" ]] || mkdir -p "${file%/*}"
   printf "${file}"
 }
 

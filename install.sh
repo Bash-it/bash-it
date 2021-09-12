@@ -184,7 +184,7 @@ if [[ $no_modify_config ]] && [[ $append_to_config ]]; then
 	exit 1
 fi
 
-BASH_IT="$(cd "$(dirname "$0")" && pwd)"
+BASH_IT="$(cd "${BASH_SOURCE%/*}" && pwd)"
 
 case $OSTYPE in
 	darwin*)
