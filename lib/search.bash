@@ -3,11 +3,12 @@
 # Search by Konstantin Gredeskoul «github.com/kigster»
 
 # Avoid duplicate inclusion
-if [[ -n "${__bash_it_lib_search:-}" ]]
+if [[ "${__bash_it_lib_loaded[*]:-}" == *"${BASH_SOURCE#*/}"* ]]
 then
     return 0
 fi
-__bash_it_lib_search="loaded"
+__bash_it_lib_loaded=( "${BASH_SOURCE#*/}" "${__bash_it_lib_loaded[@]:-}" )
+
 #———————————————————————————————————————————————————————————————————————————————
 # This function returns list of aliases, plugins and completions in bash-it,
 # whose name or description matches one of the search terms provided as arguments.

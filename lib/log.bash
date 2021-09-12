@@ -3,11 +3,11 @@
 # A collection of logging functions.
 
 # Avoid duplicate inclusion
-if [[ -n "${__bash_it_lib_log:-}" ]]
+if [[ "${__bash_it_lib_loaded[*]:-}" == *"${BASH_SOURCE#*/}"* ]]
 then
     return 0
 fi
-__bash_it_lib_log="loaded"
+__bash_it_lib_loaded=( "${BASH_SOURCE#*/}" "${__bash_it_lib_loaded[@]:-}" )
 
 export BASH_IT_LOG_LEVEL_ERROR=1
 export BASH_IT_LOG_LEVEL_WARNING=2

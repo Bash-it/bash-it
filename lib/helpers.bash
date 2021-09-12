@@ -3,11 +3,11 @@
 # A collection of reusable functions.
 
 # Avoid duplicate inclusion
-if [[ -n "${__bash_it_lib_helpers:-}" ]]
+if [[ "${__bash_it_lib_loaded[*]:-}" == *"${BASH_SOURCE#*/}"* ]]
 then
     return 0
 fi
-__bash_it_lib_helpers="loaded"
+__bash_it_lib_loaded=( "${BASH_SOURCE#*/}" "${__bash_it_lib_loaded[@]:-}" )
 
 BASH_IT_LOAD_PRIORITY_DEFAULT_ALIAS=${BASH_IT_LOAD_PRIORITY_DEFAULT_ALIAS:-150}
 BASH_IT_LOAD_PRIORITY_DEFAULT_PLUGIN=${BASH_IT_LOAD_PRIORITY_DEFAULT_PLUGIN:-250}
