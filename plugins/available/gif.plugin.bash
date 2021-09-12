@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 cite about-plugin
 about-plugin 'video to gif, gif to WebM helper functions'
 
@@ -30,11 +31,11 @@ function v2gif {
   example '$ v2gif -dh *.avi'
   example '$ v2gif -thw 600 *.avi *.mov'
 
-  local convert=$(which convert)     ; [[ -x "$convert" ]]   || { echo "No convert found!" ; return 2 ;}
-  local ffmpeg=$(which ffmpeg)       ; [[ -x "$ffmpeg" ]]    || { echo "No ffmpeg found!" ; return 2 ;}
-  local mediainfo=$(which mediainfo) ; [[ -x "$mediainfo" ]] || { echo "No mediainfo found!" ; return 2 ;}
-  local gifsicle=$(which gifsicle)   ; [[ -x "$gifsicle" ]]  || { echo "No gifsicle found!" ; return 2 ;}
-  local getopt=$(which getopt)
+  local convert="$(type -p convert)"     ; [[ -x "$convert" ]]   || { echo "No convert found!" ; return 2 ;}
+  local ffmpeg="$(type -p ffmpeg)"       ; [[ -x "$ffmpeg" ]]    || { echo "No ffmpeg found!" ; return 2 ;}
+  local mediainfo="$(type -p mediainfo)" ; [[ -x "$mediainfo" ]] || { echo "No mediainfo found!" ; return 2 ;}
+  local gifsicle="$(type -p gifsicle)"   ; [[ -x "$gifsicle" ]]  || { echo "No gifsicle found!" ; return 2 ;}
+  local getopt="$(type -p getopt)"
 
   if [[ "$OSTYPE" == "darwin"* ]] ; then
   # Getopt on BSD is incompatible with GNU
@@ -77,7 +78,7 @@ function v2gif {
         ;;
       -h|--high)
         #High Quality, use gifski
-        local gifski=$(which gifski) ; [[ -x "$gifski" ]] || { echo "No gifski found!" ; return 2 ; }
+        local gifski="$(type -p gifski)" ; [[ -x "$gifski" ]] || { echo "No gifski found!" ; return 2 ; }
         use_gifski=true
         giftag="${giftag}-h"
         shift
