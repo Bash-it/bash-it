@@ -381,8 +381,24 @@ function nvm_version_prompt {
   fi
 }
 
+function node_command_version_prompt {
+  local node_version
+  local node_command="$(command -v node)"
+
+  if [[ -n "${node_command}" && -x "${node_command}" ]]; then
+    node_version="$(${node_command} --version)"
+    echo -e "${NVM_THEME_PROMPT_PREFIX}${node_version}${NVM_THEME_PROMPT_SUFFIX}"
+  fi
+}
+
 function node_version_prompt {
-  echo -e "$(nvm_version_prompt)"
+	local node_version="$(nvm_version_prompt)"
+	if [[ -z "${node_version}" ]]; then
+		node_version="$(node_command_version_prompt)"
+	fi
+	if [[ -n "${node_version}" ]] ; then
+		echo -e "${node_version}"
+	fi
 }
 
 function rvm_version_prompt {
