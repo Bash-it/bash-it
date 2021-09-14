@@ -102,7 +102,7 @@ _KAC_clean_cache() {
 
 # perform a cache cleaning when loading this file
 # On big systems this could baloon up to a 30 second run or more, so not enabling by default.
-[[ "${KNIFE_CACHE_CLEAN}" ]] && _KAC_clean_cache
+[[ -n "${KNIFE_CACHE_CLEAN}" ]] && _KAC_clean_cache
 
 #####################################
 ### End of cache helper functions ###
@@ -120,7 +120,7 @@ _KAC_get_current_base_command() {
 	local PREVIOUS="knife"
 	local I=1
 	local CURRENT
-	while [ $I -le "$COMP_CWORD" ]; do
+	while [[ "${I}" -le "${COMP_CWORD}" ]]; do
 		# command words are all lower-case
 		echo "${COMP_WORDS[$I]}" | grep -E "^[a-z]+$" > /dev/null || break
 		CURRENT="$PREVIOUS ${COMP_WORDS[$I]}"
@@ -129,7 +129,7 @@ _KAC_get_current_base_command() {
 		I=$((I + 1))
 	done
 	_KAC_CURRENT_COMMAND=$PREVIOUS
-	[ $I -le "$COMP_CWORD" ] && _KAC_CURRENT_COMMAND_NB_WORDS=$I
+	[[ "${I}" -le "${COMP_CWORD}" ]] && _KAC_CURRENT_COMMAND_NB_WORDS="${I}"
 }
 
 # searches the position of the currently completed argument in the current base command
@@ -157,7 +157,7 @@ _knife() {
 	COMREPLY=()
 	# get correct command & arg pos
 	_KAC_get_current_base_command && ARG_POSITION=$(_KAC_get_current_arg_position) || ARG_POSITION=$((COMP_CWORD + 1))
-	RAW_LIST=$(grep -E "^$_KAC_CURRENT_COMMAND" "$_KAC_CACHE_PATH" | cut -d ' ' -f $ARG_POSITION | uniq)
+	RAW_LIST=$(grep -E "^${_KAC_CURRENT_COMMAND}" "${_KAC_CACHE_PATH}" | cut -d ' ' -f "${ARG_POSITION}" | uniq)
 
 	# we need to process that raw list a bit, most notably for placeholders
 	# NOTE: I chose to explicitely fetch & cache _certain_ informations for the server (cookbooks & node names, etc)
