@@ -43,6 +43,7 @@ function alias_completion {
 	# some aliases do have backslashes that needs to be interpreted
 	while read line; do
 		eval "local alias_tokens; alias_tokens=($line)" 2> /dev/null || continue # some alias arg patterns cause an eval parse error
+		# shellcheck disable=SC2154 # see `eval` above
 		local alias_name="${alias_tokens[0]}" alias_cmd="${alias_tokens[1]}" alias_args="${alias_tokens[2]# }"
 
 		# skip aliases to pipes, boolean control structures and other command lists
@@ -63,6 +64,7 @@ function alias_completion {
 				continue
 			fi
 		fi
+		# shellcheck disable=SC2155
 		local new_completion="$(complete -p "$alias_cmd" 2> /dev/null)"
 
 		# create a wrapper inserting the alias arguments if any
