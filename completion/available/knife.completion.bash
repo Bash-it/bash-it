@@ -42,6 +42,7 @@ _KAC_is_file_newer_than() {
 _KAC_regen_cache() {
 	local CACHE_NAME=$1
 	local CACHE_PATH="$_KNIFE_AUTOCOMPLETE_CACHE_DIR/$CACHE_NAME"
+	# shellcheck disable=SC2155
 	local TMP_FILE=$(mktemp "$_KAC_CACHE_TMP_DIR/$CACHE_NAME.XXXX")
 	shift 1
 	# discard the temp file if it's empty AND the previous command didn't exit successfully, but still mark the cache as updated
@@ -66,6 +67,7 @@ _KAC_get_command_from_cache_name() {
 # otherwise it waits for the cache to be generated
 # in either case, it regenerates the cache, and sets the _KAC_CACHE_PATH env variable
 # for obvious reason, do NOT call that in a sub-shell (in particular, no piping)
+# shellcheck disable=SC2155
 _KAC_get_and_regen_cache() {
 	# the cache name can't have space in it
 	local CACHE_NAME=$(_KAC_get_cache_name_from_command "$@")
@@ -133,6 +135,7 @@ _KAC_get_current_base_command() {
 # searches the position of the currently completed argument in the current base command
 # (i.e. handles "plural" arguments such as knife cookbook upload cookbook1 cookbook2 and so on...)
 # assumes the current base command is complete
+# shellcheck disable=SC2155
 _KAC_get_current_arg_position() {
 	local CURRENT_ARG_POS=$((_KAC_CURRENT_COMMAND_NB_WORDS + 1))
 	local COMPLETE_COMMAND=$(grep -E "^$_KAC_CURRENT_COMMAND" "$_KAC_CACHE_PATH")
@@ -150,6 +153,7 @@ _KAC_get_current_arg_position() {
 _knife() {
 	_KAC_get_and_regen_cache _KAC_knife_commands
 	local RAW_LIST ITEM REGEN_CMD ARG_POSITION
+	# shellcheck disable=SC2034
 	COMREPLY=()
 	# get correct command & arg pos
 	_KAC_get_current_base_command && ARG_POSITION=$(_KAC_get_current_arg_position) || ARG_POSITION=$((COMP_CWORD + 1))
