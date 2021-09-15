@@ -1,4 +1,6 @@
 # shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
+# shellcheck disable=SC2154 #TODO: fix these all.
 
 # Brainy Bash Prompt for Bash-it
 # by MunifTanjim
