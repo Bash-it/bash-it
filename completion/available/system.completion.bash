@@ -1,7 +1,10 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 #
 # Loads the system's Bash completion modules.
 # If Homebrew is installed (OS X), it's Bash completion modules are loaded.
+
+# Load before other completions
+# BASH_IT_LOAD_PRIORITY: 325
 
 if shopt -qo nounset
 then # Bash-completion is too large and complex to expect to handle unbound variables throughout the whole codebase.
