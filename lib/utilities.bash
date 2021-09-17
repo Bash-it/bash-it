@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 #
 # A collection of reusable functions.
 
@@ -8,20 +8,21 @@
 
 _bash-it-get-component-name-from-path() {
   # filename without path
-  filename=${1##*/}
+  filename="${1##*/}"
   # filename without path or priority
-  filename=${filename##*---}
+  filename="${filename##*---}"
   # filename without path, priority or extension
-  echo ${filename%.*.bash}
+  echo "${filename%.*.bash}"
 }
 
 _bash-it-get-component-type-from-path() {
   # filename without path
-  filename=${1##*/}
-  # filename without path or priority
-  filename=${filename##*---}
-  # extension
-  echo ${filename} | cut -d '.' -f 2
+  filename="${1##*/}"
+  # filename without extension
+  filename="${filename%.bash}"
+  # extension without priority or name
+  #filename="${filename#*.}"
+  echo "${filename#*.}" #| cut -d '.' -f 2
 }
 
 # This function searches an array for an exact match against the term passed
@@ -73,7 +74,7 @@ _bash-it-grep() {
 _bash-it-component-help() {
   local component="$(_bash-it-pluralize-component "${1}")"
   local file="$(_bash-it-component-cache-file "${component}")"
-  if [[ ! -s "${file}" || -z $(find "${file}" -mmin -300) ]] ; then
+  if [[ ! -s "${file}" || -z "$(find "${file}" -mmin -300)" ]] ; then
     rm -f "${file}" 2>/dev/null
     local func="_bash-it-${component}"
     "${func}" | $(_bash-it-grep) -E '   \[' | cat > "${file}"
@@ -82,31 +83,31 @@ _bash-it-component-help() {
 }
 
 _bash-it-component-cache-file() {
-  local component=$(_bash-it-pluralize-component "${1}")
+  local component="$(_bash-it-pluralize-component "${1}")"
   local file="${BASH_IT}/tmp/cache/${component}"
   [[ -f "${file}" ]] || mkdir -p "${file%/*}"
-  printf "${file}"
+  printf '%s' "${file}"
 }
 
 _bash-it-pluralize-component() {
   local component="${1}"
-  local len=$(( ${#component} - 1 ))
+  local -i len=$(( ${#component} - 1 ))
   # pluralize component name for consistency
-  [[ ${component:${len}:1} != 's' ]] && component="${component}s"
-  [[ ${component} == "alias" ]] && component="aliases"
-  printf ${component}
+  [[ "${component:${len}:1}" != 's' ]] && component="${component}s"
+  [[ "${component}" == "alias" ]] && component="aliases"
+  printf '%s' "${component}"
 }
 
 _bash-it-clean-component-cache() {
   local component="$1"
   local cache
   local -a BASH_IT_COMPONENTS=(aliases plugins completions)
-  if [[ -z ${component} ]] ; then
+  if [[ -z "${component}" ]] ; then
     for component in "${BASH_IT_COMPONENTS[@]}" ; do
       _bash-it-clean-component-cache "${component}"
     done
   else
-    cache="$(_bash-it-component-cache-file ${component})"
+    cache="$(_bash-it-component-cache-file "${component}")"
     if [[ -f "${cache}" ]] ; then
       rm -f "${cache}"
     fi
