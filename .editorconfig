@@ -25,6 +25,7 @@ binary_next_line   = true  # like -bn
 switch_case_indent = true  # like -ci
 space_redirects    = true  # like -sr
 keep_padding       = false # like -kp
+function_next_line = true  # like -fn
 end_of_line        = lf
 charset            = utf-8
 trim_trailing_whitespace = true
