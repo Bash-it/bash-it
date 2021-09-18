@@ -14,8 +14,8 @@ function mkvenv {
   about 'create a new virtualenv for this directory'
   group 'virtualenv'
 
-  cwd=`basename \`pwd\``
-  mkvirtualenv --distribute $cwd
+  local cwd="${PWD##*/}"
+  mkvirtualenv --distribute "$cwd"
 }
 
 
@@ -23,19 +23,21 @@ function mkvbranch {
   about 'create a new virtualenv for the current branch'
   group 'virtualenv'
 
-  mkvirtualenv --distribute "$(basename `pwd`)@$SCM_BRANCH"
+  local cwd="${PWD##*/}"
+  mkvirtualenv --distribute "${cwd}@${SCM_BRANCH}"
 }
 
 function wovbranch {
   about 'sets workon branch'
   group 'virtualenv'
 
-  workon "$(basename `pwd`)@$SCM_BRANCH"
+  local cwd="${PWD##*/}"
+  workon "${cwd}@${SCM_BRANCH}"
 }
 
 function wovenv {
   about 'works on the virtualenv for this directory'
   group 'virtualenv'
 
-  workon "$(basename `pwd`)"
+  workon "${PWD##*/}"
 }
