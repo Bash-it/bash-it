@@ -85,37 +85,45 @@ RBENV_THEME_PROMPT_SUFFIX='|'
 RBFU_THEME_PROMPT_PREFIX=' |'
 RBFU_THEME_PROMPT_SUFFIX='|'
 
-GIT_EXE=$(which git 2> /dev/null || true)
-P4_EXE=$(which p4 2> /dev/null || true)
-HG_EXE=$(which hg 2> /dev/null || true)
-SVN_EXE=$(which svn 2> /dev/null || true)
+: "${GIT_EXE:=$SCM_GIT}"
+: "${P4_EXE:=$SCM_P4}"
+: "${HG_EXE:=$SCM_HG}"
+: "${SVN_EXE:=$SCM_SVN}"
 
-# Check for broken SVN exe that is caused by some versions of Xcode.
-# See https://github.com/Bash-it/bash-it/issues/1612 for more details.
-if [[ -x "$SVN_EXE" ]]; then
-	if ! "$SVN_EXE" --version > /dev/null 2>&1; then
-		# Unset the SVN exe variable so that SVN commands are avoided.
-		SVN_EXE=""
+function _bash_it_appearance_scm_init() {
+	GIT_EXE="$(type -P $SCM_GIT || true)"
+	P4_EXE="$(type -P $SCM_P4 || true)"
+	HG_EXE="$(type -P $SCM_HG || true)"
+	SVN_EXE="$(type -P $SCM_SVN || true)"
+
+	# Check for broken SVN exe that is caused by some versions of Xcode.
+	# See https://github.com/Bash-it/bash-it/issues/1612 for more details.
+	if [[ -x "$SVN_EXE" && -x "${SVN_EXE%/*}/xcrun" ]]; then
+		if ! "$SVN_EXE" --version > /dev/null 2>&1; then
+			# Unset the SVN exe variable so that SVN commands are avoided.
+			SVN_EXE=""
+		fi
 	fi
-fi
+}
+_bash_it_appearance_scm_init
 
 function scm {
 	if [[ "$SCM_CHECK" = false ]]; then
 		SCM=$SCM_NONE
 	elif [[ -f .git/HEAD ]] && [[ -x "$GIT_EXE" ]]; then
 		SCM=$SCM_GIT
-	elif [[ -x "$GIT_EXE" ]] && [[ -n "$(git rev-parse --is-inside-work-tree 2> /dev/null)" ]]; then
-		SCM=$SCM_GIT
-	elif [[ -x "$P4_EXE" ]] && [[ -n "$(p4 set P4CLIENT 2> /dev/null)" ]]; then
-		SCM=$SCM_P4
 	elif [[ -d .hg ]] && [[ -x "$HG_EXE" ]]; then
-		SCM=$SCM_HG
-	elif [[ -x "$HG_EXE" ]] && [[ -n "$(hg root 2> /dev/null)" ]]; then
 		SCM=$SCM_HG
 	elif [[ -d .svn ]] && [[ -x "$SVN_EXE" ]]; then
 		SCM=$SCM_SVN
+	elif [[ -x "$GIT_EXE" ]] && [[ -n "$(git rev-parse --is-inside-work-tree 2> /dev/null)" ]]; then
+		SCM=$SCM_GIT
+	elif [[ -x "$HG_EXE" ]] && [[ -n "$(hg root 2> /dev/null)" ]]; then
+		SCM=$SCM_HG
 	elif [[ -x "$SVN_EXE" ]] && [[ -n "$(svn info --show-item wc-root 2> /dev/null)" ]]; then
 		SCM=$SCM_SVN
+	elif [[ -x "$P4_EXE" ]] && [[ -n "$(p4 set P4CLIENT 2> /dev/null)" ]]; then
+		SCM=$SCM_P4
 	else
 		SCM=$SCM_NONE
 	fi
