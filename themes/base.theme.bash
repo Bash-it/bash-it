@@ -1,4 +1,5 @@
 # shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
 
 CLOCK_CHAR_THEME_PROMPT_PREFIX=''
 CLOCK_CHAR_THEME_PROMPT_SUFFIX=''
@@ -122,12 +123,11 @@ function scm {
 }
 
 scm_prompt() {
-	local CHAR=$(scm_char)
+	local CHAR
+	CHAR="$(scm_char)"
 	local format=${SCM_PROMPT_FORMAT:-'[%s%s]'}
 
-	if [[ $CHAR = "$SCM_NONE_CHAR" ]]; then
-		return
-	else
+	if [[ "${CHAR}" != "$SCM_NONE_CHAR" ]]; then
 		# shellcheck disable=2059
 		printf "$format\n" "$CHAR" "$(scm_prompt_info)"
 	fi
@@ -344,15 +344,15 @@ function svn_prompt_vars {
 # - .hg is located in ~/Projects/Foo/.hg
 # - get_hg_root starts at ~/Projects/Foo/Bar and sees that there is no .hg directory, so then it goes into ~/Projects/Foo
 function get_hg_root {
-	local CURRENT_DIR=$(pwd)
+	local CURRENT_DIR="${PWD}"
 
-	while [ "$CURRENT_DIR" != "/" ]; do
-		if [ -d "$CURRENT_DIR/.hg" ]; then
+	while [[ "${CURRENT_DIR:-/}" != "/" ]]; do
+		if [[ -d "$CURRENT_DIR/.hg" ]]; then
 			echo "$CURRENT_DIR/.hg"
 			return
 		fi
 
-		CURRENT_DIR=$(dirname "$CURRENT_DIR")
+		CURRENT_DIR="${CURRENT_DIR%/*}"
 	done
 }
 
@@ -544,7 +544,7 @@ function prompt_char {
 
 function battery_char {
 	if [[ "${THEME_BATTERY_PERCENTAGE_CHECK}" = true ]]; then
-		echo -e "${bold_red}$(battery_percentage)%"
+		echo -e "${bold_red:-}$(battery_percentage)%"
 	fi
 }
 
@@ -586,7 +586,7 @@ function __check_precmd_conflict() {
 function safe_append_prompt_command {
 	local prompt_re
 
-	if [ "${__bp_imported}" == "defined" ]; then
+	if [ "${__bp_imported:-missing}" == "defined" ]; then
 		# We are using bash-preexec
 		if ! __check_precmd_conflict "${1}"; then
 			precmd_functions+=("${1}")
@@ -601,7 +601,7 @@ function safe_append_prompt_command {
 			prompt_re="\<${1}\>"
 		fi
 
-		if [[ ${PROMPT_COMMAND} =~ ${prompt_re} ]]; then
+		if [[ ${PROMPT_COMMAND[*]:-} =~ ${prompt_re} ]]; then
 			return
 		elif [[ -z ${PROMPT_COMMAND} ]]; then
 			PROMPT_COMMAND="${1}"
