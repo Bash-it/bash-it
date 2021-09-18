@@ -85,9 +85,10 @@ function _bash-it-component-help()
   cat "${file}"
 }
 
-_bash-it-component-cache-file() {
-  local component="$(_bash-it-pluralize-component "${1}")"
-  local file="${BASH_IT}/tmp/cache/${component}"
+function _bash-it-component-cache-file() {
+  local component file
+  component="$(_bash-it-pluralize-component "${1}")"
+  file="${BASH_IT}/tmp/cache/${component}"
   [[ -f "${file}" ]] || mkdir -p "${file%/*}"
   printf '%s' "${file}"
 }
