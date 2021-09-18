@@ -19,6 +19,8 @@ about-plugin 'Automatic completion of aliases'
 # Automatically add completion for all aliases to commands having completion functions
 function alias_completion {
 	local namespace="alias_completion"
+	local tmp_file completion_loader alias_name alias_tokens line completions
+	local alias_arg_words new_completion compl_func compl_wrapper
 
 	# parse function based completion definitions, where capture group 2 => function and 3 => trigger
 	local compl_regex='complete( +[^ ]+)* -F ([^ ]+) ("[^"]+"|[^ ]+)'
@@ -26,28 +28,25 @@ function alias_completion {
 	local alias_regex="alias( -- | )([^=]+)='(\"[^\"]+\"|[^ ]+)(( +[^ ]+)*)'"
 
 	# create array of function completion triggers, keeping multi-word triggers together
-	eval "local completions=($(complete -p | sed -Ene "/$compl_regex/s//'\3'/p"))"
+	eval "completions=($(complete -p | sed -Ene "/$compl_regex/s//'\3'/p"))"
 	((${#completions[@]} == 0)) && return 0
 
 	# create temporary file for wrapper functions and completions
-	local tmp_file
 	tmp_file="$(mktemp -t "${namespace}-${RANDOM}XXXXXX")" || return 1
 
-	local completion_loader
 	completion_loader="$(complete -p -D 2> /dev/null | sed -Ene 's/.* -F ([^ ]*).*/\1/p')"
 
 	# read in "<alias> '<aliased command>' '<command args>'" lines from defined aliases
-	local line
-
-	# shellcheck disable=SC2162
 	# some aliases do have backslashes that needs to be interpreted
+	# shellcheck disable=SC2162
 	while read line; do
-		eval "local alias_tokens; alias_tokens=($line)" 2> /dev/null || continue # some alias arg patterns cause an eval parse error
-		local alias_name="${alias_tokens[0]}" alias_cmd="${alias_tokens[1]}" alias_args="${alias_tokens[2]# }"
+		eval "alias_tokens=($line)" 2> /dev/null || continue # some alias arg patterns cause an eval parse error
+		# shellcheck disable=SC2154 # see `eval` above
+		alias_name="${alias_tokens[0]}" alias_cmd="${alias_tokens[1]}" alias_args="${alias_tokens[2]# }"
 
 		# skip aliases to pipes, boolean control structures and other command lists
 		# (leveraging that eval errs out if $alias_args contains unquoted shell metacharacters)
-		eval "local alias_arg_words; alias_arg_words=($alias_args)" 2> /dev/null || continue
+		eval "alias_arg_words=($alias_args)" 2> /dev/null || continue
 		# avoid expanding wildcards
 		read -a alias_arg_words <<< "$alias_args"
 
@@ -63,15 +62,15 @@ function alias_completion {
 				continue
 			fi
 		fi
-		local new_completion="$(complete -p "$alias_cmd" 2> /dev/null)"
+		new_completion="$(complete -p "$alias_cmd" 2> /dev/null)"
 
 		# create a wrapper inserting the alias arguments if any
 		if [[ -n $alias_args ]]; then
-			local compl_func="${new_completion/#* -F /}"
+			compl_func="${new_completion/#* -F /}"
 			compl_func="${compl_func%% *}"
 			# avoid recursive call loops by ignoring our own functions
 			if [[ "${compl_func#_"$namespace"::}" == "$compl_func" ]]; then
-				local compl_wrapper="_${namespace}::${alias_name}"
+				compl_wrapper="_${namespace}::${alias_name}"
 				echo "function $compl_wrapper {
                         local compl_word=\$2
                         local prec_word=\$3
