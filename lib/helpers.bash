@@ -449,7 +449,7 @@ _bash-it-restart() {
   _about 'restarts the shell in order to fully reload it'
   _group 'lib'
 
-  saved_pwd=$(pwd)
+  saved_pwd="${PWD}"
 
   case $OSTYPE in
     darwin*)

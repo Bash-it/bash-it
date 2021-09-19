@@ -227,7 +227,7 @@ EOF
       ((c++))
     done
     if [ -z "$name" ]; then
-      repo=$(basename "$(pwd)")
+      repo="$(basename "${PWD}")"
     fi
     case "$prev" in
       -d|-h)
