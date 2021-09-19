@@ -23,8 +23,8 @@
 COMP_WORDBREAKS=$(echo "$COMP_WORDBREAKS" | sed -e 's/://g')
 
 __gradle-set-project-root-dir() {
-    local dir=`pwd`
-    project_root_dir=`pwd`
+    local dir="${PWD}"
+    project_root_dir="${PWD}"
     while [[ $dir != '/' ]]; do
         if [[ -f "$dir/settings.gradle" || -f "$dir/gradlew" ]]; then
             project_root_dir=$dir

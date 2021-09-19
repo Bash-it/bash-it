@@ -340,7 +340,7 @@ _bash-it-migrate() {
   do
     for f in `sort <(compgen -G "${BASH_IT}/$file_type/enabled/*.bash")`
     do
-      typeset ff=$(basename $f)
+      typeset ff="${f##*/}"
 
       # Get the type of component from the extension
       typeset single_type=$(echo $ff | sed -e 's/.*\.\(.*\)\.bash/\1/g' | sed 's/aliases/alias/g')
@@ -449,7 +449,7 @@ _bash-it-restart() {
   _about 'restarts the shell in order to fully reload it'
   _group 'lib'
 
-  saved_pwd=$(pwd)
+  saved_pwd="${PWD}"
 
   case $OSTYPE in
     darwin*)
@@ -501,7 +501,7 @@ _bash-it-describe ()
     do
         # Check for both the old format without the load priority, and the extended format with the priority
         declare enabled_files enabled_file
-        enabled_file=$(basename $f)
+		enabled_file="${f##*/}"
         enabled_files=$(sort <(compgen -G "${BASH_IT}/enabled/*$BASH_IT_LOAD_PRIORITY_SEPARATOR${enabled_file}") <(compgen -G "${BASH_IT}/$subdirectory/enabled/${enabled_file}") <(compgen -G "${BASH_IT}/$subdirectory/enabled/*$BASH_IT_LOAD_PRIORITY_SEPARATOR${enabled_file}") | wc -l)
 
         if [ $enabled_files -gt 0 ]; then
@@ -603,9 +603,9 @@ _disable-thing ()
               printf '%s\n' "sorry, $file_entity does not appear to be an enabled $file_type."
               return
           fi
-          rm "${BASH_IT}/$subdirectory/enabled/$(basename $plugin)"
+          rm "${BASH_IT}/$subdirectory/enabled/${plugin##*/}"
         else
-          rm "${BASH_IT}/enabled/$(basename $plugin_global)"
+          rm "${BASH_IT}/enabled/${plugin_global##*/}"
         fi
     fi
 
@@ -681,7 +681,7 @@ _enable-thing ()
             return
         fi
 
-        to_enable=$(basename $to_enable)
+		to_enable="${to_enable##*/}"
         # Check for existence of the file using a wildcard, since we don't know which priority might have been used when enabling it.
         typeset enabled_plugin=$(command ls "${BASH_IT}/$subdirectory/enabled/"{[0-9][0-9][0-9]$BASH_IT_LOAD_PRIORITY_SEPARATOR$to_enable,$to_enable} 2>/dev/null | head -1)
         if [ ! -z "$enabled_plugin" ] ; then

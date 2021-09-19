@@ -16,7 +16,7 @@ editpost() {
 
   for site in ${SITES[@]}
   do
-    if [ "$(basename $site)" = "$1" ]
+    if [ "${site##*/}" = "$1" ]
     then
       SITE=$site
       break
@@ -77,7 +77,7 @@ newpost() {
 
   for site in ${SITES[@]}
   do
-    if [ "$(basename $site)" = "$1" ]
+    if [ "${site##*/}" = "$1" ]
     then
       SITE=$site
       JEKYLL_FORMATTING=${MARKUPS[$loc]}
@@ -280,7 +280,7 @@ function testsite() {
 
   for site in ${SITES[@]}
   do
-    if [ "$(basename $site)" = "$1" ]
+    if [ "${site##*/}" = "$1" ]
     then
       SITE=$site
       break
@@ -312,7 +312,7 @@ function buildsite() {
 
   for site in ${SITES[@]}
   do
-    if [ "$(basename $site)" = "$1" ]
+    if [ "${site##*/}" = "$1" ]
     then
       SITE=$site
       break
@@ -347,7 +347,7 @@ function deploysite() {
 
   for site in ${SITES[@]}
   do
-    if [ "$(basename $site)" = "$1" ]
+    if [ "${site##*/}" = "$1" ]
     then
       SITE=$site
       REMOTE=${REMOTES[$loc]}

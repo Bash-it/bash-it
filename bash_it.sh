@@ -114,6 +114,7 @@ for _bash_it_config_file in $CUSTOM; do
 	if [ -e "${_bash_it_config_file}" ]; then
 		filename=$(basename "${_bash_it_config_file}")
 		filename=${filename%*.bash}
+		# shellcheck disable=SC2034
 		BASH_IT_LOG_PREFIX="custom: $filename: "
 		_log_debug "Loading custom file..."
 		# shellcheck disable=SC1090
@@ -122,7 +123,7 @@ for _bash_it_config_file in $CUSTOM; do
 done
 
 unset _bash_it_config_file
-if [[ "${PROMPT:-}" ]]; then
+if [[ -n "${PROMPT:-}" ]]; then
 	export PS1="\[""$PROMPT""\]"
 fi
 

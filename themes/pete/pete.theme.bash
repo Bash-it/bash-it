@@ -1,10 +1,8 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 
 prompt_setter() {
   # Save history
-  history -a
-  history -c
-  history -r
+  _save-and-reload-history 1
   PS1="($(clock_prompt)) $(scm_char) [$blue\u$reset_color@$green\H$reset_color] $yellow\w${reset_color}$(scm_prompt_info)$(ruby_version_prompt) $reset_color "
   PS2='> '
   PS4='+ '

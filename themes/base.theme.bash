@@ -1,4 +1,5 @@
 # shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
 
 CLOCK_CHAR_THEME_PROMPT_PREFIX=''
 CLOCK_CHAR_THEME_PROMPT_SUFFIX=''
@@ -85,6 +86,7 @@ RBENV_THEME_PROMPT_SUFFIX='|'
 RBFU_THEME_PROMPT_PREFIX=' |'
 RBFU_THEME_PROMPT_SUFFIX='|'
 
+<<<<<<< HEAD
 GIT_EXE=$(command -v git 2> /dev/null || true)
 P4_EXE=$(command -v p4 2> /dev/null || true)
 HG_EXE=$(command -v hg 2> /dev/null || true)
@@ -96,38 +98,58 @@ if [[ -x "$SVN_EXE" ]]; then
 	if ! "$SVN_EXE" --version > /dev/null 2>&1; then
 		# Unset the SVN exe variable so that SVN commands are avoided.
 		SVN_EXE=""
+=======
+: "${GIT_EXE:=$SCM_GIT}"
+: "${P4_EXE:=$SCM_P4}"
+: "${HG_EXE:=$SCM_HG}"
+: "${SVN_EXE:=$SCM_SVN}"
+
+function _bash_it_appearance_scm_init() {
+	GIT_EXE="$(type -P $SCM_GIT || true)"
+	P4_EXE="$(type -P $SCM_P4 || true)"
+	HG_EXE="$(type -P $SCM_HG || true)"
+	SVN_EXE="$(type -P $SCM_SVN || true)"
+
+	# Check for broken SVN exe that is caused by some versions of Xcode.
+	# See https://github.com/Bash-it/bash-it/issues/1612 for more details.
+	if [[ -x "$SVN_EXE" && -x "${SVN_EXE%/*}/xcrun" ]]; then
+		if ! "$SVN_EXE" --version > /dev/null 2>&1; then
+			# Unset the SVN exe variable so that SVN commands are avoided.
+			SVN_EXE=""
+		fi
+>>>>>>> 77e9404c7dafb5c29e887e5c71332cb161014e82
 	fi
-fi
+}
+_bash_it_appearance_scm_init
 
 function scm {
 	if [[ "$SCM_CHECK" = false ]]; then
 		SCM=$SCM_NONE
 	elif [[ -f .git/HEAD ]] && [[ -x "$GIT_EXE" ]]; then
 		SCM=$SCM_GIT
-	elif [[ -x "$GIT_EXE" ]] && [[ -n "$(git rev-parse --is-inside-work-tree 2> /dev/null)" ]]; then
-		SCM=$SCM_GIT
-	elif [[ -x "$P4_EXE" ]] && [[ -n "$(p4 set P4CLIENT 2> /dev/null)" ]]; then
-		SCM=$SCM_P4
 	elif [[ -d .hg ]] && [[ -x "$HG_EXE" ]]; then
-		SCM=$SCM_HG
-	elif [[ -x "$HG_EXE" ]] && [[ -n "$(hg root 2> /dev/null)" ]]; then
 		SCM=$SCM_HG
 	elif [[ -d .svn ]] && [[ -x "$SVN_EXE" ]]; then
 		SCM=$SCM_SVN
+	elif [[ -x "$GIT_EXE" ]] && [[ -n "$(git rev-parse --is-inside-work-tree 2> /dev/null)" ]]; then
+		SCM=$SCM_GIT
+	elif [[ -x "$HG_EXE" ]] && [[ -n "$(hg root 2> /dev/null)" ]]; then
+		SCM=$SCM_HG
 	elif [[ -x "$SVN_EXE" ]] && [[ -n "$(svn info --show-item wc-root 2> /dev/null)" ]]; then
 		SCM=$SCM_SVN
+	elif [[ -x "$P4_EXE" ]] && [[ -n "$(p4 set P4CLIENT 2> /dev/null)" ]]; then
+		SCM=$SCM_P4
 	else
 		SCM=$SCM_NONE
 	fi
 }
 
 scm_prompt() {
-	local CHAR=$(scm_char)
+	local CHAR
+	CHAR="$(scm_char)"
 	local format=${SCM_PROMPT_FORMAT:-'[%s%s]'}
 
-	if [[ $CHAR = "$SCM_NONE_CHAR" ]]; then
-		return
-	else
+	if [[ "${CHAR}" != "$SCM_NONE_CHAR" ]]; then
 		# shellcheck disable=2059
 		printf "$format\n" "$CHAR" "$(scm_prompt_info)"
 	fi
@@ -344,15 +366,15 @@ function svn_prompt_vars {
 # - .hg is located in ~/Projects/Foo/.hg
 # - get_hg_root starts at ~/Projects/Foo/Bar and sees that there is no .hg directory, so then it goes into ~/Projects/Foo
 function get_hg_root {
-	local CURRENT_DIR=$(pwd)
+	local CURRENT_DIR="${PWD}"
 
-	while [ "$CURRENT_DIR" != "/" ]; do
-		if [ -d "$CURRENT_DIR/.hg" ]; then
+	while [[ "${CURRENT_DIR:-/}" != "/" ]]; do
+		if [[ -d "$CURRENT_DIR/.hg" ]]; then
 			echo "$CURRENT_DIR/.hg"
 			return
 		fi
 
-		CURRENT_DIR=$(dirname "$CURRENT_DIR")
+		CURRENT_DIR="${CURRENT_DIR%/*}"
 	done
 }
 
@@ -544,7 +566,7 @@ function prompt_char {
 
 function battery_char {
 	if [[ "${THEME_BATTERY_PERCENTAGE_CHECK}" = true ]]; then
-		echo -e "${bold_red}$(battery_percentage)%"
+		echo -e "${bold_red:-}$(battery_percentage)%"
 	fi
 }
 
@@ -586,7 +608,7 @@ function __check_precmd_conflict() {
 function safe_append_prompt_command {
 	local prompt_re
 
-	if [ "${__bp_imported}" == "defined" ]; then
+	if [ "${__bp_imported:-missing}" == "defined" ]; then
 		# We are using bash-preexec
 		if ! __check_precmd_conflict "${1}"; then
 			precmd_functions+=("${1}")
@@ -601,7 +623,7 @@ function safe_append_prompt_command {
 			prompt_re="\<${1}\>"
 		fi
 
-		if [[ ${PROMPT_COMMAND} =~ ${prompt_re} ]]; then
+		if [[ ${PROMPT_COMMAND[*]:-} =~ ${prompt_re} ]]; then
 			return
 		elif [[ -z ${PROMPT_COMMAND} ]]; then
 			PROMPT_COMMAND="${1}"
