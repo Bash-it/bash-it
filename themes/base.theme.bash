@@ -86,22 +86,6 @@ RBENV_THEME_PROMPT_SUFFIX='|'
 RBFU_THEME_PROMPT_PREFIX=' |'
 RBFU_THEME_PROMPT_SUFFIX='|'
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-GIT_EXE=$(command -v git 2> /dev/null || true)
-P4_EXE=$(command -v p4 2> /dev/null || true)
-HG_EXE=$(command -v hg 2> /dev/null || true)
-SVN_EXE=$(command -v svn 2> /dev/null || true)
-
-# Check for broken SVN exe that is caused by some versions of Xcode.
-# See https://github.com/Bash-it/bash-it/issues/1612 for more details.
-if [[ -x "$SVN_EXE" ]]; then
-	if ! "$SVN_EXE" --version > /dev/null 2>&1; then
-		# Unset the SVN exe variable so that SVN commands are avoided.
-		SVN_EXE=""
-=======
-=======
->>>>>>> 77e9404c7dafb5c29e887e5c71332cb161014e82
 : "${GIT_EXE:=$SCM_GIT}"
 : "${P4_EXE:=$SCM_P4}"
 : "${HG_EXE:=$SCM_HG}"
@@ -120,10 +104,6 @@ function _bash_it_appearance_scm_init() {
 			# Unset the SVN exe variable so that SVN commands are avoided.
 			SVN_EXE=""
 		fi
-<<<<<<< HEAD
->>>>>>> 77e9404c7dafb5c29e887e5c71332cb161014e82
-=======
->>>>>>> 77e9404c7dafb5c29e887e5c71332cb161014e82
 	fi
 }
 _bash_it_appearance_scm_init
@@ -428,7 +408,7 @@ function node_version_prompt {
 }
 
 function rvm_version_prompt {
-	if command -v rvm &> /dev/null; then
+	if which rvm &> /dev/null; then
 		rvm=$(rvm-prompt) || return
 		if [ -n "$rvm" ]; then
 			echo -e "$RVM_THEME_PROMPT_PREFIX$rvm$RVM_THEME_PROMPT_SUFFIX"
@@ -437,7 +417,7 @@ function rvm_version_prompt {
 }
 
 function rbenv_version_prompt {
-	if command -v rbenv &> /dev/null; then
+	if which rbenv &> /dev/null; then
 		rbenv=$(rbenv version-name) || return
 		rbenv commands | grep -q gemset && gemset=$(rbenv gemset active 2> /dev/null) && rbenv="$rbenv@${gemset%% *}"
 		if [ "$rbenv" != "system" ]; then
