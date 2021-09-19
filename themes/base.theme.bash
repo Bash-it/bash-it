@@ -87,6 +87,7 @@ RBFU_THEME_PROMPT_PREFIX=' |'
 RBFU_THEME_PROMPT_SUFFIX='|'
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 GIT_EXE=$(command -v git 2> /dev/null || true)
 P4_EXE=$(command -v p4 2> /dev/null || true)
 HG_EXE=$(command -v hg 2> /dev/null || true)
@@ -99,6 +100,8 @@ if [[ -x "$SVN_EXE" ]]; then
 		# Unset the SVN exe variable so that SVN commands are avoided.
 		SVN_EXE=""
 =======
+=======
+>>>>>>> 77e9404c7dafb5c29e887e5c71332cb161014e82
 : "${GIT_EXE:=$SCM_GIT}"
 : "${P4_EXE:=$SCM_P4}"
 : "${HG_EXE:=$SCM_HG}"
@@ -117,6 +120,9 @@ function _bash_it_appearance_scm_init() {
 			# Unset the SVN exe variable so that SVN commands are avoided.
 			SVN_EXE=""
 		fi
+<<<<<<< HEAD
+>>>>>>> 77e9404c7dafb5c29e887e5c71332cb161014e82
+=======
 >>>>>>> 77e9404c7dafb5c29e887e5c71332cb161014e82
 	fi
 }
