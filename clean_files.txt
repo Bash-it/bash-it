@@ -77,6 +77,7 @@ completion/available/wpscan.completion.bash
 # plugins
 #
 plugins/available/alias-completion.plugin.bash
+plugins/available/autojump.plugin.bash
 plugins/available/basher.plugin.bash
 plugins/available/cmd-returned-notify.plugin.bash
 plugins/available/docker-machine.plugin.bash
