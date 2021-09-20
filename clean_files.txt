@@ -78,6 +78,7 @@ completion/available/wpscan.completion.bash
 
 # libraries
 lib/helpers.bash
+lib/search.bash
 lib/utilities.bash
 
 # plugins
