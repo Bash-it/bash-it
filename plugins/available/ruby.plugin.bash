@@ -1,9 +1,11 @@
+# shellcheck shell=bash
 cite about-plugin
 about-plugin 'ruby and rubygems specific functions and settings'
 
 # Make commands installed with 'gem install --user-install' available
 # ~/.gem/ruby/${RUBY_VERSION}/bin/
-if which ruby >/dev/null && which gem >/dev/null; then
+if _command_exists ruby && _command_exists gem
+then
   pathmunge "$(ruby -e 'print Gem.user_dir')/bin" after
 fi
 

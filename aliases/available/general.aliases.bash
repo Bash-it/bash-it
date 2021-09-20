@@ -30,7 +30,7 @@ then
   alias grep='grep --color=auto'
 fi
 
-if which gshuf &> /dev/null
+if _command_exists gshuf
 then
   alias shuf=gshuf
 fi
@@ -65,7 +65,7 @@ alias -- -='cd -'        # Go back
 alias h='history'
 
 # Tree
-if [ ! -x "$(which tree 2>/dev/null)" ]
+if ! _command_exists tree
 then
   alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
 fi

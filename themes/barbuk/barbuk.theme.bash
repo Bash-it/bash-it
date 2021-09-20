@@ -1,4 +1,6 @@
 # shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
+# shellcheck disable=SC2154 #TODO: fix these all.
 
 # Theme custom glyphs
 SCM_GIT_CHAR_GITLAB=${BARBUK_GITLAB_CHAR:='  '}

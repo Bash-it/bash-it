@@ -1,4 +1,4 @@
-#!/bin/bash
+# shellcheck shell=bash
 
 # Two line prompt showing the following information:
 # (time) SCM [username@hostname] pwd (SCM branch SCM status)
@@ -96,9 +96,7 @@ prompt_setter() {
     else PROMPT_END=$PROMPT_END_DIRTY
   fi
   # Save history
-  history -a
-  history -c
-  history -r
+  _save-and-reload-history 1
   PS1="($(clock_prompt)${reset_color}) $(scm_char) [${USERNAME_COLOR}\u${reset_color}@${HOSTNAME_COLOR}\H${reset_color}] ${PATH_COLOR}\w${reset_color}$(scm_prompt_info) ${reset_color}\n$(prompt_end) "
   PS2='> '
   PS4='+ '

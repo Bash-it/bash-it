@@ -77,8 +77,10 @@ completion/available/wpscan.completion.bash
 # plugins
 #
 plugins/available/alias-completion.plugin.bash
+plugins/available/autojump.plugin.bash
 plugins/available/basher.plugin.bash
 plugins/available/cmd-returned-notify.plugin.bash
+plugins/available/direnv.plugin.bash
 plugins/available/docker-machine.plugin.bash
 plugins/available/git.plugin.bash
 plugins/available/go.plugin.bash
@@ -86,6 +88,14 @@ plugins/available/goenv.plugin.bash
 plugins/available/history-search.plugin.bash
 plugins/available/history-substring-search.plugin.bash
 plugins/available/history.plugin.bash
+plugins/available/hub.plugin.bash
+plugins/available/jump.plugin.bash
+plugins/available/node.plugin.bash
+plugins/available/nodenv.plugin.bash
+plugins/available/plenv.plugin.bash
+plugins/available/pyenv.plugin.bash
+plugins/available/rbenv.plugin.bash
+plugins/available/textmate.plugin.bash
 plugins/available/xterm.plugin.bash
 
 # tests

@@ -23,8 +23,8 @@
 COMP_WORDBREAKS=$(echo "$COMP_WORDBREAKS" | sed -e 's/://g')
 
 __gradle-set-project-root-dir() {
-    local dir=`pwd`
-    project_root_dir=`pwd`
+    local dir="${PWD}"
+    project_root_dir="${PWD}"
     while [[ $dir != '/' ]]; do
         if [[ -f "$dir/settings.gradle" || -f "$dir/gradlew" ]]; then
             project_root_dir=$dir
@@ -58,9 +58,9 @@ __gradle-set-cache-name() {
 
 __gradle-set-files-checksum() {
     # Cache MD5 sum of all Gradle scripts and modified timestamps
-    if builtin command -v md5 > /dev/null; then
+    if _command_exists md5; then
         gradle_files_checksum=$(md5 -q -s "$(cat "$cache_dir/$cache_name" | xargs ls -o 2>/dev/null)")
-    elif builtin command -v md5sum > /dev/null; then
+    elif _command_exists md5sum; then
         gradle_files_checksum=$(cat "$cache_dir/$cache_name" | xargs ls -o 2>/dev/null | md5sum | awk '{print $1}')
     else
         echo "Cannot generate completions as neither md5 nor md5sum exist on \$PATH"

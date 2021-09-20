@@ -6,7 +6,8 @@ about-alias 'Curl aliases for convenience.'
 # set apt aliases
 function _set_pkg_aliases()
 {
-	if [ -x $(which curl) ]; then
+	if _command_exists curl
+	then
 		# follow redirects
                 alias cl='curl -L'
                 # follow redirects, download as original name

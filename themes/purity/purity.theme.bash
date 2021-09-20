@@ -1,4 +1,6 @@
 # shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
+# shellcheck disable=SC2154 #TODO: fix these all.
 
 SCM_THEME_PROMPT_DIRTY=" ${bold_red}⊘${normal}"
 SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓${normal}"
@@ -26,8 +28,8 @@ venv_prompt() {
 }
 
 function prompt_command() {
-	retval=$?
-	local ret_status="$([ $retval -eq 0 ] && echo -e "$STATUS_THEME_PROMPT_OK" || echo -e "$STATUS_THEME_PROMPT_BAD")"
+	local retval=$? ret_status
+	ret_status="$([ $retval -eq 0 ] && echo -e "$STATUS_THEME_PROMPT_OK" || echo -e "$STATUS_THEME_PROMPT_BAD")"
 	PS1="\n${PURITY_THEME_PROMPT_COLOR}\w $(scm_prompt_info)\n${ret_status}$(venv_prompt)"
 }
 
