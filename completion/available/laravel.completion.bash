@@ -1,7 +1,9 @@
 #!/usr/bin/bash
 
-if command -v laravel > /dev/null; then
-    __laravel_completion()  {
+if _command_exists laravel
+then
+    function __laravel_completion()
+	{
         local OPTS=("-h --help -q --quiet --ansi --no-ansi -n --no-interaction -v -vv -vvv --verbose help list new")
         COMPREPLY=()
         for _opt_ in ${OPTS[@]}; do
@@ -9,7 +11,7 @@ if command -v laravel > /dev/null; then
                 COMPREPLY+=("$_opt_")
             fi
         done
-    }
+	}
 
     complete -F __laravel_completion laravel
 fi

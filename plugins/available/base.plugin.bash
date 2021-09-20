@@ -5,10 +5,10 @@ function ips ()
 {
     about 'display all ip addresses for this host'
     group 'base'
-    if command -v ifconfig &>/dev/null
+    if _command_exists ifconfig
     then
         ifconfig | awk '/inet /{ gsub(/addr:/, ""); print $2 }'
-    elif command -v ip &>/dev/null
+    elif _command_exists ip
     then
         ip addr | grep -oP 'inet \K[\d.]+'
     else
@@ -70,7 +70,7 @@ function passgen ()
 
 # Create alias pass to passgen when pass isn't installed or
 # BASH_IT_LEGACY_PASS is true.
-if ! command -v pass &>/dev/null || [[ "${BASH_IT_LEGACY_PASS:-}" = true ]]
+if ! _command_exists pass || [[ "${BASH_IT_LEGACY_PASS:-}" = true ]]
 then
   alias pass=passgen
 fi
@@ -81,7 +81,7 @@ function pmdown ()
     param '1: markdown file'
     example '$ pmdown README.md'
     group 'base'
-    if command -v markdown &>/dev/null
+    if _command_exists markdown
     then
       markdown $1 | browser
     else

@@ -23,7 +23,13 @@ function _command_exists ()
   _example '$ _command_exists ls && echo exists'
   _group 'lib'
   local msg="${2:-Command '$1' does not exist!}"
-  type "$1" &> /dev/null || (_log_warning "$msg" && return 1) ;
+  if type -t "$1" &> /dev/null
+  then
+	  return 0
+  else
+	  _log_warning "$msg"
+	  return 1
+  fi
 }
 
 function _binary_exists ()
@@ -34,7 +40,13 @@ function _binary_exists ()
   _example '$ _binary_exists ls && echo exists'
   _group 'lib'
   local msg="${2:-Binary '$1' does not exist!}"
-  type -P "$1" &> /dev/null || (_log_warning "$msg" && return 1) ;
+  if type -P "$1" &> /dev/null
+  then
+	return 0
+  else
+	_log_warning "$msg"
+	return 1
+  fi
 }
 
 function _completion_exists ()

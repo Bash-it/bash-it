@@ -396,7 +396,7 @@ function hg_prompt_vars {
 
 function nvm_version_prompt {
 	local node
-	if declare -f -F nvm &> /dev/null; then
+	if _is_function nvm; then
 		node=$(nvm current 2> /dev/null)
 		[[ "${node}" == "system" ]] && return
 		echo -e "${NVM_THEME_PROMPT_PREFIX}${node}${NVM_THEME_PROMPT_SUFFIX}"
@@ -433,8 +433,8 @@ function rbfu_version_prompt {
 }
 
 function chruby_version_prompt {
-	if declare -f -F chruby &> /dev/null; then
-		if declare -f -F chruby_auto &> /dev/null; then
+	if _is_function chruby; then
+		if _is_function chruby_auto; then
 			chruby_auto
 		fi
 
