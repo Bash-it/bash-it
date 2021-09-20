@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Directory stack navigation:
 #
 # Add to stack with: pu /path/to/directory
@@ -32,39 +33,39 @@ alias pu="pushd"
 alias po="popd"
 
 function dirs-help() {
-  about 'directory navigation alias usage'
-  group 'dirs'
+	about 'directory navigation alias usage'
+	group 'dirs'
 
-  echo "Directory Navigation Alias Usage"
-  echo
-  echo "Use the power of directory stacking to move"
-  echo "between several locations with ease."
-  echo
-  echo "d	: Show directory stack."
-  echo "po	: Remove current location from stack."
-  echo "pc	: Adds current location to stack."
-  echo "pu <dir>: Adds given location to stack."
-  echo "1	: Change to stack location 1."
-  echo "2	: Change to stack location 2."
-  echo "3	: Change to stack location 3."
-  echo "4	: Change to stack location 4."
-  echo "5	: Change to stack location 5."
-  echo "6	: Change to stack location 6."
-  echo "7	: Change to stack location 7."
-  echo "8	: Change to stack location 8."
-  echo "9	: Change to stack location 9."
+	echo "Directory Navigation Alias Usage"
+	echo
+	echo "Use the power of directory stacking to move"
+	echo "between several locations with ease."
+	echo
+	echo "d	: Show directory stack."
+	echo "po	: Remove current location from stack."
+	echo "pc	: Adds current location to stack."
+	echo "pu <dir>: Adds given location to stack."
+	echo "1	: Change to stack location 1."
+	echo "2	: Change to stack location 2."
+	echo "3	: Change to stack location 3."
+	echo "4	: Change to stack location 4."
+	echo "5	: Change to stack location 5."
+	echo "6	: Change to stack location 6."
+	echo "7	: Change to stack location 7."
+	echo "8	: Change to stack location 8."
+	echo "9	: Change to stack location 9."
 }
 
 # Add bookmarking functionality
 # Usage:
 
 : "${BASH_IT_DIRS_BKS:=${XDG_STATE_HOME:-~/.local/state}/Bash_it/dirs}"
-if [[ -f "${BASH_IT_DIRS_BKS:=${XDG_STATE_HOME:-~/.local/state}/Bash_it/dirs}" ]]
-then
+if [[ -f "${BASH_IT_DIRS_BKS:=${XDG_STATE_HOME:-~/.local/state}/Bash_it/dirs}" ]]; then
+	# shellcheck disable=SC1090
 	source "$BASH_IT_DIRS_BKS"
-elif [[ -f ~/.dirs ]]
-then
+elif [[ -f ~/.dirs ]]; then
 	mv -vn ~/.dirs "$BASH_IT_DIRS_BKS"
+	# shellcheck disable=SC1090
 	source "$BASH_IT_DIRS_BKS"
 else
 	touch "$BASH_IT_DIRS_BKS"
@@ -73,44 +74,48 @@ fi
 alias L='cat "$BASH_IT_DIRS_BKS"'
 
 # Goes to destination dir, otherwise stay in the dir
-function G()
-{
-    about 'goes to destination dir'
-    param '1: directory'
-    example '$ G ..'
-    group 'dirs'
+function G() {
+	about 'goes to destination dir'
+	param '1: directory'
+	example '$ G ..'
+	group 'dirs'
 
-    cd "${1:-${PWD}}" ;
+	cd "${1:-${PWD}}" || return
 }
 
-function S ()
-{
-    about 'save a bookmark'
-    param '1: bookmark name'
-    example '$ S mybkmrk'
-    group 'dirs'
+function S() {
+	about 'save a bookmark'
+	param '1: bookmark name'
+	example '$ S mybkmrk'
+	group 'dirs'
 
-    [[ $# -eq 1 ]] || { echo "${FUNCNAME[0]} function requires 1 argument"; return 1; }
+	[[ $# -eq 1 ]] || {
+		echo "${FUNCNAME[0]} function requires 1 argument"
+		return 1
+	}
 
-    sed "/$@/d" "$BASH_IT_DIRS_BKS" > ~/.dirs1;
-    \mv ~/.dirs1 "$BASH_IT_DIRS_BKS";
-    echo "$@"=\""${PWD}"\" >> "$BASH_IT_DIRS_BKS";
-    source "$BASH_IT_DIRS_BKS" ;
+	sed "/$1/d" "$BASH_IT_DIRS_BKS" > ~/.dirs1
+	command mv ~/.dirs1 "$BASH_IT_DIRS_BKS"
+	echo "$1"=\""${PWD}"\" >> "$BASH_IT_DIRS_BKS"
+	# shellcheck disable=SC1090
+	source "$BASH_IT_DIRS_BKS"
 }
 
-function R()
-{
-    about 'remove a bookmark'
-    param '1: bookmark name'
-    example '$ R mybkmrk'
-    group 'dirs'
+function R() {
+	about 'remove a bookmark'
+	param '1: bookmark name'
+	example '$ R mybkmrk'
+	group 'dirs'
 
-    [[ $# -eq 1 ]] || { echo "${FUNCNAME[0]} function requires 1 argument"; return 1; }
+	[[ $# -eq 1 ]] || {
+		echo "${FUNCNAME[0]} function requires 1 argument"
+		return 1
+	}
 
-    sed "/$@/d" "$BASH_IT_DIRS_BKS" > ~/.dirs1;
-    \mv ~/.dirs1 "$BASH_IT_DIRS_BKS";
+	sed "/$1/d" "$BASH_IT_DIRS_BKS" > ~/.dirs1
+	\mv ~/.dirs1 "$BASH_IT_DIRS_BKS"
 }
 
-alias U='source "$BASH_IT_DIRS_BKS"' 	# Update bookmark stack
+alias U='source "$BASH_IT_DIRS_BKS"' # Update bookmark stack
 # Set the Bash option so that no '$' is required when using the above facility
 shopt -s cdable_vars
