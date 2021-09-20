@@ -80,6 +80,7 @@ completion/available/wpscan.completion.bash
 # libraries
 lib/helpers.bash
 lib/log.bash
+lib/preview.bash
 lib/search.bash
 lib/utilities.bash
 
