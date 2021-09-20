@@ -94,10 +94,10 @@ RBFU_THEME_PROMPT_SUFFIX='|'
 : "${SVN_EXE:=$SCM_SVN}"
 
 function _bash_it_appearance_scm_init() {
-	GIT_EXE="$(type -P $SCM_GIT || true)"
-	P4_EXE="$(type -P $SCM_P4 || true)"
-	HG_EXE="$(type -P $SCM_HG || true)"
-	SVN_EXE="$(type -P $SCM_SVN || true)"
+	GIT_EXE="$(type -P "$SCM_GIT" || true)"
+	P4_EXE="$(type -P "$SCM_P4" || true)"
+	HG_EXE="$(type -P "$SCM_HG" || true)"
+	SVN_EXE="$(type -P "$SCM_SVN" || true)"
 
 	# Check for broken SVN exe that is caused by some versions of Xcode.
 	# See https://github.com/Bash-it/bash-it/issues/1612 for more details.
@@ -235,7 +235,7 @@ function git_prompt_minimal_info {
 }
 
 function git_prompt_vars {
-	if ${SCM_GIT_USE_GITSTATUS} && _command_exists gitstatus_query && gitstatus_query && [[ "${VCS_STATUS_RESULT}" == "ok-sync" ]]; then
+	if "${SCM_GIT_USE_GITSTATUS:-false}" && _command_exists gitstatus_query && gitstatus_query && [[ "${VCS_STATUS_RESULT:-}" == "ok-sync" ]]; then
 		# we can use faster gitstatus
 		# use this variable in githelpers and below to choose gitstatus output
 		SCM_GIT_GITSTATUS_RAN=true
@@ -259,8 +259,8 @@ function git_prompt_vars {
 	fi
 
 	if [[ "${SCM_GIT_GITSTATUS_RAN}" == "true" ]]; then
-		commits_behind=${VCS_STATUS_COMMITS_BEHIND}
-		commits_ahead=${VCS_STATUS_COMMITS_AHEAD}
+		commits_behind=${VCS_STATUS_COMMITS_BEHIND?}
+		commits_ahead=${VCS_STATUS_COMMITS_AHEAD?}
 	else
 		IFS=$'\t' read -r commits_behind commits_ahead <<< "$(_git-upstream-behind-ahead)"
 	fi
@@ -276,7 +276,7 @@ function git_prompt_vars {
 	if [[ "${SCM_GIT_SHOW_STASH_INFO}" = "true" ]]; then
 		local stash_count
 		if [[ "${SCM_GIT_GITSTATUS_RAN}" == "true" ]]; then
-			stash_count=${VCS_STATUS_STASHES}
+			stash_count=${VCS_STATUS_STASHES?}
 		else
 			stash_count="$(git stash list 2> /dev/null | wc -l | tr -d ' ')"
 		fi
@@ -286,9 +286,9 @@ function git_prompt_vars {
 	SCM_STATE=${GIT_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
 	if ! _git-hide-status; then
 		if [[ "${SCM_GIT_GITSTATUS_RAN}" == "true" ]]; then
-			untracked_count=${VCS_STATUS_NUM_UNTRACKED}
-			unstaged_count=${VCS_STATUS_NUM_UNSTAGED}
-			staged_count=${VCS_STATUS_NUM_STAGED}
+			untracked_count=${VCS_STATUS_NUM_UNTRACKED?}
+			unstaged_count=${VCS_STATUS_NUM_UNSTAGED?}
+			staged_count=${VCS_STATUS_NUM_STAGED?}
 		else
 			IFS=$'\t' read -r untracked_count unstaged_count staged_count <<< "$(_git-status-counts)"
 		fi
@@ -429,7 +429,7 @@ function rbenv_version_prompt {
 }
 
 function rbfu_version_prompt {
-	if [[ $RBFU_RUBY_VERSION ]]; then
+	if [[ -n "${RBFU_RUBY_VERSION:-}" ]]; then
 		echo -e "${RBFU_THEME_PROMPT_PREFIX}${RBFU_RUBY_VERSION}${RBFU_THEME_PROMPT_SUFFIX}"
 	fi
 }
@@ -445,12 +445,12 @@ function chruby_version_prompt {
 		if ! chruby | grep -q '\*'; then
 			ruby_version="${ruby_version} (system)"
 		fi
-		echo -e "${CHRUBY_THEME_PROMPT_PREFIX}${ruby_version}${CHRUBY_THEME_PROMPT_SUFFIX}"
+		echo -e "${CHRUBY_THEME_PROMPT_PREFIX:-}${ruby_version}${CHRUBY_THEME_PROMPT_SUFFIX:-}"
 	fi
 }
 
 function ruby_version_prompt {
-	if [[ "${THEME_SHOW_RUBY_PROMPT}" = "true" ]]; then
+	if [[ "${THEME_SHOW_RUBY_PROMPT:-}" == "true" ]]; then
 		echo -e "$(rbfu_version_prompt)$(rbenv_version_prompt)$(rvm_version_prompt)$(chruby_version_prompt)"
 	fi
 }
@@ -464,21 +464,22 @@ function k8s_namespace_prompt {
 }
 
 function virtualenv_prompt {
-	if [[ -n "$VIRTUAL_ENV" ]]; then
-		virtualenv=$(basename "$VIRTUAL_ENV")
+	if [[ -n "${VIRTUAL_ENV:-}" ]]; then
+		virtualenv="${VIRTUAL_ENV##*/}"
 		echo -e "$VIRTUALENV_THEME_PROMPT_PREFIX$virtualenv$VIRTUALENV_THEME_PROMPT_SUFFIX"
 	fi
 }
 
 function condaenv_prompt {
-	if [[ $CONDA_DEFAULT_ENV ]]; then
-		echo -e "${CONDAENV_THEME_PROMPT_PREFIX}${CONDA_DEFAULT_ENV}${CONDAENV_THEME_PROMPT_SUFFIX}"
+	if [[ -n "${CONDA_DEFAULT_ENV:-}" ]]; then
+		echo -e "${CONDAENV_THEME_PROMPT_PREFIX:-}${CONDA_DEFAULT_ENV}${CONDAENV_THEME_PROMPT_SUFFIX:-}"
 	fi
 }
 
 function py_interp_prompt {
+	local py_version
 	py_version=$(python --version 2>&1 | awk 'NR==1{print "py-"$2;}') || return
-	echo -e "${PYTHON_THEME_PROMPT_PREFIX}${py_version}${PYTHON_THEME_PROMPT_SUFFIX}"
+	echo -e "${PYTHON_THEME_PROMPT_PREFIX:-}${py_version}${PYTHON_THEME_PROMPT_SUFFIX:-}"
 }
 
 function python_version_prompt {
@@ -506,7 +507,7 @@ function clock_char {
 function clock_prompt {
 	CLOCK_COLOR=${THEME_CLOCK_COLOR:-"$normal"}
 	CLOCK_FORMAT=${THEME_CLOCK_FORMAT:-"%H:%M:%S"}
-	[ -z "$THEME_SHOW_CLOCK" ] && THEME_SHOW_CLOCK=${THEME_CLOCK_CHECK:-"true"}
+	[[ -z "${THEME_SHOW_CLOCK:-}" ]] && THEME_SHOW_CLOCK=${THEME_CLOCK_CHECK:-"true"}
 	SHOW_CLOCK=$THEME_SHOW_CLOCK
 
 	if [[ "${SHOW_CLOCK}" = "true" ]]; then
@@ -576,7 +577,7 @@ if ! _command_exists battery_percentage; then
 fi
 
 function aws_profile {
-	if [[ $AWS_DEFAULT_PROFILE ]]; then
+	if [[ -n "${AWS_DEFAULT_PROFILE:-}" ]]; then
 		echo -e "${AWS_DEFAULT_PROFILE}"
 	else
 		echo -e "default"
