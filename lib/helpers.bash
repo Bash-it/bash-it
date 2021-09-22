@@ -849,3 +849,21 @@ then
     fi
   }
 fi
+
+function _bash-it-find-in-ancestor() (
+	# We're deliberately using a subshell for this entire function for simplicity.
+	# By using a subshell, we can use ${PWD} without special handling, and can
+	#  just `cd ..` to move up the directory heirarchy.
+	# Let the shell do the work.
+	local kin
+	while [[ "${PWD}" != '/' ]]; do
+		for kin in "$@"; do
+			if [[ -r "${PWD}/${kin}" ]]; then
+				printf '%s' "${PWD}"
+				return "$?"
+			fi
+		done
+		command cd .. || return "$?"
+	done
+	return 1
+)
