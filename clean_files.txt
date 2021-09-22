@@ -58,6 +58,7 @@ completion/available/jungle.completion.bash
 completion/available/knife.completion.bash
 completion/available/kontena.completion.bash
 completion/available/kubectl.completion.bash
+completion/available/laravel.completion.bash
 completion/available/lerna.completion.bash
 completion/available/minikube.completion.bash
 completion/available/ngrok.completion.bash
