@@ -74,6 +74,9 @@ completion/available/vault.completion.bash
 completion/available/vuejs.completion.bash
 completion/available/wpscan.completion.bash
 
+# libraries
+lib/utilities.bash
+
 # plugins
 #
 plugins/available/alias-completion.plugin.bash
