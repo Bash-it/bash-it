@@ -7,10 +7,11 @@
 ###########################################################################
 
 function _bash-it-get-component-name-from-path() {
+	local filename
 	# filename without path
 	filename="${1##*/}"
 	# filename without path or priority
-	filename="${filename##*---}"
+	filename="${filename##*${BASH_IT_LOAD_PRIORITY_SEPARATOR?}}"
 	# filename without path, priority or extension
 	echo "${filename%.*.bash}"
 }
