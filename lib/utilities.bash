@@ -16,13 +16,14 @@ _bash-it-get-component-name-from-path() {
 }
 
 _bash-it-get-component-type-from-path() {
+	local filename
   # filename without path
   filename="${1##*/}"
   # filename without extension
   filename="${filename%.bash}"
   # extension without priority or name
-  #filename="${filename#*.}"
-  echo "${filename#*.}" #| cut -d '.' -f 2
+  filename="${filename##*.}"
+  echo "${filename}"
 }
 
 # This function searches an array for an exact match against the term passed
