@@ -850,12 +850,21 @@ then
   }
 fi
 
+# `_bash-it-find-in-ancestor` uses the shell's ability to run a function in
+# a subshell to simplify our search to a simple `cd ..` and `[[ -r $1 ]]`
+# without any external dependencies. Let the shell do what it's good at.
 function _bash-it-find-in-ancestor() (
-	# We're deliberately using a subshell for this entire function for simplicity.
-	# By using a subshell, we can use ${PWD} without special handling, and can
-	#  just `cd ..` to move up the directory heirarchy.
-	# Let the shell do the work.
+	about 'searches parents of the current directory for any of the specified file names'
+	group 'helpers'
+	param '*: names of files or folders to search for'
+	returns '0: prints path of closest matching ancestor directory to stdout'
+	returns '1: no match found'
+	returns '2: improper usage of shell builtin' # uncommon
+	example '_bash-it-find-in-ancestor .git .hg'
+	example '_bash-it-find-in-ancestor GNUmakefile Makefile makefile'
+
 	local kin
+	# To keep things simple, we do not search the root dir.
 	while [[ "${PWD}" != '/' ]]; do
 		for kin in "$@"; do
 			if [[ -r "${PWD}/${kin}" ]]; then
