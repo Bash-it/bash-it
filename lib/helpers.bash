@@ -828,13 +828,7 @@ function all_groups() {
 	about 'displays all unique metadata groups'
 	group 'lib'
 
-	local func file
-	file=$(mktemp -t composure.XXXX)
-	for func in $(_typeset_functions); do
-		declare -f "$func" | metafor group >> "$file"
-	done
-	sort -u "$file"
-	rm "$file"
+	declare -f | metafor group | sort -u
 }
 
 if ! _command_exists pathmunge; then
