@@ -1039,14 +1039,7 @@ all_groups ()
     about 'displays all unique metadata groups'
     group 'lib'
 
-    typeset func
-    typeset file=$(mktemp -t composure.XXXX)
-    for func in $(_typeset_functions)
-    do
-        typeset -f $func | metafor group >> $file
-    done
-    cat $file | sort | uniq
-    rm $file
+	declare -f | metafor group | sort -u
 }
 
 if ! type pathmunge > /dev/null 2>&1
