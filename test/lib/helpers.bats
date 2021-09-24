@@ -5,11 +5,11 @@ load "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
 load ../../lib/log
 load ../../lib/utilities
 load ../../lib/search
-load ../../plugins/available/base.plugin
 
 cite _about _param _example _group _author _version
 
 load ../../lib/helpers
+load ../../plugins/available/base.plugin
 
 function local_setup {
   setup_test_fixture
