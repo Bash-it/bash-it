@@ -117,25 +117,18 @@ function banish-cookies ()
     ln -s /dev/null ~/.macromedia
 }
 
-function usage ()
-{
+function usage() {
     about 'disk usage per directory, in Mac OS X and Linux'
     param '1: directory name'
     group 'base'
-    if [[ "$OSTYPE" == 'darwin'* ]]; then
-        if [ -n "$1" ]; then
-            du -hd 1 "$1"
-        else
-            du -hd 1
-        fi
-
-    elif [[ "$OSTYPE" = 'linux'* ]]; then
-        if [[ -n "$1" ]]; then
-            du -h --max-depth=1 "$1"
-        else
-            du -h --max-depth=1
-        fi
-    fi
+	case $OSTYPE in
+		*'darwin'*)
+			du -hd 1 "$@"
+			;;
+		*'linux'*)
+			du -h --max-depth=1 "$@"
+			;;
+	esac
 }
 
 if [[ ! -e "${BASH_IT}/plugins/enabled/todo.plugin.bash" \
