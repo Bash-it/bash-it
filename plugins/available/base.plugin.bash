@@ -96,11 +96,11 @@ function mkcd() {
 	mkdir -p -- "$@" && cd -- "${!#}" || return
 }
 
-function lsgrep ()
-{
+# shellcheck disable=SC2010
+function lsgrep() {
     about 'search through directory contents with grep'
     group 'base'
-    ls | grep "$*"
+    ls | grep "$@"
 }
 
 function quiet() {
