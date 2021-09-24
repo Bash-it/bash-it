@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 cite about-plugin
 about-plugin 'miscellaneous tools'
 
@@ -25,47 +26,44 @@ function down4me ()
     curl -Ls "http://downforeveryoneorjustme.com/$1" | sed '/just you/!d;s/<[^>]*>//g'
 }
 
-function myip ()
-{
+function myip() {
     about 'displays your ip address, as seen by the Internet'
     group 'base'
     list=("http://myip.dnsomatic.com/" "http://checkip.dyndns.com/" "http://checkip.dyndns.org/")
-    for url in ${list[*]}
-    do
-        res=$(curl -fs "${url}")
-        if [[ $? -eq 0 ]];then
+    for url in "${list[@]}"; do
+        res="$(curl -fs "${url}")"
+        if [[ $? -eq 0 ]]; then
             break;
         fi
     done
-    res=$(echo "$res" | grep -Eo '[0-9\.]+')
+    res="$(echo "$res" | grep -Eo '[0-9\.]+')"
     echo -e "Your public IP is: ${echo_bold_green} $res ${echo_normal}"
 }
 
-function pickfrom ()
-{
+function pickfrom() {
     about 'picks random line from file'
     param '1: filename'
     example '$ pickfrom /usr/share/dict/words'
     group 'base'
     local file=$1
     [[ -z "$file" ]] && reference $FUNCNAME && return
-    length=$(cat $file | wc -l)
-    n=$(expr $RANDOM \* $length \/ 32768 + 1)
-    head -n $n $file | tail -1
+    local -i length="$(wc -l "$file")"
+    n=$(( RANDOM * length / 32768 + 1 ))
+    head -n $n "$file" | tail -1
 }
 
-function passgen ()
-{
+function passgen() {
     about 'generates random password from dictionary words'
     param 'optional integer length'
     param 'if unset, defaults to 4'
     example '$ passgen'
     example '$ passgen 6'
     group 'base'
-    local i pass length=${1:-4}
+    local -i i length=${1:-4}
+	local pass
     pass=$(echo $(for i in $(eval echo "{1..$length}"); do pickfrom /usr/share/dict/words; done))
     echo "With spaces (easier to memorize): $pass"
-    echo "Without (use this as the password): $(echo $pass | tr -d ' ')"
+    echo "Without spaces (easier to brute force): $(echo $pass | tr -d ' ')"
 }
 
 # Create alias pass to passgen when pass isn't installed or
@@ -89,8 +87,7 @@ function pmdown ()
     fi
 }
 
-function mkcd ()
-{
+function mkcd() {
     about 'make one or more directories and cd into the last one'
     param 'one or more directories to create'
     example '$ mkcd foo'
@@ -98,7 +95,7 @@ function mkcd ()
     example '$ mkcd foo foo1 foo2 fooN'
     example '$ mkcd /tmp/img/photos/large /tmp/img/photos/self /tmp/img/photos/Beijing'
     group 'base'
-    mkdir -p -- "$@" && eval cd -- "\"\$$#\""
+    mkdir -p -- "$@" && cd -- "${!#}"
 }
 
 function lsgrep ()
@@ -108,11 +105,10 @@ function lsgrep ()
     ls | grep "$*"
 }
 
-function quiet ()
-{
+function quiet() {
     about 'what *does* this do?'
     group 'base'
-    $* &> /dev/null &
+    "$@" &> /dev/null &
 }
 
 function banish-cookies ()
