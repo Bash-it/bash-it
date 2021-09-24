@@ -140,15 +140,6 @@ then
     }
 fi
 
-function command_exists ()
-{
-    about 'checks for existence of a command'
-    param '1: command to check'
-    example '$ command_exists ls && echo exists'
-    group 'base'
-    type -t "$1" >/dev/null
-}
-
 if _command_exists mkisofs; then
 function mkiso() {
     about 'creates iso from current dir in the parent dir (unless defined)'
