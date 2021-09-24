@@ -31,8 +31,7 @@ function myip() {
     group 'base'
     list=("http://myip.dnsomatic.com/" "http://checkip.dyndns.com/" "http://checkip.dyndns.org/")
     for url in "${list[@]}"; do
-        res="$(curl -fs "${url}")"
-        if [[ $? -eq 0 ]]; then
+		if res="$(curl -fs "${url}")"; then
             break;
         fi
     done
