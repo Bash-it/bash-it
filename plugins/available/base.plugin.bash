@@ -44,9 +44,11 @@ function pickfrom() {
     param '1: filename'
     example '$ pickfrom /usr/share/dict/words'
     group 'base'
-    local file=$1
-    [[ -z "$file" ]] && reference $FUNCNAME && return
-    local -i length="$(wc -l "$file")"
+    local file=${1:-}
+    if [[ ! -r "$file" ]]; then
+		reference "${FUNCNAME[0]}" && return
+	fi
+    local -i length="$(wc -l < "$file")" n=0
     n=$(( RANDOM * length / 32768 + 1 ))
     head -n $n "$file" | tail -1
 }
