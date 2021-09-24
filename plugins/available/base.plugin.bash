@@ -149,9 +149,8 @@ function command_exists ()
     type -t "$1" >/dev/null
 }
 
-if type -t mkisofs >/dev/null; then
-function mkiso()
-{
+if _command_exists mkisofs; then
+function mkiso() {
     about 'creates iso from current dir in the parent dir (unless defined)'
     param '1: ISO name'
     param '2: dest/path'
@@ -164,11 +163,11 @@ function mkiso()
 	local destpath="${2:-../}"
 	local srcpath="${3:-${PWD}}"
 
-    if [ ! -f "${destpath}${isoname}.iso" ]; then
+	if [[ ! -f "${destpath%/}/${isoname}.iso" ]]; then
         echo "writing ${isoname}.iso to ${destpath} from ${srcpath}"
-		mkisofs -V "${isoname}" -iso-level 3 -r -o "${destpath}${isoname}.iso" "${srcpath}"
+		mkisofs -V "${isoname}" -iso-level 3 -r -o "${destpath%/}/${isoname}.iso" "${srcpath}"
     else
-        echo "${destpath}${isoname}.iso already exists"
+		echo "${destpath%/}/${isoname}.iso already exists"
     fi
 }
 fi
