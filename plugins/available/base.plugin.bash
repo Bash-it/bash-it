@@ -2,8 +2,7 @@
 cite about-plugin
 about-plugin 'miscellaneous tools'
 
-function ips ()
-{
+function ips() {
     about 'display all ip addresses for this host'
     group 'base'
     if _command_exists ifconfig
@@ -17,8 +16,7 @@ function ips ()
     fi
 }
 
-function down4me ()
-{
+function down4me() {
     about 'checks whether a website is down for you, or everybody'
     param '1: website url'
     example '$ down4me http://www.google.com'
@@ -36,7 +34,7 @@ function myip() {
         fi
     done
     res="$(echo "$res" | grep -Eo '[0-9\.]+')"
-    echo -e "Your public IP is: ${echo_bold_green} $res ${echo_normal}"
+    echo -e "Your public IP is: ${echo_bold_green-} $res ${echo_normal-}"
 }
 
 function pickfrom() {
@@ -45,12 +43,13 @@ function pickfrom() {
     example '$ pickfrom /usr/share/dict/words'
     group 'base'
     local file=${1:-}
+	local -i n=0 length
     if [[ ! -r "$file" ]]; then
 		reference "${FUNCNAME[0]}" && return
 	fi
-    local -i length="$(wc -l < "$file")" n=0
+    length="$(wc -l < "$file")"
     n=$(( RANDOM * length / 32768 + 1 ))
-    head -n $n "$file" | tail -1
+    head -n "$n" "$file" | tail -1
 }
 
 function passgen() {
@@ -62,6 +61,7 @@ function passgen() {
     group 'base'
     local -i i length=${1:-4}
 	local pass
+	# shellcheck disable=SC2034
 	pass="$(for i in $(eval "echo {1..$length}"); do pickfrom /usr/share/dict/words; done)"
     echo "With spaces (easier to memorize): ${pass//$'\n'/ }"
 	echo "Without spaces (easier to brute force): ${pass//$'\n'/}"
@@ -123,12 +123,12 @@ function usage() {
 	esac
 }
 
-if [[ ! -e "${BASH_IT}/plugins/enabled/todo.plugin.bash" \
-	&& ! -e "${BASH_IT}/plugins/enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR}todo.plugin.bash" ]]
+# shellcheck disable=SC2144 # the glob matches only one file
+if [[ ! -e "${BASH_IT?}/plugins/enabled/todo.plugin.bash" \
+	&& ! -e "${BASH_IT?}/plugins/enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR-}todo.plugin.bash" ]]
 then
 # if user has installed todo plugin, skip this...
-    function t ()
-    {
+    function t() {
         about 'one thing todo'
         param 'if not set, display todo item'
         param '1: todo text'
@@ -164,13 +164,12 @@ function mkiso() {
 fi
 
 # useful for administrators and configs
-function buf ()
-{
+function buf() {
     about 'back up file with timestamp'
     param 'filename'
     group 'base'
-    local filename=$1
-    local filetime=$(date +%Y%m%d_%H%M%S)
+    local filename="${1?}" filetime
+    filetime=$(date +%Y%m%d_%H%M%S)
     cp -a "${filename}" "${filename}_${filetime}"
 }
 
