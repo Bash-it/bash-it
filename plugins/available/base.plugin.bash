@@ -62,9 +62,9 @@ function passgen() {
     group 'base'
     local -i i length=${1:-4}
 	local pass
-    pass=$(echo $(for i in $(eval echo "{1..$length}"); do pickfrom /usr/share/dict/words; done))
-    echo "With spaces (easier to memorize): $pass"
-    echo "Without spaces (easier to brute force): $(echo $pass | tr -d ' ')"
+	pass="$(for i in $(eval "echo {1..$length}"); do pickfrom /usr/share/dict/words; done)"
+    echo "With spaces (easier to memorize): ${pass//$'\n'/ }"
+	echo "Without spaces (easier to brute force): ${pass//$'\n'/}"
 }
 
 # Create alias pass to passgen when pass isn't installed or
