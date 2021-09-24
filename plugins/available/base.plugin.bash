@@ -105,7 +105,7 @@ function lsgrep ()
 function quiet() {
     about 'what *does* this do?'
     group 'base'
-    "$@" &> /dev/null &
+    nohup "$@" &> /dev/null </dev/null &
 }
 
 function banish-cookies ()
