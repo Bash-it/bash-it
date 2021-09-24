@@ -73,19 +73,16 @@ then
   alias pass=passgen
 fi
 
-function pmdown ()
-{
+if _command_exists markdown && _command_exists browser; then
+function pmdown() {
     about 'preview markdown file in a browser'
     param '1: markdown file'
     example '$ pmdown README.md'
     group 'base'
-    if _command_exists markdown
-    then
-      markdown $1 | browser
-    else
-      echo "You don't have a markdown command installed!"
-    fi
+
+    markdown "${1?}" | browser
 }
+fi
 
 function mkcd() {
     about 'make one or more directories and cd into the last one'
@@ -141,7 +138,8 @@ function usage ()
     fi
 }
 
-if [[ ! -e "${BASH_IT}/plugins/enabled/todo.plugin.bash" ]] && [[ ! -e "${BASH_IT}/plugins/enabled/*${BASH_IT_LOAD_PRIORITY_SEPARATOR}todo.plugin.bash" ]]
+if [[ ! -e "${BASH_IT}/plugins/enabled/todo.plugin.bash" \
+	&& ! -e "${BASH_IT}/plugins/enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR}todo.plugin.bash" ]]
 then
 # if user has installed todo plugin, skip this...
     function t ()
@@ -163,10 +161,11 @@ function command_exists ()
     param '1: command to check'
     example '$ command_exists ls && echo exists'
     group 'base'
-    type "$1" &> /dev/null ;
+    type -t "$1" >/dev/null
 }
 
-mkiso ()
+if type -t mkisofs >/dev/null; then
+function mkiso()
 {
     about 'creates iso from current dir in the parent dir (unless defined)'
     param '1: ISO name'
@@ -176,21 +175,18 @@ mkiso ()
     example 'mkiso ISO-Name dest/path src/path'
     group 'base'
 
-    if type "mkisofs" > /dev/null; then
-        [[ -z ${1+x} ]] && local isoname=${PWD##*/} || local isoname=$1
-        [[ -z ${2+x} ]] && local destpath=../ || local destpath=$2
-        [[ -z ${3+x} ]] && local srcpath=${PWD} || local srcpath=$3
+    [ -z ${1+x} ] && local isoname=${PWD##*/} || local isoname=$1
+    [ -z ${2+x} ] && local destpath=../ || local destpath=$2
+    [ -z ${3+x} ] && local srcpath=${PWD} || local srcpath=$3
 
-        if [[ ! -f "${destpath}${isoname}.iso" ]]; then
-            echo "writing ${isoname}.iso to ${destpath} from ${srcpath}"
-            mkisofs -V ${isoname} -iso-level 3 -r -o "${destpath}${isoname}.iso" "${srcpath}"
-        else
-            echo "${destpath}${isoname}.iso already exists"
-        fi
+    if [ ! -f "${destpath}${isoname}.iso" ]; then
+        echo "writing ${isoname}.iso to ${destpath} from ${srcpath}"
+        mkisofs -V ${isoname} -iso-level 3 -r -o "${destpath}${isoname}.iso" "${srcpath}"
     else
-        echo "mkisofs cmd does not exist, please install cdrtools"
+        echo "${destpath}${isoname}.iso already exists"
     fi
 }
+fi
 
 # useful for administrators and configs
 function buf ()
@@ -203,6 +199,7 @@ function buf ()
     cp -a "${filename}" "${filename}_${filetime}"
 }
 
+if ! _command_exists del; then
 function del() {
     about 'move files to hidden folder in tmp, that gets cleared on each reboot'
     param 'file or folder to be deleted'
@@ -210,3 +207,4 @@ function del() {
     group 'base'
     mkdir -p /tmp/.trash && mv "$@" /tmp/.trash;
 }
+fi
