@@ -158,6 +158,7 @@ themes/candy
 themes/command_duration.theme.bash
 themes/easy
 themes/essential
+themes/liquidprompt
 themes/modern
 themes/norbu
 themes/pete
