@@ -109,15 +109,6 @@ function quiet() {
     nohup "$@" &> /dev/null </dev/null &
 }
 
-function banish-cookies ()
-{
-    about 'redirect .adobe and .macromedia files to /dev/null'
-    group 'base'
-    rm -r ~/.macromedia ~/.adobe
-    ln -s /dev/null ~/.adobe
-    ln -s /dev/null ~/.macromedia
-}
-
 function usage() {
     about 'disk usage per directory, in Mac OS X and Linux'
     param '1: directory name'
