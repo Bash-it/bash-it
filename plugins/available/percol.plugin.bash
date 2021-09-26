@@ -19,8 +19,6 @@ if [[ ${BASH_VERSINFO[0]} -lt 4 ]]; then
 	_log_warning "You have to upgrade Bash to Bash v4.x to use the 'percol' plugin."
 	_log_warning "Your current Bash version is $BASH_VERSION."
 	return
-else
-	bind -x '"\C-r": _replace_by_history'
 fi
 
 function _replace_by_history() {
@@ -31,3 +29,4 @@ function _replace_by_history() {
 	READLINE_LINE="${l}"
 	READLINE_POINT=${#l}
 }
+bind -x '"\C-r": _replace_by_history'
