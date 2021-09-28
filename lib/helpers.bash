@@ -571,6 +571,24 @@ _bash-it-profile-list() {
     echo "${profile/.bash_it/}"
   done
 }
+
+_bash-it-profile-rm() {
+  about 'Removes a profile from the "profiles" directory'
+  _group 'lib'
+  local name="$1"
+  if [[ -z $name ]]; then
+    echo -e "\033[91mPlease specify profile name to remove...\033[m"
+    return 1
+  fi
+
+  local profile_path="${BASH_IT}/profiles/$name.bash_it"
+  if [[ ! -f "$profile_path" ]]; then
+    echo -e "\033[91mCould not find profile \"$name\"...\033[m"
+    return 1
+  fi
+
+  command rm "$profile_path"
+  echo "Removed profile \"$name\" successfully!"
 }
 
 _bash-it-profile-load() {
