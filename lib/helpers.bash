@@ -561,6 +561,18 @@ _bash-it-profile-load-parse-profile() {
   [[ -z $bad ]]
 }
 
+_bash-it-profile-list() {
+  about 'lists all profiles from the "profiles" directory'
+  _group 'lib'
+
+  echo "Available profiles:"
+  for profile in "${BASH_IT}/profiles"/*.bash_it; do
+    profile="${profile##*/}"
+    echo "${profile/.bash_it/}"
+  done
+}
+}
+
 _bash-it-profile-load() {
   _about 'loads a configuration from the "profile" directory'
   _group 'lib'
