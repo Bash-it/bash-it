@@ -108,7 +108,7 @@ bash-it ()
     example '$ bash-it version'
     example '$ bash-it reload'
     example '$ bash-it restart'
-    example '$ bash-it profile save|load my_profile'
+    example '$ bash-it profile list|save|load|rm [profile_name]'
     example '$ bash-it doctor errors|warnings|all'
     typeset verb=${1:-}
     shift
@@ -592,18 +592,18 @@ _bash-it-profile-rm() {
 }
 
 _bash-it-profile-load() {
-  _about 'loads a configuration from the "profile" directory'
+  _about 'loads a configuration from the "profiles" directory'
   _group 'lib'
 
   local name="$1"
   if [[ -z $name ]]; then
-    echo -e "\033[91mPlease specify profile name to load, not changing configuration...\033"
+    echo -e "\033[91mPlease specify profile name to load, not changing configuration...\033[m"
     return 1
   fi
 
   local profile_path="${BASH_IT}/profiles/$name.bash_it"
   if [[ ! -f "$profile_path" ]]; then
-    echo -e "\033[91mCould not find profile \"$name\", not changing configuration...\033"
+    echo -e "\033[91mCould not find profile \"$name\", not changing configuration...\033[m"
     return 1
   fi
 
