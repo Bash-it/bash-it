@@ -581,6 +581,12 @@ _bash-it-profile-rm() {
     return 1
   fi
 
+  # Users should not be allowed to delete the default profile
+  if [[ $name == "default" ]]; then
+    echo -e "\033[91mCan not remove the default profile...\033[m"
+    return 1
+  fi
+
   local profile_path="${BASH_IT}/profiles/$name.bash_it"
   if [[ ! -f "$profile_path" ]]; then
     echo -e "\033[91mCould not find profile \"$name\"...\033[m"
