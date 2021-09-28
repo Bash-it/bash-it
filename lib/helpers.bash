@@ -972,6 +972,17 @@ _help-plugins()
     rm $grouplist 2> /dev/null
 }
 
+_help-profile () {
+  _about 'help message for profile command'
+  _group 'lib'
+
+  echo "Manages profiles of bash it."
+  echo "Use 'bash-it profile list' to see all available profiles."
+  echo "Use 'bash-it profile save foo' to save the current configuration into a profile named 'foo'."
+  echo "Use 'bash-it profile load foo' to load an existing profile named 'foo'."
+  echo "Use 'bash-it profile rm foo' to remove an existing profile named 'foo'."
+}
+
 _help-update () {
   _about 'help message for update command'
   _group 'lib'
