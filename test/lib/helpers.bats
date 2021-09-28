@@ -314,6 +314,7 @@ function local_setup {
   assert_line -n 1 "Saving completion configuration..."
   assert_line -n 2 "Saving aliases configuration..."
   assert_line -n 3 "All done!"
+  assert_file_exist "$BASH_IT/profiles/test.bash_it"
 }
 
 @test "helper: profile save creates valid file with only plugin enabled" {
@@ -389,6 +390,53 @@ function local_setup {
 @test "helper: profile load corrupted profile file: bad subdirectory" {
   run _bash-it-profile-load "test-bad-type"
   assert_line -n 1 -p "Bad line(#5) in profile, aborting load..."
+}
+
+@test "helper: profile rm sanity" {
+  run _bash-it-profile-save "test"
+  assert_file_exist "$BASH_IT/profiles/test.bash_it"
+  run _bash-it-profile-rm "test"
+  assert_line -n 0 "Removed profile \"test\" successfully!"
+  assert_file_not_exist "$BASH_IT/profiles/test.bash_it"
+}
+
+@test "helper: profile rm no params" {
+  run _bash-it-profile-rm ""
+  assert_line -n 0 -p "Please specify profile name to remove..."
+}
+
+@test "helper: profile load no params" {
+  run _bash-it-profile-load ""
+  assert_line -n 0 -p "Please specify profile name to load, not changing configuration..."
+}
+
+@test "helper: profile rm default" {
+  run _bash-it-profile-rm "default"
+  assert_line -n 0 -p "Can not remove the default profile..."
+  assert_file_exist "$BASH_IT/profiles/default.bash_it"
+}
+
+@test "helper: profile rm bad profile name" {
+  run _bash-it-profile-rm "notexisting"
+  assert_line -n 0 -p "Could not find profile \"notexisting\"..."
+}
+
+@test "helper: profile list sanity" {
+  run _bash-it-profile-list
+  assert_line -n 0 "Available profiles:"
+  assert_line -n 1 "default"
+}
+
+@test "helper: profile list more profiles" {
+  run _bash-it-profile-save "cactus"
+  run _bash-it-profile-save "another"
+  run _bash-it-profile-save "brother"
+  run _bash-it-profile-list
+  assert_line -n 0 "Available profiles:"
+  assert_line -n 4 "default"
+  assert_line -n 3 "cactus"
+  assert_line -n 1 "another"
+  assert_line -n 2 "brother"
 }
 
 @test "helpers: migrate plugins and completions that share the same name" {
