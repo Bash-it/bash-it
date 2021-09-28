@@ -102,11 +102,20 @@ _bash-it-comp()
           fi
           return 0
           ;;
+        rm)
+          if [[ "rm" == "$prev" ]]; then
+            _bash-it-comp-list-profiles
+          fi
+          return 0
+          ;;
         save)
           return 0
           ;;
+        list)
+          return 0
+          ;;
         *)
-          local profile_args="load save"
+          local profile_args="load save list rm"
           COMPREPLY=( $(compgen -W "${profile_args}" -- ${cur}) )
           return 0
           ;;
