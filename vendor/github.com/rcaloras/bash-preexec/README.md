@@ -30,6 +30,8 @@ curl https://raw.githubusercontent.com/rcaloras/bash-preexec/master/bash-preexec
 echo '[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh' >> ~/.bashrc
 ```
 
+NOTE: this script may change your `HISTCONTROL` value by removing `ignorespace` and/or replacing `ignoreboth` with `ignoredups`.  See [`HISTCONTROL` interaction](#histcontrol-interaction) for details.
+
 ## Usage
 Two functions **preexec** and **precmd** can now be defined and they'll be automatically invoked by bash-preexec if they exist.
 
@@ -90,6 +92,10 @@ bash-preexec does not support invoking preexec() for subshells by default. It mu
 export __bp_enable_subshells="true"
 ```
 This is disabled by default due to buggy situations related to to `functrace` and Bash's `DEBUG trap`. See [Issue #25](https://github.com/rcaloras/bash-preexec/issues/25)
+
+## `HISTCONTROL` interaction
+
+In order to be able to provide the last command text to the `preexec` hook, this script will remove `ignorespace` and/or will replace `ignoreboth` with `ignoredups` in your `HISTCONTROL` variable.  It will remember if `HISTCONTROL` has been modified and will remove the last command from the history "manually", after reading the last command from the history list.  This may cause issues when you have scripts that rely on the literal value of `HISTCONTROL` or manipulate history in their own ways.
 
 ## Tests
 You can run tests using [Bats](https://github.com/bats-core/bats-core).

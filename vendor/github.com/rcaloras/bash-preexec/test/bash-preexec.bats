@@ -306,18 +306,17 @@ test_preexec_echo() {
     # Should remove ignorespace
     HISTCONTROL="ignorespace:ignoredups:*"
     __bp_adjust_histcontrol
-    [ "$HISTCONTROL" == ":ignoredups:*" ]
+    [ "$HISTCONTROL" == "ignoredups:*" ]
 
     # Should remove ignoreboth and replace it with ignoredups
     HISTCONTROL="ignoreboth"
     __bp_adjust_histcontrol
-    [ "$HISTCONTROL" == "ignoredups:" ]
+    [ "$HISTCONTROL" == "ignoredups" ]
 
     # Handle a few inputs
     HISTCONTROL="ignoreboth:ignorespace:some_thing_else"
     __bp_adjust_histcontrol
-    echo "$HISTCONTROL"
-    [ "$HISTCONTROL" == "ignoredups:::some_thing_else" ]
+    [ "$HISTCONTROL" == "ignoredups:some_thing_else" ]
 
 }
 
@@ -361,4 +360,38 @@ a multiline string'" ]
     run '__bp_preexec_invoke_exec'
     [ $status -eq 0 ]
     [ "$output" == '-n' ]
+}
+
+@test "HISTCONTROL is updated, but ignorespace functionality is honoured" {
+    if [ "${BASH_VERSINFO:-0}" -lt 5 ]; then
+        skip "Proper history manipulation is supported only since Bash 5.0"
+    fi
+
+    preexec_functions+=(test_preexec_echo)
+    HISTCONTROL=ignorespace:ignoreboth
+
+    __bp_adjust_histcontrol
+
+    [[ "$HISTCONTROL" == "ignoredups" ]]
+
+    __bp_interactive_mode
+
+    command1="this command is in the history"
+
+    history -s "$command1"
+    run '__bp_preexec_invoke_exec'
+    [[ $status == 0 ]]
+    [[ "$output" == "$command1" ]]
+    last_history=$(HISTTIMEFORMAT= history 1 | sed '1 s/^ *[0-9][0-9]*[* ] //')
+    [[ "$last_history" == "$command1" ]]
+
+    command2=" this should not be in the history"
+
+    history -s "$command2"
+    # we need to extract command history in the subshell, as the parent shell
+    # history is actually not affected.
+    output=$(__bp_preexec_invoke_exec && \
+        printf "last_history: %s\n" "$(HISTTIMEFORMAT= history 1 | sed '1 s/^ *[0-9][0-9]*[* ] //')" )
+    [[ $status == 0 ]]
+    [[ "$output" == "$command2"$'\n'"last_history: $command1" ]]
 }

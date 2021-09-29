@@ -1,0 +1,283 @@
+From f4bf3492478c5a486218b14f4653666dd1193e79 Mon Sep 17 00:00:00 2001
+From: John D Pell <John+git@gaelicWizard.net>
+Date: Tue, 27 Jul 2021 22:02:17 -0700
+Subject: [PATCH 1/2] Honor HISTCONTROL ignorespace and ignoreboth
+
+After 3458480385f81124a9fd9a38ff384e43dd815b1c
+
+    Remove ignorespace from $HISTCONTROL
+
+and after 7e55ac15fee86cdf8e08e966d8b8c9dd2bf7ad03
+
+    Follow up commit for issue #6
+
+    -Replace ignoreboth with simpley ignoredups
+
+this script would remove 'ignorespace' and would replace 'ignoreboth'
+with 'ignoredups'.  This effectively disables the functionality of not
+adding space prefixed commands into history.  It used to happen
+siliently and could be quite confusing to users who use this feature.
+
+This script relies on the command to be in the history, but we can
+mostly fix the issue by "manual" removing a whitespace prefixed command
+from the history after reading it from there.
+---
+ README.md              |  8 ++++++++
+ bash-preexec.sh        | 33 ++++++++++++++++++++++++++++-----
+ test/bash-preexec.bats | 41 +++++++++++++++++++++++++++++++++++++----
+ 3 files changed, 73 insertions(+), 9 deletions(-)
+
+diff --git a/README.md b/README.md
+index 3e88c84..e47a7f1 100644
+--- a/README.md
++++ b/README.md
+@@ -30,6 +30,8 @@ curl https://raw.githubusercontent.com/rcaloras/bash-preexec/master/bash-preexec
+ echo '[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh' >> ~/.bashrc
+ ```
+ 
++NOTE: this script may change your `HISTCONTROL` value by removing `ignorespace` and/or replacing `ignoreboth` with `ignoredups`.  See [`HISTCONTROL` interaction](#histcontrol-interaction) for details.
++
+ ## Usage
+ Two functions **preexec** and **precmd** can now be defined and they'll be automatically invoked by bash-preexec if they exist.
+ 
+@@ -91,6 +93,12 @@ export __bp_enable_subshells="true"
+ ```
+ This is disabled by default due to buggy situations related to to `functrace` and Bash's `DEBUG trap`. See [Issue #25](https://github.com/rcaloras/bash-preexec/issues/25)
+ 
++## `HISTCONTROL` interaction
++
++In order to be able to provide the last command text to the `preexec` hook, this script will remove `ignorespace` and/or will replace `ignoreboth` with `ignoredups` in your `HISTCONTROL` variable.  It will remember if `HISTCONTROL` has been modified and will remove the last command from the history "manually", after reading the last command from the history list.  This may cause issues when you have scripts that rely on the literal value of `HISTCONTROL` or manipulate history in their own ways.
++
++Unfortunately, this only works with Bash 5.0 and above.  In older version of Bash, `ignorespace` and `ignoreboth` will be just silently ignored.
++
+ ## Tests
+ You can run tests using [Bats](https://github.com/bats-core/bats-core).
+ ```bash
+diff --git a/bash-preexec.sh b/bash-preexec.sh
+index f9f6aa9..103892d 100644
+--- a/bash-preexec.sh
++++ b/bash-preexec.sh
+@@ -51,6 +51,7 @@ __bp_imported="defined"
+ __bp_last_ret_value="$?"
+ BP_PIPESTATUS=("${PIPESTATUS[@]}")
+ __bp_last_argument_prev_command="$_"
++__bp_ignorespace=
+ 
+ __bp_inside_precmd=0
+ __bp_inside_preexec=0
+@@ -70,15 +71,25 @@ __bp_require_not_readonly() {
+   done
+ }
+ 
+-# Remove ignorespace and or replace ignoreboth from HISTCONTROL
+-# so we can accurately invoke preexec with a command from our
+-# history even if it starts with a space.
++# Remove ignorespace and or replace ignoreboth from HISTCONTROL so we can
++# accurately invoke preexec with a command from our history even if it starts
++# with a space.  We then remove commands that start with a space from the
++# history "manually", if either "ignorespace" or "ignoreboth" was part of
++# HISTCONTROL.
+ __bp_adjust_histcontrol() {
+     local histcontrol
+-    histcontrol="${HISTCONTROL//ignorespace}"
++    if [[ "$HISTCONTROL" == *"ignorespace"* || "$HISTCONTROL" == *"ignoreboth"* ]]; then
++      __bp_ignorespace=yes
++    fi
++    histcontrol="${HISTCONTROL//ignorespace:}"
++    histcontrol="${histcontrol//:ignorespace}"
++    histcontrol="${histcontrol//ignorespace}"
+     # Replace ignoreboth with ignoredups
+     if [[ "$histcontrol" == *"ignoreboth"* ]]; then
+-        histcontrol="ignoredups:${histcontrol//ignoreboth}"
++        histcontrol="${histcontrol//ignoreboth:}"
++        histcontrol="${histcontrol//:ignoreboth}"
++        histcontrol="${histcontrol//ignoreboth}"
++        histcontrol="ignoredups${histcontrol:+:}${histcontrol}"
+     fi;
+     export HISTCONTROL="$histcontrol"
+ }
+@@ -235,6 +246,18 @@ __bp_preexec_invoke_exec() {
+         return
+     fi
+ 
++    # If we have remove "ignorespace" or "ignoreboth" from HISTCONTROL during
++    # setup, we need to remove commands that start with a space from the
++    # history ourselves.
++
++    # Unfortunately, we need bash 5.0 or above, as "history -d" does not
++    # support negative indices in earlier versions and HISTCMD seems to be
++    # unreliable.  At least in the unit tests HISTCMD is just set to 1, after
++    # any number of "history -s" calls.
++    if [[ "${BASH_VERSINFO:-0}" -ge 5 && -n "$__bp_ignorespace" && "$this_command" == " "* ]]; then
++      builtin history -d -1
++    fi
++
+     # Invoke every function defined in our function array.
+     local preexec_function
+     local preexec_function_ret_value
+diff --git a/test/bash-preexec.bats b/test/bash-preexec.bats
+index db56753..1ca001c 100644
+--- a/test/bash-preexec.bats
++++ b/test/bash-preexec.bats
+@@ -306,18 +306,17 @@ test_preexec_echo() {
+     # Should remove ignorespace
+     HISTCONTROL="ignorespace:ignoredups:*"
+     __bp_adjust_histcontrol
+-    [ "$HISTCONTROL" == ":ignoredups:*" ]
++    [ "$HISTCONTROL" == "ignoredups:*" ]
+ 
+     # Should remove ignoreboth and replace it with ignoredups
+     HISTCONTROL="ignoreboth"
+     __bp_adjust_histcontrol
+-    [ "$HISTCONTROL" == "ignoredups:" ]
++    [ "$HISTCONTROL" == "ignoredups" ]
+ 
+     # Handle a few inputs
+     HISTCONTROL="ignoreboth:ignorespace:some_thing_else"
+     __bp_adjust_histcontrol
+-    echo "$HISTCONTROL"
+-    [ "$HISTCONTROL" == "ignoredups:::some_thing_else" ]
++    [ "$HISTCONTROL" == "ignoredups:some_thing_else" ]
+ 
+ }
+ 
+@@ -362,3 +361,37 @@ a multiline string'" ]
+     [ $status -eq 0 ]
+     [ "$output" == '-n' ]
+ }
++
++@test "HISTCONTROL is updated, but ignorespace functionality is honoured" {
++    if [ "${BASH_VERSINFO:-0}" -lt 5 ]; then
++        skip "Proper history manipulation is supported only since Bash 5.0"
++    fi
++
++    preexec_functions+=(test_preexec_echo)
++    HISTCONTROL=ignorespace:ignoreboth
++
++    __bp_adjust_histcontrol
++
++    [[ "$HISTCONTROL" == "ignoredups" ]]
++
++    __bp_interactive_mode
++
++    command1="this command is in the history"
++
++    history -s "$command1"
++    run '__bp_preexec_invoke_exec'
++    [[ $status == 0 ]]
++    [[ "$output" == "$command1" ]]
++    last_history=$(HISTTIMEFORMAT= history 1 | sed '1 s/^ *[0-9][0-9]*[* ] //')
++    [[ "$last_history" == "$command1" ]]
++
++    command2=" this should not be in the history"
++
++    history -s "$command2"
++    # we need to extract command history in the subshell, as the parent shell
++    # history is actually not affected.
++    output=$(__bp_preexec_invoke_exec && \
++        printf "last_history: %s\n" "$(HISTTIMEFORMAT= history 1 | sed '1 s/^ *[0-9][0-9]*[* ] //')" )
++    [[ $status == 0 ]]
++    [[ "$output" == "$command2"$'\n'"last_history: $command1" ]]
++}
+
+From 00818e75c1ad8eb86903947a08c3970b51fa9126 Mon Sep 17 00:00:00 2001
+From: John D Pell <John+git@gaelicWizard.net>
+Date: Tue, 27 Jul 2021 21:54:13 -0700
+Subject: [PATCH 2/2] Accomodate user insistance on HISTCONTROL
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+If the user still sets `$HISTCONTROL` incompatibly anyway (`ignorespace`), then gracefully fall back to a less-ideal but not-incorrect `$BASH_COMMAND`. Alsö, adopt a modification of @cornfeedhobo's suggestion that doesn't require Bash v5.
+---
+ README.md       |  2 --
+ bash-preexec.sh | 28 ++++++++++++----------------
+ 2 files changed, 12 insertions(+), 18 deletions(-)
+
+diff --git a/README.md b/README.md
+index e47a7f1..ffb6fca 100644
+--- a/README.md
++++ b/README.md
+@@ -97,8 +97,6 @@ This is disabled by default due to buggy situations related to to `functrace` an
+ 
+ In order to be able to provide the last command text to the `preexec` hook, this script will remove `ignorespace` and/or will replace `ignoreboth` with `ignoredups` in your `HISTCONTROL` variable.  It will remember if `HISTCONTROL` has been modified and will remove the last command from the history "manually", after reading the last command from the history list.  This may cause issues when you have scripts that rely on the literal value of `HISTCONTROL` or manipulate history in their own ways.
+ 
+-Unfortunately, this only works with Bash 5.0 and above.  In older version of Bash, `ignorespace` and `ignoreboth` will be just silently ignored.
+-
+ ## Tests
+ You can run tests using [Bats](https://github.com/bats-core/bats-core).
+ ```bash
+diff --git a/bash-preexec.sh b/bash-preexec.sh
+index 103892d..44ad2dc 100644
+--- a/bash-preexec.sh
++++ b/bash-preexec.sh
+@@ -65,7 +65,7 @@ __bp_require_not_readonly() {
+   local var
+   for var; do
+     if ! ( unset "$var" 2> /dev/null ); then
+-      echo "bash-preexec requires write access to ${var}" >&2
++      echo "${BASH_SOURCE##*/} requires write access to ${var}" >&2
+       return 1
+     fi
+   done
+@@ -91,7 +91,7 @@ __bp_adjust_histcontrol() {
+         histcontrol="${histcontrol//ignoreboth}"
+         histcontrol="ignoredups${histcontrol:+:}${histcontrol}"
+     fi;
+-    export HISTCONTROL="$histcontrol"
++    HISTCONTROL="$histcontrol"
+ }
+ 
+ # This variable describes whether we are currently in "interactive mode";
+@@ -214,8 +214,7 @@ __bp_preexec_invoke_exec() {
+         return
+     fi
+     if [[ -z "${__bp_preexec_interactive_mode:-}" ]]; then
+-        # We're doing something related to displaying the prompt.  Let the
+-        # prompt set the title instead of me.
++        # We're doing something related to displaying the prompt. 
+         return
+     else
+         # If we're in a subshell, then the prompt won't be re-displayed to put
+@@ -236,10 +235,13 @@ __bp_preexec_invoke_exec() {
+     fi
+ 
+     local this_command
+-    this_command=$(
+-        export LC_ALL=C
+-        HISTTIMEFORMAT= builtin history 1 | sed '1 s/^ *[0-9][0-9]*[* ] //'
+-    )
++    if [[ "$HISTCONTROL" == *ignore+(both|space)* ]]
++    then
++        this_command="${BASH_COMMAND:-}"
++        local __bp_ignorespace=
++    else
++        this_command="$( HISTTIMEFORMAT= builtin history 1 | sed '1 s/^ *[0-9][0-9]*[* ] //' )"
++    fi
+ 
+     # Sanity check to make sure we have something to invoke our function with.
+     if [[ -z "$this_command" ]]; then
+@@ -249,13 +251,8 @@ __bp_preexec_invoke_exec() {
+     # If we have remove "ignorespace" or "ignoreboth" from HISTCONTROL during
+     # setup, we need to remove commands that start with a space from the
+     # history ourselves.
+-
+-    # Unfortunately, we need bash 5.0 or above, as "history -d" does not
+-    # support negative indices in earlier versions and HISTCMD seems to be
+-    # unreliable.  At least in the unit tests HISTCMD is just set to 1, after
+-    # any number of "history -s" calls.
+-    if [[ "${BASH_VERSINFO:-0}" -ge 5 && -n "$__bp_ignorespace" && "$this_command" == " "* ]]; then
+-      builtin history -d -1
++    if [[ -n "${__bp_ignorespace:-}" && "$this_command" == " "* ]]; then
++      history -d "$(HISTTIMEFORMAT= builtin history 1 | sed -r '1 s/^ *([0-9][0-9]*)[* ] .*$/\1/')"
+     fi
+ 
+     # Invoke every function defined in our function array.
+@@ -265,7 +262,6 @@ __bp_preexec_invoke_exec() {
+     for preexec_function in "${preexec_functions[@]:-}"; do
+ 
+         # Only execute each function if it actually exists.
+-        # Test existence of function with: declare -[fF]
+         if type -t "$preexec_function" 1>/dev/null; then
+             __bp_set_ret_value ${__bp_last_ret_value:-}
+             # Quote our function invocation to prevent issues with IFS
