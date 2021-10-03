@@ -58,6 +58,7 @@ completion/available/jungle.completion.bash
 completion/available/knife.completion.bash
 completion/available/kontena.completion.bash
 completion/available/kubectl.completion.bash
+completion/available/laravel.completion.bash
 completion/available/lerna.completion.bash
 completion/available/minikube.completion.bash
 completion/available/ngrok.completion.bash
@@ -74,10 +75,14 @@ completion/available/vault.completion.bash
 completion/available/vuejs.completion.bash
 completion/available/wpscan.completion.bash
 
+# libraries
+lib/utilities.bash
+
 # plugins
 #
 plugins/available/alias-completion.plugin.bash
 plugins/available/autojump.plugin.bash
+plugins/available/base.plugin.bash
 plugins/available/basher.plugin.bash
 plugins/available/cmd-returned-notify.plugin.bash
 plugins/available/direnv.plugin.bash
@@ -90,11 +95,14 @@ plugins/available/history-substring-search.plugin.bash
 plugins/available/history.plugin.bash
 plugins/available/hub.plugin.bash
 plugins/available/jump.plugin.bash
+plugins/available/less-pretty-cat.plugin.bash
 plugins/available/node.plugin.bash
 plugins/available/nodenv.plugin.bash
+plugins/available/percol.plugin.bash
 plugins/available/plenv.plugin.bash
 plugins/available/pyenv.plugin.bash
 plugins/available/rbenv.plugin.bash
+plugins/available/ruby.plugin.bash
 plugins/available/textmate.plugin.bash
 plugins/available/xterm.plugin.bash
 

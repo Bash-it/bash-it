@@ -22,17 +22,9 @@
 # Avoid inaccurate completions for subproject tasks
 COMP_WORDBREAKS=$(echo "$COMP_WORDBREAKS" | sed -e 's/://g')
 
-__gradle-set-project-root-dir() {
-    local dir="${PWD}"
-    project_root_dir="${PWD}"
-    while [[ $dir != '/' ]]; do
-        if [[ -f "$dir/settings.gradle" || -f "$dir/gradlew" ]]; then
-            project_root_dir=$dir
-            return 0
-        fi
-        dir="$(dirname "$dir")"
-    done
-    return 1
+function __gradle-set-project-root-dir() {
+    project_root_dir="$(_bash-it-find-in-ancestor "settings.gradle" "gradlew")"
+    return "$?"
 }
 
 __gradle-init-cache-dir() {

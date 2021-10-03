@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 #
 # A collection of reusable functions.
 
@@ -6,22 +6,25 @@
 # Generic utilies
 ###########################################################################
 
-_bash-it-get-component-name-from-path() {
-  # filename without path
-  filename=${1##*/}
-  # filename without path or priority
-  filename=${filename##*---}
-  # filename without path, priority or extension
-  echo ${filename%.*.bash}
+function _bash-it-get-component-name-from-path() {
+	local filename
+	# filename without path
+	filename="${1##*/}"
+	# filename without path or priority
+	filename="${filename##*${BASH_IT_LOAD_PRIORITY_SEPARATOR?}}"
+	# filename without path, priority or extension
+	echo "${filename%.*.bash}"
 }
 
-_bash-it-get-component-type-from-path() {
-  # filename without path
-  filename=${1##*/}
-  # filename without path or priority
-  filename=${filename##*---}
-  # extension
-  echo ${filename} | cut -d '.' -f 2
+function _bash-it-get-component-type-from-path() {
+	local filename
+	# filename without path
+	filename="${1##*/}"
+	# filename without extension
+	filename="${filename%.bash}"
+	# extension without priority or name
+	filename="${filename##*.}"
+	echo "${filename}"
 }
 
 # This function searches an array for an exact match against the term passed
@@ -43,96 +46,97 @@ _bash-it-get-component-type-from-path() {
 #   contains pear!
 #
 #
-_bash-it-array-contains-element() {
-  local e
-  for e in "${@:2}"; do
-    [[ "$e" == "$1" ]] && return 0
-  done
-  return 1
+function _bash-it-array-contains-element() {
+	local e
+	for e in "${@:2}"; do
+		[[ "$e" == "$1" ]] && return 0
+	done
+	return 1
 }
 
 # Dedupe a simple array of words without spaces.
-_bash-it-array-dedup() {
-  echo "$*" | tr ' ' '\n' | sort -u | tr '\n' ' '
+function _bash-it-array-dedup() {
+	local IFS=$'\n'
+	echo "$@" | tr ' ' '\n' | sort -u
 }
 
 # Outputs a full path of the grep found on the filesystem
-_bash-it-grep() {
-  if [[ -z "${BASH_IT_GREP:-}" ]] ; then
-    export BASH_IT_GREP="$(which egrep || which grep || '/usr/bin/grep')"
-  fi
-  printf "%s " "${BASH_IT_GREP}"
+function _bash-it-grep() {
+	: "${BASH_IT_GREP:=$(type -p egrep || type -p grep)}"
+	printf "%s" "${BASH_IT_GREP:-'/usr/bin/grep'}"
 }
-
 
 ###########################################################################
 # Component-specific functions (component is either an alias, a plugin, or a
 # completion).
 ###########################################################################
 
-_bash-it-component-help() {
-  local component="$(_bash-it-pluralize-component "${1}")"
-  local file="$(_bash-it-component-cache-file "${component}")"
-  if [[ ! -s "${file}" || -z $(find "${file}" -mmin -300) ]] ; then
-    rm -f "${file}" 2>/dev/null
-    local func="_bash-it-${component}"
-    "${func}" | $(_bash-it-grep) -E '   \[' | cat > "${file}"
-  fi
-  cat "${file}"
+function _bash-it-component-help() {
+	local component file func
+	component="$(_bash-it-pluralize-component "${1}")"
+	file="$(_bash-it-component-cache-file "${component}")"
+	if [[ ! -s "${file}" || -z "$(find "${file}" -mmin -300)" ]]; then
+		rm -f "${file}" 2> /dev/null
+		func="_bash-it-${component}"
+		"${func}" | ${BASH_IT_GREP:-$(_bash-it-grep)} -E '   \[' > "${file}"
+	fi
+	cat "${file}"
 }
 
-_bash-it-component-cache-file() {
-  local component=$(_bash-it-pluralize-component "${1}")
-  local file="${BASH_IT}/tmp/cache/${component}"
-  [[ -f "${file}" ]] || mkdir -p "${file%/*}"
-  printf "${file}"
+function _bash-it-component-cache-file() {
+	local component file
+	component="$(_bash-it-pluralize-component "${1}")"
+	file="${BASH_IT?}/tmp/cache/${component}"
+	[[ -f "${file}" ]] || mkdir -p "${file%/*}"
+	printf '%s' "${file}"
 }
 
-_bash-it-pluralize-component() {
-  local component="${1}"
-  local len=$(( ${#component} - 1 ))
-  # pluralize component name for consistency
-  [[ ${component:${len}:1} != 's' ]] && component="${component}s"
-  [[ ${component} == "alias" ]] && component="aliases"
-  printf ${component}
+function _bash-it-pluralize-component() {
+	local component="${1}"
+	local -i len=$((${#component} - 1))
+	# pluralize component name for consistency
+	[[ "${component:${len}:1}" != 's' ]] && component="${component}s"
+	[[ "${component}" == "alias" ]] && component="aliases"
+	printf '%s' "${component}"
 }
 
-_bash-it-clean-component-cache() {
-  local component="$1"
-  local cache
-  local -a BASH_IT_COMPONENTS=(aliases plugins completions)
-  if [[ -z ${component} ]] ; then
-    for component in "${BASH_IT_COMPONENTS[@]}" ; do
-      _bash-it-clean-component-cache "${component}"
-    done
-  else
-    cache="$(_bash-it-component-cache-file ${component})"
-    if [[ -f "${cache}" ]] ; then
-      rm -f "${cache}"
-    fi
-  fi
+function _bash-it-clean-component-cache() {
+	local component="$1"
+	local cache
+	local -a BASH_IT_COMPONENTS=(aliases plugins completions)
+	if [[ -z "${component}" ]]; then
+		for component in "${BASH_IT_COMPONENTS[@]}"; do
+			_bash-it-clean-component-cache "${component}"
+		done
+	else
+		cache="$(_bash-it-component-cache-file "${component}")"
+		if [[ -f "${cache}" ]]; then
+			rm -f "${cache}"
+		fi
+	fi
 }
 
 # Returns an array of items within each compoenent.
-_bash-it-component-list() {
-  local component="$1"
-  _bash-it-component-help "${component}" | awk '{print $1}' | uniq | sort | tr '\n' ' '
+function _bash-it-component-list() {
+	local IFS=$'\n' component="$1"
+	_bash-it-component-help "${component}" | awk '{print $1}' | sort -u
 }
 
-_bash-it-component-list-matching() {
-  local component="$1"; shift
-  local term="$1"
-  _bash-it-component-help "${component}" | $(_bash-it-grep) -E -- "${term}" | awk '{print $1}' | sort | uniq
+function _bash-it-component-list-matching() {
+	local component="$1"
+	shift
+	local term="$1"
+	_bash-it-component-help "${component}" | ${BASH_IT_GREP:-$(_bash-it-grep)} -E -- "${term}" | awk '{print $1}' | sort -u
 }
 
-_bash-it-component-list-enabled() {
-  local component="$1"
-  _bash-it-component-help "${component}" | $(_bash-it-grep) -E  '\[x\]' | awk '{print $1}' | uniq | sort | tr '\n' ' '
+function _bash-it-component-list-enabled() {
+	local IFS=$'\n' component="$1"
+	_bash-it-component-help "${component}" | ${BASH_IT_GREP:-$(_bash-it-grep)} -E '\[x\]' | awk '{print $1}' | sort -u
 }
 
-_bash-it-component-list-disabled() {
-  local component="$1"
-  _bash-it-component-help "${component}" | $(_bash-it-grep) -E -v '\[x\]' | awk '{print $1}' | uniq | sort | tr '\n' ' '
+function _bash-it-component-list-disabled() {
+	local IFS=$'\n' component="$1"
+	_bash-it-component-help "${component}" | ${BASH_IT_GREP:-$(_bash-it-grep)} -E -v '\[x\]' | awk '{print $1}' | sort -u
 }
 
 # Checks if a given item is enabled for a particular component/file-type.
@@ -143,10 +147,10 @@ _bash-it-component-list-disabled() {
 #
 # Examples:
 #    _bash-it-component-item-is-enabled alias git && echo "git alias is enabled"
-_bash-it-component-item-is-enabled() {
-  local component="$1"
-  local item="$2"
-  _bash-it-component-help "${component}" | $(_bash-it-grep) -E '\[x\]' |  $(_bash-it-grep) -E -q -- "^${item}\s"
+function _bash-it-component-item-is-enabled() {
+	local component="$1"
+	local item="$2"
+	_bash-it-component-help "${component}" | ${BASH_IT_GREP:-$(_bash-it-grep)} -E '\[x\]' | ${BASH_IT_GREP:-$(_bash-it-grep)} -E -q -- "^${item}\s"
 }
 
 # Checks if a given item is disabled for a particular component/file-type.
@@ -157,8 +161,8 @@ _bash-it-component-item-is-enabled() {
 #
 # Examples:
 #    _bash-it-component-item-is-disabled alias git && echo "git aliases are disabled"
-_bash-it-component-item-is-disabled() {
-  local component="$1"
-  local item="$2"
-  _bash-it-component-help "${component}" | $(_bash-it-grep) -E -v '\[x\]' |  $(_bash-it-grep) -E -q -- "^${item}\s"
+function _bash-it-component-item-is-disabled() {
+	local component="$1"
+	local item="$2"
+	_bash-it-component-help "${component}" | ${BASH_IT_GREP:-$(_bash-it-grep)} -E -v '\[x\]' | ${BASH_IT_GREP:-$(_bash-it-grep)} -E -q -- "^${item}\s"
 }
