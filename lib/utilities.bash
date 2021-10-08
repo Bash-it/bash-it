@@ -65,6 +65,12 @@ function _bash-it-grep() {
 	printf "%s" "${BASH_IT_GREP:-'/usr/bin/grep'}"
 }
 
+# Runs `grep` with extended regular expressions
+function _bash-it-egrep() {
+	: "${BASH_IT_GREP:=$(type -p egrep || type -p grep)}"
+	"${BASH_IT_GREP:-/usr/bin/grep}" -E "$@"
+}
+
 ###########################################################################
 # Component-specific functions (component is either an alias, a plugin, or a
 # completion).
