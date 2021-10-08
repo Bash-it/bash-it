@@ -75,9 +75,8 @@ function _bash-it-component-help() {
 	component="$(_bash-it-pluralize-component "${1}")"
 	file="$(_bash-it-component-cache-file "${component}")"
 	if [[ ! -s "${file}" || -z "$(find "${file}" -mmin -300)" ]]; then
-		rm -f "${file}" 2> /dev/null
 		func="_bash-it-${component}"
-		"${func}" | ${BASH_IT_GREP:-$(_bash-it-grep)} -E '   \[' > "${file}"
+		"${func}" | ${BASH_IT_GREP:-$(_bash-it-grep)} -E '   \[' >| "${file}"
 	fi
 	cat "${file}"
 }
