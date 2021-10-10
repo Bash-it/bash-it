@@ -30,7 +30,7 @@ eval "$(goenv init - bash)"
 # If moving to a directory with a goenv version set, reload the shell
 # to ensure the shell environment matches expectations.
 _bash-it-goenv-preexec() {
-	export GOENV_OLD_VERSION="$(goenv version-name)"
+	GOENV_OLD_VERSION="$(goenv version-name)"
 }
 _bash-it-goenv-precmd() {
 	if [[ -n $GOENV_OLD_VERSION ]] && [[ "$GOENV_OLD_VERSION" != "$(goenv version-name)" ]]; then

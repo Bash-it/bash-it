@@ -1,7 +1,9 @@
 # shellcheck shell=bash
 
 function __notify-send_completions() {
+	# shellcheck disable=SC2155
 	local curr=$(_get_cword)
+	# shellcheck disable=SC2155
 	local prev=$(_get_pword)
 
 	case $prev in

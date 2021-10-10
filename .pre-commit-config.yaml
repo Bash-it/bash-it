@@ -15,11 +15,12 @@ repos:
       - id: mixed-line-ending
       - id: check-added-large-files
   - repo: https://github.com/jumanjihouse/pre-commit-hooks
-    rev: 2.1.4
+    rev: 2.1.5
     hooks:
       - id: git-check  # Configure in .gitattributes
       - id: shellcheck
         exclude: ".bats$"
+        args: [-e, SC1091, -e, SC2034]
       - id: shfmt
         exclude: ".bats$"
   - repo: https://github.com/Lucas-C/pre-commit-hooks

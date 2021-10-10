@@ -11,8 +11,8 @@ BASH_IT_LOAD_PRIORITY_SEPARATOR="---"
 # To use this in Bash-it for inline replacements with `sed`, use the following syntax:
 # sed "${BASH_IT_SED_I_PARAMETERS[@]}" -e "..." file
 BASH_IT_SED_I_PARAMETERS=(-i)
-case "$(uname)" in
-  Darwin*) BASH_IT_SED_I_PARAMETERS=(-i "")
+case "$OSTYPE" in
+  'darwin'*) BASH_IT_SED_I_PARAMETERS=(-i "")
 esac
 
 function _command_exists ()
@@ -23,7 +23,13 @@ function _command_exists ()
   _example '$ _command_exists ls && echo exists'
   _group 'lib'
   local msg="${2:-Command '$1' does not exist!}"
-  type "$1" &> /dev/null || (_log_warning "$msg" && return 1) ;
+  if type -t "$1" &> /dev/null
+  then
+	  return 0
+  else
+	  _log_warning "$msg"
+	  return 1
+  fi
 }
 
 function _binary_exists ()
@@ -34,7 +40,13 @@ function _binary_exists ()
   _example '$ _binary_exists ls && echo exists'
   _group 'lib'
   local msg="${2:-Binary '$1' does not exist!}"
-  type -P "$1" &> /dev/null || (_log_warning "$msg" && return 1) ;
+  if type -P "$1" &> /dev/null
+  then
+	return 0
+  else
+	_log_warning "$msg"
+	return 1
+  fi
 }
 
 function _completion_exists ()
@@ -46,6 +58,22 @@ function _completion_exists ()
   _group 'lib'
   local msg="${2:-Completion for '$1' already exists!}"
   complete -p "$1" &> /dev/null && _log_warning "$msg" ;
+}
+
+function _bash_it_homebrew_check()
+{
+	if _binary_exists 'brew'
+	then # Homebrew is installed
+		if [[ "${BASH_IT_HOMEBREW_PREFIX:-unset}" == 'unset' ]]
+		then # variable isn't set
+			BASH_IT_HOMEBREW_PREFIX="$(brew --prefix)"
+		else
+			true # Variable is set already, don't invoke `brew`.
+		fi
+	else # Homebrew is not installed.
+		BASH_IT_HOMEBREW_PREFIX= # clear variable, if set to anything.
+		false # return failure if brew not installed.
+	fi
 }
 
 function _make_reload_alias() {
@@ -140,7 +168,7 @@ bash-it ()
             $func $arg
         done
 
-        if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
+        if [ -n "${BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE:-}" ]; then
           _bash-it-reload
         fi
     else
@@ -194,7 +222,10 @@ _bash-it-update-stable() {
   _bash-it-update- stable "$@"
 }
 
-_bash-it_pull_and_update_inner() {
+_bash-it_update_migrate_and_restart() {
+	_about 'Checks out the wanted version, pops directory and restart. Does not return (because of the restart!)'
+  _param '1: Which branch to checkout to'
+  _param '2: Which type of version we are using'
   git checkout "$1" &> /dev/null
   if [[ $? -eq 0 ]]; then
     echo "Bash-it successfully updated."
@@ -203,7 +234,9 @@ _bash-it_pull_and_update_inner() {
     _bash-it-migrate
     echo ""
     echo "All done, enjoy!"
-    bash-it reload
+    # Don't forget to restore the original pwd!
+    popd &> /dev/null
+    _bash-it-restart
   else
     echo "Error updating Bash-it, please, check if your Bash-it installation folder (${BASH_IT}) is clean."
   fi
@@ -220,9 +253,11 @@ _bash-it-update-() {
       silent=true
     fi
   done
-  local old_pwd="${PWD}"
 
-  cd "${BASH_IT}" || return
+  pushd "${BASH_IT}" &> /dev/null || return
+
+  DIFF=$(git diff --name-status)
+  [ -n "$DIFF" ] && echo -e "Local changes detected in bash-it directory. Clean '$BASH_IT' directory to proceed.\n$DIFF" && return 1
 
   if [ -z "$BASH_IT_REMOTE" ]; then
     BASH_IT_REMOTE="origin"
@@ -240,6 +275,7 @@ _bash-it-update-() {
 
     if [[ -z "$TARGET" ]]; then
       echo "Can not find tags, so can not update to latest stable version..."
+      popd &> /dev/null
       return
     fi
   else
@@ -280,12 +316,12 @@ _bash-it-update-() {
 
     if [[ $silent ]]; then
       echo "Updating to ${TARGET}($(git log -1 --format=%h "${TARGET}"))..."
-      _bash-it_pull_and_update_inner $TARGET $version
+      _bash-it_update_migrate_and_restart $TARGET $version
     else
       read -e -n 1 -p "Would you like to update to ${TARGET}($(git log -1 --format=%h "${TARGET}"))? [Y/n] " RESP
       case $RESP in
         [yY]|"")
-          _bash-it_pull_and_update_inner $TARGET $version
+          _bash-it_update_migrate_and_restart $TARGET $version
           ;;
         [nN])
           echo "Not updating…"
@@ -302,7 +338,7 @@ _bash-it-update-() {
       echo "Bash-it is up to date, nothing to do!"
     fi
   fi
-  cd "${old_pwd}" &> /dev/null || return
+  popd &> /dev/null
 }
 
 _bash-it-migrate() {
@@ -316,7 +352,7 @@ _bash-it-migrate() {
   do
     for f in `sort <(compgen -G "${BASH_IT}/$file_type/enabled/*.bash")`
     do
-      typeset ff=$(basename $f)
+      typeset ff="${f##*/}"
 
       # Get the type of component from the extension
       typeset single_type=$(echo $ff | sed -e 's/.*\.\(.*\)\.bash/\1/g' | sed 's/aliases/alias/g')
@@ -330,8 +366,8 @@ _bash-it-migrate() {
       disable_func="_disable-$single_type"
       enable_func="_enable-$single_type"
 
-      $disable_func $component_name
-      $enable_func $component_name
+      $disable_func "$component_name"
+      $enable_func "$component_name"
     done
   done
 
@@ -351,7 +387,7 @@ _bash-it-version() {
 
   cd "${BASH_IT}" || return
 
-  if [ -z $BASH_IT_REMOTE ]; then
+  if [ -z "${BASH_IT_REMOTE:-}" ]; then
     BASH_IT_REMOTE="origin"
   fi
 
@@ -425,7 +461,7 @@ _bash-it-restart() {
   _about 'restarts the shell in order to fully reload it'
   _group 'lib'
 
-  saved_pwd=$(pwd)
+  saved_pwd="${PWD}"
 
   case $OSTYPE in
     darwin*)
@@ -477,7 +513,7 @@ _bash-it-describe ()
     do
         # Check for both the old format without the load priority, and the extended format with the priority
         declare enabled_files enabled_file
-        enabled_file=$(basename $f)
+		enabled_file="${f##*/}"
         enabled_files=$(sort <(compgen -G "${BASH_IT}/enabled/*$BASH_IT_LOAD_PRIORITY_SEPARATOR${enabled_file}") <(compgen -G "${BASH_IT}/$subdirectory/enabled/${enabled_file}") <(compgen -G "${BASH_IT}/$subdirectory/enabled/*$BASH_IT_LOAD_PRIORITY_SEPARATOR${enabled_file}") | wc -l)
 
         if [ $enabled_files -gt 0 ]; then
@@ -579,9 +615,9 @@ _disable-thing ()
               printf '%s\n' "sorry, $file_entity does not appear to be an enabled $file_type."
               return
           fi
-          rm "${BASH_IT}/$subdirectory/enabled/$(basename $plugin)"
+          rm "${BASH_IT}/$subdirectory/enabled/${plugin##*/}"
         else
-          rm "${BASH_IT}/enabled/$(basename $plugin_global)"
+          rm "${BASH_IT}/enabled/${plugin_global##*/}"
         fi
     fi
 
@@ -657,7 +693,7 @@ _enable-thing ()
             return
         fi
 
-        to_enable=$(basename $to_enable)
+		to_enable="${to_enable##*/}"
         # Check for existence of the file using a wildcard, since we don't know which priority might have been used when enabling it.
         typeset enabled_plugin=$(command ls "${BASH_IT}/$subdirectory/enabled/"{[0-9][0-9][0-9]$BASH_IT_LOAD_PRIORITY_SEPARATOR$to_enable,$to_enable} 2>/dev/null | head -1)
         if [ ! -z "$enabled_plugin" ] ; then
@@ -813,3 +849,30 @@ then
     fi
   }
 fi
+
+# `_bash-it-find-in-ancestor` uses the shell's ability to run a function in
+# a subshell to simplify our search to a simple `cd ..` and `[[ -r $1 ]]`
+# without any external dependencies. Let the shell do what it's good at.
+function _bash-it-find-in-ancestor() (
+	about 'searches parents of the current directory for any of the specified file names'
+	group 'helpers'
+	param '*: names of files or folders to search for'
+	returns '0: prints path of closest matching ancestor directory to stdout'
+	returns '1: no match found'
+	returns '2: improper usage of shell builtin' # uncommon
+	example '_bash-it-find-in-ancestor .git .hg'
+	example '_bash-it-find-in-ancestor GNUmakefile Makefile makefile'
+
+	local kin
+	# To keep things simple, we do not search the root dir.
+	while [[ "${PWD}" != '/' ]]; do
+		for kin in "$@"; do
+			if [[ -r "${PWD}/${kin}" ]]; then
+				printf '%s' "${PWD}"
+				return "$?"
+			fi
+		done
+		command cd .. || return "$?"
+	done
+	return 1
+)

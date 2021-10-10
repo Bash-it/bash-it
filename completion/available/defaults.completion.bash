@@ -13,7 +13,7 @@ _defaults_domains()
     COMPREPLY=()
     cur=${COMP_WORDS[COMP_CWORD]}
 
-	local domains=$( defaults domains | sed -e 's/, /:/g' | tr : '\n' | sed -e 's/ /\\ /g' | grep -i "^$cur" )
+	local domains=$( defaults domains | sed -e 's/, /:/g' | tr : '\n' | sed -e 's/ /\\ /g' | grep "^$cur" )
 	local IFS=$'\n'
 	COMPREPLY=( $domains )
 	if [[ $( echo '-app' | grep "^$cur" ) ]]; then
@@ -41,8 +41,8 @@ _defaults()
 			COMPREPLY=( $( compgen -W "$cmds" -- $cur ) )
 			return 0
 		elif [[ "$prev" == "-host" ]]; then
-			return 0
 			_known_hosts -a
+			return 0
 		else
 			_defaults_domains
 			return 0

@@ -22,8 +22,8 @@ function _log_general()
   param '3: message to log'
   group 'log'
 
-  message=$2${BASH_IT_LOG_PREFIX}$3
-  _has_colors && echo -e "$1${message}${echo_normal}" || echo -e "${message}"
+  message=$2${BASH_IT_LOG_PREFIX:-default: }$3
+  _has_colors && echo -e "$1${message}${echo_normal:-}" || echo -e "${message}"
 }
 
 function _log_debug()
@@ -33,8 +33,8 @@ function _log_debug()
   example '$ _log_debug "Loading plugin git..."'
   group 'log'
 
-  [[ "$BASH_IT_LOG_LEVEL" -ge $BASH_IT_LOG_LEVEL_ALL ]] || return 0
-  _log_general "${echo_green}" "DEBUG: " "$1"
+  [[ "${BASH_IT_LOG_LEVEL:-0}" -ge $BASH_IT_LOG_LEVEL_ALL ]] || return 0
+  _log_general "${echo_green:-}" "DEBUG: " "$1"
 }
 
 function _log_warning()
@@ -44,8 +44,8 @@ function _log_warning()
   example '$ _log_warning "git binary not found, disabling git plugin..."'
   group 'log'
 
-  [[ "$BASH_IT_LOG_LEVEL" -ge $BASH_IT_LOG_LEVEL_WARNING ]] || return 0
-  _log_general "${echo_yellow}" " WARN: " "$1"
+  [[ "${BASH_IT_LOG_LEVEL:-0}" -ge $BASH_IT_LOG_LEVEL_WARNING ]] || return 0
+  _log_general "${echo_yellow:-}" " WARN: " "$1"
 }
 
 function _log_error()
@@ -55,6 +55,6 @@ function _log_error()
   example '$ _log_error "Failed to load git plugin..."'
   group 'log'
 
-  [[ "$BASH_IT_LOG_LEVEL" -ge $BASH_IT_LOG_LEVEL_ERROR ]] || return 0
-  _log_general "${echo_red}" "ERROR: " "$1"
+  [[ "${BASH_IT_LOG_LEVEL:-0}" -ge $BASH_IT_LOG_LEVEL_ERROR ]] || return 0
+  _log_general "${echo_red:-}" "ERROR: " "$1"
 }

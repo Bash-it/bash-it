@@ -23,7 +23,7 @@ alias 8="pushd +8"
 alias 9="pushd +9"
 
 # Clone this location
-alias pc="pushd \$(pwd)"
+alias pc='pushd "${PWD}"'
 
 # Push new location
 alias pu="pushd"
@@ -73,7 +73,7 @@ G () {
     example '$ G ..'
     group 'dirs'
 
-    cd "${1:-$(pwd)}" ;
+    cd "${1:-${PWD}}" ;
 }
 
 S () {
@@ -86,7 +86,7 @@ S () {
 
     sed "/$@/d" ~/.dirs > ~/.dirs1;
     \mv ~/.dirs1 ~/.dirs;
-    echo "$@"=\"`pwd`\" >> ~/.dirs;
+    echo "$@"=\""${PWD}"\" >> ~/.dirs;
     source ~/.dirs ;
 }
 
