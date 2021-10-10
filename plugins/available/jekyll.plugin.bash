@@ -315,3 +315,8 @@ function deploysite() {
 	builtin cd "${SITE}" || return
 	rsync -rz "${REMOTE?}"
 }
+
+# Load the Jekyll config
+if [[ -s "$HOME/.jekyllconfig" ]]; then
+	source "$HOME/.jekyllconfig"
+fi
