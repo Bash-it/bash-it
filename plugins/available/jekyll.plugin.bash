@@ -8,7 +8,7 @@ function editpost() {
 	group 'jekyll'
 
 	local SITE site POST DATE TITLE POSTS
-	local -i COUNTER=1 POST_TO_EDIT
+	local -i COUNTER=1 POST_TO_EDIT ret
 	if [[ -z "${1:-}" ]]; then
 		echo "Error: no site specified."
 		echo "The site is the name of the directory your project is in."
@@ -27,7 +27,7 @@ function editpost() {
 		return 1
 	fi
 
-	builtin cd "${SITE}/_posts" || return
+	pushd "${SITE}/_posts" > /dev/null || return
 
 	for POST in *; do
 		DATE="$(echo "${POST}" | grep -oE "[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}")"
@@ -36,9 +36,12 @@ function editpost() {
 		echo "${COUNTER}) 	${DATE}	${TITLE}"
 		POSTS[COUNTER]="$POST"
 		COUNTER="$((COUNTER + 1))"
-	done | less
+	done > >(less)
 	read -rp "Number of post to edit: " POST_TO_EDIT
 	"${JEKYLL_EDITOR:-${VISUAL:-${EDITOR:-${ALTERNATE_EDITOR:-nano}}}}" "${POSTS[POST_TO_EDIT]}"
+	ret="$?"
+	popd > /dev/null || return "$ret"
+	return "$ret"
 }
 
 function newpost() {
@@ -48,7 +51,7 @@ function newpost() {
 
 	local SITE site FNAME_POST_TITLE FNAME YAML_DATE
 	local JEKYLL_FORMATTING FNAME_DATE OPTIONS OPTION POST_TYPE POST_TITLE
-	local -i loc=0
+	local -i loc=0 ret
 	if [[ -z "${1:-}" ]]; then
 		echo "Error: no site specified."
 		echo "The site is the name of the directory your project is in."
@@ -69,62 +72,29 @@ function newpost() {
 		loc=$((loc + 1))
 	done
 
-	# 'builtin cd' into the local jekyll root
-
-	builtin cd "${SITE}/_posts" || return
+	# Change directory into the local jekyll root
+	pushd "${SITE}/_posts" > /dev/null || return
 
 	# Get the date for the new post's filename
-
 	FNAME_DATE="$(date "+%Y-%m-%d")"
 
 	# If the user is using markdown or textile formatting, let them choose what type of post they want. Sort of like Tumblr.
-
 	OPTIONS=('Text' 'Quote' 'Image' 'Audio' 'Video' 'Link')
 
 	if [[ $JEKYLL_FORMATTING == "markdown" || $JEKYLL_FORMATTING == "textile" ]]; then
 		select OPTION in "${OPTIONS[@]}"; do
-			if [[ $OPTION == "Text" ]]; then
-				POST_TYPE="Text"
-				break
-			fi
-
-			if [[ $OPTION == "Quote" ]]; then
-				POST_TYPE="Quote"
-				break
-			fi
-
-			if [[ $OPTION == "Image" ]]; then
-				POST_TYPE="Image"
-				break
-			fi
-
-			if [[ $OPTION == "Audio" ]]; then
-				POST_TYPE="Audio"
-				break
-			fi
-
-			if [[ $OPTION == "Video" ]]; then
-				POST_TYPE="Video"
-				break
-			fi
-
-			if [[ $OPTION == "Link" ]]; then
-				POST_TYPE="Link"
-				break
-			fi
+			POST_TYPE="${OPTION}"
+			break
 		done
 	fi
 
 	# Get the title for the new post
-
 	read -rp "Enter title of the new post: " POST_TITLE
 
 	# Convert the spaces in the title to hyphens for use in the filename
-
 	FNAME_POST_TITLE="${POST_TITLE/ /-}"
 
 	# Now, put it all together for the full filename
-
 	FNAME="$FNAME_DATE-$FNAME_POST_TITLE.$JEKYLL_FORMATTING"
 
 	# And, finally, create the actual post file. But we're not done yet...
@@ -151,72 +121,65 @@ function newpost() {
 	} > "${FNAME}"
 
 	# Generate template text based on the post type
-
 	if [[ $JEKYLL_FORMATTING == "markdown" ]]; then
-		if [[ $POST_TYPE == "Text" ]]; then
-			true
-		fi
-
-		if [[ $POST_TYPE == "Quote" ]]; then
-			echo "> Quote"
-			echo
-			echo "&mdash; Author"
-		fi
-
-		if [[ $POST_TYPE == "Image" ]]; then
-			echo "![Alternate Text](/path/to/image/or/url)"
-		fi
-
-		if [[ $POST_TYPE == "Audio" ]]; then
-			echo "<html><audio src=\"/path/to/audio/file\" controls=\"controls\"></audio></html>"
-		fi
-
-		if [[ $POST_TYPE == "Video" ]]; then
-			echo "<html><video src=\"/path/to/video\" controls=\"controls\"></video></html>"
-		fi
-
-		if [[ $POST_TYPE == "Link" ]]; then
-			echo "[link][1]"
-			echo
-			echo "> Quote"
-			echo
-			echo "[1]: url"
-		fi
-	fi >> "${FNAME}"
-
-	if [[ $JEKYLL_FORMATTING == "textile" ]]; then
-		if [[ $POST_TYPE == "Text" ]]; then
-			true
-		fi
-
-		if [[ $POST_TYPE == "Quote" ]]; then
-			echo "bq. Quote"
-			echo
-			echo "&mdash; Author"
-		fi
-
-		if [[ $POST_TYPE == "Image" ]]; then
-			echo "!url(alt text)"
-		fi
-
-		if [[ $POST_TYPE == "Audio" ]]; then
-			echo "<html><audio src=\"/path/to/audio/file\" controls=\"controls\"></audio></html>"
-		fi
-
-		if [[ $POST_TYPE == "Video" ]]; then
-			echo "<html><video src=\"/path/to/video\" controls=\"controls\"></video></html>"
-		fi
-
-		if [[ $POST_TYPE == "Link" ]]; then
-			echo "\"Site\":url"
-			echo
-			echo "bq. Quote"
-		fi
+		case $POST_TYPE in
+			"Text")
+				true
+				;;
+			"Quote")
+				echo "> Quote"
+				echo
+				echo "&mdash; Author"
+				;;
+			"Image")
+				echo "![Alternate Text](/path/to/image/or/url)"
+				;;
+			"Audio")
+				echo "<html><audio src=\"/path/to/audio/file\" controls=\"controls\"></audio></html>"
+				;;
+			"Video")
+				echo "<html><video src=\"/path/to/video\" controls=\"controls\"></video></html>"
+				;;
+			"Link")
+				echo "[link][1]"
+				echo
+				echo "> Quote"
+				echo
+				echo "[1]: url"
+				;;
+		esac
+	elif [[ $JEKYLL_FORMATTING == "textile" ]]; then
+		case $POST_TYPE in
+			"Text")
+				true
+				;;
+			"Quote")
+				echo "bq. Quote"
+				echo
+				echo "&mdash; Author"
+				;;
+			"Image")
+				echo "!url(alt text)"
+				;;
+			"Audio")
+				echo "<html><audio src=\"/path/to/audio/file\" controls=\"controls\"></audio></html>"
+				;;
+			"Video")
+				echo "<html><video src=\"/path/to/video\" controls=\"controls\"></video></html>"
+				;;
+			"Link")
+				echo "\"Site\":url"
+				echo
+				echo "bq. Quote"
+				;;
+		esac
 	fi >> "${FNAME}"
 
 	# Open the file in your favorite editor
-
 	"${JEKYLL_EDITOR:-${VISUAL:-${EDITOR:-${ALTERNATE_EDITOR:-nano}}}}" "${FNAME}"
+	ret="$?"
+	popd > /dev/null || return "$ret"
+	return "$ret"
 }
 
 function testsite() {
@@ -225,6 +188,7 @@ function testsite() {
 	group 'jekyll'
 
 	local SITE site
+	local -i ret
 	if [[ -z "${1:-}" ]]; then
 		echo "Error: no site specified."
 		echo "The site is the name of the directory your project is in."
@@ -243,8 +207,11 @@ function testsite() {
 		return 1
 	fi
 
-	builtin cd "${SITE}" || return
+	pushd "${SITE}" > /dev/null || return
 	jekyll --server --auto
+	ret="$?"
+	popd > /dev/null || return "$ret"
+	return "$ret"
 }
 
 function buildsite() {
@@ -253,6 +220,7 @@ function buildsite() {
 	group 'jekyll'
 
 	local SITE site
+	local -i ret
 	if [[ -z "${1:-}" ]]; then
 		echo "Error: no site specified."
 		echo "The site is the name of the directory your project is in."
@@ -271,9 +239,12 @@ function buildsite() {
 		return 1
 	fi
 
-	builtin cd "${SITE}" || return
+	pushd "${SITE}" > /dev/null || return
 	rm -rf _site
 	jekyll --no-server
+	ret="$?"
+	popd > /dev/null || return "$ret"
+	return "$ret"
 }
 
 function deploysite() {
@@ -282,7 +253,7 @@ function deploysite() {
 	group 'jekyll'
 
 	local SITE site REMOTE
-	local -i loc=0
+	local -i loc=0 ret
 	if [[ -z "${1:-}" ]]; then
 		echo "Error: no site specified."
 		echo "The site is the name of the directory your project is in."
@@ -292,6 +263,7 @@ function deploysite() {
 	for site in "${SITES[@]}"; do
 		if [[ "${site##*/}" == "$1" ]]; then
 			SITE="$site"
+			# shellcheck disable=SC2153 # who knows
 			REMOTE="${REMOTES[loc]}"
 			break
 		fi
@@ -303,8 +275,11 @@ function deploysite() {
 		return 1
 	fi
 
-	builtin cd "${SITE}" || return
+	pushd "${SITE}" > /dev/null || return
 	rsync -rz "${REMOTE?}"
+	ret="$?"
+	popd > /dev/null || return "$ret"
+	return "$ret"
 }
 
 # Load the Jekyll config
