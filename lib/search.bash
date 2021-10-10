@@ -351,7 +351,7 @@ _bash-it-flash-term() {
   local delay=0.1
   local color
 
-  for color in "${text_black}" "${echo_bold_blue}" "${bold_yellow}" "${bold_red}" "${echo_bold_green}"
+  for color in "${echo_black-}" "${echo_bold_blue-}" "${echo_bold_yellow-}" "${echo_bold_red-}" "${echo_bold_green-}" "${echo_normal-}"
 	do
     sleep "${delay}"
     _bash-it-rewind "${len}"
