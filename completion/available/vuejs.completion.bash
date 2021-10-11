@@ -1,7 +1,9 @@
 # shellcheck shell=bash
 
 __vuejs_completion() {
+	# shellcheck disable=SC2155
 	local prev=$(_get_pword)
+	# shellcheck disable=SC2155
 	local curr=$(_get_cword)
 
 	case $prev in

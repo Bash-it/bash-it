@@ -2,7 +2,7 @@ cite about-plugin
 about-plugin 'osx-specific functions'
 
 # OS X: Open new tabs in same directory
-if [ $(uname) = "Darwin" ]; then
+if [[ $OSTYPE == 'darwin'* ]]; then
   if type update_terminal_cwd > /dev/null 2>&1 ; then
     if ! [[ $PROMPT_COMMAND =~ (^|;)update_terminal_cwd($|;) ]] ; then
       PROMPT_COMMAND="${PROMPT_COMMAND%;};update_terminal_cwd"
@@ -46,13 +46,13 @@ function dock-switch() {
     example '$ dock-switch 2d'
     group 'osx'
 
-    if [ $(uname) = "Darwin" ]; then
+    if [[ "$OSTYPE" = 'darwin'* ]]; then
 
-        if [ $1 = 3d ] ; then
+        if [[ $1 = 3d ]] ; then
             defaults write com.apple.dock no-glass -boolean NO
             killall Dock
 
-        elif [ $1 = 2d ] ; then
+        elif [[ $1 = 2d ]] ; then
             defaults write com.apple.dock no-glass -boolean YES
             killall Dock
 
@@ -90,7 +90,7 @@ function prevcurl() {
   param '1: url'
   group 'osx'
 
-  if [ ! $(uname) = "Darwin" ]
+  if [[ ! $OSTYPE = 'darwin'* ]]
   then
     echo "This function only works with Mac OS X"
     return 1
@@ -103,7 +103,7 @@ function refresh-launchpad() {
   example '$ refresh-launchpad'
   group 'osx'
 
-  if [ $(uname) = "Darwin" ];then
+  if [[ "$OSTYPE" = 'darwin'* ]];then
     defaults write com.apple.dock ResetLaunchPad -bool TRUE
     killall Dock
   else

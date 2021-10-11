@@ -5,6 +5,7 @@ function _set-prefix-based-on-path()
 {
   filename=$(_bash-it-get-component-name-from-path "$1")
   extension=$(_bash-it-get-component-type-from-path "$1")
+	# shellcheck disable=SC2034
   BASH_IT_LOG_PREFIX="$extension: $filename: "
 }
 
@@ -15,7 +16,7 @@ if [[ "$1" != "skip" ]] && [[ -d "$BASH_IT/enabled" ]]; then
     alias|completion|plugin)
       _bash_it_config_type=$1
       _log_debug "Loading enabled $1 components..." ;;
-    *|'')
+    ''|*)
       _log_debug "Loading all enabled components..." ;;
   esac
 

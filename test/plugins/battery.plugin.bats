@@ -2,6 +2,8 @@
 
 load ../test_helper
 load "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
+load "${BASH_IT}/lib/log.bash"
+load "${BASH_IT}/lib/helpers.bash"
 
 cite _about _param _example _group _author _version
 

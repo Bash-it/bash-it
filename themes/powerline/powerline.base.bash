@@ -1,4 +1,7 @@
 # shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
+# shellcheck disable=SC2154 #TODO: fix these all.
+
 # Define this here so it can be used by all of the Powerline themes
 THEME_CHECK_SUDO=${THEME_CHECK_SUDO:=true}
 
@@ -85,6 +88,16 @@ function __powerline_k8s_context_prompt() {
 	[[ -n "${kubernetes_context}" ]] && echo "${KUBERNETES_CONTEXT_THEME_CHAR}${kubernetes_context}|${KUBERNETES_CONTEXT_THEME_PROMPT_COLOR}"
 }
 
+function __powerline_k8s_namespace_prompt() {
+	local kubernetes_namespace=""
+
+	if _command_exists kubectl; then
+		kubernetes_namespace="$(k8s_namespace_prompt)"
+	fi
+
+	[[ -n "${kubernetes_namespace}" ]] && echo "${KUBERNETES_NAMESPACE_THEME_CHAR}${kubernetes_namespace}|${KUBERNETES_NAMESPACE_THEME_PROMPT_COLOR}"
+}
+
 function __powerline_python_venv_prompt() {
 	set +u
 	local python_venv=""
@@ -129,7 +142,7 @@ function __powerline_scm_prompt() {
 }
 
 function __powerline_cwd_prompt() {
-	local cwd=$(pwd | sed "s|^${HOME}|~|")
+	local cwd="${PWD/$HOME/\~}"
 
 	echo "${cwd}|${CWD_THEME_PROMPT_COLOR}"
 }
@@ -147,10 +160,10 @@ function __powerline_clock_prompt() {
 }
 
 function __powerline_battery_prompt() {
-	local color=""
-	local battery_status="$(battery_percentage 2> /dev/null)"
+	local color="" battery_status
+	battery_status="$(battery_percentage 2> /dev/null)"
 
-	if [[ -z "${battery_status}" ]] || [[ "${battery_status}" = "-1" ]] || [[ "${battery_status}" = "no" ]]; then
+	if [[ -z "${battery_status}" || "${battery_status}" == "-1" || "${battery_status}" == "no" ]]; then
 		true
 	else
 		if [[ "$((10#${battery_status}))" -le 5 ]]; then
@@ -166,7 +179,7 @@ function __powerline_battery_prompt() {
 }
 
 function __powerline_in_vim_prompt() {
-	if [ -n "$VIMRUNTIME" ]; then
+	if [[ -n "$VIMRUNTIME" ]]; then
 		echo "${IN_VIM_THEME_PROMPT_TEXT}|${IN_VIM_THEME_PROMPT_COLOR}"
 	fi
 }
@@ -210,6 +223,12 @@ function __powerline_command_number_prompt() {
 	echo "${COMMAND_NUMBER_THEME_PROMPT_CHAR}\#|${COMMAND_NUMBER_THEME_PROMPT_COLOR}"
 }
 
+function __powerline_duration_prompt() {
+	local duration
+	duration=$(_command_duration)
+	[[ -n "$duration" ]] && echo "${duration}|${COMMAND_DURATION_PROMPT_COLOR}"
+}
+
 function __powerline_left_segment() {
 	local params
 	IFS="|" read -ra params <<< "${1}"
@@ -250,7 +269,7 @@ function __powerline_last_status_prompt() {
 
 function __powerline_prompt_command() {
 	local last_status="$?" ## always the first
-	local separator_char="${POWERLINE_PROMPT_CHAR}"
+	local separator_char="${POWERLINE_PROMPT_CHAR}" info prompt_color
 
 	LEFT_PROMPT=""
 	SEGMENTS_AT_LEFT=0
@@ -264,7 +283,7 @@ function __powerline_prompt_command() {
 
 	## left prompt ##
 	for segment in $POWERLINE_PROMPT; do
-		local info="$(__powerline_"${segment}"_prompt)"
+		info="$(__powerline_"${segment}"_prompt)"
 		[[ -n "${info}" ]] && __powerline_left_segment "${info}"
 	done
 
@@ -276,7 +295,7 @@ function __powerline_prompt_command() {
 
 	# By default we try to match the prompt to the adjacent segment's background color,
 	# but when part of the prompt exists within that segment, we instead match the foreground color.
-	local prompt_color="$(set_color "${LAST_SEGMENT_COLOR}" -)"
+	prompt_color="$(set_color "${LAST_SEGMENT_COLOR}" -)"
 	if [[ -n "${LEFT_PROMPT}" ]] && [[ -n "${POWERLINE_LEFT_LAST_SEGMENT_PROMPT_CHAR}" ]]; then
 		LEFT_PROMPT+="$(set_color - "${LAST_SEGMENT_COLOR}")${POWERLINE_LEFT_LAST_SEGMENT_PROMPT_CHAR}"
 		prompt_color="${normal}"

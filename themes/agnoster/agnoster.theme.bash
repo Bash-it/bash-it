@@ -1,4 +1,5 @@
 # shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
 # vim: ft=bash ts=2 sw=2 sts=2
 #
 # agnoster's Theme - https://gist.github.com/3712874
@@ -220,7 +221,7 @@ prompt_virtualenv() {
 
 # Context: user@hostname (who am I and where am I)
 prompt_context() {
-	local user=$(whoami)
+	local user="${USER:-${LOGNAME:?}}"
 
 	if [[ $user != "$DEFAULT_USER" || -n $SSH_CLIENT ]]; then
 		prompt_segment black default "$user@\h"

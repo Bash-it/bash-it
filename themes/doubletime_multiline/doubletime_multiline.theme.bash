@@ -1,12 +1,10 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 
 source "$BASH_IT/themes/doubletime/doubletime.theme.bash"
 
 function prompt_setter() {
   # Save history
-  history -a
-  history -c
-  history -r
+  _save-and-reload-history 1
   PS1="
 $(clock_prompt) $(scm_char) [$THEME_PROMPT_HOST_COLOR\u@${THEME_PROMPT_HOST}$reset_color] $(virtualenv_prompt)$(ruby_version_prompt)
 \w

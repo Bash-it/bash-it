@@ -7,7 +7,6 @@ load ../../lib/log
 cite _about _param _example _group _author _version
 
 load ../../lib/helpers
-load ../../themes/base.theme
 
 function local_setup {
   setup_test_fixture
@@ -23,6 +22,8 @@ function local_setup {
   fi
 
   export OLD_PATH="$PATH"
+
+  load ../../themes/base.theme
 }
 
 function local_teardown {
@@ -56,8 +57,8 @@ function setup_svn_path {
 
   setup_svn_path "$BASH_IT/test/fixtures/svn/working"
 
-  # Load the base theme again so that the working SVN script is detected
-  load ../../themes/base.theme
+  # Init the base theme again so that the working SVN script is detected
+  _bash_it_appearance_scm_init
 
   scm
   # Make sure that the SVN command is used
@@ -73,8 +74,8 @@ function setup_svn_path {
 
   setup_svn_path "$BASH_IT/test/fixtures/svn/working"
 
-  # Load the base theme again so that the working SVN script is detected
-  load ../../themes/base.theme
+  # init the base theme again so that the working SVN script is detected
+  _bash_it_appearance_scm_init
 
   scm
   # Make sure that the SVN command is used
@@ -89,8 +90,8 @@ function setup_svn_path {
 
   setup_svn_path "$BASH_IT/test/fixtures/svn/working"
 
-  # Load the base theme again so that the working SVN script is detected
-  load ../../themes/base.theme
+  # Init the base theme again so that the working SVN script is detected
+  _bash_it_appearance_scm_init
 
   scm
   # Make sure that no SVN command is used
@@ -103,8 +104,8 @@ function setup_svn_path {
 
   setup_svn_path "$BASH_IT/test/fixtures/svn/broken"
 
-  # Load the base theme again so that the broken SVN script is detected
-  load ../../themes/base.theme
+  # Init the base theme again so that the broken SVN script is detected
+  _bash_it_appearance_scm_init
 
   scm
   # Make sure that no SVN command is not used
@@ -120,8 +121,8 @@ function setup_svn_path {
 
   setup_svn_path "$BASH_IT/test/fixtures/svn/broken"
 
-  # Load the base theme again so that the broken SVN script is detected
-  load ../../themes/base.theme
+  # Init the base theme again so that the broken SVN script is detected
+  _bash_it_appearance_scm_init
 
   scm
   # Make sure that no SVN command is used
