@@ -62,11 +62,13 @@ function __powerline_prompt_command {
 	SEGMENTS_AT_LEFT=0
 	SEGMENTS_AT_RIGHT=0
 	LAST_SEGMENT_COLOR=""
+
 	_save-and-reload-history "${HISTORY_AUTOSAVE:-0}"
 
 	## left prompt ##
 	for segment in $POWERLINE_LEFT_PROMPT; do
-		local info="$(__powerline_"${segment}"_prompt)"
+		local info
+		info="$(__powerline_"${segment}"_prompt)"
 		[[ -n "${info}" ]] && __powerline_left_segment "${info}"
 	done
 
@@ -80,7 +82,8 @@ function __powerline_prompt_command {
 	if [[ -n "${POWERLINE_RIGHT_PROMPT}" ]]; then
 		# LEFT_PROMPT+="${move_cursor_rightmost}"
 		for segment in $POWERLINE_RIGHT_PROMPT; do
-			local info="$(__powerline_"${segment}"_prompt)"
+			local info
+			info="$(__powerline_"${segment}"_prompt)"
 			[[ -n "${info}" ]] && __powerline_right_segment "${info}"
 		done
 
