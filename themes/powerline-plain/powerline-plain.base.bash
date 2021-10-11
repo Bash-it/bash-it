@@ -19,6 +19,7 @@ function __powerline_left_segment {
 		# Since the previous segment wasn't the last segment, add padding, if needed
 		#
 		if [[ "${POWERLINE_COMPACT_BEFORE_SEPARATOR}" -eq 0 ]]; then
+			# shellcheck disable=SC2154
 			LEFT_PROMPT+="$(set_color - "${LAST_SEGMENT_COLOR}") ${normal}"
 		fi
 	fi
@@ -40,7 +41,8 @@ function __powerline_prompt_command {
 
 	## left prompt ##
 	for segment in $POWERLINE_PROMPT; do
-		local info="$(__powerline_"${segment}"_prompt)"
+		local info
+		info="$(__powerline_"${segment}"_prompt)"
 		[[ -n "${info}" ]] && __powerline_left_segment "${info}"
 	done
 

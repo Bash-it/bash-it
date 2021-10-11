@@ -137,6 +137,7 @@ themes/powerline
 themes/powerline-multiline
 themes/powerline-naked
 themes/powerline-plain
+themes/powerturk
 themes/pure
 themes/purity
 
