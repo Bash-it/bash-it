@@ -252,9 +252,8 @@ function _bash-it_update_migrate_and_restart() {
 		_bash-it-migrate
 		echo ""
 		echo "All done, enjoy!"
-		# Don't forget to restore the original pwd!
-		# shellcheck disable=SC2164
-		popd &> /dev/null
+		# Don't forget to restore the original pwd (called from `_bash-it-update-`)!
+		popd > /dev/null || return
 		_bash-it-restart
 	else
 		echo "Error updating Bash-it, please, check if your Bash-it installation folder (${BASH_IT}) is clean."
@@ -297,8 +296,7 @@ function _bash-it-update-() {
 
 		if [[ -z "$TARGET" ]]; then
 			echo "Can not find tags, so can not update to latest stable version..."
-			# shellcheck disable=SC2164
-			popd &> /dev/null
+			popd > /dev/null || return
 			return
 		fi
 	else
@@ -361,8 +359,7 @@ function _bash-it-update-() {
 			echo "Bash-it is up to date, nothing to do!"
 		fi
 	fi
-	# shellcheck disable=SC2164
-	popd &> /dev/null
+	popd > /dev/null || return
 }
 
 function _bash-it-migrate() {
@@ -408,7 +405,7 @@ function _bash-it-version() {
 	_about 'shows current Bash-it version'
 	_group 'lib'
 
-	cd "${BASH_IT}" || return
+	pushd "${BASH_IT?}" > /dev/null || return
 
 	if [[ -z "${BASH_IT_REMOTE:-}" ]]; then
 		BASH_IT_REMOTE="origin"
@@ -439,7 +436,7 @@ function _bash-it-version() {
 
 	echo "Compare to latest: $BASH_IT_GIT_URL/compare/$TARGET...master"
 
-	cd - &> /dev/null || return
+	popd > /dev/null || return
 }
 
 function _bash-it-doctor() {
@@ -486,14 +483,11 @@ function _bash-it-restart() {
 
 	saved_pwd="${PWD}"
 
-	case $OSTYPE in
-		darwin*)
-			init_file=.bash_profile
-			;;
-		*)
-			init_file=.bashrc
-			;;
-	esac
+	if shopt -q login_shell; then
+		init_file=.bash_profile
+	else
+		init_file=.bashrc
+	fi
 	exec "${0/-/}" --rcfile <(echo "source \"$HOME/$init_file\"; cd \"$saved_pwd\"")
 }
 
@@ -503,19 +497,15 @@ function _bash-it-reload() {
 
 	pushd "${BASH_IT?}" > /dev/null || return
 
-	case $OSTYPE in
-		darwin*)
-			# shellcheck disable=SC1090
-			source ~/.bash_profile
-			;;
-		*)
-			# shellcheck disable=SC1090
-			source ~/.bashrc
-			;;
-	esac
-
-	# shellcheck disable=SC2164
-	popd
+	# shellcheck disable=SC1090
+	if shopt -q login_shell; then
+		# shellcheck source-path=$HOME
+		source ~/.bash_profile
+	else
+		# shellcheck source-path=$HOME
+		source ~/.bashrc
+	fi
+	popd > /dev/null || return
 }
 
 function _bash-it-describe() {
