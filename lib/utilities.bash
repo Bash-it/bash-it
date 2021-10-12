@@ -83,8 +83,8 @@ function _bash-it-component-help() {
 
 function _bash-it-component-cache-file() {
 	local component file
-	component="$(_bash-it-pluralize-component "${1}")"
-	file="${BASH_IT?}/tmp/cache/${component}"
+	component="$(_bash-it-pluralize-component "${1?${FUNCNAME[0]}: component name required}")"
+	file="${XDG_CACHE_HOME:-${BASH_IT?}/tmp/cache}${XDG_CACHE_HOME:+/bash_it}/${component}"
 	[[ -f "${file}" ]] || mkdir -p "${file%/*}"
 	printf '%s' "${file}"
 }
