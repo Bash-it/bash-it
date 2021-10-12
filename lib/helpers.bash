@@ -521,21 +521,20 @@ function _bash-it-describe() {
 	file_type="$3"
 	column_header="$4"
 
-	local f
-	local enabled
+	local f ff
+	local enabled enabled_file
 	printf "%-20s%-10s%s\n" "$column_header" 'Enabled?' 'Description'
-	for f in "${BASH_IT}/$subdirectory/available"/*.bash; do
+	for f in "${BASH_IT?}/$subdirectory/available"/*.bash; do
 		# Check for both the old format without the load priority, and the extended format with the priority
-		declare enabled_files enabled_file
 		enabled_file="${f##*/}"
-		enabled_files=$(sort <(compgen -G "${BASH_IT}/enabled/*$BASH_IT_LOAD_PRIORITY_SEPARATOR${enabled_file}") <(compgen -G "${BASH_IT}/$subdirectory/enabled/${enabled_file}") <(compgen -G "${BASH_IT}/$subdirectory/enabled/*$BASH_IT_LOAD_PRIORITY_SEPARATOR${enabled_file}") | wc -l)
 
-		if [[ "$enabled_files" -gt 0 ]]; then
-			enabled='x'
-		else
-			enabled=' '
-		fi
-		printf "%-20s%-10s%s\n" "$(basename "$f" | sed -e 's/\(.*\)\..*\.bash/\1/g')" "  [$enabled]" "$(metafor "about-$file_type" < "$f")"
+		enabled=
+		for ff in "${BASH_IT}/enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR?}${enabled_file}" \
+			"${BASH_IT}/${subdirectory}/enabled/${enabled_file}" \
+			"${BASH_IT}/${subdirectory}/enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR?}${enabled_file}"; do
+			[[ -f "${ff}" ]] && enabled='x'
+		done
+		printf "%-20s %-10s %s\n" "${enabled_file%.$3*.bash}" "[${enabled:- }]" "$(metafor "about-$file_type" < "$f")"
 	done
 	printf '\n%s\n' "to enable $preposition $file_type, do:"
 	printf '%s\n' "$ bash-it enable $file_type  <$file_type name> [$file_type name]... -or- $ bash-it enable $file_type all"
