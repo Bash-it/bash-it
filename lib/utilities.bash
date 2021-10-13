@@ -40,7 +40,7 @@ function _bash-it-get-component-type-from-path() {
 #   $ _bash-it-array-contains-element apple "@{fruits[@]}" && echo 'contains apple'
 #   contains apple
 #
-#   $ if $(_bash-it-array-contains-element pear "${fruits[@]}"); then
+#   $ if _bash-it-array-contains-element pear "${fruits[@]}"; then
 #       echo "contains pear!"
 #     fi
 #   contains pear!
@@ -54,10 +54,9 @@ function _bash-it-array-contains-element() {
 	return 1
 }
 
-# Dedupe a simple array of words without spaces.
+# Dedupe an array (without embedded newlines).
 function _bash-it-array-dedup() {
-	local IFS=$'\n'
-	echo "$@" | tr ' ' '\n' | sort -u
+	printf '%s\n' "$@" | sort -u
 }
 
 # Outputs a full path of the grep found on the filesystem
