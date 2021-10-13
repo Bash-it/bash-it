@@ -18,6 +18,7 @@
 #
 docs/
 hooks/
+lib/
 scripts/
 
 # root files
@@ -77,13 +78,6 @@ completion/available/sdkman.completion.bash
 completion/available/vault.completion.bash
 completion/available/vuejs.completion.bash
 completion/available/wpscan.completion.bash
-
-# libraries
-lib/helpers.bash
-lib/log.bash
-lib/preview.bash
-lib/search.bash
-lib/utilities.bash
 
 # plugins
 #
