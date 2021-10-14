@@ -2,7 +2,7 @@
 
 load ../test_helper
 load "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
-load ../../lib/appearance
+load ../../themes/colors.theme
 
 cite _about _param _example _group _author _version
 load ../../lib/log
