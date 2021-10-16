@@ -32,15 +32,13 @@ _log_debug "Loading libraries(except appearance)..."
 APPEARANCE_LIB="${BASH_IT}/lib/appearance.bash"
 for _bash_it_lib_file in "${BASH_IT}"/lib/*.bash; do
 	if [[ "$_bash_it_lib_file" != "$APPEARANCE_LIB" ]]; then
-		filename="${_bash_it_lib_file##*/}"
-		filename="${filename%.bash}"
-		BASH_IT_LOG_PREFIX="lib: ${filename}: "
+		_bash-it-log-prefix-by-path "${_bash_it_lib_file}"
 		_log_debug "Loading library file..."
 		# shellcheck source-path=SCRIPTDIR/lib disable=SC1090
 		source "$_bash_it_lib_file"
 	fi
 done
-unset _bash_it_lib_file filename
+unset _bash_it_lib_file
 
 # Load vendors
 BASH_IT_LOG_PREFIX="vendor: "
@@ -102,29 +100,28 @@ fi
 BASH_IT_LOG_PREFIX="core: main: "
 _log_debug "Loading custom aliases, completion, plugins..."
 for file_type in "aliases" "completion" "plugins"; do
-	if [[ -e "${BASH_IT}/${file_type}/custom.${file_type}.bash" ]]; then
-		BASH_IT_LOG_PREFIX="${file_type}: custom: "
+	_bash_it_custom_file="${BASH_IT}/${file_type}/custom.${file_type}.bash"
+	if [[ -e "${_bash_it_custom_file}" ]]; then
+		_bash-it-log-prefix-by-path "${_bash_it_custom_file}"
 		_log_debug "Loading component..."
 		# shellcheck disable=SC1090
-		source "${BASH_IT}/${file_type}/custom.${file_type}.bash"
+		source "${_bash_it_custom_file}"
 	fi
 done
+unset _bash_it_custom_file
 
 # Custom
 BASH_IT_LOG_PREFIX="core: main: "
 _log_debug "Loading general custom files..."
 for _bash_it_custom_file in "$BASH_IT_CUSTOM"/*.bash "$BASH_IT_CUSTOM"/*/*.bash; do
 	if [[ -e "${_bash_it_custom_file}" ]]; then
-		filename="${_bash_it_custom_file##*/}"
-		filename="${filename%*.bash}"
-		# shellcheck disable=SC2034 # expected
-		BASH_IT_LOG_PREFIX="custom: $filename: "
+		_bash-it-log-prefix-by-path "${_bash_it_custom_file}"
 		_log_debug "Loading custom file..."
 		# shellcheck disable=SC1090
 		source "$_bash_it_custom_file"
 	fi
 done
-unset _bash_it_custom_file filename
+unset _bash_it_custom_file
 
 if [[ -n "${PROMPT:-}" ]]; then
 	PS1="\[""$PROMPT""\]"
