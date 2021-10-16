@@ -11,6 +11,38 @@
 : "${BASH_IT_LOG_LEVEL_TRACE:=7}"
 readonly "${!BASH_IT_LOG_LEVEL_@}"
 
+function _bash-it-log-prefix-by-path() {
+	local component_path="${1?${FUNCNAME[0]}: path specification required}"
+	local without_extension component_directory
+	local component_filename component_type component_name
+
+	# get the directory, if any
+	component_directory="${component_path%/*}"
+	# drop the directory, if any
+	component_filename="${component_path##*/}"
+	# strip the file extension
+	without_extension="${component_filename%.bash}"
+	# strip before the last dot
+	component_type="${without_extension##*.}"
+	# strip component type, but try not to strip other words
+	# - aliases, completions, plugins, themes
+	component_name="${without_extension%.[acpt][hlo][eimu]*[ens]}"
+	# Finally, strip load priority prefix
+	component_name="${component_name##[[:digit:]]*"${BASH_IT_LOAD_PRIORITY_SEPARATOR:----}"}"
+
+	# best-guess for files without a type
+	if [[ "${component_type:-${component_name}}" == "${component_name}" ]]; then
+		if [[ "${component_directory}" == *'vendor'* ]]; then
+			component_type='vendor'
+		else
+			component_type="${component_directory##*/}"
+		fi
+	fi
+
+	# shellcheck disable=SC2034
+	BASH_IT_LOG_PREFIX="${component_type:-lib}: $component_name"
+}
+
 function _has_colors() {
 	# Check that stdout is a terminal
 	[[ -t 1 ]] || return 1
