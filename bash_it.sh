@@ -27,9 +27,7 @@ _log_debug "Loading libraries(except appearance)..."
 APPEARANCE_LIB="${BASH_IT}/lib/appearance.bash"
 for _bash_it_main_file_lib in "${BASH_IT}/lib"/*.bash; do
 	[[ "$_bash_it_main_file_lib" == "$APPEARANCE_LIB" ]] && continue
-	filename="${_bash_it_main_file_lib##*/}"
-	filename="${filename%.bash}"
-	BASH_IT_LOG_PREFIX="lib: ${filename}: "
+	_bash-it-log-prefix-by-path "${_bash_it_main_file_lib}"
 	_log_debug "Loading library file..."
 	# shellcheck disable=SC1090
 	source "$_bash_it_main_file_lib"
@@ -66,11 +64,13 @@ fi
 
 _log_debug "Loading custom aliases, completion, plugins..."
 for file_type in "aliases" "completion" "plugins"; do
-	if [[ -s "${BASH_IT}/${file_type}/custom.${file_type}.bash" ]]; then
-		BASH_IT_LOG_PREFIX="${file_type}: custom: "
+	_bash_it_main_file_custom="${BASH_IT}/${file_type}/custom.${file_type}.bash"
+	if [[ -s "${_bash_it_main_file_custom}" ]]; then
+		_bash-it-log-prefix-by-path "${_bash_it_main_file_custom}"
 		_log_debug "Loading component..."
+		# shellcheck source-path=SCRIPTDIR/aliases source-path=SCRIPTDIR/completions source-path=SCRIPTDIR/plugins
 		# shellcheck disable=SC1090
-		source "${BASH_IT}/${file_type}/custom.${file_type}.bash"
+		source "${_bash_it_main_file_custom}"
 	fi
 	BASH_IT_LOG_PREFIX="core: main: "
 done
@@ -79,9 +79,7 @@ done
 _log_debug "Loading general custom files..."
 for _bash_it_main_file_custom in "${BASH_IT_CUSTOM}"/*.bash "${BASH_IT_CUSTOM}"/*/*.bash; do
 	if [[ -s "${_bash_it_main_file_custom}" ]]; then
-		filename="${_bash_it_main_file_custom##*/}"
-		filename="${filename%*.bash}"
-		BASH_IT_LOG_PREFIX="custom: $filename: "
+		_bash-it-log-prefix-by-path "${_bash_it_main_file_custom}"
 		_log_debug "Loading custom file..."
 		# shellcheck disable=SC1090
 		source "$_bash_it_main_file_custom"
@@ -111,4 +109,4 @@ fi
 for _bash_it_library_finalize_f in "${_bash_it_library_finalize_hook[@]:-}"; do
 	eval "${_bash_it_library_finalize_f?}" # Use `eval` to achieve the same behavior as `$PROMPT_COMMAND`.
 done
-unset "${!_bash_it_library_finalize_@}" "${!_bash_it_main_file_@}" filename file_type
+unset "${!_bash_it_library_finalize_@}" "${!_bash_it_main_file_@}" file_type
