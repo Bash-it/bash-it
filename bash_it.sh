@@ -30,26 +30,14 @@ fi
 # libraries, but skip appearance (themes) for now
 _log_debug "Loading libraries(except appearance)..."
 APPEARANCE_LIB="${BASH_IT}/lib/appearance.bash"
-for _bash_it_lib_file in "${BASH_IT}"/lib/*.bash; do
-	if [[ "$_bash_it_lib_file" != "$APPEARANCE_LIB" ]]; then
-		_bash-it-log-prefix-by-path "${_bash_it_lib_file}"
-		_log_debug "Loading library file..."
-		# shellcheck source-path=SCRIPTDIR/lib disable=SC1090
-		source "$_bash_it_lib_file"
-	fi
+for _bash_it_lib_file in "${BASH_IT}"/lib/*.bash "${BASH_IT}/vendor/init.d"/*.bash; do
+	[[ "$_bash_it_lib_file" == "$APPEARANCE_LIB" ]] && continue
+	_bash-it-log-prefix-by-path "${_bash_it_lib_file}"
+	_log_debug "Loading library file..."
+	# shellcheck source-path=SCRIPTDIR/lib;SCRIPTDIR/vendor/init.d disable=SC1090
+	source "$_bash_it_lib_file"
 done
 unset _bash_it_lib_file
-
-# Load vendors
-BASH_IT_LOG_PREFIX="vendor: "
-for _bash_it_vendor_init in "${BASH_IT}/vendor/init.d"/*.bash; do
-	filename="${_bash_it_vendor_init##*/}"
-	filename="${filename%.bash}"
-	_log_debug "Loading '${filename}'..."
-	# shellcheck disable=SC1090
-	source "${_bash_it_vendor_init}"
-done
-unset _bash_it_vendor_init filename
 
 BASH_IT_LOG_PREFIX="core: main: "
 # Load the global "enabled" directory
