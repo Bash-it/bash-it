@@ -142,7 +142,8 @@ function __powerline_scm_prompt() {
 }
 
 function __powerline_cwd_prompt() {
-	local cwd=${PWD/$HOME/\~}
+	# For maximum backwards compatibility: no outer quotes, escape ~
+	local cwd=${PWD/#$HOME/\~}
 
 	echo "${cwd}|${CWD_THEME_PROMPT_COLOR}"
 }
