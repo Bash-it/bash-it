@@ -142,9 +142,7 @@ function __powerline_scm_prompt() {
 }
 
 function __powerline_cwd_prompt() {
-	local cwd="${PWD/$HOME/~}"
-
-	echo "${cwd}|${CWD_THEME_PROMPT_COLOR}"
+	echo "\w|${CWD_THEME_PROMPT_COLOR}"
 }
 
 function __powerline_hostname_prompt() {
