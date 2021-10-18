@@ -11,7 +11,7 @@ function _bash-it-get-component-name-from-path() {
 	# filename without path
 	filename="${1##*/}"
 	# filename without path or priority
-	filename="${filename##*${BASH_IT_LOAD_PRIORITY_SEPARATOR?}}"
+	filename="${filename##*"${BASH_IT_LOAD_PRIORITY_SEPARATOR?}"}"
 	# filename without path, priority or extension
 	echo "${filename%.*.bash}"
 }
@@ -40,7 +40,7 @@ function _bash-it-get-component-type-from-path() {
 #   $ _bash-it-array-contains-element apple "@{fruits[@]}" && echo 'contains apple'
 #   contains apple
 #
-#   $ if $(_bash-it-array-contains-element pear "${fruits[@]}"); then
+#   $ if _bash-it-array-contains-element pear "${fruits[@]}"; then
 #       echo "contains pear!"
 #     fi
 #   contains pear!
@@ -54,16 +54,21 @@ function _bash-it-array-contains-element() {
 	return 1
 }
 
-# Dedupe a simple array of words without spaces.
+# Dedupe an array (without embedded newlines).
 function _bash-it-array-dedup() {
-	local IFS=$'\n'
-	echo "$@" | tr ' ' '\n' | sort -u
+	printf '%s\n' "$@" | sort -u
 }
 
 # Outputs a full path of the grep found on the filesystem
 function _bash-it-grep() {
 	: "${BASH_IT_GREP:=$(type -p egrep || type -p grep)}"
 	printf "%s" "${BASH_IT_GREP:-'/usr/bin/grep'}"
+}
+
+# Runs `grep` with extended regular expressions
+function _bash-it-egrep() {
+	: "${BASH_IT_GREP:=$(type -p egrep || type -p grep)}"
+	"${BASH_IT_GREP:-/usr/bin/grep}" -E "$@"
 }
 
 ###########################################################################
@@ -76,17 +81,16 @@ function _bash-it-component-help() {
 	component="$(_bash-it-pluralize-component "${1}")"
 	file="$(_bash-it-component-cache-file "${component}")"
 	if [[ ! -s "${file}" || -z "$(find "${file}" -mmin -300)" ]]; then
-		rm -f "${file}" 2> /dev/null
 		func="_bash-it-${component}"
-		"${func}" | ${BASH_IT_GREP:-$(_bash-it-grep)} -E '   \[' > "${file}"
+		"${func}" | ${BASH_IT_GREP:-$(_bash-it-grep)} -E '   \[' >| "${file}"
 	fi
 	cat "${file}"
 }
 
 function _bash-it-component-cache-file() {
 	local component file
-	component="$(_bash-it-pluralize-component "${1}")"
-	file="${BASH_IT?}/tmp/cache/${component}"
+	component="$(_bash-it-pluralize-component "${1?${FUNCNAME[0]}: component name required}")"
+	file="${XDG_CACHE_HOME:-${BASH_IT?}/tmp/cache}${XDG_CACHE_HOME:+/bash_it}/${component}"
 	[[ -f "${file}" ]] || mkdir -p "${file%/*}"
 	printf '%s' "${file}"
 }
