@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2034
 #
 # Initialize Bash It
 
@@ -27,11 +28,9 @@ if [[ -d "${BASH}" ]]; then
 	BASH="$(bash -c 'echo $BASH')"
 fi
 
-# libraries, but skip appearance (themes) for now
-_log_debug "Loading libraries(except appearance)..."
-APPEARANCE_LIB="${BASH_IT}/lib/appearance.bash"
+# Load libraries
+_log_debug "Loading libraries..."
 for _bash_it_lib_file in "${BASH_IT}"/lib/*.bash "${BASH_IT}/vendor/init.d"/*.bash; do
-	[[ "$_bash_it_lib_file" == "$APPEARANCE_LIB" ]] && continue
 	_bash-it-log-prefix-by-path "${_bash_it_lib_file}"
 	_log_debug "Loading library file..."
 	# shellcheck source-path=SCRIPTDIR/lib;SCRIPTDIR/vendor/init.d disable=SC1090
@@ -59,7 +58,7 @@ if [[ -n "${BASH_IT_THEME:="${BASH_THEME:-}"}" ]]; then
 		unset BASH_THEME
 	fi
 
-	_log_debug "Loading \"${BASH_IT_THEME}\" theme..."
+	_log_debug "Loading theme: ${BASH_IT_THEME}..."
 	# Load colors and helpers first so they can be used in base theme
 	BASH_IT_LOG_PREFIX="themes: colors: "
 	# shellcheck source-path=SCRIPTDIR/themes
@@ -78,9 +77,14 @@ if [[ -n "${BASH_IT_THEME:="${BASH_THEME:-}"}" ]]; then
 	source "${BASH_IT}/themes/base.theme.bash"
 
 	BASH_IT_LOG_PREFIX="lib: appearance: "
-	# appearance (themes) now, after all dependencies
-	# shellcheck source=./lib/appearance.bash
-	source "$APPEARANCE_LIB"
+	# shellcheck disable=SC1090
+	if [[ -f "${BASH_IT_THEME}" ]]; then
+		source "${BASH_IT_THEME}"
+	elif [[ -f "$CUSTOM_THEME_DIR/$BASH_IT_THEME/$BASH_IT_THEME.theme.bash" ]]; then
+		source "$CUSTOM_THEME_DIR/$BASH_IT_THEME/$BASH_IT_THEME.theme.bash"
+	elif [[ -f "$BASH_IT/themes/$BASH_IT_THEME/$BASH_IT_THEME.theme.bash" ]]; then
+		source "$BASH_IT/themes/$BASH_IT_THEME/$BASH_IT_THEME.theme.bash"
+	fi
 else
 	_log_warning "BASH_IT_THEME variable not initialized, please upgrade your bash-it version!"
 fi
@@ -120,7 +124,6 @@ PREVIEW="less"
 if [[ -s /usr/bin/gloobus-preview ]]; then
 	PREVIEW="gloobus-preview"
 elif [[ -s /Applications/Preview.app ]]; then
-	# shellcheck disable=SC2034
 	PREVIEW="/Applications/Preview.app"
 fi
 

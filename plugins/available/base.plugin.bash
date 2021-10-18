@@ -2,6 +2,9 @@
 cite about-plugin
 about-plugin 'miscellaneous tools'
 
+# colored ls
+export LSCOLORS='Gxfxcxdxdxegedabagacad'
+
 function ips() {
 	about 'display all ip addresses for this host'
 	group 'base'
