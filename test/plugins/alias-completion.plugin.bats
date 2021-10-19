@@ -1,11 +1,8 @@
 #!/usr/bin/env bats
 
 load ../test_helper
-load "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
 load ../../lib/log
 load ../../lib/helpers
-
-cite _about _param _example _group _author _version
 
 load ../../completion/available/capistrano.completion
 

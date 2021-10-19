@@ -2,7 +2,7 @@
 
 load ../test_helper
 load ../../lib/helpers
-load "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
+load ../../vendor/init.d/preexec
 
 load ../../plugins/available/cmd-returned-notify.plugin
 

@@ -3,7 +3,6 @@
 load ../test_helper
 load ../../lib/log
 load ../../lib/helpers
-load "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
 
 load ../../plugins/available/xterm.plugin
 

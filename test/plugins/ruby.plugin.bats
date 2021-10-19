@@ -2,14 +2,14 @@
 
 load ../test_helper
 load ../../lib/helpers
-load "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
-load ../../plugins/available/ruby.plugin
 
 function local_setup {
   setup_test_fixture
 
   export OLD_PATH="$PATH"
   export PATH="/usr/bin:/bin:/usr/sbin"
+
+  load ../../plugins/available/ruby.plugin
 }
 
 function local_teardown {
@@ -26,8 +26,6 @@ function local_teardown {
   if ! which ruby >/dev/null; then
     skip 'ruby not installed'
   fi
-
-  load ../../plugins/available/ruby.plugin
 
   local last_path_entry=$(echo $PATH | tr ":" "\n" | tail -1)
   [[ "${last_path_entry}" == "${HOME}"/.gem/ruby/*/bin ]]

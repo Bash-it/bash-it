@@ -2,7 +2,6 @@
 
 load ../test_helper
 load ../../lib/helpers
-load "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
 
 # We test `go version` in each test to account for users with goenv and no system go.
 
