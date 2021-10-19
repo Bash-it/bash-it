@@ -25,8 +25,7 @@ function __powerline_left_segment {
 		LEFT_PROMPT+="${POWERLINE_LEFT_SEPARATOR}"
 	fi
 
-	# shellcheck disable=SC2154
-	LEFT_PROMPT+="$(set_color "${params[1]}" -)${pad_before_segment}${params[0]}${normal}"
+	LEFT_PROMPT+="$(set_color "${params[1]}" -)${pad_before_segment}${params[0]}${normal?}"
 	LAST_SEGMENT_COLOR=${params[1]}
 	((SEGMENTS_AT_LEFT += 1))
 

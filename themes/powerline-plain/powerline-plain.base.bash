@@ -19,8 +19,7 @@ function __powerline_left_segment {
 		# Since the previous segment wasn't the last segment, add padding, if needed
 		#
 		if [[ "${POWERLINE_COMPACT_BEFORE_SEPARATOR}" -eq 0 ]]; then
-			# shellcheck disable=SC2154
-			LEFT_PROMPT+="$(set_color - "${LAST_SEGMENT_COLOR}") ${normal}"
+			LEFT_PROMPT+="$(set_color - "${LAST_SEGMENT_COLOR}") ${normal?}"
 		fi
 	fi
 

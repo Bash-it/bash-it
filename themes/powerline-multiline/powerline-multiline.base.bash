@@ -2,8 +2,7 @@
 . "$BASH_IT/themes/powerline/powerline.base.bash"
 
 function __powerline_last_status_prompt {
-	# shellcheck disable=SC2154
-	[[ "$1" -ne 0 ]] && echo "$(set_color "${LAST_STATUS_THEME_PROMPT_COLOR}" -) ${1} ${normal}"
+	[[ "$1" -ne 0 ]] && echo "$(set_color "${LAST_STATUS_THEME_PROMPT_COLOR}" -) ${1} ${normal?}"
 }
 
 function __powerline_right_segment {

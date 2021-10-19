@@ -110,8 +110,7 @@ function set_rgb_color {
 
 function powerline_shell_prompt {
 	if [[ -n "${SSH_CLIENT}" ]]; then
-		# shellcheck disable=SC2154
-		SHELL_PROMPT="${bold_white}$(set_rgb_color - ${SHELL_SSH_THEME_PROMPT_COLOR}) ${SHELL_SSH_CHAR}\u@\h ${normal}"
+		SHELL_PROMPT="${bold_white?}$(set_rgb_color - ${SHELL_SSH_THEME_PROMPT_COLOR}) ${SHELL_SSH_CHAR}\u@\h ${normal?}"
 		LAST_THEME_COLOR=${SHELL_SSH_THEME_PROMPT_COLOR}
 	else
 		SHELL_PROMPT="${bold_white}$(set_rgb_color - ${SHELL_THEME_PROMPT_COLOR}) ${normal}"
