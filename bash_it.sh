@@ -155,6 +155,3 @@ if ! _command_exists reload && [[ -n "${BASH_IT_RELOAD_LEGACY:-}" ]]; then
 			;;
 	esac
 fi
-
-# Disable trap DEBUG on subshells - https://github.com/Bash-it/bash-it/pull/1040
-set +T
