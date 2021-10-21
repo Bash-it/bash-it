@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
 load ../test_helper
-load ../../lib/helpers
+load ../test_helper_libs
 
 # We test `go version` in each test to account for users with goenv and no system go.
 

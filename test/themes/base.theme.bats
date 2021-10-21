@@ -1,9 +1,7 @@
 #!/usr/bin/env bats
 
 load ../test_helper
-load ../../lib/log
-
-load ../../lib/helpers
+load ../test_helper_libs
 load ../../themes/base.theme
 
 @test 'themes base: battery_percentage should not exist' {

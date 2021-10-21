@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
 load ../test_helper
-load ../../lib/helpers
+load ../test_helper_libs
 load ../../vendor/init.d/preexec
 
 load ../../plugins/available/cmd-returned-notify.plugin

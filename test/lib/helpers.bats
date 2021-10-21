@@ -1,11 +1,7 @@
 #!/usr/bin/env bats
 
 load ../test_helper
-load ../../lib/log
-load ../../lib/utilities
-load ../../lib/search
-
-load ../../lib/helpers
+load ../test_helper_libs
 load ../../plugins/available/base.plugin
 
 function local_setup {

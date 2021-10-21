@@ -1,8 +1,7 @@
 #!/usr/bin/env bats
 
 load ../test_helper
-load "${BASH_IT}/lib/log.bash"
-load "${BASH_IT}/lib/helpers.bash"
+load ../test_helper_libs
 
 load ../../plugins/available/battery.plugin
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
 load ../test_helper
-load ../../lib/helpers
+load ../test_helper_libs
 
 function local_setup {
   setup_test_fixture

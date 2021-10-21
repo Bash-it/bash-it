@@ -123,6 +123,7 @@ plugins/available/zoxide.plugin.bash
 #
 test/plugins/alias-completion.plugin.bats
 test/test_helper.bash
+test/test_helper_libs.bash
 
 # themes
 #

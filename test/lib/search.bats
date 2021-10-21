@@ -1,10 +1,7 @@
 #!/usr/bin/env bats
 
 load ../test_helper
-load ../../lib/log
-load ../../lib/helpers
-load ../../lib/utilities
-load ../../lib/search
+load ../test_helper_libs
 
 load ../../plugins/available/base.plugin
 load ../../aliases/available/git.aliases
