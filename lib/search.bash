@@ -55,7 +55,7 @@ function _bash-it-search() {
 
 	local component
 	local BASH_IT_SEARCH_USE_COLOR="${BASH_IT_SEARCH_USE_COLOR:=true}"
-	local -a BASH_IT_COMPONENTS=(aliases plugins completions)
+	local -a BASH_IT_COMPONENTS=('aliases' 'plugins' 'completions')
 
 	if [[ $# -eq 0 ]]; then
 		_bash-it-search-help
@@ -168,8 +168,8 @@ ${echo_underline_yellow-}SUMMARY${echo_normal-}
 }
 
 function _bash-it-is-partial-match() {
-	local component="${1?}"
-	local term="${2?}"
+	local component="${1?${FUNCNAME[0]}: component type must be specified}"
+	local term="${2:-}"
 	_bash-it-component-help "${component}" | _bash-it-egrep -i -q -- "${term}"
 }
 
@@ -191,12 +191,12 @@ function _bash-it-search-component() {
 	_param '3: [-]term4 [-]term5 ...'
 	_example '$ _bash-it-search-component aliases @git rake bundler -chruby'
 
-	local component="$1"
+	local component="${1?${FUNCNAME[0]}: component type must be specified}"
 	shift
 
 	# if one of the search terms is --enable or --disable, we will apply
 	# this action to the matches further  ` down.
-	local component_singular= action= action_func=
+	local component_singular action action_func
 	local -a search_commands=('enable' 'disable')
 	for search_command in "${search_commands[@]}"; do
 		if _bash-it-array-contains-element "--${search_command}" "$@"; then
@@ -247,30 +247,34 @@ function _bash-it-search-component() {
 
 	local -a matches=()
 	for match in "${total_matches[@]}"; do
-		local include_match=true
+		local -i include_match=1
 		if [[ ${#negative_terms[@]} -gt 0 ]]; then
-			(_bash-it-component-term-matches-negation "${match}" "${negative_terms[@]:-}") && include_match=false
+			_bash-it-component-term-matches-negation "${match}" "${negative_terms[@]:-}" && include_match=0
 		fi
-		(${include_match}) && matches+=("${match}")
+		((include_match)) && matches+=("${match}")
 	done
 
-	_bash-it-search-result "${component}" "${action}" "${action_func}" "${matches[@]:-}"
+	_bash-it-search-result "${component}" "${action:-}" "${action_func:-}" "${matches[@]:-}"
 }
 
 function _bash-it-search-result() {
-	local component="$1"
+	local component="${1?${FUNCNAME[0]}: component type must be specified}"
 	shift
-	local action="$1"
+	local action="${1:-}"
 	shift
-	local action_func="$1"
+	local action_func="${1:-}"
 	shift
-	local -a matches=("$@")
 
 	local color_component color_enable color_disable color_off
+	local color_sep=':' line
 
-	color_sep=':'
+	local -a matches=()
+	# Discard any empty arguments
+	while IFS='' read -r line; do
+		[[ -n "${line}" ]] && matches+=("$line")
+	done < <(_bash-it-array-dedup "${@}")
 
-	if ${BASH_IT_SEARCH_USE_COLOR}; then
+	if [[ "${BASH_IT_SEARCH_USE_COLOR}" == "true" ]]; then
 		color_component='\e[1;34m'
 		color_enable='\e[1;32m'
 		suffix_enable=''
@@ -290,37 +294,35 @@ function _bash-it-search-result() {
 	local -i modified=0
 
 	if [[ "${#matches[@]}" -gt 0 ]]; then
-		printf "${color_component}%13s${color_sep} ${color_off}" "${component}"
+		printf "${color_component}%13s${color_sep}${color_off} " "${component}"
 
 		for match in "${matches[@]}"; do
 			local -i enabled=0
-			(_bash-it-component-item-is-enabled "${component}" "${match}") && enabled=1
+			_bash-it-component-item-is-enabled "${component}" "${match}" && enabled=1
 
 			local match_color compatible_action suffix opposite_suffix
 
-			((enabled)) && {
-				match_color=${color_enable}
-				suffix=${suffix_enable}
-				opposite_suffix=${suffix_disable}
+			if ((enabled)); then
+				match_color="${color_enable}"
+				suffix="${suffix_enable}"
+				opposite_suffix="${suffix_disable}"
 				compatible_action="disable"
-			}
-
-			((enabled)) || {
-				match_color=${color_disable}
-				suffix=${suffix_disable}
-				opposite_suffix=${suffix_enable}
+			else
+				match_color="${color_disable}"
+				suffix="${suffix_disable}"
+				opposite_suffix="${suffix_enable}"
 				compatible_action="enable"
-			}
+			fi
 
-			local m="${match}${suffix}"
-			local -i len=${#m}
+			local matched="${match}${suffix}"
+			local -i len="${#matched}"
 
-			printf '%b' " ${match_color}${match}${suffix}" # print current state
+			printf '%b' "${match_color}${matched}" # print current state
 			if [[ "${action}" == "${compatible_action}" ]]; then
-				if [[ "${action}" == "enable" && "${BASH_IT_SEARCH_USE_COLOR}" == false ]]; then
-					_bash-it-flash-term "${len}" "${match}${suffix}"
+				if [[ "${action}" == "enable" && "${BASH_IT_SEARCH_USE_COLOR}" == "true" ]]; then
+					_bash-it-flash-term "${len}" "${matched}"
 				else
-					_bash-it-erase-term "${len}"
+					_bash-it-erase-term "${len}" "${matched}"
 				fi
 				modified=1
 				# shellcheck disable=SC2034 # no idea if `$result` is ever used
@@ -331,38 +333,44 @@ function _bash-it-search-result() {
 				printf '%b' "${match_color}${match}${opposite_suffix}"
 			fi
 
-			printf '%b' "${color_off}"
+			printf '%b' "${color_off} "
 		done
 
-		[[ ${modified} -gt 0 ]] && _bash-it-clean-component-cache "${component}"
+		((modified)) && _bash-it-clean-component-cache "${component}"
 		printf "\n"
 	fi
 }
 
 function _bash-it-rewind() {
-	local -i len="$1"
+	local -i len="${1:-0}"
 	printf '%b' "\033[${len}D"
 }
 
 function _bash-it-flash-term() {
-	local -i len="${1:-0}"
-	local match="${2:-}"
+	local -i len="${1:-0}" # redundant
+	local term="${2:-}"
+	# as currently implemented, `$match` has already been printed to screen the first time
 	local delay=0.1
 	local color
+	[[ "${#term}" -gt 0 ]] && len="${#term}"
 
 	for color in "${echo_black-}" "${echo_bold_blue-}" "${echo_bold_yellow-}" "${echo_bold_red-}" "${echo_bold_green-}" "${echo_normal-}"; do
 		sleep "${delay}"
 		_bash-it-rewind "${len}"
-		printf '%b' "${color}${match}"
+		printf '%b' "${color}${term}"
 	done
 }
 
 function _bash-it-erase-term() {
-	local -i len="${1:-0}"
+	local -i len="${1:-0}" i
+	local delay=0.05
+	local term="${2:-}" # calculate length ourselves
+	[[ "${#term}" -gt 0 ]] && len="${#term}"
+
 	_bash-it-rewind "${len}"
-	for a in {0..30}; do
-		[[ ${a} -gt ${len} ]] && break
-		printf "%.*s" "$a" " "
-		sleep 0.05
+	# white-out the already-printed term by printing blanks
+	for ((i = 0; i <= len; i++)); do
+		printf "%.*s" "$i" " "
+		sleep "${delay}"
 	done
 }
