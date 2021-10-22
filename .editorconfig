@@ -21,7 +21,7 @@ indent_size = tab
 indent_style = tab
 
 shell_variant      = bash
-binary_next_line   = true  # like -bn
+binary_next_line   = false # like -bn
 switch_case_indent = true  # like -ci
 space_redirects    = true  # like -sr
 keep_padding       = false # like -kp
