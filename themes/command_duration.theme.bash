@@ -1,7 +1,8 @@
 # shellcheck shell=bash
 
 if [ -z "$BASH_IT_COMMAND_DURATION" ] || [ "$BASH_IT_COMMAND_DURATION" != true ]; then
-	_command_duration() {
+	_command_duration()
+	{
 		echo -n
 	}
 	return
@@ -16,17 +17,20 @@ COMMAND_DURATION_MIN_SECONDS=${COMMAND_DURATION_MIN_SECONDS:-'1'}
 
 trap _command_duration_delete_temp_file EXIT HUP INT TERM
 
-_command_duration_delete_temp_file() {
+_command_duration_delete_temp_file()
+{
 	if [[ -f "$COMMAND_DURATION_FILE" ]]; then
 		rm -f "$COMMAND_DURATION_FILE"
 	fi
 }
 
-_command_duration_pre_exec() {
+_command_duration_pre_exec()
+{
 	date +%s.%1N > "$COMMAND_DURATION_FILE"
 }
 
-_command_duration() {
+_command_duration()
+{
 	local command_duration command_start current_time
 	local minutes seconds deciseconds
 	local command_start_sseconds current_time_seconds command_start_deciseconds current_time_deciseconds

@@ -7,7 +7,8 @@ SCM_THEME_PROMPT_SUFFIX="${bold_green} ] "
 SCM_THEME_PROMPT_DIRTY=" ${red}✗"
 SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓"
 
-prompt_command() {
+prompt_command()
+{
 	if [ "$(whoami)" = root ]; then
 		cursor_color="${bold_red}"
 		user_color="${green}"

@@ -3,7 +3,8 @@
 # shellcheck disable=SC2154 #TODO: fix these all.
 
 # Detect whether a reboot is required
-function show_reboot_required() {
+function show_reboot_required()
+{
 	if [ -n "$_bf_prompt_reboot_info" ]; then
 		if [ -f /var/run/reboot-required ]; then
 			printf "Reboot required!"
@@ -12,7 +13,8 @@ function show_reboot_required() {
 }
 
 # Set different host color for local and remote sessions
-function set_host_color() {
+function set_host_color()
+{
 	# Detect if connection is through SSH
 	if [[ -n $SSH_CLIENT ]]; then
 		printf '%s' "${lime_yellow}"
@@ -22,7 +24,8 @@ function set_host_color() {
 }
 
 # Set different username color for users and root
-function set_user_color() {
+function set_user_color()
+{
 	case $(id -u) in
 		0)
 			printf '%s' "${red}"
@@ -36,7 +39,8 @@ function set_user_color() {
 # Define custom colors we need
 # non-printable bytes in PS1 need to be contained within \[ \].
 # Otherwise, bash will count them in the length of the prompt
-function set_custom_colors() {
+function set_custom_colors()
+{
 	dark_grey="\[$(tput setaf 8)\]"
 	light_grey="\[$(tput setaf 248)\]"
 
@@ -47,11 +51,13 @@ function set_custom_colors() {
 	powder_blue="\[$(tput setaf 153)\]"
 }
 
-__ps_time() {
+__ps_time()
+{
 	printf '%s' "$(clock_prompt)${normal}\n"
 }
 
-function prompt_command() {
+function prompt_command()
+{
 	ps_reboot="${bright_yellow}$(show_reboot_required)${normal}\n"
 
 	ps_username="$(set_user_color)\u${normal}"

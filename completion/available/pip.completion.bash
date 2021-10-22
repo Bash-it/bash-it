@@ -8,7 +8,8 @@
 # So that pip is in the system's path.
 _command_exists pip || return
 
-function __bash_it_complete_pip() {
+function __bash_it_complete_pip()
+{
 	if _command_exists _pip_completion; then
 		complete -o default -F _pip_completion pip
 		_pip_completion "$@"

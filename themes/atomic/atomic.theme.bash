@@ -29,7 +29,8 @@ Face="\342\230\273"
 ## Parsers ##
 #############
 
-____atomic_top_left_parse() {
+____atomic_top_left_parse()
+{
 	ifs_old="${IFS}"
 	IFS="|"
 	read -r -a args <<< "$@"
@@ -44,7 +45,8 @@ ____atomic_top_left_parse() {
 	_TOP_LEFT+=""
 }
 
-____atomic_top_right_parse() {
+____atomic_top_right_parse()
+{
 	ifs_old="${IFS}"
 	IFS="|"
 	read -r -a args <<< "$@"
@@ -61,7 +63,8 @@ ____atomic_top_right_parse() {
 	((__SEG_AT_RIGHT += 1))
 }
 
-____atomic_bottom_parse() {
+____atomic_bottom_parse()
+{
 	ifs_old="${IFS}"
 	IFS="|"
 	read -r -a args <<< "$@"
@@ -70,7 +73,8 @@ ____atomic_bottom_parse() {
 	[ ${#args[1]} -gt 0 ] && _BOTTOM+=" "
 }
 
-____atomic_top() {
+____atomic_top()
+{
 	_TOP_LEFT=""
 	_TOP_RIGHT=""
 	__TOP_RIGHT_LEN=0
@@ -96,7 +100,8 @@ ____atomic_top() {
 	printf "%s%s" "${_TOP_LEFT}" "${_TOP_RIGHT}"
 }
 
-____atomic_bottom() {
+____atomic_bottom()
+{
 	_BOTTOM=""
 	for seg in $___ATOMIC_BOTTOM; do
 		info="$(___atomic_prompt_"${seg}")"
@@ -109,7 +114,8 @@ ____atomic_bottom() {
 ## Segments ##
 ##############
 
-___atomic_prompt_user_info() {
+___atomic_prompt_user_info()
+{
 	color=$white
 	box="${normal}${LineA}\$([[ \$? != 0 ]] && echo \"${BIWhite}[${IRed}${SX}${BIWhite}]${normal}${Line}\")${Line}${BIWhite}[|${BIWhite}]${normal}${Line}"
 	info="${IYellow}\u${IRed}@${IGreen}\h"
@@ -117,14 +123,16 @@ ___atomic_prompt_user_info() {
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${white}" "${box}"
 }
 
-___atomic_prompt_dir() {
+___atomic_prompt_dir()
+{
 	color=${IRed}
 	box="[|]${normal}"
 	info="\w"
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
 }
 
-___atomic_prompt_scm() {
+___atomic_prompt_scm()
+{
 	[ "${THEME_SHOW_SCM}" != "true" ] && return
 	color=$bold_green
 	box="${Line}[${IWhite}$(scm_char)] "
@@ -132,7 +140,8 @@ ___atomic_prompt_scm() {
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
 }
 
-___atomic_prompt_python() {
+___atomic_prompt_python()
+{
 	[ "${THEME_SHOW_PYTHON}" != "true" ] && return
 	color=$bold_yellow
 	box="[|]"
@@ -140,7 +149,8 @@ ___atomic_prompt_python() {
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_blue}" "${box}"
 }
 
-___atomic_prompt_ruby() {
+___atomic_prompt_ruby()
+{
 	[ "${THEME_SHOW_RUBY}" != "true" ] && return
 	color=$bold_white
 	box="[|]"
@@ -148,16 +158,18 @@ ___atomic_prompt_ruby() {
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_red}" "${box}"
 }
 
-___atomic_prompt_todo() {
-	[ "${THEME_SHOW_TODO}" != "true" ] \
-		|| [ -z "$(which todo.sh)" ] && return
+___atomic_prompt_todo()
+{
+	[ "${THEME_SHOW_TODO}" != "true" ] ||
+		[ -z "$(which todo.sh)" ] && return
 	color=$bold_white
 	box="[|]"
 	info="t:$(todo.sh ls | grep -E "TODO: [0-9]+ of ([0-9]+)" | awk '{ print $4 }')"
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_green}" "${box}"
 }
 
-___atomic_prompt_clock() {
+___atomic_prompt_clock()
+{
 	[ "${THEME_SHOW_CLOCK}" != "true" ] && return
 	color=$THEME_CLOCK_COLOR
 	box="[|]"
@@ -165,10 +177,11 @@ ___atomic_prompt_clock() {
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
 }
 
-___atomic_prompt_battery() {
-	! _command_exists battery_percentage \
-		|| [ "${THEME_SHOW_BATTERY}" != "true" ] \
-		|| [ "$(battery_percentage)" = "no" ] && return
+___atomic_prompt_battery()
+{
+	! _command_exists battery_percentage ||
+		[ "${THEME_SHOW_BATTERY}" != "true" ] ||
+		[ "$(battery_percentage)" = "no" ] && return
 
 	batp=$(battery_percentage)
 	if [ "$batp" -eq 50 ] || [ "$batp" -gt 50 ]; then
@@ -186,13 +199,15 @@ ___atomic_prompt_battery() {
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
 }
 
-___atomic_prompt_exitcode() {
+___atomic_prompt_exitcode()
+{
 	[ "${THEME_SHOW_EXITCODE}" != "true" ] && return
 	color=$bold_purple
 	[ "$exitcode" -ne 0 ] && printf "%s|%s" "${color}" "${exitcode}"
 }
 
-___atomic_prompt_char() {
+___atomic_prompt_char()
+{
 	color=$white
 	prompt_char="${__ATOMIC_PROMPT_CHAR_PS1}"
 	if [ "${THEME_SHOW_SUDO}" == "true" ]; then
@@ -207,19 +222,22 @@ ___atomic_prompt_char() {
 ## cli ##
 #########
 
-__atomic_show() {
+__atomic_show()
+{
 	typeset _seg=${1:-}
 	shift
 	export "THEME_SHOW_${_seg}"=true
 }
 
-__atomic_hide() {
+__atomic_hide()
+{
 	typeset _seg=${1:-}
 	shift
 	export "THEME_SHOW_${_seg}"=false
 }
 
-_atomic_completion() {
+_atomic_completion()
+{
 	local cur _action actions segments
 	COMPREPLY=()
 	cur="${COMP_WORDS[COMP_CWORD]}"
@@ -239,7 +257,8 @@ _atomic_completion() {
 	return 0
 }
 
-atomic() {
+atomic()
+{
 	typeset action=${1:-}
 	shift
 	typeset segs=${*:-}
@@ -303,16 +322,19 @@ ___ATOMIC_BOTTOM=${___ATOMIC_BOTTOM:-"char"}
 ## Prompt ##
 ############
 
-__atomic_ps1() {
+__atomic_ps1()
+{
 	printf "%s%s%s" "$(____atomic_top)" "$(____atomic_bottom)" "${normal}"
 }
 
-__atomic_ps2() {
+__atomic_ps2()
+{
 	color=$bold_white
 	printf "%s%s%s" "${color}" "${__ATOMIC_PROMPT_CHAR_PS2}  " "${normal}"
 }
 
-_atomic_prompt() {
+_atomic_prompt()
+{
 	exitcode="$?"
 
 	PS1="$(__atomic_ps1)"

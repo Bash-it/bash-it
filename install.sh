@@ -2,7 +2,8 @@
 # bash-it installer
 
 # Show how to use this installer
-function _bash-it_show_usage() {
+function _bash-it_show_usage()
+{
 	echo -e "\n$0 : Install bash-it"
 	echo -e "Usage:\n$0 [arguments] \n"
 	echo "Arguments:"
@@ -16,7 +17,8 @@ function _bash-it_show_usage() {
 }
 
 # enable a thing
-function _bash-it_load_one() {
+function _bash-it_load_one()
+{
 	file_type=$1
 	file_to_enable=$2
 	mkdir -p "$BASH_IT/${file_type}/enabled"
@@ -30,7 +32,8 @@ function _bash-it_load_one() {
 }
 
 # Interactively enable several things
-function _bash-it_load_some() {
+function _bash-it_load_some()
+{
 	file_type=$1
 	single_type=$(echo "$file_type" | sed -e "s/aliases$/alias/g" | sed -e "s/plugins$/plugin/g")
 	enable_func="_enable-$single_type"
@@ -57,27 +60,31 @@ function _bash-it_load_some() {
 }
 
 # Back up existing profile
-function _bash-it_backup() {
-	test -w "$HOME/$CONFIG_FILE" \
-		&& cp -aL "$HOME/$CONFIG_FILE" "$HOME/$CONFIG_FILE.bak" \
-		&& echo -e "\033[0;32mYour original $CONFIG_FILE has been backed up to $CONFIG_FILE.bak\033[0m"
+function _bash-it_backup()
+{
+	test -w "$HOME/$CONFIG_FILE" &&
+		cp -aL "$HOME/$CONFIG_FILE" "$HOME/$CONFIG_FILE.bak" &&
+		echo -e "\033[0;32mYour original $CONFIG_FILE has been backed up to $CONFIG_FILE.bak\033[0m"
 }
 
 # Back up existing profile and create new one for bash-it
-function _bash-it_backup_new() {
+function _bash-it_backup_new()
+{
 	_bash-it_backup
 	sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" > "$HOME/$CONFIG_FILE"
 	echo -e "\033[0;32mCopied the template $CONFIG_FILE into ~/$CONFIG_FILE, edit this file to customize bash-it\033[0m"
 }
 
 # Back up existing profile and append bash-it templates at the end
-function _bash-it_backup_append() {
+function _bash-it_backup_append()
+{
 	_bash-it_backup
 	(sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" | tail -n +2) >> "$HOME/$CONFIG_FILE"
 	echo -e "\033[0;32mBash-it template has been added to your $CONFIG_FILE\033[0m"
 }
 
-function _bash-it_check_for_backup() {
+function _bash-it_check_for_backup()
+{
 	if ! [[ -e "$HOME/$BACKUP_FILE" ]]; then
 		return
 	fi
@@ -111,7 +118,8 @@ function _bash-it_check_for_backup() {
 	fi
 }
 
-function _bash-it_modify_config_files() {
+function _bash-it_modify_config_files()
+{
 	_bash-it_check_for_backup
 
 	if [[ -z "${silent}" ]]; then

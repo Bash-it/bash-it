@@ -6,7 +6,8 @@
 # Generic utilies
 ###########################################################################
 
-function _bash-it-get-component-name-from-path() {
+function _bash-it-get-component-name-from-path()
+{
 	local filename
 	# filename without path
 	filename="${1##*/}"
@@ -16,7 +17,8 @@ function _bash-it-get-component-name-from-path() {
 	echo "${filename%.*.bash}"
 }
 
-function _bash-it-get-component-type-from-path() {
+function _bash-it-get-component-type-from-path()
+{
 	local filename
 	# filename without path
 	filename="${1##*/}"
@@ -46,7 +48,8 @@ function _bash-it-get-component-type-from-path() {
 #   contains pear!
 #
 #
-function _bash-it-array-contains-element() {
+function _bash-it-array-contains-element()
+{
 	local e
 	for e in "${@:2}"; do
 		[[ "$e" == "$1" ]] && return 0
@@ -55,18 +58,21 @@ function _bash-it-array-contains-element() {
 }
 
 # Dedupe an array (without embedded newlines).
-function _bash-it-array-dedup() {
+function _bash-it-array-dedup()
+{
 	printf '%s\n' "$@" | sort -u
 }
 
 # Outputs a full path of the grep found on the filesystem
-function _bash-it-grep() {
+function _bash-it-grep()
+{
 	: "${BASH_IT_GREP:=$(type -p egrep || type -p grep)}"
 	printf "%s" "${BASH_IT_GREP:-'/usr/bin/grep'}"
 }
 
 # Runs `grep` with extended regular expressions
-function _bash-it-egrep() {
+function _bash-it-egrep()
+{
 	: "${BASH_IT_GREP:=$(type -p egrep || type -p grep)}"
 	"${BASH_IT_GREP:-/usr/bin/grep}" -E "$@"
 }
@@ -76,7 +82,8 @@ function _bash-it-egrep() {
 # completion).
 ###########################################################################
 
-function _bash-it-component-help() {
+function _bash-it-component-help()
+{
 	local component file func
 	component="$(_bash-it-pluralize-component "${1}")"
 	file="$(_bash-it-component-cache-file "${component}")"
@@ -87,7 +94,8 @@ function _bash-it-component-help() {
 	cat "${file}"
 }
 
-function _bash-it-component-cache-file() {
+function _bash-it-component-cache-file()
+{
 	local component file
 	component="$(_bash-it-pluralize-component "${1?${FUNCNAME[0]}: component name required}")"
 	file="${XDG_CACHE_HOME:-${BASH_IT?}/tmp/cache}${XDG_CACHE_HOME:+/bash_it}/${component}"
@@ -95,7 +103,8 @@ function _bash-it-component-cache-file() {
 	printf '%s' "${file}"
 }
 
-function _bash-it-pluralize-component() {
+function _bash-it-pluralize-component()
+{
 	local component="${1}"
 	local -i len=$((${#component} - 1))
 	# pluralize component name for consistency
@@ -104,7 +113,8 @@ function _bash-it-pluralize-component() {
 	printf '%s' "${component}"
 }
 
-function _bash-it-clean-component-cache() {
+function _bash-it-clean-component-cache()
+{
 	local component="$1"
 	local cache
 	local -a BASH_IT_COMPONENTS=(aliases plugins completions)
@@ -121,24 +131,28 @@ function _bash-it-clean-component-cache() {
 }
 
 # Returns an array of items within each compoenent.
-function _bash-it-component-list() {
+function _bash-it-component-list()
+{
 	local IFS=$'\n' component="$1"
 	_bash-it-component-help "${component}" | awk '{print $1}' | sort -u
 }
 
-function _bash-it-component-list-matching() {
+function _bash-it-component-list-matching()
+{
 	local component="$1"
 	shift
 	local term="$1"
 	_bash-it-component-help "${component}" | ${BASH_IT_GREP:-$(_bash-it-grep)} -E -- "${term}" | awk '{print $1}' | sort -u
 }
 
-function _bash-it-component-list-enabled() {
+function _bash-it-component-list-enabled()
+{
 	local IFS=$'\n' component="$1"
 	_bash-it-component-help "${component}" | ${BASH_IT_GREP:-$(_bash-it-grep)} -E '\[x\]' | awk '{print $1}' | sort -u
 }
 
-function _bash-it-component-list-disabled() {
+function _bash-it-component-list-disabled()
+{
 	local IFS=$'\n' component="$1"
 	_bash-it-component-help "${component}" | ${BASH_IT_GREP:-$(_bash-it-grep)} -E -v '\[x\]' | awk '{print $1}' | sort -u
 }
@@ -151,7 +165,8 @@ function _bash-it-component-list-disabled() {
 #
 # Examples:
 #    _bash-it-component-item-is-enabled alias git && echo "git alias is enabled"
-function _bash-it-component-item-is-enabled() {
+function _bash-it-component-item-is-enabled()
+{
 	local component="$1"
 	local item="$2"
 	_bash-it-component-help "${component}" | ${BASH_IT_GREP:-$(_bash-it-grep)} -E '\[x\]' | ${BASH_IT_GREP:-$(_bash-it-grep)} -E -q -- "^${item}\s"
@@ -165,7 +180,8 @@ function _bash-it-component-item-is-enabled() {
 #
 # Examples:
 #    _bash-it-component-item-is-disabled alias git && echo "git aliases are disabled"
-function _bash-it-component-item-is-disabled() {
+function _bash-it-component-item-is-disabled()
+{
 	local component="$1"
 	local item="$2"
 	_bash-it-component-help "${component}" | ${BASH_IT_GREP:-$(_bash-it-grep)} -E -v '\[x\]' | ${BASH_IT_GREP:-$(_bash-it-grep)} -E -q -- "^${item}\s"

@@ -11,13 +11,15 @@ SCM_GIT_CHAR="${bold_green}±${normal}"
 SCM_SVN_CHAR="${bold_cyan}⑆${normal}"
 SCM_HG_CHAR="${bold_red}☿${normal}"
 
-is_vim_shell() {
+is_vim_shell()
+{
 	if [ -n "$VIMRUNTIME" ]; then
 		echo "[${cyan}vim shell${normal}]"
 	fi
 }
 
-prompt() {
+prompt()
+{
 	SCM_PROMPT_FORMAT=' %s (%s)'
 	PS1="${white}${background_blue} \u${normal}${background_blue}@${red}${background_blue}\h $(clock_prompt) ${reset_color}${normal} $(battery_charge)\n${bold_black}${background_white} \w ${normal}$(scm_prompt)$(is_vim_shell)\n${white}>${normal} "
 }

@@ -194,11 +194,13 @@ case $OSTYPE in
 esac
 
 # functions
-function gdv() {
+function gdv()
+{
 	git diff --ignore-all-space "$@" | vim -R -
 }
 
-function get_default_branch() {
+function get_default_branch()
+{
 	if git branch | grep -q main; then
 		echo main
 	else

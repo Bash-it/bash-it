@@ -15,7 +15,8 @@ GIT_THEME_PROMPT_SUFFIX="${green}|"
 RVM_THEME_PROMPT_PREFIX="|"
 RVM_THEME_PROMPT_SUFFIX="|"
 
-__bobby_clock() {
+__bobby_clock()
+{
 	printf '%s' "$(clock_prompt) "
 
 	if [ "${THEME_SHOW_CLOCK_CHAR}" == "true" ]; then
@@ -23,7 +24,8 @@ __bobby_clock() {
 	fi
 }
 
-function prompt_command() {
+function prompt_command()
+{
 	PS1="\n$(battery_char) $(__bobby_clock)"
 	PS1+="${yellow}$(ruby_version_prompt) "
 	PS1+="${purple}\h "

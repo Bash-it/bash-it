@@ -7,7 +7,8 @@ if [ "$file" != "clean_files.txt" ]; then
 	exit 1
 fi
 
-function compare_lines() {
+function compare_lines()
+{
 	prev=""
 	while read -r line; do
 		# Skip unimportant lines

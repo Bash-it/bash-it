@@ -2,7 +2,8 @@
 
 _command_exists laravel || return
 
-function __laravel_completion() {
+function __laravel_completion()
+{
 	local OPTS=('-h' '--help' '-q' '--quiet' '--ansi' '--no-ansi' '-n' '--no-interaction' '-v' '-vv' '-vvv' '--verbose' 'help' 'list' 'new')
 	local _opt_
 	COMPREPLY=()

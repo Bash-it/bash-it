@@ -17,7 +17,8 @@ about-plugin 'Automatic completion of aliases'
 # 4) Custom scripts
 
 # Automatically add completion for all aliases to commands having completion functions
-function alias_completion {
+function alias_completion
+{
 	local namespace="alias_completion"
 	local tmp_file completion_loader alias_name alias_tokens line completions
 	local alias_arg_words new_completion compl_func compl_wrapper

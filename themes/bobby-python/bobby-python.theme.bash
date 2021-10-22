@@ -14,7 +14,8 @@ GIT_THEME_PROMPT_SUFFIX="${green}|"
 
 CONDAENV_THEME_PROMPT_SUFFIX="|"
 
-function prompt_command() {
+function prompt_command()
+{
 	PS1="\n${yellow}$(python_version_prompt) " # Name of virtual env followed by python version
 	PS1+="${purple}\h "
 	PS1+="${reset_color}in "

@@ -70,7 +70,8 @@ PROMPT_DIRTRIM=2 # bash4 and above
 
 ######################################################################
 DEBUG=0
-debug() {
+debug()
+{
 	if [[ ${DEBUG} -ne 0 ]]; then
 		echo >&2 -e "$@"
 	fi
@@ -87,7 +88,8 @@ RIGHT_SEPARATOR=''
 LEFT_SUBSEG=''
 RIGHT_SUBSEG=''
 
-text_effect() {
+text_effect()
+{
 	case "$1" in
 		reset) echo 0 ;;
 		bold) echo 1 ;;
@@ -98,7 +100,8 @@ text_effect() {
 # to add colors, see
 # http://bitmote.com/index.php?post/2012/11/19/Using-ANSI-Color-Codes-to-Colorize-Your-Bash-Prompt-on-Linux
 # under the "256 (8-bit) Colors" section, and follow the example for orange below
-fg_color() {
+fg_color()
+{
 	case "$1" in
 		black) echo 30 ;;
 		red) echo 31 ;;
@@ -112,7 +115,8 @@ fg_color() {
 	esac
 }
 
-bg_color() {
+bg_color()
+{
 	case "$1" in
 		black) echo 40 ;;
 		red) echo 41 ;;
@@ -129,7 +133,8 @@ bg_color() {
 # TIL: declare is global not local, so best use a different name
 # for codes (mycodes) as otherwise it'll clobber the original.
 # this changes from BASH v3 to BASH v4.
-ansi() {
+ansi()
+{
 	local seq
 	declare -a mycodes=("${!1}")
 
@@ -147,14 +152,16 @@ ansi() {
 	# PR="$PR\[\033[${seq}m\]"
 }
 
-ansi_single() {
+ansi_single()
+{
 	echo -ne '\[\033['"$1"'m\]'
 }
 
 # Begin a segment
 # Takes two arguments, background and foreground. Both can be omitted,
 # rendering default background/foreground.
-prompt_segment() {
+prompt_segment()
+{
 	local bg fg
 	declare -a codes
 
@@ -196,7 +203,8 @@ prompt_segment() {
 }
 
 # End the prompt, closing any open segments
-prompt_end() {
+prompt_end()
+{
 	if [[ -n $CURRENT_BG ]]; then
 		declare -a codes=("$(text_effect reset)" "$(fg_color "$CURRENT_BG")")
 		PR="$PR $(ansi codes[@])$SEGMENT_SEPARATOR"
@@ -207,7 +215,8 @@ prompt_end() {
 }
 
 ### virtualenv prompt
-prompt_virtualenv() {
+prompt_virtualenv()
+{
 	if [[ -n $VIRTUAL_ENV ]]; then
 		color=cyan
 		prompt_segment $color "$PRIMARY_FG"
@@ -220,7 +229,8 @@ prompt_virtualenv() {
 # Each component will draw itself, and hide itself if no information needs to be shown
 
 # Context: user@hostname (who am I and where am I)
-prompt_context() {
+prompt_context()
+{
 	local user="${USER:-${LOGNAME:?}}"
 
 	if [[ $user != "$DEFAULT_USER" || -n $SSH_CLIENT ]]; then
@@ -230,17 +240,20 @@ prompt_context() {
 
 # prints history followed by HH:MM, useful for remembering what
 # we did previously
-prompt_histdt() {
+prompt_histdt()
+{
 	prompt_segment black default "\! [\A]"
 }
 
-git_status_dirty() {
+git_status_dirty()
+{
 	dirty=$(git status -s 2> /dev/null | tail -n 1)
 	[[ -n $dirty ]] && echo " ●"
 }
 
 # Git: branch/detached head, dirty status
-prompt_git() {
+prompt_git()
+{
 	local ref dirty
 	if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
 		ZSH_THEME_GIT_PROMPT_DIRTY='±'
@@ -256,7 +269,8 @@ prompt_git() {
 }
 
 # Dir: current working directory
-prompt_dir() {
+prompt_dir()
+{
 	prompt_segment blue black '\w'
 }
 
@@ -264,7 +278,8 @@ prompt_dir() {
 # - was there an error
 # - am I root
 # - are there background jobs?
-prompt_status() {
+prompt_status()
+{
 	local symbols
 	symbols=()
 	[[ $RETVAL -ne 0 ]] && symbols+=("$(ansi_single "$(fg_color red)")✘")
@@ -280,12 +295,14 @@ prompt_status() {
 # requires setting prompt_foo to use PRIGHT vs PR
 # doesn't quite work per above
 
-rightprompt() {
+rightprompt()
+{
 	printf "%*s" $COLUMNS "$PRIGHT"
 }
 
 # quick right prompt I grabbed to test things.
-__command_rprompt() {
+__command_rprompt()
+{
 	local times=n=$COLUMNS tz
 	for tz in ZRH:Europe/Zurich PIT:US/Eastern \
 		MTV:US/Pacific TOK:Asia/Tokyo; do
@@ -299,7 +316,8 @@ __command_rprompt() {
 # PROMPT_COMMAND=__command_rprompt
 
 # this doens't wrap code in \[ \]
-ansi_r() {
+ansi_r()
+{
 	local seq
 	declare -a mycodes2=("${!1}")
 
@@ -320,7 +338,8 @@ ansi_r() {
 # Begin a segment on the right
 # Takes two arguments, background and foreground. Both can be omitted,
 # rendering default background/foreground.
-prompt_right_segment() {
+prompt_right_segment()
+{
 	local bg fg
 	declare -a codes
 
@@ -383,7 +402,8 @@ prompt_right_segment() {
 #               (add-hook 'comint-preoutput-filter-functions
 #                         'dirtrack-filter-out-pwd-prompt t t)))
 
-prompt_emacsdir() {
+prompt_emacsdir()
+{
 	# no color or other setting... this will be deleted per above
 	PR="DIR \w DIR$PR"
 }
@@ -391,7 +411,8 @@ prompt_emacsdir() {
 ######################################################################
 ## Main prompt
 
-build_prompt() {
+build_prompt()
+{
 	[[ -n ${AG_EMACS_DIR+x} ]] && prompt_emacsdir
 	prompt_status
 	#[[ -z ${AG_NO_HIST+x} ]] && prompt_histdt
@@ -407,7 +428,8 @@ build_prompt() {
 # this doesn't work... new model: create a prompt via a PR variable and
 # use that.
 
-set_bash_prompt() {
+set_bash_prompt()
+{
 	RETVAL=$?
 	PR=""
 	PRIGHT=""

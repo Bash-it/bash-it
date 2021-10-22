@@ -16,7 +16,8 @@ else
 	user_host="${bold_green}\u@\h${normal}${reset_color}"
 fi
 
-function prompt_command() {
+function prompt_command()
+{
 	local current_dir=" ${bold_blue}\w${normal}${reset_color}"
 	PS1="╭─${user_host}${current_dir}$(virtualenv_prompt)$(scm_prompt_info)\n╰─${bold}\\$ ${normal}"
 }

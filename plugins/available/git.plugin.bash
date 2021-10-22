@@ -3,7 +3,8 @@ cite about-plugin
 about-plugin 'git helper functions'
 
 # shellcheck disable=SC2016
-function git_remote {
+function git_remote
+{
 	about 'adds remote $GIT_HOSTING:$1 to current repo'
 	group "git"
 
@@ -11,7 +12,8 @@ function git_remote {
 	git remote add origin "${GIT_HOSTING}:${1}".git
 }
 
-function git_first_push {
+function git_first_push
+{
 	about 'push into origin refs/heads/master'
 	group 'git'
 
@@ -19,7 +21,8 @@ function git_first_push {
 	git push origin master:refs/heads/master
 }
 
-function git_pub() {
+function git_pub()
+{
 	about 'publishes current branch to remote origin'
 	group 'git'
 	BRANCH=$(git rev-parse --abbrev-ref HEAD)
@@ -28,7 +31,8 @@ function git_pub() {
 	git push -u origin "${BRANCH}"
 }
 
-function git_revert() {
+function git_revert()
+{
 	about 'applies changes to HEAD that revert all changes after this commit'
 	group 'git'
 
@@ -38,25 +42,29 @@ function git_revert() {
 	git reset --hard
 }
 
-function git_rollback() {
+function git_rollback()
+{
 	about 'resets the current HEAD to this commit'
 	group 'git'
 
-	function is_clean() {
+	function is_clean()
+	{
 		if [[ $(git diff --shortstat 2> /dev/null | tail -n1) != "" ]]; then
 			echo "Your branch is dirty, please commit your changes"
 			kill -INT $$
 		fi
 	}
 
-	function commit_exists() {
+	function commit_exists()
+	{
 		if git rev-list --quiet "${1:?}"; then
 			echo "Commit ${1} does not exist"
 			kill -INT $$
 		fi
 	}
 
-	function keep_changes() {
+	function keep_changes()
+	{
 		while true; do
 			# shellcheck disable=SC2162
 			read -p "Do you want to keep all changes from rolled back revisions in your working tree? [Y/N]" RESP
@@ -105,7 +113,8 @@ function git_rollback() {
 	fi
 }
 
-function git_remove_missing_files() {
+function git_remove_missing_files()
+{
 	about "git rm's missing files"
 	group 'git'
 
@@ -113,7 +122,8 @@ function git_remove_missing_files() {
 }
 
 # Adds files to git's exclude file (same as .gitignore)
-function local-ignore() {
+function local-ignore()
+{
 	about 'adds file or path to git exclude file'
 	param '1: file or path fragment to ignore'
 	group 'git'
@@ -121,7 +131,8 @@ function local-ignore() {
 }
 
 # get a quick overview for your git repo
-function git_info() {
+function git_info()
+{
 	about 'overview for your git repo'
 	group 'git'
 
@@ -158,7 +169,8 @@ function git_info() {
 	fi
 }
 
-function git_stats {
+function git_stats
+{
 	about 'display stats per author'
 	group 'git'
 
@@ -203,7 +215,8 @@ function git_stats {
 	fi
 }
 
-function gittowork() {
+function gittowork()
+{
 	about 'Places the latest .gitignore file for a given project type in the current directory, or concatenates onto an existing .gitignore'
 	group 'git'
 	param '1: the language/type of the project, used for determining the contents of the .gitignore file'
@@ -224,7 +237,8 @@ function gittowork() {
 	fi
 }
 
-function gitignore-reload() {
+function gitignore-reload()
+{
 	about 'Empties the git cache, and readds all files not blacklisted by .gitignore'
 	group 'git'
 	example '$ gitignore-reload'
@@ -274,7 +288,8 @@ function gitignore-reload() {
 	fi
 }
 
-function git-changelog() {
+function git-changelog()
+{
 	# ---------------------------------------------------------------
 	#  ORIGINAL ANSWER: https://stackoverflow.com/a/2979587/10362396 |
 	# ---------------------------------------------------------------

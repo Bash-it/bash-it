@@ -2,7 +2,8 @@
 cite "about-completion"
 about-completion "gem completion"
 
-__gem_completion() {
+__gem_completion()
+{
 	local cur=${COMP_WORDS[COMP_CWORD]}
 	local prev=${COMP_WORDS[COMP_CWORD - 1]}
 	case $prev in

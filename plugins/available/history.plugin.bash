@@ -11,7 +11,8 @@ export HISTCONTROL=${HISTCONTROL:-ignorespace:erasedups}
 # resize history to 100x the default (500)
 export HISTSIZE=${HISTSIZE:-50000}
 
-top-history() {
+top-history()
+{
 	about 'print the name and count of the most commonly run tools'
 
 	if [[ -n $HISTTIMEFORMAT ]]; then
@@ -23,16 +24,16 @@ top-history() {
 		unset HISTTIMEFORMAT
 	fi
 
-	history \
-		| awk '{
+	history |
+		awk '{
 				a[$2]++
 			}END{
 				for(i in a)
 				printf("%s\t%s\n", a[i], i)
-			}' \
-		| sort --reverse --numeric-sort \
-		| head \
-		| column \
+			}' |
+		sort --reverse --numeric-sort |
+		head |
+		column \
 			--table \
 			--table-columns 'Command Count,Command Name' \
 			--output-separator ' | '

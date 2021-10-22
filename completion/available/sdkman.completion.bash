@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 
-function _sdkman_complete() {
+function _sdkman_complete()
+{
 	local CANDIDATES
 	local CANDIDATE_VERSIONS
 	local SDKMAN_CANDIDATES_CSV="${SDKMAN_CANDIDATES_CSV:-}"
@@ -48,13 +49,15 @@ function _sdkman_complete() {
 	return 0
 }
 
-function _sdkman_candidate_local_versions() {
+function _sdkman_candidate_local_versions()
+{
 
 	CANDIDATE_VERSIONS=$(__sdkman_cleanup_local_versions "$1")
 
 }
 
-function _sdkman_candidate_all_versions() {
+function _sdkman_candidate_all_versions()
+{
 
 	candidate="$1"
 	CANDIDATE_LOCAL_VERSIONS=$(__sdkman_cleanup_local_versions "$candidate")
@@ -77,7 +80,8 @@ function _sdkman_candidate_all_versions() {
 
 }
 
-function __sdkman_cleanup_local_versions() {
+function __sdkman_cleanup_local_versions()
+{
 
 	__sdkman_build_version_csv "$1" | tr ',' ' '
 

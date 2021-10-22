@@ -22,13 +22,15 @@ esac
 
 PS3=">> "
 
-is_vim_shell() {
+is_vim_shell()
+{
 	if [ -n "$VIMRUNTIME" ]; then
 		echo "[${cyan}vim shell${normal}]"
 	fi
 }
 
-detect_venv() {
+detect_venv()
+{
 	python_venv=""
 	# Detect python venv
 	if [[ -n "${CONDA_DEFAULT_ENV}" ]]; then
@@ -38,7 +40,8 @@ detect_venv() {
 	fi
 }
 
-prompt() {
+prompt()
+{
 	SCM_PROMPT_FORMAT='[%s][%s]'
 	retval=$?
 	if [[ retval -ne 0 ]]; then

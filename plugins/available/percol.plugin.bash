@@ -21,7 +21,8 @@ if [[ ${BASH_VERSINFO[0]} -lt 4 ]]; then
 	return
 fi
 
-function _replace_by_history() {
+function _replace_by_history()
+{
 	local HISTTIMEFORMAT= # Ensure we can parse history properly
 	#TODO: "${histlines[@]/*( )+([[:digit:]])*( )/}"
 	local l

@@ -33,13 +33,15 @@ stat -c %Y /dev/null > /dev/null 2>&1 && _KAC_STAT_COMMAND="stat -c %Y" || _KAC_
 # returns 0 iff the file whose path is given as 1st argument
 # exists and has last been modified in the last $2 seconds
 # returns 1 otherwise
-_KAC_is_file_newer_than() {
+_KAC_is_file_newer_than()
+{
 	[ -f "$1" ] || return 1
 	[ $(($(date +%s) - $($_KAC_STAT_COMMAND "$1"))) -gt "$2" ] && return 1 || return 0
 }
 
 # helper function for _KAC_get_and_regen_cache, see doc below
-_KAC_regen_cache() {
+_KAC_regen_cache()
+{
 	local CACHE_NAME=$1
 	local CACHE_PATH="$_KNIFE_AUTOCOMPLETE_CACHE_DIR/$CACHE_NAME"
 	# shellcheck disable=SC2155
@@ -54,12 +56,14 @@ _KAC_regen_cache() {
 }
 
 # cached files can't have spaces in their names
-_KAC_get_cache_name_from_command() {
+_KAC_get_cache_name_from_command()
+{
 	echo "${@/ /_SPACE_}"
 }
 
 # the reverse operation from the function above
-_KAC_get_command_from_cache_name() {
+_KAC_get_command_from_cache_name()
+{
 	echo "${@/_SPACE_/ }"
 }
 
@@ -68,7 +72,8 @@ _KAC_get_command_from_cache_name() {
 # in either case, it regenerates the cache, and sets the _KAC_CACHE_PATH env variable
 # for obvious reason, do NOT call that in a sub-shell (in particular, no piping)
 # shellcheck disable=SC2155
-_KAC_get_and_regen_cache() {
+_KAC_get_and_regen_cache()
+{
 	# the cache name can't have space in it
 	local CACHE_NAME=$(_KAC_get_cache_name_from_command "$@")
 	local REGEN_CMD="_KAC_regen_cache $CACHE_NAME $*"
@@ -83,15 +88,16 @@ _KAC_get_and_regen_cache() {
 
 # performs two things: first, deletes all obsolete temp files
 # then refreshes stale caches that haven't been called in a long time
-_KAC_clean_cache() {
+_KAC_clean_cache()
+{
 	local FILE CMD
 	# delete all obsolete temp files, could be lingering there for any kind of crash in the caching process
 	for FILE in "$_KAC_CACHE_TMP_DIR"/*; do
 		_KAC_is_file_newer_than "$FILE" "$_KNIFE_AUTOCOMPLETE_MAX_CACHE_AGE" || rm -f "$FILE"
 	done
 	# refresh really stale caches
-	find "$_KNIFE_AUTOCOMPLETE_CACHE_DIR" -maxdepth 1 -type f -not -name '.*' \
-		| while read -r FILE; do
+	find "$_KNIFE_AUTOCOMPLETE_CACHE_DIR" -maxdepth 1 -type f -not -name '.*' |
+		while read -r FILE; do
 			_KAC_is_file_newer_than "$FILE" "$_KNIFE_AUTOCOMPLETE_MAX_CACHE_AGE" && continue
 			# first let's get the original command
 			CMD=$(_KAC_get_command_from_cache_name "$(basename "$FILE")")
@@ -109,14 +115,16 @@ _KAC_clean_cache() {
 #####################################
 
 # returns all the possible knife sub-commands
-_KAC_knife_commands() {
+_KAC_knife_commands()
+{
 	knife --help | grep -E "^knife" | sed -E 's/ \(options\)//g'
 }
 
 # rebuilds the knife base command currently being completed, and assigns it to $_KAC_CURRENT_COMMAND
 # additionnally, returns 1 iff the current base command is not complete, 0 otherwise
 # also sets $_KAC_CURRENT_COMMAND_NB_WORDS if the base command is complete
-_KAC_get_current_base_command() {
+_KAC_get_current_base_command()
+{
 	local PREVIOUS="knife"
 	local I=1
 	local CURRENT
@@ -136,7 +144,8 @@ _KAC_get_current_base_command() {
 # (i.e. handles "plural" arguments such as knife cookbook upload cookbook1 cookbook2 and so on...)
 # assumes the current base command is complete
 # shellcheck disable=SC2155
-_KAC_get_current_arg_position() {
+_KAC_get_current_arg_position()
+{
 	local CURRENT_ARG_POS=$((_KAC_CURRENT_COMMAND_NB_WORDS + 1))
 	local COMPLETE_COMMAND=$(grep -E "^$_KAC_CURRENT_COMMAND" "$_KAC_CACHE_PATH")
 	local CURRENT_ARG
@@ -150,7 +159,8 @@ _KAC_get_current_arg_position() {
 }
 
 # the actual auto-complete function
-_knife() {
+_knife()
+{
 	_KAC_get_and_regen_cache _KAC_knife_commands
 	local RAW_LIST ITEM REGEN_CMD ARG_POSITION
 	# shellcheck disable=SC2034

@@ -2,7 +2,8 @@
 cite "about-completion"
 about-completion "lerna(javascript project manager tool) completion"
 
-function __lerna_completion() {
+function __lerna_completion()
+{
 	local cur compls
 
 	# The currently-being-completed word.

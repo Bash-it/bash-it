@@ -29,7 +29,8 @@ else
 	RESET="\033[m"
 fi
 
-function prompt_command() {
+function prompt_command()
+{
 	PS1="\[${BOLD}${MAGENTA}\]\u \[$WHITE\]@ \[$ORANGE\]\h \[$WHITE\]in \[$GREEN\]\w\[$WHITE\]\[$SCM_THEME_PROMPT_PREFIX\]$(clock_prompt) \[$PURPLE\]$(scm_prompt_info) \n\$ \[$RESET\]"
 }
 

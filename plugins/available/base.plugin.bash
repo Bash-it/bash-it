@@ -2,7 +2,8 @@
 cite about-plugin
 about-plugin 'miscellaneous tools'
 
-function ips() {
+function ips()
+{
 	about 'display all ip addresses for this host'
 	group 'base'
 	if _command_exists ifconfig; then
@@ -14,7 +15,8 @@ function ips() {
 	fi
 }
 
-function down4me() {
+function down4me()
+{
 	about 'checks whether a website is down for you, or everybody'
 	param '1: website url'
 	example '$ down4me http://www.google.com'
@@ -22,7 +24,8 @@ function down4me() {
 	curl -Ls "http://downforeveryoneorjustme.com/$1" | sed '/just you/!d;s/<[^>]*>//g'
 }
 
-function myip() {
+function myip()
+{
 	about 'displays your ip address, as seen by the Internet'
 	group 'base'
 	list=("http://myip.dnsomatic.com/" "http://checkip.dyndns.com/" "http://checkip.dyndns.org/")
@@ -35,7 +38,8 @@ function myip() {
 	echo -e "Your public IP is: ${echo_bold_green-} $res ${echo_normal-}"
 }
 
-function pickfrom() {
+function pickfrom()
+{
 	about 'picks random line from file'
 	param '1: filename'
 	example '$ pickfrom /usr/share/dict/words'
@@ -50,7 +54,8 @@ function pickfrom() {
 	head -n "$n" "$file" | tail -1
 }
 
-function passgen() {
+function passgen()
+{
 	about 'generates random password from dictionary words'
 	param 'optional integer length'
 	param 'if unset, defaults to 4'
@@ -72,7 +77,8 @@ if ! _command_exists pass || [[ "${BASH_IT_LEGACY_PASS:-}" = true ]]; then
 fi
 
 if _command_exists markdown && _command_exists browser; then
-	function pmdown() {
+	function pmdown()
+	{
 		about 'preview markdown file in a browser'
 		param '1: markdown file'
 		example '$ pmdown README.md'
@@ -82,7 +88,8 @@ if _command_exists markdown && _command_exists browser; then
 	}
 fi
 
-function mkcd() {
+function mkcd()
+{
 	about 'make one or more directories and cd into the last one'
 	param 'one or more directories to create'
 	example '$ mkcd foo'
@@ -94,19 +101,22 @@ function mkcd() {
 }
 
 # shellcheck disable=SC2010
-function lsgrep() {
+function lsgrep()
+{
 	about 'search through directory contents with grep'
 	group 'base'
 	ls | grep "$@"
 }
 
-function quiet() {
+function quiet()
+{
 	about 'what *does* this do?'
 	group 'base'
 	nohup "$@" &> /dev/null < /dev/null &
 }
 
-function usage() {
+function usage()
+{
 	about 'disk usage per directory, in Mac OS X and Linux'
 	param '1: directory name'
 	group 'base'
@@ -124,7 +134,8 @@ function usage() {
 if [[ ! -e "${BASH_IT?}/plugins/enabled/todo.plugin.bash" &&
 	! -e "${BASH_IT?}/plugins/enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR-}todo.plugin.bash" ]]; then
 	# if user has installed todo plugin, skip this...
-	function t() {
+	function t()
+	{
 		about 'one thing todo'
 		param 'if not set, display todo item'
 		param '1: todo text'
@@ -137,7 +148,8 @@ if [[ ! -e "${BASH_IT?}/plugins/enabled/todo.plugin.bash" &&
 fi
 
 if _command_exists mkisofs; then
-	function mkiso() {
+	function mkiso()
+	{
 		about 'creates iso from current dir in the parent dir (unless defined)'
 		param '1: ISO name'
 		param '2: dest/path'
@@ -160,7 +172,8 @@ if _command_exists mkisofs; then
 fi
 
 # useful for administrators and configs
-function buf() {
+function buf()
+{
 	about 'back up file with timestamp'
 	param 'filename'
 	group 'base'
@@ -170,7 +183,8 @@ function buf() {
 }
 
 if ! _command_exists del; then
-	function del() {
+	function del()
+	{
 		about 'move files to hidden folder in tmp, that gets cleared on each reboot'
 		param 'file or folder to be deleted'
 		example 'del ./file.txt'

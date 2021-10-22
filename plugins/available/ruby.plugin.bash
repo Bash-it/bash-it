@@ -8,7 +8,8 @@ if _command_exists ruby && _command_exists gem; then
 	pathmunge "$(ruby -e 'print Gem.user_dir')/bin" after
 fi
 
-function remove_gem() {
+function remove_gem()
+{
 	about 'removes installed gem'
 	param '1: installed gem name'
 	group 'ruby'

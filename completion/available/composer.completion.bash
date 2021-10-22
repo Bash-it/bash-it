@@ -2,7 +2,8 @@
 cite "about-completion"
 about-completion "composer completion"
 
-function __composer_completion() {
+function __composer_completion()
+{
 	local cur coms opts com words
 	COMPREPLY=()
 	_get_comp_words_by_ref -n : cur words

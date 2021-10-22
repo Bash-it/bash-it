@@ -41,7 +41,8 @@ SCM_THEME_BRANCH_TRACK_PREFIX="${normal} ⤏  ${cyan}"
 SCM_THEME_CURRENT_USER_PREFFIX='  '
 SCM_GIT_SHOW_CURRENT_USER=false
 
-function _git-uptream-remote-logo {
+function _git-uptream-remote-logo
+{
 	[[ "$(_git-upstream)" == "" ]] && SCM_GIT_CHAR="$SCM_GIT_CHAR_DEFAULT"
 
 	local remote remote_domain
@@ -59,12 +60,14 @@ function _git-uptream-remote-logo {
 	esac
 }
 
-function git_prompt_info {
+function git_prompt_info
+{
 	git_prompt_vars
 	echo -e " on $SCM_GIT_CHAR_ICON_BRANCH $SCM_PREFIX$SCM_BRANCH$SCM_STATE$SCM_GIT_AHEAD$SCM_GIT_BEHIND$SCM_GIT_STASH$SCM_SUFFIX"
 }
 
-function _exit-code {
+function _exit-code
+{
 	if [[ "$1" -ne 0 ]]; then
 		exit_code=" ${purple}${EXIT_CODE_ICON}${yellow}${exit_code}${bold_orange}"
 	else
@@ -72,7 +75,8 @@ function _exit-code {
 	fi
 }
 
-function _prompt {
+function _prompt
+{
 	local exit_code="$?" wrap_char=' ' dir_color=$green ssh_info='' python_venv='' host command_duration=
 
 	command_duration=$(_command_duration)
