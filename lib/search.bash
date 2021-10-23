@@ -57,7 +57,6 @@ _bash-it-search() {
 
   local component
   export BASH_IT_SEARCH_USE_COLOR=true
-  export BASH_IT_GREP=${BASH_IT_GREP:-$(which egrep)}
   declare -a BASH_IT_COMPONENTS=(aliases plugins completions)
 
   if [[ -z "$*" ]] ; then
@@ -168,7 +167,7 @@ ${echo_underline_yellow}SUMMARY${echo_normal}
 _bash-it-is-partial-match() {
   local component="$1"
   local term="$2"
-  _bash-it-component-help "${component}" | $(_bash-it-grep) -E -i -q -- "${term}"
+  _bash-it-component-help "${component}" | _bash-it-egrep -i -q -- "${term}"
 }
 
 _bash-it-component-term-matches-negation() {

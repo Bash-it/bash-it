@@ -82,7 +82,7 @@ function _bash-it-component-help() {
 	file="$(_bash-it-component-cache-file "${component}")"
 	if [[ ! -s "${file}" || -z "$(find "${file}" -mmin -300)" ]]; then
 		func="_bash-it-${component}"
-		"${func}" | ${BASH_IT_GREP:-$(_bash-it-grep)} -E '   \[' >| "${file}"
+		"${func}" | _bash-it-egrep '   \[' >| "${file}"
 	fi
 	cat "${file}"
 }
@@ -130,17 +130,17 @@ function _bash-it-component-list-matching() {
 	local component="$1"
 	shift
 	local term="$1"
-	_bash-it-component-help "${component}" | ${BASH_IT_GREP:-$(_bash-it-grep)} -E -- "${term}" | awk '{print $1}' | sort -u
+	_bash-it-component-help "${component}" | _bash-it-egrep -- "${term}" | awk '{print $1}' | sort -u
 }
 
 function _bash-it-component-list-enabled() {
 	local IFS=$'\n' component="$1"
-	_bash-it-component-help "${component}" | ${BASH_IT_GREP:-$(_bash-it-grep)} -E '\[x\]' | awk '{print $1}' | sort -u
+	_bash-it-component-help "${component}" | _bash-it-egrep '\[x\]' | awk '{print $1}' | sort -u
 }
 
 function _bash-it-component-list-disabled() {
 	local IFS=$'\n' component="$1"
-	_bash-it-component-help "${component}" | ${BASH_IT_GREP:-$(_bash-it-grep)} -E -v '\[x\]' | awk '{print $1}' | sort -u
+	_bash-it-component-help "${component}" | _bash-it-egrep -v '\[x\]' | awk '{print $1}' | sort -u
 }
 
 # Checks if a given item is enabled for a particular component/file-type.
@@ -154,7 +154,7 @@ function _bash-it-component-list-disabled() {
 function _bash-it-component-item-is-enabled() {
 	local component="$1"
 	local item="$2"
-	_bash-it-component-help "${component}" | ${BASH_IT_GREP:-$(_bash-it-grep)} -E '\[x\]' | ${BASH_IT_GREP:-$(_bash-it-grep)} -E -q -- "^${item}\s"
+	_bash-it-component-help "${component}" | _bash-it-egrep '\[x\]' | _bash-it-egrep -q -- "^${item}\s"
 }
 
 # Checks if a given item is disabled for a particular component/file-type.
@@ -168,5 +168,5 @@ function _bash-it-component-item-is-enabled() {
 function _bash-it-component-item-is-disabled() {
 	local component="$1"
 	local item="$2"
-	_bash-it-component-help "${component}" | ${BASH_IT_GREP:-$(_bash-it-grep)} -E -v '\[x\]' | ${BASH_IT_GREP:-$(_bash-it-grep)} -E -q -- "^${item}\s"
+	_bash-it-component-help "${component}" | _bash-it-egrep -v '\[x\]' | _bash-it-egrep -q -- "^${item}\s"
 }
