@@ -47,9 +47,10 @@ function _bash-it-get-component-type-from-path() {
 #
 #
 function _bash-it-array-contains-element() {
-	local e
-	for e in "${@:2}"; do
-		[[ "$e" == "$1" ]] && return 0
+	local e element="${1?}"
+	shift
+	for e in "$@"; do
+		[[ "$e" == "${element}" ]] && return 0
 	done
 	return 1
 }
@@ -82,7 +83,7 @@ function _bash-it-component-help() {
 	file="$(_bash-it-component-cache-file "${component}")"
 	if [[ ! -s "${file}" || -z "$(find "${file}" -mmin -300)" ]]; then
 		func="_bash-it-${component}"
-		"${func}" | _bash-it-egrep '   \[' >| "${file}"
+		"${func}" | _bash-it-egrep '\[[x ]\]' >| "${file}"
 	fi
 	cat "${file}"
 }
