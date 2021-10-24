@@ -144,7 +144,6 @@ function _bash-it-component-list-disabled() {
 }
 
 # Checks if a given item is enabled for a particular component/file-type.
-# Uses the component cache if available.
 #
 # Returns:
 #    0 if an item of the component is enabled, 1 otherwise.
@@ -152,13 +151,17 @@ function _bash-it-component-list-disabled() {
 # Examples:
 #    _bash-it-component-item-is-enabled alias git && echo "git alias is enabled"
 function _bash-it-component-item-is-enabled() {
-	local component="$1"
-	local item="$2"
-	_bash-it-component-help "${component}" | _bash-it-egrep '\[x\]' | _bash-it-egrep -q -- "^${item}\s"
+	local component="$1" item="$2"
+	local each_file
+
+	for each_file in "${BASH_IT}/enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR?}${item}.${component}"*."bash" \
+		"${BASH_IT}/${component}"*/"enabled/${item}.${component}"*."bash" \
+		"${BASH_IT}/${component}"*/"enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR?}${item}.${component}"*."bash"; do
+		[[ -f "${each_file}" ]] && return
+	done
 }
 
 # Checks if a given item is disabled for a particular component/file-type.
-# Uses the component cache if available.
 #
 # Returns:
 #    0 if an item of the component is enabled, 1 otherwise.
@@ -166,7 +169,5 @@ function _bash-it-component-item-is-enabled() {
 # Examples:
 #    _bash-it-component-item-is-disabled alias git && echo "git aliases are disabled"
 function _bash-it-component-item-is-disabled() {
-	local component="$1"
-	local item="$2"
-	_bash-it-component-help "${component}" | _bash-it-egrep -v '\[x\]' | _bash-it-egrep -q -- "^${item}\s"
+	! _bash-it-component-item-is-enabled "$@"
 }
