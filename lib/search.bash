@@ -53,29 +53,32 @@ _bash-it-search() {
   _param '2: [ term2 ]...'
   _example '$ _bash-it-search @git ruby -rvm rake bundler'
 
-  [[ -z "$(type _bash-it-array-contains-element 2>/dev/null)" ]] && source "${BASH_IT}/lib/utilities.bash"
-
   local component
-  export BASH_IT_SEARCH_USE_COLOR=true
-  declare -a BASH_IT_COMPONENTS=(aliases plugins completions)
+  local BASH_IT_SEARCH_USE_COLOR="${BASH_IT_SEARCH_USE_COLOR:=true}"
+  local -a BASH_IT_COMPONENTS=(aliases plugins completions)
 
-  if [[ -z "$*" ]] ; then
+  if [[ $# -eq 0 ]] ; then
     _bash-it-search-help
     return 0
   fi
 
   local -a args=()
-  for word in $@; do
-    if [[ ${word} == "--help" || ${word} == "-h" ]]; then
+  for word in "$@"; do
+		case "${word}" in
+		'-h'|'--help')
       _bash-it-search-help
       return 0
-    elif [[ ${word} == "--refresh" || ${word} == "-r" ]]; then
+			;;
+		'-r'|'--refresh')
       _bash-it-clean-component-cache
-    elif [[ ${word} == "--no-color" || ${word} == '-c' ]]; then
-      export BASH_IT_SEARCH_USE_COLOR=false
-    else
-      args=(${args[@]} ${word})
-    fi
+			;;
+		'-c'|'--no-color')
+      BASH_IT_SEARCH_USE_COLOR=false
+			;;
+		*)
+      args+=("${word}")
+			;;
+		esac
   done
 
   if [[ ${#args} -gt 0 ]]; then
@@ -196,9 +199,8 @@ _bash-it-search-component() {
   local -a search_commands=(enable disable)
   for search_command in "${search_commands[@]}"; do
     if $(_bash-it-array-contains-element "--${search_command}" "$@"); then
-      component_singular=${component}
-      component_singular=${component_singular/es/}  # aliases -> alias
-      component_singular=${component_singular/ns/n} # plugins -> plugin
+      component_singular="${component/es/}"  # aliases -> alias
+      component_singular="${component_singular/ns/n}" # plugins -> plugin
 
       action="${search_command}"
       action_func="_${action}-${component_singular}"
@@ -206,7 +208,7 @@ _bash-it-search-component() {
     fi
   done
 
-  local -a terms=($@)           # passed on the command line
+  local -a terms=("$@")           # passed on the command line
 
   unset exact_terms
   unset partial_terms
@@ -225,26 +227,26 @@ _bash-it-search-component() {
     if [[ "${term:0:2}" == "--" ]] ; then
       continue
     elif [[ "${term:0:1}" == "-"  ]] ; then
-      negative_terms=(${negative_terms[@]} "${search_term}")
+      negative_terms+=("${search_term}")
     elif [[ "${term:0:1}" == "@"  ]] ; then
       if $(_bash-it-array-contains-element "${search_term}" "${component_list[@]}"); then
-        exact_terms=(${exact_terms[@]} "${search_term}")
+        exact_terms+=( "${search_term}")
       fi
     else
-      partial_terms=(${partial_terms[@]} $(_bash-it-component-list-matching "${component}" "${term}") )
+      partial_terms+=($(_bash-it-component-list-matching "${component}" "${term}") )
     fi
   done
 
-  local -a total_matches=( $(_bash-it-array-dedup ${exact_terms[@]} ${partial_terms[@]}) )
+  local -a total_matches=( $(_bash-it-array-dedup "${exact_terms[@]}" "${partial_terms[@]}") )
 
   unset matches
   declare -a matches=()
-  for match in ${total_matches[@]}; do
+  for match in "${total_matches[@]}"; do
     local include_match=true
     if  [[ ${#negative_terms[@]} -gt 0 ]]; then
       ( _bash-it-component-term-matches-negation "${match}" "${negative_terms[@]}" ) && include_match=false
     fi
-    ( ${include_match} ) && matches=(${matches[@]} "${match}")
+    ( ${include_match} ) && matches+=("${match}")
   done
   _bash-it-search-result "${component}" "${action}" "${action_func}" "${matches[@]}"
   unset matches final_matches terms
@@ -254,38 +256,37 @@ _bash-it-search-result() {
   local component="$1"; shift
   local action="$1"; shift
   local action_func="$1"; shift
-  local -a matches=($@)
+  local -a matches=("$@")
 
   local color_component color_enable color_disable color_off
 
   color_sep=':'
 
-  ( ${BASH_IT_SEARCH_USE_COLOR} ) && {
+  if ${BASH_IT_SEARCH_USE_COLOR}
+	then
     color_component='\e[1;34m'
     color_enable='\e[1;32m'
     suffix_enable=''
     suffix_disable=''
     color_disable='\e[0;0m'
     color_off='\e[0;0m'
-  }
-
-  ( ${BASH_IT_SEARCH_USE_COLOR} ) || {
+	else
     color_component=''
     suffix_enable=' ✓ ︎'
     suffix_disable='  '
     color_enable=''
     color_disable=''
     color_off=''
-  }
+	fi
 
   local match
-  local modified=0
+  local -i modified=0
 
   if [[ "${#matches[@]}" -gt 0 ]] ; then
     printf "${color_component}%13s${color_sep} ${color_off}" "${component}"
 
     for match in "${matches[@]}"; do
-      local enabled=0
+      local -i enabled=0
       ( _bash-it-component-item-is-enabled "${component}" "${match}" ) && enabled=1
 
       local match_color compatible_action suffix opposite_suffix
@@ -305,28 +306,27 @@ _bash-it-search-result() {
       }
 
       local m="${match}${suffix}"
-      local len
-      len=${#m}
+      local -i len=${#m}
 
       printf " ${match_color}${match}${suffix}"  # print current state
       if [[ "${action}" == "${compatible_action}" ]]; then
-        if [[ ${action} == "enable" && ${BASH_IT_SEARCH_USE_COLOR} == false ]]; then
-          _bash-it-flash-term ${len} "${match}${suffix}"
+        if [[ "${action}" == "enable" && "${BASH_IT_SEARCH_USE_COLOR}" == false ]]; then
+          _bash-it-flash-term "${len}" "${match}${suffix}"
         else
           _bash-it-erase-term ${len}
         fi
         modified=1
-        result=$(${action_func} ${match})
+        result=$("${action_func}" "${match}")
         local temp="color_${compatible_action}"
-        match_color=${!temp}
-        _bash-it-rewind ${len}
+        match_color="${!temp}"
+        _bash-it-rewind "${len}"
         printf "${match_color}${match}${opposite_suffix}"
       fi
 
       printf "${color_off}"
     done
 
-    [[ ${modified} -gt 0 ]] && _bash-it-clean-component-cache ${component}
+    [[ ${modified} -gt 0 ]] && _bash-it-clean-component-cache "${component}"
     printf "\n"
   fi
 }
@@ -337,24 +337,25 @@ _bash-it-rewind() {
 }
 
 _bash-it-flash-term() {
-  local len="$1"
-  local match="$2"
+  local -i len="${1:-0}"
+  local match="${2:-}"
   local delay=0.1
   local color
 
-  for color in ${text_black} ${echo_bold_blue} ${bold_yellow} ${bold_red} ${echo_bold_green} ; do
-    sleep ${delay}
+  for color in "${text_black}" "${echo_bold_blue}" "${bold_yellow}" "${bold_red}" "${echo_bold_green}"
+	do
+    sleep "${delay}"
     _bash-it-rewind "${len}"
     printf "${color}${match}"
   done
 }
 
 _bash-it-erase-term() {
-  local len="$1"
+  local -i len="${1:-0}"
   _bash-it-rewind ${len}
   for a in {0..30}; do
     [[ ${a} -gt ${len} ]] && break
-    printf "%.*s" $a " "
+    printf "%.*s" "$a" " "
     sleep 0.05
   done
 }
