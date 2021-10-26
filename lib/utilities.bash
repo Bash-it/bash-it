@@ -79,7 +79,8 @@ function _bash-it-egrep() {
 
 function _bash-it-component-help() {
 	local component file func
-	component="$(_bash-it-pluralize-component "${1}")"
+	_bash-it-component-pluralize "${1}"
+	component="${_bash_it_component_pluralized_name?}"
 	file="$(_bash-it-component-cache-file "${component}")"
 	if [[ ! -s "${file}" || -z "$(find "${file}" -mmin -300)" ]]; then
 		func="_bash-it-${component}"
@@ -90,19 +91,36 @@ function _bash-it-component-help() {
 
 function _bash-it-component-cache-file() {
 	local component file
-	component="$(_bash-it-pluralize-component "${1?${FUNCNAME[0]}: component name required}")"
+	_bash-it-component-pluralize "${1?${FUNCNAME[0]}: component name required}"
+	component="${_bash_it_component_pluralized_name?}"
 	file="${XDG_CACHE_HOME:-${BASH_IT?}/tmp/cache}${XDG_CACHE_HOME:+/bash_it}/${component}"
 	[[ -f "${file}" ]] || mkdir -p "${file%/*}"
 	printf '%s' "${file}"
 }
 
-function _bash-it-pluralize-component() {
-	local component="${1}"
-	local -i len=$((${#component} - 1))
+function _bash-it-component-singularize() {
+	[[ -n "${2:-}" ]] && local -n _bash_it_component_singularized_name="${2?}"
+	local component="${1?${FUNCNAME[0]}: component name required}"
+	local -i len="$((${#component} - 2))"
+	if [[ "${component:${len}:2}" == 'ns' ]]; then
+		component="${component%s}"
+	elif [[ "${component}" == "aliases" ]]; then
+		component="${component%es}"
+	fi
+	printf -v _bash_it_component_singularized_name '%s' "${component}"
+}
+
+function _bash-it-component-pluralize() {
+	[[ -n "${2:-}" ]] && local -n _bash_it_component_pluralized_name="${2?}"
+	local component="${1?${FUNCNAME[0]}: component name required}"
+	local -i len="$((${#component} - 1))"
 	# pluralize component name for consistency
-	[[ "${component:${len}:1}" != 's' ]] && component="${component}s"
-	[[ "${component}" == "alias" ]] && component="aliases"
-	printf '%s' "${component}"
+	if [[ "${component:${len}:1}" != 's' ]]; then
+		component="${component}s"
+	elif [[ "${component}" == "alias" ]]; then
+		component="${component}es"
+	fi
+	printf -v _bash_it_component_pluralized_name '%s' "${component}"
 }
 
 function _bash-it-clean-component-cache() {
