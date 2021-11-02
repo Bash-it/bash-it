@@ -39,4 +39,5 @@ done
 if [[ "${_git_bash_completion_found}" == false ]]; then
 	_log_warning "no completion files found - please try enabling the 'system' completion instead."
 fi
+# shellcheck disable=SC2154 # ignore unknown
 unset "${!_git_bash_completion@}"
