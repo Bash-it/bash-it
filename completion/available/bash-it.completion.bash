@@ -10,20 +10,11 @@ _bash-it-comp-list-available-not-enabled()
 {
   subdirectory="$1"
 
-  local available_things
+  local enabled_components all_things available_things
 
-  available_things=$(for f in `compgen -G "${BASH_IT}/$subdirectory/available/*.bash" | sort -d`;
-    do
-      file_entity=$(basename $f)
-
-      typeset enabled_component=$(command ls "${BASH_IT}/$subdirectory/enabled/"{[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity,$file_entity} 2>/dev/null | head -1)
-      typeset enabled_component_global=$(command ls "${BASH_IT}/enabled/"[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity 2>/dev/null | head -1)
-
-      if [ -z "$enabled_component" ] && [ -z "$enabled_component_global" ]
-      then
-        basename $f | sed -e 's/\(.*\)\..*\.bash/\1/g'
-      fi
-    done)
+  all_things=$(compgen -G "${BASH_IT}/$subdirectory/available/*.bash" | sed 's|^.*/||')
+  enabled_components=$(command ls "${BASH_IT}"/{"$subdirectory"/,}enabled/*.bash 2>/dev/null | sed 's|^.*/||; s/^[0-9]*---//g')
+  available_things=$(echo "$all_things" | sort -d | grep -Fxv "$enabled_components" | sed 's/\(.*\)\..*\.bash/\1/g')
 
   COMPREPLY=( $(compgen -W "all ${available_things}" -- ${cur}) )
 }
@@ -107,15 +98,15 @@ _bash-it-comp()
       fi
       case "${file_type}" in
         alias)
-            _bash-it-comp-list-${suffix} aliases
+            _bash-it-comp-list-"${suffix}" aliases
             return 0
             ;;
         plugin)
-            _bash-it-comp-list-${suffix} plugins
+            _bash-it-comp-list-"${suffix}" plugins
             return 0
             ;;
         completion)
-            _bash-it-comp-list-${suffix} completion
+            _bash-it-comp-list-"${suffix}" completion
             return 0
             ;;
         *)
