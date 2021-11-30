@@ -8,7 +8,7 @@ _bash-it-comp-enable-disable()
 
 _bash-it-comp-list-available-not-enabled()
 {
-  subdirectory="$1"
+  local subdirectory="$1"
 
   local enabled_components all_things available_things
 
@@ -33,7 +33,7 @@ _bash-it-comp-list-enabled()
 
 _bash-it-comp-list-available()
 {
-  subdirectory="$1"
+  local subdirectory="$1"
 
   local enabled_things
 
