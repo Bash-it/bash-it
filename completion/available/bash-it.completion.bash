@@ -3,7 +3,7 @@
 _bash-it-comp-enable-disable()
 {
   local enable_disable_args="alias completion plugin"
-  COMPREPLY=( $(compgen -W "${enable_disable_args}" -- ${cur}) )
+  COMPREPLY=( $(compgen -W "${enable_disable_args}" -- "${cur}") )
 }
 
 _bash-it-comp-list-available-not-enabled()
@@ -16,7 +16,7 @@ _bash-it-comp-list-available-not-enabled()
   enabled_components=$(command ls "${BASH_IT}"/{"$subdirectory"/,}enabled/*.bash 2>/dev/null | sed 's|^.*/||; s/^[0-9]*---//g')
   available_things=$(echo "$all_things" | sort -d | grep -Fxv "$enabled_components" | sed 's/\(.*\)\..*\.bash/\1/g')
 
-  COMPREPLY=( $(compgen -W "all ${available_things}" -- ${cur}) )
+  COMPREPLY=( $(compgen -W "all ${available_things}" -- "${cur}") )
 }
 
 _bash-it-comp-list-enabled()
@@ -28,7 +28,7 @@ _bash-it-comp-list-enabled()
 
   enabled_things=$(sort -d <(compgen -G "${BASH_IT}/$subdirectory/enabled/*.${suffix}.bash") <(compgen -G "${BASH_IT}/enabled/*.${suffix}.bash") | sed 's|^.*/||; s/\(.*\)\..*\.bash/\1/g; s/^[0-9]*---//g')
 
-  COMPREPLY=( $(compgen -W "all ${enabled_things}" -- ${cur}) )
+  COMPREPLY=( $(compgen -W "all ${enabled_things}" -- "${cur}") )
 }
 
 _bash-it-comp-list-available()
@@ -39,7 +39,7 @@ _bash-it-comp-list-available()
 
   enabled_things=$(sort -d <(compgen -G "${BASH_IT}/$subdirectory/available/*.bash") | sed 's|^.*/||; s/\(.*\)\..*\.bash/\1/g')
 
-  COMPREPLY=( $(compgen -W "${enabled_things}" -- ${cur}) )
+  COMPREPLY=( $(compgen -W "${enabled_things}" -- "${cur}") )
 }
 
 _bash-it-comp()
@@ -54,7 +54,7 @@ _bash-it-comp()
   case "${chose_opt}" in
     show)
       local show_args="aliases completions plugins"
-      COMPREPLY=( $(compgen -W "${show_args}" -- ${cur}) )
+      COMPREPLY=( $(compgen -W "${show_args}" -- "${cur}") )
       return 0
       ;;
     help)
@@ -63,22 +63,22 @@ _bash-it-comp()
         return 0
       else
         local help_args="aliases completions migrate plugins update"
-        COMPREPLY=( $(compgen -W "${help_args}" -- ${cur}) )
+        COMPREPLY=( $(compgen -W "${help_args}" -- "${cur}") )
         return 0
       fi
       ;;
     doctor)
       local doctor_args="errors warnings all"
-      COMPREPLY=( $(compgen -W "${doctor_args}" -- ${cur}) )
+      COMPREPLY=( $(compgen -W "${doctor_args}" -- "${cur}") )
       return 0
       ;;
     update)
-      if [[ ${cur} == -* ]];then
+      if [[ "${cur}" == -* ]];then
         local update_args="-s --silent"
       else
         local update_args="stable dev"
       fi
-      COMPREPLY=( $(compgen -W "${update_args}" -- ${cur}) )
+      COMPREPLY=( $(compgen -W "${update_args}" -- "${cur}") )
       return 0
       ;;
     migrate | reload | search | version)
@@ -111,7 +111,7 @@ _bash-it-comp()
       ;;
   esac
 
-  COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+  COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
 
   return 0
 }
