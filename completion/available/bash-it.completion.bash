@@ -12,9 +12,14 @@ _bash-it-comp-list-available-not-enabled()
 
   local enabled_components all_things available_things
 
-  all_things=$(compgen -G "${BASH_IT}/$subdirectory/available/*.bash" | sed 's|^.*/||')
-  enabled_components=$(command ls "${BASH_IT}"/{"$subdirectory"/,}enabled/*.bash 2>/dev/null | sed 's|^.*/||; s/^[0-9]*---//g')
-  available_things=$(echo "$all_things" | sort -d | grep -Fxv "$enabled_components" | sed 's/\(.*\)\..*\.bash/\1/g')
+  all_things=( $(compgen -G "${BASH_IT}/$subdirectory/available/*.bash") ); all_things=( "${all_things[@]##*/}" )
+  enabled_components=( $(command ls "${BASH_IT}"/{"$subdirectory"/,}enabled/*.bash 2>/dev/null) )
+  enabled_components=( "${enabled_components[@]##*/}" ); enabled_components="${enabled_components[@]#*---}"
+  available_things=( $(sort -d <(for i in ${enabled_components}
+    do
+      all_things=( "${all_things[@]//$i}" )
+    done
+    printf '%s\n' "${all_things[@]}")) ); available_things="${available_things[@]%.*.bash}"
 
   COMPREPLY=( $(compgen -W "all ${available_things}" -- "${cur}") )
 }
@@ -26,7 +31,8 @@ _bash-it-comp-list-enabled()
 
   suffix="${subdirectory/plugins/plugin}"
 
-  enabled_things=$(sort -d <(compgen -G "${BASH_IT}/$subdirectory/enabled/*.${suffix}.bash") <(compgen -G "${BASH_IT}/enabled/*.${suffix}.bash") | sed 's|^.*/||; s/\(.*\)\..*\.bash/\1/g; s/^[0-9]*---//g')
+  enabled_things=( $(sort -d <(compgen -G "${BASH_IT}/$subdirectory/enabled/*.${suffix}.bash") <(compgen -G "${BASH_IT}/enabled/*.${suffix}.bash")) )
+  enabled_things=( "${enabled_things[@]##*/}" ); enabled_things=( "${enabled_things[@]#*---}" ); enabled_things="${enabled_things[@]%.*.bash}"
 
   COMPREPLY=( $(compgen -W "all ${enabled_things}" -- "${cur}") )
 }
@@ -37,7 +43,8 @@ _bash-it-comp-list-available()
 
   local enabled_things
 
-  enabled_things=$(sort -d <(compgen -G "${BASH_IT}/$subdirectory/available/*.bash") | sed 's|^.*/||; s/\(.*\)\..*\.bash/\1/g')
+  enabled_things=( $(sort -d <(compgen -G "${BASH_IT}/$subdirectory/available/*.bash")) )
+  enabled_things=( "${enabled_things[@]##*/}" ); enabled_things="${enabled_things[@]%.*.bash}"
 
   COMPREPLY=( $(compgen -W "${enabled_things}" -- "${cur}") )
 }
