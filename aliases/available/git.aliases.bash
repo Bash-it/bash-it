@@ -131,6 +131,7 @@ alias grb='git rebase'
 alias grbc='git rebase --continue'
 alias grm='git rebase $(get_default_branch)'
 alias grmi='git rebase $(get_default_branch) -i'
+alias grma='GIT_SEQUENCE_EDITOR=: git rebase  $(get_default_branch) -i --autosquash'
 alias gprom='git fetch origin $(get_default_branch) && git rebase origin/$(get_default_branch) && git update-ref refs/heads/$(get_default_branch) origin/$(get_default_branch)' # Rebase with latest remote
 
 # reset
