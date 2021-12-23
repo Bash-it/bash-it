@@ -4,13 +4,14 @@
 cite about-plugin
 about-plugin 'load fzf, if you are using it'
 
-_command_exists fzf || return
-
 if [ -r ~/.fzf.bash ] ; then
   source ~/.fzf.bash
 elif [ -r "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash ] ; then
   source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash
 fi
+
+# No need to continue if the command is not present
+_command_exists fzf || return
 
 if [ -z ${FZF_DEFAULT_COMMAND+x}  ] && _command_exists fd ; then
   export FZF_DEFAULT_COMMAND='fd --type f'
