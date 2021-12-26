@@ -199,7 +199,7 @@ function gdv() {
 }
 
 function get_default_branch() {
-	if git branch | grep -q main; then
+	if git branch | grep -q '^. main\s*$'; then
 		echo main
 	else
 		echo master

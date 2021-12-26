@@ -92,6 +92,7 @@ plugins/available/docker-machine.plugin.bash
 plugins/available/git.plugin.bash
 plugins/available/go.plugin.bash
 plugins/available/goenv.plugin.bash
+plugins/available/history-eternal.plugin.bash
 plugins/available/history-search.plugin.bash
 plugins/available/history-substring-search.plugin.bash
 plugins/available/history.plugin.bash
@@ -107,6 +108,7 @@ plugins/available/rbenv.plugin.bash
 plugins/available/ruby.plugin.bash
 plugins/available/textmate.plugin.bash
 plugins/available/xterm.plugin.bash
+plugins/available/zoxide.plugin.bash
 
 # tests
 #

@@ -30,7 +30,11 @@ precmd_xterm_title() {
 }
 
 preexec_xterm_title() {
-	set_xterm_title "$(_short-command "${1:-}") {$(_short-dirname)} (${SHORT_USER:-${USER}}@${SHORT_HOSTNAME:-${HOSTNAME}})"
+	local command_line="${BASH_COMMAND:-${1:-}}"
+	local directory_name short_command
+	directory_name="$(_short-dirname)"
+	short_command="$(_short-command "${command_line}")"
+	set_xterm_title "${short_command} {${directory_name}} (${SHORT_USER:-${USER}}@${SHORT_HOSTNAME:-${HOSTNAME}})"
 }
 
 case "${TERM:-dumb}" in

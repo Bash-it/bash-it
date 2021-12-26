@@ -711,8 +711,8 @@ _enable-thing ()
 
         # Load the priority from the file if it present there
         declare local_file_priority use_load_priority
-        local_file_priority=$(grep -E "^# BASH_IT_LOAD_PRIORITY:" "${BASH_IT}/$subdirectory/available/$to_enable" | awk -F': ' '{ print $2 }')
-        use_load_priority=${local_file_priority:-$load_priority}
+		local_file_priority="$(_bash-it-egrep "^# BASH_IT_LOAD_PRIORITY:" "${BASH_IT}/$subdirectory/available/$to_enable" | awk -F': ' '{ print $2 }')"
+		use_load_priority="${local_file_priority:-$load_priority}"
 
         ln -s ../$subdirectory/available/$to_enable "${BASH_IT}/enabled/${use_load_priority}${BASH_IT_LOAD_PRIORITY_SEPARATOR}${to_enable}"
     fi
