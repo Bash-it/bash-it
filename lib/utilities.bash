@@ -81,7 +81,8 @@ function _bash-it-component-help() {
 	local component file func
 	_bash-it-component-pluralize "${1}"
 	component="${_bash_it_component_pluralized_name?}"
-	file="$(_bash-it-component-cache-file "${component}")"
+	_bash-it-component-cache-file "${component}"
+	file="${_bash_it_component_cache_filename?}"
 	if [[ ! -s "${file}" || -z "$(find "${file}" -mmin -300)" ]]; then
 		func="_bash-it-${component}"
 		"${func}" | _bash-it-egrep '\[[x ]\]' >| "${file}"
@@ -95,7 +96,7 @@ function _bash-it-component-cache-file() {
 	component="${_bash_it_component_pluralized_name?}"
 	file="${XDG_CACHE_HOME:-${BASH_IT?}/tmp/cache}${XDG_CACHE_HOME:+/bash_it}/${component}"
 	[[ -f "${file}" ]] || mkdir -p "${file%/*}"
-	printf '%s' "${file}"
+	printf -v _bash_it_component_cache_filename '%s' "${file}"
 }
 
 function _bash-it-component-singularize() {
@@ -132,7 +133,8 @@ function _bash-it-clean-component-cache() {
 			_bash-it-clean-component-cache "${component}"
 		done
 	else
-		cache="$(_bash-it-component-cache-file "${component}")"
+		_bash-it-component-cache-file "${component}"
+		cache="${_bash_it_component_cache_filename?}"
 		if [[ -f "${cache}" ]]; then
 			rm -f "${cache}"
 		fi
