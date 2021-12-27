@@ -120,8 +120,7 @@ function usage() {
 	esac
 }
 
-# shellcheck disable=SC2144 # the glob matches only one file
-if [[ ! -e "${BASH_IT?}/plugins/enabled/todo.plugin.bash" && ! -e "${BASH_IT?}/plugins/enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR-}todo.plugin.bash" ]]; then
+if ! _bash-it-component-item-is-enabled plugin todo; then
 	# if user has installed todo plugin, skip this...
 	function t() {
 		about 'one thing todo'
