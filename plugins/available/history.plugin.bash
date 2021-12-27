@@ -5,11 +5,11 @@ about-plugin 'improve history handling with sane defaults'
 # variable when the shell exits, rather than overwriting the file.
 shopt -s histappend
 
-# erase duplicates; alternative option: export HISTCONTROL=ignoredups
-export HISTCONTROL=${HISTCONTROL:-ignorespace:erasedups}
+# erase duplicates; alternative option: HISTCONTROL=ignoredups
+: "${HISTCONTROL:=ignorespace:erasedups}"
 
 # resize history to 100x the default (500)
-export HISTSIZE=${HISTSIZE:-50000}
+: "${HISTSIZE:=50000}"
 
 # Flush history to disk after each command.
 export PROMPT_COMMAND="history -a;${PROMPT_COMMAND}"
