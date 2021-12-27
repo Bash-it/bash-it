@@ -3,11 +3,10 @@
 # A collection of reusable functions.
 
 # Avoid duplicate inclusion
-if [[ "${__bash_it_lib_loaded[*]:-}" == *"${BASH_SOURCE#*/}"* ]]
-then
-    return 0
+if [[ "${__bash_it_lib_loaded[*]:-}" == *"${BASH_SOURCE#*/}"* ]]; then
+	return 0
 fi
-__bash_it_lib_loaded=( "${BASH_SOURCE#*/}" "${__bash_it_lib_loaded[@]:-}" )
+__bash_it_lib_loaded=("${BASH_SOURCE#*/}" "${__bash_it_lib_loaded[@]:-}")
 
 ###########################################################################
 # Generic utilies
