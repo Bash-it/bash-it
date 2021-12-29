@@ -53,4 +53,4 @@ function _command_duration() {
 	fi
 }
 
-safe_append_preexec '_command_duration_pre_exec'
+_bash_it_library_finalize_hook+=("safe_append_preexec '_command_duration_pre_exec'")
