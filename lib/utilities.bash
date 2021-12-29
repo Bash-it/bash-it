@@ -79,49 +79,46 @@ function _bash-it-egrep() {
 
 function _bash-it-component-help() {
 	local component file func
-	_bash-it-component-pluralize "${1}"
-	component="${_bash_it_component_pluralized_name?}"
-	_bash-it-component-cache-file "${component}"
-	file="${_bash_it_component_cache_filename?}"
-	if [[ ! -s "${file}" || -z "$(find "${file}" -mmin -300)" ]]; then
-		func="_bash-it-${component}"
+	_bash-it-component-pluralize "${1}" component
+	_bash-it-component-cache-file "${component}" file
+	if [[ ! -s "${file?}" || -z "$(find "${file}" -mmin -300)" ]]; then
+		func="_bash-it-${component?}"
 		"${func}" | _bash-it-egrep '\[[x ]\]' >| "${file}"
 	fi
 	cat "${file}"
 }
 
 function _bash-it-component-cache-file() {
-	local component file
-	_bash-it-component-pluralize "${1?${FUNCNAME[0]}: component name required}"
-	component="${_bash_it_component_pluralized_name?}"
-	file="${XDG_CACHE_HOME:-${BASH_IT?}/tmp/cache}${XDG_CACHE_HOME:+/bash_it}/${component}"
-	[[ -f "${file}" ]] || mkdir -p "${file%/*}"
-	printf -v _bash_it_component_cache_filename '%s' "${file}"
+	local _component_to_cache _file_path _result="${2:-${FUNCNAME[0]//-/_}}"
+	_bash-it-component-pluralize "${1?${FUNCNAME[0]}: component name required}" _component_to_cache
+	_file_path="${XDG_CACHE_HOME:-${BASH_IT?}/tmp/cache}${XDG_CACHE_HOME:+/bash_it}/${_component_to_cache?}"
+	[[ -f "${_file_path}" ]] || mkdir -p "${_file_path%/*}"
+	printf -v "${_result?}" '%s' "${_file_path}"
 }
 
 function _bash-it-component-singularize() {
-	[[ -n "${2:-}" ]] && local -n _bash_it_component_singularized_name="${2?}"
-	local component="${1?${FUNCNAME[0]}: component name required}"
-	local -i len="$((${#component} - 2))"
-	if [[ "${component:${len}:2}" == 'ns' ]]; then
-		component="${component%s}"
-	elif [[ "${component}" == "aliases" ]]; then
-		component="${component%es}"
+	local _result="${2:-${FUNCNAME[0]//-/_}}"
+	local _component_to_single="${1?${FUNCNAME[0]}: component name required}"
+	local -i len="$((${#_component_to_single} - 2))"
+	if [[ "${_component_to_single:${len}:2}" == 'ns' ]]; then
+		_component_to_single="${_component_to_single%s}"
+	elif [[ "${_component_to_single}" == "aliases" ]]; then
+		_component_to_single="${_component_to_single%es}"
 	fi
-	printf -v _bash_it_component_singularized_name '%s' "${component}"
+	printf -v "${_result?}" '%s' "${_component_to_single}"
 }
 
 function _bash-it-component-pluralize() {
-	[[ -n "${2:-}" ]] && local -n _bash_it_component_pluralized_name="${2?}"
-	local component="${1?${FUNCNAME[0]}: component name required}"
-	local -i len="$((${#component} - 1))"
+	local _result="${2:-${FUNCNAME[0]//-/_}}"
+	local _component_to_plural="${1?${FUNCNAME[0]}: component name required}"
+	local -i len="$((${#_component_to_plural} - 1))"
 	# pluralize component name for consistency
-	if [[ "${component:${len}:1}" != 's' ]]; then
-		component="${component}s"
-	elif [[ "${component}" == "alias" ]]; then
-		component="${component}es"
+	if [[ "${_component_to_plural:${len}:1}" != 's' ]]; then
+		_component_to_plural="${_component_to_plural}s"
+	elif [[ "${_component_to_plural}" == "alias" ]]; then
+		_component_to_plural="${_component_to_plural}es"
 	fi
-	printf -v _bash_it_component_pluralized_name '%s' "${component}"
+	printf -v "${_result?}" '%s' "${_component_to_plural}"
 }
 
 function _bash-it-clean-component-cache() {
@@ -133,8 +130,7 @@ function _bash-it-clean-component-cache() {
 			_bash-it-clean-component-cache "${component}"
 		done
 	else
-		_bash-it-component-cache-file "${component}"
-		cache="${_bash_it_component_cache_filename?}"
+		_bash-it-component-cache-file "${component}" cache
 		if [[ -f "${cache}" ]]; then
 			rm -f "${cache}"
 		fi
