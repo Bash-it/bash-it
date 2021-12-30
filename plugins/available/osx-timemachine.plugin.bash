@@ -60,7 +60,8 @@ function time-machine-list-old-backups() {
 
 # Taken from here: http://stackoverflow.com/a/30547074/1228454
 function _tm_startsudo() {
-	sudo -v # validate without running a command.
+	local -x SUDO_COMMAND="plugin/osx-timemachine: keep 'sudo' token alive during long-run 'tmutil' commands"
+	sudo "-${SUDO_ASKPASS:+A}v" # validate without running a command, using `ssh-askpass` if available.
 	(while sudo "-${SUDO_ASKPASS:+A}v"; do
 		sleep 50
 	done) &
