@@ -31,38 +31,6 @@ function winname {
 	printf '%b' "\e]2;$1\a"
 }
 
-# this one switches your os x dock between 2d and 3d
-# thanks to savier.zwetschge.org
-function dock-switch() {
-	about 'switch dock between 2d and 3d'
-	param '1: "2d" or "3d"'
-	example '$ dock-switch 2d'
-	group 'osx'
-
-	case $OSTYPE in
-		*'darwin'*)
-			case $1 in
-				3d)
-					defaults write com.apple.dock no-glass -boolean NO
-					killall Dock
-					;;
-				2d)
-					defaults write com.apple.dock no-glass -boolean YES
-					killall Dock
-					;;
-				*)
-					echo "usage:"
-					echo "dock-switch 2d"
-					echo "dock-switch 3d."
-					;;
-			esac
-			;;
-		*)
-			echo "Sorry, this only works on Mac OS X"
-			;;
-	esac
-}
-
 function pman() {
 	about 'view man documentation in Preview'
 	param '1: man page to view'
