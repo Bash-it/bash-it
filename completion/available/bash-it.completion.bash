@@ -14,7 +14,7 @@ _bash-it-comp-list-available-not-enabled()
 
   all_things=( $(compgen -G "${BASH_IT}/$subdirectory/available/*.bash") ); all_things=( "${all_things[@]##*/}" )
   enabled_components=( $(command ls "${BASH_IT}"/{"$subdirectory"/,}enabled/*.bash 2>/dev/null) )
-  enabled_components=( "${enabled_components[@]##*/}" ); enabled_components="${enabled_components[@]#*---}"
+  enabled_components=( "${enabled_components[@]##*/}" ); enabled_components="${enabled_components[@]##*---}"
   available_things=( $(sort -d <(for i in ${enabled_components}
     do
       all_things=( "${all_things[@]//$i}" )
@@ -32,7 +32,7 @@ _bash-it-comp-list-enabled()
   suffix="${subdirectory/plugins/plugin}"
 
   enabled_things=( $(sort -d <(compgen -G "${BASH_IT}/$subdirectory/enabled/*.${suffix}.bash") <(compgen -G "${BASH_IT}/enabled/*.${suffix}.bash")) )
-  enabled_things=( "${enabled_things[@]##*/}" ); enabled_things=( "${enabled_things[@]#*---}" ); enabled_things="${enabled_things[@]%.*.bash}"
+  enabled_things=( "${enabled_things[@]##*/}" ); enabled_things=( "${enabled_things[@]##*---}" ); enabled_things="${enabled_things[@]%.*.bash}"
 
   COMPREPLY=( $(compgen -W "all ${enabled_things}" -- "${cur}") )
 }
