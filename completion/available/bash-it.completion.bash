@@ -88,7 +88,7 @@ _bash-it-comp()
       COMPREPLY=( $(compgen -W "${update_args}" -- "${cur}") )
       return 0
       ;;
-    migrate | reload | search | version)
+    migrate | reload | restart | search | version)
       return 0
       ;;
     enable | disable)
