@@ -1,6 +1,11 @@
 # shellcheck shell=bash
 about-plugin 'osx-specific functions'
 
+if [[ "${OSTYPE}" != 'darwin'* ]]; then
+	_log_warning "This plugin only works with Mac OS X."
+	return 1
+fi
+
 # OS X: Open new tabs in same directory
 if _is_function update_terminal_cwd; then
 	safe_append_prompt_command 'update_terminal_cwd'
@@ -53,10 +58,6 @@ function prevcurl() {
 	param '1: url'
 	group 'osx'
 
-	if [[ ! $OSTYPE = 'darwin'* ]]; then
-		echo "This function only works with Mac OS X"
-		return 1
-	fi
 	curl "$*" | open -fa 'Preview'
 }
 
@@ -65,12 +66,8 @@ function refresh-launchpad() {
 	example '$ refresh-launchpad'
 	group 'osx'
 
-	if [[ "$OSTYPE" = 'darwin'* ]]; then
-		defaults write com.apple.dock ResetLaunchPad -bool TRUE
-		killall Dock
-	else
-		echo "Sorry, this only works on Mac OS X"
-	fi
+	defaults write com.apple.dock ResetLaunchPad -bool TRUE
+	killall Dock
 }
 
 function list-jvms() {
