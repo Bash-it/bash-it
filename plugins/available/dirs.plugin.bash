@@ -62,13 +62,13 @@ function dirs-help() {
 : "${BASH_IT_DIRS_BKS:=${XDG_STATE_HOME:-~/.local/state}/bash_it/dirs}"
 if [[ -f "${BASH_IT_DIRS_BKS?}" ]]; then
 	# shellcheck disable=SC1090
-	source "$BASH_IT_DIRS_BKS"
+	source "${BASH_IT_DIRS_BKS?}"
 elif [[ -f ~/.dirs ]]; then
-	mv -vn ~/.dirs "$BASH_IT_DIRS_BKS"
+	mv -vn ~/.dirs "${BASH_IT_DIRS_BKS?}"
 	# shellcheck disable=SC1090
-	source "$BASH_IT_DIRS_BKS"
+	source "${BASH_IT_DIRS_BKS?}"
 else
-	touch "$BASH_IT_DIRS_BKS"
+	touch "${BASH_IT_DIRS_BKS?}"
 fi
 
 alias L='cat "${BASH_IT_DIRS_BKS?}"'
@@ -94,11 +94,11 @@ function S() {
 		return 1
 	}
 
-	sed "/$1/d" "$BASH_IT_DIRS_BKS" > ~/.dirs1
-	command mv ~/.dirs1 "$BASH_IT_DIRS_BKS"
-	echo "$1"=\""${PWD}"\" >> "$BASH_IT_DIRS_BKS"
+	sed "/$1/d" "${BASH_IT_DIRS_BKS?}" > "${BASH_IT_DIRS_BKS?}.new"
+	command mv "${BASH_IT_DIRS_BKS?}.new" "${BASH_IT_DIRS_BKS?}"
+	echo "$1"=\""${PWD}"\" >> "${BASH_IT_DIRS_BKS?}"
 	# shellcheck disable=SC1090
-	source "$BASH_IT_DIRS_BKS"
+	source "${BASH_IT_DIRS_BKS?}"
 }
 
 function R() {
@@ -112,8 +112,8 @@ function R() {
 		return 1
 	}
 
-	sed "/$1/d" "$BASH_IT_DIRS_BKS" > ~/.dirs1
-	\mv ~/.dirs1 "$BASH_IT_DIRS_BKS"
+	sed "/$1/d" "${BASH_IT_DIRS_BKS?}" > "${BASH_IT_DIRS_BKS?}.new"
+	command mv "${BASH_IT_DIRS_BKS?}.new" "${BASH_IT_DIRS_BKS?}"
 }
 
-alias U='source "$BASH_IT_DIRS_BKS"' # Update bookmark stack
+alias U='source "${BASH_IT_DIRS_BKS?}"' # Update bookmark stack
