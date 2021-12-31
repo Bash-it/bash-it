@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Directory stack navigation:
 #
 # Add to stack with: pu /path/to/directory
@@ -60,9 +61,11 @@ function dirs-help() {
 
 : "${BASH_IT_DIRS_BKS:=${XDG_STATE_HOME:-~/.local/state}/bash_it/dirs}"
 if [[ -f "${BASH_IT_DIRS_BKS?}" ]]; then
+	# shellcheck disable=SC1090
 	source "$BASH_IT_DIRS_BKS"
 elif [[ -f ~/.dirs ]]; then
 	mv -vn ~/.dirs "$BASH_IT_DIRS_BKS"
+	# shellcheck disable=SC1090
 	source "$BASH_IT_DIRS_BKS"
 else
 	touch "$BASH_IT_DIRS_BKS"
@@ -77,7 +80,7 @@ function G() {
 	example '$ G ..'
 	group 'dirs'
 
-	cd "${1:-${PWD}}"
+	cd "${1:-${PWD}}" || return
 }
 
 function S() {
@@ -91,9 +94,10 @@ function S() {
 		return 1
 	}
 
-	sed "/$@/d" "$BASH_IT_DIRS_BKS" > ~/.dirs1
-	\mv ~/.dirs1 "$BASH_IT_DIRS_BKS"
-	echo "$@"=\""${PWD}"\" >> "$BASH_IT_DIRS_BKS"
+	sed "/$1/d" "$BASH_IT_DIRS_BKS" > ~/.dirs1
+	command mv ~/.dirs1 "$BASH_IT_DIRS_BKS"
+	echo "$1"=\""${PWD}"\" >> "$BASH_IT_DIRS_BKS"
+	# shellcheck disable=SC1090
 	source "$BASH_IT_DIRS_BKS"
 }
 
@@ -108,7 +112,7 @@ function R() {
 		return 1
 	}
 
-	sed "/$@/d" "$BASH_IT_DIRS_BKS" > ~/.dirs1
+	sed "/$1/d" "$BASH_IT_DIRS_BKS" > ~/.dirs1
 	\mv ~/.dirs1 "$BASH_IT_DIRS_BKS"
 }
 
