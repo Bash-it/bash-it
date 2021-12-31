@@ -329,7 +329,7 @@ function _bash-it-update-() {
 		fi
 
 		for i in $(git rev-list --merges --first-parent "${revision}"); do
-			num_of_lines=$(git log -1 --format=%B "$i" | awk 'NF' | wc -l)
+			num_of_lines=$(git log -1 --format=%B "$i" | awk '!/^[[:space:]]*$ {++i} END{print i}')
 			if [[ "$num_of_lines" -eq 1 ]]; then
 				description="%s"
 			else
