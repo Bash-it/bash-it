@@ -905,7 +905,7 @@ function _enable-thing() {
 		mkdir -p "${BASH_IT}/enabled"
 
 		# Load the priority from the file if it present there
-		local_file_priority="$(_bash-it-egrep "^# BASH_IT_LOAD_PRIORITY:" "${BASH_IT}/$subdirectory/available/$to_enable" | awk -F': ' '{ print $2 }')"
+		local_file_priority="$(awk -F': ' '$1 == "# BASH_IT_LOAD_PRIORITY" { print $2 }' "${BASH_IT}/$subdirectory/available/$to_enable")"
 		use_load_priority="${local_file_priority:-$load_priority}"
 
 		ln -s "../$subdirectory/available/$to_enable" "${BASH_IT}/enabled/${use_load_priority}${BASH_IT_LOAD_PRIORITY_SEPARATOR}${to_enable}"
