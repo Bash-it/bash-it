@@ -1,5 +1,17 @@
 # shellcheck shell=bash
 
+case $HISTCONTROL in
+*'auto'*)
+	: # Do nothing, already configured.
+	;;
+*)
+	# Append new history lines to history file
+	HISTCONTROL="${HISTCONTROL:-}${HISTCONTROL:+:}autosave"
+	;;
+esac
+safe_append_preexec '_bash-it-history-auto-load'
+safe_append_prompt_command '_bash-it-history-auto-save'
+
 SCM_THEME_PROMPT_PREFIX="${SCM_THEME_PROMPT_SUFFIX:-}"
 SCM_THEME_PROMPT_DIRTY="${bold_red?} ✗${normal?}"
 SCM_THEME_PROMPT_CLEAN="${bold_green?} ✓${normal?}"
@@ -21,5 +33,4 @@ function prompt() {
   PS1="$(user_host_path_prompt)$(virtualenv_prompt)$(scm_prompt) $(mark_prompt) "
 }
 
-safe_append_prompt_command '_save-and-reload-history 1'
 safe_append_prompt_command prompt
