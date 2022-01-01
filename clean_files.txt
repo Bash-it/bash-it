@@ -98,6 +98,7 @@ plugins/available/history-substring-search.plugin.bash
 plugins/available/history.plugin.bash
 plugins/available/hub.plugin.bash
 plugins/available/java.plugin.bash
+plugins/available/jekyll.plugin.bash
 plugins/available/jump.plugin.bash
 plugins/available/less-pretty-cat.plugin.bash
 plugins/available/node.plugin.bash

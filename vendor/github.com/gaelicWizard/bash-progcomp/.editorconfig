@@ -1,0 +1,40 @@
+# EditorConfig is awesome: http://EditorConfig.org
+
+[*]
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[**.md]
+indent_style = space
+indent_size = 2
+trim_trailing_whitespace = false
+
+[.git*]
+indent_style = tab
+
+[**.*sh]
+indent_style = tab
+indent_size = tab
+
+shell_variant      = bash
+binary_next_line   = true  # like -bn
+switch_case_indent = false # like -ci
+space_redirects    = true  # like -sr
+keep_padding       = false # like -kp
+function_next_line = true  # like -fn
+end_of_line        = lf
+charset            = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[**.bats]
+indent_style = tab
+indent_size = tab
+
+shell_variant      = bash
+end_of_line        = lf
+charset            = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
