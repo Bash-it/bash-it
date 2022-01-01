@@ -12,7 +12,7 @@ function _user-prompt() {
 	fi
 
 	# Print the current user's name (colored according to their current EUID):
-	echo -e "${user_color}${user}${normal?}"
+	echo -ne "${user_color}${user}${normal?}"
 }
 
 function _host-prompt() {
@@ -28,12 +28,14 @@ function _host-prompt() {
 	fi
 
 	# Print the current hostname (colored according to $SSH_TTY's status):
-	echo -e "${host_color}${host}${normal?}"
+	echo -ne "${host_color}${host}${normal?}"
 }
 
 function _user-at-host-prompt() {
 	# Concatenate the user and host prompts into: user@host:
-	echo -e "$(_user-prompt)${bold_white?}@$(_host-prompt)"
+	_user-prompt
+	echo -ne "${bold_white?}@"
+	_host-prompt
 }
 
 function _exit-status-prompt() {
@@ -54,27 +56,28 @@ function _exit-status-prompt() {
 	echo -ne "${exit_status_color}"
 	if [[ "${prompt_string}" -eq 1 ]]; then
 		# $PS1:
-		echo -e " +${normal?} "
+		echo -ne " +${normal?} "
 	elif [[ "${prompt_string}" -eq 2 ]]; then
 		# $PS2:
-		echo -e " |${normal?} "
+		echo -ne " |${normal?} "
 	else
 		# Default:
-		echo -e " ?${normal?} "
+		echo -ne " ?${normal?} "
 	fi
 }
 
 function _ps1() {
 	local -r time='\\t'
+	local -r pwd='\\w'
 
 	echo -ne "${bold_white?}${time} "
-	echo -ne "$(_user-at-host-prompt)"
-	echo -e "${bold_white?}:${normal?}${PWD}"
-	echo -e "$(_exit-status-prompt 1 "${exit_status}")"
+	_user-at-host-prompt
+	echo -e "${bold_white?}:${normal?}${pwd}"
+	_exit-status-prompt 1 "${exit_status}"
 }
 
 function _ps2() {
-	echo -e "$(_exit-status-prompt 2 "${exit_status}")"
+	_exit-status-prompt 2 "${exit_status}"
 }
 
 function prompt_command() {
@@ -89,5 +92,3 @@ function prompt_command() {
 }
 
 safe_append_prompt_command prompt_command
-
-# vim: sw=2 ts=2 et:
