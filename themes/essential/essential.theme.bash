@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 function _user-prompt() {
-	local -r user='\\u'
+	local -r user='\u'
 
 	if [[ "${EUID}" -eq 0 ]]; then
 		# Privileged users:
@@ -12,11 +12,11 @@ function _user-prompt() {
 	fi
 
 	# Print the current user's name (colored according to their current EUID):
-	echo -ne "${user_color}${user}${normal?}"
+	printf '%b%s%b' "${user_color}" "${user}" "${normal?}"
 }
 
 function _host-prompt() {
-	local -r host='\\h'
+	local -r host='\h'
 
 	# Check whether or not $SSH_TTY is set:
 	if [[ -z "${SSH_TTY:-}" ]]; then
@@ -28,13 +28,13 @@ function _host-prompt() {
 	fi
 
 	# Print the current hostname (colored according to $SSH_TTY's status):
-	echo -ne "${host_color}${host}${normal?}"
+	printf '%b%s%b' "${host_color}" "${host}" "${normal?}"
 }
 
 function _user-at-host-prompt() {
 	# Concatenate the user and host prompts into: user@host:
 	_user-prompt
-	echo -ne "${bold_white?}@"
+	printf '%b@' "${bold_white?}"
 	_host-prompt
 }
 
@@ -53,26 +53,25 @@ function _exit-status-prompt() {
 		local -r exit_status_color="${bold_red?}"
 	fi
 
-	echo -ne "${exit_status_color}"
 	if [[ "${prompt_string}" -eq 1 ]]; then
 		# $PS1:
-		echo -ne " +${normal?} "
+		printf '%b +%b' "${exit_status_color}" "${normal?} "
 	elif [[ "${prompt_string}" -eq 2 ]]; then
 		# $PS2:
-		echo -ne " |${normal?} "
+		printf '%b |%b' "${exit_status_color}" "${normal?} "
 	else
 		# Default:
-		echo -ne " ?${normal?} "
+		printf '%b ?%b' "${exit_status_color}" "${normal?} "
 	fi
 }
 
 function _ps1() {
-	local -r time='\\t'
-	local -r pwd='\\w'
+	local -r time='\t'
+	local -r pwd='\w'
 
-	echo -ne "${bold_white?}${time} "
+	printf '%b%s ' "${bold_white?}" "${time}"
 	_user-at-host-prompt
-	echo -e "${bold_white?}:${normal?}${pwd}"
+	printf '%b:%b%s\n' "${bold_white?}" "${normal?}" "${pwd}"
 	_exit-status-prompt 1 "${exit_status}"
 }
 
