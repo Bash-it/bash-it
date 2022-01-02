@@ -106,6 +106,7 @@ plugins/available/nodenv.plugin.bash
 plugins/available/percol.plugin.bash
 plugins/available/plenv.plugin.bash
 plugins/available/pyenv.plugin.bash
+plugins/available/python.plugin.bash
 plugins/available/rbenv.plugin.bash
 plugins/available/ruby.plugin.bash
 plugins/available/textmate.plugin.bash
