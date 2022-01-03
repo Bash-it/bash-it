@@ -3,6 +3,7 @@
 load ../test_helper
 load ../test_helper_libs
 load ../../plugins/available/base.plugin
+load ../../themes/colors.theme
 
 function local_setup {
   setup_test_fixture
@@ -289,8 +290,9 @@ function local_setup {
   assert_link_exist "$BASH_IT/enabled/225---nvm.plugin.bash"
 }
 
-@test "helper: profile load command sanity" {
+@test "helpers: profile load command sanity" {
   run _bash-it-profile-load "default"
+  assert_success
 
   assert_link_exist "$BASH_IT/enabled/150---general.aliases.bash"
   assert_link_exist "$BASH_IT/enabled/250---base.plugin.bash"
@@ -299,7 +301,7 @@ function local_setup {
   assert_link_exist "$BASH_IT/enabled/325---system.completion.bash"
 }
 
-@test "helper: profile save command sanity" {
+@test "helpers: profile save command sanity" {
   run _enable-plugin "nvm"
 
   run _bash-it-profile-save "test"
@@ -310,7 +312,7 @@ function local_setup {
   assert_file_exist "$BASH_IT/profiles/test.bash_it"
 }
 
-@test "helper: profile save creates valid file with only plugin enabled" {
+@test "helpers: profile save creates valid file with only plugin enabled" {
   run _enable-plugin "nvm"
 
   run _bash-it-profile-save "test"
@@ -320,7 +322,7 @@ function local_setup {
   assert_line -n 2 "plugins nvm"
 }
 
-@test "helper: profile save creates valid file with only completion enabled" {
+@test "helpers: profile save creates valid file with only completion enabled" {
   run _enable-completion "bash-it"
 
   run _bash-it-profile-save "test"
@@ -330,7 +332,7 @@ function local_setup {
   assert_line -n 2 "completion bash-it"
 }
 
-@test "helper: profile save creates valid file with only aliases enabled" {
+@test "helpers: profile save creates valid file with only aliases enabled" {
   run _enable-alias "general"
 
   run _bash-it-profile-save "test"
@@ -340,7 +342,7 @@ function local_setup {
   assert_line -n 2 "aliases general"
 }
 
-@test "helper: profile edge case, empty configuration" {
+@test "helpers: profile edge case, empty configuration" {
   run _bash-it-profile-save "test"
   assert_line -n 3 "It seems like no configuration was enabled.."
   assert_line -n 4 "Make sure to double check that this is the wanted behavior."
@@ -359,7 +361,7 @@ function local_setup {
   assert_link_not_exist "$BASH_IT/enabled/325---system.completion.bash"
 }
 
-@test "helper: profile save and load" {
+@test "helpers: profile save and load" {
   run _enable-alias "general"
   run _enable-plugin "base"
   run _enable-plugin "alias-completion"
@@ -375,52 +377,52 @@ function local_setup {
   assert_link_exist "$BASH_IT/enabled/150---general.aliases.bash"
 }
 
-@test "helper: profile load corrupted profile file: bad component" {
+@test "helpers: profile load corrupted profile file: bad component" {
   run _bash-it-profile-load "test-bad-component"
   assert_line -n 1 -p "Bad line(#12) in profile, aborting load..."
 }
 
-@test "helper: profile load corrupted profile file: bad subdirectory" {
+@test "helpers: profile load corrupted profile file: bad subdirectory" {
   run _bash-it-profile-load "test-bad-type"
   assert_line -n 1 -p "Bad line(#5) in profile, aborting load..."
 }
 
-@test "helper: profile rm sanity" {
+@test "helpers: profile rm sanity" {
   run _bash-it-profile-save "test"
   assert_file_exist "$BASH_IT/profiles/test.bash_it"
   run _bash-it-profile-rm "test"
-  assert_line -n 0 "Removed profile \"test\" successfully!"
+  assert_line -n 0 "Removed profile 'test' successfully!"
   assert_file_not_exist "$BASH_IT/profiles/test.bash_it"
 }
 
-@test "helper: profile rm no params" {
+@test "helpers: profile rm no params" {
   run _bash-it-profile-rm ""
   assert_line -n 0 -p "Please specify profile name to remove..."
 }
 
-@test "helper: profile load no params" {
+@test "helpers: profile load no params" {
   run _bash-it-profile-load ""
   assert_line -n 0 -p "Please specify profile name to load, not changing configuration..."
 }
 
-@test "helper: profile rm default" {
+@test "helpers: profile rm default" {
   run _bash-it-profile-rm "default"
   assert_line -n 0 -p "Can not remove the default profile..."
   assert_file_exist "$BASH_IT/profiles/default.bash_it"
 }
 
-@test "helper: profile rm bad profile name" {
+@test "helpers: profile rm bad profile name" {
   run _bash-it-profile-rm "notexisting"
-  assert_line -n 0 -p "Could not find profile \"notexisting\"..."
+  assert_line -n 0 -p "Could not find profile 'notexisting'..."
 }
 
-@test "helper: profile list sanity" {
+@test "helpers: profile list sanity" {
   run _bash-it-profile-list
   assert_line -n 0 "Available profiles:"
   assert_line -n 1 "default"
 }
 
-@test "helper: profile list more profiles" {
+@test "helpers: profile list more profiles" {
   run _bash-it-profile-save "cactus"
   run _bash-it-profile-save "another"
   run _bash-it-profile-save "brother"
