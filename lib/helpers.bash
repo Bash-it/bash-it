@@ -1,4 +1,7 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
+# shellcheck disable=SC2016
+#
+# A collection of reusable functions.
 
 BASH_IT_LOAD_PRIORITY_DEFAULT_ALIAS=${BASH_IT_LOAD_PRIORITY_DEFAULT_ALIAS:-150}
 BASH_IT_LOAD_PRIORITY_DEFAULT_PLUGIN=${BASH_IT_LOAD_PRIORITY_DEFAULT_PLUGIN:-250}
@@ -77,7 +80,7 @@ function _bash_it_homebrew_check()
 }
 
 function _make_reload_alias() {
-  echo "source \${BASH_IT}/scripts/reloader.bash ${1} ${2}"
+  echo "source '${BASH_IT}/scripts/reloader.bash' '${1}' '${2}'"
 }
 
 # Alias for reloading aliases
@@ -108,52 +111,52 @@ bash-it ()
     example '$ bash-it version'
     example '$ bash-it reload'
     example '$ bash-it restart'
-    example '$ bash-it profile list|save|load|rm [profile_name]'
+	example '$ bash-it profile list|save|load|rm [profile_name]'
     example '$ bash-it doctor errors|warnings|all'
-    typeset verb=${1:-}
+    local verb=${1:-}
     shift
-    typeset component=${1:-}
+    local component=${1:-}
     shift
-    typeset func
+    local func
 
     case $verb in
       show)
-        func=_bash-it-$component;;
+        func="_bash-it-$component";;
       enable)
-        func=_enable-$component;;
+        func="_enable-$component";;
       disable)
-        func=_disable-$component;;
+        func="_disable-$component";;
       help)
-        func=_help-$component;;
+        func="_help-$component";;
       doctor)
-        func=_bash-it-doctor-$component;;
+        func="_bash-it-doctor-$component";;
       profile)
-        func=_bash-it-profile-$component;;
+       func=_bash-it-profile-$component;;
       search)
-        _bash-it-search $component "$@"
+        _bash-it-search "$component" "$@"
         return;;
       update)
-        func=_bash-it-update-$component;;
+        func="_bash-it-update-$component";;
       migrate)
-        func=_bash-it-migrate;;
+        func="_bash-it-migrate";;
       version)
-        func=_bash-it-version;;
+        func="_bash-it-version";;
       restart)
-        func=_bash-it-restart;;
+        func="_bash-it-restart";;
       reload)
-        func=_bash-it-reload;;
+        func="_bash-it-reload";;
       *)
-        reference bash-it
+        reference "bash-it"
         return;;
     esac
 
     # pluralize component if necessary
-    if ! _is_function $func; then
-        if _is_function ${func}s; then
-            func=${func}s
+    if ! _is_function "$func"; then
+        if _is_function "${func}s"; then
+            func="${func}s"
         else
-            if _is_function ${func}es; then
-                func=${func}es
+            if _is_function "${func}es"; then
+                func="${func}es"
             else
                 echo "oops! $component is not a valid option!"
                 reference bash-it
@@ -162,20 +165,21 @@ bash-it ()
         fi
     fi
 
-    if [ x"$verb" == x"enable" ] || [ x"$verb" == x"disable" ]; then
+    if [[ "$verb" == "enable" || "$verb" == "disable" ]]
+	then
         # Automatically run a migration if required
         _bash-it-migrate
 
         for arg in "$@"
         do
-            $func $arg
+            "$func" "$arg"
         done
 
-        if [ -n "${BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE:-}" ]; then
+        if [[ -n "${BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE:-}" ]]; then
           _bash-it-reload
         fi
     else
-        $func "$@"
+        "$func" "$@"
     fi
 }
 
@@ -237,8 +241,8 @@ _bash-it_update_migrate_and_restart() {
 	_about 'Checks out the wanted version, pops directory and restart. Does not return (because of the restart!)'
   _param '1: Which branch to checkout to'
   _param '2: Which type of version we are using'
-  git checkout "$1" &> /dev/null
-  if [[ $? -eq 0 ]]; then
+  if git checkout "$1" &> /dev/null
+  then
     echo "Bash-it successfully updated."
     echo ""
     echo "Migrating your installation to the latest $2 version now..."
@@ -246,6 +250,7 @@ _bash-it_update_migrate_and_restart() {
     echo ""
     echo "All done, enjoy!"
     # Don't forget to restore the original pwd!
+		# shellcheck disable=SC2164
     popd &> /dev/null
     _bash-it-restart
   else
@@ -259,96 +264,101 @@ _bash-it-update-() {
   _group 'lib'
 
   declare silent
-  for word in $@; do
-    if [[ ${word} == "--silent" || ${word} == "-s" ]]; then
+  for word in "$@"; do
+    if [[ "${word}" == "--silent" || "${word}" == "-s" ]]; then
       silent=true
     fi
   done
 
-  pushd "${BASH_IT}" &> /dev/null || return
+  pushd "${BASH_IT?}" >/dev/null || return
 
   DIFF=$(git diff --name-status)
-  [ -n "$DIFF" ] && echo -e "Local changes detected in bash-it directory. Clean '$BASH_IT' directory to proceed.\n$DIFF" && return 1
+  if [[ -n "$DIFF" ]]; then
+		echo -e "Local changes detected in bash-it directory. Clean '$BASH_IT' directory to proceed.\n$DIFF"
+		return 1
+	fi
 
-  if [ -z "$BASH_IT_REMOTE" ]; then
+  if [[ -z "$BASH_IT_REMOTE" ]]; then
     BASH_IT_REMOTE="origin"
   fi
 
-  git fetch $BASH_IT_REMOTE --tags &> /dev/null
+  git fetch "$BASH_IT_REMOTE" --tags &> /dev/null
 
-  if [ -z "$BASH_IT_DEVELOPMENT_BRANCH" ]; then
+  if [[ -z "$BASH_IT_DEVELOPMENT_BRANCH" ]]; then
     BASH_IT_DEVELOPMENT_BRANCH="master"
   fi
   # Defaults to stable update
-  if [ -z "$1" ] || [ "$1" == "stable" ]; then
+  if [[ -z "$1" || "$1" == "stable" ]]; then
     version="stable"
     TARGET=$(git describe --tags "$(git rev-list --tags --max-count=1)" 2> /dev/null)
 
     if [[ -z "$TARGET" ]]; then
       echo "Can not find tags, so can not update to latest stable version..."
+			# shellcheck disable=SC2164
       popd &> /dev/null
       return
     fi
   else
     version="dev"
-    TARGET=${BASH_IT_REMOTE}/${BASH_IT_DEVELOPMENT_BRANCH}
+    TARGET="${BASH_IT_REMOTE}/${BASH_IT_DEVELOPMENT_BRANCH}"
   fi
 
   declare revision
   revision="HEAD..${TARGET}"
   declare status
-  status="$(git rev-list ${revision} 2> /dev/null)"
+  status="$(git rev-list "${revision}" 2> /dev/null)"
   declare revert
 
-  if [[ -z "${status}" && ${version} == "stable" ]]; then
+  if [[ -z "${status}" && "${version}" == "stable" ]]; then
     revision="${TARGET}..HEAD"
-    status="$(git rev-list ${revision} 2> /dev/null)"
+    status="$(git rev-list "${revision}" 2> /dev/null)"
     revert=true
   fi
 
   if [[ -n "${status}" ]]; then
-    if [[ $revert ]]; then
+    if [[ -n "${revert}" ]]; then
       echo "Your version is a more recent development version ($(git log -1 --format=%h HEAD))"
       echo "You can continue in order to revert and update to the latest stable version"
       echo ""
       log_color="%Cred"
     fi
 
-    for i in $(git rev-list --merges --first-parent ${revision}); do
-      num_of_lines=$(git log -1 --format=%B $i | awk 'NF' | wc -l)
-      if [ $num_of_lines -eq 1 ]; then
+    for i in $(git rev-list --merges --first-parent "${revision}"); do
+      num_of_lines=$(git log -1 --format=%B "$i" | awk 'NF' | wc -l)
+      if [[ "$num_of_lines" -eq 1 ]]; then
         description="%s"
       else
         description="%b"
       fi
-      git log --format="${log_color}%h: $description (%an)" -1 $i
+      git log --format="${log_color}%h: $description (%an)" -1 "$i"
     done
     echo ""
 
-    if [[ $silent ]]; then
+    if [[ -n "${silent}" ]]; then
       echo "Updating to ${TARGET}($(git log -1 --format=%h "${TARGET}"))..."
-      _bash-it_update_migrate_and_restart $TARGET $version
+      _bash-it_update_migrate_and_restart "$TARGET" "$version"
     else
-      read -e -n 1 -p "Would you like to update to ${TARGET}($(git log -1 --format=%h "${TARGET}"))? [Y/n] " RESP
-      case $RESP in
+      read -r -e -n 1 -p "Would you like to update to ${TARGET}($(git log -1 --format=%h "${TARGET}"))? [Y/n] " RESP
+      case "$RESP" in
         [yY]|"")
-          _bash-it_update_migrate_and_restart $TARGET $version
+          _bash-it_update_migrate_and_restart "$TARGET" "$version"
           ;;
         [nN])
           echo "Not updating…"
           ;;
         *)
-          echo -e "\033[91mPlease choose y or n.\033[m"
+          echo -e "${echo_orange?}Please choose y or n.${echo_reset_color?}"
           ;;
         esac
     fi
   else
-    if [[ ${version} == "stable" ]]; then
+    if [[ "${version}" == "stable" ]]; then
       echo "You're on the latest stable version. If you want to check out the latest 'dev' version, please run \"bash-it update dev\""
     else
       echo "Bash-it is up to date, nothing to do!"
     fi
   fi
+	# shellcheck disable=SC2164
   popd &> /dev/null
 }
 
@@ -361,32 +371,34 @@ _bash-it-migrate() {
 
   for file_type in "aliases" "plugins" "completion"
   do
-    for f in `sort <(compgen -G "${BASH_IT}/$file_type/enabled/*.bash")`
+		for _bash_it_config_file in "${BASH_IT}/$file_type/enabled"/*.bash
     do
-      typeset ff="${f##*/}"
+			[[ -f "$_bash_it_config_file" ]] || continue
 
       # Get the type of component from the extension
-      typeset single_type=$(echo $ff | sed -e 's/.*\.\(.*\)\.bash/\1/g' | sed 's/aliases/alias/g')
+      local component_type="$(_bash-it-get-component-type-from-path "$_bash_it_config_file")"
       # Cut off the optional "250---" prefix and the suffix
-      typeset component_name=$(echo $ff | sed -e 's/[0-9]*[-]*\(.*\)\..*\.bash/\1/g')
+      local component_name="$(_bash-it-get-component-name-from-path "$_bash_it_config_file")"
 
       migrated_something=true
 
-      echo "Migrating $single_type $component_name."
+			local single_type="${component_type/aliases/aliass}"
+      echo "Migrating ${single_type%s} $component_name."
 
-      disable_func="_disable-$single_type"
-      enable_func="_enable-$single_type"
+      disable_func="_disable-${single_type%s}"
+      enable_func="_enable-${single_type%s}"
 
-      $disable_func "$component_name"
-      $enable_func "$component_name"
+      "$disable_func" "$component_name"
+      "$enable_func" "$component_name"
     done
+	unset _bash_it_config_file
   done
 
-  if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
+  if [[ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]]; then
     _bash-it-reload
   fi
 
-  if [ "$migrated_something" = "true" ]; then
+  if [[ "$migrated_something" == "true" ]]; then
     echo ""
     echo "If any migration errors were reported, please try the following: reload && bash-it migrate"
   fi
@@ -398,28 +410,28 @@ _bash-it-version() {
 
   cd "${BASH_IT}" || return
 
-  if [ -z "${BASH_IT_REMOTE:-}" ]; then
+  if [[ -z "${BASH_IT_REMOTE:-}" ]]; then
     BASH_IT_REMOTE="origin"
   fi
 
-  BASH_IT_GIT_REMOTE=$(git remote get-url $BASH_IT_REMOTE)
-  BASH_IT_GIT_URL=${BASH_IT_GIT_REMOTE%.git}
+  BASH_IT_GIT_REMOTE="$(git remote get-url "$BASH_IT_REMOTE")"
+  BASH_IT_GIT_URL="${BASH_IT_GIT_REMOTE%.git}"
   if [[ "$BASH_IT_GIT_URL" == *"git@"* ]]; then
     # Fix URL in case it is ssh based URL
-    BASH_IT_GIT_URL=${BASH_IT_GIT_URL/://}
-    BASH_IT_GIT_URL=${BASH_IT_GIT_URL/git@/https://}
+    BASH_IT_GIT_URL="${BASH_IT_GIT_URL/://}"
+    BASH_IT_GIT_URL="${BASH_IT_GIT_URL/git@/https://}"
   fi
 
-  current_tag=$(git describe --exact-match --tags 2> /dev/null)
+  current_tag="$(git describe --exact-match --tags 2> /dev/null)"
 
-  if [[ -z $current_tag ]]; then
+  if [[ -z "$current_tag" ]]; then
     BASH_IT_GIT_VERSION_INFO="$(git log --pretty=format:'%h on %aI' -n 1)"
-    TARGET=${BASH_IT_GIT_VERSION_INFO%% *}
+    TARGET="${BASH_IT_GIT_VERSION_INFO%% *}"
     echo "Version type: dev"
     echo "Current git SHA: $BASH_IT_GIT_VERSION_INFO"
     echo "Commit info: $BASH_IT_GIT_URL/commit/$TARGET"
   else
-    TARGET=$current_tag
+    TARGET="$current_tag"
     echo "Version type: stable"
     echo "Current tag: $current_tag"
     echo "Tag information: $BASH_IT_GIT_URL/releases/tag/$current_tag"
@@ -444,21 +456,21 @@ _bash-it-doctor-all() {
   _about 'reloads a profile file with error, warning and debug logs'
   _group 'lib'
 
-  _bash-it-doctor $BASH_IT_LOG_LEVEL_ALL
+  _bash-it-doctor "$BASH_IT_LOG_LEVEL_ALL"
 }
 
 _bash-it-doctor-warnings() {
   _about 'reloads a profile file with error and warning logs'
   _group 'lib'
 
-  _bash-it-doctor $BASH_IT_LOG_LEVEL_WARNING
+  _bash-it-doctor "$BASH_IT_LOG_LEVEL_WARNING"
 }
 
 _bash-it-doctor-errors() {
   _about 'reloads a profile file with error logs'
   _group 'lib'
 
-  _bash-it-doctor $BASH_IT_LOG_LEVEL_ERROR
+  _bash-it-doctor "$BASH_IT_LOG_LEVEL_ERROR"
 }
 
 _bash-it-doctor-() {
@@ -469,170 +481,172 @@ _bash-it-doctor-() {
 }
 
 _bash-it-profile-save() {
-  _about 'saves the current configuration to the "profile" directory'
-  _group 'lib'
+   _about 'saves the current configuration to the "profile" directory'
+   _group 'lib'
 
-  local name=$1
-  while [ -z "$1" ]; do
-    read -r -e -p "Please enter the name of the profile to save: " name
-    case $name in
-      "")
-        echo -e "\033[91mPlease choose a name.\033[m"
-        ;;
-      *)
-        break
-        ;;
-    esac
-  done
+   local name="${1:-}"
+   while [[ -z "$name" ]]; do
+     read -r -e -p "Please enter the name of the profile to save: " name
+     case $name in
+       "")
+         echo -e "${echo_orange?}Please choose a name.${echo_reset_color?}"
+         ;;
+       *)
+         break
+         ;;
+     esac
+   done
 
-  local profile_path="${BASH_IT}/profiles/${name}.bash_it"
-  if [ -f "$profile_path" ]; then
-    echo -e "\033[0;33mProfile \"$name\" already exists.\033[m"
-    while true; do
-      read -r -e -n 1 -p "Would you like to overwrite existing profile? [y/N] " RESP
-      case $RESP in
-        [yY])
-          echo -e "\033[0;32mOverwriting profile \"$name\"...\033[m"
-          rm "$profile_path"
-          break
-          ;;
-        [nN] | "")
-          echo -e "\033[91mAborting profile save...\033[m"
-          return 1
-          ;;
-        *)
-          echo -e "\033[91mPlease choose y or n.\033[m"
-          ;;
-      esac
-    done
-  fi
+   local profile_path="${BASH_IT}/profiles/${name}.bash_it" RESP
+   if [[ -s "$profile_path" ]]; then
+     echo -e "${echo_yellow?}Profile \"$name\" already exists.${echo_reset_color?}"
+     while true; do
+       read -r -e -n 1 -p "Would you like to overwrite existing profile? [y/N] " RESP
+       case $RESP in
+         [yY])
+           echo -e "${echo_green?}Overwriting profile \"$name\"...${echo_reset_color?}"
+           rm "$profile_path"
+           break
+           ;;
+         [nN] | "")
+           echo -e "${echo_orange?}Aborting profile save...${echo_reset_color?}"
+           return 1
+           ;;
+         *)
+           echo -e "${echo_orange?}Please choose y or n.${echo_reset_color?}"
+           ;;
+       esac
+     done
+   fi
 
-  local something_exists
-  echo "# This file is auto generated by Bash-it. Do not edit manually!" > "$profile_path"
-  for subdirectory in "plugins" "completion" "aliases"; do
-    local component_exists=""
-    echo "Saving $subdirectory configuration..."
-    for f in "${BASH_IT}/$subdirectory/available/"*.bash; do
-      _bash-it-determine-component-status-from-path "$f"
-      if [ "$enabled" == "x" ]; then
-        if [ -z "$component_exists" ]; then
-            # This is the first component of this type, print the header
-            component_exists="yes"
-            something_exists="yes"
-            echo "" >> "$profile_path"
-            echo "# $subdirectory" >> "$profile_path"
-        fi
-        echo "$subdirectory $enabled_file_clean" >> "$profile_path"
-      fi
-    done
-  done
-  if [ -z "$something_exists" ]; then
-    echo "It seems like no configuration was enabled.."
-    echo "Make sure to double check that this is the wanted behavior."
-  fi
+   local something_exists subdirectory
+   echo "# This file is auto generated by Bash-it. Do not edit manually!" > "$profile_path"
+   for subdirectory in "plugins" "completion" "aliases"; do
+     local component_exists="" f
+     echo "Saving $subdirectory configuration..."
+     for f in "${BASH_IT}/$subdirectory/available/"*.bash; do
+       _bash-it-determine-component-status-from-path "$f"
+       if [[ "$enabled" == "x" ]]; then
+         if [[ -z "$component_exists" ]]; then
+             # This is the first component of this type, print the header
+             component_exists="yes"
+             something_exists="yes"
+             echo "" >> "$profile_path"
+             echo "# $subdirectory" >> "$profile_path"
+         fi
+         echo "$subdirectory $enabled_file_clean" >> "$profile_path"
+       fi
+     done
+   done
+   if [[ -z "$something_exists" ]]; then
+     echo "It seems like no configuration was enabled.."
+     echo "Make sure to double check that this is the wanted behavior."
+   fi
 
-  echo "All done!"
-  echo ""
-  echo "Profile location: $profile_path"
-  echo "Load the profile by invoking \"bash-it profile load $name\""
-}
+   echo "All done!"
+   echo ""
+   echo "Profile location: $profile_path"
+   echo "Load the profile by invoking \"bash-it profile load $name\""
+ }
 
-_bash-it-profile-load-parse-profile() {
-  _about 'Internal function used to parse the profile file'
-  _param '1: path to the profile file'
-  _param '2: dry run- only check integrity of the profile file'
-  _example '$ _bash-it-profile-load-parse-profile "profile.bash_it" "dry"'
+ _bash-it-profile-load-parse-profile() {
+   _about 'Internal function used to parse the profile file'
+   _param '1: path to the profile file'
+   _param '2: dry run- only check integrity of the profile file'
+   _example '$ _bash-it-profile-load-parse-profile "profile.bash_it" "dry"'
 
-  local num=0
-  while read -r -a line; do
-    num=$((num + 1))
-    # Ignore comments and empty lines
-    [[ -z "${line[*]}" || "${line[*]}" =~ ^#.* ]] && continue
-    local enable_func="_enable-${line[0]}"
-    local subdirectory=${line[0]}
-    local component=${line[1]}
+   local -i num=0
+   while read -r -a line; do
+     ((++num))
+     # Ignore comments and empty lines
+     [[ -z "${line[*]}" || "${line[*]}" =~ ^#.* ]] && continue
+     local enable_func="_enable-${line[0]}"
+     local subdirectory=${line[0]}
+     local component=${line[1]}
 
-    typeset to_enable=$(command ls "${BASH_IT}/$subdirectory/available/$component".*bash 2>/dev/null | head -1)
-    # Ignore botched lines
-    if [[ -z "$to_enable" ]]; then
-      echo -e "\033[91mBad line(#$num) in profile, aborting load...\033[m"
-      local bad="bad line"
-      break
-    fi
-    # Do not actually modify config on dry run
-    [[ -z $2 ]] || continue
-    # Actually enable the component
-    $enable_func "$component"
-  done < "$1"
+     local to_enable=$(command ls "${BASH_IT}/$subdirectory/available/$component".*bash 2>/dev/null | head -1)
+     # Ignore botched lines
+     if [[ -z "${to_enable}" ]]; then
+       echo -e "${echo_orange?}Bad line(#$num) in profile, aborting load...${echo_reset_color?}"
+       local bad="bad line"
+       break
+     fi
+     # Do not actually modify config on dry run
+     [[ -z $2 ]] || continue
+     # Actually enable the component
+     $enable_func "$component"
+   done < "$1"
 
-  # Make sure to propagate the error
-  [[ -z $bad ]]
-}
+   # Make sure to propagate the error
+   [[ -z $bad ]]
+ }
 
-_bash-it-profile-list() {
-  about 'lists all profiles from the "profiles" directory'
-  _group 'lib'
+ _bash-it-profile-list() {
+   about 'lists all profiles from the "profiles" directory'
+   _group 'lib'
+   local profile
 
-  echo "Available profiles:"
-  for profile in "${BASH_IT}/profiles"/*.bash_it; do
-    profile="${profile##*/}"
-    echo "${profile/.bash_it/}"
-  done
-}
+   echo "Available profiles:"
+   for profile in "${BASH_IT}/profiles"/*.bash_it; do
+     profile="${profile##*/}"
+     echo "${profile/.bash_it/}"
+   done
+ }
 
-_bash-it-profile-rm() {
-  about 'Removes a profile from the "profiles" directory'
-  _group 'lib'
-  local name="$1"
-  if [[ -z $name ]]; then
-    echo -e "\033[91mPlease specify profile name to remove...\033[m"
-    return 1
-  fi
+ _bash-it-profile-rm() {
+   about 'Removes a profile from the "profiles" directory'
+   _group 'lib'
 
-  # Users should not be allowed to delete the default profile
-  if [[ $name == "default" ]]; then
-    echo -e "\033[91mCan not remove the default profile...\033[m"
-    return 1
-  fi
+   local name="$1"
+   if [[ -z $name ]]; then
+     echo -e "${echo_orange?}Please specify profile name to remove...${echo_reset_color?}"
+     return 1
+   fi
 
-  local profile_path="${BASH_IT}/profiles/$name.bash_it"
-  if [[ ! -f "$profile_path" ]]; then
-    echo -e "\033[91mCould not find profile \"$name\"...\033[m"
-    return 1
-  fi
+   # Users should not be allowed to delete the default profile
+   if [[ $name == "default" ]]; then
+     echo -e "${echo_orange?}Can not remove the default profile...${echo_reset_color?}"
+     return 1
+   fi
 
-  command rm "$profile_path"
-  echo "Removed profile \"$name\" successfully!"
-}
+   local profile_path="${BASH_IT}/profiles/$name.bash_it"
+   if [[ ! -f "$profile_path" ]]; then
+     echo -e "${echo_orange?}Could not find profile \"$name\"...${echo_reset_color?}"
+     return 1
+   fi
 
-_bash-it-profile-load() {
-  _about 'loads a configuration from the "profiles" directory'
-  _group 'lib'
+   command rm "$profile_path"
+   echo "Removed profile \"$name\" successfully!"
+ }
 
-  local name="$1"
-  if [[ -z $name ]]; then
-    echo -e "\033[91mPlease specify profile name to load, not changing configuration...\033[m"
-    return 1
-  fi
+ _bash-it-profile-load() {
+   _about 'loads a configuration from the "profiles" directory'
+   _group 'lib'
 
-  local profile_path="${BASH_IT}/profiles/$name.bash_it"
-  if [[ ! -f "$profile_path" ]]; then
-    echo -e "\033[91mCould not find profile \"$name\", not changing configuration...\033[m"
-    return 1
-  fi
+   local name="$1"
+   if [[ -z $name ]]; then
+     echo -e "${echo_orange?}Please specify profile name to load, not changing configuration...${echo_reset_color?}"
+     return 1
+   fi
 
-  echo "Trying to parse profile \"$name\"..."
-  if _bash-it-profile-load-parse-profile "$profile_path" "dry"; then
-    echo "Profile \"$name\" parsed successfully!"
-    echo "Disabling current configuration..."
-    _disable-all
-    echo ""
-    echo "Enabling configuration based on profile..."
-    _bash-it-profile-load-parse-profile "$profile_path"
-    echo ""
-    echo "Profile \"$name\" enabled!"
-  fi
-}
+   local profile_path="${BASH_IT}/profiles/$name.bash_it"
+   if [[ ! -f "$profile_path" ]]; then
+     echo -e "${echo_orange?}Could not find profile \"$name\", not changing configuration...${echo_reset_color?}"
+     return 1
+   fi
+
+   echo "Trying to parse profile \"$name\"..."
+   if _bash-it-profile-load-parse-profile "$profile_path" "dry"; then
+     echo "Profile \"$name\" parsed successfully!"
+     echo "Disabling current configuration..."
+     _disable-all
+     echo ""
+     echo "Enabling configuration based on profile..."
+     _bash-it-profile-load-parse-profile "$profile_path"
+     echo ""
+     echo "Profile \"$name\" enabled!"
+   fi
+ }
 
 _bash-it-restart() {
   _about 'restarts the shell in order to fully reload it'
@@ -655,38 +669,41 @@ _bash-it-reload() {
   _about 'reloads a profile file'
   _group 'lib'
 
-  pushd "${BASH_IT}" &> /dev/null || return
+  pushd "${BASH_IT?}" >/dev/null || return
 
   case $OSTYPE in
     darwin*)
+		# shellcheck disable=SC1090
       source ~/.bash_profile
       ;;
     *)
+		# shellcheck disable=SC1090
       source ~/.bashrc
       ;;
   esac
 
-  popd &> /dev/null || return
+	# shellcheck disable=SC2164
+  popd
 }
 
 _bash-it-determine-component-status-from-path ()
-{
-  _about 'internal function used to process component name and check if its enabled'
-  _param '1: full path to available component file'
-  _example '$ _bash-it-determine-component-status-from-path "${BASH_IT}/plugins/available/git.plugin.bash'
+ {
+   _about 'internal function used to process component name and check if its enabled'
+   _param '1: full path to available component file'
+   _example '$ _bash-it-determine-component-status-from-path "${BASH_IT}/plugins/available/git.plugin.bash'
 
-  # Check for both the old format without the load priority, and the extended format with the priority
-  declare enabled_files enabled_file
-  enabled_file="${f##*/}"
-  enabled_file_clean=$(echo "$enabled_file" | sed -e 's/\(.*\)\..*\.bash/\1/g')
-  enabled_files=$(sort <(compgen -G "${BASH_IT}/enabled/*$BASH_IT_LOAD_PRIORITY_SEPARATOR${enabled_file}") <(compgen -G "${BASH_IT}/$subdirectory/enabled/${enabled_file}") <(compgen -G "${BASH_IT}/$subdirectory/enabled/*$BASH_IT_LOAD_PRIORITY_SEPARATOR${enabled_file}") | wc -l)
+   # Check for both the old format without the load priority, and the extended format with the priority
+   local enabled_files enabled_file
+   enabled_file="${f##*/}"
+   enabled_file_clean=$(echo "$enabled_file" | sed -e 's/\(.*\)\..*\.bash/\1/g')
+   enabled_files=$(sort <(compgen -G "${BASH_IT}/enabled/*$BASH_IT_LOAD_PRIORITY_SEPARATOR${enabled_file}") <(compgen -G "${BASH_IT}/$subdirectory/enabled/${enabled_file}") <(compgen -G "${BASH_IT}/$subdirectory/enabled/*$BASH_IT_LOAD_PRIORITY_SEPARATOR${enabled_file}") | wc -l)
 
-  if [ "$enabled_files" -gt 0 ]; then
-      enabled='x'
-  else
-      enabled=' '
-  fi
-}
+   if [[ "$enabled_files" -gt 0 ]]; then
+       enabled='x'
+   else
+       enabled=' '
+   fi
+ }
 
 _bash-it-describe ()
 {
@@ -702,13 +719,13 @@ _bash-it-describe ()
     file_type="$3"
     column_header="$4"
 
-    typeset f
-    typeset enabled
+    local f
+    local enabled
     printf "%-20s%-10s%s\n" "$column_header" 'Enabled?' 'Description'
-    for f in "${BASH_IT}/$subdirectory/available/"*.bash
+    for f in "${BASH_IT}/$subdirectory/available"/*.bash
     do
-        _bash-it-determine-component-status-from-path "$f"
-        printf "%-20s%-10s%s\n" "$enabled_file_clean" "  [$enabled]" "$(cat $f | metafor about-$file_type)"
+		_bash-it-determine-component-status-from-path "$f"
+        printf "%-20s%-10s%s\n" "$enabled_file_clean" "  [$enabled]" "$(metafor "about-$file_type" < "$f")"
     done
     printf '\n%s\n' "to enable $preposition $file_type, do:"
     printf '%s\n' "$ bash-it enable $file_type  <$file_type name> [$file_type name]... -or- $ bash-it enable $file_type all"
@@ -723,20 +740,20 @@ _on-disable-callback()
     _example '$ _on-disable-callback gitstatus'
     _group 'lib'
 
-    callback=$1_on_disable
-    _command_exists $callback && $callback
+    callback="$1_on_disable"
+    _command_exists "$callback" && "$callback"
 }
 
 _disable-all ()
-{
-    _about 'disables all bash_it components'
-    _example '$ _disable-all'
-    _group 'lib'
+ {
+     _about 'disables all bash_it components'
+     _example '$ _disable-all'
+     _group 'lib'
 
-    _disable-plugin "all"
-    _disable-alias "all"
-    _disable-completion "all"
-}
+     _disable-plugin "all"
+     _disable-alias "all"
+     _disable-completion "all"
+ }
 
 _disable-plugin ()
 {
@@ -745,8 +762,8 @@ _disable-plugin ()
     _example '$ disable-plugin rvm'
     _group 'lib'
 
-    _disable-thing "plugins" "plugin" $1
-    _on-disable-callback $1
+    _disable-thing "plugins" "plugin" "$1"
+    _on-disable-callback "$1"
 }
 
 _disable-alias ()
@@ -756,7 +773,7 @@ _disable-alias ()
     _example '$ disable-alias git'
     _group 'lib'
 
-    _disable-thing "aliases" "alias" $1
+    _disable-thing "aliases" "alias" "$1"
 }
 
 _disable-completion ()
@@ -766,7 +783,7 @@ _disable-completion ()
     _example '$ disable-completion git'
     _group 'lib'
 
-    _disable-thing "completion" "completion" $1
+    _disable-thing "completion" "completion" "$1"
 }
 
 _disable-thing ()
@@ -781,35 +798,34 @@ _disable-thing ()
     file_type="$2"
     file_entity="$3"
 
-    if [ -z "$file_entity" ]; then
+    if [[ -z "$file_entity" ]]; then
         reference "disable-$file_type"
         return
     fi
 
-    typeset f suffix
-    suffix=$(echo "$subdirectory" | sed -e 's/plugins/plugin/g')
+    local f suffix _bash_it_config_file
+    suffix="${subdirectory/plugins/plugin}"
 
-    if [ "$file_entity" = "all" ]; then
+    if [[ "$file_entity" = "all" ]]; then
         # Disable everything that's using the old structure
-        for f in `compgen -G "${BASH_IT}/$subdirectory/enabled/*.${suffix}.bash"`
-        do
-          rm "$f"
+
+				for _bash_it_config_file in "${BASH_IT}/$subdirectory/enabled"/*."${suffix}.bash"; do
+          rm -f "$_bash_it_config_file"
         done
 
+				for _bash_it_config_file in "${BASH_IT}/enabled"/*".${suffix}.bash"; do
         # Disable everything in the global "enabled" directory
-        for f in `compgen -G "${BASH_IT}/enabled/*.${suffix}.bash"`
-        do
-          rm "$f"
+          rm -f "$_bash_it_config_file"
         done
     else
-        typeset plugin_global=$(command ls $ "${BASH_IT}/enabled/"[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity.$suffix.bash 2>/dev/null | head -1)
-        if [ -z "$plugin_global" ]; then
+        local plugin_global="$(command ls $ "${BASH_IT}/enabled"/[0-9]*"${BASH_IT_LOAD_PRIORITY_SEPARATOR}${file_entity}.${suffix}.bash" 2>/dev/null | head -1)"
+        if [[ -z "$plugin_global" ]]; then
           # Use a glob to search for both possible patterns
           # 250---node.plugin.bash
           # node.plugin.bash
           # Either one will be matched by this glob
-          typeset plugin=$(command ls $ "${BASH_IT}/$subdirectory/enabled/"{[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity.$suffix.bash,$file_entity.$suffix.bash} 2>/dev/null | head -1)
-          if [ -z "$plugin" ]; then
+          local plugin="$(command ls $ "${BASH_IT}/$subdirectory/enabled/"{[0-9]*"${BASH_IT_LOAD_PRIORITY_SEPARATOR}${file_entity}.${suffix}.bash","${file_entity}.${suffix}.bash"} 2>/dev/null | head -1)"
+          if [[ -z "$plugin" ]]; then
               printf '%s\n' "sorry, $file_entity does not appear to be an enabled $file_type."
               return
           fi
@@ -822,10 +838,10 @@ _disable-thing ()
     _bash-it-clean-component-cache "${file_type}"
 
     if [ "$file_entity" = "all" ]; then
-      printf '%s\n' "$file_entity $(_bash-it-pluralize-component "$file_type") disabled."
-    else
-      printf '%s\n' "$file_entity disabled."
-    fi
+       printf '%s\n' "$file_entity $(_bash-it-pluralize-component "$file_type") disabled."
+     else
+       printf '%s\n' "$file_entity disabled."
+     fi
 }
 
 _enable-plugin ()
@@ -835,14 +851,14 @@ _enable-plugin ()
     _example '$ enable-plugin rvm'
     _group 'lib'
 
-    _enable-thing "plugins" "plugin" $1 $BASH_IT_LOAD_PRIORITY_DEFAULT_PLUGIN
+    _enable-thing "plugins" "plugin" "$1" "$BASH_IT_LOAD_PRIORITY_DEFAULT_PLUGIN"
 }
 
 _enable-plugins ()
-{
-    _about 'alias of _enable-plugin'
-    _enable-plugin "$@"
-}
+ {
+     _about 'alias of _enable-plugin'
+     _enable-plugin "$@"
+ }
 
 _enable-alias ()
 {
@@ -851,14 +867,14 @@ _enable-alias ()
     _example '$ enable-alias git'
     _group 'lib'
 
-    _enable-thing "aliases" "alias" $1 $BASH_IT_LOAD_PRIORITY_DEFAULT_ALIAS
+    _enable-thing "aliases" "alias" "$1" "$BASH_IT_LOAD_PRIORITY_DEFAULT_ALIAS"
 }
 
 _enable-aliases ()
-{
-    _about 'alias of _enable-alias'
-    _enable-alias "$@"
-}
+ {
+     _about 'alias of _enable-alias'
+     _enable-alias "$@"
+ }
 
 _enable-completion ()
 {
@@ -867,7 +883,7 @@ _enable-completion ()
     _example '$ enable-completion git'
     _group 'lib'
 
-    _enable-thing "completion" "completion" $1 $BASH_IT_LOAD_PRIORITY_DEFAULT_COMPLETION
+    _enable-thing "completion" "completion" "$1" "$BASH_IT_LOAD_PRIORITY_DEFAULT_COMPLETION"
 }
 
 _enable-thing ()
@@ -885,38 +901,37 @@ _enable-thing ()
     file_entity="$3"
     load_priority="$4"
 
-    if [ -z "$file_entity" ]; then
+    if [[ -z "$file_entity" ]]; then
         reference "enable-$file_type"
         return
     fi
 
-    if [ "$file_entity" = "all" ]; then
-        typeset f $file_type
-        for f in "${BASH_IT}/$subdirectory/available/"*.bash
-        do
-            to_enable=$(basename $f .$file_type.bash)
-            if [ "$file_type" = "alias" ]; then
-              to_enable=$(basename $f ".aliases.bash")
+    if [[ "$file_entity" == "all" ]]; then
+        local _bash_it_config_file
+        for _bash_it_config_file in "${BASH_IT}/$subdirectory/available"/*.bash; do
+            to_enable="$(basename "$_bash_it_config_file" ".$file_type.bash")"
+            if [[ "$file_type" == "alias" ]]; then
+              to_enable="$(basename "$_bash_it_config_file" ".aliases.bash")"
             fi
-            _enable-thing $subdirectory $file_type $to_enable $load_priority
+            _enable-thing "$subdirectory" "$file_type" "$to_enable" "$load_priority"
         done
     else
-        typeset to_enable=$(command ls "${BASH_IT}/$subdirectory/available/"$file_entity.*bash 2>/dev/null | head -1)
-        if [ -z "$to_enable" ]; then
+        local to_enable="$(command ls "${BASH_IT}/$subdirectory/available/$file_entity".*.bash 2>/dev/null | head -1)"
+        if [[ -z "$to_enable" ]]; then
             printf '%s\n' "sorry, $file_entity does not appear to be an available $file_type."
             return
         fi
 
 		to_enable="${to_enable##*/}"
         # Check for existence of the file using a wildcard, since we don't know which priority might have been used when enabling it.
-        typeset enabled_plugin=$(command ls "${BASH_IT}/$subdirectory/enabled/"{[0-9][0-9][0-9]$BASH_IT_LOAD_PRIORITY_SEPARATOR$to_enable,$to_enable} 2>/dev/null | head -1)
-        if [ ! -z "$enabled_plugin" ] ; then
+        local enabled_plugin="$(command ls "${BASH_IT}/$subdirectory/enabled"/{[0-9][0-9][0-9]"${BASH_IT_LOAD_PRIORITY_SEPARATOR}${to_enable}","${to_enable}"} 2>/dev/null | head -1)"
+        if [[ -n "$enabled_plugin" ]]; then
           printf '%s\n' "$file_entity is already enabled."
           return
         fi
 
-        typeset enabled_plugin_global=$(command compgen -G "${BASH_IT}/enabled/[0-9][0-9][0-9]$BASH_IT_LOAD_PRIORITY_SEPARATOR$to_enable" 2>/dev/null | head -1)
-        if [ ! -z "$enabled_plugin_global" ] ; then
+        local enabled_plugin_global="$(command compgen -G "${BASH_IT}/enabled/[0-9][0-9][0-9]${BASH_IT_LOAD_PRIORITY_SEPARATOR}${to_enable}" 2>/dev/null | head -1)"
+        if [[ -n "$enabled_plugin_global" ]]; then
           printf '%s\n' "$file_entity is already enabled."
           return
         fi
@@ -925,10 +940,10 @@ _enable-thing ()
 
         # Load the priority from the file if it present there
         declare local_file_priority use_load_priority
-		local_file_priority="$(_bash-it-egrep "^# BASH_IT_LOAD_PRIORITY:" "${BASH_IT}/$subdirectory/available/$to_enable" | awk -F': ' '{ print $2 }')"
-		use_load_priority="${local_file_priority:-$load_priority}"
+        local_file_priority="$(_bash-it-egrep "^# BASH_IT_LOAD_PRIORITY:" "${BASH_IT}/$subdirectory/available/$to_enable" | awk -F': ' '{ print $2 }')"
+        use_load_priority="${local_file_priority:-$load_priority}"
 
-        ln -s ../$subdirectory/available/$to_enable "${BASH_IT}/enabled/${use_load_priority}${BASH_IT_LOAD_PRIORITY_SEPARATOR}${to_enable}"
+        ln -s "../$subdirectory/available/$to_enable" "${BASH_IT}/enabled/${use_load_priority}${BASH_IT_LOAD_PRIORITY_SEPARATOR}${to_enable}"
     fi
 
     _bash-it-clean-component-cache "${file_type}"
@@ -951,7 +966,7 @@ _help-aliases()
     _example '$ alias-help'
     _example '$ alias-help git'
 
-    if [ -n "$1" ]; then
+    if [[ -n "$1" ]]; then
         case $1 in
             custom)
                 alias_path='custom.aliases.bash'
@@ -960,16 +975,16 @@ _help-aliases()
                 alias_path="available/$1.aliases.bash"
             ;;
         esac
-        cat "${BASH_IT}/aliases/$alias_path" | metafor alias | sed "s/$/'/"
+        metafor alias < "${BASH_IT}/aliases/$alias_path" | sed "s/$/'/"
     else
-        typeset f
+        local f
 
-        for f in `sort <(compgen -G "${BASH_IT}/aliases/enabled/*") <(compgen -G "${BASH_IT}/enabled/*.aliases.bash")`
-        do
-            _help-list-aliases $f
+        for f in "${BASH_IT}/aliases/enabled"/* "${BASH_IT}/enabled"/*."aliases.bash"; do
+			[[ -f "$f" ]] || continue
+            _help-list-aliases "$f"
         done
 
-        if [ -e "${BASH_IT}/aliases/custom.aliases.bash" ]; then
+        if [[ -e "${BASH_IT}/aliases/custom.aliases.bash" ]]; then
           _help-list-aliases "${BASH_IT}/aliases/custom.aliases.bash"
         fi
     fi
@@ -977,10 +992,10 @@ _help-aliases()
 
 _help-list-aliases ()
 {
-    typeset file=$(basename $1 | sed -e 's/[0-9]*[-]*\(.*\)\.aliases\.bash/\1/g')
+    local file="$(basename "$1" | sed -e 's/[0-9]*[-]*\(.*\)\.aliases\.bash/\1/g')"
     printf '\n\n%s:\n' "${file}"
     # metafor() strips trailing quotes, restore them with sed..
-    cat $1 | metafor alias | sed "s/$/'/"
+    metafor alias < "$1" | sed "s/$/'/"
 }
 
 _help-plugins()
@@ -990,42 +1005,40 @@ _help-plugins()
 
     # display a brief progress message...
     printf '%s' 'please wait, building help...'
-    typeset grouplist=$(mktemp -t grouplist.XXXXXX)
-    typeset func
-    for func in $(_typeset_functions)
-    do
-        typeset group="$(typeset -f $func | metafor group)"
-        if [ -z "$group" ]; then
+    local grouplist=$(mktemp -t grouplist.XXXXXX)
+    local func
+    for func in $(_typeset_functions); do
+        local group="$(declare -f "$func" | metafor group)"
+        if [[ -z "$group" ]]; then
             group='misc'
         fi
-        typeset about="$(typeset -f $func | metafor about)"
-        _letterpress "$about" $func >> $grouplist.$group
-        echo $grouplist.$group >> $grouplist
+        local about="$(declare -f "$func" | metafor about)"
+        _letterpress "$about" "$func" >> "$grouplist.$group"
+        echo "$grouplist.$group" >> "$grouplist"
     done
     # clear progress message
     printf '\r%s\n' '                              '
-    typeset group
-    typeset gfile
-    for gfile in $(cat $grouplist | sort | uniq)
-    do
+    local group
+    local gfile
+		while IFS= read -r gfile; do
         printf '%s\n' "${gfile##*.}:"
-        cat $gfile
+        cat "$gfile"
         printf '\n'
-        rm $gfile 2> /dev/null
-    done | less
-    rm $grouplist 2> /dev/null
+        rm "$gfile" 2> /dev/null
+    done < <(sort -u "$grouplist") | less
+    rm "$grouplist" 2> /dev/null
 }
 
 _help-profile () {
-  _about 'help message for profile command'
-  _group 'lib'
+   _about 'help message for profile command'
+   _group 'lib'
 
-  echo "Manages profiles of bash it."
-  echo "Use 'bash-it profile list' to see all available profiles."
-  echo "Use 'bash-it profile save foo' to save the current configuration into a profile named 'foo'."
-  echo "Use 'bash-it profile load foo' to load an existing profile named 'foo'."
-  echo "Use 'bash-it profile rm foo' to remove an existing profile named 'foo'."
-}
+   echo "Manages profiles of bash it."
+   echo "Use 'bash-it profile list' to see all available profiles."
+   echo "Use 'bash-it profile save foo' to save the current configuration into a profile named 'foo'."
+   echo "Use 'bash-it profile load foo' to load an existing profile named 'foo'."
+   echo "Use 'bash-it profile rm foo' to remove an existing profile named 'foo'."
+ }
 
 _help-update () {
   _about 'help message for update command'
@@ -1050,22 +1063,21 @@ all_groups ()
 	declare -f | metafor group | sort -u
 }
 
-if ! type pathmunge > /dev/null 2>&1
-then
-  function pathmunge () {
-    about 'prevent duplicate directories in you PATH variable'
-    group 'helpers'
-    example 'pathmunge /path/to/dir is equivalent to PATH=/path/to/dir:$PATH'
-    example 'pathmunge /path/to/dir after is equivalent to PATH=$PATH:/path/to/dir'
+if ! _command_exists pathmunge
+then function pathmunge () {
+  about 'prevent duplicate directories in you PATH variable'
+  group 'helpers'
+  example 'pathmunge /path/to/dir is equivalent to PATH=/path/to/dir:$PATH'
+  example 'pathmunge /path/to/dir after is equivalent to PATH=$PATH:/path/to/dir'
 
-    if ! [[ $PATH =~ (^|:)$1($|:) ]] ; then
-      if [ "$2" = "after" ] ; then
-        export PATH=$PATH:$1
-      else
-        export PATH=$1:$PATH
-      fi
+  if [[ -d "${1:-}" && ! $PATH =~ (^|:)$1($|:) ]]; then
+	if [[ "${2:-}" == "after" ]]; then
+      export PATH=$PATH:$1
+    else
+      export PATH=$1:$PATH
     fi
-  }
+  fi
+}
 fi
 
 # `_bash-it-find-in-ancestor` uses the shell's ability to run a function in

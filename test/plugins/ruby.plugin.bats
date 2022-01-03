@@ -6,6 +6,8 @@ load ../test_helper_libs
 function local_setup {
   setup_test_fixture
 
+  _command_exists "ruby" && mkdir -p "$(ruby -e 'print Gem.user_dir')/bin"
+
   export OLD_PATH="$PATH"
   export PATH="/usr/bin:/bin:/usr/sbin"
 }
