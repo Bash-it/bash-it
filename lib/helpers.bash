@@ -256,9 +256,8 @@ function _bash-it_update_migrate_and_restart() {
 		_bash-it-migrate
 		echo ""
 		echo "All done, enjoy!"
-		# Don't forget to restore the original pwd!
-		# shellcheck disable=SC2164
-		popd &> /dev/null
+		# Don't forget to restore the original pwd (called from `_bash-it-update-`)!
+		popd > /dev/null || return
 		_bash-it-restart
 	else
 		echo "Error updating Bash-it, please, check if your Bash-it installation folder (${BASH_IT}) is clean."
@@ -301,8 +300,7 @@ function _bash-it-update-() {
 
 		if [[ -z "$TARGET" ]]; then
 			echo "Can not find tags, so can not update to latest stable version..."
-			# shellcheck disable=SC2164
-			popd &> /dev/null
+			popd > /dev/null || return
 			return
 		fi
 	else
@@ -365,8 +363,7 @@ function _bash-it-update-() {
 			echo "Bash-it is up to date, nothing to do!"
 		fi
 	fi
-	# shellcheck disable=SC2164
-	popd &> /dev/null
+	popd > /dev/null || return
 }
 
 function _bash-it-migrate() {
@@ -398,7 +395,7 @@ function _bash-it-migrate() {
 		done
 	done
 
-	if [[ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]]; then
+	if [[ -n "${BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE:-}" ]]; then
 		_bash-it-reload
 	fi
 
@@ -412,7 +409,7 @@ function _bash-it-version() {
 	_about 'shows current Bash-it version'
 	_group 'lib'
 
-	cd "${BASH_IT}" || return
+	pushd "${BASH_IT?}" > /dev/null || return
 
 	if [[ -z "${BASH_IT_REMOTE:-}" ]]; then
 		BASH_IT_REMOTE="origin"
@@ -443,7 +440,7 @@ function _bash-it-version() {
 
 	echo "Compare to latest: $BASH_IT_GIT_URL/compare/$TARGET...master"
 
-	cd - &> /dev/null || return
+	popd > /dev/null || return
 }
 
 function _bash-it-doctor() {
@@ -538,7 +535,7 @@ function _bash-it-profile-save() {
 					echo "" >> "$profile_path"
 					echo "# $subdirectory" >> "$profile_path"
 				fi
-				echo "$subdirectory $enabled_file_clean" >> "$profile_path"
+				echo "$subdirectory $enabled_file" >> "$profile_path"
 			fi
 		done
 	done
@@ -568,7 +565,8 @@ _bash-it-profile-load-parse-profile() {
 		local subdirectory=${line[0]}
 		local component=${line[1]}
 
-		local to_enable=$(command ls "${BASH_IT}/$subdirectory/available/$component".*bash 2> /dev/null | head -1)
+		local to_enable
+		to_enable=$(command ls "${BASH_IT}/$subdirectory/available/$component".*bash 2> /dev/null | head -1)
 		# Ignore botched lines
 		if [[ -z "${to_enable}" ]]; then
 			echo -e "${echo_orange?}Bad line(#$num) in profile, aborting load...${echo_reset_color?}"
@@ -658,14 +656,11 @@ function _bash-it-restart() {
 
 	saved_pwd="${PWD}"
 
-	case $OSTYPE in
-		darwin*)
-			init_file=.bash_profile
-			;;
-		*)
-			init_file=.bashrc
-			;;
-	esac
+	if shopt -q login_shell; then
+		init_file=.bash_profile
+	else
+		init_file=.bashrc
+	fi
 	exec "${0/-/}" --rcfile <(echo "source \"$HOME/$init_file\"; cd \"$saved_pwd\"")
 }
 
@@ -675,19 +670,15 @@ function _bash-it-reload() {
 
 	pushd "${BASH_IT?}" > /dev/null || return
 
-	case $OSTYPE in
-		darwin*)
-			# shellcheck disable=SC1090
-			source ~/.bash_profile
-			;;
-		*)
-			# shellcheck disable=SC1090
-			source ~/.bashrc
-			;;
-	esac
-
-	# shellcheck disable=SC2164
-	popd
+	# shellcheck disable=SC1090
+	if shopt -q login_shell; then
+		# shellcheck source-path=$HOME
+		source ~/.bash_profile
+	else
+		# shellcheck source-path=$HOME
+		source ~/.bashrc
+	fi
+	popd > /dev/null || return
 }
 
 _bash-it-determine-component-status-from-path() {
@@ -698,7 +689,7 @@ _bash-it-determine-component-status-from-path() {
 	# Check for both the old format without the load priority, and the extended format with the priority
 	local enabled_files enabled_file
 	enabled_file="${f##*/}"
-	enabled_file_clean=$(echo "$enabled_file" | sed -e 's/\(.*\)\..*\.bash/\1/g')
+	enabled_file="${enabled_file%.*.bash}"
 	enabled_files=$(sort <(compgen -G "${BASH_IT}/enabled/*$BASH_IT_LOAD_PRIORITY_SEPARATOR${enabled_file}") <(compgen -G "${BASH_IT}/$subdirectory/enabled/${enabled_file}") <(compgen -G "${BASH_IT}/$subdirectory/enabled/*$BASH_IT_LOAD_PRIORITY_SEPARATOR${enabled_file}") | wc -l)
 
 	if [[ "$enabled_files" -gt 0 ]]; then
@@ -726,7 +717,7 @@ function _bash-it-describe() {
 	printf "%-20s%-10s%s\n" "$column_header" 'Enabled?' 'Description'
 	for f in "${BASH_IT}/$subdirectory/available"/*.bash; do
 		_bash-it-determine-component-status-from-path "$f"
-		printf "%-20s%-10s%s\n" "$enabled_file_clean" "  [$enabled]" "$(metafor "about-$file_type" < "$f")"
+		printf "%-20s%-10s%s\n" "$enabled_file" "  [$enabled]" "$(metafor "about-$file_type" < "$f")"
 	done
 	printf '\n%s\n' "to enable $preposition $file_type, do:"
 	printf '%s\n' "$ bash-it enable $file_type  <$file_type name> [$file_type name]... -or- $ bash-it enable $file_type all"
@@ -832,7 +823,7 @@ function _disable-thing() {
 
 	_bash-it-clean-component-cache "${file_type}"
 
-	if [ "$file_entity" = "all" ]; then
+	if [[ "$file_entity" = "all" ]]; then
 		printf '%s\n' "$file_entity $(_bash-it-pluralize-component "$file_type") disabled."
 	else
 		printf '%s\n' "$file_entity disabled."
@@ -898,7 +889,6 @@ function _enable-thing() {
 	fi
 
 	if [[ "$file_entity" == "all" ]]; then
-		_bash_it_config_file
 		for _bash_it_config_file in "${BASH_IT}/$subdirectory/available"/*.bash; do
 			to_enable="$(basename "$_bash_it_config_file" ".$file_type.bash")"
 			if [[ "$file_type" == "alias" ]]; then
@@ -921,7 +911,7 @@ function _enable-thing() {
 			return
 		fi
 
-		enabled_plugin_global="$(command compgen -G "${BASH_IT}/enabled/[0-9][0-9][0-9]${BASH_IT_LOAD_PRIORITY_SEPARATOR}${to_enable}" 2> /dev/null | head -1)"
+		enabled_plugin_global="$(command compgen -G "${BASH_IT}/enabled/[0-9][0-9][0-9]${BASH_IT_LOAD_PRIORITY_SEPARATOR?}${to_enable}" 2> /dev/null | head -1)"
 		if [[ -n "$enabled_plugin_global" ]]; then
 			printf '%s\n' "$file_entity is already enabled."
 			return
@@ -1047,22 +1037,20 @@ function all_groups() {
 	declare -f | metafor group | sort -u
 }
 
-if ! _command_exists pathmunge; then
-	function pathmunge() {
-		about 'prevent duplicate directories in you PATH variable'
-		group 'helpers'
-		example 'pathmunge /path/to/dir is equivalent to PATH=/path/to/dir:$PATH'
-		example 'pathmunge /path/to/dir after is equivalent to PATH=$PATH:/path/to/dir'
+function pathmunge() {
+	about 'prevent duplicate directories in you PATH variable'
+	group 'helpers'
+	example 'pathmunge /path/to/dir is equivalent to PATH=/path/to/dir:$PATH'
+	example 'pathmunge /path/to/dir after is equivalent to PATH=$PATH:/path/to/dir'
 
-		if [[ -d "${1:-}" && ! $PATH =~ (^|:)$1($|:) ]]; then
-			if [[ "${2:-}" == "after" ]]; then
-				export PATH=$PATH:$1
-			else
-				export PATH=$1:$PATH
-			fi
+	if [[ -d "${1:-}" && ! $PATH =~ (^|:)$1($|:) ]]; then
+		if [[ "${2:-}" == "after" ]]; then
+			export PATH=$PATH:$1
+		else
+			export PATH=$1:$PATH
 		fi
-	}
-fi
+	fi
+}
 
 # `_bash-it-find-in-ancestor` uses the shell's ability to run a function in
 # a subshell to simplify our search to a simple `cd ..` and `[[ -r $1 ]]`
