@@ -208,6 +208,8 @@ export BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE=''
 source "${BASH_IT}"/vendor/github.com/erichs/composure/composure.sh
 # shellcheck source=./lib/utilities.bash
 source "$BASH_IT/lib/utilities.bash"
+# shellcheck source=./lib/log.bash
+source "${BASH_IT}/lib/log.bash"
 cite _about _param _example _group _author _version
 # shellcheck source=./lib/helpers.bash
 source "$BASH_IT/lib/helpers.bash"
@@ -219,12 +221,7 @@ if [[ -n $interactive && -z "${silent}" ]]; then
 	done
 else
 	echo ""
-	echo -e "\033[0;32mEnabling reasonable defaults\033[0m"
-	_enable-completion bash-it
-	_enable-completion system
-	_enable-plugin base
-	_enable-plugin alias-completion
-	_enable-alias general
+	_bash-it-profile-load "default"
 fi
 
 echo ""

@@ -8,7 +8,7 @@
 # Disable immediate `$PROMPT_COMMAND` modification
 __bp_delay_install="delayed"
 
-# shellcheck source=SCRIPTDIR/../github.com/rcaloras/bash-preexec
+# shellcheck source-path=SCRIPTDIR/../github.com/rcaloras/bash-preexec
 source "${BASH_IT?}/vendor/github.com/rcaloras/bash-preexec/bash-preexec.sh"
 
 # Block damanaging user's `$HISTCONTROL`

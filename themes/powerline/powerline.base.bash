@@ -1,16 +1,15 @@
 # shellcheck shell=bash
 # shellcheck disable=SC2034 # Expected behavior for themes.
-# shellcheck disable=SC2154 #TODO: fix these all.
 
 # Define this here so it can be used by all of the Powerline themes
 THEME_CHECK_SUDO=${THEME_CHECK_SUDO:=true}
 
 function set_color() {
-	set +u
-	if [[ "${1}" != "-" ]]; then
+	local fg='' bg=''
+	if [[ "${1:-}" != "-" ]]; then
 		fg="38;5;${1}"
 	fi
-	if [[ "${2}" != "-" ]]; then
+	if [[ "${2:-}" != "-" ]]; then
 		bg="48;5;${2}"
 		[[ -n "${fg}" ]] && bg=";${bg}"
 	fi
@@ -99,14 +98,13 @@ function __powerline_k8s_namespace_prompt() {
 }
 
 function __powerline_python_venv_prompt() {
-	set +u
 	local python_venv=""
 
-	if [[ -n "${CONDA_DEFAULT_ENV}" ]]; then
+	if [[ -n "${CONDA_DEFAULT_ENV:-}" ]]; then
 		python_venv="${CONDA_DEFAULT_ENV}"
 		PYTHON_VENV_CHAR=${CONDA_PYTHON_VENV_CHAR}
-	elif [[ -n "${VIRTUAL_ENV}" ]]; then
-		python_venv=$(basename "${VIRTUAL_ENV}")
+	elif [[ -n "${VIRTUAL_ENV:-}" ]]; then
+		python_venv="${VIRTUAL_ENV##*/}"
 	fi
 
 	[[ -n "${python_venv}" ]] && echo "${PYTHON_VENV_CHAR}${python_venv}|${PYTHON_VENV_THEME_PROMPT_COLOR}"
@@ -137,7 +135,7 @@ function __powerline_scm_prompt() {
 		elif [[ "${SCM_SVN_CHAR}" == "${SCM_CHAR}" ]]; then
 			scm_prompt+="${SCM_CHAR}${SCM_BRANCH}${SCM_STATE}"
 		fi
-		echo "$(eval "echo ${scm_prompt}")${scm}|${color}"
+		echo "${scm_prompt?}${scm?}|${color}"
 	fi
 }
 
@@ -243,12 +241,12 @@ function __powerline_left_segment() {
 		# Since the previous segment wasn't the last segment, add padding, if needed
 		#
 		if [[ "${POWERLINE_COMPACT_BEFORE_SEPARATOR}" -eq 0 ]]; then
-			LEFT_PROMPT+="$(set_color - "${LAST_SEGMENT_COLOR}") ${normal}"
+			LEFT_PROMPT+="$(set_color - "${LAST_SEGMENT_COLOR}") ${normal?}"
 		fi
 		if [[ "${LAST_SEGMENT_COLOR}" -eq "${params[1]}" ]]; then
-			LEFT_PROMPT+="$(set_color - "${LAST_SEGMENT_COLOR}")${POWERLINE_LEFT_SEPARATOR_SOFT}${normal}"
+			LEFT_PROMPT+="$(set_color - "${LAST_SEGMENT_COLOR}")${POWERLINE_LEFT_SEPARATOR_SOFT}${normal?}"
 		else
-			LEFT_PROMPT+="$(set_color "${LAST_SEGMENT_COLOR}" "${params[1]}")${POWERLINE_LEFT_SEPARATOR}${normal}"
+			LEFT_PROMPT+="$(set_color "${LAST_SEGMENT_COLOR}" "${params[1]}")${POWERLINE_LEFT_SEPARATOR}${normal?}"
 		fi
 	fi
 
@@ -258,7 +256,7 @@ function __powerline_left_segment() {
 }
 
 function __powerline_left_last_segment_padding() {
-	LEFT_PROMPT+="$(set_color - "${LAST_SEGMENT_COLOR}") ${normal}"
+	LEFT_PROMPT+="$(set_color - "${LAST_SEGMENT_COLOR}") ${normal?}"
 }
 
 function __powerline_last_status_prompt() {
@@ -285,9 +283,9 @@ function __powerline_prompt_command() {
 		[[ -n "${info}" ]] && __powerline_left_segment "${info}"
 	done
 
-	[[ "${last_status}" -ne 0 ]] && __powerline_left_segment "$(__powerline_last_status_prompt ${last_status})"
+	[[ "${last_status}" -ne 0 ]] && __powerline_left_segment "$(__powerline_last_status_prompt "${last_status}")"
 
-	if [[ -n "${LEFT_PROMPT}" ]] && [[ "${POWERLINE_COMPACT_AFTER_LAST_SEGMENT}" -eq 0 ]]; then
+	if [[ -n "${LEFT_PROMPT}" ]] && [[ "${POWERLINE_COMPACT_AFTER_LAST_SEGMENT:-}" -eq 0 ]]; then
 		__powerline_left_last_segment_padding
 	fi
 
@@ -296,11 +294,11 @@ function __powerline_prompt_command() {
 	prompt_color="$(set_color "${LAST_SEGMENT_COLOR}" -)"
 	if [[ -n "${LEFT_PROMPT}" ]] && [[ -n "${POWERLINE_LEFT_LAST_SEGMENT_PROMPT_CHAR}" ]]; then
 		LEFT_PROMPT+="$(set_color - "${LAST_SEGMENT_COLOR}")${POWERLINE_LEFT_LAST_SEGMENT_PROMPT_CHAR}"
-		prompt_color="${normal}"
+		prompt_color="${normal?}"
 	fi
-	[[ -n "${LEFT_PROMPT}" ]] && LEFT_PROMPT+="${prompt_color}${separator_char}${normal}"
+	[[ -n "${LEFT_PROMPT}" ]] && LEFT_PROMPT+="${prompt_color}${separator_char}${normal?}"
 
-	if [[ "${POWERLINE_COMPACT_PROMPT}" -eq 0 ]]; then
+	if [[ "${POWERLINE_COMPACT_PROMPT:-}" -eq 0 ]]; then
 		LEFT_PROMPT+=" "
 	fi
 

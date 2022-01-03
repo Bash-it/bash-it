@@ -57,6 +57,18 @@ _bash-it-comp-list-available()
   COMPREPLY=( $(compgen -W "${enabled_things}" -- ${cur}) )
 }
 
+_bash-it-comp-list-profiles()
+{
+  local profiles
+
+  profiles=$(for f in `compgen -G "${BASH_IT}/profiles/*.bash_it" | sort -d`;
+    do
+      basename $f | sed -e 's/.bash_it//g'
+    done)
+
+  COMPREPLY=( $(compgen -W "${profiles}" -- ${cur}) )
+}
+
 _bash-it-comp()
 {
   local cur prev opts
@@ -65,7 +77,7 @@ _bash-it-comp()
   prev="${COMP_WORDS[COMP_CWORD-1]}"
   chose_opt="${COMP_WORDS[1]}"
   file_type="${COMP_WORDS[2]}"
-  opts="disable enable help migrate reload restart doctor search show update version"
+  opts="disable enable help migrate reload restart profile doctor search show update version"
   case "${chose_opt}" in
     show)
       local show_args="aliases completions plugins"
@@ -81,6 +93,33 @@ _bash-it-comp()
         COMPREPLY=( $(compgen -W "${help_args}" -- ${cur}) )
         return 0
       fi
+      ;;
+    profile)
+      case "${file_type}" in
+        load)
+          if [[ "load" == "$prev" ]]; then
+            _bash-it-comp-list-profiles
+          fi
+          return 0
+          ;;
+        rm)
+          if [[ "rm" == "$prev" ]]; then
+            _bash-it-comp-list-profiles
+          fi
+          return 0
+          ;;
+        save)
+          return 0
+          ;;
+        list)
+          return 0
+          ;;
+        *)
+          local profile_args="load save list rm"
+          COMPREPLY=( $(compgen -W "${profile_args}" -- ${cur}) )
+          return 0
+          ;;
+      esac
       ;;
     doctor)
       local doctor_args="errors warnings all"

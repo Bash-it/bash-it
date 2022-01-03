@@ -103,5 +103,3 @@ R () {
 }
 
 alias U='source ~/.dirs' 	# Update bookmark stack
-# Set the Bash option so that no '$' is required when using the above facility
-shopt -s cdable_vars

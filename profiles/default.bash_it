@@ -1,0 +1,12 @@
+# This is the default profile of Bash-it
+
+# plugins
+plugins alias-completion
+plugins base
+
+# completion
+completion bash-it
+completion system
+
+# aliases
+aliases general
