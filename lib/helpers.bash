@@ -3,9 +3,9 @@
 #
 # A collection of reusable functions.
 
-BASH_IT_LOAD_PRIORITY_DEFAULT_ALIAS=${BASH_IT_LOAD_PRIORITY_DEFAULT_ALIAS:-150}
-BASH_IT_LOAD_PRIORITY_DEFAULT_PLUGIN=${BASH_IT_LOAD_PRIORITY_DEFAULT_PLUGIN:-250}
-BASH_IT_LOAD_PRIORITY_DEFAULT_COMPLETION=${BASH_IT_LOAD_PRIORITY_DEFAULT_COMPLETION:-350}
+: "${BASH_IT_LOAD_PRIORITY_DEFAULT_ALIAS:=150}"
+: "${BASH_IT_LOAD_PRIORITY_DEFAULT_PLUGIN:=250}"
+: "${BASH_IT_LOAD_PRIORITY_DEFAULT_COMPLETION:=350}"
 BASH_IT_LOAD_PRIORITY_SEPARATOR="---"
 
 # Handle the different ways of running `sed` without generating a backup file based on OS
@@ -13,9 +13,10 @@ BASH_IT_LOAD_PRIORITY_SEPARATOR="---"
 # - BSD sed (macOS) uses `-i ''`
 # To use this in Bash-it for inline replacements with `sed`, use the following syntax:
 # sed "${BASH_IT_SED_I_PARAMETERS[@]}" -e "..." file
-BASH_IT_SED_I_PARAMETERS=(-i)
+BASH_IT_SED_I_PARAMETERS=('-i')
+# shellcheck disable=SC2034 # expected for this case
 case "$OSTYPE" in
-  'darwin'*) BASH_IT_SED_I_PARAMETERS=(-i "")
+	'darwin'*) BASH_IT_SED_I_PARAMETERS=('-i' '') ;;
 esac
 
 function _command_exists() {
@@ -80,7 +81,7 @@ function _bash_it_homebrew_check()
 }
 
 function _make_reload_alias() {
-  echo "source '${BASH_IT}/scripts/reloader.bash' '${1}' '${2}'"
+  echo "source '${BASH_IT?}/scripts/reloader.bash' '${1?}' '${2?}'"
 }
 
 # Alias for reloading aliases
@@ -362,27 +363,25 @@ _bash-it-update-() {
   popd &> /dev/null
 }
 
-_bash-it-migrate() {
+function _bash-it-migrate() {
   _about 'migrates Bash-it configuration from a previous format to the current one'
   _group 'lib'
 
-  declare migrated_something
+  local migrated_something component_type component_name single_type _bash_it_config_file
   migrated_something=false
 
-  for file_type in "aliases" "plugins" "completion"
-  do
-		for _bash_it_config_file in "${BASH_IT}/$file_type/enabled"/*.bash
-    do
+  for file_type in "aliases" "plugins" "completion"; do
+		for _bash_it_config_file in "${BASH_IT}/$file_type/enabled"/*.bash; do
 			[[ -f "$_bash_it_config_file" ]] || continue
 
       # Get the type of component from the extension
-      local component_type="$(_bash-it-get-component-type-from-path "$_bash_it_config_file")"
+      component_type="$(_bash-it-get-component-type-from-path "$_bash_it_config_file")"
       # Cut off the optional "250---" prefix and the suffix
-      local component_name="$(_bash-it-get-component-name-from-path "$_bash_it_config_file")"
+      component_name="$(_bash-it-get-component-name-from-path "$_bash_it_config_file")"
 
       migrated_something=true
 
-			local single_type="${component_type/aliases/aliass}"
+			single_type="${component_type/aliases/aliass}"
       echo "Migrating ${single_type%s} $component_name."
 
       disable_func="_disable-${single_type%s}"
@@ -391,7 +390,6 @@ _bash-it-migrate() {
       "$disable_func" "$component_name"
       "$enable_func" "$component_name"
     done
-	unset _bash_it_config_file
   done
 
   if [[ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]]; then
@@ -447,30 +445,30 @@ _bash-it-doctor() {
   _param '1: BASH_IT_LOG_LEVEL argument: "errors" "warnings" "all"'
   _group 'lib'
 
-  BASH_IT_LOG_LEVEL=$1
+  # shellcheck disable=SC2034 # expected for this case
+  local BASH_IT_LOG_LEVEL="${1?}"
   _bash-it-reload
-  unset BASH_IT_LOG_LEVEL
 }
 
 _bash-it-doctor-all() {
   _about 'reloads a profile file with error, warning and debug logs'
   _group 'lib'
 
-  _bash-it-doctor "$BASH_IT_LOG_LEVEL_ALL"
+  _bash-it-doctor "${BASH_IT_LOG_LEVEL_ALL?}"
 }
 
 _bash-it-doctor-warnings() {
   _about 'reloads a profile file with error and warning logs'
   _group 'lib'
 
-  _bash-it-doctor "$BASH_IT_LOG_LEVEL_WARNING"
+  _bash-it-doctor "${BASH_IT_LOG_LEVEL_WARNING?}"
 }
 
 _bash-it-doctor-errors() {
   _about 'reloads a profile file with error logs'
   _group 'lib'
 
-  _bash-it-doctor "$BASH_IT_LOG_LEVEL_ERROR"
+  _bash-it-doctor "${BASH_IT_LOG_LEVEL_ERROR?}"
 }
 
 _bash-it-doctor-() {
@@ -786,45 +784,44 @@ _disable-completion ()
     _disable-thing "completion" "completion" "$1"
 }
 
-_disable-thing ()
-{
+function _disable-thing() {
     _about 'disables a bash_it component'
     _param '1: subdirectory'
     _param '2: file_type'
     _param '3: file_entity'
     _example '$ _disable-thing "plugins" "plugin" "ssh"'
 
-    subdirectory="$1"
-    file_type="$2"
-    file_entity="$3"
+    local subdirectory="$1"
+    local file_type="$2"
+    local file_entity="$3"
 
     if [[ -z "$file_entity" ]]; then
         reference "disable-$file_type"
         return
     fi
 
-    local f suffix _bash_it_config_file
+    local f suffix _bash_it_config_file plugin_global plugin
     suffix="${subdirectory/plugins/plugin}"
 
     if [[ "$file_entity" = "all" ]]; then
         # Disable everything that's using the old structure
 
-				for _bash_it_config_file in "${BASH_IT}/$subdirectory/enabled"/*."${suffix}.bash"; do
+		for _bash_it_config_file in "${BASH_IT}/$subdirectory/enabled"/*."${suffix}.bash"; do
           rm -f "$_bash_it_config_file"
         done
 
-				for _bash_it_config_file in "${BASH_IT}/enabled"/*".${suffix}.bash"; do
-        # Disable everything in the global "enabled" directory
+		for _bash_it_config_file in "${BASH_IT}/enabled"/*".${suffix}.bash"; do
+			# Disable everything in the global "enabled" directory
           rm -f "$_bash_it_config_file"
         done
     else
-        local plugin_global="$(command ls $ "${BASH_IT}/enabled"/[0-9]*"${BASH_IT_LOAD_PRIORITY_SEPARATOR}${file_entity}.${suffix}.bash" 2>/dev/null | head -1)"
+        plugin_global="$(command ls $ "${BASH_IT}/enabled"/[0-9]*"${BASH_IT_LOAD_PRIORITY_SEPARATOR}${file_entity}.${suffix}.bash" 2>/dev/null | head -1)"
         if [[ -z "$plugin_global" ]]; then
           # Use a glob to search for both possible patterns
           # 250---node.plugin.bash
           # node.plugin.bash
           # Either one will be matched by this glob
-          local plugin="$(command ls $ "${BASH_IT}/$subdirectory/enabled/"{[0-9]*"${BASH_IT_LOAD_PRIORITY_SEPARATOR}${file_entity}.${suffix}.bash","${file_entity}.${suffix}.bash"} 2>/dev/null | head -1)"
+          plugin="$(command ls $ "${BASH_IT}/$subdirectory/enabled/"{[0-9]*"${BASH_IT_LOAD_PRIORITY_SEPARATOR}${file_entity}.${suffix}.bash","${file_entity}.${suffix}.bash"} 2>/dev/null | head -1)"
           if [[ -z "$plugin" ]]; then
               printf '%s\n' "sorry, $file_entity does not appear to be an enabled $file_type."
               return
@@ -886,8 +883,7 @@ _enable-completion ()
     _enable-thing "completion" "completion" "$1" "$BASH_IT_LOAD_PRIORITY_DEFAULT_COMPLETION"
 }
 
-_enable-thing ()
-{
+function _enable-thing() {
     cite _about _param _example
     _about 'enables a bash_it component'
     _param '1: subdirectory'
@@ -896,10 +892,12 @@ _enable-thing ()
     _param '4: load priority'
     _example '$ _enable-thing "plugins" "plugin" "ssh" "150"'
 
-    subdirectory="$1"
-    file_type="$2"
-    file_entity="$3"
-    load_priority="$4"
+    local subdirectory="$1"
+    local file_type="$2"
+    local file_entity="$3"
+    local load_priority="$4"
+
+    local _bash_it_config_file to_enable enabled_plugin enabled_plugin_global local_file_priority use_load_priority
 
     if [[ -z "$file_entity" ]]; then
         reference "enable-$file_type"
@@ -907,7 +905,7 @@ _enable-thing ()
     fi
 
     if [[ "$file_entity" == "all" ]]; then
-        local _bash_it_config_file
+        _bash_it_config_file
         for _bash_it_config_file in "${BASH_IT}/$subdirectory/available"/*.bash; do
             to_enable="$(basename "$_bash_it_config_file" ".$file_type.bash")"
             if [[ "$file_type" == "alias" ]]; then
@@ -916,7 +914,7 @@ _enable-thing ()
             _enable-thing "$subdirectory" "$file_type" "$to_enable" "$load_priority"
         done
     else
-        local to_enable="$(command ls "${BASH_IT}/$subdirectory/available/$file_entity".*.bash 2>/dev/null | head -1)"
+        to_enable="$(command ls "${BASH_IT}/$subdirectory/available/$file_entity".*.bash 2>/dev/null | head -1)"
         if [[ -z "$to_enable" ]]; then
             printf '%s\n' "sorry, $file_entity does not appear to be an available $file_type."
             return
@@ -924,13 +922,13 @@ _enable-thing ()
 
 		to_enable="${to_enable##*/}"
         # Check for existence of the file using a wildcard, since we don't know which priority might have been used when enabling it.
-        local enabled_plugin="$(command ls "${BASH_IT}/$subdirectory/enabled"/{[0-9][0-9][0-9]"${BASH_IT_LOAD_PRIORITY_SEPARATOR}${to_enable}","${to_enable}"} 2>/dev/null | head -1)"
+        enabled_plugin="$(command ls "${BASH_IT}/$subdirectory/enabled"/{[0-9][0-9][0-9]"${BASH_IT_LOAD_PRIORITY_SEPARATOR}${to_enable}","${to_enable}"} 2>/dev/null | head -1)"
         if [[ -n "$enabled_plugin" ]]; then
           printf '%s\n' "$file_entity is already enabled."
           return
         fi
 
-        local enabled_plugin_global="$(command compgen -G "${BASH_IT}/enabled/[0-9][0-9][0-9]${BASH_IT_LOAD_PRIORITY_SEPARATOR}${to_enable}" 2>/dev/null | head -1)"
+        enabled_plugin_global="$(command compgen -G "${BASH_IT}/enabled/[0-9][0-9][0-9]${BASH_IT_LOAD_PRIORITY_SEPARATOR}${to_enable}" 2>/dev/null | head -1)"
         if [[ -n "$enabled_plugin_global" ]]; then
           printf '%s\n' "$file_entity is already enabled."
           return
@@ -939,7 +937,6 @@ _enable-thing ()
         mkdir -p "${BASH_IT}/enabled"
 
         # Load the priority from the file if it present there
-        declare local_file_priority use_load_priority
         local_file_priority="$(_bash-it-egrep "^# BASH_IT_LOAD_PRIORITY:" "${BASH_IT}/$subdirectory/available/$to_enable" | awk -F': ' '{ print $2 }')"
         use_load_priority="${local_file_priority:-$load_priority}"
 
@@ -990,36 +987,33 @@ _help-aliases()
     fi
 }
 
-_help-list-aliases ()
-{
-    local file="$(basename "$1" | sed -e 's/[0-9]*[-]*\(.*\)\.aliases\.bash/\1/g')"
+function _help-list-aliases() {
+    local file
+		file="$(_bash-it-get-component-name-from-path "${1?}")"
     printf '\n\n%s:\n' "${file}"
     # metafor() strips trailing quotes, restore them with sed..
     metafor alias < "$1" | sed "s/$/'/"
 }
 
-_help-plugins()
-{
+function _help-plugins() {
     _about 'summarize all functions defined by enabled bash-it plugins'
     _group 'lib'
 
+    local grouplist func group about gfile
     # display a brief progress message...
     printf '%s' 'please wait, building help...'
-    local grouplist=$(mktemp -t grouplist.XXXXXX)
-    local func
+    grouplist="$(mktemp -t grouplist.XXXXXX)"
     for func in $(_typeset_functions); do
-        local group="$(declare -f "$func" | metafor group)"
+        group="$(declare -f "$func" | metafor group)"
         if [[ -z "$group" ]]; then
             group='misc'
         fi
-        local about="$(declare -f "$func" | metafor about)"
+        about="$(declare -f "$func" | metafor about)"
         _letterpress "$about" "$func" >> "$grouplist.$group"
         echo "$grouplist.$group" >> "$grouplist"
     done
     # clear progress message
     printf '\r%s\n' '                              '
-    local group
-    local gfile
 		while IFS= read -r gfile; do
         printf '%s\n' "${gfile##*.}:"
         cat "$gfile"
@@ -1055,8 +1049,7 @@ _help-migrate () {
   echo "The 'migrate' command is run automatically when calling 'update', 'enable' or 'disable'."
 }
 
-all_groups ()
-{
+function all_groups() {
     about 'displays all unique metadata groups'
     group 'lib'
 
