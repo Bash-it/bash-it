@@ -727,7 +727,7 @@ function _on-disable-callback() {
 	_example '$ _on-disable-callback gitstatus'
 	_group 'lib'
 
-	callback="$1_on_disable"
+	callback="${1}_on_disable"
 	_command_exists "$callback" && "$callback"
 }
 
@@ -946,7 +946,7 @@ function _help-aliases() {
 				alias_path='custom.aliases.bash'
 				;;
 			*)
-				alias_path="available/$1.aliases.bash"
+				alias_path="available/${1}.aliases.bash"
 				;;
 		esac
 		metafor alias < "${BASH_IT}/aliases/$alias_path" | sed "s/$/'/"
@@ -1039,11 +1039,11 @@ function pathmunge() {
 	example 'pathmunge /path/to/dir is equivalent to PATH=/path/to/dir:$PATH'
 	example 'pathmunge /path/to/dir after is equivalent to PATH=$PATH:/path/to/dir'
 
-	if [[ -d "${1:-}" && ! $PATH =~ (^|:)$1($|:) ]]; then
+	if [[ -d "${1:-}" && ! $PATH =~ (^|:)"${1}"($|:) ]]; then
 		if [[ "${2:-}" == "after" ]]; then
-			export PATH=$PATH:$1
+			export PATH="$PATH:${1}"
 		else
-			export PATH=$1:$PATH
+			export PATH="${1}:$PATH"
 		fi
 	fi
 }
