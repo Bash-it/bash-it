@@ -1,11 +1,12 @@
 # shellcheck shell=bash
 about-plugin 'alias "shttp" to SimpleHTTPServer'
 
-if _command_exists python2; then
-	alias shttp='python2 -m SimpleHTTPServer'
+if _command_exists python3; then
+	alias shttp='python3 -m http.server'
 elif _command_exists python; then
-	alias shttp='python -m SimpleHTTPServer'
+	alias shttp='python -m http.server'
 else
+	_log_warning "Unable to load 'plugin/python' due to being unable to find a working 'python'"
 	return 1
 fi
 
