@@ -27,32 +27,25 @@ __bp_install_after_session_init
 
 ## Helper functions
 function __check_precmd_conflict() {
-	local f # TODO: trim whitespace like preexec does
-	for f in "${precmd_functions[@]}"; do
-		if [[ "${f}" == "${1}" ]]; then
-			return 0
-		fi
-	done
-	return 1
+	local f
+	__bp_trim_whitespace f "${1?}"
+	! _bash-it-array-contains-element "${f}" "${precmd_functions[@]}"
 }
 
 function __check_preexec_conflict() {
-	local f # TODO: trim whitespace like preexec does
-	for f in "${preexec_functions[@]}"; do
-		if [[ "${f}" == "${1}" ]]; then
-			return 0
-		fi
-	done
-	return 1
+	local f
+	__bp_trim_whitespace f "${1?}"
+	! _bash-it-array-contains-element "${f}" "${preexec_functions[@]}"
 }
 
 function safe_append_prompt_command {
-	local prompt_re
+	local prompt_re f
+	__bp_trim_whitespace f "${1?}"
 
 	if [ "${__bp_imported:-missing}" == "defined" ]; then
 		# We are using bash-preexec
-		if ! __check_precmd_conflict "${1}"; then
-			precmd_functions+=("${1}")
+		if ! __check_precmd_conflict "${f}"; then
+			precmd_functions+=("${f}")
 		fi
 	else
 		# Set OS dependent exact match regular expression
@@ -75,12 +68,13 @@ function safe_append_prompt_command {
 }
 
 function safe_append_preexec {
-	local prompt_re
+	local prompt_re f
+	__bp_trim_whitespace f "${1?}"
 
 	if [ "${__bp_imported:-missing}" == "defined" ]; then
 		# We are using bash-preexec
-		if ! __check_preexec_conflict "${1}"; then
-			preexec_functions+=("${1}")
+		if ! __check_preexec_conflict "${f}"; then
+			preexec_functions+=("${f}")
 		fi
 	else
 		_log_error "${FUNCNAME[0]}: can't append to preexec hook because _bash-preexec.sh_ hasn't been loaded"
