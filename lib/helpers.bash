@@ -689,14 +689,10 @@ _bash-it-determine-component-status-from-path() {
 	# Check for both the old format without the load priority, and the extended format with the priority
 	local enabled_files enabled_file
 	enabled_file="${f##*/}"
-	enabled_file="${enabled_file%.*.bash}"
-	enabled_files=$(sort <(compgen -G "${BASH_IT}/enabled/*$BASH_IT_LOAD_PRIORITY_SEPARATOR${enabled_file}") <(compgen -G "${BASH_IT}/$subdirectory/enabled/${enabled_file}") <(compgen -G "${BASH_IT}/$subdirectory/enabled/*$BASH_IT_LOAD_PRIORITY_SEPARATOR${enabled_file}") | wc -l)
-
-	if [[ "$enabled_files" -gt 0 ]]; then
-		enabled='x'
-	else
-		enabled=' '
-	fi
+	enabled_file="${enabled_file%."${file_type}"*.bash}"
+	enabled=
+	_bash-it-component-item-is-enabled "${file_type}" "${enabled_file}" && enabled='x'
+	return 0
 }
 
 function _bash-it-describe() {
@@ -713,11 +709,11 @@ function _bash-it-describe() {
 	column_header="$4"
 
 	local f
-	local enabled
-	printf "%-20s%-10s%s\n" "$column_header" 'Enabled?' 'Description'
-	for f in "${BASH_IT}/$subdirectory/available"/*.bash; do
+	local enabled enabled_file
+	printf "%-20s %-10s %s\n" "$column_header" 'Enabled?' 'Description'
+	for f in "${BASH_IT?}/$subdirectory/available"/*.*.bash; do
 		_bash-it-determine-component-status-from-path "$f"
-		printf "%-20s%-10s%s\n" "$enabled_file" "  [$enabled]" "$(metafor "about-$file_type" < "$f")"
+		printf "%-20s %-10s %s\n" "$enabled_file" "[${enabled:- }]" "$(metafor "about-$file_type" < "$f")"
 	done
 	printf '\n%s\n' "to enable $preposition $file_type, do:"
 	printf '%s\n' "$ bash-it enable $file_type  <$file_type name> [$file_type name]... -or- $ bash-it enable $file_type all"
@@ -1004,7 +1000,7 @@ function _help-plugins() {
 	rm "$grouplist" 2> /dev/null
 }
 
-_help-profile() {
+function _help-profile() {
 	_about 'help message for profile command'
 	_group 'lib'
 

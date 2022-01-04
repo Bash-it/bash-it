@@ -732,5 +732,5 @@ function __migrate_all_components() {
 
 @test "helpers: describe the todo.txt-cli aliases without enabling them" {
   run _bash-it-aliases
-  assert_line "todo.txt-cli          [ ]     todo.txt-cli abbreviations"
+  assert_line "todo.txt-cli         [ ]        todo.txt-cli abbreviations"
 }
