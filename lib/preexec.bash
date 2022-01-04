@@ -83,6 +83,6 @@ function safe_append_preexec {
 			preexec_functions+=("${1}")
 		fi
 	else
-		: #can't...
+		_log_error "${FUNCNAME[0]}: can't append to preexec hook because _bash-preexec.sh_ hasn't been loaded"
 	fi
 }
