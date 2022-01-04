@@ -557,6 +557,7 @@ _bash-it-profile-load-parse-profile() {
 	_example '$ _bash-it-profile-load-parse-profile "profile.bash_it" "dry"'
 
 	local -i num=0
+	local line
 	while read -r -a line; do
 		((++num))
 		# Ignore comments and empty lines
@@ -565,11 +566,10 @@ _bash-it-profile-load-parse-profile() {
 		local subdirectory=${line[0]}
 		local component=${line[1]}
 
-		local to_enable
-		to_enable=$(command ls "${BASH_IT}/$subdirectory/available/$component".*bash 2> /dev/null | head -1)
+		local to_enable=("${BASH_IT}/$subdirectory/available/$component.${subdirectory%s}"*.bash)
 		# Ignore botched lines
-		if [[ -z "${to_enable}" ]]; then
-			echo -e "${echo_orange?}Bad line(#$num) in profile, aborting load...${echo_reset_color?}"
+		if [[ ! -e "${to_enable[0]}" ]]; then
+			echo -e "${echo_orange?}Bad line(#$num) in profile, aborting load...${line[*]}${echo_reset_color?}"
 			local bad="bad line"
 			break
 		fi
@@ -613,12 +613,12 @@ _bash-it-profile-rm() {
 
 	local profile_path="${BASH_IT}/profiles/$name.bash_it"
 	if [[ ! -f "$profile_path" ]]; then
-		echo -e "${echo_orange?}Could not find profile \"$name\"...${echo_reset_color?}"
+		echo -e "${echo_orange?}Could not find profile '$name'...${echo_reset_color?}"
 		return 1
 	fi
 
 	command rm "$profile_path"
-	echo "Removed profile \"$name\" successfully!"
+	echo "Removed profile '$name' successfully!"
 }
 
 _bash-it-profile-load() {
@@ -633,20 +633,22 @@ _bash-it-profile-load() {
 
 	local profile_path="${BASH_IT}/profiles/$name.bash_it"
 	if [[ ! -f "$profile_path" ]]; then
-		echo -e "${echo_orange?}Could not find profile \"$name\", not changing configuration...${echo_reset_color?}"
+		echo -e "${echo_orange?}Could not find profile '$name', not changing configuration...${echo_reset_color?}"
 		return 1
 	fi
 
-	echo "Trying to parse profile \"$name\"..."
+	echo "Trying to parse profile '$name'..."
 	if _bash-it-profile-load-parse-profile "$profile_path" "dry"; then
-		echo "Profile \"$name\" parsed successfully!"
+		echo "Profile '$name' parsed successfully!"
 		echo "Disabling current configuration..."
 		_disable-all
 		echo ""
 		echo "Enabling configuration based on profile..."
 		_bash-it-profile-load-parse-profile "$profile_path"
 		echo ""
-		echo "Profile \"$name\" enabled!"
+		echo "Profile '$name' enabled!"
+	else
+		false # failure
 	fi
 }
 
@@ -776,44 +778,38 @@ function _disable-thing() {
 	_param '3: file_entity'
 	_example '$ _disable-thing "plugins" "plugin" "ssh"'
 
-	local subdirectory="$1"
-	local file_type="$2"
-	local file_entity="$3"
+	local subdirectory="${1?}"
+	local file_type="${2?}"
+	local file_entity="${3:-}"
 
 	if [[ -z "$file_entity" ]]; then
 		reference "disable-$file_type"
 		return
 	fi
 
-	local f suffix _bash_it_config_file plugin_global plugin
+	local f suffix _bash_it_config_file plugin
 	suffix="${subdirectory/plugins/plugin}"
 
-	if [[ "$file_entity" = "all" ]]; then
-		# Disable everything that's using the old structure
-
-		for _bash_it_config_file in "${BASH_IT}/$subdirectory/enabled"/*."${suffix}.bash"; do
-			rm -f "$_bash_it_config_file"
-		done
-
-		for _bash_it_config_file in "${BASH_IT}/enabled"/*".${suffix}.bash"; do
-			# Disable everything in the global "enabled" directory
+	if [[ "$file_entity" == "all" ]]; then
+		# Disable everything that's using the old structure and everything in the global "enabled" directory.
+		for _bash_it_config_file in "${BASH_IT}/$subdirectory/enabled"/*."${suffix}.bash" "${BASH_IT}/enabled"/*".${suffix}.bash"; do
 			rm -f "$_bash_it_config_file"
 		done
 	else
-		plugin_global="$(command ls $ "${BASH_IT}/enabled"/[0-9]*"${BASH_IT_LOAD_PRIORITY_SEPARATOR}${file_entity}.${suffix}.bash" 2> /dev/null | head -1)"
-		if [[ -z "$plugin_global" ]]; then
-			# Use a glob to search for both possible patterns
-			# 250---node.plugin.bash
-			# node.plugin.bash
-			# Either one will be matched by this glob
-			plugin="$(command ls $ "${BASH_IT}/$subdirectory/enabled/"{[0-9]*"${BASH_IT_LOAD_PRIORITY_SEPARATOR}${file_entity}.${suffix}.bash","${file_entity}.${suffix}.bash"} 2> /dev/null | head -1)"
-			if [[ -z "$plugin" ]]; then
-				printf '%s\n' "sorry, $file_entity does not appear to be an enabled $file_type."
-				return
+		# Use a glob to search for both possible patterns
+		# 250---node.plugin.bash
+		# node.plugin.bash
+		# Either one will be matched by this glob
+		for plugin in "${BASH_IT}/enabled"/[[:digit:]][[:digit:]][[:digit:]]"${BASH_IT_LOAD_PRIORITY_SEPARATOR}${file_entity}.${suffix}.bash" "${BASH_IT}/$subdirectory/enabled/"{[[:digit:]][[:digit:]][[:digit:]]"${BASH_IT_LOAD_PRIORITY_SEPARATOR}${file_entity}.${suffix}.bash","${file_entity}.${suffix}.bash"}; do
+			if [[ -e "${plugin}" ]]; then
+				rm "${plugin}"
+				plugin=
+				break
 			fi
-			rm "${BASH_IT}/$subdirectory/enabled/${plugin##*/}"
-		else
-			rm "${BASH_IT}/enabled/${plugin_global##*/}"
+		done
+		if [[ -n "${plugin}" ]]; then
+			printf '%s\n' "sorry, $file_entity does not appear to be an enabled $file_type."
+			return
 		fi
 	fi
 
@@ -872,46 +868,39 @@ function _enable-thing() {
 	_param '4: load priority'
 	_example '$ _enable-thing "plugins" "plugin" "ssh" "150"'
 
-	local subdirectory="$1"
-	local file_type="$2"
-	local file_entity="$3"
-	local load_priority="$4"
-
-	local _bash_it_config_file to_enable enabled_plugin enabled_plugin_global local_file_priority use_load_priority
+	local subdirectory="${1?}"
+	local file_type="${2?}"
+	local file_entity="${3:-}"
+	local load_priority="${4:-500}"
 
 	if [[ -z "$file_entity" ]]; then
 		reference "enable-$file_type"
 		return
 	fi
 
+	local _bash_it_config_file to_enable to_enables enabled_plugin local_file_priority use_load_priority
+	local suffix="${subdirectory/plugins/plugin}"
+
 	if [[ "$file_entity" == "all" ]]; then
 		for _bash_it_config_file in "${BASH_IT}/$subdirectory/available"/*.bash; do
-			to_enable="$(basename "$_bash_it_config_file" ".$file_type.bash")"
-			if [[ "$file_type" == "alias" ]]; then
-				to_enable="$(basename "$_bash_it_config_file" ".aliases.bash")"
-			fi
-			_enable-thing "$subdirectory" "$file_type" "$to_enable" "$load_priority"
+			to_enable="${_bash_it_config_file##*/}"
+			_enable-thing "$subdirectory" "$file_type" "${to_enable%."${file_type/alias/aliases}".bash}" "$load_priority"
 		done
 	else
-		to_enable="$(command ls "${BASH_IT}/$subdirectory/available/$file_entity".*.bash 2> /dev/null | head -1)"
-		if [[ -z "$to_enable" ]]; then
+		to_enables=("${BASH_IT}/$subdirectory/available/$file_entity.${suffix}.bash")
+		if [[ ! -e "${to_enables[0]}" ]]; then
 			printf '%s\n' "sorry, $file_entity does not appear to be an available $file_type."
 			return
 		fi
 
-		to_enable="${to_enable##*/}"
+		to_enable="${to_enables[0]##*/}"
 		# Check for existence of the file using a wildcard, since we don't know which priority might have been used when enabling it.
-		enabled_plugin="$(command ls "${BASH_IT}/$subdirectory/enabled"/{[0-9][0-9][0-9]"${BASH_IT_LOAD_PRIORITY_SEPARATOR}${to_enable}","${to_enable}"} 2> /dev/null | head -1)"
-		if [[ -n "$enabled_plugin" ]]; then
-			printf '%s\n' "$file_entity is already enabled."
-			return
-		fi
-
-		enabled_plugin_global="$(command compgen -G "${BASH_IT}/enabled/[0-9][0-9][0-9]${BASH_IT_LOAD_PRIORITY_SEPARATOR?}${to_enable}" 2> /dev/null | head -1)"
-		if [[ -n "$enabled_plugin_global" ]]; then
-			printf '%s\n' "$file_entity is already enabled."
-			return
-		fi
+		for enabled_plugin in "${BASH_IT}/$subdirectory/enabled"/{[[:digit:]][[:digit:]][[:digit:]]"${BASH_IT_LOAD_PRIORITY_SEPARATOR}${to_enable}","${to_enable}"} "${BASH_IT}/enabled"/[[:digit:]][[:digit:]][[:digit:]]"${BASH_IT_LOAD_PRIORITY_SEPARATOR?}${to_enable}"; do
+			if [[ -e "${enabled_plugin}" ]]; then
+				printf '%s\n' "$file_entity is already enabled."
+				return
+			fi
+		done
 
 		mkdir -p "${BASH_IT}/enabled"
 
