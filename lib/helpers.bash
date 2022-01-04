@@ -3,9 +3,9 @@
 #
 # A collection of reusable functions.
 
-: "${BASH_IT_LOAD_PRIORITY_DEFAULT_ALIAS:=150}"
-: "${BASH_IT_LOAD_PRIORITY_DEFAULT_PLUGIN:=250}"
-: "${BASH_IT_LOAD_PRIORITY_DEFAULT_COMPLETION:=350}"
+: "${BASH_IT_LOAD_PRIORITY_ALIAS:=150}"
+: "${BASH_IT_LOAD_PRIORITY_PLUGIN:=250}"
+: "${BASH_IT_LOAD_PRIORITY_COMPLETION:=350}"
 BASH_IT_LOAD_PRIORITY_SEPARATOR="---"
 
 # Handle the different ways of running `sed` without generating a backup file based on OS
@@ -269,7 +269,7 @@ function _bash-it-update-() {
 	_param '1: What kind of update to do (stable|dev)'
 	_group 'lib'
 
-	declare silent
+	local silent word DIFF version TARGET revision status revert log_color num_of_lines description i RESP
 	for word in "$@"; do
 		if [[ "${word}" == "--silent" || "${word}" == "-s" ]]; then
 			silent=true
@@ -308,11 +308,8 @@ function _bash-it-update-() {
 		TARGET="${BASH_IT_REMOTE}/${BASH_IT_DEVELOPMENT_BRANCH}"
 	fi
 
-	declare revision
 	revision="HEAD..${TARGET}"
-	declare status
 	status="$(git rev-list "${revision}" 2> /dev/null)"
-	declare revert
 
 	if [[ -z "${status}" && "${version}" == "stable" ]]; then
 		revision="${TARGET}..HEAD"
@@ -370,7 +367,7 @@ function _bash-it-migrate() {
 	_about 'migrates Bash-it configuration from a previous format to the current one'
 	_group 'lib'
 
-	local migrated_something component_type component_name single_type _bash_it_config_file
+	local migrated_something component_type component_name single_type file_type _bash_it_config_file disable_func enable_func
 	migrated_something=false
 
 	for file_type in "aliases" "plugins" "completion"; do
@@ -408,6 +405,8 @@ function _bash-it-migrate() {
 function _bash-it-version() {
 	_about 'shows current Bash-it version'
 	_group 'lib'
+
+	local BASH_IT_GIT_REMOTE BASH_IT_GIT_URL current_tag BASH_IT_GIT_VERSION_INFO TARGET
 
 	pushd "${BASH_IT?}" > /dev/null || return
 
@@ -656,7 +655,7 @@ function _bash-it-restart() {
 	_about 'restarts the shell in order to fully reload it'
 	_group 'lib'
 
-	saved_pwd="${PWD}"
+	local saved_pwd="${PWD}" init_file
 
 	if shopt -q login_shell; then
 		init_file=.bash_profile
@@ -689,7 +688,6 @@ _bash-it-determine-component-status-from-path() {
 	_example '$ _bash-it-determine-component-status-from-path "${BASH_IT}/plugins/available/git.plugin.bash'
 
 	# Check for both the old format without the load priority, and the extended format with the priority
-	local enabled_files enabled_file
 	enabled_file="${f##*/}"
 	enabled_file="${enabled_file%."${file_type}"*.bash}"
 	enabled=
@@ -705,6 +703,7 @@ function _bash-it-describe() {
 	_param '4: column_header'
 	_example '$ _bash-it-describe "plugins" "a" "plugin" "Plugin"'
 
+	local subdirectory preposition file_type column_header f enabled enabled_file
 	subdirectory="$1"
 	preposition="$2"
 	file_type="$3"
@@ -729,7 +728,7 @@ function _on-disable-callback() {
 	_example '$ _on-disable-callback gitstatus'
 	_group 'lib'
 
-	callback="${1}_on_disable"
+	local callback="${1}_on_disable"
 	_command_exists "$callback" && "$callback"
 }
 
@@ -828,7 +827,7 @@ function _enable-plugin() {
 	_example '$ enable-plugin rvm'
 	_group 'lib'
 
-	_enable-thing "plugins" "plugin" "$1" "$BASH_IT_LOAD_PRIORITY_DEFAULT_PLUGIN"
+	_enable-thing "plugins" "plugin" "$1" "$BASH_IT_LOAD_PRIORITY_PLUGIN"
 }
 
 function _enable-plugins() {
@@ -842,7 +841,7 @@ function _enable-alias() {
 	_example '$ enable-alias git'
 	_group 'lib'
 
-	_enable-thing "aliases" "alias" "$1" "$BASH_IT_LOAD_PRIORITY_DEFAULT_ALIAS"
+	_enable-thing "aliases" "alias" "$1" "$BASH_IT_LOAD_PRIORITY_ALIAS"
 }
 
 function _enable-aliases() {
@@ -856,7 +855,7 @@ function _enable-completion() {
 	_example '$ enable-completion git'
 	_group 'lib'
 
-	_enable-thing "completion" "completion" "$1" "$BASH_IT_LOAD_PRIORITY_DEFAULT_COMPLETION"
+	_enable-thing "completion" "completion" "$1" "$BASH_IT_LOAD_PRIORITY_COMPLETION"
 }
 
 function _enable-thing() {
@@ -965,19 +964,20 @@ function _help-plugins() {
 	_about 'summarize all functions defined by enabled bash-it plugins'
 	_group 'lib'
 
-	local grouplist func group about gfile
+	local grouplist func group about gfile defn
 	# display a brief progress message...
 	printf '%s' 'please wait, building help...'
 	grouplist="$(mktemp -t grouplist.XXXXXX)"
-	for func in $(_typeset_functions); do
-		group="$(declare -f "$func" | metafor group)"
+	while read -ra func; do
+		defn="$(declare -f "${func[2]}")"
+		group="$(metafor group <<< "$defn")"
 		if [[ -z "$group" ]]; then
 			group='misc'
 		fi
-		about="$(declare -f "$func" | metafor about)"
-		_letterpress "$about" "$func" >> "$grouplist.$group"
+		about="$(metafor about <<< "$defn")"
+		_letterpress "$about" "${func[2]}" >> "$grouplist.$group"
 		echo "$grouplist.$group" >> "$grouplist"
-	done
+	done < <(declare -F)
 	# clear progress message
 	printf '\r%s\n' '                              '
 	while IFS= read -r gfile; do
@@ -1023,13 +1023,13 @@ function all_groups() {
 }
 
 function pathmunge() {
-	about 'prevent duplicate directories in you PATH variable'
+	about 'prevent duplicate directories in your PATH variable'
 	group 'helpers'
 	example 'pathmunge /path/to/dir is equivalent to PATH=/path/to/dir:$PATH'
 	example 'pathmunge /path/to/dir after is equivalent to PATH=$PATH:/path/to/dir'
 
 	if [[ -d "${1:-}" && ! $PATH =~ (^|:)"${1}"($|:) ]]; then
-		if [[ "${2:-}" == "after" ]]; then
+		if [[ "${2:-before}" == "after" ]]; then
 			export PATH="$PATH:${1}"
 		else
 			export PATH="${1}:$PATH"
