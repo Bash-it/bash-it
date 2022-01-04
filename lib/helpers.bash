@@ -525,8 +525,7 @@ function _bash-it-profile-save() {
 		local component_exists="" f
 		echo "Saving $subdirectory configuration..."
 		for f in "${BASH_IT}/$subdirectory/available/"*.bash; do
-			_bash-it-determine-component-status-from-path "$f"
-			if [[ "$enabled" == "x" ]]; then
+			if _bash-it-component-item-is-enabled "$f"; then
 				if [[ -z "$component_exists" ]]; then
 					# This is the first component of this type, print the header
 					component_exists="yes"
@@ -534,6 +533,7 @@ function _bash-it-profile-save() {
 					echo "" >> "$profile_path"
 					echo "# $subdirectory" >> "$profile_path"
 				fi
+				enabled_file="$(_bash-it-get-component-name-from-path "$f")"
 				echo "$subdirectory $enabled_file" >> "$profile_path"
 			fi
 		done
@@ -682,19 +682,6 @@ function _bash-it-reload() {
 	popd > /dev/null || return
 }
 
-_bash-it-determine-component-status-from-path() {
-	_about 'internal function used to process component name and check if its enabled'
-	_param '1: full path to available component file'
-	_example '$ _bash-it-determine-component-status-from-path "${BASH_IT}/plugins/available/git.plugin.bash'
-
-	# Check for both the old format without the load priority, and the extended format with the priority
-	enabled_file="${f##*/}"
-	enabled_file="${enabled_file%."${file_type}"*.bash}"
-	enabled=
-	_bash-it-component-item-is-enabled "${file_type}" "${enabled_file}" && enabled='x'
-	return 0
-}
-
 function _bash-it-describe() {
 	_about 'summarizes available bash_it components'
 	_param '1: subdirectory'
@@ -709,11 +696,12 @@ function _bash-it-describe() {
 	file_type="$3"
 	column_header="$4"
 
-	local f
-	local enabled enabled_file
 	printf "%-20s %-10s %s\n" "$column_header" 'Enabled?' 'Description'
 	for f in "${BASH_IT?}/$subdirectory/available"/*.*.bash; do
-		_bash-it-determine-component-status-from-path "$f"
+		enabled=''
+		enabled_file="${f##*/}"
+		enabled_file="${enabled_file%."${file_type}"*.bash}"
+		_bash-it-component-item-is-enabled "${file_type}" "${enabled_file}" && enabled='x'
 		printf "%-20s %-10s %s\n" "$enabled_file" "[${enabled:- }]" "$(metafor "about-$file_type" < "$f")"
 	done
 	printf '\n%s\n' "to enable $preposition $file_type, do:"
