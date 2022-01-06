@@ -66,6 +66,7 @@ alias gftv='git fetch --all --prune --tags --verbose'
 alias gfv='git fetch --all --prune --verbose'
 alias gmu='git fetch origin -v; git fetch upstream -v; git merge upstream/$(get_default_branch)'
 alias gup='git fetch && git rebase'
+alias gfrb="gf && grb origin/$(get_default_branch)"
 
 # log
 alias gg='git log --graph --pretty=format:'\''%C(bold)%h%Creset%C(magenta)%d%Creset %s %C(yellow)<%an> %C(cyan)(%cr)%Creset'\'' --abbrev-commit --date=relative'
