@@ -3,29 +3,25 @@
 _bash-it-comp-enable-disable()
 {
   local enable_disable_args="alias completion plugin"
-  COMPREPLY=( $(compgen -W "${enable_disable_args}" -- ${cur}) )
+  COMPREPLY=( $(compgen -W "${enable_disable_args}" -- "${cur}") )
 }
 
 _bash-it-comp-list-available-not-enabled()
 {
-  subdirectory="$1"
+  local subdirectory="$1"
 
-  local available_things
+  local enabled_components all_things available_things
 
-  available_things=$(for f in `compgen -G "${BASH_IT}/$subdirectory/available/*.bash" | sort -d`;
+  all_things=( $(compgen -G "${BASH_IT}/$subdirectory/available/*.bash") ); all_things=( "${all_things[@]##*/}" )
+  enabled_components=( $(command ls "${BASH_IT}"/{"$subdirectory"/,}enabled/*.bash 2>/dev/null) )
+  enabled_components=( "${enabled_components[@]##*/}" ); enabled_components="${enabled_components[@]##*---}"
+  available_things=( $(sort -d <(for i in ${enabled_components}
     do
-      file_entity=$(basename $f)
+      all_things=( "${all_things[@]//$i}" )
+    done
+    printf '%s\n' "${all_things[@]}")) ); available_things="${available_things[@]%.*.bash}"
 
-      typeset enabled_component=$(command ls "${BASH_IT}/$subdirectory/enabled/"{[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity,$file_entity} 2>/dev/null | head -1)
-      typeset enabled_component_global=$(command ls "${BASH_IT}/enabled/"[0-9]*$BASH_IT_LOAD_PRIORITY_SEPARATOR$file_entity 2>/dev/null | head -1)
-
-      if [ -z "$enabled_component" ] && [ -z "$enabled_component_global" ]
-      then
-        basename $f | sed -e 's/\(.*\)\..*\.bash/\1/g'
-      fi
-    done)
-
-  COMPREPLY=( $(compgen -W "all ${available_things}" -- ${cur}) )
+  COMPREPLY=( $(compgen -W "all ${available_things}" -- "${cur}") )
 }
 
 _bash-it-comp-list-enabled()
@@ -33,28 +29,24 @@ _bash-it-comp-list-enabled()
   local subdirectory="$1"
   local suffix enabled_things
 
-  suffix=$(echo "$subdirectory" | sed -e 's/plugins/plugin/g')
+  suffix="${subdirectory/plugins/plugin}"
 
-  enabled_things=$(for f in `sort -d <(compgen -G "${BASH_IT}/$subdirectory/enabled/*.${suffix}.bash") <(compgen -G "${BASH_IT}/enabled/*.${suffix}.bash")`;
-    do
-      basename $f | sed -e 's/\(.*\)\..*\.bash/\1/g' | sed -e "s/^[0-9]*---//g"
-    done)
+  enabled_things=( $(sort -d <(compgen -G "${BASH_IT}/$subdirectory/enabled/*.${suffix}.bash") <(compgen -G "${BASH_IT}/enabled/*.${suffix}.bash")) )
+  enabled_things=( "${enabled_things[@]##*/}" ); enabled_things=( "${enabled_things[@]##*---}" ); enabled_things="${enabled_things[@]%.*.bash}"
 
-  COMPREPLY=( $(compgen -W "all ${enabled_things}" -- ${cur}) )
+  COMPREPLY=( $(compgen -W "all ${enabled_things}" -- "${cur}") )
 }
 
 _bash-it-comp-list-available()
 {
-  subdirectory="$1"
+  local subdirectory="$1"
 
   local enabled_things
 
-  enabled_things=$(for f in `compgen -G "${BASH_IT}/$subdirectory/available/*.bash" | sort -d`;
-    do
-      basename $f | sed -e 's/\(.*\)\..*\.bash/\1/g'
-    done)
+  enabled_things=( $(sort -d <(compgen -G "${BASH_IT}/$subdirectory/available/*.bash")) )
+  enabled_things=( "${enabled_things[@]##*/}" ); enabled_things="${enabled_things[@]%.*.bash}"
 
-  COMPREPLY=( $(compgen -W "${enabled_things}" -- ${cur}) )
+  COMPREPLY=( $(compgen -W "${enabled_things}" -- "${cur}") )
 }
 
 _bash-it-comp-list-profiles()
@@ -81,7 +73,7 @@ _bash-it-comp()
   case "${chose_opt}" in
     show)
       local show_args="aliases completions plugins"
-      COMPREPLY=( $(compgen -W "${show_args}" -- ${cur}) )
+      COMPREPLY=( $(compgen -W "${show_args}" -- "${cur}") )
       return 0
       ;;
     help)
@@ -90,7 +82,7 @@ _bash-it-comp()
         return 0
       else
         local help_args="aliases completions migrate plugins update"
-        COMPREPLY=( $(compgen -W "${help_args}" -- ${cur}) )
+        COMPREPLY=( $(compgen -W "${help_args}" -- "${cur}") )
         return 0
       fi
       ;;
@@ -123,19 +115,19 @@ _bash-it-comp()
       ;;
     doctor)
       local doctor_args="errors warnings all"
-      COMPREPLY=( $(compgen -W "${doctor_args}" -- ${cur}) )
+      COMPREPLY=( $(compgen -W "${doctor_args}" -- "${cur}") )
       return 0
       ;;
     update)
-      if [[ ${cur} == -* ]];then
+      if [[ "${cur}" == -* ]];then
         local update_args="-s --silent"
       else
         local update_args="stable dev"
       fi
-      COMPREPLY=( $(compgen -W "${update_args}" -- ${cur}) )
+      COMPREPLY=( $(compgen -W "${update_args}" -- "${cur}") )
       return 0
       ;;
-    migrate | reload | search | version)
+    migrate | reload | restart | search | version)
       return 0
       ;;
     enable | disable)
@@ -146,15 +138,15 @@ _bash-it-comp()
       fi
       case "${file_type}" in
         alias)
-            _bash-it-comp-list-${suffix} aliases
+            _bash-it-comp-list-"${suffix}" aliases
             return 0
             ;;
         plugin)
-            _bash-it-comp-list-${suffix} plugins
+            _bash-it-comp-list-"${suffix}" plugins
             return 0
             ;;
         completion)
-            _bash-it-comp-list-${suffix} completion
+            _bash-it-comp-list-"${suffix}" completion
             return 0
             ;;
         *)
@@ -165,7 +157,7 @@ _bash-it-comp()
       ;;
   esac
 
-  COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+  COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
 
   return 0
 }
