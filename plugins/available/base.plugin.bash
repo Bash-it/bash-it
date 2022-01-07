@@ -67,7 +67,7 @@ function passgen() {
 
 # Create alias pass to passgen when pass isn't installed or
 # BASH_IT_LEGACY_PASS is true.
-if ! _command_exists pass || [[ "${BASH_IT_LEGACY_PASS:-}" = true ]]; then
+if ! _command_exists pass || [[ "${BASH_IT_LEGACY_PASS:-}" == true ]]; then
 	alias pass=passgen
 fi
 
@@ -120,20 +120,26 @@ function usage() {
 	esac
 }
 
-# shellcheck disable=SC2144 # the glob matches only one file
-if [[ ! -e "${BASH_IT?}/plugins/enabled/todo.plugin.bash" && ! -e "${BASH_IT?}/plugins/enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR-}todo.plugin.bash" ]]; then
-	# if user has installed todo plugin, skip this...
-	function t() {
-		about 'one thing todo'
-		param 'if not set, display todo item'
-		param '1: todo text'
-		if [[ "$*" == "" ]]; then
-			cat ~/.t
-		else
-			echo "$*" > ~/.t
-		fi
-	}
-fi
+function t() {
+	about 'todo.sh if available, otherwise one thing todo'
+	param 'if not set, display todo item'
+	param '1: todo text'
+
+	local todotxt="${XDG_STATE_HOME:-~/.local/state}/bash_it/todo.txt"
+
+	if _bash-it-component-item-is-enabled plugin todo; then
+		todo.sh "$@"
+		return
+	elif [[ ! -f "${todotxt}" && -f ~/.t ]]; then
+		mv -vn ~/.t "${todotxt}" # Verbose, so the user knows. Don't overwrite, just in case.
+	fi
+
+	if [[ "$#" -eq 0 ]]; then
+		cat "${todotxt}"
+	else
+		echo "$@" >| "${todotxt}"
+	fi
+}
 
 if _command_exists mkisofs; then
 	function mkiso() {
