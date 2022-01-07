@@ -141,6 +141,7 @@ themes/brunton
 themes/candy
 themes/command_duration.theme.bash
 themes/easy
+themes/essential
 themes/modern
 themes/powerline
 themes/pure
