@@ -122,6 +122,7 @@ plugins/available/zoxide.plugin.bash
 # tests
 #
 test/plugins/alias-completion.plugin.bats
+test/run
 test/test_helper.bash
 test/test_helper_libs.bash
 
