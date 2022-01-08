@@ -1,31 +1,43 @@
 # shellcheck shell=bash
 
 function _bash-it-comp-list-available-not-enabled() {
-	local subdirectory="$1"
-	COMPREPLY=($(compgen -W "all $(_bash-it-component-list-disabled "${subdirectory}")" -- "${cur}"))
+	local subdirectory="$1" IFS=$'\n' REPL
+	COMPREPLY=('all')
+	while read -ra REPL; do
+		COMPREPLY+=("${REPL[@]}")
+	done < <(compgen -W "$(_bash-it-component-list-disabled "${subdirectory}")" -- "${cur}")
 }
 
 function _bash-it-comp-list-enabled() {
-	local subdirectory="$1"
-	COMPREPLY=($(compgen -W "all $(_bash-it-component-list-enabled "${subdirectory}")" -- "${cur}"))
+	local subdirectory="$1" IFS=$'\n' REPL
+	COMPREPLY=('all')
+	while read -ra REPL; do
+		COMPREPLY+=("${REPL[@]}")
+	done < <(compgen -W "$(_bash-it-component-list-enabled "${subdirectory}")" -- "${cur}")
 }
 
 function _bash-it-comp-list-available() {
-	local subdirectory="$1"
-	COMPREPLY=($(compgen -W "all $(_bash-it-component-list "${subdirectory}")" -- "${cur}"))
+	local subdirectory="$1" IFS=$'\n' REPL
+	COMPREPLY=('all')
+	while read -ra REPL; do
+		COMPREPLY+=("${REPL[@]}")
+	done < <(compgen -W "$(_bash-it-component-list "${subdirectory}")" -- "${cur}")
 }
 
 function _bash-it-comp-list-profiles() {
-	local profiles
+	local profiles IFS=$'\n' REPL
+	COMPREPLY=()
 
 	profiles=("${BASH_IT}/profiles"/*.bash_it)
 	profiles=("${profiles[@]##*/}")
 
-	COMPREPLY=($(compgen -W "${profiles[*]%%.bash_it}" -- "${cur}"))
+	while read -ra REPL; do
+		COMPREPLY+=("${REPL[@]}")
+	done < <(compgen -W "${profiles[*]%%.bash_it}" -- "${cur}")
 }
 
 function _bash-it-comp() {
-	local cur prev opts
+	local cur prev opts chose_opt file_type
 	COMPREPLY=()
 	cur="${COMP_WORDS[COMP_CWORD]}"
 	prev="${COMP_WORDS[COMP_CWORD - 1]}"
