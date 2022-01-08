@@ -296,7 +296,7 @@ function local_setup {
   assert_link_exist "$BASH_IT/enabled/250---base.plugin.bash"
   assert_link_exist "$BASH_IT/enabled/365---alias-completion.plugin.bash"
   assert_link_exist "$BASH_IT/enabled/350---bash-it.completion.bash"
-  assert_link_exist "$BASH_IT/enabled/350---system.completion.bash"
+  assert_link_exist "$BASH_IT/enabled/325---system.completion.bash"
 }
 
 @test "helper: profile save command sanity" {
@@ -356,7 +356,7 @@ function local_setup {
   assert_link_not_exist "$BASH_IT/enabled/250---base.plugin.bash"
   assert_link_not_exist "$BASH_IT/enabled/365---alias-completion.plugin.bash"
   assert_link_not_exist "$BASH_IT/enabled/350---bash-it.completion.bash"
-  assert_link_not_exist "$BASH_IT/enabled/350---system.completion.bash"
+  assert_link_not_exist "$BASH_IT/enabled/325---system.completion.bash"
 }
 
 @test "helper: profile save and load" {
