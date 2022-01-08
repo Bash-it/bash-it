@@ -21,6 +21,7 @@ load "${TEST_DEPS_DIR}/bats-file/load.bash"
 
 # support 'plumbing' metadata
 cite _about _param _example _group _author _version
+cite about-alias about-plugin about-completion
 
 local_setup() {
 	true
@@ -41,7 +42,7 @@ setup_test_fixture() {
 
 	if command -v rsync &> /dev/null; then
 		# Use rsync to copy Bash-it to the temp folder
-		rsync -qavrKL -d --delete-excluded --exclude=.git --exclude=enabled "$src_topdir" "$BASH_IT"
+		rsync -qavrKL -d --delete-excluded --exclude=.git --exclude=helper.bash --exclude=enabled "$src_topdir" "$BASH_IT"
 	else
 		rm -rf "$BASH_IT"
 		mkdir -p "$BASH_IT"

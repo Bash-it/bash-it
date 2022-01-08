@@ -1,7 +1,6 @@
 #!/usr/bin/env bats
 
 load ../test_helper
-load "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
 load ../../completion/available/bash-it.completion
 
 function local_setup {

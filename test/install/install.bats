@@ -1,7 +1,6 @@
 #!/usr/bin/env bats
 
 load ../test_helper
-load "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
 
 # Determine which config file to use based on OS.
 case $OSTYPE in

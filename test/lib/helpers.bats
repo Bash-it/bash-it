@@ -1,14 +1,7 @@
 #!/usr/bin/env bats
 
 load ../test_helper
-load "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
-load ../../lib/log
-load ../../lib/utilities
-load ../../lib/search
-
-cite _about _param _example _group _author _version
-
-load ../../lib/helpers
+load ../test_helper_libs
 load ../../plugins/available/base.plugin
 
 function local_setup {
