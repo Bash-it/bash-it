@@ -1,132 +1,85 @@
 # shellcheck shell=bash
 
-function _bash-it-comp-list-available-not-enabled() {
-	local subdirectory="$1" IFS=$'\n' REPL
-	COMPREPLY=('all')
-	while read -ra REPL; do
-		COMPREPLY+=("${REPL[@]}")
-	done < <(compgen -W "$(_bash-it-component-list-disabled "${subdirectory}")" -- "${cur}")
-}
+function _compreply_candidates() {
+	local IFS=$'\n'
 
-function _bash-it-comp-list-enabled() {
-	local subdirectory="$1" IFS=$'\n' REPL
-	COMPREPLY=('all')
-	while read -ra REPL; do
-		COMPREPLY+=("${REPL[@]}")
-	done < <(compgen -W "$(_bash-it-component-list-enabled "${subdirectory}")" -- "${cur}")
-}
-
-function _bash-it-comp-list-available() {
-	local subdirectory="$1" IFS=$'\n' REPL
-	COMPREPLY=('all')
-	while read -ra REPL; do
-		COMPREPLY+=("${REPL[@]}")
-	done < <(compgen -W "$(_bash-it-component-list "${subdirectory}")" -- "${cur}")
-}
-
-function _bash-it-comp-list-profiles() {
-	local profiles IFS=$'\n' REPL
-	COMPREPLY=()
-
-	profiles=("${BASH_IT}/profiles"/*.bash_it)
-	profiles=("${profiles[@]##*/}")
-
-	while read -ra REPL; do
-		COMPREPLY+=("${REPL[@]}")
-	done < <(compgen -W "${profiles[*]%%.bash_it}" -- "${cur}")
+	read -d '' -ra COMPREPLY < <(compgen -W "${candidates[*]}" -- "${cur}")
 }
 
 function _bash-it-comp() {
-	local cur prev opts chose_opt file_type
+	local cur prev verb file_type candidates suffix
 	COMPREPLY=()
 	cur="${COMP_WORDS[COMP_CWORD]}"
 	prev="${COMP_WORDS[COMP_CWORD - 1]}"
-	chose_opt="${COMP_WORDS[1]}"
+	verb="${COMP_WORDS[1]}"
 	file_type="${COMP_WORDS[2]:-}"
-	opts="disable enable help migrate reload restart profile doctor search show update version"
-	case "${chose_opt}" in
+	candidates=('disable' 'enable' 'help' 'migrate' 'reload' 'restart' 'profile' 'doctor' 'search' 'show' 'update' 'version')
+	case "${verb}" in
 		show)
-			local show_args="aliases completions plugins"
-			COMPREPLY=($(compgen -W "${show_args}" -- "${cur}"))
-			return 0
+			candidates=('aliases' 'completions' 'plugins')
+			_compreply_candidates
 			;;
 		help)
 			if [[ "${prev}" == "aliases" ]]; then
-				_bash-it-comp-list-available aliases
-				return 0
+				candidates=('all' "$(_bash-it-component-list "${file_type}")")
+				_compreply_candidates
 			else
-				local help_args="aliases completions migrate plugins update"
-				COMPREPLY=($(compgen -W "${help_args}" -- "${cur}"))
-				return 0
+				candidates=('aliases' 'completions' 'migrate' 'plugins' 'update')
+				_compreply_candidates
 			fi
 			;;
 		profile)
 			case "${file_type}" in
-				load)
-					if [[ "load" == "$prev" ]]; then
-						_bash-it-comp-list-profiles
+				load | rm)
+					if [[ "${file_type}" == "$prev" ]]; then
+						candidates=("${BASH_IT}/profiles"/*.bash_it)
+						candidates=("${candidates[@]##*/}")
+						candidates=("${candidates[@]%%.bash_it}")
+
+						_compreply_candidates
 					fi
-					return 0
 					;;
-				rm)
-					if [[ "rm" == "$prev" ]]; then
-						_bash-it-comp-list-profiles
-					fi
-					return 0
-					;;
-				save)
-					return 0
-					;;
-				list)
-					return 0
-					;;
+				save | list) ;;
 				*)
-					local profile_args="load save list rm"
-					COMPREPLY=($(compgen -W "${profile_args}" -- "${cur}"))
-					return 0
+					candidates=('load' 'save' 'list' 'rm')
+					_compreply_candidates
 					;;
 			esac
 			;;
 		doctor)
-			local doctor_args="errors warnings all"
-			COMPREPLY=($(compgen -W "${doctor_args}" -- "${cur}"))
-			return 0
+			candidates=('errors' 'warnings' 'all')
+			_compreply_candidates
 			;;
 		update)
 			if [[ "${cur}" == -* ]]; then
-				local update_args="-s --silent"
+				candidates=('-s' '--silent')
 			else
-				local update_args="stable dev"
+				candidates=('stable' 'dev')
 			fi
-			COMPREPLY=($(compgen -W "${update_args}" -- "${cur}"))
-			return 0
+			_compreply_candidates
 			;;
-		migrate | reload | restart | search | version)
-			return 0
-			;;
+		migrate | reload | restart | search | version) ;;
 		enable | disable)
-			if [[ "${chose_opt}" == "enable" ]]; then
-				suffix="available-not-enabled"
+			if [[ "${verb}" == "enable" ]]; then
+				suffix="disabled"
 			else
 				suffix="enabled"
 			fi
 			case "${file_type}" in
 				alias | completion | plugin)
-					_bash-it-comp-list-"${suffix}" "${file_type}"
-					return 0
+					candidates=('all' "$("_bash-it-component-list-${suffix}" "${file_type}")")
+					_compreply_candidates
 					;;
 				*)
-					local enable_disable_args="alias completion plugin"
-					COMPREPLY=($(compgen -W "${enable_disable_args}" -- "${cur}"))
-					return 0
+					candidates=('alias' 'completion' 'plugin')
+					_compreply_candidates
 					;;
 			esac
 			;;
+		*)
+			_compreply_candidates
+			;;
 	esac
-
-	COMPREPLY=($(compgen -W "${opts}" -- "${cur}"))
-
-	return 0
 }
 
 # Activate completion for bash-it and its common misspellings
