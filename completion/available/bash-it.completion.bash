@@ -1,74 +1,36 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 
-_bash-it-comp-enable-disable() {
-	local enable_disable_args="alias completion plugin"
-	COMPREPLY=($(compgen -W "${enable_disable_args}" -- "${cur}"))
-}
-
-_bash-it-comp-list-available-not-enabled() {
+function _bash-it-comp-list-available-not-enabled() {
 	local subdirectory="$1"
-
-	local enabled_components all_things available_things
-
-	all_things=($(compgen -G "${BASH_IT}/$subdirectory/available/*.bash"))
-	all_things=("${all_things[@]##*/}")
-	enabled_components=($(command ls "${BASH_IT}"/{"$subdirectory"/,}enabled/*.bash 2> /dev/null))
-	enabled_components=("${enabled_components[@]##*/}")
-	enabled_components="${enabled_components[@]##*---}"
-	available_things=($(sort -d <(
-		for i in ${enabled_components}; do
-			all_things=("${all_things[@]//$i/}")
-		done
-		printf '%s\n' "${all_things[@]}"
-	)))
-	available_things="${available_things[@]%.*.bash}"
-
-	COMPREPLY=($(compgen -W "all ${available_things}" -- "${cur}"))
+	COMPREPLY=($(compgen -W "all $(_bash-it-component-list-disabled "${subdirectory}")" -- "${cur}"))
 }
 
-_bash-it-comp-list-enabled() {
+function _bash-it-comp-list-enabled() {
 	local subdirectory="$1"
-	local suffix enabled_things
-
-	suffix="${subdirectory/plugins/plugin}"
-
-	enabled_things=($(sort -d <(compgen -G "${BASH_IT}/$subdirectory/enabled/*.${suffix}.bash") <(compgen -G "${BASH_IT}/enabled/*.${suffix}.bash")))
-	enabled_things=("${enabled_things[@]##*/}")
-	enabled_things=("${enabled_things[@]##*---}")
-	enabled_things="${enabled_things[@]%.*.bash}"
-
-	COMPREPLY=($(compgen -W "all ${enabled_things}" -- "${cur}"))
+	COMPREPLY=($(compgen -W "all $(_bash-it-component-list-enabled "${subdirectory}")" -- "${cur}"))
 }
 
-_bash-it-comp-list-available() {
+function _bash-it-comp-list-available() {
 	local subdirectory="$1"
-
-	local enabled_things
-
-	enabled_things=($(sort -d <(compgen -G "${BASH_IT}/$subdirectory/available/*.bash")))
-	enabled_things=("${enabled_things[@]##*/}")
-	enabled_things="${enabled_things[@]%.*.bash}"
-
-	COMPREPLY=($(compgen -W "${enabled_things}" -- "${cur}"))
+	COMPREPLY=($(compgen -W "all $(_bash-it-component-list "${subdirectory}")" -- "${cur}"))
 }
 
-_bash-it-comp-list-profiles() {
+function _bash-it-comp-list-profiles() {
 	local profiles
 
-	profiles=$(for f in $(compgen -G "${BASH_IT}/profiles/*.bash_it" | sort -d); do
-		basename $f | sed -e 's/.bash_it//g'
-	done)
+	profiles=("${BASH_IT}/profiles"/*.bash_it)
+	profiles=("${profiles[@]##*/}")
 
-	COMPREPLY=($(compgen -W "${profiles}" -- ${cur}))
+	COMPREPLY=($(compgen -W "${profiles[*]%%.bash_it}" -- "${cur}"))
 }
 
-_bash-it-comp() {
+function _bash-it-comp() {
 	local cur prev opts
 	COMPREPLY=()
 	cur="${COMP_WORDS[COMP_CWORD]}"
 	prev="${COMP_WORDS[COMP_CWORD - 1]}"
 	chose_opt="${COMP_WORDS[1]}"
-	file_type="${COMP_WORDS[2]}"
+	file_type="${COMP_WORDS[2]:-}"
 	opts="disable enable help migrate reload restart profile doctor search show update version"
 	case "${chose_opt}" in
 		show)
@@ -77,7 +39,7 @@ _bash-it-comp() {
 			return 0
 			;;
 		help)
-			if [ x"${prev}" == x"aliases" ]; then
+			if [[ "${prev}" == "aliases" ]]; then
 				_bash-it-comp-list-available aliases
 				return 0
 			else
@@ -108,7 +70,7 @@ _bash-it-comp() {
 					;;
 				*)
 					local profile_args="load save list rm"
-					COMPREPLY=($(compgen -W "${profile_args}" -- ${cur}))
+					COMPREPLY=($(compgen -W "${profile_args}" -- "${cur}"))
 					return 0
 					;;
 			esac
@@ -131,26 +93,19 @@ _bash-it-comp() {
 			return 0
 			;;
 		enable | disable)
-			if [ x"${chose_opt}" == x"enable" ]; then
+			if [[ "${chose_opt}" == "enable" ]]; then
 				suffix="available-not-enabled"
 			else
 				suffix="enabled"
 			fi
 			case "${file_type}" in
-				alias)
-					_bash-it-comp-list-"${suffix}" aliases
-					return 0
-					;;
-				plugin)
-					_bash-it-comp-list-"${suffix}" plugins
-					return 0
-					;;
-				completion)
-					_bash-it-comp-list-"${suffix}" completion
+				alias | completion | plugin)
+					_bash-it-comp-list-"${suffix}" "${file_type}"
 					return 0
 					;;
 				*)
-					_bash-it-comp-enable-disable
+					local enable_disable_args="alias completion plugin"
+					COMPREPLY=($(compgen -W "${enable_disable_args}" -- "${cur}"))
 					return 0
 					;;
 			esac

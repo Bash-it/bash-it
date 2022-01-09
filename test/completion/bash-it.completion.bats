@@ -1,6 +1,8 @@
 #!/usr/bin/env bats
 
 load ../test_helper
+load ../../lib/utilities
+load ../../lib/helpers
 load ../../completion/available/bash-it.completion
 
 function local_setup {
@@ -290,7 +292,7 @@ function __check_completion () {
   assert_link_exist "$BASH_IT/aliases/enabled/docker-compose.aliases.bash"
 
   run __check_completion 'bash-it enable plugin docker'
-  assert_line -n 0 "docker-compose docker-machine docker"
+  assert_line -n 0 "docker docker-compose docker-machine"
 }
 
 @test "completion bash-it: enable - provide the docker-* plugins when nothing is enabled with the old location and priority-based name" {
@@ -298,7 +300,7 @@ function __check_completion () {
   assert_link_exist "$BASH_IT/aliases/enabled/150---docker-compose.aliases.bash"
 
   run __check_completion 'bash-it enable plugin docker'
-  assert_line -n 0 "docker-compose docker-machine docker"
+  assert_line -n 0 "docker docker-compose docker-machine"
 }
 
 @test "completion bash-it: enable - provide the docker-* plugins when nothing is enabled with the new location and priority-based name" {
@@ -306,7 +308,7 @@ function __check_completion () {
   assert_link_exist "$BASH_IT/enabled/150---docker-compose.aliases.bash"
 
   run __check_completion 'bash-it enable plugin docker'
-  assert_line -n 0 "docker-compose docker-machine docker"
+  assert_line -n 0 "docker docker-compose docker-machine"
 }
 
 @test "completion bash-it: enable - provide the docker-* completions when nothing is enabled with the old location and name" {
