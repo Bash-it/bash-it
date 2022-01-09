@@ -1,8 +1,7 @@
 #!/usr/bin/env bats
 
 load ../test_helper
-load ../../lib/helpers
-load "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
+load ../test_helper_libs
 
 # We test `go version` in each test to account for users with goenv and no system go.
 

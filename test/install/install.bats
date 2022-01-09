@@ -1,7 +1,6 @@
 #!/usr/bin/env bats
 
 load ../test_helper
-load "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
 
 # Determine which config file to use based on OS.
 case $OSTYPE in
@@ -32,7 +31,7 @@ function local_setup {
   assert_link_exist "$BASH_IT/enabled/250---base.plugin.bash"
   assert_link_exist "$BASH_IT/enabled/365---alias-completion.plugin.bash"
   assert_link_exist "$BASH_IT/enabled/350---bash-it.completion.bash"
-  assert_link_exist "$BASH_IT/enabled/350---system.completion.bash"
+  assert_link_exist "$BASH_IT/enabled/325---system.completion.bash"
 }
 
 @test "install: verify that a backup file is created" {

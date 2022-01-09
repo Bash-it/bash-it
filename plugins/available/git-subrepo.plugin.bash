@@ -1,6 +1,7 @@
-# Load git-subrepo if you are using it, and initialize completions
-
-cite about-plugin
+# shellcheck shell=bash
 about-plugin 'load git-subrepo if you are using it, and initialize completions'
 
-[[ -e "${GIT_SUBREPO_ROOT:=~/.git-subrepo}/init" ]] && source "$GIT_SUBREPO_ROOT/init"
+if [[ -s "${GIT_SUBREPO_ROOT:=$HOME/.git-subrepo}/init" ]]; then
+	# shellcheck disable=SC1091
+	source "$GIT_SUBREPO_ROOT/init"
+fi
