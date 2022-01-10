@@ -9,8 +9,8 @@ function local_setup {
   setup_test_fixture
 }
 
-@test "completion bash-it: ensure that the _bash-it-comp function is available" {
-  type -a _bash-it-comp &> /dev/null
+@test "completion bash-it: ensure that the _bash-it function is available" {
+  type -a _bash-it &> /dev/null
   assert_success
 }
 
@@ -38,7 +38,7 @@ function __check_completion () {
   COMP_CWORD=$(( ${#COMP_WORDS[@]} - 1 ))
 
   # Run the Bash-it completion function
-  _bash-it-comp
+  _bash-it
 
   # Return the completion output
   echo "${COMPREPLY[@]}"

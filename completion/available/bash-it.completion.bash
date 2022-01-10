@@ -6,7 +6,7 @@ function _compreply_candidates() {
 	read -d '' -ra COMPREPLY < <(compgen -W "${candidates[*]}" -- "${cur}")
 }
 
-function _bash-it-comp() {
+function _bash-it() {
 	local cur prev verb file_type candidates suffix
 	COMPREPLY=()
 	cur="${COMP_WORDS[COMP_CWORD]}"
@@ -83,9 +83,9 @@ function _bash-it-comp() {
 }
 
 # Activate completion for bash-it and its common misspellings
-complete -F _bash-it-comp bash-it
-complete -F _bash-it-comp bash-ti
-complete -F _bash-it-comp shit
-complete -F _bash-it-comp bashit
-complete -F _bash-it-comp batshit
-complete -F _bash-it-comp bash_it
+complete -F _bash-it bash-it
+complete -F _bash-it bash-ti
+complete -F _bash-it shit
+complete -F _bash-it bashit
+complete -F _bash-it batshit
+complete -F _bash-it bash_it
