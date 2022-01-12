@@ -66,7 +66,7 @@ function setup_libs() {
 }
 
 function local_setup_file() {
-	true
+	setup_libs "search" # overridable default
 }
 
 function local_setup() {
