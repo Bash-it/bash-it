@@ -44,7 +44,7 @@ if command -v parallel &> /dev/null \
 		fi
 	)"
 	exec "$bats_executable" "${CI:+--tap}" --jobs "${test_jobs_effective}" \
-		"${test_dirs[@]}"
+		--no-parallelize-within-files "${test_dirs[@]}"
 else
 	# Run `bats` in single-threaded mode.
 	exec "$bats_executable" "${CI:+--tap}" "${test_dirs[@]}"
