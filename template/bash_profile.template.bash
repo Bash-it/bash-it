@@ -14,6 +14,10 @@ export BASH_IT="{{BASH_IT}}"
 # location /.bash_it/themes/
 export BASH_IT_THEME='bobby'
 
+# Some themes can show whether `sudo` has a current token or not.
+# Set `$THEME_CHECK_SUDO` to `true` to check every prompt:
+#THEME_CHECK_SUDO='true'
+
 # (Advanced): Change this to the name of your remote repo if you
 # cloned bash-it with a remote other than origin such as `bash-it`.
 # export BASH_IT_REMOTE='bash-it'
