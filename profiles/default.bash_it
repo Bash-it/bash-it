@@ -1,10 +1,10 @@
 # This is the default profile of Bash-it
 
 # plugins
-plugins alias-completion
 plugins base
 
 # completion
+completion aliases
 completion bash-it
 completion system
 
