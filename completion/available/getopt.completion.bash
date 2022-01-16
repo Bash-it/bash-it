@@ -21,15 +21,15 @@ function _getopt() {
 
 	case $prev in
 		-s | --shell)
-			read -d '' -ra COMPREPLY < <(compgen -W "${SHELL_ARGS[*]}" -- "$cur")
+			COMPREPLY=("${SHELL_ARGS[@]}")
 			;;
 		-n | --name)
 			read -d '' -ra COMPREPLY < <(compgen -A function -- "$cur")
 			;;
 		*)
-			read -d '' -ra COMPREPLY < <(compgen -W "${OPTIONS[*]}" -- "$cur")
+			COMPREPLY=("${OPTIONS[@]}")
 			;;
 	esac
 }
 
-complete -F _getopt getopt
+complete -F _getopt -X '!&*' getopt
