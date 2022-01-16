@@ -1,26 +1,18 @@
 # shellcheck shell=bash
-# Load after the other completions to understand what needs to be completed
-# BASH_IT_LOAD_PRIORITY: 365
-
-cite about-plugin
 about-plugin 'Automatic completion of aliases'
+# Load after the other completions to understand what needs to be completed
+# BASH_IT_LOAD_PRIORITY: 800
+
 
 # References:
 # http://superuser.com/a/437508/119764
 # http://stackoverflow.com/a/1793178/1228454
 
-# This needs to be a plugin so it gets executed after the completions and the aliases have been defined.
-# Bash-it loads its components in the order
-# 1) Aliases
-# 2) Completions
-# 3) Plugins
-# 4) Custom scripts
-
 # Automatically add completion for all aliases to commands having completion functions
-function alias_completion {
+function alias_completion() {
 	local namespace="alias_completion"
 	local tmp_file completion_loader alias_name alias_tokens line completions
-	local alias_arg_words new_completion compl_func compl_wrapper
+	local alias_arg_words new_completion compl_func compl_wrapper alias_defn
 
 	# parse function based completion definitions, where capture group 2 => function and 3 => trigger
 	local compl_regex='complete( +[^ ]+)* -F ([^ ]+) ("[^"]+"|[^ ]+)'
@@ -28,8 +20,12 @@ function alias_completion {
 	local alias_regex="alias( -- | )([^=]+)='(\"[^\"]+\"|[^ ]+)(( +[^ ]+)*)'"
 
 	# create array of function completion triggers, keeping multi-word triggers together
-	eval "completions=($(complete -p | sed -Ene "/$compl_regex/s//'\3'/p"))"
+	IFS=$'\n' read -d '' -ra completions < <(complete -p)
 	((${#completions[@]} == 0)) && return 0
+
+	completions=("${completions[@]##complete -* * -}") # strip all but last option plus trigger(s)
+	completions=("${completions[@]#complete -}") # strip last option and arg, leaving only trigger(s)
+	completions=("${completions[@]#? * }") # strip last option and arg, leaving only trigger(s)
 
 	# create temporary file for wrapper functions and completions
 	tmp_file="$(mktemp -t "${namespace}-${RANDOM}XXXXXX")" || return 1
@@ -40,13 +36,16 @@ function alias_completion {
 	# some aliases do have backslashes that needs to be interpreted
 	# shellcheck disable=SC2162
 	while read line; do
-		eval "alias_tokens=($line)" 2> /dev/null || continue # some alias arg patterns cause an eval parse error
-		# shellcheck disable=SC2154 # see `eval` above
-		alias_name="${alias_tokens[0]}" alias_cmd="${alias_tokens[1]}" alias_args="${alias_tokens[2]# }"
+		line="${line#alias }"
+		alias_name="${line%%=*}"
+		alias_defn="${line#*=}" # alias definition
+		alias_cmd="${alias_defn%%[[:space:]]*}" # first word of alias
+		alias_cmd="${alias_cmd:1}" # lose opening quotation mark
+		alias_args="${alias_defn#*[[:space:]]}" # everything after first word
+		alias_args="${alias_args:0:-1}" # lose ending quotation mark
 
 		# skip aliases to pipes, boolean control structures and other command lists
-		# (leveraging that eval errs out if $alias_args contains unquoted shell metacharacters)
-		eval "alias_arg_words=($alias_args)" 2> /dev/null || continue
+		[[ "${alias_args}" =~ [\|\&\;\)\(\n] ]] && continue
 		# avoid expanding wildcards
 		read -a alias_arg_words <<< "$alias_args"
 
@@ -54,7 +53,7 @@ function alias_completion {
 		if ! _bash-it-array-contains-element "$alias_cmd" "${completions[@]}"; then
 			if [[ -n "$completion_loader" ]]; then
 				# force loading of completions for the aliased command
-				eval "$completion_loader $alias_cmd"
+				"${completion_loader:?}" "${alias_cmd}"
 				# 124 means completion loader was successful
 				[[ $? -eq 124 ]] || continue
 				completions+=("$alias_cmd")
@@ -97,7 +96,7 @@ function alias_completion {
 			new_completion="${new_completion% *} $alias_name"
 			echo "$new_completion" >> "$tmp_file"
 		fi
-	done < <(alias -p | sed -Ene "s/$alias_regex/\2 '\3' '\4'/p")
+	done < <(alias -p)
 	# shellcheck source=/dev/null
 	source "$tmp_file" && command rm -f "$tmp_file"
 }
