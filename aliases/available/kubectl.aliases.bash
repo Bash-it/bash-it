@@ -1,8 +1,4 @@
-#!/bin/bash
-#
-# -binaryanomaly
-
-cite 'about-alias'
+# shellcheck shell=bash
 about-alias 'kubectl aliases'
 
 function _set_pkg_aliases() {

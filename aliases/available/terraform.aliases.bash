@@ -1,7 +1,5 @@
-# Aliases for Terraform and Terragrunt
-
-cite 'about-alias'
-about-alias 'Terraform abbreviations'
+# shellcheck shell=bash
+about-alias 'Aliases for Terraform and Terragrunt'
 
 alias tf='terraform'
 alias tfv='terraform validate'

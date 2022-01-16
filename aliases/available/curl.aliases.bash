@@ -1,6 +1,4 @@
-#!/bin/bash
-
-cite 'about-alias'
+# shellcheck shell=bash
 about-alias 'Curl aliases for convenience.'
 
 # set apt aliases

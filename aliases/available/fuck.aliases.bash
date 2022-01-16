@@ -1,4 +1,4 @@
-cite 'about-alias'
+# shellcheck shell=bash
 about-alias 'fuck/please to retry last command with sudo'
 
 # Play nicely with 'thefuck' plugin

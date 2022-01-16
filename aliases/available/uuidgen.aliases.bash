@@ -1,4 +1,4 @@
-cite 'uuid-alias'
+# shellcheck shell=bash
 about-alias 'uuidgen aliases'
 
 if _command_exists uuid; then # Linux
