@@ -1,17 +1,15 @@
 cite about-alias
 about-alias 'general aliases'
 
-if ls --color -d . &> /dev/null
-then
-  alias ls="ls --color=auto"
-elif ls -G -d . &> /dev/null
-then
-  alias ls='ls -G'        # Compact view, show colors
+if ls --color -d . &> /dev/null; then
+	alias ls="ls --color=auto"
+elif ls -G -d . &> /dev/null; then
+	alias ls='ls -G' # Compact view, show colors
 fi
 
 # List directory contents
 alias sl=ls
-alias la='ls -AF'       # Compact view, show hidden
+alias la='ls -AF' # Compact view, show hidden
 alias ll='ls -al'
 alias l='ls -a'
 alias l1='ls -1'
@@ -26,14 +24,12 @@ alias vbpf="vim ~/.bash_profile"
 # colored grep
 # Need to check an existing file for a pattern that will be found to ensure
 # that the check works when on an OS that supports the color option
-if grep --color=auto "a" "${BASH_IT}/"*.md &> /dev/null
-then
-  alias grep='grep --color=auto'
+if grep --color=auto "a" "${BASH_IT}/"*.md &> /dev/null; then
+	alias grep='grep --color=auto'
 fi
 
-if _command_exists gshuf
-then
-  alias shuf=gshuf
+if _command_exists gshuf; then
+	alias shuf=gshuf
 fi
 
 alias c='clear'
@@ -66,9 +62,8 @@ alias -- -='cd -'        # Go back
 alias h='history'
 
 # Tree
-if ! _command_exists tree
-then
-  alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
+if ! _command_exists tree; then
+	alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
 fi
 
 # Directory
@@ -84,13 +79,13 @@ alias snano="sudo nano"
 
 # Display whatever file is regular file or folder
 catt() {
-  for i in "$@"; do
-    if [ -d "$i" ]; then
-      ls "$i"
-    else
-      cat "$i"
-    fi
-  done
+	for i in "$@"; do
+		if [ -d "$i" ]; then
+			ls "$i"
+		else
+			cat "$i"
+		fi
+	done
 }
 
 # The Bash-it aliases were moved to the `bash-it.aliases.bash` file. The intent of this

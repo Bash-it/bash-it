@@ -20,8 +20,8 @@ alias skype='open -a Skype'
 alias mou='open -a Mou'
 alias subl='open -a Sublime\ Text'
 
-if [ -s /usr/bin/firefox ] ; then
-  unalias firefox
+if [ -s /usr/bin/firefox ]; then
+	unalias firefox
 fi
 
 # Requires growlnotify, which can be found in the Growl DMG under "Extras"
