@@ -3,7 +3,6 @@ about-plugin 'Automatic completion of aliases'
 # Load after the other completions to understand what needs to be completed
 # BASH_IT_LOAD_PRIORITY: 800
 
-
 # References:
 # http://superuser.com/a/437508/119764
 # http://stackoverflow.com/a/1793178/1228454
@@ -11,21 +10,16 @@ about-plugin 'Automatic completion of aliases'
 # Automatically add completion for all aliases to commands having completion functions
 function alias_completion() {
 	local namespace="alias_completion"
-	local tmp_file completion_loader alias_name alias_tokens line completions
+	local tmp_file completion_loader alias_name line completions
 	local alias_arg_words new_completion compl_func compl_wrapper alias_defn
-
-	# parse function based completion definitions, where capture group 2 => function and 3 => trigger
-	local compl_regex='complete( +[^ ]+)* -F ([^ ]+) ("[^"]+"|[^ ]+)'
-	# parse alias definitions, where capture group 1 => trigger, 2 => command, 3 => command arguments
-	local alias_regex="alias( -- | )([^=]+)='(\"[^\"]+\"|[^ ]+)(( +[^ ]+)*)'"
 
 	# create array of function completion triggers, keeping multi-word triggers together
 	IFS=$'\n' read -d '' -ra completions < <(complete -p)
 	((${#completions[@]} == 0)) && return 0
 
 	completions=("${completions[@]##complete -* * -}") # strip all but last option plus trigger(s)
-	completions=("${completions[@]#complete -}") # strip last option and arg, leaving only trigger(s)
-	completions=("${completions[@]#? * }") # strip last option and arg, leaving only trigger(s)
+	completions=("${completions[@]#complete -}")       # strip anything missed
+	completions=("${completions[@]#? * }")             # strip last option and arg, leaving only trigger(s)
 
 	# create temporary file for wrapper functions and completions
 	tmp_file="$(mktemp -t "${namespace}-${RANDOM}XXXXXX")" || return 1
@@ -38,11 +32,11 @@ function alias_completion() {
 	while read line; do
 		line="${line#alias }"
 		alias_name="${line%%=*}"
-		alias_defn="${line#*=}" # alias definition
+		alias_defn="${line#*=}"                 # alias definition
 		alias_cmd="${alias_defn%%[[:space:]]*}" # first word of alias
-		alias_cmd="${alias_cmd:1}" # lose opening quotation mark
+		alias_cmd="${alias_cmd:1}"              # lose opening quotation mark
 		alias_args="${alias_defn#*[[:space:]]}" # everything after first word
-		alias_args="${alias_args:0:-1}" # lose ending quotation mark
+		alias_args="${alias_args%\'}"           # lose ending quotation mark
 
 		# skip aliases to pipes, boolean control structures and other command lists
 		[[ "${alias_args}" =~ [\|\&\;\)\(\n] ]] && continue
