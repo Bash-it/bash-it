@@ -1,6 +1,10 @@
 # shellcheck shell=bash
 
 function _getopt() {
+	local IFS=$'\n'
+	local cur=${COMP_WORDS[COMP_CWORD]}
+	local prev=${COMP_WORDS[COMP_CWORD-1]:-}
+
 	local OPTIONS=('-a' '--alternative'
 		'-h' '--help'
 		'-l' '--longoptions'
@@ -15,18 +19,15 @@ function _getopt() {
 
 	local SHELL_ARGS=('sh' 'bash' 'csh' 'tcsh')
 
-	local current=$2
-	local previous=$3
-
-	case $previous in
+	case $prev in
 		-s | --shell)
-			readarray -t COMPREPLY < <(compgen -W "${SHELL_ARGS[*]}" -- "$current")
+			read -d '' -ra COMPREPLY < <(compgen -W "${SHELL_ARGS[*]}" -- "$cur")
 			;;
 		-n | --name)
-			readarray -t COMPREPLY < <(compgen -A function -- "$current")
+			read -d '' -ra COMPREPLY < <(compgen -A function -- "$cur")
 			;;
 		*)
-			readarray -t COMPREPLY < <(compgen -W "${OPTIONS[*]}" -- "$current")
+			read -d '' -ra COMPREPLY < <(compgen -W "${OPTIONS[*]}" -- "$cur")
 			;;
 	esac
 }
