@@ -165,6 +165,7 @@ themes/modern
 themes/norbu
 themes/pete
 themes/powerline
+themes/powerline-naked
 themes/pure
 themes/purity
 
