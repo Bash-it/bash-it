@@ -8,12 +8,10 @@ function __powerline_last_status_prompt {
 }
 
 function __powerline_right_segment {
-	local OLD_IFS="${IFS}"
-	IFS="|"
-	local params=($1)
-	IFS="${OLD_IFS}"
-	local padding=0
+	local -a params
+	IFS="|" read -ra params <<< "${1}"
 	local pad_before_segment=" "
+	local padding=0
 
 	if [[ "${SEGMENTS_AT_RIGHT}" -eq 0 ]]; then
 		if [[ "${POWERLINE_COMPACT_AFTER_LAST_SEGMENT}" -ne 0 ]]; then
