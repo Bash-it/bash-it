@@ -106,7 +106,7 @@ function _bash_it_appearance_scm_init() {
 		fi
 	fi
 }
-_bash_it_appearance_scm_init
+_bash_it_library_finalize_hook+=('_bash_it_appearance_scm_init')
 
 function scm {
 	if [[ "$SCM_CHECK" = false ]]; then
