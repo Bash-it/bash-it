@@ -29,7 +29,7 @@ _bash-it-gopath-pathmunge() {
 	while [[ $i -gt 0 ]]; do
 		i=$((i - 1))
 		if [[ -n "${paths[i]}" ]]; then
-			pathmunge "${paths[i]}/bin"
+			pathmunge "${paths[i]}/bin" || true
 		fi
 	done
 }
