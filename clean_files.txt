@@ -78,6 +78,7 @@ completion/available/vuejs.completion.bash
 completion/available/wpscan.completion.bash
 
 # libraries
+lib/helpers.bash
 lib/log.bash
 lib/utilities.bash
 
