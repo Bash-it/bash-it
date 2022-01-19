@@ -171,35 +171,3 @@ function _git-remote-info() {
 		fi
 	fi
 }
-
-# Unused by bash-it, present for API compatibility
-function git_status_summary() {
-	awk '
-  BEGIN {
-    untracked=0;
-    unstaged=0;
-    staged=0;
-  }
-  {
-    if (!after_first && $0 ~ /^##.+/) {
-      print $0
-      seen_header = 1
-    } else if ($0 ~ /^\?\? .+/) {
-      untracked += 1
-    } else {
-      if ($0 ~ /^.[^ ] .+/) {
-        unstaged += 1
-      }
-      if ($0 ~ /^[^ ]. .+/) {
-        staged += 1
-      }
-    }
-    after_first = 1
-  }
-  END {
-    if (!seen_header) {
-      print
-    }
-    print untracked "\t" unstaged "\t" staged
-  }'
-}
