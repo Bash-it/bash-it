@@ -1,32 +1,35 @@
-__getopt() {
-  local OPTIONS=('-a' '--alternative'
-    '-h' '--help'
-    '-l' '--longoptions'
-    '-n' '--name'
-    '-o' '--options'
-    '-q' '--quiet'
-    '-Q' '--quiet-output'
-    '-s' '--shell'
-    '-T' '--test'
-    '-u' '--unquoted'
-    '-V' '--version')
+# shellcheck shell=bash
 
-  local SHELL_ARGS=('sh' 'bash' 'csh' 'tcsh')
+function _getopt() {
+	local IFS=$'\n'
+	local cur=${COMP_WORDS[COMP_CWORD]}
+	local prev=${COMP_WORDS[COMP_CWORD-1]:-}
 
-  local current=$2
-  local previous=$3
+	local OPTIONS=('-a' '--alternative'
+		'-h' '--help'
+		'-l' '--longoptions'
+		'-n' '--name'
+		'-o' '--options'
+		'-q' '--quiet'
+		'-Q' '--quiet-output'
+		'-s' '--shell'
+		'-T' '--test'
+		'-u' '--unquoted'
+		'-V' '--version')
 
-  case $previous in
-    -s|--shell)
-      readarray -t COMPREPLY < <(compgen -W "${SHELL_ARGS[*]}" -- "$current")
-      ;;
-    -n|--name)
-      readarray -t COMPREPLY < <(compgen -A function -- "$current")
-      ;;
-    *)
-      readarray -t COMPREPLY < <(compgen -W "${OPTIONS[*]}" -- "$current")
-      ;;
-  esac
+	local SHELL_ARGS=('sh' 'bash' 'csh' 'tcsh')
+
+	case $prev in
+		-s | --shell)
+			COMPREPLY=("${SHELL_ARGS[@]}")
+			;;
+		-n | --name)
+			read -d '' -ra COMPREPLY < <(compgen -A function -- "$cur")
+			;;
+		*)
+			COMPREPLY=("${OPTIONS[@]}")
+			;;
+	esac
 }
 
-complete -F __getopt getopt
+complete -F _getopt -X '!&*' getopt

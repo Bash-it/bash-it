@@ -49,6 +49,7 @@ completion/available/docker-machine.completion.bash
 completion/available/docker.completion.bash
 completion/available/gcloud.completion.bash
 completion/available/gem.completion.bash
+completion/available/getopt.completion.bash
 completion/available/git.completion.bash
 completion/available/github-cli.completion.bash
 completion/available/go.completion.bash
