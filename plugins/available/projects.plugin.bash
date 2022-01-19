@@ -8,42 +8,48 @@ function pj() {
 	group 'projects'
 
 	local proj="${1?${FUNCNAME[0]}: project name required}"
-	local cmd PS3 dest
-	local -a dests=()
+	local cmd PS3 dest d
+	local -a dests
 
 	if [[ "$proj" == "open" ]]; then
 		shift
+		proj="${1}"
 		cmd="${EDITOR?}"
 	fi
 
 	# collect possible destinations to account for directories
 	# with the same name in project directories
-	IFS=':' read -ra dests <<< "${BASH_IT_PROJECT_PATHS}"
+	IFS=':' read -ra dests <<< "${BASH_IT_PROJECT_PATHS?${FUNCNAME[0]}: project working folders must be configured}"
+	for d in "${!dests[@]}"; do
+		if [[ ! -d "${dests[d]}" ]]; then
+			unset 'dests[d]'
+		fi
+	done
 
-	# when multiple destinations are found, present a menu
-	if [[ ${#dests[@]} -eq 0 ]]; then
-		_log_error "no such project '${1:-}'"
-		return 1
-	elif [[ ${#dests[@]} -eq 1 ]]; then
-		dest="${dests[0]}"
-	elif [[ ${#dests[@]} -gt 1 ]]; then
-		PS3="Multiple project directories found. Please select one: "
-		dests+=("cancel")
-		select d in "${dests[@]}"; do
-			case $d in
-				"cancel")
-					return
-					;;
-				*)
-					dest=$d
-					break
-					;;
-			esac
-		done
-	else
-		_log_error "please report this error"
-		return 2 # should never reach this
-	fi
+	case ${#dests[@]} in
+		0)
+			_log_error "BASH_IT_PROJECT_PATHS must contain at least one existing location"
+			return 1
+			;;
+		1)
+			dest="${dests[*]}/${proj}"
+			;;
+		*)
+			PS3="Multiple project directories found. Please select one: "
+			dests+=("cancel")
+			select d in "${dests[@]}"; do
+				case $d in
+					"cancel")
+						return
+						;;
+					*)
+						dest="${d}/${proj}"
+						break
+						;;
+				esac
+			done
+			;;
+	esac
 
 	"${cmd:-cd}" "${dest}"
 }
