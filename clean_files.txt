@@ -82,6 +82,7 @@ completion/available/wpscan.completion.bash
 # libraries
 lib/helpers.bash
 lib/log.bash
+lib/preexec.bash
 lib/utilities.bash
 
 # plugins
@@ -165,4 +166,3 @@ themes/purity
 # vendor init files
 #
 vendor/.gitattributes
-vendor/init.d

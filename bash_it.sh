@@ -51,15 +51,6 @@ for _bash_it_config_file in $LIB; do
 	fi
 done
 
-# Load vendors
-BASH_IT_LOG_PREFIX="vendor: "
-for _bash_it_vendor_init in "${BASH_IT}"/vendor/init.d/*.bash; do
-	_log_debug "Loading \"$(basename "${_bash_it_vendor_init}" .bash)\"..."
-	# shellcheck disable=SC1090
-	source "${_bash_it_vendor_init}"
-done
-unset _bash_it_vendor_init
-
 BASH_IT_LOG_PREFIX="core: main: "
 # Load the global "enabled" directory
 # "family" param is empty so that files get sources in glob order
