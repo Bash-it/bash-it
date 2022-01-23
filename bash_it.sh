@@ -15,8 +15,11 @@ fi
 # shellcheck disable=SC1090
 source "${BASH_IT}"/vendor/github.com/erichs/composure/composure.sh
 
-# We need to load logging module first as well in order to be able to log
-# shellcheck source=./lib/log.bash
+# Declare our end-of-main finishing hook
+declare -a _bash_it_library_finalize_hook
+
+# We need to load logging module early in order to be able to log
+# shellcheck source-path=SCRIPTDIR/lib
 source "${BASH_IT}/lib/log.bash"
 
 # We can only log it now
@@ -148,3 +151,8 @@ if ! _command_exists reload && [[ -n "${BASH_IT_RELOAD_LEGACY:-}" ]]; then
 			;;
 	esac
 fi
+
+for _bash_it_library_finalize_f in "${_bash_it_library_finalize_hook[@]:-}"; do
+	eval "${_bash_it_library_finalize_f?}" # Use `eval` to achieve the same behavior as `$PROMPT_COMMAND`.
+done
+unset "${!_bash_it_library_finalize_@}"

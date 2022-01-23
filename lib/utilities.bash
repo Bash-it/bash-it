@@ -47,9 +47,10 @@ function _bash-it-get-component-type-from-path() {
 #
 #
 function _bash-it-array-contains-element() {
-	local e
-	for e in "${@:2}"; do
-		[[ "$e" == "$1" ]] && return 0
+	local e element="${1?}"
+	shift
+	for e in "$@"; do
+		[[ "$e" == "${element}" ]] && return 0
 	done
 	return 1
 }
@@ -78,30 +79,46 @@ function _bash-it-egrep() {
 
 function _bash-it-component-help() {
 	local component file func
-	component="$(_bash-it-pluralize-component "${1}")"
-	file="$(_bash-it-component-cache-file "${component}")"
-	if [[ ! -s "${file}" || -z "$(find "${file}" -mmin -300)" ]]; then
-		func="_bash-it-${component}"
-		"${func}" | _bash-it-egrep '   \[' >| "${file}"
+	_bash-it-component-pluralize "${1}" component
+	_bash-it-component-cache-file "${component}" file
+	if [[ ! -s "${file?}" || -z "$(find "${file}" -mmin -300)" ]]; then
+		func="_bash-it-${component?}"
+		"${func}" | _bash-it-egrep '\[[x ]\]' >| "${file}"
 	fi
 	cat "${file}"
 }
 
 function _bash-it-component-cache-file() {
-	local component file
-	component="$(_bash-it-pluralize-component "${1?${FUNCNAME[0]}: component name required}")"
-	file="${XDG_CACHE_HOME:-${BASH_IT?}/tmp/cache}${XDG_CACHE_HOME:+/bash_it}/${component}"
-	[[ -f "${file}" ]] || mkdir -p "${file%/*}"
-	printf '%s' "${file}"
+	local _component_to_cache _file_path _result="${2:-${FUNCNAME[0]//-/_}}"
+	_bash-it-component-pluralize "${1?${FUNCNAME[0]}: component name required}" _component_to_cache
+	_file_path="${XDG_CACHE_HOME:-${BASH_IT?}/tmp/cache}${XDG_CACHE_HOME:+/bash_it}/${_component_to_cache?}"
+	[[ -f "${_file_path}" ]] || mkdir -p "${_file_path%/*}"
+	printf -v "${_result?}" '%s' "${_file_path}"
 }
 
-function _bash-it-pluralize-component() {
-	local component="${1}"
-	local -i len=$((${#component} - 1))
+function _bash-it-component-singularize() {
+	local _result="${2:-${FUNCNAME[0]//-/_}}"
+	local _component_to_single="${1?${FUNCNAME[0]}: component name required}"
+	local -i len="$((${#_component_to_single} - 2))"
+	if [[ "${_component_to_single:${len}:2}" == 'ns' ]]; then
+		_component_to_single="${_component_to_single%s}"
+	elif [[ "${_component_to_single}" == "aliases" ]]; then
+		_component_to_single="${_component_to_single%es}"
+	fi
+	printf -v "${_result?}" '%s' "${_component_to_single}"
+}
+
+function _bash-it-component-pluralize() {
+	local _result="${2:-${FUNCNAME[0]//-/_}}"
+	local _component_to_plural="${1?${FUNCNAME[0]}: component name required}"
+	local -i len="$((${#_component_to_plural} - 1))"
 	# pluralize component name for consistency
-	[[ "${component:${len}:1}" != 's' ]] && component="${component}s"
-	[[ "${component}" == "alias" ]] && component="aliases"
-	printf '%s' "${component}"
+	if [[ "${_component_to_plural:${len}:1}" != 's' ]]; then
+		_component_to_plural="${_component_to_plural}s"
+	elif [[ "${_component_to_plural}" == "alias" ]]; then
+		_component_to_plural="${_component_to_plural}es"
+	fi
+	printf -v "${_result?}" '%s' "${_component_to_plural}"
 }
 
 function _bash-it-clean-component-cache() {
@@ -113,7 +130,7 @@ function _bash-it-clean-component-cache() {
 			_bash-it-clean-component-cache "${component}"
 		done
 	else
-		cache="$(_bash-it-component-cache-file "${component}")"
+		_bash-it-component-cache-file "${component}" cache
 		if [[ -f "${cache}" ]]; then
 			rm -f "${cache}"
 		fi
@@ -144,7 +161,6 @@ function _bash-it-component-list-disabled() {
 }
 
 # Checks if a given item is enabled for a particular component/file-type.
-# Uses the component cache if available.
 #
 # Returns:
 #    0 if an item of the component is enabled, 1 otherwise.
@@ -152,13 +168,17 @@ function _bash-it-component-list-disabled() {
 # Examples:
 #    _bash-it-component-item-is-enabled alias git && echo "git alias is enabled"
 function _bash-it-component-item-is-enabled() {
-	local component="$1"
-	local item="$2"
-	_bash-it-component-help "${component}" | _bash-it-egrep '\[x\]' | _bash-it-egrep -q -- "^${item}\s"
+	local component="$1" item="$2"
+	local each_file
+
+	for each_file in "${BASH_IT}/enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR?}${item}.${component}"*."bash" \
+		"${BASH_IT}/${component}"*/"enabled/${item}.${component}"*."bash" \
+		"${BASH_IT}/${component}"*/"enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR?}${item}.${component}"*."bash"; do
+		[[ -f "${each_file}" ]] && return
+	done
 }
 
 # Checks if a given item is disabled for a particular component/file-type.
-# Uses the component cache if available.
 #
 # Returns:
 #    0 if an item of the component is enabled, 1 otherwise.
@@ -166,7 +186,5 @@ function _bash-it-component-item-is-enabled() {
 # Examples:
 #    _bash-it-component-item-is-disabled alias git && echo "git aliases are disabled"
 function _bash-it-component-item-is-disabled() {
-	local component="$1"
-	local item="$2"
-	_bash-it-component-help "${component}" | _bash-it-egrep -v '\[x\]' | _bash-it-egrep -q -- "^${item}\s"
+	! _bash-it-component-item-is-enabled "$@"
 }
