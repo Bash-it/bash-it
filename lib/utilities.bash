@@ -168,12 +168,18 @@ function _bash-it-component-list-disabled() {
 # Examples:
 #    _bash-it-component-item-is-enabled alias git && echo "git alias is enabled"
 function _bash-it-component-item-is-enabled() {
-	local component="$1" item="$2"
-	local each_file
+	local component_type item_name each_file
 
-	for each_file in "${BASH_IT}/enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR?}${item}.${component}"*."bash" \
-		"${BASH_IT}/${component}"*/"enabled/${item}.${component}"*."bash" \
-		"${BASH_IT}/${component}"*/"enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR?}${item}.${component}"*."bash"; do
+	if [[ -f "${1}" ]]; then
+		item_name="$(_bash-it-get-component-name-from-path "${1}")"
+		component_type="$(_bash-it-get-component-type-from-path "${1}")"
+	else
+		component_type="${1}" item_name="${2}"
+	fi
+
+	for each_file in "${BASH_IT}/enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR?}${item_name}.${component_type}"*."bash" \
+		"${BASH_IT}/${component_type}"*/"enabled/${item_name}.${component_type}"*."bash" \
+		"${BASH_IT}/${component_type}"*/"enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR?}${item_name}.${component_type}"*."bash"; do
 		[[ -f "${each_file}" ]] && return
 	done
 }
