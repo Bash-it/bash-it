@@ -83,6 +83,7 @@ completion/available/wpscan.completion.bash
 # libraries
 lib/colors.bash
 lib/helpers.bash
+lib/history.bash
 lib/log.bash
 lib/preexec.bash
 lib/search.bash
