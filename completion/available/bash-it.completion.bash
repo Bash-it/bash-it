@@ -13,7 +13,7 @@ function _bash-it() {
 	prev="${COMP_WORDS[COMP_CWORD - 1]}"
 	verb="${COMP_WORDS[1]}"
 	file_type="${COMP_WORDS[2]:-}"
-	candidates=('disable' 'enable' 'help' 'migrate' 'reload' 'restart' 'profile' 'doctor' 'search' 'show' 'update' 'version')
+	candidates=('disable' 'enable' 'help' 'migrate' 'reload' 'restart' 'preview' 'profile' 'doctor' 'search' 'show' 'update' 'version')
 	case "${verb}" in
 		show)
 			candidates=('aliases' 'completions' 'plugins')
@@ -58,7 +58,7 @@ function _bash-it() {
 			fi
 			_compreply_candidates
 			;;
-		migrate | reload | restart | search | version) ;;
+		migrate | reload | restart | preview | search | version) ;;
 		enable | disable)
 			if [[ "${verb}" == "enable" ]]; then
 				suffix="disabled"
