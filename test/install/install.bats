@@ -7,8 +7,8 @@ function local_setup() {
 }
 
 function local_setup_file() {
-  # Determine which config file to use based on OS.
-  export BASH_IT_CONFIG_FILE=.bashrc
+	# Determine which config file to use based on OS.
+	export BASH_IT_CONFIG_FILE=.bashrc
 }
 
 @test "install: verify that the install script exists" {
@@ -22,11 +22,11 @@ function local_setup_file() {
 
 	assert_file_exist "$HOME/$BASH_IT_CONFIG_FILE"
 
-	assert_link_exist "${BASH_IT?}/enabled/150---general.aliases.bash"
-	assert_link_exist "${BASH_IT?}/enabled/250---base.plugin.bash"
-	assert_link_exist "${BASH_IT?}/enabled/800---aliases.completion.bash"
-	assert_link_exist "${BASH_IT?}/enabled/350---bash-it.completion.bash"
-	assert_link_exist "${BASH_IT?}/enabled/325---system.completion.bash"
+    assert_link_exist "${BASH_IT?}/enabled/750---general.aliases.bash"
+    assert_link_exist "${BASH_IT?}/enabled/250---base.plugin.bash"
+    assert_link_exist "${BASH_IT?}/enabled/800---aliases.completion.bash"
+    assert_link_exist "${BASH_IT?}/enabled/350---bash-it.completion.bash"
+    assert_link_exist "${BASH_IT?}/enabled/325---system.completion.bash"
 }
 
 @test "install: verify that a backup file is created" {
