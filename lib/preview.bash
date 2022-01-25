@@ -4,22 +4,26 @@
 
 function _bash-it-preview() {
 	local BASH_IT_THEME BASH_IT_LOG_LEVEL
-	local themes theme
+	local themes IFS=$'\n' cur
 
-	printf '\n\n\t%s\n\n' "Previewing Bash-it Themes"
-
-	if [[ -n "${1:-}" && -s "${BASH_IT?}/themes/${1}/${1}.theme.bash" ]]; then
-		themes=("${1}")
+	if [[ $# -gt '0' ]]; then
+		themes=("$@")
 	else
 		themes=("${BASH_IT?}/themes"/*/*.theme.bash)
+		themes=("${themes[@]##*/}")
+		themes=("${themes[@]%.theme.bash}")
 	fi
 
-	# shellcheck disable=SC2034
-	for theme in "${themes[@]}"; do
-		BASH_IT_THEME="${theme%.theme.bash}"
-		BASH_IT_THEME="${BASH_IT_THEME##*/}"
-		BASH_IT_LOG_LEVEL=0
+	if [[ ${COMP_CWORD:-} -gt '0' ]]; then
+		cur="${COMP_WORDS[COMP_CWORD]}"
+		read -d '' -ra COMPREPLY < <(compgen -W "all${IFS}${themes[*]}" -- "${cur}")
+		return
+	fi
+	printf '\n\n\t%s\n\n' "Previewing Bash-it Themes"
 
+	# shellcheck disable=SC2034
+	for BASH_IT_THEME in "${themes[@]}"; do
+		BASH_IT_LOG_LEVEL=0
 		bash --init-file "${BASH_IT_BASHRC:-${BASH_IT?}/bash_it.sh}" -i <<< '_bash-it-flash-term "${#BASH_IT_THEME}" "${BASH_IT_THEME}"'
 	done
 }

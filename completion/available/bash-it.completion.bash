@@ -58,7 +58,11 @@ function _bash-it() {
 			fi
 			_compreply_candidates
 			;;
-		migrate | reload | restart | preview | search | version) ;;
+		migrate | reload | restart | search | version) ;;
+		preview)
+			_bash-it-preview # completes itself
+			return 0
+			;;
 		enable | disable)
 			if [[ "${verb}" == "enable" ]]; then
 				suffix="disabled"
