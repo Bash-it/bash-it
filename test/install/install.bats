@@ -22,7 +22,7 @@ function local_setup_file() {
 
   assert_file_exist "$HOME/$BASH_IT_CONFIG_FILE"
 
-  assert_link_exist "$BASH_IT/enabled/150---general.aliases.bash"
+  assert_link_exist "$BASH_IT/enabled/750---general.aliases.bash"
   assert_link_exist "$BASH_IT/enabled/250---base.plugin.bash"
   assert_link_exist "$BASH_IT/enabled/800---aliases.completion.bash"
   assert_link_exist "$BASH_IT/enabled/350---bash-it.completion.bash"
