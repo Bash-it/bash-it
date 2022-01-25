@@ -1,14 +1,16 @@
 #!/usr/bin/env bats
 
 load ../test_helper
+load ../../lib/utilities
+load ../../lib/helpers
 load ../../completion/available/bash-it.completion
 
 function local_setup {
   setup_test_fixture
 }
 
-@test "completion bash-it: ensure that the _bash-it-comp function is available" {
-  type -a _bash-it-comp &> /dev/null
+@test "completion bash-it: ensure that the _bash-it function is available" {
+  type -a _bash-it &> /dev/null
   assert_success
 }
 
@@ -36,7 +38,7 @@ function __check_completion () {
   COMP_CWORD=$(( ${#COMP_WORDS[@]} - 1 ))
 
   # Run the Bash-it completion function
-  _bash-it-comp
+  _bash-it
 
   # Return the completion output
   echo "${COMPREPLY[@]}"
@@ -153,10 +155,10 @@ function __check_completion () {
 }
 
 @test "completion bash-it: disable - provide the a* aliases when atom is enabled with the old location and name" {
-  ln -s $BASH_IT/aliases/available/atom.aliases.bash $BASH_IT/aliases/enabled/atom.aliases.bash
+  ln -s "$BASH_IT/aliases/available/atom.aliases.bash" "$BASH_IT/aliases/enabled/atom.aliases.bash"
   assert_link_exist "$BASH_IT/aliases/enabled/atom.aliases.bash"
 
-  ln -s $BASH_IT/completion/available/apm.completion.bash $BASH_IT/completion/enabled/apm.completion.bash
+  ln -s "$BASH_IT/completion/available/apm.completion.bash" "$BASH_IT/completion/enabled/apm.completion.bash"
   assert_link_exist "$BASH_IT/completion/enabled/apm.completion.bash"
 
   run __check_completion 'bash-it disable alias a'
@@ -164,10 +166,10 @@ function __check_completion () {
 }
 
 @test "completion bash-it: disable - provide the a* aliases when atom is enabled with the old location and priority-based name" {
-  ln -s $BASH_IT/aliases/available/atom.aliases.bash $BASH_IT/aliases/enabled/150---atom.aliases.bash
+  ln -s "$BASH_IT/aliases/available/atom.aliases.bash" "$BASH_IT/aliases/enabled/150---atom.aliases.bash"
   assert_link_exist "$BASH_IT/aliases/enabled/150---atom.aliases.bash"
 
-  ln -s $BASH_IT/completion/available/apm.completion.bash $BASH_IT/completion/enabled/350---apm.completion.bash
+  ln -s "$BASH_IT/completion/available/apm.completion.bash" "$BASH_IT/completion/enabled/350---apm.completion.bash"
   assert_link_exist "$BASH_IT/completion/enabled/350---apm.completion.bash"
 
   run __check_completion 'bash-it disable alias a'
@@ -175,10 +177,10 @@ function __check_completion () {
 }
 
 @test "completion bash-it: disable - provide the a* aliases when atom is enabled with the new location and priority-based name" {
-  ln -s $BASH_IT/aliases/available/atom.aliases.bash $BASH_IT/enabled/150---atom.aliases.bash
+  ln -s "$BASH_IT/aliases/available/atom.aliases.bash" "$BASH_IT/enabled/150---atom.aliases.bash"
   assert_link_exist "$BASH_IT/enabled/150---atom.aliases.bash"
 
-  ln -s $BASH_IT/completion/available/apm.completion.bash $BASH_IT/enabled/350---apm.completion.bash
+  ln -s "$BASH_IT/completion/available/apm.completion.bash" "$BASH_IT/enabled/350---apm.completion.bash"
   assert_link_exist "$BASH_IT/enabled/350---apm.completion.bash"
 
   run __check_completion 'bash-it disable alias a'
@@ -186,10 +188,10 @@ function __check_completion () {
 }
 
 @test "completion bash-it: disable - provide the docker-machine plugin when docker-machine is enabled with the old location and name" {
-  ln -s $BASH_IT/aliases/available/docker-compose.aliases.bash $BASH_IT/aliases/enabled/docker-compose.aliases.bash
+  ln -s "$BASH_IT/aliases/available/docker-compose.aliases.bash" "$BASH_IT/aliases/enabled/docker-compose.aliases.bash"
   assert_link_exist "$BASH_IT/aliases/enabled/docker-compose.aliases.bash"
 
-  ln -s $BASH_IT/plugins/available/docker-machine.plugin.bash $BASH_IT/plugins/enabled/docker-machine.plugin.bash
+  ln -s "$BASH_IT/plugins/available/docker-machine.plugin.bash" "$BASH_IT/plugins/enabled/docker-machine.plugin.bash"
   assert_link_exist "$BASH_IT/plugins/enabled/docker-machine.plugin.bash"
 
   run __check_completion 'bash-it disable plugin docker'
@@ -197,10 +199,10 @@ function __check_completion () {
 }
 
 @test "completion bash-it: disable - provide the docker-machine plugin when docker-machine is enabled with the old location and priority-based name" {
-  ln -s $BASH_IT/aliases/available/docker-compose.aliases.bash $BASH_IT/aliases/enabled/150---docker-compose.aliases.bash
+  ln -s "$BASH_IT/aliases/available/docker-compose.aliases.bash" "$BASH_IT/aliases/enabled/150---docker-compose.aliases.bash"
   assert_link_exist "$BASH_IT/aliases/enabled/150---docker-compose.aliases.bash"
 
-  ln -s $BASH_IT/plugins/available/docker-machine.plugin.bash $BASH_IT/plugins/enabled/350---docker-machine.plugin.bash
+  ln -s "$BASH_IT/plugins/available/docker-machine.plugin.bash" "$BASH_IT/plugins/enabled/350---docker-machine.plugin.bash"
   assert_link_exist "$BASH_IT/plugins/enabled/350---docker-machine.plugin.bash"
 
   run __check_completion 'bash-it disable plugin docker'
@@ -208,10 +210,10 @@ function __check_completion () {
 }
 
 @test "completion bash-it: disable - provide the docker-machine plugin when docker-machine is enabled with the new location and priority-based name" {
-  ln -s $BASH_IT/aliases/available/docker-compose.aliases.bash $BASH_IT/enabled/150---docker-compose.aliases.bash
+  ln -s "$BASH_IT/aliases/available/docker-compose.aliases.bash" "$BASH_IT/enabled/150---docker-compose.aliases.bash"
   assert_link_exist "$BASH_IT/enabled/150---docker-compose.aliases.bash"
 
-  ln -s $BASH_IT/plugins/available/docker-machine.plugin.bash $BASH_IT/enabled/350---docker-machine.plugin.bash
+  ln -s "$BASH_IT/plugins/available/docker-machine.plugin.bash" "$BASH_IT/enabled/350---docker-machine.plugin.bash"
   assert_link_exist "$BASH_IT/enabled/350---docker-machine.plugin.bash"
 
   run __check_completion 'bash-it disable plugin docker'
@@ -219,10 +221,10 @@ function __check_completion () {
 }
 
 @test "completion bash-it: disable - provide the todo.txt-cli aliases when todo plugin is enabled with the old location and name" {
-  ln -s $BASH_IT/aliases/available/todo.txt-cli.aliases.bash $BASH_IT/aliases/enabled/todo.txt-cli.aliases.bash
+  ln -s "$BASH_IT/aliases/available/todo.txt-cli.aliases.bash" "$BASH_IT/aliases/enabled/todo.txt-cli.aliases.bash"
   assert_link_exist "$BASH_IT/aliases/enabled/todo.txt-cli.aliases.bash"
 
-  ln -s $BASH_IT/plugins/available/todo.plugin.bash $BASH_IT/plugins/enabled/todo.plugin.bash
+  ln -s "$BASH_IT/plugins/available/todo.plugin.bash" "$BASH_IT/plugins/enabled/todo.plugin.bash"
   assert_link_exist "$BASH_IT/plugins/enabled/todo.plugin.bash"
 
   run __check_completion 'bash-it disable alias to'
@@ -230,10 +232,10 @@ function __check_completion () {
 }
 
 @test "completion bash-it: disable - provide the todo.txt-cli aliases when todo plugin is enabled with the old location and priority-based name" {
-  ln -s $BASH_IT/aliases/available/todo.txt-cli.aliases.bash $BASH_IT/aliases/enabled/150---todo.txt-cli.aliases.bash
+  ln -s "$BASH_IT/aliases/available/todo.txt-cli.aliases.bash" "$BASH_IT/aliases/enabled/150---todo.txt-cli.aliases.bash"
   assert_link_exist "$BASH_IT/aliases/enabled/150---todo.txt-cli.aliases.bash"
 
-  ln -s $BASH_IT/plugins/available/todo.plugin.bash $BASH_IT/plugins/enabled/350---todo.plugin.bash
+  ln -s "$BASH_IT/plugins/available/todo.plugin.bash" "$BASH_IT/plugins/enabled/350---todo.plugin.bash"
   assert_link_exist "$BASH_IT/plugins/enabled/350---todo.plugin.bash"
 
   run __check_completion 'bash-it disable alias to'
@@ -241,10 +243,10 @@ function __check_completion () {
 }
 
 @test "completion bash-it: disable - provide the todo.txt-cli aliases when todo plugin is enabled with the new location and priority-based name" {
-  ln -s $BASH_IT/aliases/available/todo.txt-cli.aliases.bash $BASH_IT/enabled/150---todo.txt-cli.aliases.bash
+  ln -s "$BASH_IT/aliases/available/todo.txt-cli.aliases.bash" "$BASH_IT/enabled/150---todo.txt-cli.aliases.bash"
   assert_link_exist "$BASH_IT/enabled/150---todo.txt-cli.aliases.bash"
 
-  ln -s $BASH_IT/plugins/available/todo.plugin.bash $BASH_IT/enabled/350---todo.plugin.bash
+  ln -s "$BASH_IT/plugins/available/todo.plugin.bash" "$BASH_IT/enabled/350---todo.plugin.bash"
   assert_link_exist "$BASH_IT/enabled/350---todo.plugin.bash"
 
   run __check_completion 'bash-it disable alias to'
@@ -262,7 +264,7 @@ function __check_completion () {
 }
 
 @test "completion bash-it: enable - provide the a* aliases when atom is enabled with the old location and name" {
-  ln -s $BASH_IT/aliases/available/atom.aliases.bash $BASH_IT/aliases/enabled/atom.aliases.bash
+  ln -s "$BASH_IT/aliases/available/atom.aliases.bash" "$BASH_IT/aliases/enabled/atom.aliases.bash"
   assert_link_exist "$BASH_IT/aliases/enabled/atom.aliases.bash"
 
   run __check_completion 'bash-it enable alias a'
@@ -270,7 +272,7 @@ function __check_completion () {
 }
 
 @test "completion bash-it: enable - provide the a* aliases when atom is enabled with the old location and priority-based name" {
-  ln -s $BASH_IT/aliases/available/atom.aliases.bash $BASH_IT/aliases/enabled/150---atom.aliases.bash
+  ln -s "$BASH_IT/aliases/available/atom.aliases.bash" "$BASH_IT/aliases/enabled/150---atom.aliases.bash"
   assert_link_exist "$BASH_IT/aliases/enabled/150---atom.aliases.bash"
 
   run __check_completion 'bash-it enable alias a'
@@ -278,55 +280,55 @@ function __check_completion () {
 }
 
 @test "completion bash-it: enable - provide the a* aliases when atom is enabled with the new location and priority-based name" {
-  ln -s $BASH_IT/aliases/available/atom.aliases.bash $BASH_IT/enabled/150---atom.aliases.bash
+  ln -s "$BASH_IT/aliases/available/atom.aliases.bash" "$BASH_IT/enabled/150---atom.aliases.bash"
   assert_link_exist "$BASH_IT/enabled/150---atom.aliases.bash"
 
   run __check_completion 'bash-it enable alias a'
   assert_line -n 0 "all ag ansible apt"
 }
 
-@test "completion bash-it: enable - provide the docker-* plugins when nothing is enabled with the old location and name" {
-  ln -s $BASH_IT/aliases/available/docker-compose.aliases.bash $BASH_IT/aliases/enabled/docker-compose.aliases.bash
+@test "completion bash-it: enable - provide the docker* plugins when docker-compose is enabled with the old location and name" {
+  ln -s "$BASH_IT/aliases/available/docker-compose.aliases.bash" "$BASH_IT/aliases/enabled/docker-compose.aliases.bash"
   assert_link_exist "$BASH_IT/aliases/enabled/docker-compose.aliases.bash"
 
   run __check_completion 'bash-it enable plugin docker'
-  assert_line -n 0 "docker-compose docker-machine docker"
+  assert_line -n 0 "docker docker-compose docker-machine"
 }
 
-@test "completion bash-it: enable - provide the docker-* plugins when nothing is enabled with the old location and priority-based name" {
-  ln -s $BASH_IT/aliases/available/docker-compose.aliases.bash $BASH_IT/aliases/enabled/150---docker-compose.aliases.bash
+@test "completion bash-it: enable - provide the docker-* plugins when docker-compose is enabled with the old location and priority-based name" {
+  ln -s "$BASH_IT/aliases/available/docker-compose.aliases.bash" "$BASH_IT/aliases/enabled/150---docker-compose.aliases.bash"
   assert_link_exist "$BASH_IT/aliases/enabled/150---docker-compose.aliases.bash"
 
   run __check_completion 'bash-it enable plugin docker'
-  assert_line -n 0 "docker-compose docker-machine docker"
+  assert_line -n 0 "docker docker-compose docker-machine"
 }
 
-@test "completion bash-it: enable - provide the docker-* plugins when nothing is enabled with the new location and priority-based name" {
-  ln -s $BASH_IT/aliases/available/docker-compose.aliases.bash $BASH_IT/enabled/150---docker-compose.aliases.bash
+@test "completion bash-it: enable - provide the docker-* plugins when docker-compose is enabled with the new location and priority-based name" {
+  ln -s "$BASH_IT/aliases/available/docker-compose.aliases.bash" "$BASH_IT/enabled/150---docker-compose.aliases.bash"
   assert_link_exist "$BASH_IT/enabled/150---docker-compose.aliases.bash"
 
   run __check_completion 'bash-it enable plugin docker'
-  assert_line -n 0 "docker-compose docker-machine docker"
+  assert_line -n 0 "docker docker-compose docker-machine"
 }
 
-@test "completion bash-it: enable - provide the docker-* completions when nothing is enabled with the old location and name" {
-  ln -s $BASH_IT/aliases/available/docker-compose.aliases.bash $BASH_IT/aliases/enabled/docker-compose.aliases.bash
+@test "completion bash-it: enable - provide the docker* completions when docker-compose is enabled with the old location and name" {
+  ln -s "$BASH_IT/aliases/available/docker-compose.aliases.bash" "$BASH_IT/aliases/enabled/docker-compose.aliases.bash"
   assert_link_exist "$BASH_IT/aliases/enabled/docker-compose.aliases.bash"
 
   run __check_completion 'bash-it enable completion docker'
   assert_line -n 0 "docker docker-compose docker-machine"
 }
 
-@test "completion bash-it: enable - provide the docker-* completions when nothing is enabled with the old location and priority-based name" {
-  ln -s $BASH_IT/aliases/available/docker-compose.aliases.bash $BASH_IT/aliases/enabled/150---docker-compose.aliases.bash
+@test "completion bash-it: enable - provide the docker* completions when docker-compose is enabled with the old location and priority-based name" {
+  ln -s "$BASH_IT/aliases/available/docker-compose.aliases.bash" "$BASH_IT/aliases/enabled/150---docker-compose.aliases.bash"
   assert_link_exist "$BASH_IT/aliases/enabled/150---docker-compose.aliases.bash"
 
   run __check_completion 'bash-it enable completion docker'
   assert_line -n 0 "docker docker-compose docker-machine"
 }
 
-@test "completion bash-it: enable - provide the docker-* completions when nothing is enabled with the new location and priority-based name" {
-  ln -s $BASH_IT/aliases/available/docker-compose.aliases.bash $BASH_IT/enabled/150---docker-compose.aliases.bash
+@test "completion bash-it: enable - provide the docker* completions when docker-compose is enabled with the new location and priority-based name" {
+  ln -s "$BASH_IT/aliases/available/docker-compose.aliases.bash" "$BASH_IT/enabled/150---docker-compose.aliases.bash"
   assert_link_exist "$BASH_IT/enabled/150---docker-compose.aliases.bash"
 
   run __check_completion 'bash-it enable completion docker'
@@ -334,7 +336,7 @@ function __check_completion () {
 }
 
 @test "completion bash-it: enable - provide the todo.txt-cli aliases when todo plugin is enabled with the old location and name" {
-  ln -s $BASH_IT/plugins/available/todo.plugin.bash $BASH_IT/plugins/enabled/todo.plugin.bash
+  ln -s "$BASH_IT/plugins/available/todo.plugin.bash" "$BASH_IT/plugins/enabled/todo.plugin.bash"
   assert_link_exist "$BASH_IT/plugins/enabled/todo.plugin.bash"
 
   run __check_completion 'bash-it enable alias to'
@@ -342,7 +344,7 @@ function __check_completion () {
 }
 
 @test "completion bash-it: enable - provide the todo.txt-cli aliases when todo plugin is enabled with the old location and priority-based name" {
-  ln -s $BASH_IT/plugins/available/todo.plugin.bash $BASH_IT/plugins/enabled/350---todo.plugin.bash
+  ln -s "$BASH_IT/plugins/available/todo.plugin.bash" "$BASH_IT/plugins/enabled/350---todo.plugin.bash"
   assert_link_exist "$BASH_IT/plugins/enabled/350---todo.plugin.bash"
 
   run __check_completion 'bash-it enable alias to'
@@ -350,7 +352,7 @@ function __check_completion () {
 }
 
 @test "completion bash-it: enable - provide the todo.txt-cli aliases when todo plugin is enabled with the new location and priority-based name" {
-  ln -s $BASH_IT/plugins/available/todo.plugin.bash $BASH_IT/enabled/350---todo.plugin.bash
+  ln -s "$BASH_IT/plugins/available/todo.plugin.bash" "$BASH_IT/enabled/350---todo.plugin.bash"
   assert_link_exist "$BASH_IT/enabled/350---todo.plugin.bash"
 
   run __check_completion 'bash-it enable alias to'
