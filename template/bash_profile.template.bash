@@ -38,6 +38,9 @@ export IRC_CLIENT='irssi'
 # Set this to the command you use for todo.txt-cli
 export TODO="t"
 
+# Set this to the location of your work or project folders
+#BASH_IT_PROJECT_PATHS="${HOME}/Projects:/Volumes/work/src"
+
 # Set this to false to turn off version control status checking within the prompt for all themes
 export SCM_CHECK=true
 # Set to actual location of gitstatus directory if installed
