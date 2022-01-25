@@ -154,6 +154,7 @@ themes/command_duration.theme.bash
 themes/easy
 themes/essential
 themes/modern
+themes/norbu
 themes/pete
 themes/powerline
 themes/pure
