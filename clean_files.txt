@@ -80,6 +80,7 @@ completion/available/vuejs.completion.bash
 completion/available/wpscan.completion.bash
 
 # libraries
+lib/colors.bash
 lib/helpers.bash
 lib/log.bash
 lib/preexec.bash

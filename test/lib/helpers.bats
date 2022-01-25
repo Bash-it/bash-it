@@ -3,7 +3,7 @@
 load ../test_helper
 load ../test_helper_libs
 load ../../plugins/available/base.plugin
-load ../../themes/colors.theme
+load ../../lib/colors
 
 function local_setup {
   setup_test_fixture
