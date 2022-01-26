@@ -75,7 +75,7 @@ completion/available/minikube.completion.bash
 completion/available/minishift.completion.bash
 completion/available/ng.completion.bash
 completion/available/ngrok.completion.bash
-#completion/available/notify-send.completion.bash
+completion/available/notify-send.completion.bash
 completion/available/npm.completion.bash
 completion/available/nvm.completion.bash
 completion/available/openshift.completion.bash
