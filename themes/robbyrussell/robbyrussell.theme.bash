@@ -21,8 +21,6 @@ function git_prompt_info() {
 function venv_parenthases() {
 	if [[ $(venv_prompt) != "" ]]; then
 		echo "($(venv_prompt)) "
-	else
-		echo ""
 	fi
 }
 
