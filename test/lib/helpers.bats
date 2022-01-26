@@ -87,40 +87,40 @@ function local_setup {
 }
 
 @test "helpers: bash-it help list aliases with ag aliases enabled" {
-  ln -s $BASH_IT/aliases/available/ag.aliases.bash $BASH_IT/aliases/enabled/150---ag.aliases.bash
-  assert_link_exist "$BASH_IT/aliases/enabled/150---ag.aliases.bash"
+  ln -s $BASH_IT/aliases/available/ag.aliases.bash $BASH_IT/aliases/enabled/750---ag.aliases.bash
+  assert_link_exist "$BASH_IT/aliases/enabled/750---ag.aliases.bash"
 
-  run _help-list-aliases "$BASH_IT/aliases/enabled/150---ag.aliases.bash"
+  run _help-list-aliases "$BASH_IT/aliases/enabled/750---ag.aliases.bash"
   assert_line -n 0 "ag:"
 }
 
 @test "helpers: bash-it help list aliases with todo.txt-cli aliases enabled" {
-  ln -s $BASH_IT/aliases/available/todo.txt-cli.aliases.bash $BASH_IT/aliases/enabled/150---todo.txt-cli.aliases.bash
-  assert_link_exist "$BASH_IT/aliases/enabled/150---todo.txt-cli.aliases.bash"
+  ln -s $BASH_IT/aliases/available/todo.txt-cli.aliases.bash $BASH_IT/aliases/enabled/750---todo.txt-cli.aliases.bash
+  assert_link_exist "$BASH_IT/aliases/enabled/750---todo.txt-cli.aliases.bash"
 
-  run _help-list-aliases "$BASH_IT/aliases/enabled/150---todo.txt-cli.aliases.bash"
+  run _help-list-aliases "$BASH_IT/aliases/enabled/750---todo.txt-cli.aliases.bash"
   assert_line -n 0 "todo.txt-cli:"
 }
 
 @test "helpers: bash-it help list aliases with docker-compose aliases enabled" {
-  ln -s $BASH_IT/aliases/available/docker-compose.aliases.bash $BASH_IT/aliases/enabled/150---docker-compose.aliases.bash
-  assert_link_exist "$BASH_IT/aliases/enabled/150---docker-compose.aliases.bash"
+  ln -s $BASH_IT/aliases/available/docker-compose.aliases.bash $BASH_IT/aliases/enabled/750---docker-compose.aliases.bash
+  assert_link_exist "$BASH_IT/aliases/enabled/750---docker-compose.aliases.bash"
 
-  run _help-list-aliases "$BASH_IT/aliases/enabled/150---docker-compose.aliases.bash"
+  run _help-list-aliases "$BASH_IT/aliases/enabled/750---docker-compose.aliases.bash"
   assert_line -n 0 "docker-compose:"
 }
 
 @test "helpers: bash-it help list aliases with ag aliases enabled in global directory" {
-  ln -s $BASH_IT/aliases/available/ag.aliases.bash $BASH_IT/enabled/150---ag.aliases.bash
-  assert_link_exist "$BASH_IT/enabled/150---ag.aliases.bash"
+  ln -s $BASH_IT/aliases/available/ag.aliases.bash $BASH_IT/enabled/750---ag.aliases.bash
+  assert_link_exist "$BASH_IT/enabled/750---ag.aliases.bash"
 
-  run _help-list-aliases "$BASH_IT/enabled/150---ag.aliases.bash"
+  run _help-list-aliases "$BASH_IT/enabled/750---ag.aliases.bash"
   assert_line -n 0 "ag:"
 }
 
 @test "helpers: bash-it help aliases one alias enabled in the old directory" {
-  ln -s $BASH_IT/aliases/available/ag.aliases.bash $BASH_IT/aliases/enabled/150---ag.aliases.bash
-  assert_link_exist "$BASH_IT/aliases/enabled/150---ag.aliases.bash"
+  ln -s $BASH_IT/aliases/available/ag.aliases.bash $BASH_IT/aliases/enabled/750---ag.aliases.bash
+  assert_link_exist "$BASH_IT/aliases/enabled/750---ag.aliases.bash"
 
   run bash-it help aliases
   assert_line -n 0 "ag:"
@@ -128,8 +128,8 @@ function local_setup {
 
 @test "helpers: bash-it help aliases one alias enabled in global directory" {
   run bash-it enable alias "ag"
-  assert_line -n 0 'ag enabled with priority 150.'
-  assert_link_exist "$BASH_IT/enabled/150---ag.aliases.bash"
+  assert_line -n 0 'ag enabled with priority 750.'
+  assert_link_exist "$BASH_IT/enabled/750---ag.aliases.bash"
 
   run bash-it enable plugin "aws"
   assert_line -n 0 'aws enabled with priority 250.'
@@ -142,14 +142,14 @@ function local_setup {
 
 @test "helpers: enable the todo.txt-cli aliases through the bash-it function" {
   run bash-it enable alias "todo.txt-cli"
-  assert_line -n 0 'todo.txt-cli enabled with priority 150.'
-  assert_link_exist "$BASH_IT/enabled/150---todo.txt-cli.aliases.bash"
+  assert_line -n 0 'todo.txt-cli enabled with priority 750.'
+  assert_link_exist "$BASH_IT/enabled/750---todo.txt-cli.aliases.bash"
 }
 
 @test "helpers: enable the curl aliases" {
   run _enable-alias "curl"
-  assert_line -n 0 'curl enabled with priority 150.'
-  assert_link_exist "$BASH_IT/enabled/150---curl.aliases.bash"
+  assert_line -n 0 'curl enabled with priority 750.'
+  assert_link_exist "$BASH_IT/enabled/750---curl.aliases.bash"
 }
 
 @test "helpers: enable the apm completion through the bash-it function" {
@@ -294,7 +294,7 @@ function local_setup {
   run _bash-it-profile-load "default"
   assert_success
 
-  assert_link_exist "$BASH_IT/enabled/150---general.aliases.bash"
+  assert_link_exist "$BASH_IT/enabled/750---general.aliases.bash"
   assert_link_exist "$BASH_IT/enabled/250---base.plugin.bash"
   assert_link_exist "$BASH_IT/enabled/800---aliases.completion.bash"
   assert_link_exist "$BASH_IT/enabled/350---bash-it.completion.bash"
@@ -354,7 +354,7 @@ function local_setup {
   run _enable-completion "system"
 
   run _bash-it-profile-load "test"
-  assert_link_not_exist "$BASH_IT/enabled/150---general.aliases.bash"
+  assert_link_not_exist "$BASH_IT/enabled/750---general.aliases.bash"
   assert_link_not_exist "$BASH_IT/enabled/250---base.plugin.bash"
   assert_link_not_exist "$BASH_IT/enabled/800---aliases.completion.bash"
   assert_link_not_exist "$BASH_IT/enabled/350---bash-it.completion.bash"
@@ -372,9 +372,9 @@ function local_setup {
   assert_success
 
   run _disable-alias "general"
-  assert_link_not_exist "$BASH_IT/enabled/150---general.aliases.bash"
+  assert_link_not_exist "$BASH_IT/enabled/750---general.aliases.bash"
   run _bash-it-profile-load "test"
-  assert_link_exist "$BASH_IT/enabled/150---general.aliases.bash"
+  assert_link_exist "$BASH_IT/enabled/750---general.aliases.bash"
 }
 
 @test "helpers: profile load corrupted profile file: bad component" {
@@ -472,12 +472,12 @@ function local_setup {
   run _bash-it-migrate
   assert_line -n 0 'Migrating alias todo.txt-cli.'
   assert_line -n 1 'todo.txt-cli disabled.'
-  assert_line -n 2 'todo.txt-cli enabled with priority 150.'
+  assert_line -n 2 'todo.txt-cli enabled with priority 750.'
 
   assert_link_exist "$BASH_IT/enabled/225---nvm.plugin.bash"
   assert_link_exist "$BASH_IT/enabled/250---node.plugin.bash"
   assert_link_exist "$BASH_IT/enabled/250---ssh.plugin.bash"
-  assert_link_exist "$BASH_IT/enabled/150---todo.txt-cli.aliases.bash"
+  assert_link_exist "$BASH_IT/enabled/750---todo.txt-cli.aliases.bash"
   assert [ ! -L "$BASH_IT/plugins/enabled/node.plugin.bash" ]
   assert [ ! -L "$BASH_IT/plugins/enabled/nvm.plugin.bash" ]
   assert [ ! -L "$BASH_IT/aliases/enabled/todo.txt-cli.aliases.bash" ]
@@ -500,7 +500,7 @@ function local_setup {
   assert_link_exist "$BASH_IT/enabled/225---nvm.plugin.bash"
   assert_link_exist "$BASH_IT/enabled/250---node.plugin.bash"
   assert_link_exist "$BASH_IT/enabled/250---ssh.plugin.bash"
-  assert_link_exist "$BASH_IT/enabled/150---todo.txt-cli.aliases.bash"
+  assert_link_exist "$BASH_IT/enabled/750---todo.txt-cli.aliases.bash"
   assert [ ! -L "$BASH_IT/plugins/enabled/225----node.plugin.bash" ]
   assert [ ! -L "$BASH_IT/plugins/enabled/250----nvm.plugin.bash" ]
   assert [ ! -L "$BASH_IT/aliases/enabled/250----todo.txt-cli.aliases.bash" ]
@@ -641,12 +641,12 @@ function __migrate_all_components() {
   assert_equal "$available" "$enabled"
 
   run _enable-alias "ag"
-  assert_link_exist "$BASH_IT/enabled/150---ag.aliases.bash"
+  assert_link_exist "$BASH_IT/enabled/750---ag.aliases.bash"
 
   run _disable-plugin "all"
   local enabled2=$(find $BASH_IT/enabled -name [0-9]*.plugin.bash | wc -l | xargs)
   assert_equal "0" "$enabled2"
-  assert_link_exist "$BASH_IT/enabled/150---ag.aliases.bash"
+  assert_link_exist "$BASH_IT/enabled/750---ag.aliases.bash"
 }
 
 @test "helpers: disable all plugins in the old directory structure" {
@@ -660,12 +660,12 @@ function __migrate_all_components() {
   assert_equal "2" "$enabled"
 
   run _enable-alias "ag"
-  assert_link_exist "$BASH_IT/enabled/150---ag.aliases.bash"
+  assert_link_exist "$BASH_IT/enabled/750---ag.aliases.bash"
 
   run _disable-plugin "all"
   local enabled2=$(find $BASH_IT/plugins/enabled -name *.plugin.bash | wc -l | xargs)
   assert_equal "0" "$enabled2"
-  assert_link_exist "$BASH_IT/enabled/150---ag.aliases.bash"
+  assert_link_exist "$BASH_IT/enabled/750---ag.aliases.bash"
 }
 
 @test "helpers: disable all plugins in the old directory structure with priority" {
@@ -679,12 +679,12 @@ function __migrate_all_components() {
   assert_equal "2" "$enabled"
 
   run _enable-alias "ag"
-  assert_link_exist "$BASH_IT/enabled/150---ag.aliases.bash"
+  assert_link_exist "$BASH_IT/enabled/750---ag.aliases.bash"
 
   run _disable-plugin "all"
   local enabled2=$(find $BASH_IT/plugins/enabled -name *.plugin.bash | wc -l | xargs)
   assert_equal "0" "$enabled2"
-  assert_link_exist "$BASH_IT/enabled/150---ag.aliases.bash"
+  assert_link_exist "$BASH_IT/enabled/750---ag.aliases.bash"
 }
 
 @test "helpers: disable all plugins without anything enabled" {
@@ -692,18 +692,18 @@ function __migrate_all_components() {
   assert_equal "0" "$enabled"
 
   run _enable-alias "ag"
-  assert_link_exist "$BASH_IT/enabled/150---ag.aliases.bash"
+  assert_link_exist "$BASH_IT/enabled/750---ag.aliases.bash"
 
   run _disable-plugin "all"
   local enabled2=$(find $BASH_IT/enabled -name [0-9]*.plugin.bash | wc -l | xargs)
   assert_equal "0" "$enabled2"
-  assert_link_exist "$BASH_IT/enabled/150---ag.aliases.bash"
+  assert_link_exist "$BASH_IT/enabled/750---ag.aliases.bash"
 }
 
 @test "helpers: enable the ansible aliases through the bash-it function" {
   run bash-it enable alias "ansible"
-  assert_line -n 0 'ansible enabled with priority 150.'
-  assert_link_exist "$BASH_IT/enabled/150---ansible.aliases.bash"
+  assert_line -n 0 'ansible enabled with priority 750.'
+  assert_link_exist "$BASH_IT/enabled/750---ansible.aliases.bash"
 }
 
 @test "helpers: describe the nvm plugin without enabling it" {

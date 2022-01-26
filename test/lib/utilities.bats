@@ -14,7 +14,7 @@ function local_setup {
 
 @test "_bash-it-component-item-is-enabled() - for an enabled/disabled item" {
   run bash-it enable alias svn
-  assert_line -n 0 'svn enabled with priority 150.'
+  assert_line -n 0 'svn enabled with priority 750.'
 
   run _bash-it-component-item-is-enabled alias svn
   assert_success
@@ -37,7 +37,7 @@ function local_setup {
 
 @test "_bash-it-component-item-is-disabled() - for an enabled/disabled item" {
   run bash-it enable alias svn
-  assert_line -n 0 'svn enabled with priority 150.'
+  assert_line -n 0 'svn enabled with priority 750.'
 
   run _bash-it-component-item-is-disabled alias svn
   assert_failure
