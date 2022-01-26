@@ -625,3 +625,14 @@ function _save-and-reload-history() {
 	local autosave=${1:-0}
 	[[ $autosave -eq 1 ]] && history -a && history -c && history -r
 }
+
+function venv_prompt() {
+	local python_venv=""
+	if [[ -n "${CONDA_DEFAULT_ENV:-}" ]]; then
+		python_venv="${CONDA_DEFAULT_ENV}"
+		PYTHON_VENV_CHAR=${CONDA_PYTHON_VENV_CHAR}
+	elif [[ -n "${VIRTUAL_ENV:-}" ]]; then
+		python_venv="${VIRTUAL_ENV##*/}"
+	fi
+	[[ -n "${python_venv}" ]] && echo "${PYTHON_VENV_CHAR}${python_venv}"
+}
