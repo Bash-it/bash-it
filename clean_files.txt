@@ -101,7 +101,7 @@ completion/available/travis.completion.bash
 completion/available/vault.completion.bash
 completion/available/virsh.completion.bash
 #completion/available/virtualbox.completion.bash
-#completion/available/vuejs.completion.bash
+completion/available/vuejs.completion.bash
 completion/available/wpscan.completion.bash
 
 # libraries
