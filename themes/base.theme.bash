@@ -206,14 +206,14 @@ function scm_prompt_info_common() {
 function terraform_workspace_prompt() {
 	if _command_exists terraform; then
 		if [[ -d .terraform ]]; then
-			echo -e "$(terraform workspace show 2> /dev/null)"
+			terraform workspace show 2> /dev/null
 		fi
 	fi
 }
 
 function active_gcloud_account_prompt() {
 	if _command_exists gcloud; then
-		echo -e "$(gcloud config list account --format "value(core.account)" 2> /dev/null)"
+		gcloud config list account --format "value(core.account)" 2> /dev/null
 	fi
 }
 
@@ -291,7 +291,7 @@ function git_prompt_vars() {
 			unstaged_count="${VCS_STATUS_NUM_UNSTAGED?}"
 			staged_count="${VCS_STATUS_NUM_STAGED?}"
 		else
-			IFS=$'\t' read -r untracked_count unstaged_count staged_count <<< "$(_git-status-counts)"
+			IFS=$'\t' read -r untracked_count unstaged_count staged_count < <(_git-status-counts)
 		fi
 		if [[ "${untracked_count}" -gt 0 || "${unstaged_count}" -gt 0 || "${staged_count}" -gt 0 ]]; then
 			SCM_DIRTY=1
@@ -310,14 +310,17 @@ function git_prompt_vars() {
 	SCM_PREFIX="${GIT_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}"
 	SCM_SUFFIX="${GIT_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}"
 
-	SCM_CHANGE=$(_git-short-sha 2> /dev/null || echo "")
+	SCM_CHANGE=$(_git-short-sha 2> /dev/null || true)
 }
 
 function p4_prompt_vars() {
+	local opened_count non_default_changes default_count \
+		add_file_count edit_file_count delete_file_count
+
 	IFS=$'\t' read -r \
 		opened_count non_default_changes default_count \
 		add_file_count edit_file_count delete_file_count \
-		<<< "$(_p4-opened-counts)"
+		< <(_p4-opened-counts)
 	if [[ "${opened_count}" -gt 0 ]]; then
 		SCM_DIRTY=1
 		SCM_STATE="${SCM_THEME_PROMPT_DIRTY}"
@@ -334,7 +337,7 @@ function p4_prompt_vars() {
 }
 
 function svn_prompt_vars() {
-	if [[ -n $(svn status | head -c1 2> /dev/null) ]]; then
+	if [[ -n "$(svn status | head -c1 2> /dev/null)" ]]; then
 		SCM_DIRTY=1
 		SCM_STATE="${SVN_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}"
 	else
@@ -407,7 +410,7 @@ function nvm_version_prompt() {
 }
 
 function node_version_prompt() {
-	echo -e "$(nvm_version_prompt)"
+	nvm_version_prompt
 }
 
 function rvm_version_prompt() {
@@ -457,14 +460,15 @@ function ruby_version_prompt() {
 }
 
 function k8s_context_prompt() {
-	echo -e "$(kubectl config current-context 2> /dev/null)"
+	kubectl config current-context 2> /dev/null
 }
 
 function k8s_namespace_prompt() {
-	echo -e "$(kubectl config view --minify --output 'jsonpath={..namespace}' 2> /dev/null)"
+	kubectl config view --minify --output 'jsonpath={..namespace}' 2> /dev/null
 }
 
 function virtualenv_prompt() {
+	local virtualenv
 	if [[ -n "${VIRTUAL_ENV:-}" ]]; then
 		virtualenv="${VIRTUAL_ENV##*/}"
 		echo -e "$VIRTUALENV_THEME_PROMPT_PREFIX$virtualenv$VIRTUALENV_THEME_PROMPT_SUFFIX"
@@ -507,13 +511,13 @@ function clock_char() {
 }
 
 function clock_prompt() {
-	local CLOCK_COLOR="${THEME_CLOCK_COLOR:-${normal?}}"
-	local CLOCK_FORMAT="${THEME_CLOCK_FORMAT:-"%H:%M:%S"}"
-	local SHOW_CLOCK="${THEME_SHOW_CLOCK:-${THEME_CLOCK_CHECK:-true}}"
-	local CLOCK_STRING="\D{${CLOCK_FORMAT}}"
+	local clock_color="${THEME_CLOCK_COLOR:-${normal?}}"
+	local clock_format="${THEME_CLOCK_FORMAT:-"%H:%M:%S"}"
+	local show_clock="${THEME_SHOW_CLOCK:-${THEME_CLOCK_CHECK:-true}}"
+	local clock_string="\D{${clock_format}}"
 
-	if [[ "${SHOW_CLOCK}" == "true" ]]; then
-		echo -e "${CLOCK_COLOR}${CLOCK_THEME_PROMPT_PREFIX}${CLOCK_STRING}${CLOCK_THEME_PROMPT_SUFFIX}"
+	if [[ "${show_clock}" == "true" ]]; then
+		echo -e "${clock_color}${CLOCK_THEME_PROMPT_PREFIX}${clock_string}${CLOCK_THEME_PROMPT_SUFFIX}"
 	fi
 }
 
