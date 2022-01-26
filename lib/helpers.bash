@@ -654,14 +654,9 @@ function _bash-it-restart() {
 	_about 'restarts the shell in order to fully reload it'
 	_group 'lib'
 
-	local saved_pwd="${PWD}" init_file
+	local saved_pwd="${PWD}" init_file="${BASH_IT_BASHRC:-${HOME?}/.bashrc}"
 
-	if shopt -q login_shell; then
-		init_file=.bash_profile
-	else
-		init_file=.bashrc
-	fi
-	exec "${0/-/}" --rcfile <(echo "source \"$HOME/$init_file\"; cd \"$saved_pwd\"")
+	exec "${0/-/}" --rcfile <(echo "source \"${init_file}\"; cd \"$saved_pwd\"")
 }
 
 function _bash-it-reload() {
@@ -669,15 +664,8 @@ function _bash-it-reload() {
 	_group 'lib'
 
 	pushd "${BASH_IT?}" > /dev/null || return
-
 	# shellcheck disable=SC1090
-	if shopt -q login_shell; then
-		# shellcheck source-path=$HOME
-		source ~/.bash_profile
-	else
-		# shellcheck source-path=$HOME
-		source ~/.bashrc
-	fi
+	source "${BASH_IT_BASHRC:-${HOME?}/.bashrc}"
 	popd > /dev/null || return
 }
 
