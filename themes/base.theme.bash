@@ -88,21 +88,21 @@ RBENV_THEME_PROMPT_SUFFIX='|'
 RBFU_THEME_PROMPT_PREFIX=' |'
 RBFU_THEME_PROMPT_SUFFIX='|'
 
-: "${GIT_EXE:=$SCM_GIT}"
-: "${P4_EXE:=$SCM_P4}"
-: "${HG_EXE:=$SCM_HG}"
-: "${SVN_EXE:=$SCM_SVN}"
+: "${GIT_EXE:=${SCM_GIT?}}"
+: "${HG_EXE:=${SCM_HG?}}"
+: "${SVN_EXE:=${SCM_SVN?}}"
+: "${P4_EXE:=${SCM_P4?}}"
 
 function _bash_it_appearance_scm_init() {
-	GIT_EXE="$(type -P "${SCM_GIT}" || true)"
-	P4_EXE="$(type -P "${SCM_P4}" || true)"
-	HG_EXE="$(type -P "${SCM_HG}" || true)"
-	SVN_EXE="$(type -P "${SCM_SVN}" || true)"
+	GIT_EXE="$(type -P "${SCM_GIT:-git}" || true)"
+	HG_EXE="$(type -P "${SCM_HG:-hg}" || true)"
+	SVN_EXE="$(type -P "${SCM_SVN:-svn}" || true)"
+	P4_EXE="$(type -P "${SCM_P4:-p4}" || true)"
 
 	# Check for broken SVN exe that is caused by some versions of Xcode.
 	# See https://github.com/Bash-it/bash-it/issues/1612 for more details.
-	if [[ -x "$SVN_EXE" && -x "${SVN_EXE%/*}/xcrun" ]]; then
-		if ! "$SVN_EXE" --version > /dev/null 2>&1; then
+	if [[ -x "${SVN_EXE-}" && -x "${SVN_EXE%/svn}/xcrun" ]]; then
+		if ! "${SVN_EXE}" --version > /dev/null 2>&1; then
 			# Unset the SVN exe variable so that SVN commands are avoided.
 			SVN_EXE=""
 		fi
@@ -112,51 +112,61 @@ function _bash_it_appearance_scm_init() {
 _bash_it_library_finalize_hook+=('_bash_it_appearance_scm_init')
 
 function scm() {
-	if [[ "$SCM_CHECK" == false ]]; then
-		SCM="$SCM_NONE"
-	elif [[ -f .git/HEAD ]] && [[ -x "$GIT_EXE" ]]; then
-		SCM="$SCM_GIT"
-	elif [[ -d .hg ]] && [[ -x "$HG_EXE" ]]; then
-		SCM="$SCM_HG"
-	elif [[ -d .svn ]] && [[ -x "$SVN_EXE" ]]; then
-		SCM="$SCM_SVN"
-	elif [[ -x "$GIT_EXE" ]] && [[ -n "$(git rev-parse --is-inside-work-tree 2> /dev/null)" ]]; then
-		SCM="$SCM_GIT"
-	elif [[ -x "$HG_EXE" ]] && [[ -n "$(hg root 2> /dev/null)" ]]; then
-		SCM="$SCM_HG"
-	elif [[ -x "$SVN_EXE" ]] && [[ -n "$(svn info --show-item wc-root 2> /dev/null)" ]]; then
-		SCM="$SCM_SVN"
-	elif [[ -x "$P4_EXE" ]] && [[ -n "$(p4 set P4CLIENT 2> /dev/null)" ]]; then
-		SCM="$SCM_P4"
+	if [[ "${SCM_CHECK:-true}" == "false" ]]; then
+		SCM="${SCM_NONE-NONE}"
+	elif [[ -f .git/HEAD ]] && [[ -x "${GIT_EXE-}" ]]; then
+		SCM="${SCM_GIT?}"
+	elif [[ -d .hg ]] && [[ -x "${HG_EXE-}" ]]; then
+		SCM="${SCM_HG?}"
+	elif [[ -d .svn ]] && [[ -x "${SVN_EXE-}" ]]; then
+		SCM="${SCM_SVN?}"
+	elif [[ -x "${GIT_EXE-}" ]] && [[ -n "$(git rev-parse --is-inside-work-tree 2> /dev/null)" ]]; then
+		SCM="${SCM_GIT?}"
+	elif [[ -x "${HG_EXE-}" ]] && [[ -n "$(hg root 2> /dev/null)" ]]; then
+		SCM="${SCM_HG?}"
+	elif [[ -x "${SVN_EXE-}" ]] && [[ -n "$(svn info --show-item wc-root 2> /dev/null)" ]]; then
+		SCM="${SCM_SVN?}"
+	elif [[ -x "${P4_EXE-}" ]] && [[ -n "$(p4 set P4CLIENT 2> /dev/null)" ]]; then
+		SCM="${SCM_P4?}"
 	else
-		SCM="$SCM_NONE"
+		SCM="${SCM_NONE-NONE}"
 	fi
 }
 
 function scm_prompt() {
-	local CHAR
-	CHAR="$(scm_char)"
-	local format="${SCM_PROMPT_FORMAT:-'[%s%s]'}"
+	local format="${SCM_PROMPT_FORMAT-"[%s%s]"}"
+	local scm_char scm_prompt_info
+	scm_char="$(scm_char)"
+	scm_prompt_info="$(scm_prompt_info)"
 
-	if [[ "${CHAR}" != "$SCM_NONE_CHAR" ]]; then
+	if [[ "${scm_char}" != "${SCM_NONE_CHAR:-}" ]]; then
 		# shellcheck disable=2059
-		printf "$format\n" "$CHAR" "$(scm_prompt_info)"
+		printf "${format}" "${scm_char}" "${scm_prompt_info}"
 	fi
 }
 
 function scm_prompt_char() {
-	if [[ -z "$SCM" ]]; then scm; fi
-	if [[ $SCM == "$SCM_GIT" ]]; then
-		SCM_CHAR="$SCM_GIT_CHAR"
-	elif [[ $SCM == "$SCM_P4" ]]; then
-		SCM_CHAR="$SCM_P4_CHAR"
-	elif [[ $SCM == "$SCM_HG" ]]; then
-		SCM_CHAR="$SCM_HG_CHAR"
-	elif [[ $SCM == "$SCM_SVN" ]]; then
-		SCM_CHAR="$SCM_SVN_CHAR"
-	else
-		SCM_CHAR="$SCM_NONE_CHAR"
+	if [[ -z "${SCM:-}" ]]; then
+		scm
 	fi
+
+	case ${SCM?} in
+		"${SCM_GIT?}")
+			SCM_CHAR="${SCM_GIT_CHAR?}"
+			;;
+		"${SCM_HG?}")
+			SCM_CHAR="${SCM_HG_CHAR?}"
+			;;
+		"${SCM_SVN?}")
+			SCM_CHAR="${SCM_SVN_CHAR?}"
+			;;
+		"${SCM_P4?}")
+			SCM_CHAR="${SCM_P4_CHAR?}"
+			;;
+		*)
+			SCM_CHAR="${SCM_NONE_CHAR:-}"
+			;;
+	esac
 }
 
 function scm_prompt_vars() {
@@ -164,10 +174,9 @@ function scm_prompt_vars() {
 	scm_prompt_char
 	SCM_DIRTY=0
 	SCM_STATE=''
-	[[ $SCM == "$SCM_GIT" ]] && git_prompt_vars && return
-	[[ $SCM == "$SCM_P4" ]] && p4_prompt_vars && return
-	[[ $SCM == "$SCM_HG" ]] && hg_prompt_vars && return
-	[[ $SCM == "$SCM_SVN" ]] && svn_prompt_vars && return
+
+	local prompt_vars="${SCM}_prompt_vars"
+	_is_function "${prompt_vars}" && "${prompt_vars}"
 }
 
 function scm_prompt_info() {
@@ -178,29 +187,31 @@ function scm_prompt_info() {
 
 function scm_prompt_char_info() {
 	scm_prompt_char
-	echo -ne "${SCM_THEME_CHAR_PREFIX}${SCM_CHAR}${SCM_THEME_CHAR_SUFFIX}"
+	echo -ne "${SCM_THEME_CHAR_PREFIX-}${SCM_CHAR?}${SCM_THEME_CHAR_SUFFIX-}"
 	scm_prompt_info_common
 }
 
 function scm_prompt_info_common() {
+	local prompt_info
 	SCM_DIRTY=0
 	SCM_STATE=''
 
-	if [[ ${SCM} == "${SCM_GIT}" ]]; then
-		if [[ ${SCM_GIT_SHOW_MINIMAL_INFO} == true ]]; then
-			# user requests minimal git status information
-			git_prompt_minimal_info
-		else
-			# more detailed git status
-			git_prompt_info
-		fi
-		return
-	fi
-
-	# TODO: consider adding minimal status information for hg and svn
-	{ [[ ${SCM} == "${SCM_P4}" ]] && p4_prompt_info && return; } || true
-	{ [[ ${SCM} == "${SCM_HG}" ]] && hg_prompt_info && return; } || true
-	{ [[ ${SCM} == "${SCM_SVN}" ]] && svn_prompt_info && return; } || true
+	case ${SCM?} in
+		"${SCM_GIT?}")
+			if [[ ${SCM_GIT_SHOW_MINIMAL_INFO:-false} == "true" ]]; then
+				# user requests minimal git status information
+				prompt_info="${SCM}_prompt_minimal_info"
+			else
+				# more detailed git status
+				prompt_info="${SCM}_prompt_info"
+			fi
+			;;
+		*)
+			# TODO: consider adding minimal status information for hg and svn
+			prompt_info="${SCM}_prompt_info"
+			;;
+	esac
+	_is_function "${prompt_info}" && "${prompt_info}"
 }
 
 function terraform_workspace_prompt() {
@@ -218,25 +229,25 @@ function active_gcloud_account_prompt() {
 }
 
 function git_prompt_minimal_info() {
-	SCM_STATE="${SCM_THEME_PROMPT_CLEAN}"
+	SCM_STATE="${SCM_THEME_PROMPT_CLEAN?}"
 
 	_git-hide-status && return
 
-	SCM_BRANCH="${SCM_THEME_BRANCH_PREFIX}\$(_git-friendly-ref)"
+	SCM_BRANCH="${SCM_THEME_BRANCH_PREFIX-}\$(_git-friendly-ref)"
 
 	if [[ -n "$(_git-status | tail -n1)" ]]; then
 		SCM_DIRTY=1
-		SCM_STATE="${SCM_THEME_PROMPT_DIRTY}"
+		SCM_STATE="${SCM_THEME_PROMPT_DIRTY?}"
 	fi
 
 	# Output the git prompt
-	SCM_PREFIX="${SCM_THEME_PROMPT_PREFIX}"
-	SCM_SUFFIX="${SCM_THEME_PROMPT_SUFFIX}"
-	echo -e "${SCM_PREFIX}${SCM_BRANCH}${SCM_STATE}${SCM_SUFFIX}"
+	SCM_PREFIX="${SCM_THEME_PROMPT_PREFIX-}"
+	SCM_SUFFIX="${SCM_THEME_PROMPT_SUFFIX-}"
+	echo -ne "${SCM_PREFIX}${SCM_BRANCH}${SCM_STATE}${SCM_SUFFIX}"
 }
 
 function git_prompt_vars() {
-	if "${SCM_GIT_USE_GITSTATUS:-false}" && _command_exists gitstatus_query && gitstatus_query && [[ "${VCS_STATUS_RESULT:-}" == "ok-sync" ]]; then
+	if [[ "${SCM_GIT_USE_GITSTATUS:-false}" != "false" ]] && _command_exists gitstatus_query && gitstatus_query && [[ "${VCS_STATUS_RESULT:-}" == "ok-sync" ]]; then
 		# we can use faster gitstatus
 		# use this variable in githelpers and below to choose gitstatus output
 		SCM_GIT_GITSTATUS_RAN=true
@@ -300,15 +311,15 @@ function git_prompt_vars() {
 				[[ "${unstaged_count}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_GIT_UNSTAGED_CHAR}${unstaged_count}" && SCM_DIRTY=2
 				[[ "${untracked_count}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_GIT_UNTRACKED_CHAR}${untracked_count}" && SCM_DIRTY=1
 			fi
-			SCM_STATE="${GIT_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}"
+			SCM_STATE="${GIT_THEME_PROMPT_DIRTY:-${SCM_THEME_PROMPT_DIRTY?}}"
 		fi
 	fi
 
 	# no if for gitstatus here, user extraction is not supported by it
 	[[ "${SCM_GIT_SHOW_CURRENT_USER}" == "true" ]] && SCM_BRANCH+="$(git_user_info)"
 
-	SCM_PREFIX="${GIT_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}"
-	SCM_SUFFIX="${GIT_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}"
+	SCM_PREFIX="${GIT_THEME_PROMPT_PREFIX:-${SCM_THEME_PROMPT_PREFIX-}}"
+	SCM_SUFFIX="${GIT_THEME_PROMPT_SUFFIX:-${SCM_THEME_PROMPT_SUFFIX-}}"
 
 	SCM_CHANGE=$(_git-short-sha 2> /dev/null || true)
 }
@@ -323,65 +334,45 @@ function p4_prompt_vars() {
 		< <(_p4-opened-counts)
 	if [[ "${opened_count}" -gt 0 ]]; then
 		SCM_DIRTY=1
-		SCM_STATE="${SCM_THEME_PROMPT_DIRTY}"
-		[[ "${opened_count}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_P4_OPENED_CHAR}${opened_count}"
-		[[ "${non_default_changes}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_P4_CHANGES_CHAR}${non_default_changes}"
-		[[ "${default_count}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_P4_DEFAULT_CHAR}${default_count}"
+		SCM_STATE="${SCM_THEME_PROMPT_DIRTY?}"
+		[[ "${opened_count}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_P4_OPENED_CHAR?}${opened_count}"
+		[[ "${non_default_changes}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_P4_CHANGES_CHAR?}${non_default_changes}"
+		[[ "${default_count}" -gt 0 ]] && SCM_BRANCH+=" ${SCM_P4_DEFAULT_CHAR?}${default_count}"
 	else
 		SCM_DIRTY=0
-		SCM_STATE="${SCM_THEME_PROMPT_DIRTY}"
+		SCM_STATE="${SCM_THEME_PROMPT_CLEAN?}"
 	fi
 
-	SCM_PREFIX="${P4_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}"
-	SCM_SUFFIX="${P4_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}"
+	SCM_PREFIX="${P4_THEME_PROMPT_PREFIX:-${SCM_THEME_PROMPT_PREFIX-}}"
+	SCM_SUFFIX="${P4_THEME_PROMPT_SUFFIX:-${SCM_THEME_PROMPT_SUFFIX-}}"
 }
 
 function svn_prompt_vars() {
 	if [[ -n "$(svn status | head -c1 2> /dev/null)" ]]; then
 		SCM_DIRTY=1
-		SCM_STATE="${SVN_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}"
+		SCM_STATE="${SVN_THEME_PROMPT_DIRTY:-${SCM_THEME_PROMPT_DIRTY?}}"
 	else
 		SCM_DIRTY=0
-		SCM_STATE="${SVN_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}"
+		SCM_STATE="${SVN_THEME_PROMPT_CLEAN:-${SCM_THEME_PROMPT_CLEAN?}}"
 	fi
-	SCM_PREFIX="${SVN_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}"
-	SCM_SUFFIX="${SVN_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}"
+	SCM_PREFIX="${SVN_THEME_PROMPT_PREFIX:-${SCM_THEME_PROMPT_PREFIX-}}"
+	SCM_SUFFIX="${SVN_THEME_PROMPT_SUFFIX:-${SCM_THEME_PROMPT_SUFFIX-}}"
 	SCM_BRANCH="$(svn info --show-item=url 2> /dev/null | awk -F/ '{ for (i=0; i<=NF; i++) { if ($i == "branches" || $i == "tags" ) { print $(i+1); break }; if ($i == "trunk") { print $i; break } } }')" || return
 	SCM_CHANGE="$(svn info --show-item=revision 2> /dev/null)"
-}
-
-# this functions returns absolute location of .hg directory if one exists
-# It starts in the current directory and moves its way up until it hits /.
-# If we get to / then no Mercurial repository was found.
-# Example:
-# - lets say we cd into ~/Projects/Foo/Bar
-# - .hg is located in ~/Projects/Foo/.hg
-# - get_hg_root starts at ~/Projects/Foo/Bar and sees that there is no .hg directory, so then it goes into ~/Projects/Foo
-function get_hg_root() {
-	local CURRENT_DIR="${PWD}"
-
-	while [[ "${CURRENT_DIR:-/}" != "/" ]]; do
-		if [[ -d "$CURRENT_DIR/.hg" ]]; then
-			echo "$CURRENT_DIR/.hg"
-			return
-		fi
-
-		CURRENT_DIR="${CURRENT_DIR%/*}"
-	done
 }
 
 function hg_prompt_vars() {
 	if [[ -n $(hg status 2> /dev/null) ]]; then
 		SCM_DIRTY=1
-		SCM_STATE="${HG_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}"
+		SCM_STATE="${HG_THEME_PROMPT_DIRTY:-${SCM_THEME_PROMPT_DIRTY?}}"
 	else
 		SCM_DIRTY=0
-		SCM_STATE="${HG_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}"
+		SCM_STATE="${HG_THEME_PROMPT_CLEAN:-${SCM_THEME_PROMPT_CLEAN?}}"
 	fi
-	SCM_PREFIX="${HG_THEME_PROMPT_PREFIX:-$SCM_THEME_PROMPT_PREFIX}"
-	SCM_SUFFIX="${HG_THEME_PROMPT_SUFFIX:-$SCM_THEME_PROMPT_SUFFIX}"
+	SCM_PREFIX="${HG_THEME_PROMPT_PREFIX:-${SCM_THEME_PROMPT_PREFIX-}}"
+	SCM_SUFFIX="${HG_THEME_PROMPT_SUFFIX:-${SCM_THEME_PROMPT_SUFFIX-}}"
 
-	HG_ROOT=$(get_hg_root)
+	HG_ROOT=$(_bash-it-find-in-ancestor ".hg")
 
 	if [[ -f "$HG_ROOT/branch" ]]; then
 		# Mercurial holds it's current branch in .hg/branch file
@@ -405,7 +396,7 @@ function nvm_version_prompt() {
 	if _is_function nvm; then
 		node=$(nvm current 2> /dev/null)
 		[[ "${node}" == "system" ]] && return
-		echo -e "${NVM_THEME_PROMPT_PREFIX}${node}${NVM_THEME_PROMPT_SUFFIX}"
+		echo -ne "${NVM_THEME_PROMPT_PREFIX-}${node}${NVM_THEME_PROMPT_SUFFIX-}"
 	fi
 }
 
@@ -417,7 +408,7 @@ function rvm_version_prompt() {
 	if _command_exists rvm; then
 		rvm="$(rvm-prompt)" || return
 		if [[ -n "$rvm" ]]; then
-			echo -e "$RVM_THEME_PROMPT_PREFIX$rvm$RVM_THEME_PROMPT_SUFFIX"
+			echo -ne "${RVM_THEME_PROMPT_PREFIX-}${rvm}${RVM_THEME_PROMPT_SUFFIX-}"
 		fi
 	fi
 }
@@ -427,14 +418,14 @@ function rbenv_version_prompt() {
 		rbenv=$(rbenv version-name) || return
 		rbenv commands | grep -q gemset && gemset=$(rbenv gemset active 2> /dev/null) && rbenv="$rbenv@${gemset%% *}"
 		if [[ "$rbenv" != "system" ]]; then
-			echo -e "$RBENV_THEME_PROMPT_PREFIX$rbenv$RBENV_THEME_PROMPT_SUFFIX"
+			echo -ne "${RBENV_THEME_PROMPT_PREFIX-}${rbenv}${RBENV_THEME_PROMPT_SUFFIX-}"
 		fi
 	fi
 }
 
 function rbfu_version_prompt() {
 	if [[ -n "${RBFU_RUBY_VERSION:-}" ]]; then
-		echo -e "${RBFU_THEME_PROMPT_PREFIX}${RBFU_RUBY_VERSION}${RBFU_THEME_PROMPT_SUFFIX}"
+		echo -ne "${RBFU_THEME_PROMPT_PREFIX-}${RBFU_RUBY_VERSION}${RBFU_THEME_PROMPT_SUFFIX-}"
 	fi
 }
 
@@ -449,13 +440,16 @@ function chruby_version_prompt() {
 		if ! chruby | grep -q '\*'; then
 			ruby_version="${ruby_version} (system)"
 		fi
-		echo -e "${CHRUBY_THEME_PROMPT_PREFIX:-}${ruby_version}${CHRUBY_THEME_PROMPT_SUFFIX:-}"
+		echo -ne "${CHRUBY_THEME_PROMPT_PREFIX-}${ruby_version}${CHRUBY_THEME_PROMPT_SUFFIX-}"
 	fi
 }
 
 function ruby_version_prompt() {
 	if [[ "${THEME_SHOW_RUBY_PROMPT:-}" == "true" ]]; then
-		echo -e "$(rbfu_version_prompt)$(rbenv_version_prompt)$(rvm_version_prompt)$(chruby_version_prompt)"
+		rbfu_version_prompt
+		rbenv_version_prompt
+		rvm_version_prompt
+		chruby_version_prompt
 	fi
 }
 
@@ -471,32 +465,35 @@ function virtualenv_prompt() {
 	local virtualenv
 	if [[ -n "${VIRTUAL_ENV:-}" ]]; then
 		virtualenv="${VIRTUAL_ENV##*/}"
-		echo -e "$VIRTUALENV_THEME_PROMPT_PREFIX$virtualenv$VIRTUALENV_THEME_PROMPT_SUFFIX"
+		echo -ne "${VIRTUALENV_THEME_PROMPT_PREFIX-}${virtualenv}${VIRTUALENV_THEME_PROMPT_SUFFIX-}"
 	fi
 }
 
 function condaenv_prompt() {
 	if [[ -n "${CONDA_DEFAULT_ENV:-}" ]]; then
-		echo -e "${CONDAENV_THEME_PROMPT_PREFIX:-}${CONDA_DEFAULT_ENV}${CONDAENV_THEME_PROMPT_SUFFIX:-}"
+		echo -ne "${CONDAENV_THEME_PROMPT_PREFIX-}${CONDA_DEFAULT_ENV}${CONDAENV_THEME_PROMPT_SUFFIX-}"
 	fi
 }
 
 function py_interp_prompt() {
 	local py_version
 	py_version="$(python --version 2>&1 | awk 'NR==1{print "py-"$2;}')" || return
-	echo -e "${PYTHON_THEME_PROMPT_PREFIX:-}${py_version}${PYTHON_THEME_PROMPT_SUFFIX:-}"
+	echo -ne "${PYTHON_THEME_PROMPT_PREFIX-}${py_version}${PYTHON_THEME_PROMPT_SUFFIX-}"
 }
 
 function python_version_prompt() {
-	echo -e "$(virtualenv_prompt)$(condaenv_prompt)$(py_interp_prompt)"
+	virtualenv_prompt
+	condaenv_prompt
+	py_interp_prompt
 }
 
 function git_user_info() {
+	local current_user
 	# support two or more initials, set by 'git pair' plugin
-	SCM_CURRENT_USER="$(git config user.initials | sed 's% %+%')"
+	current_user="$(git config user.initials | sed 's% %+%')"
 	# if `user.initials` weren't set, attempt to extract initials from `user.name`
-	[[ -z "${SCM_CURRENT_USER}" ]] && SCM_CURRENT_USER=$(printf "%s" "$(for word in $(git config user.name | PERLIO=:utf8 perl -pe '$_=lc'); do printf "%s" "${word:0:1}"; done)")
-	[[ -n "${SCM_CURRENT_USER}" ]] && printf "%s" "$SCM_THEME_CURRENT_USER_PREFFIX$SCM_CURRENT_USER$SCM_THEME_CURRENT_USER_SUFFIX"
+	[[ -z "${current_user}" ]] && current_user=$(printf "%s" "$(for word in $(git config user.name | PERLIO=:utf8 perl -pe '$_=lc'); do printf "%s" "${word:0:1}"; done)")
+	[[ -n "${current_user}" ]] && printf "%s" "${SCM_THEME_CURRENT_USER_PREFFIX-}${current_user}${SCM_THEME_CURRENT_USER_SUFFIX-}"
 }
 
 function clock_char() {
@@ -506,7 +503,7 @@ function clock_char() {
 	show_clock_char="${THEME_SHOW_CLOCK_CHAR:-"true"}"
 
 	if [[ "${show_clock_char}" == "true" ]]; then
-		echo -e "${clock_char_color}${CLOCK_CHAR_THEME_PROMPT_PREFIX}${clock_char}${CLOCK_CHAR_THEME_PROMPT_SUFFIX}"
+		echo -ne "${clock_char_color}${CLOCK_CHAR_THEME_PROMPT_PREFIX-}${clock_char}${CLOCK_CHAR_THEME_PROMPT_SUFFIX-}"
 	fi
 }
 
@@ -517,13 +514,13 @@ function clock_prompt() {
 	local clock_string="\D{${clock_format}}"
 
 	if [[ "${show_clock}" == "true" ]]; then
-		echo -e "${clock_color}${CLOCK_THEME_PROMPT_PREFIX}${clock_string}${CLOCK_THEME_PROMPT_SUFFIX}"
+		echo -ne "${clock_color}${CLOCK_THEME_PROMPT_PREFIX-}${clock_string}${CLOCK_THEME_PROMPT_SUFFIX-}"
 	fi
 }
 
 function user_host_prompt() {
-	if [[ "${THEME_SHOW_USER_HOST}" == "true" ]]; then
-		echo -e "${USER_HOST_THEME_PROMPT_PREFIX}\u@\h${USER_HOST_THEME_PROMPT_SUFFIX}"
+	if [[ "${THEME_SHOW_USER_HOST:-false}" == "true" ]]; then
+		echo -ne "${USER_HOST_THEME_PROMPT_PREFIX-}\u@${THEME_PROMPT_HOST:-\h}${USER_HOST_THEME_PROMPT_SUFFIX-}"
 	fi
 }
 
@@ -531,27 +528,27 @@ function user_host_prompt() {
 function git_prompt_info() {
 	_git-hide-status && return
 	git_prompt_vars
-	echo -e "${SCM_PREFIX}${SCM_BRANCH}${SCM_STATE}${SCM_SUFFIX}"
+	echo -ne "${SCM_PREFIX?}${SCM_BRANCH?}${SCM_STATE?}${SCM_SUFFIX?}"
 }
 
 function p4_prompt_info() {
 	p4_prompt_vars
-	echo -e "${SCM_PREFIX}${SCM_BRANCH}:${SCM_CHANGE}${SCM_STATE}${SCM_SUFFIX}"
+	echo -ne "${SCM_PREFIX?}${SCM_BRANCH?}:${SCM_CHANGE?}${SCM_STATE?}${SCM_SUFFIX?}"
 }
 
 function svn_prompt_info() {
 	svn_prompt_vars
-	echo -e "${SCM_PREFIX}${SCM_BRANCH}${SCM_STATE}${SCM_SUFFIX}"
+	echo -ne "${SCM_PREFIX?}${SCM_BRANCH?}${SCM_STATE?}${SCM_SUFFIX?}"
 }
 
 function hg_prompt_info() {
 	hg_prompt_vars
-	echo -e "${SCM_PREFIX}${SCM_BRANCH}:${SCM_CHANGE#*:}${SCM_STATE}${SCM_SUFFIX}"
+	echo -ne "${SCM_PREFIX?}${SCM_BRANCH?}:${SCM_CHANGE#*:}${SCM_STATE?}${SCM_SUFFIX?}"
 }
 
 function scm_char() {
 	scm_prompt_char
-	echo -e "${SCM_THEME_CHAR_PREFIX}${SCM_CHAR}${SCM_THEME_CHAR_SUFFIX}"
+	echo -ne "${SCM_THEME_CHAR_PREFIX?}${SCM_CHAR?}${SCM_THEME_CHAR_SUFFIX?}"
 }
 
 function prompt_char() {
@@ -561,7 +558,7 @@ function prompt_char() {
 function battery_char() {
 	# The battery_char function depends on the presence of the battery_percentage function.
 	if [[ "${THEME_BATTERY_PERCENTAGE_CHECK}" == true ]] && _command_exists battery_percentage; then
-		echo -e "${bold_red?}$(battery_percentage)%"
+		echo -ne "${bold_red?}$(battery_percentage)%"
 	else
 		false
 	fi
@@ -576,9 +573,9 @@ fi
 
 function aws_profile() {
 	if [[ -n "${AWS_DEFAULT_PROFILE:-}" ]]; then
-		echo -e "${AWS_DEFAULT_PROFILE}"
+		echo -ne "${AWS_DEFAULT_PROFILE}"
 	else
-		echo -e "default"
+		echo -ne "default"
 	fi
 }
 
