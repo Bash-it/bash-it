@@ -16,6 +16,9 @@ jobs:
     - name: Install greadlink
       if: startsWith(runner.os, 'macOS')
       run: brew install coreutils
+    - name: Install parallel
+      if: startsWith(runner.os, 'macOS')
+      run: brew install parallel
     - name: Test code
       run: test/run
 
