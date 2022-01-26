@@ -1,10 +1,10 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 
 # Make sure terraform is installed
-_command_exists terraform || return
+_bash-it-completion-helper-necessary terraform || return
 
 # Don't handle completion if it's already managed
-complete -p terraform &>/dev/null && return
+_bash-it-completion-helper-sufficient terraform || return
 
 # Terraform completes itself
 complete -C terraform terraform
