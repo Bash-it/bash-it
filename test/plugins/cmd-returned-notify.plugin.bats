@@ -2,7 +2,6 @@
 
 load ../test_helper
 load ../test_helper_libs
-load ../../vendor/init.d/preexec
 
 load ../../plugins/available/cmd-returned-notify.plugin
 
