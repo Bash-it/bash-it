@@ -2,7 +2,6 @@
 
 load ../test_helper
 load ../test_helper_libs
-load ../../themes/colors.theme
 load ../../themes/base.theme
 
 @test 'themes base: battery_percentage should not exist' {
