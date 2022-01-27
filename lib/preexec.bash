@@ -29,13 +29,13 @@ __bp_install_after_session_init
 function __check_precmd_conflict() {
 	local f
 	__bp_trim_whitespace f "${1?}"
-	! _bash-it-array-contains-element "${f}" "${precmd_functions[@]}"
+	_bash-it-array-contains-element "${f}" "${precmd_functions[@]}"
 }
 
 function __check_preexec_conflict() {
 	local f
 	__bp_trim_whitespace f "${1?}"
-	! _bash-it-array-contains-element "${f}" "${preexec_functions[@]}"
+	_bash-it-array-contains-element "${f}" "${preexec_functions[@]}"
 }
 
 function safe_append_prompt_command {
