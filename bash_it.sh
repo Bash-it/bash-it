@@ -35,10 +35,10 @@ for _bash_it_main_file_lib in "${BASH_IT}/lib"/*.bash; do
 done
 
 # Load the global "enabled" directory, then enabled aliases, completion, plugins
-# "file_type" param is empty so that files get sourced in glob order
-for file_type in "" "aliases" "plugins" "completion"; do
+# "_bash_it_main_file_type" param is empty so that files get sourced in glob order
+for _bash_it_main_file_type in "" "aliases" "plugins" "completion"; do
 	BASH_IT_LOG_PREFIX="core: reloader: "
-	source "${BASH_IT}/scripts/reloader.bash" "${file_type:+skip}" "$file_type"
+	source "${BASH_IT}/scripts/reloader.bash" "${_bash_it_main_file_type:+skip}" "$_bash_it_main_file_type"
 	BASH_IT_LOG_PREFIX="core: main: "
 done
 
@@ -63,12 +63,11 @@ if [[ -n "${BASH_IT_THEME:-}" ]]; then
 fi
 
 _log_debug "Loading custom aliases, completion, plugins..."
-for file_type in "aliases" "completion" "plugins"; do
-	_bash_it_main_file_custom="${BASH_IT}/${file_type}/custom.${file_type}.bash"
+for _bash_it_main_file_type in "aliases" "completion" "plugins"; do
+	_bash_it_main_file_custom="${BASH_IT}/${_bash_it_main_file_type}/custom.${_bash_it_main_file_type}.bash"
 	if [[ -s "${_bash_it_main_file_custom}" ]]; then
 		_bash-it-log-prefix-by-path "${_bash_it_main_file_custom}"
 		_log_debug "Loading component..."
-		# shellcheck source-path=SCRIPTDIR/aliases source-path=SCRIPTDIR/completions source-path=SCRIPTDIR/plugins
 		# shellcheck disable=SC1090
 		source "${_bash_it_main_file_custom}"
 	fi
@@ -109,4 +108,4 @@ fi
 for _bash_it_library_finalize_f in "${_bash_it_library_finalize_hook[@]:-}"; do
 	eval "${_bash_it_library_finalize_f?}" # Use `eval` to achieve the same behavior as `$PROMPT_COMMAND`.
 done
-unset "${!_bash_it_library_finalize_@}" "${!_bash_it_main_file_@}" file_type
+unset "${!_bash_it_library_finalize_@}" "${!_bash_it_main_file_@}"
