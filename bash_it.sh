@@ -66,10 +66,6 @@ done
 # Load theme, if a theme was set
 if [[ -n "${BASH_IT_THEME}" ]]; then
 	_log_debug "Loading \"${BASH_IT_THEME}\" theme..."
-	# Load colors and helpers first so they can be used in base theme
-	BASH_IT_LOG_PREFIX="themes: colors: "
-	# shellcheck source=./themes/colors.theme.bash
-	source "${BASH_IT}/themes/colors.theme.bash"
 	BASH_IT_LOG_PREFIX="themes: githelpers: "
 	# shellcheck source=./themes/githelpers.theme.bash
 	source "${BASH_IT}/themes/githelpers.theme.bash"
