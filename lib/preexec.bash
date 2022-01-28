@@ -4,9 +4,8 @@
 # Load the `bash-preexec.sh` library, and define helper functions
 
 ## Prepare, load, fix, and install `bash-preexec.sh`
-: "${PROMPT_COMMAND:=}"
 
-# Disable immediate `$PROMPT_COMMAND` modification
+# Disable `$PROMPT_COMMAND` modification for now.
 __bp_delay_install="delayed"
 
 # shellcheck source-path=SCRIPTDIR/../vendor/github.com/rcaloras/bash-preexec
@@ -20,7 +19,6 @@ function __bp_require_not_readonly() { :; }
 
 # Disable trap DEBUG on subshells - https://github.com/Bash-it/bash-it/pull/1040
 __bp_enable_subshells= # blank
-set +T
 
 # Modify `$PROMPT_COMMAND` now
 __bp_install_after_session_init
@@ -42,7 +40,7 @@ function safe_append_prompt_command {
 	local prompt_re f
 	__bp_trim_whitespace f "${1?}"
 
-	if [ "${__bp_imported:-missing}" == "defined" ]; then
+	if [ "${bash_preexec_imported:-${__bp_imported:-missing}}" == "defined" ]; then
 		# We are using bash-preexec
 		if ! __check_precmd_conflict "${f}"; then
 			precmd_functions+=("${f}")
@@ -71,7 +69,7 @@ function safe_append_preexec {
 	local prompt_re f
 	__bp_trim_whitespace f "${1?}"
 
-	if [ "${__bp_imported:-missing}" == "defined" ]; then
+	if [ "${bash_preexec_imported:-${__bp_imported:-missing}}" == "defined" ]; then
 		# We are using bash-preexec
 		if ! __check_preexec_conflict "${f}"; then
 			preexec_functions+=("${f}")
