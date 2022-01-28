@@ -20,8 +20,8 @@ function __bp_require_not_readonly() { :; }
 # Disable trap DEBUG on subshells - https://github.com/Bash-it/bash-it/pull/1040
 __bp_enable_subshells= # blank
 
-# Modify `$PROMPT_COMMAND` now
-__bp_install_after_session_init
+# Modify `$PROMPT_COMMAND` in finalize hook
+_bash_it_library_finalize_hook+=('__bp_install_after_session_init')
 
 ## Helper functions
 function __check_precmd_conflict() {
