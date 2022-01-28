@@ -32,6 +32,7 @@ bash_it.sh
 clean_files.txt
 install.sh
 lint_clean_files.sh
+uninstall.sh
 
 # themes
 #
