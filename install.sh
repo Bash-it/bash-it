@@ -2,7 +2,7 @@
 # bash-it installer
 
 # Show how to use this installer
-function _bash-it_show_usage() {
+function _bash-it-install-help() {
 	echo -e "\n$0 : Install bash-it"
 	echo -e "Usage:\n$0 [arguments] \n"
 	echo "Arguments:"
@@ -15,41 +15,27 @@ function _bash-it_show_usage() {
 	exit 0
 }
 
-# enable a thing
-function _bash-it_load_one() {
-	file_type=$1
-	file_to_enable=$2
-	mkdir -p "$BASH_IT/${file_type}/enabled"
-
-	dest="${BASH_IT}/${file_type}/enabled/${file_to_enable}"
-	if [ ! -e "${dest}" ]; then
-		ln -sf "../available/${file_to_enable}" "${dest}"
-	else
-		echo "File ${dest} exists, skipping"
-	fi
-}
-
 # Interactively enable several things
-function _bash-it_load_some() {
+function _bash-it-install-enable() {
+	local file_type single_type enable_func file_name just_the_name RESP
 	file_type=$1
 	single_type=$(echo "$file_type" | sed -e "s/aliases$/alias/g" | sed -e "s/plugins$/plugin/g")
 	enable_func="_enable-$single_type"
-	[ -d "$BASH_IT/$file_type/enabled" ] || mkdir "$BASH_IT/$file_type/enabled"
-	for path in "$BASH_IT/${file_type}/available/"[^_]*; do
-		file_name=$(basename "$path")
+	for path in "${BASH_IT?}/${file_type}/available/"[^_]*; do
+		file_name="${path##*/}"
 		while true; do
-			just_the_name="${file_name%%.*}"
+			just_the_name="${file_name%".${file_type}.bash"}"
 			read -r -e -n 1 -p "Would you like to enable the $just_the_name $file_type? [y/N] " RESP
 			case $RESP in
 				[yY])
-					$enable_func "$just_the_name"
+					"$enable_func" "$just_the_name"
 					break
 					;;
 				[nN] | "")
 					break
 					;;
 				*)
-					echo -e "\033[91mPlease choose y or n.\033[m"
+					echo -e "${echo_orange:-}Please choose y or n.${echo_normal:-}"
 					;;
 			esac
 		done
@@ -57,41 +43,35 @@ function _bash-it_load_some() {
 }
 
 # Back up existing profile
-function _bash-it_backup() {
-	test -w "$HOME/$CONFIG_FILE" \
-		&& cp -aL "$HOME/$CONFIG_FILE" "$HOME/$CONFIG_FILE.bak" \
-		&& echo -e "\033[0;32mYour original $CONFIG_FILE has been backed up to $CONFIG_FILE.bak\033[0m"
+function _bash-it-install-backup-config() {
+	test -w "${HOME?}/${CONFIG_FILE?}" \
+		&& cp -aL "${HOME?}/${CONFIG_FILE?}" "${HOME?}/${CONFIG_FILE?}.bak" \
+		&& echo -e "${echo_green:-}Your original ${CONFIG_FILE?} has been backed up to ${CONFIG_FILE?}.bak${echo_normal:-}"
 }
 
 # Back up existing profile and create new one for bash-it
-function _bash-it_backup_new() {
-	_bash-it_backup
-	sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" > "$HOME/$CONFIG_FILE"
-	echo -e "\033[0;32mCopied the template $CONFIG_FILE into ~/$CONFIG_FILE, edit this file to customize bash-it\033[0m"
+function _bash-it-install-backup-new() {
+	_bash-it-install-backup-config
+	sed "s|{{BASH_IT}}|${BASH_IT?}|" "${BASH_IT?}/template/bashrc.template.bash" > "${HOME?}/${CONFIG_FILE?}"
+	echo -e "${echo_green:-}Copied the template ${CONFIG_FILE?} into ~/${CONFIG_FILE?}, edit this file to customize bash-it${echo_normal:-}"
 }
 
 # Back up existing profile and append bash-it templates at the end
-function _bash-it_backup_append() {
-	local profile_strings=('if [[ -f ~/.profile ]]; then' 'source ~/.profile' 'fi' 'if [[ -f ~/.bashrc ]]; then' 'source ~/.bashrc' 'fi')
-	_bash-it_backup
-	(sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" | tail -n +2) >> "$HOME/$CONFIG_FILE"
-	if [[ ! -f ~/.bash_profile ]]; then
-		printf '%s\n\t%s\n%s\n%s\n\t%s\n%s\n' "${profile_strings[@]}" > ~/.bash_profile
-	else
-		printf '\e[0;33m%s\n\t%s\n\t\t%s\n\t%s\n\t%s\n\t\t%s\n\t%s\n\e[0m' "You may need to update your ~/.bash_profile (or ~/.profile) to source your ~/.bashrc:" "${profile_strings[@]}"
-	fi
-	echo -e "\033[0;32mBash-it template has been added to your $CONFIG_FILE\033[0m"
+function _bash-it-install-backup-append() {
+	_bash-it-install-backup-config
+	(sed "s|{{BASH_IT}}|${BASH_IT?}|" "${BASH_IT?}/template/bashrc.template.bash" | tail -n +2) >> "${HOME?}/${CONFIG_FILE?}"
+	echo -e "${echo_green:-}Bash-it template has been added to your ${CONFIG_FILE?}${echo_normal:-}"
 }
 
-function _bash-it_check_for_backup() {
-	if ! [[ -e "$HOME/$BACKUP_FILE" ]]; then
+function _bash-it-install-backup-check() {
+	if ! [[ -e "${HOME?}/$BACKUP_FILE" ]]; then
 		return
 	fi
-	echo -e "\033[0;33mBackup file already exists. Make sure to backup your .bashrc before running this installation.\033[0m" >&2
+	echo -e "${echo_yellow:-}Backup file already exists. Make sure to backup your .bashrc before running this installation.${echo_normal:-}" >&2
 
 	if [[ -z "${overwrite_backup}" ]]; then
 		while [[ -z "${silent}" ]]; do
-			read -e -n 1 -r -p "Would you like to overwrite the existing backup? This will delete your existing backup file ($HOME/$BACKUP_FILE) [y/N] " RESP
+			read -e -n 1 -r -p "Would you like to overwrite the existing backup? This will delete your existing backup file (${HOME?}/$BACKUP_FILE) [y/N] " RESP
 			case $RESP in
 				[yY])
 					overwrite_backup=true
@@ -101,28 +81,28 @@ function _bash-it_check_for_backup() {
 					break
 					;;
 				*)
-					echo -e "\033[91mPlease choose y or n.\033[m"
+					echo -e "${echo_orange:-}Please choose y or n.${echo_normal:-}"
 					;;
 			esac
 		done
 	fi
 	if [[ -z "${overwrite_backup}" ]]; then
-		echo -e "\033[91mInstallation aborted. Please come back soon!\033[m"
+		echo -e "${echo_orange:-}Installation aborted. Please come back soon!${echo_normal:-}"
 		if [[ -n "${silent}" ]]; then
-			echo -e "\033[91mUse \"-f\" flag to force overwrite of backup.\033[m"
+			echo -e "${echo_orange:-}Use \"-f\" flag to force overwrite of backup.${echo_normal:-}"
 		fi
 		exit 1
 	else
-		echo -e "\033[0;32mOverwriting backup...\033[m"
+		echo -e "${echo_green:-}Overwriting backup...${echo_normal:-}"
 	fi
 }
 
-function _bash-it_modify_config_files() {
-	_bash-it_check_for_backup
+function _bash-it-install-modify-config() {
+	_bash-it-install-backup-check
 
 	if [[ -z "${silent}" ]]; then
 		while [[ -z "${append_to_config}" ]]; do
-			read -e -n 1 -r -p "Would you like to keep your $CONFIG_FILE and append bash-it templates at the end? [y/N] " choice
+			read -e -n 1 -r -p "Would you like to keep your ${CONFIG_FILE?} and append bash-it templates at the end? [y/N] " choice
 			case $choice in
 				[yY])
 					append_to_config=true
@@ -132,17 +112,24 @@ function _bash-it_modify_config_files() {
 					break
 					;;
 				*)
-					echo -e "\033[91mPlease choose y or n.\033[m"
+					echo -e "${echo_orange:-}Please choose y or n.${echo_normal:-}"
 					;;
 			esac
 		done
 	fi
-	if [[ -n "${append_to_config}" ]]; then
+	if [[ -n "${append_to_config:-}" ]]; then
 		# backup/append
-		_bash-it_backup_append
+		_bash-it-install-backup-append
 	else
 		# backup/new by default
-		_bash-it_backup_new
+		_bash-it-install-backup-new
+	fi
+	local choice profile_string=$'if [[ -s ~/.profile ]]; then\n\tsource ~/.profile\nfi\nif [[ $- == *"i"* && -s ~/.bashrc ]]; then\n\tsource ~/.bashrc\nfi'
+	if [[ ! -f ~/.bash_profile ]]; then
+		printf '%s\n' "${profile_string}" > ~/.bash_profile
+	else
+		printf "${echo_yellow:-}%s${echo_normal:-}" "You may need to update your ~/.bash_profile (or ~/.profile) to source your ~/.bashrc:"
+		printf '%s\n' "${profile_string}"
 	fi
 }
 
@@ -163,7 +150,7 @@ OPTIND=1
 while getopts "hsinaf" opt; do
 	case "$opt" in
 		"h")
-			_bash-it_show_usage
+			_bash-it-install-help
 			exit 0
 			;;
 		"s") silent=true ;;
@@ -172,7 +159,7 @@ while getopts "hsinaf" opt; do
 		"a") append_to_config=true ;;
 		"f") overwrite_backup=true ;;
 		"?")
-			_bash-it_show_usage >&2
+			_bash-it-install-help >&2
 			exit 1
 			;;
 	esac
@@ -181,42 +168,44 @@ done
 shift $((OPTIND - 1))
 
 if [[ -n "${silent}" && -n "${interactive}" ]]; then
-	echo -e "\033[91mOptions --silent and --interactive are mutually exclusive. Please choose one or the other.\033[m"
+	echo -e "${echo_orange:-}Options --silent and --interactive are mutually exclusive. Please choose one or the other.${echo_normal:-}"
 	exit 1
 fi
 
 if [[ -n "${no_modify_config}" && -n "${append_to_config}" ]]; then
-	echo -e "\033[91mOptions --no-modify-config and --append-to-config are mutually exclusive. Please choose one or the other.\033[m"
+	echo -e "${echo_orange:-}Options --no-modify-config and --append-to-config are mutually exclusive. Please choose one or the other.${echo_normal:-}"
 	exit 1
 fi
 
 BASH_IT="$(cd "${BASH_SOURCE%/*}" && pwd)"
 
-CONFIG_FILE=.bashrc
+CONFIG_FILE=".bashrc"
 
-BACKUP_FILE=$CONFIG_FILE.bak
+BACKUP_FILE="${CONFIG_FILE?}.bak"
 echo "Installing bash-it"
 if [[ -z "${no_modify_config}" ]]; then
-	_bash-it_modify_config_files
+	_bash-it-install-modify-config
 fi
 
 # Disable auto-reload in case its enabled
 export BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE=''
 # Load dependencies for enabling components
-# shellcheck disable=SC1090
+# shellcheck source-path=SCRIPTPATH/vendor/github.com/erichs/composure
 source "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
 cite _about _param _example _group _author _version
 # shellcheck source-path=SCRIPTDIR/lib
-source "$BASH_IT/lib/utilities.bash"
-# shellcheck source-path=SCRIPTDIR/lib
 source "${BASH_IT}/lib/log.bash"
 # shellcheck source-path=SCRIPTDIR/lib
-source "$BASH_IT/lib/helpers.bash"
+source "${BASH_IT?}/lib/utilities.bash"
+# shellcheck source-path=SCRIPTDIR/lib
+source "${BASH_IT?}/lib/helpers.bash"
+# shellcheck source-path=SCRIPTDIR/lib
+source "${BASH_IT?}/lib/colors.bash"
 
 if [[ -n $interactive && -z "${silent}" ]]; then
 	for type in "aliases" "plugins" "completion"; do
-		echo -e "\033[0;32mEnabling ${type}\033[0m"
-		_bash-it_load_some "$type"
+		echo -e "${echo_green:-}Enabling ${type}${echo_normal:-}"
+		_bash-it-install-enable "$type"
 	done
 else
 	echo ""
@@ -224,9 +213,8 @@ else
 fi
 
 echo ""
-echo -e "\033[0;32mInstallation finished successfully! Enjoy bash-it!\033[0m"
-# shellcheck disable=SC2086
-echo -e "\033[0;32mTo start using it, open a new tab or 'source "~/$CONFIG_FILE"'.\033[0m"
+echo -e "${echo_green:-}Installation finished successfully! Enjoy bash-it!${echo_normal:-}"
+echo -e "${echo_green:-}To start using it, open a new tab or 'source ~/${CONFIG_FILE?}'.${echo_normal:-}"
 echo ""
 echo "To show the available aliases/completions/plugins, type one of the following:"
 echo "  bash-it show aliases"
