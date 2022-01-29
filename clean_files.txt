@@ -83,6 +83,7 @@ completion/available/wpscan.completion.bash
 lib/helpers.bash
 lib/log.bash
 lib/preexec.bash
+lib/search.bash
 lib/utilities.bash
 
 # plugins
