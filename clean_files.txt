@@ -18,6 +18,7 @@
 #
 docs/
 hooks/
+scripts/
 
 # root files
 #
