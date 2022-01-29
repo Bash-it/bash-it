@@ -8,7 +8,7 @@ all powerline themes.
 
 **IMPORTANT:** This theme requires that `a font with the Powerline symbols <https://github.com/powerline/fonts>`_ needs to be used in your terminal emulator, otherwise the prompt won't be displayed correctly, i.e. some of the additional icons and characters will be missing. Please follow your operating system's instructions to install one of the fonts from the above link and select it in your terminal emulator.
 
-**NOTICE:** The default behavior of this theme assumes that you have sudo privileges on your workstation. If that is not the case (e.g. if you are running on a corporate network where ``sudo`` usage is tracked), you can set the flag 'export THEME_CHECK_SUDO=false' in your ``~/.bashrc`` or ``~/.bash_profile`` to disable the Powerline theme's ``sudo`` check. This will apply to all ``powerline*`` themes.
+**NOTICE:** The default behavior of this theme assumes that you have sudo privileges on your workstation. If that is not the case (e.g. if you are running on a corporate network where ``sudo`` usage is tracked), you can set the flag 'export THEME_CHECK_SUDO=false' in your ``~/.bashrc`` to disable the Powerline theme's ``sudo`` check. This will apply to all ``powerline*`` themes.
 
 Provided Information
 --------------------
