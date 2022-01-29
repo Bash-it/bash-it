@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
 load ../test_helper
-load ../../themes/colors.theme
+load ../../lib/colors
 
 load ../../lib/log
 load ../../lib/helpers
