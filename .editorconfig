@@ -16,7 +16,7 @@ trim_trailing_whitespace = false
 indent_size = tab
 indent_style = tab
 
-[{**.*sh,test/run}]
+[{**.*sh,test/run,**.bats}]
 indent_size = tab
 indent_style = tab
 
@@ -29,3 +29,8 @@ end_of_line        = lf
 charset            = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
+
+[**.bats]
+indent_size = tab
+indent_style = tab
+shell_variant	= bats

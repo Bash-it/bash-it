@@ -1,5 +1,3 @@
-# Sudo check after every command
-THEME_CHECK_SUDO=${THEME_CHECK_SUDO:=true}
 
 #To set color for foreground and background
 function set_color {

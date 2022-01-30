@@ -18,6 +18,7 @@
 #
 docs/
 hooks/
+scripts/
 
 # root files
 #
@@ -37,6 +38,7 @@ aliases/available/vim.aliases.bash
 #
 completion/available/apm.completion.bash
 completion/available/awless.completion.bash
+completion/available/bash-it.completion.bash
 completion/available/brew.completion.bash
 completion/available/cargo.completion.bash
 completion/available/composer.completion.bash
@@ -47,6 +49,7 @@ completion/available/django.completion.bash
 completion/available/dmidecode.completion.bash
 completion/available/docker-machine.completion.bash
 completion/available/docker.completion.bash
+completion/available/dotnet.completion.bash
 completion/available/gcloud.completion.bash
 completion/available/gem.completion.bash
 completion/available/git.completion.bash
@@ -78,7 +81,11 @@ completion/available/vuejs.completion.bash
 completion/available/wpscan.completion.bash
 
 # libraries
+lib/colors.bash
+lib/helpers.bash
 lib/log.bash
+lib/preexec.bash
+lib/search.bash
 lib/utilities.bash
 
 # plugins
@@ -87,8 +94,10 @@ plugins/available/alias-completion.plugin.bash
 plugins/available/autojump.plugin.bash
 plugins/available/base.plugin.bash
 plugins/available/basher.plugin.bash
+plugins/available/battery.plugin.bash
 plugins/available/blesh.plugin.bash
 plugins/available/cmd-returned-notify.plugin.bash
+plugins/available/colors.plugin.bash
 plugins/available/direnv.plugin.bash
 plugins/available/dirs.plugin.bash
 plugins/available/docker-machine.plugin.bash
@@ -115,6 +124,7 @@ plugins/available/osx-timemachine.plugin.bash
 plugins/available/osx.plugin.bash
 plugins/available/percol.plugin.bash
 plugins/available/plenv.plugin.bash
+plugins/available/projects.plugin.bash
 plugins/available/proxy.plugin.bash
 plugins/available/pyenv.plugin.bash
 plugins/available/python.plugin.bash
@@ -152,6 +162,8 @@ themes/command_duration.theme.bash
 themes/easy
 themes/essential
 themes/modern
+themes/norbu
+themes/pete
 themes/powerline
 themes/pure
 themes/purity
@@ -159,4 +171,3 @@ themes/purity
 # vendor init files
 #
 vendor/.gitattributes
-vendor/init.d
