@@ -17,8 +17,9 @@ function __bp_adjust_histcontrol() { :; }
 # Don't fail on readonly variables
 function __bp_require_not_readonly() { :; }
 
-# Disable trap DEBUG on subshells - https://github.com/Bash-it/bash-it/pull/1040
-__bp_enable_subshells= # blank
+# For performance, testing, and to avoid unexpected behavior: disable DEBUG traps in subshells.
+# See bash-it/bash-it#1040 and rcaloras/bash-preexec#26
+: "${__bp_enable_subshells:=}" # blank
 
 # Modify `$PROMPT_COMMAND` in finalize hook
 _bash_it_library_finalize_hook+=('__bp_install_after_session_init')
