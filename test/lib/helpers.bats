@@ -1,21 +1,15 @@
-#!/usr/bin/env bats
+# shellcheck shell=bats
 
-load ../test_helper
-load ../test_helper_libs
-load ../../plugins/available/base.plugin
-load ../../lib/colors
+load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
-function local_setup {
-  setup_test_fixture
+function local_setup_file() {
+  setup_libs "colors"
+  load "${BASH_IT?}/plugins/available/base.plugin.bash"
+}
 
+function local_setup() {
   # Copy the test fixture to the Bash-it folder
-  if command -v rsync &> /dev/null; then
-    rsync -a "$BASH_IT/test/fixtures/bash_it/" "$BASH_IT/"
-  else
-    find "$BASH_IT/test/fixtures/bash_it" \
-      -mindepth 1 -maxdepth 1 \
-      -exec cp -r {} "$BASH_IT/" \;
-  fi
+  cp -RP "$BASH_IT/test/fixtures/bash_it"/* "$BASH_IT/"
 }
 
 # TODO Create global __is_enabled function
