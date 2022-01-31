@@ -20,6 +20,7 @@ aliases/
 docs/
 hooks/
 scripts/
+test/
 
 # root files
 #
@@ -133,12 +134,6 @@ plugins/available/textmate.plugin.bash
 plugins/available/todo.plugin.bash
 plugins/available/xterm.plugin.bash
 plugins/available/zoxide.plugin.bash
-
-# tests
-#
-test/plugins/alias-completion.plugin.bats
-test/run
-test/test_helper.bash
 
 # themes
 #
