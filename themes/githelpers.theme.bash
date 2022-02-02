@@ -134,7 +134,7 @@ function _git-remote-info {
     elif [[ ${same_branch_name} != "true" ]]; then
       remote_info="${VCS_STATUS_REMOTE_BRANCH}"
     fi
-    if [[ -n "${remote_info}" ]];then
+    if [[ -n "${remote_info:-}" ]];then
       # no support for gone remote branches in gitstatusd
       local branch_prefix="${SCM_THEME_BRANCH_TRACK_PREFIX}"
       echo "${branch_prefix}${remote_info}"
@@ -155,7 +155,7 @@ function _git-remote-info {
     elif [[ ${same_branch_name} != "true" ]]; then
       remote_info="\$(_git-upstream-branch)"
     fi
-    if [[ -n "${remote_info}" ]];then
+    if [[ -n "${remote_info:-}" ]];then
       local branch_prefix
       if _git-upstream-branch-gone; then
         branch_prefix="${SCM_THEME_BRANCH_GONE_PREFIX}"
