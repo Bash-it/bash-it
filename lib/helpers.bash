@@ -255,10 +255,10 @@ function _bash-it_update_migrate_and_restart() {
 	_about 'Checks out the wanted version, pops directory and restart. Does not return (because of the restart!)'
 	_param '1: Which branch to checkout to'
 	_param '2: Which type of version we are using'
-	if git checkout "$1" &> /dev/null; then
+	if git checkout "${1?}" &> /dev/null; then
 		echo "Bash-it successfully updated."
 		echo ""
-		echo "Migrating your installation to the latest $2 version now..."
+		echo "Migrating your installation to the latest ${2:-} version now..."
 		_bash-it-migrate
 		echo ""
 		echo "All done, enjoy!"
@@ -300,7 +300,7 @@ function _bash-it-update-() {
 		BASH_IT_DEVELOPMENT_BRANCH="master"
 	fi
 	# Defaults to stable update
-	if [[ -z "$1" || "$1" == "stable" ]]; then
+	if [[ -z "${1:-}" || "$1" == "stable" ]]; then
 		version="stable"
 		TARGET=$(git describe --tags "$(git rev-list --tags --max-count=1)" 2> /dev/null)
 
@@ -577,10 +577,10 @@ _bash-it-profile-load-parse-profile() {
 			break
 		fi
 		# Do not actually modify config on dry run
-		[[ -z $2 ]] || continue
+		[[ -z "${2:-}" ]] || continue
 		# Actually enable the component
 		$enable_func "$component"
-	done < "$1"
+	done < "${1?}"
 
 	# Make sure to propagate the error
 	[[ -z $bad ]]
@@ -602,7 +602,7 @@ _bash-it-profile-rm() {
 	about 'Removes a profile from the "profiles" directory'
 	_group 'lib'
 
-	local name="$1"
+	local name="${1:-}"
 	if [[ -z $name ]]; then
 		echo -e "${echo_orange?}Please specify profile name to remove...${echo_reset_color?}"
 		return 1
@@ -628,7 +628,7 @@ _bash-it-profile-load() {
 	_about 'loads a configuration from the "profiles" directory'
 	_group 'lib'
 
-	local name="$1"
+	local name="${1:-}"
 	if [[ -z $name ]]; then
 		echo -e "${echo_orange?}Please specify profile name to load, not changing configuration...${echo_reset_color?}"
 		return 1
@@ -659,19 +659,15 @@ function _bash-it-restart() {
 	_about 'restarts the shell in order to fully reload it'
 	_group 'lib'
 
-	local saved_pwd="${PWD}" init_file="${BASH_IT_BASHRC:-${HOME?}/.bashrc}"
-
-	exec "${0/-/}" --rcfile <(echo "source \"${init_file}\"; cd \"$saved_pwd\"")
+	exec "${0#-}" --rcfile "${BASH_IT_BASHRC:-${HOME?}/.bashrc}"
 }
 
 function _bash-it-reload() {
-	_about 'reloads a profile file'
+	_about 'reloads the shell initialization file'
 	_group 'lib'
 
-	pushd "${BASH_IT?}" > /dev/null || return
 	# shellcheck disable=SC1090
 	source "${BASH_IT_BASHRC:-${HOME?}/.bashrc}"
-	popd > /dev/null || return
 }
 
 function _bash-it-describe() {
@@ -728,7 +724,7 @@ function _disable-plugin() {
 	_example '$ disable-plugin rvm'
 	_group 'lib'
 
-	_disable-thing "plugins" "plugin" "$1"
+	_disable-thing "plugins" "plugin" "${1?}"
 	_on-disable-callback "$1"
 }
 
@@ -738,7 +734,7 @@ function _disable-alias() {
 	_example '$ disable-alias git'
 	_group 'lib'
 
-	_disable-thing "aliases" "alias" "$1"
+	_disable-thing "aliases" "alias" "${1?}"
 }
 
 function _disable-completion() {
@@ -747,7 +743,7 @@ function _disable-completion() {
 	_example '$ disable-completion git'
 	_group 'lib'
 
-	_disable-thing "completion" "completion" "$1"
+	_disable-thing "completion" "completion" "${1?}"
 }
 
 function _disable-thing() {
@@ -808,7 +804,7 @@ function _enable-plugin() {
 	_example '$ enable-plugin rvm'
 	_group 'lib'
 
-	_enable-thing "plugins" "plugin" "$1" "$BASH_IT_LOAD_PRIORITY_PLUGIN"
+	_enable-thing "plugins" "plugin" "${1?}" "$BASH_IT_LOAD_PRIORITY_PLUGIN"
 }
 
 function _enable-plugins() {
@@ -822,7 +818,7 @@ function _enable-alias() {
 	_example '$ enable-alias git'
 	_group 'lib'
 
-	_enable-thing "aliases" "alias" "$1" "$BASH_IT_LOAD_PRIORITY_ALIAS"
+	_enable-thing "aliases" "alias" "${1?}" "$BASH_IT_LOAD_PRIORITY_ALIAS"
 }
 
 function _enable-aliases() {
@@ -836,7 +832,7 @@ function _enable-completion() {
 	_example '$ enable-completion git'
 	_group 'lib'
 
-	_enable-thing "completion" "completion" "$1" "$BASH_IT_LOAD_PRIORITY_COMPLETION"
+	_enable-thing "completion" "completion" "${1?}" "$BASH_IT_LOAD_PRIORITY_COMPLETION"
 }
 
 function _enable-thing() {
@@ -909,7 +905,7 @@ function _help-aliases() {
 	_example '$ alias-help'
 	_example '$ alias-help git'
 
-	if [[ -n "$1" ]]; then
+	if [[ -n "${1:-}" ]]; then
 		case "$1" in
 			custom)
 				alias_path='custom.aliases.bash'
