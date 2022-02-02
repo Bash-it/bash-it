@@ -560,20 +560,20 @@ _bash-it-profile-load-parse-profile() {
 	_example '$ _bash-it-profile-load-parse-profile "profile.bash_it" "dry"'
 
 	local -i num=0
-	local line
+	local line enable_func subdirectory component to_enable bad
 	while read -r -a line; do
 		((++num))
 		# Ignore comments and empty lines
 		[[ -z "${line[*]}" || "${line[*]}" =~ ^#.* ]] && continue
-		local enable_func="_enable-${line[0]}"
-		local subdirectory=${line[0]}
-		local component=${line[1]}
+		enable_func="_enable-${line[0]}"
+		subdirectory=${line[0]}
+		component=${line[1]}
 
-		local to_enable=("${BASH_IT}/$subdirectory/available/$component.${subdirectory%s}"*.bash)
+		to_enable=("${BASH_IT}/$subdirectory/available/$component.${subdirectory%s}"*.bash)
 		# Ignore botched lines
 		if [[ ! -e "${to_enable[0]}" ]]; then
 			echo -e "${echo_orange?}Bad line(#$num) in profile, aborting load...${line[*]}${echo_reset_color?}"
-			local bad="bad line"
+			bad="bad line"
 			break
 		fi
 		# Do not actually modify config on dry run
@@ -583,7 +583,7 @@ _bash-it-profile-load-parse-profile() {
 	done < "${1?}"
 
 	# Make sure to propagate the error
-	[[ -z $bad ]]
+	[[ -z ${bad:-} ]]
 }
 
 _bash-it-profile-list() {
