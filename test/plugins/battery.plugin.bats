@@ -194,15 +194,22 @@ function setup_acpi {
 # The passed in parameter is used for the remaining battery percentage.
 function setup_upower {
 	percent="$1"
+	BAT0="/org/freedesktop/UPower/devices/battery_BAT$RANDOM"
+
 
 	function upower {
 		case $1 in
 		'-e'|'--enumerate')
-			echo "/org/freedesktop/UPower/devices/battery_BAT0"
+			echo "$BAT0"
 			echo "/org/freedesktop/UPower/devices/mouse_hid_${RANDOM}_battery"
 			;;
 		'-i'|'--show-info')
-			printf "voltage:             12.191 V\n    time to full:        57.3 minutes\n    percentage:          %s\n    capacity:            84.6964" "${percent}"
+			if [[ $2 == "$BAT0" ]]
+			then
+				printf "voltage:             12.191 V\n    time to full:        57.3 minutes\n    percentage:          %s\n    capacity:            84.6964" "${percent}"
+			else
+				false
+			fi
 			;;
 		esac
 	}
