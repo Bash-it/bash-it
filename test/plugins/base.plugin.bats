@@ -1,11 +1,14 @@
 #!/usr/bin/env bats
 
-load ../test_helper
-load ../test_helper_libs
-load ../../plugins/available/base.plugin
+load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
+
+function local_setup() {
+  setup_libs
+  load "${BASH_IT?}/plugins/available/base.plugin.bash"
+}
 
 @test 'plugins base: ips()' {
-  if [[ $CI ]]; then
+  if [[ -n "${CI:-}" ]]; then
     skip 'ifconfig probably requires sudo on TravisCI'
   fi
 
@@ -23,7 +26,7 @@ load ../../plugins/available/base.plugin
 }
 
 @test 'plugins base: pickfrom()' {
-  stub_file="${BASH_IT_ROOT}/stub_file"
+  stub_file="${BATS_TEST_TMPDIR}/stub_file"
   printf "l1\nl2\nl3" > $stub_file
   run pickfrom $stub_file
   assert_success
@@ -31,28 +34,30 @@ load ../../plugins/available/base.plugin
 }
 
 @test 'plugins base: mkcd()' {
-  cd "${BASH_IT_ROOT}"
+  cd "${BATS_TEST_TMPDIR}"
   declare -r dir_name="-dir_with_dash"
 
   # Make sure that the directory does not exist prior to the test
-  rm -rf "${BASH_IT_ROOT}/${dir_name}"
+  rm -rf "${BATS_TEST_TMPDIR}/${dir_name}"
+
+  run mkcd "${dir_name}"
+  assert_success
+  assert_dir_exist "${BATS_TEST_TMPDIR}/${dir_name}"
 
   mkcd "${dir_name}"
-  assert_success
-  assert_dir_exist "${BASH_IT_ROOT}/${dir_name}"
-  assert_equal "${PWD}" "${BASH_IT_ROOT//\/\///}/${dir_name}"
+  assert_equal "${PWD}" "${BATS_TEST_TMPDIR//\/\///}/${dir_name}"
 }
 
 @test 'plugins base: lsgrep()' {
-  for i in 1 2 3; do mkdir -p "${BASH_IT_TEST_DIR}/${i}"; done
-  cd $BASH_IT_TEST_DIR
+  for i in 1 2 3; do mkdir -p "${BASH_IT}/${i}"; done
+  cd $BASH_IT
   run lsgrep 2
   assert_success
   assert_equal $output 2
 }
 
 @test 'plugins base: buf()' {
-  declare -r file="${BASH_IT_ROOT}/file"
+  declare -r file="${BATS_TEST_TMPDIR}/file"
   touch $file
 
   # Take one timestamp before running the `buf` function
