@@ -211,7 +211,7 @@ function _bash-it-component-item-is-enabled() {
 		component_type="${1}" item_name="${2?}"
 	fi
 
-	for each_file in "${BASH_IT}/enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR?}${item_name}.${component_type}"*."bash" \
+	for each_file in "${BASH_IT?}/enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR?}${item_name}.${component_type}"*."bash" \
 		"${BASH_IT}/${component_type}"*/"enabled/${item_name}.${component_type}"*."bash" \
 		"${BASH_IT}/${component_type}"*/"enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR?}${item_name}.${component_type}"*."bash"; do
 		if [[ -f "${each_file}" ]]; then
