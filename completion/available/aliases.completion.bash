@@ -10,7 +10,7 @@ about-plugin 'Automatic completion of aliases'
 # Automatically add completion for all aliases to commands having completion functions
 function _bash-it-component-completion-callback-on-init-aliases() {
 	local namespace="alias_completion"
-	local tmp_file completion_loader alias_name line completions
+	local tmp_file completion_loader alias_name line completions chars
 	local alias_arg_words new_completion compl_func compl_wrapper alias_defn
 
 	# create array of function completion triggers, keeping multi-word triggers together
@@ -20,28 +20,42 @@ function _bash-it-component-completion-callback-on-init-aliases() {
 	completions=("${completions[@]##complete -* * -}") # strip all but last option plus trigger(s)
 	completions=("${completions[@]#complete -}")       # strip anything missed
 	completions=("${completions[@]#? * }")             # strip last option and arg, leaving only trigger(s)
+	completions=("${completions[@]#? }")       # strip anything missed
+	#TODO: this will fail on some completions...
 
 	# create temporary file for wrapper functions and completions
 	tmp_file="$(mktemp -t "${namespace}-${RANDOM}XXXXXX")" || return 1
 
-	completion_loader="$(complete -p -D 2> /dev/null | sed -Ene 's/.* -F ([^ ]*).*/\1/p')"
+	IFS=$'\n' read -r completion_loader < <(complete -p -D 2> /dev/null)
+	if [[ "${completion_loader#complete }" =~ '-F'[[:space:]]([[:alnum:]_]+)[[:space:]] ]]; then
+		completion_loader="${BASH_REMATCH[1]}"
+	else
+		completion_loader=""
+	fi
 
 	# read in "<alias> '<aliased command>' '<command args>'" lines from defined aliases
 	# some aliases do have backslashes that needs to be interpreted
 	# shellcheck disable=SC2162
 	while read line; do
+		line="${line#alias -- }"
 		line="${line#alias }"
 		alias_name="${line%%=*}"
-		alias_defn="${line#*=}"                 # alias definition
+		alias_defn="${line#*=\'}"                 # alias definition
+		alias_defn="${alias_defn%\'}"
 		alias_cmd="${alias_defn%%[[:space:]]*}" # first word of alias
-		alias_cmd="${alias_cmd:1}"              # lose opening quotation mark
-		alias_args="${alias_defn#*[[:space:]]}" # everything after first word
-		alias_args="${alias_args%\'}"           # lose ending quotation mark
+		if [[ ${alias_defn} == ${alias_cmd} ]]; then
+			alias_args=''
+		else
+			alias_args="${alias_defn#*[[:space:]]}" # everything after first word
+		fi
 
 		# skip aliases to pipes, boolean control structures and other command lists
-		[[ "${alias_args}" =~ [\|\&\;\)\(\n] ]] && continue
+		chars='\|\&\;\)\(\n\<\>'
+		if [[ "${alias_defn}" =~ [$chars] ]]; then
+			continue
+		fi
 		# avoid expanding wildcards
-		read -a alias_arg_words <<< "$alias_args"
+		read -ra alias_arg_words <<< "$alias_args"
 
 		# skip alias if there is no completion function triggered by the aliased command
 		if ! _bash-it-array-contains-element "$alias_cmd" "${completions[@]}"; then
@@ -65,8 +79,8 @@ function _bash-it-component-completion-callback-on-init-aliases() {
 			if [[ "${compl_func#_"$namespace"::}" == "$compl_func" ]]; then
 				compl_wrapper="_${namespace}::${alias_name}"
 				echo "function $compl_wrapper {
-                        local compl_word=\$2
-                        local prec_word=\$3
+                        local compl_word=\${2?}
+                        local prec_word=\${3?}
                         # check if prec_word is the alias itself. if so, replace it
                         # with the last word in the unaliased form, i.e.,
                         # alias_cmd + ' ' + alias_args.
@@ -75,11 +89,11 @@ function _bash-it-component-completion-callback-on-init-aliases() {
                             prec_word=\${prec_word#* }
                         fi
                         (( COMP_CWORD += ${#alias_arg_words[@]} ))
-                        COMP_WORDS=($alias_cmd $alias_args \${COMP_WORDS[@]:1})
+                        COMP_WORDS=(\"$alias_cmd\" \"${alias_arg_words[@]}\" \"\${COMP_WORDS[@]:1}\")
                         (( COMP_POINT -= \${#COMP_LINE} ))
                         COMP_LINE=\${COMP_LINE/$alias_name/$alias_cmd $alias_args}
                         (( COMP_POINT += \${#COMP_LINE} ))
-                        $compl_func \"$alias_cmd\" \"\$compl_word\" \"\$prec_word\"
+                        \"$compl_func\" \"$alias_cmd\" \"\$compl_word\" \"\$prec_word\"
                     }" >> "$tmp_file"
 				new_completion="${new_completion/ -F $compl_func / -F $compl_wrapper }"
 			fi
