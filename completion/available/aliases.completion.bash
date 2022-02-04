@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 about-plugin 'Automatic completion of aliases'
-# Load after the other completions to understand what needs to be completed
+# Load after all aliases and completions to understand what needs to be completed
 # BASH_IT_LOAD_PRIORITY: 800
 
 # References:
@@ -8,7 +8,7 @@ about-plugin 'Automatic completion of aliases'
 # http://stackoverflow.com/a/1793178/1228454
 
 # Automatically add completion for all aliases to commands having completion functions
-function alias_completion() {
+function _bash-it-component-completion-callback-on-init-aliases() {
 	local namespace="alias_completion"
 	local tmp_file completion_loader alias_name line completions
 	local alias_arg_words new_completion compl_func compl_wrapper alias_defn
@@ -95,4 +95,4 @@ function alias_completion() {
 	source "$tmp_file" && command rm -f "$tmp_file"
 }
 
-alias_completion
+_bash-it-component-completion-callback-on-init-aliases
