@@ -1,6 +1,10 @@
 # shellcheck shell=bash
 # shellcheck disable=SC2034 # Expected behavior for themes.
 
+# Colors for listing files, using default color scheme.
+# To customize color scheme by theme, check out https://geoff.greer.fm/lscolors/
+export CLICOLOR LSCOLORS LS_COLORS
+
 CLOCK_CHAR_THEME_PROMPT_PREFIX=''
 CLOCK_CHAR_THEME_PROMPT_SUFFIX=''
 CLOCK_THEME_PROMPT_PREFIX=''

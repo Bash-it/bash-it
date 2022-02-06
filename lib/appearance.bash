@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
-# colored ls
-export LSCOLORS='Gxfxcxdxdxegedabagacad'
+: "${CLICOLOR:=$(tput colors)}"
+export CLICOLOR
 
 : "${CUSTOM_THEME_DIR:="${BASH_IT_CUSTOM:=${BASH_IT}/custom}/themes"}"
 
