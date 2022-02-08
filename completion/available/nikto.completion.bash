@@ -1,7 +1,6 @@
 # shellcheck shell=bash
 
 __nikto_completion() {
-	local cur=${COMP_WORDS[COMP_CWORD]}
 	local prev=${COMP_WORDS[COMP_CWORD - 1]:-}
 
 	case $prev in
