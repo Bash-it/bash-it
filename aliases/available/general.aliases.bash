@@ -1,13 +1,18 @@
 cite about-alias
 about-alias 'general aliases'
 
-if ls --color -d . &> /dev/null
-then
-  alias ls="ls --color=auto"
-elif ls -G -d . &> /dev/null
-then
-  alias ls='ls -G'        # Compact view, show colors
-fi
+# color support for darwin and non-darwin os
+# special thanks https://stackoverflow.com/a/27776822/10362396
+case "$(uname -s)" in
+
+   Darwin)
+     alias ls='ls -G'
+     ;;
+
+   *)
+     alias ls='ls --color=auto'
+     ;;
+esac
 
 # List directory contents
 alias sl=ls
