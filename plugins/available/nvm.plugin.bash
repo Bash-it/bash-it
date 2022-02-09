@@ -10,15 +10,16 @@ about-plugin 'node version manager configuration'
 export NVM_DIR
 
 # shellcheck disable=SC1091 # This loads nvm
-if _bash_it_homebrew_check && [[ -s "${BASH_IT_HOMEBREW_PREFIX?}/nvm.sh" ]]; then
-	source "${BASH_IT_HOMEBREW_PREFIX?}/nvm.sh"
+if _bash_it_homebrew_check && [[ -s "${BASH_IT_HOMEBREW_PREFIX?}/opt/nvm/nvm.sh" ]]; then
+	mkdir -p "${NVM_DIR}"
+	source "${BASH_IT_HOMEBREW_PREFIX?}/opt/nvm/nvm.sh"
 elif [[ -s "${NVM_DIR}/nvm.sh" ]]; then
 	source "${NVM_DIR}/nvm.sh"
 fi
 
 if ! _command_exists nvm; then
 	_log_warning "Bash-it no longer bundles the nvm script. Please install the latest version from
-	https://github.com/creationix/nvm.git"
+	https://github.com/creationix/nvm.git or Homebrew"
 	_log_warning "if you want to use nvm. You can keep this plugin enabled once you have installed nvm."
 	return 1
 fi
