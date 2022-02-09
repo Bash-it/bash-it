@@ -81,6 +81,7 @@ completion/available/vuejs.completion.bash
 completion/available/wpscan.completion.bash
 
 # libraries
+lib/battery.bash
 lib/colors.bash
 lib/helpers.bash
 lib/log.bash
@@ -94,7 +95,6 @@ plugins/available/alias-completion.plugin.bash
 plugins/available/autojump.plugin.bash
 plugins/available/base.plugin.bash
 plugins/available/basher.plugin.bash
-plugins/available/battery.plugin.bash
 plugins/available/blesh.plugin.bash
 plugins/available/cmd-returned-notify.plugin.bash
 plugins/available/colors.plugin.bash
