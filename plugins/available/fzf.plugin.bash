@@ -1,42 +1,43 @@
-# Load after the system completion to make sure that the fzf completions are working
-# BASH_IT_LOAD_PRIORITY: 375
-
-cite about-plugin
+# shellcheck shell=bash
 about-plugin 'load fzf, if you are using it'
 
-if [ -r ~/.fzf.bash ] ; then
-  source ~/.fzf.bash
-elif [ -r "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash ] ; then
-  source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash
+# shellcheck source-path=$HOME source-path=$HOME/.config/fzf disable=SC1090 disable=SC1091
+if [[ -r ~/.fzf.bash ]]; then
+	source ~/.fzf.bash
+elif [[ -r "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/fzf.bash" ]]; then
+	source "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/fzf.bash"
 fi
 
 # No need to continue if the command is not present
-_command_exists fzf || return
-
-if [ -z ${FZF_DEFAULT_COMMAND+x}  ] && _command_exists fd ; then
-  export FZF_DEFAULT_COMMAND='fd --type f'
+if ! _binary_exists fzf; then
+	_log_warning "unable to initialize without '$_' installed."
+	return 1
 fi
 
-fe() {
-  about "Open the selected file in the default editor"
-  group "fzf"
-  param "1: Search term"
-  example "fe foo"
+if [[ -z ${FZF_DEFAULT_COMMAND+x} ]] && _command_exists fd; then
+	export FZF_DEFAULT_COMMAND='fd --type f'
+fi
 
-  local IFS=$'\n'
-  local files
-  files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
-  [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
+function fe() {
+	about "Open the selected file in the default editor"
+	group "fzf"
+	param "1: Search term"
+	example "fe foo"
+
+	local IFS=$'\n'
+	local files
+	read -ra files < <(fzf-tmux --query="$1" --multi --select-1 --exit-0)
+	[[ -n "${files[*]}" ]] && "${EDITOR:-${ALTERNATE_EDITOR:-nano}}" "${files[@]}"
 }
 
-fcd() {
-  about "cd to the selected directory"
-  group "fzf"
-  param "1: Directory to browse, or . if omitted"
-  example "fcd aliases"
+function fcd() {
+	about "cd to the selected directory"
+	group "fzf"
+	param "1: Directory to browse, or . if omitted"
+	example "fcd aliases"
 
-  local dir
-  dir=$(find ${1:-.} -path '*/\.*' -prune \
-                  -o -type d -print 2> /dev/null | fzf +m) &&
-  cd "$dir"
+	local dir
+	dir=$(find "${1:-.}" -path '*/\.*' -prune \
+		-o -type d -print 2> /dev/null | fzf +m) \
+		&& cd "$dir" || return
 }
