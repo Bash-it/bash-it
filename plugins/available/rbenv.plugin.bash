@@ -1,10 +1,13 @@
 # shellcheck shell=bash
-cite about-plugin
 about-plugin 'load rbenv, if you are using it'
 
-export RBENV_ROOT="$HOME/.rbenv"
+: "${RBENV_ROOT:=$HOME/.rbenv}"
+export RBENV_ROOT
 pathmunge "$RBENV_ROOT/bin"
 
-if _command_exists rbenv; then
-	eval "$(rbenv init - bash)"
+if ! _binary_exists rbenv; then
+	_log_warning "Unable to locage 'rbenv'."
+	return 1
 fi
+
+source < <(rbenv init - bash)

@@ -1,8 +1,10 @@
 # shellcheck shell=bash
-cite about-plugin
 about-plugin 'pygmentize instead of cat to terminal if possible'
 
-_command_exists pygmentize || return
+if ! _binary_exists pygmentize; then
+	_log_warning "${BASH_SOURCE[0]##*/}: unable to initialize without '$_' installed."
+	return 1
+fi
 
 # pigmentize cat and less outputs - call them ccat and cless to avoid that
 # especially cat'ed output in scripts gets mangled with pygemtized meta characters

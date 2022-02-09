@@ -93,11 +93,14 @@ plugins/available/base.plugin.bash
 plugins/available/basher.plugin.bash
 plugins/available/battery.plugin.bash
 plugins/available/blesh.plugin.bash
+plugins/available/cht.sh.plugin.bash
 plugins/available/cmd-returned-notify.plugin.bash
 plugins/available/colors.plugin.bash
 plugins/available/direnv.plugin.bash
 plugins/available/dirs.plugin.bash
 plugins/available/docker-machine.plugin.bash
+plugins/available/fasd.plugin.bash
+plugins/available/fzf.plugin.bash
 plugins/available/gif.plugin.bash
 plugins/available/git-subrepo.plugin.bash
 plugins/available/git.plugin.bash
@@ -110,6 +113,7 @@ plugins/available/history.plugin.bash
 plugins/available/hub.plugin.bash
 plugins/available/java.plugin.bash
 plugins/available/jekyll.plugin.bash
+plugins/available/jenv.plugin.bash
 plugins/available/jump.plugin.bash
 plugins/available/latex.plugin.bash
 plugins/available/less-pretty-cat.plugin.bash
@@ -117,10 +121,12 @@ plugins/available/man.plugin.bash
 plugins/available/nginx.plugin.bash
 plugins/available/node.plugin.bash
 plugins/available/nodenv.plugin.bash
+plugins/available/nvm.plugin.bash
 plugins/available/osx-timemachine.plugin.bash
 plugins/available/osx.plugin.bash
 plugins/available/percol.plugin.bash
 plugins/available/plenv.plugin.bash
+plugins/available/powerline.plugin.bash
 plugins/available/projects.plugin.bash
 plugins/available/proxy.plugin.bash
 plugins/available/pyenv.plugin.bash
@@ -128,6 +134,7 @@ plugins/available/python.plugin.bash
 plugins/available/rbenv.plugin.bash
 plugins/available/ruby.plugin.bash
 plugins/available/textmate.plugin.bash
+plugins/available/thefuck.plugin.bash
 plugins/available/todo.plugin.bash
 plugins/available/xterm.plugin.bash
 plugins/available/zoxide.plugin.bash

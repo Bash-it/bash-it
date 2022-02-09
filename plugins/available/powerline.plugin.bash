@@ -1,9 +1,11 @@
 # shellcheck shell=bash
-
-cite about-plugin
 about-plugin 'enables powerline daemon'
 
-_command_exists powerline-daemon || return
+if ! _binary_exists powerline-daemon; then
+	_log_warning "Unable to locate '$_'."
+	return 1
+fi
+
 powerline-daemon -q
 
 #the following should not be executed if bashit powerline themes in use
@@ -12,8 +14,8 @@ case "$BASH_IT_THEME" in
 		return
 		;;
 esac
-POWERLINE_BASH_CONTINUATION=1
-POWERLINE_BASH_SELECT=1
+export POWERLINE_BASH_CONTINUATION=1
+export POWERLINE_BASH_SELECT=1
 bashPowerlineInit="$(python -c \
 	"import os; \
 	import powerline;\
@@ -22,5 +24,11 @@ bashPowerlineInit="$(python -c \
 	'bindings', \
 	'bash', \
 	'powerline.sh'))")"
-[ -e $bashPowerlineInit ] || return
-source $bashPowerlineInit
+
+if ! [[ -s ${bashPowerlineInit?} ]]; then
+	_log_warning "Failed to initialize 'powerline'."
+	return 1
+fi
+
+# shellcheck disable=SC1090
+source "${bashPowerlineInit?}"
