@@ -10,6 +10,7 @@ about-plugin 'node version manager configuration'
 url "https://github.com/nvm-sh/nvm"
 
 : "${NVM_DIR:=$HOME/.nvm}"
+export NVM_DIR
 
 # first check if NVM is managed by brew
 if _bash_it_homebrew_check; then
