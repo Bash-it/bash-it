@@ -3,7 +3,9 @@
 load ../test_helper
 load ../test_helper_libs
 
-load ../../plugins/available/battery.plugin
+function local_setup() {
+	load "../../lib/battery.bash"
+}
 
 # Sets up the `_command_exists` function so that it only responds `true` if called with
 # the name of the function that was passed in as an argument to `setup_command_exists`.
@@ -37,7 +39,7 @@ function setup_command_exists {
 # no tool
 #
 
-@test 'plugins battery: battery-percentage with no tool' {
+@test 'lib battery: battery-percentage with no tool' {
   setup_command_exists "fooooo"
 
   run battery_percentage
@@ -59,7 +61,7 @@ function setup_pmset {
   }
 }
 
-@test 'plugins battery: battery-percentage with pmset, 100%' {
+@test 'lib battery: battery-percentage with pmset, 100%' {
   setup_command_exists "pmset"
 
   setup_pmset "100%"
@@ -68,7 +70,7 @@ function setup_pmset {
   assert_output "100"
 }
 
-@test 'plugins battery: battery-percentage with pmset, 98%' {
+@test 'lib battery: battery-percentage with pmset, 98%' {
   setup_command_exists "pmset"
 
   setup_pmset "98%"
@@ -77,7 +79,7 @@ function setup_pmset {
   assert_output "98"
 }
 
-@test 'plugins battery: battery-percentage with pmset, 98.5%' {
+@test 'lib battery: battery-percentage with pmset, 98.5%' {
   setup_command_exists "pmset"
 
   setup_pmset "98.5%"
@@ -86,7 +88,7 @@ function setup_pmset {
   assert_output "98"
 }
 
-@test 'plugins battery: battery-percentage with pmset, 4%' {
+@test 'lib battery: battery-percentage with pmset, 4%' {
   setup_command_exists "pmset"
 
   setup_pmset "4%"
@@ -95,7 +97,7 @@ function setup_pmset {
   assert_output "04"
 }
 
-@test 'plugins battery: battery-percentage with pmset, no status' {
+@test 'lib battery: battery-percentage with pmset, no status' {
   setup_command_exists "pmset"
 
   setup_pmset ""
@@ -122,7 +124,7 @@ function setup_acpi {
   }
 }
 
-@test 'plugins battery: battery-percentage with acpi, 100% Full' {
+@test 'lib battery: battery-percentage with acpi, 100% Full' {
   setup_command_exists "acpi"
 
   setup_acpi "100%" "Full"
@@ -131,7 +133,7 @@ function setup_acpi {
   assert_output "100"
 }
 
-@test 'plugins battery: battery-percentage with acpi, 98% Charging' {
+@test 'lib battery: battery-percentage with acpi, 98% Charging' {
   setup_command_exists "acpi"
 
   setup_acpi "98%" "Charging"
@@ -140,7 +142,7 @@ function setup_acpi {
   assert_output "98"
 }
 
-@test 'plugins battery: battery-percentage with acpi, 98% Discharging' {
+@test 'lib battery: battery-percentage with acpi, 98% Discharging' {
   setup_command_exists "acpi"
 
   setup_acpi "98%" "Discharging"
@@ -149,7 +151,7 @@ function setup_acpi {
   assert_output "98"
 }
 
-@test 'plugins battery: battery-percentage with acpi, 98% Unknown' {
+@test 'lib battery: battery-percentage with acpi, 98% Unknown' {
   setup_command_exists "acpi"
 
   setup_acpi "98%" "Unknown"
@@ -158,7 +160,7 @@ function setup_acpi {
   assert_output "98"
 }
 
-@test 'plugins battery: battery-percentage with acpi, 4% Charging' {
+@test 'lib battery: battery-percentage with acpi, 4% Charging' {
   setup_command_exists "acpi"
 
   setup_acpi "4%" "Charging"
@@ -167,7 +169,7 @@ function setup_acpi {
   assert_output "04"
 }
 
-@test 'plugins battery: battery-percentage with acpi, 4% no status' {
+@test 'lib battery: battery-percentage with acpi, 4% no status' {
   setup_command_exists "acpi"
 
   setup_acpi "4%" ""
@@ -176,7 +178,7 @@ function setup_acpi {
   assert_output "04"
 }
 
-@test 'plugins battery: battery-percentage with acpi, no status' {
+@test 'lib battery: battery-percentage with acpi, no status' {
   setup_command_exists "acpi"
 
   setup_acpi "" ""
@@ -200,7 +202,7 @@ function setup_upower {
   }
 }
 
-@test 'plugins battery: battery-percentage with upower, 100%' {
+@test 'lib battery: battery-percentage with upower, 100%' {
   setup_command_exists "upower"
 
   setup_upower "100.00%"
@@ -209,7 +211,7 @@ function setup_upower {
   assert_output "100"
 }
 
-@test 'plugins battery: battery-percentage with upower, 98%' {
+@test 'lib battery: battery-percentage with upower, 98%' {
   setup_command_exists "upower"
 
   setup_upower "98.4567%"
@@ -218,7 +220,7 @@ function setup_upower {
   assert_output "98"
 }
 
-@test 'plugins battery: battery-percentage with upower, 98.5%' {
+@test 'lib battery: battery-percentage with upower, 98.5%' {
   setup_command_exists "upower"
 
   setup_upower "98.5%"
@@ -227,7 +229,7 @@ function setup_upower {
   assert_output "98"
 }
 
-@test 'plugins battery: battery-percentage with upower, 4%' {
+@test 'lib battery: battery-percentage with upower, 4%' {
   setup_command_exists "upower"
 
   setup_upower "4.2345%"
@@ -236,7 +238,7 @@ function setup_upower {
   assert_output "04"
 }
 
-@test 'plugins battery: battery-percentage with upower, no output' {
+@test 'lib battery: battery-percentage with upower, no output' {
   setup_command_exists "upower"
 
   setup_upower ""
@@ -260,7 +262,7 @@ function setup_ioreg {
   }
 }
 
-@test 'plugins battery: battery-percentage with ioreg, 100%' {
+@test 'lib battery: battery-percentage with ioreg, 100%' {
   setup_command_exists "ioreg"
 
   setup_ioreg "100%"
@@ -269,7 +271,7 @@ function setup_ioreg {
   assert_output "100"
 }
 
-@test 'plugins battery: battery-percentage with ioreg, 98%' {
+@test 'lib battery: battery-percentage with ioreg, 98%' {
   setup_command_exists "ioreg"
 
   setup_ioreg "98%"
@@ -278,7 +280,7 @@ function setup_ioreg {
   assert_output "98"
 }
 
-@test 'plugins battery: battery-percentage with ioreg, 98.5%' {
+@test 'lib battery: battery-percentage with ioreg, 98.5%' {
   setup_command_exists "ioreg"
 
   setup_ioreg "98.5%"
@@ -287,7 +289,7 @@ function setup_ioreg {
   assert_output "98"
 }
 
-@test 'plugins battery: battery-percentage with ioreg, 4%' {
+@test 'lib battery: battery-percentage with ioreg, 4%' {
   setup_command_exists "ioreg"
 
   setup_ioreg "4%"
@@ -296,7 +298,7 @@ function setup_ioreg {
   assert_output "04"
 }
 
-@test 'plugins battery: battery-percentage with ioreg, no status' {
+@test 'lib battery: battery-percentage with ioreg, no status' {
   setup_command_exists "ioreg"
 
   # Simulate that no battery is present
@@ -323,7 +325,7 @@ function setup_WMIC {
   }
 }
 
-@test 'plugins battery: battery-percentage with WMIC, 100%' {
+@test 'lib battery: battery-percentage with WMIC, 100%' {
   setup_command_exists "WMIC"
 
   setup_WMIC "100%"
@@ -332,7 +334,7 @@ function setup_WMIC {
   assert_output "100"
 }
 
-@test 'plugins battery: battery-percentage with WMIC, 98%' {
+@test 'lib battery: battery-percentage with WMIC, 98%' {
   setup_command_exists "WMIC"
 
   setup_WMIC "98%"
@@ -341,7 +343,7 @@ function setup_WMIC {
   assert_output "98"
 }
 
-@test 'plugins battery: battery-percentage with WMIC, 98.5%' {
+@test 'lib battery: battery-percentage with WMIC, 98.5%' {
   setup_command_exists "WMIC"
 
   setup_WMIC "98.5%"
@@ -350,7 +352,7 @@ function setup_WMIC {
   assert_output "98"
 }
 
-@test 'plugins battery: battery-percentage with WMIC, 4%' {
+@test 'lib battery: battery-percentage with WMIC, 4%' {
   setup_command_exists "WMIC"
 
   setup_WMIC "4%"
@@ -359,7 +361,7 @@ function setup_WMIC {
   assert_output "04"
 }
 
-@test 'plugins battery: battery-percentage with WMIC, no status' {
+@test 'lib battery: battery-percentage with WMIC, no status' {
   setup_command_exists "WMIC"
 
   setup_WMIC ""
