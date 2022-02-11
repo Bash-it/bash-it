@@ -9,14 +9,16 @@ function set_color() {
 	fi
 	if [[ "${2:-}" != "-" ]]; then
 		bg="48;5;${2}"
-		[[ -n "${fg}" ]] && bg=";${bg}"
+		if [[ -n "${fg}" ]]; then
+			bg=";${bg}"
+		fi
 	fi
-	echo -e "\[\033[${fg}${bg}m\]"
+	printf '\[\\e[%s%sm\]' "${fg}" "${bg}"
 }
 
 #Customising User Info Segment
 function __powerline_user_info_prompt() {
-	local user_info="${SHORT_USER:-${USER}}"
+	local user_info='\u'
 	local color=${USER_INFO_THEME_PROMPT_COLOR-${POWERLINE_USER_INFO_COLOR-"32"}}
 
 	if [[ "${THEME_CHECK_SUDO:-false}" == true ]]; then
@@ -32,12 +34,12 @@ function __powerline_user_info_prompt() {
 			fi
 			;;
 		*)
-			if [[ -n "${SSH_CLIENT:-}" ]] || [[ -n "${SSH_CONNECTION:-}" ]]; then
-				user_info="${USER_INFO_SSH_CHAR-${POWERLINE_USER_INFO_SSH_CHAR-"⌁ "}}${user_info}"
+			if [[ -n "${SSH_CLIENT:-}" || -n "${SSH_CONNECTION:-}" ]]; then
+				user_info="${USER_INFO_SSH_CHAR-${POWERLINE_USER_INFO_SSH_CHAR-"⌁"}}${user_info}"
 			fi
 			;;
 	esac
-	echo "${user_info}|${color}"
+	printf '%s|%s' "${user_info}" "${color}"
 }
 
 function __powerline_terraform_prompt() {
@@ -45,7 +47,9 @@ function __powerline_terraform_prompt() {
 
 	if [[ -d .terraform ]]; then
 		terraform_workspace="$(terraform_workspace_prompt)"
-		[[ -n "${terraform_workspace}" ]] && echo "${TERRAFORM_CHAR-${POWERLINE_TERRAFORM_CHAR-"❲t❳ "}}${terraform_workspace}|${TERRAFORM_THEME_PROMPT_COLOR-${POWERLINE_TERRAFORM_COLOR-"161"}}"
+		if [[ -n "${terraform_workspace}" ]]; then
+			printf '%s%s|%s' "${TERRAFORM_CHAR-${POWERLINE_TERRAFORM_CHAR-"❲t❳"}}" "${terraform_workspace}" "${TERRAFORM_THEME_PROMPT_COLOR-${POWERLINE_TERRAFORM_COLOR-"161"}}"
+		fi
 	fi
 }
 
@@ -53,14 +57,18 @@ function __powerline_gcloud_prompt() {
 	local active_gcloud_account=""
 
 	active_gcloud_account="$(active_gcloud_account_prompt)"
-	[[ -n "${active_gcloud_account}" ]] && echo "${GCLOUD_CHAR-${POWERLINE_GCLOUD_CHAR-"❲G❳ "}}${active_gcloud_account}|${GCLOUD_THEME_PROMPT_COLOR-${POWERLINE_GCLOUD_COLOR-"161"}}"
+	if [[ -n "${active_gcloud_account}" ]]; then
+		printf '%s%s|%s' "${GCLOUD_CHAR-${POWERLINE_GCLOUD_CHAR-"❲G❳"}}" "${active_gcloud_account}" "${GCLOUD_THEME_PROMPT_COLOR-${POWERLINE_GCLOUD_COLOR-"161"}}"
+	fi
 }
 
 function __powerline_node_prompt() {
 	local node_version=""
 
 	node_version="$(node_version_prompt)"
-	[[ -n "${node_version}" ]] && echo "${NODE_CHAR-${POWERLINE_NODE_CHAR-="❲n❳ "}}${node_version}|${NODE_THEME_PROMPT_COLOR-${POWERLINE_NODE_COLOR-"22"}}"
+	if [[ -n "${node_version}" ]]; then
+		printf '%s%s|%s' "${NODE_CHAR-${POWERLINE_NODE_CHAR-="❲n❳"}}" "${node_version}" "${NODE_THEME_PROMPT_COLOR-${POWERLINE_NODE_COLOR-"22"}}"
+	fi
 }
 
 #Customising Ruby Prompt
@@ -74,7 +82,7 @@ function __powerline_ruby_prompt() {
 	fi
 
 	if [[ -n "${ruby_version:-}" ]]; then
-		echo "${RUBY_CHAR-${POWERLINE_RUBY_CHAR-"💎 "}}${ruby_version}|${RUBY_THEME_PROMPT_COLOR-${POWERLINE_RUBY_COLOR-"161"}}"
+		printf '%s%s|%s' "${RUBY_CHAR-${POWERLINE_RUBY_CHAR-"💎"}}" "${ruby_version}" "${RUBY_THEME_PROMPT_COLOR-${POWERLINE_RUBY_COLOR-"161"}}"
 	fi
 }
 
@@ -85,7 +93,9 @@ function __powerline_k8s_context_prompt() {
 		kubernetes_context="$(k8s_context_prompt)"
 	fi
 
-	[[ -n "${kubernetes_context}" ]] && echo "${KUBERNETES_CONTEXT_THEME_CHAR-${POWERLINE_KUBERNETES_CONTEXT_CHAR-"⎈ "}}${kubernetes_context}|${KUBERNETES_CONTEXT_THEME_PROMPT_COLOR-${POWERLINE_KUBERNETES_CONTEXT_COLOR-"26"}}"
+	if [[ -n "${kubernetes_context}" ]]; then
+		printf '%s%s|%s' "${KUBERNETES_CONTEXT_THEME_CHAR-${POWERLINE_KUBERNETES_CONTEXT_CHAR-"⎈"}}" "${kubernetes_context}" "${KUBERNETES_CONTEXT_THEME_PROMPT_COLOR-${POWERLINE_KUBERNETES_CONTEXT_COLOR-"26"}}"
+	fi
 }
 
 function __powerline_k8s_namespace_prompt() {
@@ -95,7 +105,9 @@ function __powerline_k8s_namespace_prompt() {
 		kubernetes_namespace="$(k8s_namespace_prompt)"
 	fi
 
-	[[ -n "${kubernetes_namespace}" ]] && echo "${KUBERNETES_NAMESPACE_THEME_CHAR-${POWERLINE_KUBERNETES_NAMESPACE_CHAR-"⎈ "}}${kubernetes_namespace}|${KUBERNETES_NAMESPACE_THEME_PROMPT_COLOR-${POWERLINE_KUBERNETES_NAMESPACE_COLOR-"60"}}"
+	if [[ -n "${kubernetes_namespace}" ]]; then
+		printf '%s%s|%s' "${KUBERNETES_NAMESPACE_THEME_CHAR-${POWERLINE_KUBERNETES_NAMESPACE_CHAR-"⎈"}}" "${kubernetes_namespace}" "${KUBERNETES_NAMESPACE_THEME_PROMPT_COLOR-${POWERLINE_KUBERNETES_NAMESPACE_COLOR-"60"}}"
+	fi
 }
 
 #Customising Python (venv) Prompt
@@ -104,12 +116,14 @@ function __powerline_python_venv_prompt() {
 
 	if [[ -n "${CONDA_DEFAULT_ENV:-}" ]]; then
 		python_venv="${CONDA_DEFAULT_ENV}"
-		local PYTHON_VENV_CHAR=${CONDA_PYTHON_VENV_CHAR-${POWERLINE_CONDA_PYTHON_VENV_CHAR-"ⓔ "}}
+		local PYTHON_VENV_CHAR=${CONDA_PYTHON_VENV_CHAR-${POWERLINE_CONDA_PYTHON_VENV_CHAR-"ⓔ"}}
 	elif [[ -n "${VIRTUAL_ENV:-}" ]]; then
 		python_venv="${VIRTUAL_ENV##*/}"
 	fi
 
-	[[ -n "${python_venv}" ]] && echo "${PYTHON_VENV_CHAR-${POWERLINE_PYTHON_VENV_CHAR-"ⓔ "}}${python_venv}|${PYTHON_VENV_THEME_PROMPT_COLOR-${POWERLINE_PYTHON_VENV_COLOR-"35"}}"
+	if [[ -n "${python_venv}" ]]; then
+		printf '%s%s|%s' "${PYTHON_VENV_CHAR-${POWERLINE_PYTHON_VENV_CHAR-"ⓔ"}}" "${python_venv}" "${PYTHON_VENV_THEME_PROMPT_COLOR-${POWERLINE_PYTHON_VENV_COLOR-"35"}}"
+	fi
 }
 
 #Customising SCM(GIT) Prompt
@@ -140,24 +154,24 @@ function __powerline_scm_prompt() {
 		elif [[ "${SCM_SVN_CHAR?}" == "${SCM_CHAR}" ]]; then
 			scm_prompt+="${SCM_CHAR}${SCM_BRANCH?}${SCM_STATE?}"
 		fi
-		echo "${scm_prompt}|${color}"
+		printf '%s|%s' "${scm_prompt}" "${color}"
 	fi
 }
 
 function __powerline_cwd_prompt() {
-	echo "\w|${CWD_THEME_PROMPT_COLOR-240}"
+	printf '%s|%s' "\w" "${CWD_THEME_PROMPT_COLOR-"240"}"
 }
 
 function __powerline_hostname_prompt() {
-	echo "\h|${HOST_THEME_PROMPT_COLOR-"0"}"
+	printf '%s|%s' "\h" "${HOST_THEME_PROMPT_COLOR-"0"}"
 }
 
 function __powerline_wd_prompt() {
-	echo "\W|${CWD_THEME_PROMPT_COLOR}"
+	printf '%s|%s' "\W" "${CWD_THEME_PROMPT_COLOR-"240"}"
 }
 
 function __powerline_clock_prompt() {
-	echo "\D{${THEME_CLOCK_FORMAT-"%H:%M:%S"}}|${CLOCK_THEME_PROMPT_COLOR-"240"}"
+	printf '%s|%s' "\D{${THEME_CLOCK_FORMAT-"%H:%M:%S"}}" "${CLOCK_THEME_PROMPT_COLOR-"240"}"
 }
 
 function __powerline_battery_prompt() {
@@ -174,26 +188,28 @@ function __powerline_battery_prompt() {
 		else
 			color="${BATTERY_STATUS_THEME_PROMPT_GOOD_COLOR-"70"}"
 		fi
-		ac_adapter_connected && battery_status="${BATTERY_AC_CHAR-"+ "}${battery_status}"
-		echo "${battery_status}%|${color}"
+		if ac_adapter_connected; then
+			battery_status="${BATTERY_AC_CHAR-"+"}${battery_status}"
+		fi
+		printf '%s|%s' "${battery_status}%" "${color}"
 	fi
 }
 
 function __powerline_in_vim_prompt() {
 	if [[ -n "${VIMRUNTIME:-}" ]]; then
-		echo "${IN_VIM_THEME_PROMPT_TEXT-"vim"}|${IN_VIM_THEME_PROMPT_COLOR-"245"}"
+		printf '%s|%s' "${IN_VIM_THEME_PROMPT_TEXT-"vim"}" "${IN_VIM_THEME_PROMPT_COLOR-"245"}"
 	fi
 }
 
 function __powerline_aws_profile_prompt() {
 	if [[ -n "${AWS_PROFILE:-}" ]]; then
-		echo "${AWS_PROFILE_CHAR-${POWERLINE_AWS_PROFILE_CHAR-"❲aws❳ "}}${AWS_PROFILE}|${AWS_PROFILE_PROMPT_COLOR-${POWERLINE_AWS_PROFILE_COLOR-"208"}}"
+		printf '%s%s|%s' "${AWS_PROFILE_CHAR-${POWERLINE_AWS_PROFILE_CHAR-"❲aws❳"}}" "${AWS_PROFILE}" "${AWS_PROFILE_PROMPT_COLOR-${POWERLINE_AWS_PROFILE_COLOR-"208"}}"
 	fi
 }
 
 function __powerline_in_toolbox_prompt() {
-	if [[ -f /run/.containerenv ]] && [[ -f /run/.toolboxenv ]]; then
-		echo "${IN_TOOLBOX_THEME_PROMPT_TEXT-"⬢ "}|${IN_TOOLBOX_THEME_PROMPT_COLOR-"125"}"
+	if [[ -f /run/.containerenv && -f /run/.toolboxenv ]]; then
+		printf '%s|%s' "${IN_TOOLBOX_THEME_PROMPT_TEXT-"⬢"}" "${IN_TOOLBOX_THEME_PROMPT_COLOR-"125"}"
 	fi
 }
 
@@ -201,7 +217,7 @@ function __powerline_shlvl_prompt() {
 	if [[ "${SHLVL}" -gt 1 ]]; then
 		local prompt="${SHLVL_THEME_PROMPT_CHAR-"§"}"
 		local level=$((SHLVL - 1))
-		echo "${prompt}${level}|${SHLVL_THEME_PROMPT_COLOR-${HOST_THEME_PROMPT_COLOR-"0"}}"
+		printf '%s|%s' "${prompt}${level}" "${SHLVL_THEME_PROMPT_COLOR-${HOST_THEME_PROMPT_COLOR-"0"}}"
 	fi
 }
 
@@ -212,22 +228,24 @@ function __powerline_dirstack_prompt() {
 		if [[ "${depth}" -ge 2 ]]; then
 			prompt+="${depth}"
 		fi
-		echo "${prompt}|${DIRSTACK_THEME_PROMPT_COLOR-${POWERLINE_DIRSTACK_COLOR-${CWD_THEME_PROMPT_COLOR-${POWERLINE_CWD_COLOR-"240"}}}}"
+		printf '%s|%s' "${prompt}" "${DIRSTACK_THEME_PROMPT_COLOR-${POWERLINE_DIRSTACK_COLOR-${CWD_THEME_PROMPT_COLOR-${POWERLINE_CWD_COLOR-"240"}}}}"
 	fi
 }
 
 function __powerline_history_number_prompt() {
-	echo "${HISTORY_NUMBER_THEME_PROMPT_CHAR-${POWERLINE_HISTORY_NUMBER_CHAR-"#"}}\!|${HISTORY_NUMBER_THEME_PROMPT_COLOR-${POWERLINE_HISTORY_NUMBER_COLOR-"0"}}"
+	printf '%s%s|%s' "${HISTORY_NUMBER_THEME_PROMPT_CHAR-${POWERLINE_HISTORY_NUMBER_CHAR-"#"}}" '\!' "${HISTORY_NUMBER_THEME_PROMPT_COLOR-${POWERLINE_HISTORY_NUMBER_COLOR-"0"}}"
 }
 
 function __powerline_command_number_prompt() {
-	echo "${COMMAND_NUMBER_THEME_PROMPT_CHAR-${POWERLINE_COMMAND_NUMBER_CHAR-"#"}}\#|${COMMAND_NUMBER_THEME_PROMPT_COLOR-${POWERLINE_COMMAND_NUMBER_COLOR-"0"}}"
+	printf '%s%s|%s' "${COMMAND_NUMBER_THEME_PROMPT_CHAR-${POWERLINE_COMMAND_NUMBER_CHAR-"#"}}" '\#' "${COMMAND_NUMBER_THEME_PROMPT_COLOR-${POWERLINE_COMMAND_NUMBER_COLOR-"0"}}"
 }
 
 function __powerline_duration_prompt() {
 	local duration
 	duration=$(_command_duration)
-	[[ -n "$duration" ]] && echo "${duration}|${COMMAND_DURATION_PROMPT_COLOR?}"
+	if [[ -n "$duration" ]]; then
+		printf '%s|%s' "${duration}" "${COMMAND_DURATION_PROMPT_COLOR?}"
+	fi
 }
 
 function __powerline_left_segment() {
@@ -268,7 +286,9 @@ function __powerline_left_last_segment_padding() {
 }
 
 function __powerline_last_status_prompt() {
-	[[ "$1" -ne 0 ]] && echo "${1}|${LAST_STATUS_THEME_PROMPT_COLOR-"52"}"
+	if [[ "${1?}" -ne 0 ]]; then
+		printf '%s|%s' "${1}" "${LAST_STATUS_THEME_PROMPT_COLOR-"52"}"
+	fi
 }
 
 function __powerline_prompt_command() {
@@ -289,23 +309,27 @@ function __powerline_prompt_command() {
 	# shellcheck disable=SC2068 # intended behavior
 	for segment in ${POWERLINE_PROMPT[@]-"user_info" "scm" "python_venv" "ruby" "node" "cwd"}; do
 		info="$("__powerline_${segment}_prompt")"
-		[[ -n "${info}" ]] && __powerline_left_segment "${info}"
+		if [[ -n "${info}" ]]; then
+			__powerline_left_segment "${info}"
+		fi
 	done
 
-	[[ "${last_status}" -ne 0 ]] && __powerline_left_segment "$(__powerline_last_status_prompt "${last_status}")"
+	if [[ "${last_status}" -ne 0 ]]; then
+		__powerline_left_segment "$(__powerline_last_status_prompt "${last_status}")"
+	fi
 
-	if [[ -n "${LEFT_PROMPT:-}" ]] && [[ "${POWERLINE_COMPACT_AFTER_LAST_SEGMENT:-0}" -eq 0 ]]; then
+	if [[ -n "${LEFT_PROMPT:-}" && "${POWERLINE_COMPACT_AFTER_LAST_SEGMENT:-0}" -eq 0 ]]; then
 		__powerline_left_last_segment_padding
 	fi
 
 	# By default we try to match the prompt to the adjacent segment's background color,
 	# but when part of the prompt exists within that segment, we instead match the foreground color.
 	prompt_color="$(set_color "${LAST_SEGMENT_COLOR?}" -)"
-	if [[ -n "${LEFT_PROMPT:-}" ]] && [[ -n "${POWERLINE_LEFT_LAST_SEGMENT_PROMPT_CHAR:-}" ]]; then
+	if [[ -n "${LEFT_PROMPT:-}" && -n "${POWERLINE_LEFT_LAST_SEGMENT_PROMPT_CHAR:-}" ]]; then
 		LEFT_PROMPT+="$(set_color - "${LAST_SEGMENT_COLOR?}")${POWERLINE_LEFT_LAST_SEGMENT_PROMPT_CHAR}"
 		prompt_color="${normal?}"
 	fi
-	[[ -n "${LEFT_PROMPT:-}" ]] && LEFT_PROMPT+="${prompt_color}${POWERLINE_PROMPT_CHAR-\\$}${normal?}"
+	LEFT_PROMPT+="${prompt_color}${POWERLINE_PROMPT_CHAR-\\$}${normal?}"
 
 	if [[ "${POWERLINE_COMPACT_PROMPT:-0}" -eq 0 ]]; then
 		LEFT_PROMPT+=" "
