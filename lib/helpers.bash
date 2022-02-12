@@ -8,16 +8,19 @@
 : "${BASH_IT_LOAD_PRIORITY_COMPLETION:=350}"
 BASH_IT_LOAD_PRIORITY_SEPARATOR="---"
 
-# Handle the different ways of running `sed` without generating a backup file based on OS
-# - GNU sed (Linux) uses `-i`
-# - BSD sed (macOS) uses `-i ''`
+# Handle the different ways of running `sed` without generating a backup file based on provenance:
+# - GNU sed (Linux) uses `-i''`
+# - BSD sed (FreeBSD/macOS/Solaris/PlayStation) uses `-i ''`
 # To use this in Bash-it for inline replacements with `sed`, use the following syntax:
 # sed "${BASH_IT_SED_I_PARAMETERS[@]}" -e "..." file
-BASH_IT_SED_I_PARAMETERS=('-i')
 # shellcheck disable=SC2034 # expected for this case
-case "$OSTYPE" in
-	'darwin'*) BASH_IT_SED_I_PARAMETERS=('-i' '') ;;
-esac
+if sed --version > /dev/null 2>&1; then
+	# GNU sed accepts "long" options
+	BASH_IT_SED_I_PARAMETERS=('-i')
+else
+	# BSD sed errors on invalid option `-`
+	BASH_IT_SED_I_PARAMETERS=('-i' '')
+fi
 
 function _command_exists() {
 	_about 'checks for existence of a command'
