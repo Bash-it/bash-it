@@ -23,6 +23,7 @@ hooks/
 lib/
 plugins/
 scripts/
+template/
 test/
 
 # root files
