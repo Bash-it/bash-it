@@ -20,6 +20,7 @@ aliases/
 docs/
 hooks/
 scripts/
+template/
 
 # root files
 #
