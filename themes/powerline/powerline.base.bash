@@ -286,7 +286,8 @@ function __powerline_prompt_command() {
 	fi
 
 	## left prompt ##
-	for segment in ${POWERLINE_PROMPT-"user_info" "scm" "python_venv" "ruby" "node" "cwd"}; do
+	# shellcheck disable=SC2068 # intended behavior
+	for segment in ${POWERLINE_PROMPT[@]-"user_info" "scm" "python_venv" "ruby" "node" "cwd"}; do
 		info="$("__powerline_${segment}_prompt")"
 		[[ -n "${info}" ]] && __powerline_left_segment "${info}"
 	done
