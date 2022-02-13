@@ -86,6 +86,7 @@ lib/helpers.bash
 lib/history.bash
 lib/log.bash
 lib/preexec.bash
+lib/preview.bash
 lib/search.bash
 lib/utilities.bash
 
