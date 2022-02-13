@@ -118,19 +118,13 @@ _bash_it_library_finalize_hook+=('_bash_it_appearance_scm_init')
 function scm() {
 	if [[ "${SCM_CHECK:-true}" == "false" ]]; then
 		SCM="${SCM_NONE-NONE}"
-	elif [[ -f .git/HEAD ]] && [[ -x "${GIT_EXE-}" ]]; then
+	elif [[ -x "${GIT_EXE-}" ]] && _bash-it-find-in-ancestor '.git' > /dev/null; then
 		SCM="${SCM_GIT?}"
-	elif [[ -d .hg ]] && [[ -x "${HG_EXE-}" ]]; then
+	elif [[ -x "${HG_EXE-}" ]] && _bash-it-find-in-ancestor '.hg' > /dev/null; then
 		SCM="${SCM_HG?}"
-	elif [[ -d .svn ]] && [[ -x "${SVN_EXE-}" ]]; then
+	elif [[ -x "${SVN_EXE-}" ]] && _bash-it-find-in-ancestor '.svn' > /dev/null; then
 		SCM="${SCM_SVN?}"
-	elif [[ -x "${GIT_EXE-}" ]] && [[ -n "$(git rev-parse --is-inside-work-tree 2> /dev/null)" ]]; then
-		SCM="${SCM_GIT?}"
-	elif [[ -x "${HG_EXE-}" ]] && [[ -n "$(hg root 2> /dev/null)" ]]; then
-		SCM="${SCM_HG?}"
-	elif [[ -x "${SVN_EXE-}" ]] && [[ -n "$(svn info --show-item wc-root 2> /dev/null)" ]]; then
-		SCM="${SCM_SVN?}"
-	elif [[ -x "${P4_EXE-}" ]] && [[ -n "$(p4 set P4CLIENT 2> /dev/null)" ]]; then
+	elif [[ -x "${P4_EXE-}" && -n "$(p4 set P4CLIENT 2> /dev/null)" ]]; then
 		SCM="${SCM_P4?}"
 	else
 		SCM="${SCM_NONE-NONE}"
@@ -376,7 +370,7 @@ function hg_prompt_vars() {
 	SCM_PREFIX="${HG_THEME_PROMPT_PREFIX:-${SCM_THEME_PROMPT_PREFIX-}}"
 	SCM_SUFFIX="${HG_THEME_PROMPT_SUFFIX:-${SCM_THEME_PROMPT_SUFFIX-}}"
 
-	HG_ROOT=$(_bash-it-find-in-ancestor ".hg")
+	HG_ROOT="$(_bash-it-find-in-ancestor ".hg")/.hg"
 
 	if [[ -f "$HG_ROOT/branch" ]]; then
 		# Mercurial holds it's current branch in .hg/branch file
