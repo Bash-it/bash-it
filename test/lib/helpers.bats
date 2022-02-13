@@ -296,7 +296,7 @@ function local_setup {
 
   assert_link_exist "$BASH_IT/enabled/150---general.aliases.bash"
   assert_link_exist "$BASH_IT/enabled/250---base.plugin.bash"
-  assert_link_exist "$BASH_IT/enabled/365---alias-completion.plugin.bash"
+  assert_link_exist "$BASH_IT/enabled/800---aliases.completion.bash"
   assert_link_exist "$BASH_IT/enabled/350---bash-it.completion.bash"
   assert_link_exist "$BASH_IT/enabled/325---system.completion.bash"
 }
@@ -356,7 +356,7 @@ function local_setup {
   run _bash-it-profile-load "test"
   assert_link_not_exist "$BASH_IT/enabled/150---general.aliases.bash"
   assert_link_not_exist "$BASH_IT/enabled/250---base.plugin.bash"
-  assert_link_not_exist "$BASH_IT/enabled/365---alias-completion.plugin.bash"
+  assert_link_not_exist "$BASH_IT/enabled/800---aliases.completion.bash"
   assert_link_not_exist "$BASH_IT/enabled/350---bash-it.completion.bash"
   assert_link_not_exist "$BASH_IT/enabled/325---system.completion.bash"
 }
@@ -384,7 +384,7 @@ function local_setup {
 
 @test "helpers: profile load corrupted profile file: bad subdirectory" {
   run _bash-it-profile-load "test-bad-type"
-  assert_line -n 1 -p "Bad line(#5) in profile, aborting load..."
+  assert_line -n 1 -p "Bad line(#4) in profile, aborting load..."
 }
 
 @test "helpers: profile rm sanity" {
