@@ -2,7 +2,7 @@
 about-alias 'general aliases'
 
 if command ls --color -d . &> /dev/null; then
-	alias ls="ls --color=auto"
+	alias ls='ls --color=auto'
 	# BSD `ls` doesn't need an argument (`-G`) when `$CLICOLOR` is set.
 fi
 
@@ -14,11 +14,11 @@ alias l='ls -a'
 alias l1='ls -1'
 alias lf='ls -F'
 
-alias _="sudo"
+alias _='sudo'
 
 # Shortcuts to edit startup files
-alias vbrc="${VISUAL:-vim} ~/.bashrc"
-alias vbpf="${VISUAL:-vim} ~/.bash_profile"
+alias vbrc='${VISUAL:-vim} ~/.bashrc'
+alias vbpf='${VISUAL:-vim} ~/.bash_profile'
 
 # colored grep
 # Need to check an existing file for a pattern that will be found to ensure
@@ -70,11 +70,11 @@ alias md='mkdir -p'
 alias rd='rmdir'
 
 # Shorten extract
-alias xt="extract"
+alias xt='extract'
 
 # sudo editors
-alias svim="sudo ${VISUAL:-vim}"
-alias snano="sudo nano"
+alias svim='sudo ${VISUAL:-vim}'
+alias snano='sudo nano'
 
 # Display whatever file is regular file or folder
 function catt() {
