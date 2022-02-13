@@ -249,22 +249,22 @@ function __powerline_left_segment() {
 
 	#for seperator character
 	if [[ "${SEGMENTS_AT_LEFT?}" -eq 0 ]]; then
-		if [[ "${POWERLINE_COMPACT_BEFORE_FIRST_SEGMENT:-0}" -ne 0 ]]; then
+		if [[ "${POWERLINE_COMPACT_BEFORE_FIRST_SEGMENT:-${POWERLINE_COMPACT:-0}}" -ne 0 ]]; then
 			pad_before_segment=""
 		fi
 	else
-		if [[ "${POWERLINE_COMPACT_AFTER_SEPARATOR:-0}" -ne 0 ]]; then
+		if [[ "${POWERLINE_COMPACT_AFTER_SEPARATOR:-${POWERLINE_COMPACT:-0}}" -ne 0 ]]; then
 			pad_before_segment=""
 		fi
 		# Since the previous segment wasn't the last segment, add padding, if needed
 		#
-		if [[ "${POWERLINE_COMPACT_BEFORE_SEPARATOR:-0}" -eq 0 ]]; then
+		if [[ "${POWERLINE_COMPACT_BEFORE_SEPARATOR:-${POWERLINE_COMPACT:-0}}" -eq 0 ]]; then
 			LEFT_PROMPT+="$(set_color - "${LAST_SEGMENT_COLOR?}") ${normal?}"
 		fi
 		if [[ "${LAST_SEGMENT_COLOR?}" -eq "${params[1]:-}" ]]; then
-			LEFT_PROMPT+="$(set_color - "${LAST_SEGMENT_COLOR?}")${POWERLINE_LEFT_SEPARATOR_SOFT:- }${normal?}"
+			LEFT_PROMPT+="$(set_color - "${LAST_SEGMENT_COLOR?}")${POWERLINE_LEFT_SEPARATOR_SOFT- }${normal?}"
 		else
-			LEFT_PROMPT+="$(set_color "${LAST_SEGMENT_COLOR?}" "${params[1]:-}")${POWERLINE_LEFT_SEPARATOR:- }${normal?}"
+			LEFT_PROMPT+="$(set_color "${LAST_SEGMENT_COLOR?}" "${params[1]:-}")${POWERLINE_LEFT_SEPARATOR- }${normal?}"
 		fi
 	fi
 
@@ -287,7 +287,8 @@ function __powerline_last_status_prompt() {
 
 function __powerline_prompt_command() {
 	local last_status="$?" ## always the first
-	local info prompt_color segment
+	local beginning_of_line='\[\e[G\]'
+	local info prompt_color segment prompt
 
 	local LEFT_PROMPT=""
 	local SEGMENTS_AT_LEFT=0
@@ -312,22 +313,22 @@ function __powerline_prompt_command() {
 		__powerline_left_segment "$(__powerline_last_status_prompt "${last_status}")"
 	fi
 
-	if [[ -n "${LEFT_PROMPT:-}" && "${POWERLINE_COMPACT_AFTER_LAST_SEGMENT:-0}" -eq 0 ]]; then
+	if [[ -n "${LEFT_PROMPT:-}" && "${POWERLINE_COMPACT_AFTER_LAST_SEGMENT:-${POWERLINE_COMPACT:-0}}" -eq 0 ]]; then
 		__powerline_left_last_segment_padding
 	fi
 
 	# By default we try to match the prompt to the adjacent segment's background color,
 	# but when part of the prompt exists within that segment, we instead match the foreground color.
 	prompt_color="$(set_color "${LAST_SEGMENT_COLOR?}" -)"
-	if [[ -n "${LEFT_PROMPT:-}" && -n "${POWERLINE_LEFT_LAST_SEGMENT_PROMPT_CHAR:-}" ]]; then
-		LEFT_PROMPT+="$(set_color - "${LAST_SEGMENT_COLOR?}")${POWERLINE_LEFT_LAST_SEGMENT_PROMPT_CHAR}"
+	if [[ -n "${LEFT_PROMPT:-}" && -n "${POWERLINE_LEFT_LAST_SEGMENT_END_CHAR:-}" ]]; then
+		LEFT_PROMPT+="$(set_color - "${LAST_SEGMENT_COLOR?}")${POWERLINE_LEFT_LAST_SEGMENT_END_CHAR}"
 		prompt_color="${normal?}"
 	fi
-	LEFT_PROMPT+="${prompt_color}${POWERLINE_PROMPT_CHAR-\\$}${normal?}"
 
-	if [[ "${POWERLINE_COMPACT_PROMPT:-0}" -eq 0 ]]; then
-		LEFT_PROMPT+=" "
+	prompt="${prompt_color}${PROMPT_CHAR-${POWERLINE_PROMPT_CHAR-\\$}}${normal?}"
+	if [[ "${POWERLINE_COMPACT_PROMPT:-${POWERLINE_COMPACT:-0}}" -eq 0 ]]; then
+		prompt+=" "
 	fi
 
-	PS1="${LEFT_PROMPT?}"
+	PS1="${beginning_of_line}${normal?}${LEFT_PROMPT}${prompt}"
 }
