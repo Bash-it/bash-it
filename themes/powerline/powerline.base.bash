@@ -24,21 +24,15 @@ function __powerline_user_info_prompt() {
 	if [[ "${THEME_CHECK_SUDO:-false}" == true ]]; then
 		if sudo -vn 2> /dev/null; then
 			color=${USER_INFO_THEME_PROMPT_COLOR_SUDO-${POWERLINE_USER_INFO_COLOR_SUDO-"202"}}
+			if [[ "${POWERLINE_PROMPT_USER_INFO_MODE:-}" == "sudo" ]]; then
+				user_info="!"
+			fi
 		fi
 	fi
 
-	case "${POWERLINE_PROMPT_USER_INFO_MODE:-}" in
-		"sudo")
-			if [[ "${color}" == "${USER_INFO_THEME_PROMPT_COLOR_SUDO-${POWERLINE_USER_INFO_COLOR_SUDO-"202"}}" ]]; then
-				user_info="!"
-			fi
-			;;
-		*)
-			if [[ -n "${SSH_CLIENT:-}" || -n "${SSH_CONNECTION:-}" ]]; then
-				user_info="${USER_INFO_SSH_CHAR-${POWERLINE_USER_INFO_SSH_CHAR-"⌁"}}${user_info}"
-			fi
-			;;
-	esac
+	if [[ -n "${SSH_CLIENT:-}" || -n "${SSH_CONNECTION:-}" ]]; then
+		user_info="${USER_INFO_SSH_CHAR-${POWERLINE_USER_INFO_SSH_CHAR-"⌁"}}${user_info}"
+	fi
 	printf '%s|%s' "${user_info}" "${color}"
 }
 
