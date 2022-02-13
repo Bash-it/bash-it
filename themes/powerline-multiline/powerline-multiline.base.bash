@@ -10,10 +10,10 @@ function __powerline_right_segment() {
 	local padding=0
 
 	if [[ "${SEGMENTS_AT_RIGHT}" -eq 0 ]]; then
-		if [[ "${POWERLINE_COMPACT_AFTER_LAST_SEGMENT}" -ne 0 ]]; then
+		if [[ "${POWERLINE_COMPACT_AFTER_LAST_SEGMENT:-${POWERLINE_COMPACT:-0}}" -ne 0 ]]; then
 			pad_before_segment=""
 		fi
-		RIGHT_PROMPT+="$(set_color "${params[1]:-}" -)${POWERLINE_RIGHT_END?}${normal?}"
+		RIGHT_PROMPT+="$(set_color "${params[1]:-}" -)${POWERLINE_RIGHT_LAST_SEGMENT_END_CHAR:-}${normal?}"
 		((padding += 1))
 	else
 		if [[ "${POWERLINE_COMPACT_BEFORE_SEPARATOR:-}" -ne 0 ]]; then
@@ -26,9 +26,9 @@ function __powerline_right_segment() {
 			((padding += 1))
 		fi
 		if [[ "${LAST_SEGMENT_COLOR}" -eq "${params[1]:-}" ]]; then
-			RIGHT_PROMPT+="$(set_color - "${LAST_SEGMENT_COLOR?}")${POWERLINE_RIGHT_SEPARATOR_SOFT?}${normal?}"
+			RIGHT_PROMPT+="$(set_color - "${LAST_SEGMENT_COLOR?}")${POWERLINE_RIGHT_SEPARATOR_SOFT- }${normal?}"
 		else
-			RIGHT_PROMPT+="$(set_color "${params[1]:-}" "${LAST_SEGMENT_COLOR?}")${POWERLINE_RIGHT_SEPARATOR?}${normal?}"
+			RIGHT_PROMPT+="$(set_color "${params[1]:-}" "${LAST_SEGMENT_COLOR?}")${POWERLINE_RIGHT_SEPARATOR- }${normal?}"
 		fi
 		((padding += 1))
 	fi
@@ -49,16 +49,20 @@ function __powerline_right_first_segment_padding() {
 }
 
 function __powerline_last_status_prompt() {
-	[[ "$1" -ne 0 ]] && echo "$(set_color "${LAST_STATUS_THEME_PROMPT_COLOR?}" -) ${1} ${normal?}"
+	if [[ "${1?}" -ne 0 ]]; then
+		printf '%b %s %b' "$(set_color "${LAST_STATUS_THEME_PROMPT_COLOR-"52"}" -)" "${1}" "${normal?}"
+	fi
 }
 
 function __powerline_prompt_command() {
 	local last_status="$?" ## always the first
-	local move_cursor_rightmost='\033[500C' info prompt
+	local beginning_of_line='\[\e[G\]'
+	local move_cursor_rightmost='\e[500C'
+	local info prompt_color segment prompt
 
 	local LEFT_PROMPT=""
 	local RIGHT_PROMPT=""
-	local RIGHT_PROMPT_LENGTH=${POWERLINE_PADDING?}
+	local RIGHT_PROMPT_LENGTH=${POWERLINE_PADDING:-2}
 	local SEGMENTS_AT_LEFT=0
 	local SEGMENTS_AT_RIGHT=0
 	local LAST_SEGMENT_COLOR=""
@@ -70,26 +74,36 @@ function __powerline_prompt_command() {
 	fi
 
 	## left prompt ##
-	for segment in ${POWERLINE_PROMPT-"user_info scm python_venv ruby node cwd"}; do
+	# shellcheck disable=SC2068 # intended behavior
+	for segment in ${POWERLINE_PROMPT[@]-"user_info" "scm" "python_venv" "ruby" "node" "cwd"}; do
 		info="$("__powerline_${segment}_prompt")"
-		[[ -n "${info}" ]] && __powerline_left_segment "${info}"
+		if [[ -n "${info}" ]]; then
+			__powerline_left_segment "${info}"
+		fi
 	done
 
-	if [[ -n "${LEFT_PROMPT:-}" ]] && [[ "${POWERLINE_COMPACT_AFTER_LAST_SEGMENT:-0}" -eq 0 ]]; then
+	if [[ -n "${LEFT_PROMPT:-}" && "${POWERLINE_COMPACT_AFTER_LAST_SEGMENT:-${POWERLINE_COMPACT:-0}}" -eq 0 ]]; then
 		__powerline_left_last_segment_padding
 	fi
 
-	[[ -n "${LEFT_PROMPT:-}" ]] && LEFT_PROMPT+="$(set_color "${LAST_SEGMENT_COLOR?}" -)${POWERLINE_LEFT_END?}${normal?}"
+	# By default we try to match the prompt to the adjacent segment's background color,
+	# but when part of the prompt exists within that segment, we instead match the foreground color.
+	prompt_color="$(set_color "${LAST_SEGMENT_COLOR?}" -)"
+	if [[ -n "${LEFT_PROMPT:-}" && -n "${POWERLINE_LEFT_LAST_SEGMENT_END_CHAR:-}" ]]; then
+		LEFT_PROMPT+="$(set_color - "${LAST_SEGMENT_COLOR?}")${POWERLINE_LEFT_LAST_SEGMENT_END_CHAR}"
+		prompt_color="${normal?}"
+	fi
 
 	## right prompt ##
-	if [[ -n "${POWERLINE_RIGHT_PROMPT}" ]]; then
+	if [[ -n "${POWERLINE_RIGHT_PROMPT[*]:-}" ]]; then
 		# LEFT_PROMPT+="${move_cursor_rightmost}"
-		for segment in $POWERLINE_RIGHT_PROMPT; do
+		# shellcheck disable=SC2068 # intended behavior
+		for segment in ${POWERLINE_RIGHT_PROMPT[@]}; do
 			info="$("__powerline_${segment}_prompt")"
 			[[ -n "${info}" ]] && __powerline_right_segment "${info}"
 		done
 
-		if [[ -n "${RIGHT_PROMPT:-}" ]] && [[ "${POWERLINE_COMPACT_BEFORE_FIRST_SEGMENT:-0}" -eq 0 ]]; then
+		if [[ -n "${RIGHT_PROMPT:-}" && "${POWERLINE_COMPACT_BEFORE_FIRST_SEGMENT:-${POWERLINE_COMPACT:-0}}" -eq 0 ]]; then
 			__powerline_right_first_segment_padding
 		fi
 
@@ -98,10 +112,10 @@ function __powerline_prompt_command() {
 		LEFT_PROMPT+="\033[$((${#RIGHT_PAD} - 1))D"
 	fi
 
-	prompt="${PROMPT_CHAR?}"
-	if [[ "${POWERLINE_COMPACT_PROMPT:-0}" -eq 0 ]]; then
+	prompt="${prompt_color}${PROMPT_CHAR-${POWERLINE_PROMPT_CHAR-\\$}}${normal?}"
+	if [[ "${POWERLINE_COMPACT_PROMPT:-${POWERLINE_COMPACT:-0}}" -eq 0 ]]; then
 		prompt+=" "
 	fi
 
-	PS1="${LEFT_PROMPT}${RIGHT_PROMPT}\n$(__powerline_last_status_prompt "${last_status}")${prompt}"
+	PS1="${beginning_of_line}${normal?}${LEFT_PROMPT}${RIGHT_PROMPT}\n$(__powerline_last_status_prompt "${last_status}")${prompt}"
 }
