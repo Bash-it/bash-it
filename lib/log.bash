@@ -55,8 +55,15 @@ function _bash-it-log-message() {
 	param '3: message to log'
 	group 'log'
 
-	message="$2${BASH_IT_LOG_PREFIX:-default: }$3"
-	_has_colors && echo -e "$1${message}${echo_normal:-}" || echo -e "${message}"
+	local prefix="${BASH_IT_LOG_PREFIX:-default}"
+	local color="${1-${echo_cyan:-}}"
+	local level="${2:-TRACE}"
+	local message="${level%: }: ${prefix%: }: ${3?}"
+	if _has_colors; then
+		printf '%b%s%b\n' "${color}" "${message}" "${echo_normal:-}"
+	else
+		printf '%s\n' "${message}"
+	fi
 }
 
 function _log_debug() {
@@ -65,8 +72,9 @@ function _log_debug() {
 	example '$ _log_debug "Loading plugin git..."'
 	group 'log'
 
-	[[ "${BASH_IT_LOG_LEVEL:-0}" -ge "${BASH_IT_LOG_LEVEL_INFO?}" ]] || return 0
-	_bash-it-log-message "${echo_green:-}" "DEBUG: " "$1"
+	if [[ "${BASH_IT_LOG_LEVEL:-0}" -ge "${BASH_IT_LOG_LEVEL_INFO?}" ]]; then
+		_bash-it-log-message "${echo_green:-}" "DEBUG: " "$1"
+	fi
 }
 
 function _log_warning() {
@@ -75,8 +83,9 @@ function _log_warning() {
 	example '$ _log_warning "git binary not found, disabling git plugin..."'
 	group 'log'
 
-	[[ "${BASH_IT_LOG_LEVEL:-0}" -ge "${BASH_IT_LOG_LEVEL_WARNING?}" ]] || return 0
-	_bash-it-log-message "${echo_yellow:-}" " WARN: " "$1"
+	if [[ "${BASH_IT_LOG_LEVEL:-0}" -ge "${BASH_IT_LOG_LEVEL_WARNING?}" ]]; then
+		_bash-it-log-message "${echo_yellow:-}" " WARN: " "$1"
+	fi
 }
 
 function _log_error() {
@@ -85,6 +94,7 @@ function _log_error() {
 	example '$ _log_error "Failed to load git plugin..."'
 	group 'log'
 
-	[[ "${BASH_IT_LOG_LEVEL:-0}" -ge "${BASH_IT_LOG_LEVEL_ERROR?}" ]] || return 0
-	_bash-it-log-message "${echo_red:-}" "ERROR: " "$1"
+	if [[ "${BASH_IT_LOG_LEVEL:-0}" -ge "${BASH_IT_LOG_LEVEL_ERROR?}" ]]; then
+		_bash-it-log-message "${echo_red:-}" "ERROR: " "$1"
+	fi
 }
