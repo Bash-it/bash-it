@@ -26,5 +26,5 @@ function local_setup_file() {
   alias rm='rm -v'
   run load "${BASH_IT?}/completion/available/aliases.completion.bash"
 
-  refute_output
+  assert_output ""
 }
