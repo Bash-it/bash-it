@@ -29,7 +29,7 @@ function local_setup {
 
   assert_link_exist "$BASH_IT/enabled/150---general.aliases.bash"
   assert_link_exist "$BASH_IT/enabled/250---base.plugin.bash"
-  assert_link_exist "$BASH_IT/enabled/365---alias-completion.plugin.bash"
+  assert_link_exist "$BASH_IT/enabled/800---aliases.completion.bash"
   assert_link_exist "$BASH_IT/enabled/350---bash-it.completion.bash"
   assert_link_exist "$BASH_IT/enabled/325---system.completion.bash"
 }

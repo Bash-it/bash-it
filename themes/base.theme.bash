@@ -584,6 +584,7 @@ function aws_profile {
 }
 
 function _save-and-reload-history() {
-	local autosave=${1:-0}
-	[[ $autosave -eq 1 ]] && history -a && history -c && history -r
+	local autosave="${1:-${HISTORY_AUTOSAVE:-0}}"
+	[[ ${autosave} -eq 1 ]] && local HISTCONTROL="${HISTCONTROL:-}${HISTCONTROL:+:}autoshare"
+	_bash-it-history-auto-save && _bash-it-history-auto-load
 }

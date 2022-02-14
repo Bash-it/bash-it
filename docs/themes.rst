@@ -22,7 +22,7 @@ Examples:
    # Disable theming
    export BASH_IT_THEME=""
 
-You can easily preview the themes in your own shell using ``BASH_PREVIEW=true bash-it reload``.
+You can easily preview the themes in your own shell using ``bash-it preview``.
 
 If you've created your own custom prompts, we'd love it if you shared them with everyone else! Just submit a Pull Request.
 You can see theme screenshots on `wiki/Themes <https://github.com/Bash-it/bash-it/wiki/Themes>`_.
