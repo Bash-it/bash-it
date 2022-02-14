@@ -63,7 +63,7 @@ function _bash-it-array-dedup() {
 # Outputs a full path of the grep found on the filesystem
 function _bash-it-grep() {
 	: "${BASH_IT_GREP:=$(type -p egrep || type -p grep)}"
-	printf "%s" "${BASH_IT_GREP:-'/usr/bin/grep'}"
+	printf "%s" "${BASH_IT_GREP:-/usr/bin/grep}"
 }
 
 # Runs `grep` with extended regular expressions
