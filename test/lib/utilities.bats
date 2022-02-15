@@ -4,6 +4,8 @@ load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
 function local_setup_file() {
 	setup_libs "helpers"
+	# shellcheck disable=SC2034
+	BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE=""
 }
 
 @test "_bash-it-component-item-is-enabled() - for a disabled item" {

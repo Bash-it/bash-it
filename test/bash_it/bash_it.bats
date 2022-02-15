@@ -8,6 +8,10 @@ function local_setup_file() {
 	# don't load any libraries as the tests here test the *whole* kit
 }
 
+function local_setup() {
+  : "${PROMPT_COMMAND:=}" "${BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE:=}"
+}
+
 @test "bash-it: verify that the test fixture is available" {
 	assert_file_exist "${BASH_IT?}/aliases/available/a.aliases.bash"
 	assert_file_exist "${BASH_IT?}/aliases/available/b.aliases.bash"
