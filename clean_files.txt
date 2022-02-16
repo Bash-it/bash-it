@@ -16,6 +16,7 @@
 
 # root directories
 #
+aliases/
 docs/
 hooks/
 scripts/
@@ -27,12 +28,6 @@ bash_it.sh
 clean_files.txt
 install.sh
 lint_clean_files.sh
-
-# aliases
-#
-aliases/available/dnf.aliases.bash
-aliases/available/git.aliases.bash
-aliases/available/vim.aliases.bash
 
 # completions
 #

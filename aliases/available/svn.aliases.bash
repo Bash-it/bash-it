@@ -1,4 +1,4 @@
-cite 'about-alias'
+# shellcheck shell=bash
 about-alias 'common svn abbreviations'
 
 # Aliases
