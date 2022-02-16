@@ -511,7 +511,6 @@ function _bash-it-profile-save() {
 			case "$RESP" in
 				[yY])
 					echo -e "${echo_green?}Overwriting profile '$name'...${echo_reset_color?}"
-					rm "$profile_path"
 					break
 					;;
 				[nN] | "")
