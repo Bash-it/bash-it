@@ -8,8 +8,14 @@ gray="\[\e[1;90m\]"
 __bash_it_theme_liquidprompt_path="github.com/nojhan/liquidprompt"
 __bash_it_theme_liquidprompt_dir="${BASH_IT?}/vendor/${__bash_it_theme_liquidprompt_path}"
 if [[ ! -d "${__bash_it_theme_liquidprompt_dir}" ]]; then
-	if git clone --branch stable "https://${__bash_it_theme_liquidprompt_path}" "${__bash_it_theme_liquidprompt_dir}";then
-		echo -e "Successfully cloned liquidprompt!\n More configuration in '${__bash_it_theme_liquidprompt_dir/$HOME/\~}/liquid.theme'."
+	if git clone --branch stable "https://${__bash_it_theme_liquidprompt_path}" "${__bash_it_theme_liquidprompt_dir}"; then
+		__bash_it_theme_liquidprompt_lqprc="${XDG_CONFIG_HOME:-"$HOME/.config"}/liquidpromptrc"
+		__bash_it_theme_liquidprompt_tilde='~'
+		if [[ ! -e "${__bash_it_theme_liquidprompt_lqprc}" ]]; then
+			# shellcheck disable=SC2016 disable=SC1003
+			sed -e 's/^LP_/#LP_/g' -e 's;#LOCAL_RCFILE=$HOME/.liquidpromptrc.local;LOCAL_RCFILE=${BASH_SOURCE[0]}.local;g' -e 's/#\[ -f "$LOCAL_RCFILE" \] && source "$LOCAL_RCFILE"/if [[ -s $LOCAL_RCFILE ]]; then\'$'\n\t''source "$LOCAL_RCFILE"\'$'\n''fi/g' < "${__bash_it_theme_liquidprompt_dir}/liquidpromptrc-dist" > "${__bash_it_theme_liquidprompt_lqprc}"
+		fi
+		echo -e "Successfully cloned liquidprompt!\n More configuration in '${__bash_it_theme_liquidprompt_lqprc//$HOME/$__bash_it_theme_liquidprompt_tilde}' (or '${__bash_it_theme_liquidprompt_lqprc//$HOME/$__bash_it_theme_liquidprompt_tilde}.local')."
 	fi
 fi
 
@@ -22,9 +28,20 @@ LP_MARK_LOAD="📈 "
 : "${LP_LOAD_THRESHOLD:=60}"
 : "${LP_TEMP_THRESHOLD:=80}"
 
-## Load theme
+## Load theme, but don't activate
 # shellcheck source-path=SCRIPTDIR/../../vendor/github.com/nojhan/liquidprompt
-source "${__bash_it_theme_liquidprompt_dir}/liquidprompt"
+source "${__bash_it_theme_liquidprompt_dir}/liquidprompt" --no-activate
+
+## Activate theme, without clobbering `bash-preexec`
+LP_OLD_PS1="${PROMPT:-${PS1:-\$ }}"
+LP_OLD_PROMPT_COMMAND=""
+function prompt_on() { :; }
+function prompt_off() { :; }
+function prompt_OFF() { :; }
+# shellcheck disable=SC2119
+TERM_PROGRAM=not_apple_terminal LP_ENABLE_RUNTIME=0 LP_ENABLE_RUNTIME_BELL=0 lp_activate
+safe_append_preexec '__lp_runtime_before'
+safe_append_prompt_command '__lp_set_prompt'
 
 ## Override upstream defaults
 PS2=" ┃ "
@@ -74,3 +91,5 @@ function _lp_temp_acpi() {
 		((i > ${temperature:-0})) && ((i != 127)) && temperature=i
 	done
 }
+
+unset "${!__bash_it_theme_liquidprompt_@}"
