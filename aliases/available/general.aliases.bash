@@ -42,9 +42,6 @@ if ! _command_exists tree; then
 	alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
 fi
 
-# Shorten extract
-alias xt='extract'
-
 # Display whatever file is regular file or folder
 function catt() {
 	for i in "$@"; do
