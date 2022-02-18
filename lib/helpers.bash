@@ -795,7 +795,8 @@ function _disable-thing() {
 	_bash-it-clean-component-cache "${file_type}"
 
 	if [[ "$file_entity" = "all" ]]; then
-		printf '%s\n' "$file_entity $(_bash-it-pluralize-component "$file_type") disabled."
+		_bash-it-component-pluralize "$file_type" file_type
+		printf '%s\n' "$file_entity ${file_type} disabled."
 	else
 		printf '%s\n' "$file_entity disabled."
 	fi
