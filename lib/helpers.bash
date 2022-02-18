@@ -542,7 +542,7 @@ function _bash-it-profile-save() {
 			fi
 		done
 	done
-	if [[ -z "$something_exists" ]]; then
+	if [[ -z "${something_exists:-}" ]]; then
 		echo "It seems like no configuration was enabled.."
 		echo "Make sure to double check that this is the wanted behavior."
 	fi
@@ -705,7 +705,9 @@ function _on-disable-callback() {
 	_group 'lib'
 
 	local callback="${1}_on_disable"
-	_command_exists "$callback" && "$callback"
+	if _command_exists "$callback"; then
+		"$callback"
+	fi
 }
 
 function _disable-all() {
@@ -725,7 +727,7 @@ function _disable-plugin() {
 	_group 'lib'
 
 	_disable-thing "plugins" "plugin" "${1?}"
-	_on-disable-callback "$1"
+	_on-disable-callback "${1?}"
 }
 
 function _disable-alias() {
@@ -777,7 +779,7 @@ function _disable-thing() {
 		# Either one will be matched by this glob
 		for plugin in "${BASH_IT}/enabled"/[[:digit:]][[:digit:]][[:digit:]]"${BASH_IT_LOAD_PRIORITY_SEPARATOR}${file_entity}.${suffix}.bash" "${BASH_IT}/$subdirectory/enabled/"{[[:digit:]][[:digit:]][[:digit:]]"${BASH_IT_LOAD_PRIORITY_SEPARATOR}${file_entity}.${suffix}.bash","${file_entity}.${suffix}.bash"}; do
 			if [[ -e "${plugin}" ]]; then
-				rm "${plugin}"
+				rm -f "${plugin}"
 				plugin=
 				break
 			fi
@@ -790,7 +792,7 @@ function _disable-thing() {
 
 	_bash-it-clean-component-cache "${file_type}"
 
-	if [[ "$file_entity" = "all" ]]; then
+	if [[ "$file_entity" == "all" ]]; then
 		_bash-it-component-pluralize "$file_type" file_type
 		printf '%s\n' "$file_entity ${file_type} disabled."
 	else
