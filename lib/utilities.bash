@@ -168,11 +168,11 @@ function _bash-it-component-list-disabled() {
 function _bash-it-component-item-is-enabled() {
 	local component_type item_name each_file
 
-	if [[ -f "${1}" ]]; then
+	if [[ -f "${1?}" ]]; then
 		item_name="$(_bash-it-get-component-name-from-path "${1}")"
 		component_type="$(_bash-it-get-component-type-from-path "${1}")"
 	else
-		component_type="${1}" item_name="${2}"
+		component_type="${1}" item_name="${2?}"
 	fi
 
 	for each_file in "${BASH_IT}/enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR?}${item_name}.${component_type}"*."bash" \
