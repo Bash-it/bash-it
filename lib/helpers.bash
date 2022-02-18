@@ -278,7 +278,7 @@ function _bash-it-update-() {
 	_param '1: What kind of update to do (stable|dev)'
 	_group 'lib'
 
-	local silent word DIFF version TARGET revision status revert log_color num_of_lines description i RESP
+	local silent word DIFF version TARGET revision status revert log_color RESP
 	for word in "$@"; do
 		if [[ "${word}" == "--silent" || "${word}" == "-s" ]]; then
 			silent=true
@@ -334,15 +334,7 @@ function _bash-it-update-() {
 			log_color="%Cred"
 		fi
 
-		for i in $(git rev-list --merges --first-parent "${revision}"); do
-			num_of_lines=$(git log -1 --format=%B "$i" | awk '!/^[[:space:]]*$/ {++i} END{print i}')
-			if [[ "$num_of_lines" -eq 1 ]]; then
-				description="%s"
-			else
-				description="%b"
-			fi
-			git log --format="${log_color}%h: $description (%an)" -1 "$i"
-		done
+		git log --format="${log_color}%h: %s (%an)" "${revision}"
 		echo ""
 
 		if [[ -n "${silent}" ]]; then
