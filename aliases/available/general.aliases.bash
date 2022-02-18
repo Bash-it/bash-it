@@ -4,10 +4,6 @@ about-alias 'general aliases'
 
 alias _='sudo'
 
-# Shortcuts to edit startup files
-alias vbrc='"${VISUAL:-vim}" ~/.bashrc'
-alias vbpf='"${VISUAL:-vim}" ~/.bash_profile'
-
 # colored grep
 # Need to check an existing file for a pattern that will be found to ensure
 # that the check works when on an OS that supports the color option
@@ -22,7 +18,6 @@ fi
 alias c='clear'
 alias cls='clear'
 
-alias edit='${EDITOR:-${ALTERNATE_EDITOR?}}'
 alias pager='${PAGER:-less}'
 
 alias q='exit'
@@ -50,10 +45,6 @@ fi
 # Shorten extract
 alias xt='extract'
 
-# sudo editors
-alias svim='sudo "${VISUAL:-vim}"'
-alias snano='sudo "${ALTERNATE_EDITOR:-nano}"'
-
 # Display whatever file is regular file or folder
 function catt() {
 	for i in "$@"; do
@@ -73,3 +64,4 @@ function catt() {
 # bash-it enable alias bash-it
 source "$BASH_IT/aliases/available/bash-it.aliases.bash"
 source "$BASH_IT/aliases/available/directory.aliases.bash"
+source "$BASH_IT/aliases/available/editor.aliases.bash"
