@@ -178,8 +178,12 @@ function _bash-it-component-item-is-enabled() {
 	for each_file in "${BASH_IT}/enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR?}${item_name}.${component_type}"*."bash" \
 		"${BASH_IT}/${component_type}"*/"enabled/${item_name}.${component_type}"*."bash" \
 		"${BASH_IT}/${component_type}"*/"enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR?}${item_name}.${component_type}"*."bash"; do
-		[[ -f "${each_file}" ]] && return
+		if [[ -f "${each_file}" ]]; then
+			return 0
+		fi
 	done
+
+	return 1
 }
 
 # Checks if a given item is disabled for a particular component/file-type.
