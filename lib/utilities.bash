@@ -121,13 +121,13 @@ function _bash-it-component-pluralize() {
 	printf -v "${_result?}" '%s' "${_component_to_plural}"
 }
 
-function _bash-it-clean-component-cache() {
+function _bash-it-component-cache-clean() {
 	local component="${1:-}"
 	local cache
 	local -a components=('aliases' 'plugins' 'completions')
 	if [[ -z "${component}" ]]; then
 		for component in "${components[@]}"; do
-			_bash-it-clean-component-cache "${component}"
+			_bash-it-component-cache-clean "${component}"
 		done
 	else
 		_bash-it-component-cache-file "${component}" cache

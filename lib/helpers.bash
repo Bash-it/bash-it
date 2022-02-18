@@ -785,7 +785,7 @@ function _disable-thing() {
 		fi
 	fi
 
-	_bash-it-clean-component-cache "${file_type}"
+	_bash-it-component-cache-clean "${file_type}"
 
 	if [[ "$file_entity" == "all" ]]; then
 		_bash-it-component-pluralize "$file_type" file_type
@@ -884,7 +884,7 @@ function _enable-thing() {
 		ln -s "../$subdirectory/available/$to_enable" "${BASH_IT}/enabled/${use_load_priority}${BASH_IT_LOAD_PRIORITY_SEPARATOR}${to_enable}"
 	fi
 
-	_bash-it-clean-component-cache "${file_type}"
+	_bash-it-component-cache-clean "${file_type}"
 
 	printf '%s\n' "$file_entity enabled with priority $use_load_priority."
 }

@@ -70,7 +70,7 @@ function _bash-it-search() {
 				return 0
 				;;
 			'-r' | '--refresh')
-				_bash-it-clean-component-cache
+				_bash-it-component-cache-clean
 				;;
 			'-c' | '--no-color')
 				BASH_IT_SEARCH_USE_COLOR=false
@@ -333,7 +333,7 @@ function _bash-it-search-result() {
 			printf '%b' "${color_off} "
 		done
 
-		((modified)) && _bash-it-clean-component-cache "${component}"
+		((modified)) && _bash-it-component-cache-clean "${component}"
 		printf "\n"
 	fi
 }
