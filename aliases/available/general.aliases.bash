@@ -2,19 +2,6 @@
 # shellcheck source-path=SCRIPTDIR
 about-alias 'general aliases'
 
-if command ls --color -d . &> /dev/null; then
-	alias ls='ls --color=auto'
-	# BSD `ls` doesn't need an argument (`-G`) when `$CLICOLOR` is set.
-fi
-
-# List directory contents
-alias sl=ls
-alias la='ls -AF' # Compact view, show hidden
-alias ll='ls -Al'
-alias l='ls -A'
-alias l1='ls -1'
-alias lf='ls -F'
-
 alias _='sudo'
 
 # Shortcuts to edit startup files
@@ -49,14 +36,8 @@ alias ipy='ipython'
 
 # Pianobar can be found here: http://github.com/PromyLOPh/pianobar/
 if _command_exists pianobar; then
-alias piano='pianobar'
+	alias piano='pianobar'
 fi
-
-alias ..='cd ..'         # Go up one directory
-alias cd..='cd ..'       # Common misspelling for going up one directory
-alias ...='cd ../..'     # Go up two directories
-alias ....='cd ../../..' # Go up three directories
-alias -- -='cd -'        # Go back
 
 # Shell History
 alias h='history'
@@ -65,10 +46,6 @@ alias h='history'
 if ! _command_exists tree; then
 	alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
 fi
-
-# Directory
-alias md='mkdir -p'
-alias rd='rmdir'
 
 # Shorten extract
 alias xt='extract'
@@ -95,3 +72,4 @@ function catt() {
 # bash-it disable alias general
 # bash-it enable alias bash-it
 source "$BASH_IT/aliases/available/bash-it.aliases.bash"
+source "$BASH_IT/aliases/available/directory.aliases.bash"
