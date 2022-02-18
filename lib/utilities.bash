@@ -91,7 +91,7 @@ function _bash-it-component-help() {
 function _bash-it-component-cache-file() {
 	local _component_to_cache _file_path _result="${2:-${FUNCNAME[0]//-/_}}"
 	_bash-it-component-pluralize "${1?${FUNCNAME[0]}: component name required}" _component_to_cache
-	_file_path="${XDG_CACHE_HOME:-${BASH_IT?}/tmp/cache}${XDG_CACHE_HOME:+/bash_it}/${_component_to_cache?}"
+	_file_path="${XDG_CACHE_HOME:-${HOME?}/.cache}/bash/${_component_to_cache?}"
 	[[ -f "${_file_path}" ]] || mkdir -p "${_file_path%/*}"
 	printf -v "${_result?}" '%s' "${_file_path}"
 }
