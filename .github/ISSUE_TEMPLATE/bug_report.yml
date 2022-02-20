@@ -65,7 +65,7 @@ body:
       label: "bash-it doctor output"
       value: |
         ```
-        # Smth here
+        # How to get: bash-it doctor
         ```
     validations:
       required: false
@@ -74,7 +74,7 @@ body:
       label: Your ~/.bashrc
       value: |
         ```bash
-        # Smth here
+        # How to get: cat ~/.bashrc
         ```
     validations:
       required: true
