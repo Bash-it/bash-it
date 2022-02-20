@@ -78,3 +78,8 @@ body:
         ```
     validations:
       required: true
+  - type: textarea
+    attributes:
+      label: Notes
+      description: >
+        Provide any extra details here.
