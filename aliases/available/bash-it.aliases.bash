@@ -1,4 +1,4 @@
-cite about-alias
+# shellcheck shell=bash
 about-alias 'Aliases for the bash-it command (these aliases are automatically included with the "general" aliases)'
 
 # Common misspellings of bash-it

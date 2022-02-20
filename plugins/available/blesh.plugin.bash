@@ -10,7 +10,7 @@ fi
 _bash_it_ble_path=${XDG_DATA_HOME:-$HOME/.local/share}/blesh/ble.sh
 if [[ -f $_bash_it_ble_path ]]; then
 	# shellcheck disable=1090
-	source "$_bash_it_ble_path"
+	source "$_bash_it_ble_path" --attach=prompt
 else
 	_log_error "Could not find ble.sh in $_bash_it_ble_path"
 	_log_error "Please install using the following command:"

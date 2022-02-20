@@ -98,7 +98,7 @@ alias reload_plugins="$(_make_reload_alias plugin plugins)"
 
 function bash-it() {
 	about 'Bash-it help and maintenance'
-	param '1: verb [one of: help | show | enable | disable | migrate | update | search | version | reload | restart | doctor ] '
+	param '1: verb [one of: help | show | enable | disable | migrate | update | search | preview | version | reload | restart | doctor ] '
 	param '2: component type [one of: alias(es) | completion(s) | plugin(s) ] or search term(s)'
 	param '3: specific component [optional]'
 	example '$ bash-it show plugins'
@@ -108,6 +108,8 @@ function bash-it() {
 	example '$ bash-it migrate'
 	example '$ bash-it update'
 	example '$ bash-it search [-|@]term1 [-|@]term2 ... [ -e/--enable ] [ -d/--disable ] [ -r/--refresh ] [ -c/--no-color ]'
+	example '$ bash-it preview'
+	example '$ bash-it preview essential'
 	example '$ bash-it version'
 	example '$ bash-it reload'
 	example '$ bash-it restart'
@@ -140,6 +142,10 @@ function bash-it() {
 			;;
 		search)
 			_bash-it-search "$component" "$@"
+			return
+			;;
+		preview)
+			_bash-it-preview "$component" "$@"
 			return
 			;;
 		update)
@@ -505,7 +511,6 @@ function _bash-it-profile-save() {
 			case "$RESP" in
 				[yY])
 					echo -e "${echo_green?}Overwriting profile '$name'...${echo_reset_color?}"
-					rm "$profile_path"
 					break
 					;;
 				[nN] | "")
