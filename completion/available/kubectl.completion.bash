@@ -1,7 +1,10 @@
 # shellcheck shell=bash
-cite "about-completion"
 about-completion "kubectl (Kubernetes CLI) completion"
 
-if _binary_exists kubectl; then
-	eval "$(kubectl completion bash)"
-fi
+# Make sure kubectl is installed
+_bash-it-completion-helper-necessary kubectl || return
+
+# Don't handle completion if it's already managed
+_bash-it-completion-helper-sufficient kubectl || return
+
+eval "$(kubectl completion bash)"

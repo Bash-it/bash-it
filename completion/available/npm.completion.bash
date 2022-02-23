@@ -1,7 +1,10 @@
 # shellcheck shell=bash
-cite "about-completion"
 about-completion "npm (Node Package Manager) completion"
 
-if _command_exists npm; then
-	eval "$(npm completion)"
-fi
+# Make sure npm is installed
+_bash-it-completion-helper-necessary npm || return
+
+# Don't handle completion if it's already managed
+_bash-it-completion-helper-sufficient npm || return
+
+eval "$(npm completion)"

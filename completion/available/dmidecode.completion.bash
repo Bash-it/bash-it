@@ -1,22 +1,25 @@
 # shellcheck shell=bash
 
-function __dmidecode_completion() {
-	# shellcheck disable=SC2155
-	local prev=$(_get_pword)
-	# shellcheck disable=SC2155
-	local curr=$(_get_cword)
+# Make sure dmidecode is installed
+_bash-it-completion-helper-necessary dmidecode || :
+
+# Don't handle completion if it's already managed
+_bash-it-completion-helper-sufficient dmidecode || return
+
+function _dmidecode() {
+	local prev="${COMP_WORDS[COMP_CWORD - 1]}"
 
 	case $prev in
 		-s | --string | -t | --type)
 			OPTS=$(dmidecode "$prev" 2>&1 | grep -E '^ ' | sed 's/ *//g')
 			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "$OPTS" -- "$curr"))
+			COMPREPLY=("${OPTS[@]}")
 			;;
 		dmidecode)
 			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "-d --dev-mem -h --help -q --quiet -s --string -t --type -H --handle -u --dump{,-bin} --from-dump --no-sysfs --oem-string -V --version" -- "$curr"))
+			COMPREPLY=("-d" "--dev-mem" "-h" "--help" "-q" "--quiet" "-s" "--string" "-t" "--type" "-H" "--handle" "-u" "--dump" "-dump-bin" "--from-dump" "--no-sysfs" "--oem-string" "-V" "--version")
 			;;
 	esac
 }
 
-complete -F __dmidecode_completion dmidecode
+complete -F _dmidecode -X '!&*' dmidecode

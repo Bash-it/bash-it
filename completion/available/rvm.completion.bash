@@ -1,5 +1,8 @@
-#!/usr/bin/env bash
-# Bash completion support for  RVM.
+# shellcheck shell=bash
+about-completion "Bash completion support for  RVM."
 # Source: https://rvm.io/workflow/completion
 
-[[ -r $rvm_path/scripts/completion ]] && . $rvm_path/scripts/completion
+if [[ -n "${rvm_path:-}" && -s "${rvm_path}/scripts/completion" ]]; then
+	# shellcheck disable=SC1091
+	source "${rvm_path}/scripts/completion"
+fi

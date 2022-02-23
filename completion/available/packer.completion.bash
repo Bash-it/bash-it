@@ -1,7 +1,10 @@
 # shellcheck shell=bash
-cite "about-completion"
 about-completion "packer completion"
 
-if _binary_exists packer; then
-	complete -C packer packer
-fi
+# Make sure packer is installed
+_bash-it-completion-helper-necessary packer || return
+
+# Don't handle completion if it's already managed
+_bash-it-completion-helper-sufficient packer || return
+
+complete -C packer packer
