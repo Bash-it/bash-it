@@ -1,9 +1,14 @@
 # shellcheck shell=bash
-cite about-plugin
-about-plugin 'load nodenv, if you are using it'
+about-plugin 'Node.js environment management using https://github.com/nodenv/nodenv'
 
-export NODENV_ROOT="$HOME/.nodenv"
-pathmunge "$NODENV_ROOT/bin"
+# Load after basher
+# BASH_IT_LOAD_PRIORITY: 260
+
+export NODENV_ROOT="${NODENV_ROOT:-${HOME?}/.nodenv}"
+
+if [[ -d "${NODENV_ROOT?}/bin" ]]; then
+	pathmunge "${NODENV_ROOT?}/bin"
+fi
 
 if _command_exists nodenv; then
 	eval "$(nodenv init - bash)"

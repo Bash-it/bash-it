@@ -114,6 +114,7 @@ plugins/available/jump.plugin.bash
 plugins/available/latex.plugin.bash
 plugins/available/less-pretty-cat.plugin.bash
 plugins/available/man.plugin.bash
+plugins/available/nenv.plugin.bash
 plugins/available/nginx.plugin.bash
 plugins/available/node.plugin.bash
 plugins/available/nodenv.plugin.bash
