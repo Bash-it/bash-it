@@ -360,6 +360,7 @@ function svn_prompt_vars() {
 }
 
 function hg_prompt_vars() {
+	local hg_root bookmark
 	if [[ -n $(hg status 2> /dev/null) ]]; then
 		SCM_DIRTY=1
 		SCM_STATE="${HG_THEME_PROMPT_DIRTY:-${SCM_THEME_PROMPT_DIRTY?}}"
@@ -370,20 +371,20 @@ function hg_prompt_vars() {
 	SCM_PREFIX="${HG_THEME_PROMPT_PREFIX:-${SCM_THEME_PROMPT_PREFIX-}}"
 	SCM_SUFFIX="${HG_THEME_PROMPT_SUFFIX:-${SCM_THEME_PROMPT_SUFFIX-}}"
 
-	HG_ROOT="$(_bash-it-find-in-ancestor ".hg")/.hg"
+	hg_root="$(_bash-it-find-in-ancestor ".hg")/.hg"
 
-	if [[ -f "$HG_ROOT/branch" ]]; then
+	if [[ -f "$hg_root/branch" ]]; then
 		# Mercurial holds it's current branch in .hg/branch file
-		SCM_BRANCH=$(< "${HG_ROOT}/branch")
-		local bookmark="${HG_ROOT}/bookmarks.current"
+		SCM_BRANCH=$(< "${hg_root}/branch")
+		bookmark="${hg_root}/bookmarks.current"
 		[[ -f "${bookmark}" ]] && SCM_BRANCH+=:$(< "${bookmark}")
 	else
 		SCM_BRANCH=$(hg summary 2> /dev/null | grep branch: | awk '{print $2}')
 	fi
 
-	if [[ -f "$HG_ROOT/dirstate" ]]; then
+	if [[ -f "$hg_root/dirstate" ]]; then
 		# Mercurial holds various information about the working directory in .hg/dirstate file. More on http://mercurial.selenic.com/wiki/DirState
-		SCM_CHANGE=$(hexdump -vn 10 -e '1/1 "%02x"' "$HG_ROOT/dirstate" | cut -c-12)
+		SCM_CHANGE=$(hexdump -vn 10 -e '1/1 "%02x"' "$hg_root/dirstate" | cut -c-12)
 	else
 		SCM_CHANGE=$(hg summary 2> /dev/null | grep parent: | awk '{print $2}')
 	fi
