@@ -1015,14 +1015,14 @@ function pathmunge() {
 # a subshell to simplify our search to a simple `cd ..` and `[[ -r $1 ]]`
 # without any external dependencies. Let the shell do what it's good at.
 function _bash-it-find-in-ancestor() (
-	about 'searches parents of the current directory for any of the specified file names'
-	group 'helpers'
-	param '*: names of files or folders to search for'
-	returns '0: prints path of closest matching ancestor directory to stdout'
-	returns '1: no match found'
-	returns '2: improper usage of shell builtin' # uncommon
-	example '_bash-it-find-in-ancestor .git .hg'
-	example '_bash-it-find-in-ancestor GNUmakefile Makefile makefile'
+	: _about 'searches parents of the current directory for any of the specified file names'
+	: _group 'helpers'
+	: _param '*: names of files or folders to search for'
+	: _returns '0: prints path of closest matching ancestor directory to stdout'
+	: _returns '1: no match found'
+	: _returns '2: improper usage of shell builtin' # uncommon
+	: _example '_bash-it-find-in-ancestor .git .hg'
+	: _example '_bash-it-find-in-ancestor GNUmakefile Makefile makefile'
 
 	local kin
 	# To keep things simple, we do not search the root dir.
