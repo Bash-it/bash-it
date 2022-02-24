@@ -397,7 +397,8 @@ function node_command_version_prompt() {
 }
 
 function node_version_prompt() {
-	local node_version="$(nvm_version_prompt)"
+	local node_version
+	node_version="$(nvm_version_prompt)"
 	if [[ -z "${node_version}" ]]; then
 		node_version="$(node_command_version_prompt)"
 	fi
