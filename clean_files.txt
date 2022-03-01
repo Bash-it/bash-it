@@ -160,6 +160,7 @@ themes/easy
 themes/essential
 themes/modern
 themes/norbu
+themes/oh-my-posh
 themes/pete
 themes/powerline
 themes/pure
