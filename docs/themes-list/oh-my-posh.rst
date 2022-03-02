@@ -10,7 +10,6 @@ of managing your prompt. To use it please start here:
 It is beyond the scope of bash-it to install and manage oh-my-posh,
 this theme is here just to make sure your OMP setup doesn't clash
 with other bash-it themes. Once installed, OMP will load a default
-OMP theme (powerlevel10k_rainbow), which you can then
-customize or override.
+OMP theme (jandedobbeleer), which you can then customize or override.
 
 Note: Nerd Fonts are highly recommended, as most of the themes are graphic candies.

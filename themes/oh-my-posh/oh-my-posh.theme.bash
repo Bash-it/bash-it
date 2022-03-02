@@ -15,6 +15,6 @@ else
 	_log_warning "It is beyond the scope of bash-it to install and manage oh-my-posh,"
 	_log_warning "this theme is here just to make sure your OMP setup doesn't clash"
 	_log_warning "with other bash-it themes. Once installed, OMP will load a default"
-	_log_warning "OMP theme (powerlevel10k_rainbow), which you can then"
+	_log_warning "OMP theme (jandedobbeleer), which you can then"
 	_log_warning "customize or override."
 fi
