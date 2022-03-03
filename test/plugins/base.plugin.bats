@@ -5,7 +5,7 @@ load ../test_helper_libs
 load ../../plugins/available/base.plugin
 
 @test 'plugins base: ips()' {
-  if [[ $CI ]]; then
+  if [[ -n "${CI:-}" ]]; then
     skip 'ifconfig probably requires sudo on TravisCI'
   fi
 
@@ -38,7 +38,7 @@ load ../../plugins/available/base.plugin
   rm -rf "${BASH_IT_ROOT}/${dir_name}"
 
   mkcd "${dir_name}"
-  assert_success
+
   assert_dir_exist "${BASH_IT_ROOT}/${dir_name}"
   assert_equal "${PWD}" "${BASH_IT_ROOT//\/\///}/${dir_name}"
 }

@@ -12,8 +12,6 @@ function local_setup {
 	export PROMPT_COMMAND="$test_prompt_string"
 
 	load ../../vendor/github.com/rcaloras/bash-preexec/bash-preexec.sh
-	assert_success
-
 	assert_equal "${PROMPT_COMMAND}" $'__bp_trap_string="$(trap -p DEBUG)"\ntrap - DEBUG\n__bp_install'
 }
 
@@ -22,8 +20,6 @@ function local_setup {
 	export PROMPT_COMMAND="$test_prompt_string"
 
 	load ../../vendor/github.com/rcaloras/bash-preexec/bash-preexec.sh
-	assert_success
-
 	assert_equal "${PROMPT_COMMAND}" "$test_prompt_string"$'\n__bp_trap_string="$(trap -p DEBUG)"\ntrap - DEBUG\n__bp_install'
 }
 
@@ -33,8 +29,6 @@ function local_setup {
 	export __bp_delay_install="blarg"
 
 	load ../../vendor/github.com/rcaloras/bash-preexec/bash-preexec.sh
-	assert_success
-
 	assert_equal "${PROMPT_COMMAND}" "$test_prompt_string"
 
 	run __bp_install_after_session_init
@@ -49,7 +43,6 @@ function local_setup {
 	export PROMPT_COMMAND="$test_prompt_string"
 
 	load ../../vendor/github.com/rcaloras/bash-preexec/bash-preexec.sh
-	assert_success
 
 	run __bp_install
 	assert_success
@@ -63,7 +56,6 @@ function local_setup {
 	export PROMPT_COMMAND="$test_prompt_string"
 
 	load ../../vendor/github.com/rcaloras/bash-preexec/bash-preexec.sh
-	assert_success
 
 	run __bp_install
 	assert_success
