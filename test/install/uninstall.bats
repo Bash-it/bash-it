@@ -27,7 +27,7 @@ function local_setup {
   echo "test file content for original file" > "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE"
   local md5_bak=$(md5sum "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE.bak" | awk '{print $1}')
 
-  ./uninstall.sh
+  run ./uninstall.sh
 
   assert_success
 
@@ -46,7 +46,7 @@ function local_setup {
   echo "test file content for original file" > "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE"
   local md5_orig=$(md5sum "$BASH_IT_TEST_HOME/$BASH_IT_CONFIG_FILE" | awk '{print $1}')
 
-  ./uninstall.sh
+  run ./uninstall.sh
 
   assert_success
 

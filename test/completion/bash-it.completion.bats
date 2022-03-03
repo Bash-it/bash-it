@@ -10,7 +10,7 @@ function local_setup {
 }
 
 @test "completion bash-it: ensure that the _bash-it function is available" {
-  type -a _bash-it &> /dev/null
+  run type -a _bash-it &> /dev/null
   assert_success
 }
 
@@ -71,12 +71,12 @@ function __check_completion () {
 
 @test "completion bash-it: search - show no options" {
   run __check_completion 'bash-it search '
-  assert_line -n 0 ""
+  assert_output ""
 }
 
 @test "completion bash-it: migrate - show no options" {
   run __check_completion 'bash-it migrate '
-  assert_line -n 0 ""
+  assert_output ""
 }
 
 @test "completion bash-it: show options" {
@@ -146,7 +146,7 @@ function __check_completion () {
 
 @test "completion bash-it: disable - provide nothing when atom is not enabled" {
   run __check_completion 'bash-it disable alias ato'
-  assert_line -n 0 ""
+  assert_output ""
 }
 
 @test "completion bash-it: disable - provide all when atom is not enabled" {

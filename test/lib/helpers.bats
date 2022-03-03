@@ -73,7 +73,7 @@ function local_setup {
 
 @test "helpers: bash-it help aliases without any aliases enabled" {
   run bash-it help aliases
-  assert_line -n 0 ""
+  assert_output ""
 }
 
 @test "helpers: bash-it help plugins" {
@@ -521,7 +521,7 @@ function local_setup {
 function __migrate_all_components() {
   subdirectory="$1"
   one_type="$2"
-  priority="$3"
+  priority="${3:-}"
 
   for f in "${BASH_IT}/$subdirectory/available/"*.bash
   do
