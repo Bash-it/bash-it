@@ -82,8 +82,8 @@ function _bash-it_check_for_backup() {
 	fi
 	echo -e "\033[0;33mBackup file already exists. Make sure to backup your .bashrc before running this installation.\033[0m" >&2
 
-	if [[ -z "${overwrite_backup}" ]]; then
-		while [[ -z "${silent}" ]]; do
+	if [[ -z "${overwrite_backup:-}" ]]; then
+		while [[ -z "${silent:-}" ]]; do
 			read -e -n 1 -r -p "Would you like to overwrite the existing backup? This will delete your existing backup file ($HOME/$BACKUP_FILE) [y/N] " RESP
 			case $RESP in
 				[yY])
@@ -99,9 +99,9 @@ function _bash-it_check_for_backup() {
 			esac
 		done
 	fi
-	if [[ -z "${overwrite_backup}" ]]; then
+	if [[ -z "${overwrite_backup:-}" ]]; then
 		echo -e "\033[91mInstallation aborted. Please come back soon!\033[m"
-		if [[ -n "${silent}" ]]; then
+		if [[ -n "${silent:-}" ]]; then
 			echo -e "\033[91mUse \"-f\" flag to force overwrite of backup.\033[m"
 		fi
 		exit 1
@@ -113,8 +113,8 @@ function _bash-it_check_for_backup() {
 function _bash-it_modify_config_files() {
 	_bash-it_check_for_backup
 
-	if [[ -z "${silent}" ]]; then
-		while [[ -z "${append_to_config}" ]]; do
+	if [[ -z "${silent:-}" ]]; then
+		while [[ -z "${append_to_config:-}" ]]; do
 			read -e -n 1 -r -p "Would you like to keep your $CONFIG_FILE and append bash-it templates at the end? [y/N] " choice
 			case $choice in
 				[yY])
@@ -130,7 +130,7 @@ function _bash-it_modify_config_files() {
 			esac
 		done
 	fi
-	if [[ -n "${append_to_config}" ]]; then
+	if [[ -n "${append_to_config:-}" ]]; then
 		# backup/append
 		_bash-it_backup_append
 	else
@@ -173,12 +173,12 @@ done
 
 shift $((OPTIND - 1))
 
-if [[ -n "${silent}" && -n "${interactive}" ]]; then
+if [[ -n "${silent:-}" && -n "${interactive:-}" ]]; then
 	echo -e "\033[91mOptions --silent and --interactive are mutually exclusive. Please choose one or the other.\033[m"
 	exit 1
 fi
 
-if [[ -n "${no_modify_config}" && -n "${append_to_config}" ]]; then
+if [[ -n "${no_modify_config:-}" && -n "${append_to_config:-}" ]]; then
 	echo -e "\033[91mOptions --no-modify-config and --append-to-config are mutually exclusive. Please choose one or the other.\033[m"
 	exit 1
 fi
@@ -220,7 +220,7 @@ cite _about _param _example _group _author _version
 # shellcheck source=./lib/helpers.bash
 source "$BASH_IT/lib/helpers.bash"
 
-if [[ -n $interactive && -z "${silent}" ]]; then
+if [[ -n ${interactive:-} && -z "${silent:-}" ]]; then
 	for type in "aliases" "plugins" "completion"; do
 		echo -e "\033[0;32mEnabling ${type}\033[0m"
 		_bash-it_load_some "$type"
