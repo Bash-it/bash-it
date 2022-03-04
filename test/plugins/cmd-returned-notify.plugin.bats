@@ -3,8 +3,7 @@
 load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
 function local_setup_file() {
-  setup_libs "preexec" #"command_duration"
-  load ../../themes/command_duration.theme
+  setup_libs "command_duration"
   load "${BASH_IT?}/plugins/available/cmd-returned-notify.plugin.bash"
 }
 
