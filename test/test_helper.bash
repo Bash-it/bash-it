@@ -57,7 +57,7 @@ function common_setup_file() {
 function setup_libs() {
 	local lib
 	# Use a loop to allow convenient short-circuiting for some test files
-	for lib in "log" "utilities" "helpers" "search" "preexec" "colors"; do
+	for lib in "log" "utilities" "helpers" "search" "preexec" "colors" "command_duration"; do
 		load "${BASH_IT?}/lib/${lib}.bash" || return
 		# shellcheck disable=SC2015 # short-circuit if we've reached the requested library
 		[[ "${lib}" == "${1:-}" ]] && return 0 || true
