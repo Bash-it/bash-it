@@ -1,9 +1,11 @@
-#!/usr/bin/env bats
+# shellcheck shell=bats
 
-load ../test_helper
-load ../test_helper_libs
+load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
-load ../../plugins/available/cmd-returned-notify.plugin
+function local_setup_file() {
+  setup_libs "preexec" #"command_duration"
+  load "${BASH_IT?}/plugins/available/cmd-returned-notify.plugin.bash"
+}
 
 @test "plugins cmd-returned-notify: notify after elapsed time" {
     export NOTIFY_IF_COMMAND_RETURNS_AFTER=0

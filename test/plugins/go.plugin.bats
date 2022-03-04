@@ -1,11 +1,9 @@
-#!/usr/bin/env bats
+# shellcheck shell=bats
 
-load ../test_helper
-load ../test_helper_libs
+load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
-function local_setup()
-{
-  setup_test_fixture
+function local_setup_file() {
+  setup_libs "helpers"
 }
 
 function setup_go_path()
