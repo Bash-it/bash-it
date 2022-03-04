@@ -19,6 +19,7 @@
 aliases/
 docs/
 hooks/
+lib/
 scripts/
 template/
 
@@ -76,18 +77,6 @@ completion/available/system.completion.bash
 completion/available/vault.completion.bash
 completion/available/vuejs.completion.bash
 completion/available/wpscan.completion.bash
-
-# libraries
-lib/appearance.bash
-lib/colors.bash
-lib/command_duration.bash
-lib/helpers.bash
-lib/history.bash
-lib/log.bash
-lib/preexec.bash
-lib/preview.bash
-lib/search.bash
-lib/utilities.bash
 
 # plugins
 #
