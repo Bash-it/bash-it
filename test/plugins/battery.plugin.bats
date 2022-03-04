@@ -195,14 +195,14 @@ function setup_acpi {
 # Creates a `upower` function that simulates output like the real `upower` command.
 # The passed in parameter is used for the remaining battery percentage.
 function setup_upower {
+	trap -p PIPE | grep -q PIPE || trap '' PIPE
 	percent="$1"
 	BAT0="/org/freedesktop/UPower/devices/battery_BAT$RANDOM"
 
 	function upower {
 		case $1 in
 		'-e'|'--enumerate')
-			# don't just `echo` twice because `grep` will close the pipe after matching the first line...
-			echo "$BAT0"$'\n'"/org/freedesktop/UPower/devices/mouse_hid_${RANDOM}_battery"
+			printf '%s\n' "$BAT0" "/org/freedesktop/UPower/devices/mouse_hid_${RANDOM}_battery"
 			;;
 		'-i'|'--show-info')
 			if [[ $2 == "$BAT0" ]]
