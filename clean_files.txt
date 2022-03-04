@@ -76,6 +76,7 @@ completion/available/vuejs.completion.bash
 completion/available/wpscan.completion.bash
 
 # libraries
+lib/appearance.bash
 lib/colors.bash
 lib/helpers.bash
 lib/history.bash
