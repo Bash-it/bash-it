@@ -5,10 +5,19 @@
 
 : "${BASH_IT:=${HOME?}/.bash_it}"
 
-CONFIG_FILE=".bashrc"
-if [[ ! -e ~/.bashrc && -e ~/.bash_profile ]]; then
-	# legacy Mac or WSL or just no backup file
+if [[ ! -e ~/.bashrc && ! -e ~/.bash_profile && ! -e ~/.bashrc.bak && ! -e ~/.bash_profile.bak ]]; then
+	echo "We can't locate your configuration files, so we can't uninstall..."
+	return
+elif grep -F -q -- BASH_IT ~/.bashrc && grep -F -q -- BASH_IT ~/.bash_profile; then
+	echo "We can't figure out if Bash-it is loaded from ~/.bashrc or ~/.bash_profile..."
+	return
+elif grep -F -q -- BASH_IT ~/.bashrc || [[ -e ~/.bashrc.bak && ! -e ~/.bashrc ]]; then
+	CONFIG_FILE=".bashrc"
+elif grep -F -q -- BASH_IT ~/.bash_profile || [[ -e ~/.bash_profile.bak && ! -e ~/.bash_profile ]]; then
 	CONFIG_FILE=".bash_profile"
+else
+	echo "Bash-it does not appear to be installed."
+	return
 fi
 
 case $OSTYPE in
@@ -22,6 +31,14 @@ esac
 
 # overriding CONFIG_FILE:
 CONFIG_FILE="${BASH_IT_CONFIG_FILE:-"${CONFIG_FILE}"}"
+# possible states:
+# - both .bash* /and/ .bash*.bak, /and/ both config reference `$BASH_IT`: no solution
+# - both config and bak, but only one references `$BASH_IT`: that one
+# - both config, only one bak, but other references `$BASH_IT`: the other one?
+# - both config, no bak, with `$BASH_IT` reference: that one
+# - one config, no bak, but no `$BASH_IT` reference: wut
+# - no config, with bak, with `$BASH_IT`: re-create???
+# - no config, no bak: nothing.
 
 BACKUP_FILE=$CONFIG_FILE.bak
 
