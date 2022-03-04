@@ -158,8 +158,10 @@ themes/candy
 themes/command_duration.theme.bash
 themes/easy
 themes/essential
+themes/githelpers.theme.bash
 themes/modern
 themes/norbu
+themes/p4helpers.theme.bash
 themes/pete
 themes/powerline
 themes/pure
