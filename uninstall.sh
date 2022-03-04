@@ -20,17 +20,6 @@ else
 	return
 fi
 
-case $OSTYPE in
-	darwin*)
-		CONFIG_FILE=.bash_profile
-		;;
-	*)
-		CONFIG_FILE=.bashrc
-		;;
-esac
-
-# overriding CONFIG_FILE:
-CONFIG_FILE="${BASH_IT_CONFIG_FILE:-"${CONFIG_FILE}"}"
 # possible states:
 # - both .bash* /and/ .bash*.bak, /and/ both config reference `$BASH_IT`: no solution
 # - both config and bak, but only one references `$BASH_IT`: that one
@@ -39,6 +28,9 @@ CONFIG_FILE="${BASH_IT_CONFIG_FILE:-"${CONFIG_FILE}"}"
 # - one config, no bak, but no `$BASH_IT` reference: wut
 # - no config, with bak, with `$BASH_IT`: re-create???
 # - no config, no bak: nothing.
+
+# overriding CONFIG_FILE:
+CONFIG_FILE="${BASH_IT_CONFIG_FILE:-"${CONFIG_FILE}"}"
 
 BACKUP_FILE=$CONFIG_FILE.bak
 

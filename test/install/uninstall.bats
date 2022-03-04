@@ -7,16 +7,7 @@ function local_setup() {
 }
 
 function local_setup_file() {
-	# Determine which config file to use based on OS.
-	case $OSTYPE in
-		darwin*)
-			export BASH_IT_CONFIG_FILE=.bash_profile
-			;;
-		*)
-			export BASH_IT_CONFIG_FILE=.bashrc
-			;;
-	esac
-	# don't load any libraries as the tests here test the *whole* kit
+	: # don't load any libraries as the tests here test the *whole* kit
 }
 
 @test "uninstall: verify that the uninstall script exists" {
@@ -25,9 +16,9 @@ function local_setup_file() {
 
 @test "uninstall: run the uninstall script with existing backup 'bashrc'" {
 	local md5_bak md5_conf
-	cd "${BASH_IT?}"
+	BASH_IT_CONFIG_FILE=.bashrc
 
-	echo "test file cont  BASH_IT_COent for backup" > "${HOME?}/$BASH_IT_CONFIG_FILE.bak"
+	echo "test file content for backup" > "${HOME?}/$BASH_IT_CONFIG_FILE.bak"
 	echo "test file content for original BASH_IT file" > "${HOME?}/$BASH_IT_CONFIG_FILE"
 	md5_bak=$(md5sum "${HOME?}/$BASH_IT_CONFIG_FILE.bak" | awk '{print $1}')
 
