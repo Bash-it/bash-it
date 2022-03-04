@@ -9,13 +9,18 @@ fi
 
 COMMAND_DURATION_START_TIME=
 
-COMMAND_DURATION_ICON=${COMMAND_DURATION_ICON:-'  '}
+COMMAND_DURATION_ICON=${COMMAND_DURATION_ICON:-'  '} 🕘
 COMMAND_DURATION_MIN_SECONDS=${COMMAND_DURATION_MIN_SECONDS:-'1'}
 
 _command_duration_pre_exec() {
 	local command_nano_now="$(date +%1N)"
 	[[ "$command_nano_now" == "1N" ]] && command_nano_now=1
 	COMMAND_DURATION_START_TIME="$(date "+%s").${command_nano_now}"
+}
+
+function _dynamic_clock_icon {
+	local -i clock_hand=$(((${1:-${SECONDS}} % 12) + 90))
+	printf -v 'COMMAND_DURATION_ICON' '%b' "\xf0\x9f\x95\x$clock_hand"
 }
 
 _command_duration() {
@@ -54,10 +59,11 @@ _command_duration() {
 		seconds=$((command_duration % 60))
 	fi
 
+	_dynamic_clock_icon
 	if ((minutes > 0)); then
-		printf "%s%s%dm %ds" "$COMMAND_DURATION_ICON" "$COMMAND_DURATION_COLOR" "$minutes" "$seconds"
+		printf "%s%s%dm %ds" "${COMMAND_DURATION_ICON:-}" "${COMMAND_DURATION_COLOR:-}" "$minutes" "$seconds"
 	elif ((seconds >= COMMAND_DURATION_MIN_SECONDS)); then
-		printf "%s%s%d.%01ds" "$COMMAND_DURATION_ICON" "$COMMAND_DURATION_COLOR" "$seconds" "$deciseconds"
+		printf "%s%s%d.%01ds" "${COMMAND_DURATION_ICON:-}" "${COMMAND_DURATION_COLOR:-}" "$seconds" "$deciseconds"
 	fi
 }
 
