@@ -199,8 +199,7 @@ function setup_upower {
 	function upower {
 		case $1 in
 		'-e'|'--enumerate')
-			# don't just `echo` twice because `grep` will close the pipe after matching the first line...
-			echo "$BAT0"$'\n'"/org/freedesktop/UPower/devices/mouse_hid_${RANDOM}_battery"
+			printf '%s\n' "$BAT0" "/org/freedesktop/UPower/devices/mouse_hid_${RANDOM}_battery"
 			;;
 		'-i'|'--show-info')
 			if [[ $2 == "$BAT0" ]]
