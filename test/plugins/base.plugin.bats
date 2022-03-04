@@ -8,10 +8,6 @@ function local_setup_file() {
 }
 
 @test 'plugins base: ips()' {
-  if [[ -n "${CI:-}" ]]; then
-    skip 'ifconfig probably requires sudo on TravisCI'
-  fi
-
   declare -r localhost='127.0.0.1'
   run ips
   assert_success
