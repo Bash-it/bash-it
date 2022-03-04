@@ -195,7 +195,6 @@ function setup_acpi {
 # Creates a `upower` function that simulates output like the real `upower` command.
 # The passed in parameter is used for the remaining battery percentage.
 function setup_upower {
-	trap -p PIPE | grep -q PIPE || trap '' PIPE
 	percent="$1"
 	BAT0="/org/freedesktop/UPower/devices/battery_BAT$RANDOM"
 
