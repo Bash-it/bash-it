@@ -71,8 +71,14 @@ function _bash-it_backup_new() {
 
 # Back up existing profile and append bash-it templates at the end
 function _bash-it_backup_append() {
+	local profile_strings=('if [[ -f ~/.profile ]]; then' 'source ~/.profile' 'fi' 'if [[ -f ~/.bashrc ]]; then' 'source ~/.bashrc' 'fi')
 	_bash-it_backup
 	(sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" | tail -n +2) >> "$HOME/$CONFIG_FILE"
+	if [[ ! -f ~/.bash_profile ]]; then
+		printf '%s\n\t%s\n%s\n%s\n\t%s\n%s\n' "${profile_strings[@]}" > ~/.bash_profile
+	else
+		printf '\e[0;33m%s\n\t%s\n\t\t%s\n\t%s\n\t%s\n\t\t%s\n\t%s\n\e[0m' "You may need to update your ~/.bash_profile (or ~/.profile) to source your ~/.bashrc:" "${profile_strings[@]}"
+	fi
 	echo -e "\033[0;32mBash-it template has been added to your $CONFIG_FILE\033[0m"
 }
 
@@ -185,14 +191,7 @@ fi
 
 BASH_IT="$(cd "${BASH_SOURCE%/*}" && pwd)"
 
-case $OSTYPE in
-	darwin*)
-		CONFIG_FILE=.bash_profile
-		;;
-	*)
-		CONFIG_FILE=.bashrc
-		;;
-esac
+CONFIG_FILE=.bashrc
 
 # overriding CONFIG_FILE:
 CONFIG_FILE="${BASH_IT_CONFIG_FILE:-"${CONFIG_FILE}"}"
@@ -211,13 +210,13 @@ fi
 export BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE=''
 # Load dependencies for enabling components
 # shellcheck disable=SC1090
-source "${BASH_IT}"/vendor/github.com/erichs/composure/composure.sh
-# shellcheck source=./lib/utilities.bash
-source "$BASH_IT/lib/utilities.bash"
-# shellcheck source=./lib/log.bash
-source "${BASH_IT}/lib/log.bash"
+source "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
 cite _about _param _example _group _author _version
-# shellcheck source=./lib/helpers.bash
+# shellcheck source-path=SCRIPTDIR/lib
+source "$BASH_IT/lib/utilities.bash"
+# shellcheck source-path=SCRIPTDIR/lib
+source "${BASH_IT}/lib/log.bash"
+# shellcheck source-path=SCRIPTDIR/lib
 source "$BASH_IT/lib/helpers.bash"
 
 if [[ -n $interactive && -z "${silent}" ]]; then
