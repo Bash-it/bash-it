@@ -12,7 +12,8 @@ for file in "$@"; do
 	# Confirm expected schellcheck header
 	#
 	LINE1="$(head -n 1 "${file}")"
-	if [[ "${LINE1}" != "# shellcheck shell=bash" ]]; then
+	SCSH="${file##*.}"
+	if [[ "${LINE1}" != "# shellcheck shell=${SCSH}" ]]; then
 		echo "Bash include file \`${file}\` has bad/missing shellcheck header"
 		exit_code=1
 	fi

@@ -16,6 +16,7 @@ function local_setup_file() {
 }
 
 @test "plugins ruby: PATH includes ~/.gem/ruby/bin" {
+  local last_path_entry
   if ! type ruby >/dev/null; then
     skip 'ruby not installed'
   fi
@@ -26,6 +27,6 @@ function local_setup_file() {
   assert_success
   load "${BASH_IT?}/plugins/available/ruby.plugin.bash"
 
-  local last_path_entry="$(tail -1 <<<"${PATH//:/$'\n'}")"
+  last_path_entry="$(tail -1 <<<"${PATH//:/$'\n'}")"
   [[ "${last_path_entry}" == "$(ruby -e 'print Gem.user_dir')/bin" ]]
 }

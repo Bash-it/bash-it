@@ -3,7 +3,7 @@
 load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
 function local_setup() {
-  export HOME="$BATS_TEST_TMPDIR"
+  export HOME="${BATS_TEST_TMPDIR?}"
 }
 
 function local_setup_file() {
@@ -20,7 +20,7 @@ function local_setup_file() {
 }
 
 @test "install: verify that the install script exists" {
-  assert_file_exist "$BASH_IT/install.sh"
+  assert_file_exist "${BASH_IT?}/install.sh"
 }
 
 @test "install: run the install script silently" {
@@ -30,26 +30,27 @@ function local_setup_file() {
 
   assert_file_exist "$HOME/$BASH_IT_CONFIG_FILE"
 
-  assert_link_exist "$BASH_IT/enabled/150---general.aliases.bash"
-  assert_link_exist "$BASH_IT/enabled/250---base.plugin.bash"
-  assert_link_exist "$BASH_IT/enabled/800---aliases.completion.bash"
-  assert_link_exist "$BASH_IT/enabled/350---bash-it.completion.bash"
-  assert_link_exist "$BASH_IT/enabled/325---system.completion.bash"
+  assert_link_exist "${BASH_IT?}/enabled/150---general.aliases.bash"
+  assert_link_exist "${BASH_IT?}/enabled/250---base.plugin.bash"
+  assert_link_exist "${BASH_IT?}/enabled/800---aliases.completion.bash"
+  assert_link_exist "${BASH_IT?}/enabled/350---bash-it.completion.bash"
+  assert_link_exist "${BASH_IT?}/enabled/325---system.completion.bash"
 }
 
 @test "install: verify that a backup file is created" {
-  cd "$BASH_IT"
+  local md5_orig md5_bak
+  cd "${BASH_IT?}"
 
   touch "$HOME/$BASH_IT_CONFIG_FILE"
   echo "test file content" > "$HOME/$BASH_IT_CONFIG_FILE"
-  local md5_orig=$(md5sum "$HOME/$BASH_IT_CONFIG_FILE" | awk '{print $1}')
+  md5_orig=$(md5sum "$HOME/$BASH_IT_CONFIG_FILE" | awk '{print $1}')
 
   ./install.sh --silent
 
   assert_file_exist "$HOME/$BASH_IT_CONFIG_FILE"
   assert_file_exist "$HOME/$BASH_IT_CONFIG_FILE.bak"
 
-  local md5_bak=$(md5sum "$HOME/$BASH_IT_CONFIG_FILE.bak" | awk '{print $1}')
+  md5_bak=$(md5sum "$HOME/$BASH_IT_CONFIG_FILE.bak" | awk '{print $1}')
 
   assert_equal "$md5_orig" "$md5_bak"
 }
