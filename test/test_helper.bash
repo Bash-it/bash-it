@@ -57,7 +57,7 @@ function common_setup_file() {
 function setup_libs() {
 	local lib
 	# Use a loop to allow convenient short-circuiting for some test files
-	for lib in "log" "utilities" "helpers" "search" "preexec" "colors" "command_duration"; do
+	for lib in "log" "utilities" "helpers" "search" "colors" "preview" "preexec" "history" "command_duration"; do
 		load "${BASH_IT?}/lib/${lib}.bash" || return
 		# shellcheck disable=SC2015 # short-circuit if we've reached the requested library
 		[[ "${lib}" == "${1:-}" ]] && return 0 || true
@@ -66,7 +66,7 @@ function setup_libs() {
 }
 
 function local_setup_file() {
-	true
+	setup_libs "colors" # overridable default
 }
 
 function local_setup() {
@@ -101,6 +101,7 @@ function setup() {
 	BASH_IT_CONFIG="${BASH_IT?}" #"${BATS_TEST_TMPDIR//\/\///}"
 	export XDG_CACHE_HOME="${BATS_TEST_TMPDIR?}"
 
+	set -Eeuo pipefail # Bash Unofficial Strict Mode
 	setup_test_fixture
 	local_setup
 }
@@ -109,6 +110,7 @@ function teardown() {
 	unset GIT_CONFIG_NOSYSTEM
 	local_teardown
 	clean_test_fixture
+	set +Eeuo pipefail # Bash Unofficial Strict Mode
 }
 
 function teardown_file() {
