@@ -1,8 +1,8 @@
 # shellcheck shell=bash
 
 __truffle_completion() {
-	local prev=$(_get_pword)
-	local curr=$(_get_cword)
+	local prev
+	prev=$(_get_pword)
 
 	case $prev in
 	compile)
@@ -29,7 +29,7 @@ __truffle_completion() {
 	exec)
 		COMPREPLY=(--{network,compile})
 		;;
-	debug)
+	init)
 		COMPREPLY=(--force)
 		;;
 	migrate)
