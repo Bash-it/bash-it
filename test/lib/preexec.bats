@@ -111,7 +111,7 @@ function local_setup {
 
 @test "lib preexec: __check_precmd_conflict()" {
 	test_precmd_function_name="test"
-	load ../test_helper_libs
+	setup_libs "preexec"
 
 	run __check_precmd_conflict "$test_precmd_function_name"
 	assert_failure
@@ -124,7 +124,7 @@ function local_setup {
 
 @test "lib preexec: __check_preexec_conflict()" {
 	test_preexec_function_name="test"
-	load ../test_helper_libs
+	setup_libs "preexec"
 
 	run __check_preexec_conflict "$test_preexec_function_name"
 	assert_failure
@@ -137,7 +137,7 @@ function local_setup {
 
 @test "lib preexec: safe_append_prompt_command()" {
 	test_precmd_function_name="test"
-	load ../test_helper_libs
+	setup_libs "preexec"
 
 	export precmd_functions=()
 	assert_equal "${precmd_functions[*]}" ""
@@ -151,7 +151,7 @@ function local_setup {
 
 @test "lib preexec: safe_append_preexec()" {
 	test_preexec_function_name="test"
-	load ../test_helper_libs
+	setup_libs "preexec"
 
 	export preexec_functions=()
 	assert_equal "${preexec_functions[*]}" ""

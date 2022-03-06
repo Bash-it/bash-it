@@ -1,29 +1,10 @@
-#!/usr/bin/env bats
+# shellcheck shell=bats
 
-load ../test_helper
-load ../test_helper_libs
+load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
-function local_setup {
-  setup_test_fixture
-
-  # Copy the test fixture to the Bash-it folder
-  if command -v rsync &> /dev/null
-  then
-    rsync -a "$BASH_IT/test/fixtures/bash_it/" "$BASH_IT/"
-  else
-    find "$BASH_IT/test/fixtures/bash_it" \
-      -mindepth 1 -maxdepth 1 \
-      -exec cp -r {} "$BASH_IT/" \;
-  fi
-
-  export OLD_PATH="$PATH"
-
-  load ../../themes/base.theme
-}
-
-function local_teardown {
-  export PATH="$OLD_PATH"
-  unset OLD_PATH
+function local_setup_file() {
+  setup_libs "colors" #"theme"
+  load "${BASH_IT?}/themes/base.theme.bash"
 }
 
 function setup_repo {

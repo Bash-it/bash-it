@@ -1,19 +1,11 @@
-#!/usr/bin/env bats
+# shellcheck shell=bats
 
-load ../test_helper
+load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
-function local_setup {
-  setup_test_fixture
-
+function local_setup_file() {
   # Copy the test fixture to the Bash-it folder
-  if command -v rsync &> /dev/null
-  then
-    rsync -a "$BASH_IT/test/fixtures/bash_it/" "$BASH_IT/"
-  else
-    find "$BASH_IT/test/fixtures/bash_it" \
-      -mindepth 1 -maxdepth 1 \
-      -exec cp -r {} "$BASH_IT/" \;
-  fi
+  cp -fRP "${BASH_IT?}/test/fixtures/bash_it"/* "${BASH_IT?}/" || true
+  # don't load any libraries as the tests here test the *whole* kit
 }
 
 @test "bash-it: verify that the test fixture is available" {
