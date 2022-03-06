@@ -1,17 +1,16 @@
-#!/usr/bin/env bats
+# shellcheck shell=bats
 
-load ../test_helper
-load ../../lib/utilities
-load ../../lib/helpers
-load ../../completion/available/bash-it.completion
+load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
-function local_setup {
-  setup_test_fixture
+function local_setup_file() {
+  setup_libs "helpers"
+  load "${BASH_IT?}/completion/available/bash-it.completion.bash"
 }
 
 @test "completion bash-it: ensure that the _bash-it function is available" {
-  type -a _bash-it &> /dev/null
+  run type -t _bash-it
   assert_success
+  assert_output "function"
 }
 
 function __check_completion () {

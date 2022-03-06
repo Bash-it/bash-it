@@ -45,7 +45,7 @@ function _bash-it-log-prefix-by-path() {
 
 function _has_colors() {
 	# Check that stdout is a terminal, and that it has at least 8 colors.
-	[[ -t 1 && "${_bash_it_available_colors:=$(tput colors 2> /dev/null)}" -ge 8 ]]
+	[[ -t 1 && "${CLICOLOR:=$(tput colors 2> /dev/null)}" -ge 8 ]]
 }
 
 function _bash-it-log-message() {

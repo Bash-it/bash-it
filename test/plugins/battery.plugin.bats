@@ -1,9 +1,11 @@
-#!/usr/bin/env bats
+# shellcheck shell=bats
 
-load ../test_helper
-load ../test_helper_libs
+load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
-load ../../plugins/available/battery.plugin
+function local_setup_file() {
+  setup_libs "helpers"
+  load "${BASH_IT?}/plugins/available/battery.plugin.bash"
+}
 
 # Sets up the `_command_exists` function so that it only responds `true` if called with
 # the name of the function that was passed in as an argument to `setup_command_exists`.
@@ -196,12 +198,10 @@ function setup_upower {
 	percent="$1"
 	BAT0="/org/freedesktop/UPower/devices/battery_BAT$RANDOM"
 
-
 	function upower {
 		case $1 in
 		'-e'|'--enumerate')
-			echo "$BAT0"
-			echo "/org/freedesktop/UPower/devices/mouse_hid_${RANDOM}_battery"
+			printf '%s\n' "$BAT0" "/org/freedesktop/UPower/devices/mouse_hid_${RANDOM}_battery"
 			;;
 		'-i'|'--show-info')
 			if [[ $2 == "$BAT0" ]]

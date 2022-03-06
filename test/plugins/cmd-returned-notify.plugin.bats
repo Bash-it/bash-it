@@ -1,4 +1,4 @@
-#!/usr/bin/env bats
+# shellcheck shell=bats
 
 load ../test_helper
 load ../../lib/helpers
@@ -8,44 +8,40 @@ load ../../lib/composure
 load "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
 >>>>>>> 30eda03f30af6d62452ca1efdec919031f83c013
 
-load ../../plugins/available/cmd-returned-notify.plugin
+function local_setup_file() {
+  setup_libs "command_duration"
+  load "${BASH_IT?}/plugins/available/cmd-returned-notify.plugin.bash"
+}
 
 @test "plugins cmd-returned-notify: notify after elapsed time" {
-    export NOTIFY_IF_COMMAND_RETURNS_AFTER=0
-    export LAST_COMMAND_TIME=$(date +%s)
-    sleep 1
-    run precmd_return_notification
-    assert_success
-    assert_output $'\a'
+	export NOTIFY_IF_COMMAND_RETURNS_AFTER=0
+	export COMMAND_DURATION_START_SECONDS="${EPOCHREALTIME:-$SECONDS}"
+	sleep 1
+	run precmd_return_notification
+	assert_success
+	assert_output $'\a'
 }
 
 @test "plugins cmd-returned-notify: do not notify before elapsed time" {
-    export NOTIFY_IF_COMMAND_RETURNS_AFTER=10
-    export LAST_COMMAND_TIME=$(date +%s)
-    sleep 1
-    run precmd_return_notification
-    assert_success
-    assert_output $''
+	export NOTIFY_IF_COMMAND_RETURNS_AFTER=10
+	export COMMAND_DURATION_START_SECONDS="${EPOCHREALTIME:-$SECONDS}"
+	sleep 1
+	run precmd_return_notification
+	assert_success
+	assert_output $''
 }
 
-@test "plugins cmd-returned-notify: preexec no output" {
-    export LAST_COMMAND_TIME=
-    run preexec_return_notification
-    assert_success
-    assert_output ""
+@test "lib command_duration: preexec no output" {
+	export COMMAND_DURATION_START_SECONDS=
+	run _command_duration_pre_exec
+	assert_success
+	assert_output ""
 }
-
-@test "plugins cmd-returned-notify: preexec no output env set" {
-    export LAST_COMMAND_TIME=$(date +%s)
-    run preexec_return_notification
-    assert_failure
-    assert_output ""
-}
-
-@test "plugins cmd-returned-notify: preexec set LAST_COMMAND_TIME" {
-    export LAST_COMMAND_TIME=
-    assert_equal "${LAST_COMMAND_TIME}" ""
-    NOW=$(date +%s)
-    preexec_return_notification
-    assert_equal "${LAST_COMMAND_TIME}" "${NOW}"
+@test "lib command_duration: preexec set COMMAND_DURATION_START_SECONDS" {
+	export COMMAND_DURATION_START_SECONDS=
+	assert_equal "${COMMAND_DURATION_START_SECONDS}" ""
+	NOW="${EPOCHREALTIME:-$SECONDS}"
+	_command_duration_pre_exec
+	# We need to make sure to account for nanoseconds...
+	assert_equal "${COMMAND_DURATION_START_SECONDS%.*}" "${NOW%.*}"
 }
