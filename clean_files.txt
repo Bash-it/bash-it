@@ -161,6 +161,7 @@ themes/essential
 themes/githelpers.theme.bash
 themes/modern
 themes/norbu
+themes/oh-my-posh
 themes/p4helpers.theme.bash
 themes/pete
 themes/powerline
