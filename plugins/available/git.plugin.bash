@@ -3,7 +3,7 @@ cite about-plugin
 about-plugin 'git helper functions'
 
 # shellcheck disable=SC2016
-function git_remote {
+function git_remote() {
 	about 'adds remote $GIT_HOSTING:$1 to current repo'
 	group "git"
 
@@ -11,7 +11,7 @@ function git_remote {
 	git remote add origin "${GIT_HOSTING}:${1}".git
 }
 
-function git_first_push {
+function git_first_push() {
 	about 'push into origin refs/heads/master'
 	group 'git'
 
@@ -43,7 +43,7 @@ function git_rollback() {
 	group 'git'
 
 	function is_clean() {
-		if [[ $(git diff --shortstat 2> /dev/null | tail -n1) != "" ]]; then
+		if [[ $(git diff --shortstat 2>/dev/null | tail -n1) != "" ]]; then
 			echo "Your branch is dirty, please commit your changes"
 			kill -INT $$
 		fi
@@ -62,24 +62,24 @@ function git_rollback() {
 			read -p "Do you want to keep all changes from rolled back revisions in your working tree? [Y/N]" RESP
 			case "${RESP}" in
 
-				[yY])
-					echo "Rolling back to commit ${1} with unstaged changes"
-					git reset "$1"
-					break
-					;;
-				[nN])
-					echo "Rolling back to commit ${1} with a clean working tree"
-					git reset --hard "$1"
-					break
-					;;
-				*)
-					echo "Please enter Y or N"
-					;;
+			[yY])
+				echo "Rolling back to commit ${1} with unstaged changes"
+				git reset "$1"
+				break
+				;;
+			[nN])
+				echo "Rolling back to commit ${1} with a clean working tree"
+				git reset --hard "$1"
+				break
+				;;
+			*)
+				echo "Please enter Y or N"
+				;;
 			esac
 		done
 	}
 
-	if [ -n "$(git symbolic-ref HEAD 2> /dev/null)" ]; then
+	if [ -n "$(git symbolic-ref HEAD 2>/dev/null)" ]; then
 		is_clean
 		commit_exists "$1"
 
@@ -88,16 +88,16 @@ function git_rollback() {
 			read -p "WARNING: This will change your history and move the current HEAD back to commit ${1}, continue? [Y/N]" RESP
 			case "${RESP}" in
 
-				[yY])
-					keep_changes "$1"
-					break
-					;;
-				[nN])
-					break
-					;;
-				*)
-					echo "Please enter Y or N"
-					;;
+			[yY])
+				keep_changes "$1"
+				break
+				;;
+			[nN])
+				break
+				;;
+			*)
+				echo "Please enter Y or N"
+				;;
 			esac
 		done
 	else
@@ -117,7 +117,7 @@ function local-ignore() {
 	about 'adds file or path to git exclude file'
 	param '1: file or path fragment to ignore'
 	group 'git'
-	echo "$1" >> .git/info/exclude
+	echo "$1" >>.git/info/exclude
 }
 
 # get a quick overview for your git repo
@@ -125,7 +125,7 @@ function git_info() {
 	about 'overview for your git repo'
 	group 'git'
 
-	if [ -n "$(git symbolic-ref HEAD 2> /dev/null)" ]; then
+	if [ -n "$(git symbolic-ref HEAD 2>/dev/null)" ]; then
 		# print informations
 		echo "git repo overview"
 		echo "-----------------"
@@ -140,7 +140,7 @@ function git_info() {
 
 		# print status of working repo
 		echo "status:"
-		if [ -n "$(git status -s 2> /dev/null)" ]; then
+		if [ -n "$(git status -s 2>/dev/null)" ]; then
 			git status -s
 		else
 			echo "working directory is clean"
@@ -158,14 +158,14 @@ function git_info() {
 	fi
 }
 
-function git_stats {
+function git_stats() {
 	about 'display stats per author'
 	group 'git'
 
 	# awesome work from https://github.com/esc/git-stats
 	# including some modifications
 
-	if [ -n "$(git symbolic-ref HEAD 2> /dev/null)" ]; then
+	if [ -n "$(git symbolic-ref HEAD 2>/dev/null)" ]; then
 		echo "Number of commits per author:"
 		git --no-pager shortlog -sn --all
 		AUTHORS=$(git shortlog -sn --all | cut -f2 | cut -f1 -d' ')
@@ -209,7 +209,7 @@ function gittowork() {
 	param '1: the language/type of the project, used for determining the contents of the .gitignore file'
 	example '$ gittowork java'
 
-	result=$(curl -L "https://www.gitignore.io/api/$1" 2> /dev/null)
+	result=$(curl -L "https://www.gitignore.io/api/$1" 2>/dev/null)
 
 	if [[ "${result}" =~ ERROR ]]; then
 		echo "Query '$1' has no match. See a list of possible queries with 'gittowork list'"
@@ -217,10 +217,10 @@ function gittowork() {
 		echo "${result}"
 	else
 		if [[ -f .gitignore ]]; then
-			result=$(grep -v "# Created by http://www.gitignore.io" <<< "${result}")
+			result=$(grep -v "# Created by http://www.gitignore.io" <<<"${result}")
 			echo ".gitignore already exists, appending..."
 		fi
-		echo "${result}" >> .gitignore
+		echo "${result}" >>.gitignore
 	fi
 }
 
@@ -313,4 +313,28 @@ function git-changelog() {
 			NEXT=${DATE}
 		done
 	fi
+}
+
+function git-get-default-branch() {
+	about 'gets the default branch of the git repo'
+	group 'git'
+	example '$ git-get-default-branch'
+
+	echo $(basename $(git symbolic-ref refs/remotes/origin/HEAD))
+}
+
+function git-delete-stale-branch() {
+	about 'deletes the stale branch from git'
+	group 'git'
+	example '$ git-delete-stale-branch [--force|-f]'
+
+	local CURR_BRANCH
+	CURR_BRANCH=$(git branch | grep "*" | awk '{print $2}')
+
+	if [[ "$1" == "--force" ]] || [[ "$1" == "-f" ]]; then
+		git branch | grep -vE "$(git-get-default-branch)|$CURR_BRANCH" | xargs git branch -D
+	else
+		git branch | grep -vE "$(git-get-default-branch)|$CURR_BRANCH" | xargs git branch -d
+	fi
+
 }
