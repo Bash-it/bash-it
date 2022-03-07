@@ -17,6 +17,7 @@ alias gbd='git branch -d'
 alias gbm='git branch -m'
 alias gbt='git branch --track'
 alias gdel='git branch -D'
+alias gdsb='git-delete-stale-branch'
 
 # for-each-ref
 alias gbc='git for-each-ref --format="%(authorname) %09 %(if)%(HEAD)%(then)*%(else)%(refname:short)%(end) %09 %(creatordate)" refs/remotes/ --sort=authorname DESC' # FROM https://stackoverflow.com/a/58623139/10362396
@@ -185,12 +186,12 @@ alias gtd='git tag -d'
 alias gtl='git tag -l'
 
 case $OSTYPE in
-	darwin*)
-		alias gtls="git tag -l | gsort -V"
-		;;
-	*)
-		alias gtls='git tag -l | sort -V'
-		;;
+darwin*)
+	alias gtls="git tag -l | gsort -V"
+	;;
+*)
+	alias gtls='git tag -l | sort -V'
+	;;
 esac
 
 # functions
