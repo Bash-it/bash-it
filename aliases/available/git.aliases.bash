@@ -186,12 +186,12 @@ alias gtd='git tag -d'
 alias gtl='git tag -l'
 
 case $OSTYPE in
-darwin*)
-	alias gtls="git tag -l | gsort -V"
-	;;
-*)
-	alias gtls='git tag -l | sort -V'
-	;;
+	darwin*)
+		alias gtls="git tag -l | gsort -V"
+		;;
+	*)
+		alias gtls='git tag -l | sort -V'
+		;;
 esac
 
 # functions
