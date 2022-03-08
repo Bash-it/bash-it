@@ -1,16 +1,36 @@
 # shellcheck shell=bash
 
-_command_exists wpscan || return
+if _command_exists wpscan; then
+	function __wpscan_completion() {
+		local prev
+		prev=$(_get_pword)
 
-function __wpscan_completion() {
-	local _opt_
-	local OPTS=('--help' '--hh' '--version' '--url' '--ignore-main-redirect' '--verbose' '--output' '--format' '--detection-mode' '--scope' '--headers' '--user-agent' '--vhost' '--random-user-agent' '--user-agents-list' '--http-auth' '--max-threads' '--throttle' '--request-timeout' '--connect-timeout' '--disable-tlc-checks' '--proxy' '--proxy-auth' '--cookie-string' '--cookie-jar' '--cache-ttl' '--clear-cache' '--server' '--cache-dir' '--update' '--no-update' '--wp-content-dir' '--wp-plugins-dir' '--wp-version-detection' '--main-theme-detection' '--enumerate' '--exclude-content-based' '--plugins-list' '--plugins-detection' '--plugins-version-all' '--plugins-version-detection' '--themes-list' '--themes-detection' '--themes-version-all' '--themes-version-detection' '--timthumbs-list' '--timthumbs-detection' '--config-backups-list' '--config-backups-detection' '--db-exports-list' '--db-exports-detection' '--medias-detection' '--users-list' '--users-detection' '--passwords' '--usernames' '--multicall-max-passwords' '--password-attack' '--stealthy')
-	COMPREPLY=()
-	for _opt_ in "${OPTS[@]}"; do
-		if [[ "$_opt_" == "$2"* ]]; then
-			COMPREPLY+=("$_opt_")
-		fi
-	done
-}
+		case $prev in
+			-f | --format)
+				COMPREPLY=(cli cli-no-colour cli-no-color json)
+				;;
+			--server)
+				COMPREPLY=(apache iis nginx)
+				;;
+			*-detection)
+				COMPREPLY=(mixed passive aggressive)
+				;;
+			-e | --enumerate)
+				COMPREPLY=({a,v,}{p,t} tt cb dbe u m)
+				;;
+			--password-attack)
+				COMPREPLY=(wp-login xmlrpc xmlrpc-multicall)
+				;;
+			*)
+				COMPREPLY=(--url -h --help --hh --version --ignore-main-redirect -v --verbose --{no-,}banner --max-scan-duration -o --output --detection-mode
+					--scope --user-agent --ua --headers --vhost --random-user-agent --rua --user-agents-list --http-auth -t --max-threads --throttle --{request,connect}-timeout
+					--disable-tls --proxy{,-auth} --cookie-{string,jar} --cache-{ttl,dir} --clear-cache --server --{no-,}update --api-token --wp-{content,plugins}-dir
+					--interesting-findings-detection --wp-version-{all,detection} --main-theme-detection -e --enumerate --exclude-content-based --plugins-{list,detection,version-{all,detection},threshold}
+					--themes-{list,detection,version-{all,detection},threshold} --timthumbs-{detection,list} --config-backups-{detection,list} --db-exports-{detection,list}
+					--medias-detection --users-{list,detection} --exclude-usernames -P --passwords -U --usernames --multicall-max-passwords --password-attack --login-uri --stealthy)
+				;;
 
-complete -F __wpscan_completion wpscan
+		esac
+	}
+	complete -F __wpscan_completion -X '!&*' wpscan
+fi
