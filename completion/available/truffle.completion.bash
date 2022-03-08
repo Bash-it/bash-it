@@ -50,7 +50,7 @@ __truffle_completion() {
 		test)
 			COMPREPLY=(--{compile-all{,-debug},network,verbose-rpc,show-events,debug{,-global},bail,stacktrace{,-extra}})
 			;;
-		truffle)
+		*)
 			COMPREPLY=(build compile config console create dashboard browser db debug deploy develop exec help init install migrate networks obtain opcode preserve publish run test unbox version watch)
 			;;
 	esac
