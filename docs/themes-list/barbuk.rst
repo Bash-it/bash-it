@@ -8,12 +8,34 @@ A minimal theme with a clean git prompt
 Provided Information
 --------------------
 
-
 * Current git remote tool logo (support: github, gitlab, bitbucket)
 * Current path (red when user is root)
 * Current git info
 * Last command exit code (only shown when the exit code is greater than 0)
 * user@hostname for ssh connection
+
+Default configuration
+^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: bash
+
+   BARBUK_PROMPT="git-uptream-remote-logo ssh path scm python_venv ruby node terraform cloud duration exit"
+
+You can override BARBUK_PROMPT to display only the desired information.
+
+available block:
+
+* git-uptream-remote-logo
+* ssh
+* path
+* scm
+* python_venv
+* ruby
+* node
+* terraform
+* cloud
+* duration
+* exit
 
 Fonts and glyphs
 ----------------
@@ -39,6 +61,12 @@ Default theme glyphs
    BARBUK_EXIT_CODE_ICON=' '
    BARBUK_PYTHON_VENV_CHAR=' '
    BARBUK_COMMAND_DURATION_ICON='  '
+   BARBUK_RUBY_CHAR=' '
+   BARBUK_NODE_CHAR=' '
+   BARBUK_TERRAFORM_CHAR="❲t❳ "
+   BARBUK_AWS_PROFILE_CHAR=" aws "
+   BARBUK_SCALEWAY_PROFILE_CHAR=" scw "
+   BARBUK_GCLOUD_CHAR=" gcp "
 
 Customize glyphs
 ^^^^^^^^^^^^^^^^
