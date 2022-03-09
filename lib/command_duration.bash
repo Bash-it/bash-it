@@ -22,9 +22,11 @@ function _command_duration() {
 	local -i minutes=0 seconds=0 deciseconds=0
 	local -i command_start_seconds="${command_start%.*}"
 	local -i command_start_deciseconds=$((10#${command_start##*.}))
+	command_start_deciseconds="${command_start_deciseconds:0:1}"
 	local current_time="${EPOCHREALTIME:-$SECONDS}"
 	local -i current_time_seconds="${current_time%.*}"
 	local -i current_time_deciseconds="$((10#${current_time##*.}))"
+	current_time_deciseconds="${current_time_deciseconds:0:1}"
 
 	if [[ "${command_start_seconds:-0}" -gt 0 ]]; then
 		# seconds
