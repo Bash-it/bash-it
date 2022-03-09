@@ -60,145 +60,144 @@ RBFU_THEME_PROMPT_PREFIX=''
 RBFU_THEME_PROMPT_SUFFIX=''
 
 function __git-uptream-remote-logo_prompt() {
-  [[ "$(_git-upstream)" == "" ]] && SCM_GIT_CHAR="$SCM_GIT_CHAR_DEFAULT"
+	[[ "$(_git-upstream)" == "" ]] && SCM_GIT_CHAR="$SCM_GIT_CHAR_DEFAULT"
 
-  local remote remote_domain
-  remote=$(_git-upstream-remote)
-  remote_domain=$(git config --get remote."$remote".url | awk -F'[@:.]' '{print $2}')
+	local remote remote_domain
+	remote=$(_git-upstream-remote)
+	remote_domain=$(git config --get remote."$remote".url | awk -F'[@:.]' '{print $2}')
 
-  # remove // suffix for https:// url
-  remote_domain=${remote_domain//\//}
+	# remove // suffix for https:// url
+	remote_domain=${remote_domain//\//}
 
-  case $remote_domain in
-    github) SCM_GIT_CHAR="$SCM_GIT_CHAR_GITHUB" ;;
-    gitlab) SCM_GIT_CHAR="$SCM_GIT_CHAR_GITLAB" ;;
-    bitbucket) SCM_GIT_CHAR="$SCM_GIT_CHAR_BITBUCKET" ;;
-    *) SCM_GIT_CHAR="$SCM_GIT_CHAR_DEFAULT" ;;
-  esac
+	case $remote_domain in
+		github) SCM_GIT_CHAR="$SCM_GIT_CHAR_GITHUB" ;;
+		gitlab) SCM_GIT_CHAR="$SCM_GIT_CHAR_GITLAB" ;;
+		bitbucket) SCM_GIT_CHAR="$SCM_GIT_CHAR_BITBUCKET" ;;
+		*) SCM_GIT_CHAR="$SCM_GIT_CHAR_DEFAULT" ;;
+	esac
 
-  echo "${purple?}$(scm_char)"
+	echo "${purple?}$(scm_char)"
 }
 
 function git_prompt_info() {
-  git_prompt_vars
-  echo -e "on $SCM_GIT_CHAR_ICON_BRANCH $SCM_PREFIX$SCM_BRANCH$SCM_STATE$SCM_GIT_AHEAD$SCM_GIT_BEHIND$SCM_GIT_STASH$SCM_SUFFIX "
+	git_prompt_vars
+	echo -e "on $SCM_GIT_CHAR_ICON_BRANCH $SCM_PREFIX$SCM_BRANCH$SCM_STATE$SCM_GIT_AHEAD$SCM_GIT_BEHIND$SCM_GIT_STASH$SCM_SUFFIX "
 }
 
 function __exit_prompt() {
-  if [[ "$exit_code" -ne 0 ]]; then
-    echo "${purple?}${EXIT_CODE_ICON}${yellow?}${exit_code}${bold_orange?} "
-  else
-    echo "${bold_green}"
-  fi
+	if [[ "$exit_code" -ne 0 ]]; then
+		echo "${purple?}${EXIT_CODE_ICON}${yellow?}${exit_code}${bold_orange?} "
+	else
+		echo "${bold_green}"
+	fi
 }
 
 function __aws_profile_prompt() {
-  if [[ -n "${AWS_PROFILE}" ]]; then
-    echo -n "${bold_purple?}${AWS_PROFILE_CHAR}${normal?}${AWS_PROFILE} "
-  fi
+	if [[ -n "${AWS_PROFILE}" ]]; then
+		echo -n "${bold_purple?}${AWS_PROFILE_CHAR}${normal?}${AWS_PROFILE} "
+	fi
 }
 
 function __scaleway_profile_prompt() {
-  if [[ -n "${SCW_PROFILE}" ]]; then
-    echo -n "${bold_purple?}${SCALEWAY_PROFILE_CHAR}${normal?}${SCW_PROFILE} "
-  fi
+	if [[ -n "${SCW_PROFILE}" ]]; then
+		echo -n "${bold_purple?}${SCALEWAY_PROFILE_CHAR}${normal?}${SCW_PROFILE} "
+	fi
 }
 
 function __gcloud_prompt() {
-  local active_gcloud_account=""
+	local active_gcloud_account=""
 
-  active_gcloud_account="$(active_gcloud_account_prompt)"
-  [[ -n "${active_gcloud_account}" ]] && echo "${bold_purple?}${GCLOUD_CHAR}${normal?}${active_gcloud_account} "
+	active_gcloud_account="$(active_gcloud_account_prompt)"
+	[[ -n "${active_gcloud_account}" ]] && echo "${bold_purple?}${GCLOUD_CHAR}${normal?}${active_gcloud_account} "
 }
 
 function __cloud_prompt() {
-  __aws_profile_prompt
-  __scaleway_profile_prompt
-  __gcloud_prompt
+	__aws_profile_prompt
+	__scaleway_profile_prompt
+	__gcloud_prompt
 }
 
 function __terraform_prompt() {
-  local terraform_workspace=""
+	local terraform_workspace=""
 
-  if [ -d .terraform ]; then
-    terraform_workspace="$(terraform_workspace_prompt)"
-    [[ -n "${terraform_workspace}" ]] && echo "${bold_purple?}${TERRAFORM_CHAR}${normal?}${terraform_workspace} "
-  fi
+	if [ -d .terraform ]; then
+		terraform_workspace="$(terraform_workspace_prompt)"
+		[[ -n "${terraform_workspace}" ]] && echo "${bold_purple?}${TERRAFORM_CHAR}${normal?}${terraform_workspace} "
+	fi
 }
 
 function __node_prompt() {
-  local node_version=""
+	local node_version=""
 
-  node_version="$(node_version_prompt)"
-  [[ -n "${node_version}" ]] && echo "${bold_purple?}${NODE_CHAR}${normal?}${node_version} "
+	node_version="$(node_version_prompt)"
+	[[ -n "${node_version}" ]] && echo "${bold_purple?}${NODE_CHAR}${normal?}${node_version} "
 }
 
 function __ruby_prompt() {
-  local ruby_version=""
+	local ruby_version=""
 
-  ruby_version="$(ruby_version_prompt)"
-  [[ -n "${ruby_version}" ]] && echo "${bold_purple?}${RUBY_CHAR}${normal?}${ruby_version} "
+	ruby_version="$(ruby_version_prompt)"
+	[[ -n "${ruby_version}" ]] && echo "${bold_purple?}${RUBY_CHAR}${normal?}${ruby_version} "
 }
 
 function __ssh_prompt() {
-  # Detect ssh
-  if [[ -n "${SSH_CONNECTION}" ]] && [ "$SSH_INFO" = true ]; then
-    if [ "$HOST_INFO" = long ]; then
-      host="\H"
-    else
-      host="\h"
-    fi
-    echo "${bold_blue?}\u${bold_orange?}@${cyan?}$host ${bold_orange?}in "
-  fi
+	# Detect ssh
+	if [[ -n "${SSH_CONNECTION}" ]] && [ "$SSH_INFO" = true ]; then
+		if [ "$HOST_INFO" = long ]; then
+			host="\H"
+		else
+			host="\h"
+		fi
+		echo "${bold_blue?}\u${bold_orange?}@${cyan?}$host ${bold_orange?}in "
+	fi
 }
 
 function __python_venv_prompt() {
-  # Detect python venv
-  if [[ -n "${CONDA_DEFAULT_ENV}" ]]; then
-    echo "${bold_purple?}$PYTHON_VENV_CHAR${normal?}${CONDA_DEFAULT_ENV} "
-  elif [[ -n "${VIRTUAL_ENV}" ]]; then
-    echo "${bold_purple?}$PYTHON_VENV_CHAR${normal?}$(basename "${VIRTUAL_ENV}") "
-  fi
+	# Detect python venv
+	if [[ -n "${CONDA_DEFAULT_ENV}" ]]; then
+		echo "${bold_purple?}$PYTHON_VENV_CHAR${normal?}${CONDA_DEFAULT_ENV} "
+	elif [[ -n "${VIRTUAL_ENV}" ]]; then
+		echo "${bold_purple?}$PYTHON_VENV_CHAR${normal?}$(basename "${VIRTUAL_ENV}") "
+	fi
 }
 
 function __path_prompt() {
-  local dir_color=${green?}
-  # Detect root shell
-  if [ "$(whoami)" = root ]; then
-    dir_color=${red?}
-  fi
+	local dir_color=${green?}
+	# Detect root shell
+	if [ "$(whoami)" = root ]; then
+		dir_color=${red?}
+	fi
 
-  echo "${dir_color}\w${normal} "
+	echo "${dir_color}\w${normal} "
 }
 
 function __scm_prompt() {
-  scm_prompt_info
+	scm_prompt_info
 }
 
 function __duration_prompt() {
-  [[ -n "$command_duration" ]] && echo "${command_duration} "
+	[[ -n "$command_duration" ]] && echo "${command_duration} "
 }
 
 function __prompt-command() {
-  exit_code="$?"
-  command_duration=$(_command_duration)
-  local wrap_char
+	exit_code="$?"
+	command_duration=$(_command_duration)
+	local wrap_char
 
-  # Generate prompt
-  PS1="\n "
-  for segment in $BARBUK_PROMPT; do
-    local info
-    info="$(__"${segment}"_prompt)"
-    [[ -n "${info}" ]] && PS1+="${info}"
-  done
+	# Generate prompt
+	PS1="\n "
+	for segment in $BARBUK_PROMPT; do
+		local info
+		info="$(__"${segment}"_prompt)"
+		[[ -n "${info}" ]] && PS1+="${info}"
+	done
 
-  # Cut prompt when it's too long
-  if [[ ${#PS1} -gt $((COLUMNS * 2)) ]]; then
-    wrap_char="\n"
-  fi
+	# Cut prompt when it's too long
+	if [[ ${#PS1} -gt $((COLUMNS * 2)) ]]; then
+		wrap_char="\n"
+	fi
 
-  PS1="${PS1}${wrap_char}❯${normal} "
+	PS1="${PS1}${wrap_char}❯${normal} "
 }
 
 safe_append_prompt_command __prompt-command
-
