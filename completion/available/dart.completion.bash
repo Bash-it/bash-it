@@ -1,48 +1,115 @@
 # shellcheck shell=bash
 
-__dart_completion() {
-	# shellcheck disable=SC2155
-	local prev=$(_get_pword)
-	# shellcheck disable=SC2155
-	local curr=$(_get_cword)
+if _command_exists dart; then
+	function __dart_completion() {
+		local prev HELP VERBOSE cmd
 
-	local HELP="--help -h"
-	local VERBOSE="-v --verbose"
+		prev=$(_get_pword)
+		cmd=${COMP_WORDS[1]}
 
-	case $prev in
-		analyze)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "$HELP --fatal-infos --no-fatal-warnings --fatal-warnings" -- "$curr"))
-			;;
-		compile)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "$HELP aot-snapshot exe js jit-snapshot kernel" -- "$curr"))
-			;;
-		create)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "$HELP --template -t --no-pub --pub --force" -- "$curr"))
-			;;
-		-t | --template)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "console-simple console-full package-simple web-simple" -- "$curr"))
-			;;
-		format)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "$HELP $VERBOSE -o --output --fix -l --line-length" -- "$curr"))
-			;;
-		pub)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "$HELP $VERBOSE --version --no-trace --trace --verbosity cache deps downgrade get global logout outdated publish run upgrade uploader version" -- "$curr"))
-			;;
-		run)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "$HELP --observe --enable-vm-service --no-pause-isolates-on-exit --no-pause-isolates-on-unhandled-exceptions --no-warn-on-pause-with-no-debugger --pause-isolates-on-exit --pause-isolates-on-unhandled-exceptions --warn-on-pause-with-no-debugger" -- "$curr"))
-			;;
-		dart)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "$HELP $VERBOSE --version --enable-analytics --disable-analytics help analyze compile create format pub run test" -- "$curr"))
-			;;
-	esac
-}
+		HELP=(--help -h)
+		VERBOSE=(-v --verbose)
 
-complete -F __dart_completion dart
+		case $cmd in
+			analyze)
+				COMPREPLY=("${HELP[@]}" --fatal-infos --{no-,}fatal-warnings)
+				;;
+
+			compile)
+				COMPREPLY=("${HELP[@]}" {aot,jit}-snapshot exe js kernel)
+				;;
+
+			create)
+				case $prev in
+					-t | --template)
+						COMPREPLY=({console,package,web}-simple console-full server-shelf)
+						;;
+					*)
+						COMPREPLY=("${HELP[@]}" -t --template --{no-,}pub --force)
+						;;
+				esac
+				;;
+
+			fix)
+				COMPREPLY=("${HELP[@]}" -n --dry-run --apply)
+				;;
+
+			format)
+				case $prev in
+					-o | --output)
+						COMPREPLY=(json none show write)
+						;;
+					*)
+						COMPREPLY=("${HELP[@]} ${VERBOSE[@]}" -o --output -l --line-length --fix --set-exit-if-changed)
+						;;
+				esac
+				;;
+
+			migrate)
+				COMPREPLY=("${HELP[@]}"--apply-changes --ignore-errors --skip-import-check --{no-,}web-preview --preview-hostname --preview-port --summary)
+				;;
+
+			pub)
+				case $prev in
+					add)
+						COMPREPLY=("${HELP[@]}" -d --dev --git-{url,ref,path} --hosted-url --path --sdk --{no-,}offline -n --dry-run --{no-,}precompile -C --directory)
+						;;
+					cache)
+						COMPREPLY=("${HELP[@]}" add clean repair)
+						;;
+					deps)
+						COMPREPLY=("${HELP[@]}" -s --style --{no-,}dev --executables --json -C --directory)
+						;;
+					downgrade)
+						COMPREPLY=("${HELP[@]}" --{no-,}offline -n --dry-run -C --directory)
+						;;
+					get)
+						COMPREPLY=("${HELP[@]}" --{no-,}{offline,precompile} -n --dry-run -C --directory)
+						;;
+					global)
+						COMPREPLY=("${HELP[@]}" activate deactivate list run)
+						;;
+					login | logout)
+						COMPREPLY=("${HELP[@]}")
+						;;
+					outdated)
+						COMPREPLY=("${HELP[@]}" --{no-,}{color,dependency-overrides,dev-dependencies,prereleases,show-all,transitive} --json --mode -C --directory)
+						;;
+					publish)
+						COMPREPLY=("${HELP[@]}" -n --dry-run -f --force -C --directory)
+						;;
+					remove)
+						COMPREPLY=("${HELP[@]}" --{no-,}{offline,precompile} -n --dry-run -C --directory)
+						;;
+					upgrade)
+						COMPREPLY=("${HELP[@]}" --{no-,}{offline,precompile} -n --dry-run --null-safety --major-versions -C --directory)
+						;;
+					uploader)
+						COMPREPLY=("${HELP[@]}" -p --package -C --directory)
+						;;
+
+					*)
+						COMPREPLY=("${HELP[@]} ${VERBOSE[@]}" --{no-,}trace add cache deps downgrade get global log{in,out} outdated publish remove upgrade uploader)
+						;;
+				esac
+				;;
+
+			run)
+				case $prev in
+					--verbosity)
+						COMPREPLY=(all error info warning)
+						;;
+					*)
+						COMPREPLY=("${HELP[@]}" --observe --enable-vm-service --{no-,}{serve-devtools,pause-isolates-on-{exit,unhandled-exceptions,start},warn-on-pause-with-no-debugger,enable-asserts} --verbosity -D --define)
+						;;
+				esac
+				;;
+
+			*)
+				COMPREPLY=("${HELP[@]} ${VERBOSE[@]}" --version --{enable,disable}-analytics analyze compile create fix format migrate pub run test help)
+				;;
+		esac
+	}
+
+	complete -F __dart_completion -X "!&*" dart
+fi
