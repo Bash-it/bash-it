@@ -33,6 +33,7 @@ lint_clean_files.sh
 #
 completion/available/apm.completion.bash
 completion/available/awless.completion.bash
+completion/available/awscli.completion.bash
 completion/available/bash-it.completion.bash
 completion/available/brew.completion.bash
 completion/available/cargo.completion.bash
