@@ -6,7 +6,7 @@ Troubleshooting Guide
 Table of Contents
 -----------------
 
-* `I'm stuck in the LightDM login screen after setting up bash-it. <im-stuck-in-the-lightdm-login-screen-after-setting-up-bash-it>`_
+* `I'm stuck in the LightDM login screen after setting up bash-it. <#id1>`_   
 
 I'm stuck in the LightDM login screen after setting up bash-it
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
