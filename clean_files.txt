@@ -136,7 +136,7 @@ plugins/available/zoxide.plugin.bash
 
 # tests
 #
-test/plugins/alias-completion.plugin.bats
+test/completion/aliases.completion.bats
 test/run
 test/test_helper.bash
 
@@ -161,6 +161,7 @@ themes/essential
 themes/githelpers.theme.bash
 themes/modern
 themes/norbu
+themes/oh-my-posh
 themes/p4helpers.theme.bash
 themes/pete
 themes/powerline

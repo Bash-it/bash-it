@@ -24,7 +24,7 @@ function _bash-it-preview() {
 	# shellcheck disable=SC2034
 	for BASH_IT_THEME in "${themes[@]}"; do
 		BASH_IT_LOG_LEVEL=0
-		bash --init-file "${BASH_IT_BASHRC:-${BASH_IT?}/bash_it.sh}" -i <<< '_bash-it-flash-term "${#BASH_IT_THEME}" "${BASH_IT_THEME}"'
+		bash --init-file "${BASH_IT?}/bash_it.sh" -i <<< '_bash-it-flash-term "${#BASH_IT_THEME}" "${BASH_IT_THEME}"'
 	done
 }
 
