@@ -34,7 +34,7 @@ fi
 alias c='clear'
 alias cls='clear'
 
-alias edit='${EDITOR:-${ALTERNATE_EDITOR?}}'
+alias edit='${EDITOR:-${ALTERNATE_EDITOR:-nano}}'
 alias pager='${PAGER:=less}'
 
 alias q='exit'
