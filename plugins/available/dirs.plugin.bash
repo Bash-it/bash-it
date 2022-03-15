@@ -59,7 +59,7 @@ function dirs-help() {
 # Add bookmarking functionality
 # Usage:
 
-: "${BASH_IT_DIRS_BKS:=${XDG_STATE_HOME:-~/.local/state}/bash_it/dirs}"
+: "${BASH_IT_DIRS_BKS:=${XDG_STATE_HOME:-${HOME}/.local/state}/bash_it/dirs}"
 if [[ -f "${BASH_IT_DIRS_BKS?}" ]]; then
 	# shellcheck disable=SC1090
 	source "${BASH_IT_DIRS_BKS?}"

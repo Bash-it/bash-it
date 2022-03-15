@@ -1,21 +1,15 @@
-#!/usr/bin/env bats
+# shellcheck shell=bats
 
-load ../test_helper
-load ../test_helper_libs
-load ../../plugins/available/base.plugin
-load ../../lib/colors
+load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
-function local_setup {
-  setup_test_fixture
+function local_setup_file() {
+  setup_libs "colors"
+  load "${BASH_IT?}/plugins/available/base.plugin.bash"
+}
 
+function local_setup() {
   # Copy the test fixture to the Bash-it folder
-  if command -v rsync &> /dev/null; then
-    rsync -a "$BASH_IT/test/fixtures/bash_it/" "$BASH_IT/"
-  else
-    find "$BASH_IT/test/fixtures/bash_it" \
-      -mindepth 1 -maxdepth 1 \
-      -exec cp -r {} "$BASH_IT/" \;
-  fi
+  cp -RP "$BASH_IT/test/fixtures/bash_it"/* "$BASH_IT/"
 }
 
 # TODO Create global __is_enabled function
@@ -296,7 +290,7 @@ function local_setup {
 
   assert_link_exist "$BASH_IT/enabled/150---general.aliases.bash"
   assert_link_exist "$BASH_IT/enabled/250---base.plugin.bash"
-  assert_link_exist "$BASH_IT/enabled/365---alias-completion.plugin.bash"
+  assert_link_exist "$BASH_IT/enabled/800---aliases.completion.bash"
   assert_link_exist "$BASH_IT/enabled/350---bash-it.completion.bash"
   assert_link_exist "$BASH_IT/enabled/325---system.completion.bash"
 }
@@ -356,7 +350,7 @@ function local_setup {
   run _bash-it-profile-load "test"
   assert_link_not_exist "$BASH_IT/enabled/150---general.aliases.bash"
   assert_link_not_exist "$BASH_IT/enabled/250---base.plugin.bash"
-  assert_link_not_exist "$BASH_IT/enabled/365---alias-completion.plugin.bash"
+  assert_link_not_exist "$BASH_IT/enabled/800---aliases.completion.bash"
   assert_link_not_exist "$BASH_IT/enabled/350---bash-it.completion.bash"
   assert_link_not_exist "$BASH_IT/enabled/325---system.completion.bash"
 }
@@ -384,7 +378,7 @@ function local_setup {
 
 @test "helpers: profile load corrupted profile file: bad subdirectory" {
   run _bash-it-profile-load "test-bad-type"
-  assert_line -n 1 -p "Bad line(#5) in profile, aborting load..."
+  assert_line -n 1 -p "Bad line(#4) in profile, aborting load..."
 }
 
 @test "helpers: profile rm sanity" {

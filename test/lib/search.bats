@@ -1,28 +1,14 @@
-#!/usr/bin/env bats
+# shellcheck shell=bats
 
-load ../test_helper
-load ../test_helper_libs
+load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
-load ../../plugins/available/base.plugin
-load ../../aliases/available/git.aliases
-load ../../plugins/available/ruby.plugin
-load ../../plugins/available/rails.plugin
-load ../../completion/available/bundler.completion
-load ../../completion/available/gem.completion
-load ../../completion/available/rake.completion
-
-load ../../lib/helpers
-
-function local_setup {
-  setup_test_fixture
-
-  export OLD_PATH="$PATH"
-  export PATH="/usr/bin:/bin:/usr/sbin"
+function local_setup_file() {
+  setup_libs "search"
 }
 
-function local_teardown {
-  export PATH="$OLD_PATH"
-  unset OLD_PATH
+function local_setup() {
+    # shellcheck disable=SC2034
+    BASH_IT_SEARCH_USE_COLOR=false
 }
 
 @test "search: plugin base" {

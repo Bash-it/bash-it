@@ -1,4 +1,4 @@
-cite 'about-alias'
+# shellcheck shell=bash
 about-alias 'maven abbreviations'
 
 alias mci='mvn clean install'
