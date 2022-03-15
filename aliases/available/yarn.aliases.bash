@@ -31,7 +31,6 @@ alias yain='yarn info' # [ya]rn [in]fo
 alias yalili='yarn licenses list' # [ya]rn [li]censes [li]st
 
 # Aliases for backward compatibility
-alias ya='yarn'
 alias yai='yarn init'
 alias yaa='yarn add'
 alias yaga='yarn global add'
@@ -40,7 +39,6 @@ alias yau='yarn upgrade'
 alias yarm='yarn remove'
 alias yagrm='yarn global remove'
 alias yaod='yarn outdated'
-alias yapa='yarn pack'
 alias yap='yarn publish'
 alias yasu='yarn self-update'
 alias yat='yarn test'
