@@ -70,7 +70,7 @@ function _bash-it-search() {
 				return 0
 				;;
 			'-r' | '--refresh')
-				_bash-it-clean-component-cache
+				_bash-it-component-cache-clean
 				;;
 			'-c' | '--no-color')
 				BASH_IT_SEARCH_USE_COLOR=false
@@ -266,9 +266,11 @@ function _bash-it-search-result() {
 	shift
 
 	local color_component color_enable color_disable color_off
-	local color_sep=':' line
-
+	local match_color compatible_action suffix opposite_suffix
+	local color_sep=':' line match matched temp
+	local -i modified=0 enabled=0 len
 	local -a matches=()
+
 	# Discard any empty arguments
 	while IFS='' read -r line; do
 		[[ -n "${line}" ]] && matches+=("$line")
@@ -290,17 +292,12 @@ function _bash-it-search-result() {
 		color_off=''
 	fi
 
-	local match
-	local -i modified=0
-
 	if [[ "${#matches[@]}" -gt 0 ]]; then
 		printf "${color_component}%13s${color_sep}${color_off} " "${component}"
 
 		for match in "${matches[@]}"; do
-			local -i enabled=0
+			enabled=0
 			_bash-it-component-item-is-enabled "${component}" "${match}" && enabled=1
-
-			local match_color compatible_action suffix opposite_suffix
 
 			if ((enabled)); then
 				match_color="${color_enable}"
@@ -314,8 +311,8 @@ function _bash-it-search-result() {
 				compatible_action="enable"
 			fi
 
-			local matched="${match}${suffix}"
-			local -i len="${#matched}"
+			matched="${match}${suffix}"
+			len="${#matched}"
 
 			printf '%b' "${match_color}${matched}" # print current state
 			if [[ "${action}" == "${compatible_action}" ]]; then
@@ -327,7 +324,7 @@ function _bash-it-search-result() {
 				modified=1
 				# shellcheck disable=SC2034 # no idea if `$result` is ever used
 				result=$("${action_func}" "${match}")
-				local temp="color_${compatible_action}"
+				temp="color_${compatible_action}"
 				match_color="${!temp}"
 				_bash-it-rewind "${len}"
 				printf '%b' "${match_color}${match}${opposite_suffix}"
@@ -336,7 +333,7 @@ function _bash-it-search-result() {
 			printf '%b' "${color_off} "
 		done
 
-		((modified)) && _bash-it-clean-component-cache "${component}"
+		((modified)) && _bash-it-component-cache-clean "${component}"
 		printf "\n"
 	fi
 }
@@ -350,7 +347,7 @@ function _bash-it-flash-term() {
 	local -i len="${1:-0}" # redundant
 	local term="${2:-}"
 	# as currently implemented, `$match` has already been printed to screen the first time
-	local delay=0.1
+	local delay=0.2
 	local color
 	[[ "${#term}" -gt 0 ]] && len="${#term}"
 

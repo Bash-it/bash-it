@@ -1,5 +1,4 @@
 # shellcheck shell=bash
-cite 'about-alias'
 about-alias 'xclip shortcuts'
 
 alias pbcopy="xclip -selection clipboard"

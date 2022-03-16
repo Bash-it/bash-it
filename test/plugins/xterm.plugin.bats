@@ -1,21 +1,10 @@
-#!/usr/bin/env bats
+# shellcheck shell=bats
 
-load ../test_helper
-load ../test_helper_libs
+load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
-load ../../plugins/available/xterm.plugin
-
-function local_setup {
-  setup_test_fixture
-
-  # Copy the test fixture to the Bash-it folder
-  if _command_exists rsync; then
-    rsync -a "$BASH_IT/test/fixtures/plugin/xterm/" "$BASH_IT/"
-  else
-    find "$BASH_IT/test/fixtures/plugin/xterm" \
-      -mindepth 1 -maxdepth 1 \
-      -exec cp -r {} "$BASH_IT/" \;
-  fi
+function local_setup_file() {
+  setup_libs "helpers"
+  load "${BASH_IT?}/plugins/available/xterm.plugin.bash"
 }
 
 @test "plugins xterm: shorten command output" {

@@ -62,13 +62,13 @@ function _bash-it-array-dedup() {
 
 # Outputs a full path of the grep found on the filesystem
 function _bash-it-grep() {
-	: "${BASH_IT_GREP:=$(type -p egrep || type -p grep)}"
-	printf "%s" "${BASH_IT_GREP:-'/usr/bin/grep'}"
+	: "${BASH_IT_GREP:=$(type -P egrep || type -P grep)}"
+	printf "%s" "${BASH_IT_GREP:-/usr/bin/grep}"
 }
 
 # Runs `grep` with extended regular expressions
 function _bash-it-egrep() {
-	: "${BASH_IT_GREP:=$(type -p egrep || type -p grep)}"
+	: "${BASH_IT_GREP:=$(type -P egrep || type -P grep)}"
 	"${BASH_IT_GREP:-/usr/bin/grep}" -E "$@"
 }
 
@@ -91,7 +91,7 @@ function _bash-it-component-help() {
 function _bash-it-component-cache-file() {
 	local _component_to_cache _file_path _result="${2:-${FUNCNAME[0]//-/_}}"
 	_bash-it-component-pluralize "${1?${FUNCNAME[0]}: component name required}" _component_to_cache
-	_file_path="${XDG_CACHE_HOME:-${BASH_IT?}/tmp/cache}${XDG_CACHE_HOME:+/bash_it}/${_component_to_cache?}"
+	_file_path="${XDG_CACHE_HOME:-${HOME?}/.cache}/bash/${_component_to_cache?}"
 	[[ -f "${_file_path}" ]] || mkdir -p "${_file_path%/*}"
 	printf -v "${_result?}" '%s' "${_file_path}"
 }
@@ -121,19 +121,17 @@ function _bash-it-component-pluralize() {
 	printf -v "${_result?}" '%s' "${_component_to_plural}"
 }
 
-function _bash-it-clean-component-cache() {
-	local component="$1"
+function _bash-it-component-cache-clean() {
+	local component="${1:-}"
 	local cache
-	local -a BASH_IT_COMPONENTS=(aliases plugins completions)
+	local -a components=('aliases' 'plugins' 'completions')
 	if [[ -z "${component}" ]]; then
-		for component in "${BASH_IT_COMPONENTS[@]}"; do
-			_bash-it-clean-component-cache "${component}"
+		for component in "${components[@]}"; do
+			_bash-it-component-cache-clean "${component}"
 		done
 	else
 		_bash-it-component-cache-file "${component}" cache
-		if [[ -f "${cache}" ]]; then
-			rm -f "${cache}"
-		fi
+		: >| "${cache:?}"
 	fi
 }
 
@@ -170,18 +168,22 @@ function _bash-it-component-list-disabled() {
 function _bash-it-component-item-is-enabled() {
 	local component_type item_name each_file
 
-	if [[ -f "${1}" ]]; then
+	if [[ -f "${1?}" ]]; then
 		item_name="$(_bash-it-get-component-name-from-path "${1}")"
 		component_type="$(_bash-it-get-component-type-from-path "${1}")"
 	else
-		component_type="${1}" item_name="${2}"
+		component_type="${1}" item_name="${2?}"
 	fi
 
 	for each_file in "${BASH_IT}/enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR?}${item_name}.${component_type}"*."bash" \
 		"${BASH_IT}/${component_type}"*/"enabled/${item_name}.${component_type}"*."bash" \
 		"${BASH_IT}/${component_type}"*/"enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR?}${item_name}.${component_type}"*."bash"; do
-		[[ -f "${each_file}" ]] && return
+		if [[ -f "${each_file}" ]]; then
+			return 0
+		fi
 	done
+
+	return 1
 }
 
 # Checks if a given item is disabled for a particular component/file-type.

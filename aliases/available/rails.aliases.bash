@@ -1,4 +1,4 @@
-cite 'about-alias'
+# shellcheck shell=bash
 about-alias 'rails abbreviations'
 
 # Rails Commands
@@ -14,9 +14,9 @@ alias rd='rails destroy'
 alias dbm='rake db:migrate'
 
 alias ss='script/server'
-alias ts="thin start"     # thin server
+alias ts="thin start" # thin server
 alias sc='script/console'
 alias restartapp='touch tmp/restart.txt'
-alias restart='touch tmp/restart.txt'  # restart passenger
+alias restart='touch tmp/restart.txt' # restart passenger
 alias devlog='tail -f log/development.log'
 alias taild='tail -f log/development.log' # tail dev log

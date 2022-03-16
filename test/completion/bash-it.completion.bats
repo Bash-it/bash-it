@@ -1,17 +1,16 @@
-#!/usr/bin/env bats
+# shellcheck shell=bats
 
-load ../test_helper
-load ../../lib/utilities
-load ../../lib/helpers
-load ../../completion/available/bash-it.completion
+load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
-function local_setup {
-  setup_test_fixture
+function local_setup_file() {
+  setup_libs "helpers"
+  load "${BASH_IT?}/completion/available/bash-it.completion.bash"
 }
 
 @test "completion bash-it: ensure that the _bash-it function is available" {
-  type -a _bash-it &> /dev/null
+  run type -t _bash-it
   assert_success
+  assert_output "function"
 }
 
 function __check_completion () {
@@ -81,32 +80,32 @@ function __check_completion () {
 
 @test "completion bash-it: show options" {
   run __check_completion 'bash-it '
-  assert_line -n 0 "disable enable help migrate reload restart profile doctor search show update version"
+  assert_line -n 0 "disable enable help migrate reload restart preview profile doctor search show update version"
 }
 
 @test "completion bash-it: bash-ti - show options" {
   run __check_completion 'bash-ti '
-  assert_line -n 0 "disable enable help migrate reload restart profile doctor search show update version"
+  assert_line -n 0 "disable enable help migrate reload restart preview profile doctor search show update version"
 }
 
 @test "completion bash-it: shit - show options" {
   run __check_completion 'shit '
-  assert_line -n 0 "disable enable help migrate reload restart profile doctor search show update version"
+  assert_line -n 0 "disable enable help migrate reload restart preview profile doctor search show update version"
 }
 
 @test "completion bash-it: bashit - show options" {
   run __check_completion 'bashit '
-  assert_line -n 0 "disable enable help migrate reload restart profile doctor search show update version"
+  assert_line -n 0 "disable enable help migrate reload restart preview profile doctor search show update version"
 }
 
 @test "completion bash-it: batshit - show options" {
   run __check_completion 'batshit '
-  assert_line -n 0 "disable enable help migrate reload restart profile doctor search show update version"
+  assert_line -n 0 "disable enable help migrate reload restart preview profile doctor search show update version"
 }
 
 @test "completion bash-it: bash_it - show options" {
   run __check_completion 'bash_it '
-  assert_line -n 0 "disable enable help migrate reload restart profile doctor search show update version"
+  assert_line -n 0 "disable enable help migrate reload restart preview profile doctor search show update version"
 }
 
 @test "completion bash-it: profile - show options" {
