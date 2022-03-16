@@ -1,8 +1,9 @@
 cite 'about-alias'
 about-alias 'yarn package manager aliases'
 
-_set_yarn_aliases() {
-	if _command_exists yarn; then
+_set-yarn-aliases() {
+	if _command_exists yarn
+	then
 		# Aliases
 		alias ya='yarn' # [ya]rn
 		alias yain='yarn init' # [ya]rn [in]it
@@ -53,4 +54,4 @@ _set_yarn_aliases() {
 	fi
 }
 
-_set_yarn_aliases
+_set-yarn-aliases
