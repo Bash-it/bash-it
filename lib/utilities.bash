@@ -62,13 +62,13 @@ function _bash-it-array-dedup() {
 
 # Outputs a full path of the grep found on the filesystem
 function _bash-it-grep() {
-	: "${BASH_IT_GREP:=$(type -p egrep || type -p grep)}"
+	: "${BASH_IT_GREP:=$(type -P egrep || type -P grep)}"
 	printf "%s" "${BASH_IT_GREP:-/usr/bin/grep}"
 }
 
 # Runs `grep` with extended regular expressions
 function _bash-it-egrep() {
-	: "${BASH_IT_GREP:=$(type -p egrep || type -p grep)}"
+	: "${BASH_IT_GREP:=$(type -P egrep || type -P grep)}"
 	"${BASH_IT_GREP:-/usr/bin/grep}" -E "$@"
 }
 
