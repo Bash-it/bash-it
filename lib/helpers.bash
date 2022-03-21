@@ -290,6 +290,7 @@ function _bash-it-update-() {
 	DIFF=$(git diff --name-status)
 	if [[ -n "$DIFF" ]]; then
 		echo -e "Local changes detected in bash-it directory. Clean '$BASH_IT' directory to proceed.\n$DIFF"
+		popd > /dev/null || return
 		return 1
 	fi
 
@@ -334,7 +335,7 @@ function _bash-it-update-() {
 			log_color="%Cred"
 		fi
 
-		git log --format="${log_color}%h: %s (%an)" "${revision}"
+		git log --no-merges --format="${log_color}%h: %s (%an)" "${revision}"
 		echo ""
 
 		if [[ -n "${silent}" ]]; then
