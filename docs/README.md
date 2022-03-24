@@ -1,6 +1,6 @@
 ![logo](https://github.com/Bash-it/media/raw/master/media/Bash-it.png)
 
-![Build Status](https://github.com/Bash-it/bash-it/workflows/CI/badge.svg?branch=master)
+![Build Status](../../../workflows/CI/badge.svg?event=push)
 ![Docs Status](https://readthedocs.org/projects/bash-it/badge/)
 ![License](https://img.shields.io/github/license/Bash-it/bash-it)
 ![shell](https://img.shields.io/badge/Shell-Bash-blue)

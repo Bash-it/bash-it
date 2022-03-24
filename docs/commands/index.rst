@@ -13,3 +13,4 @@ You should be familiar with them in order to fully utilize Bash-it.
    search
    reload
    doctor
+   profile

@@ -1,5 +1,4 @@
 # shellcheck shell=bash
-cite 'about-alias'
 about-alias 'dnf aliases for fedora 22+ distros'
 
 alias dnfl="dnf list"            # List packages

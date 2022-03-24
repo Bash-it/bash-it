@@ -1,14 +1,14 @@
-#!/usr/bin/env bats
+# shellcheck shell=bats
+# shellcheck disable=SC2034
+# shellcheck disable=SC2016
 
-load ../test_helper
-load "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
-load ../../lib/log
+load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
-cite _about _param _example _group _author _version
-
-load ../../lib/helpers
-load ../../themes/githelpers.theme
-load ../../themes/base.theme
+function local_setup_file() {
+  setup_libs "colors" #"theme"
+  load "${BASH_IT?}/themes/base.theme.bash"
+  load "${BASH_IT?}/themes/githelpers.theme.bash"
+}
 
 add_commit() {
   local file_name="general-${RANDOM}"

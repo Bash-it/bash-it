@@ -1,21 +1,22 @@
-#!/bin/bash
+# shellcheck shell=bash
 
 # ---------------------------------------------------------------------------+
 #                                                                            |
-# Thanks to Alexander Korznikov                                                                 |
+# Thanks to Alexander Korznikov                                              |
 # http://www.korznikov.com/2014/12/bash-tab-completion-for-awesome-tool.html |
 #                                                                            |
 # ---------------------------------------------------------------------------+
 
-if command -v sqlmap > /dev/null; then
+if _command_exists sqlmap
+then
 
-    _sqlmap()
+    function _sqlmap()
     {
         local cur prev
 
         COMPREPLY=()
-        cur=$(_get_cword)
-        prev=$(_get_pword)
+        cur="$(_get_cword)"
+        prev="$(_get_pword)"
 
         case $prev in
 
@@ -143,7 +144,7 @@ if command -v sqlmap > /dev/null; then
         --mobile --page-rank --purge-output --smart \
         --sqlmap-shell --wizard '
         COMPREPLY=( $( \
-            (while read -d ' ' i; do
+		(while read -d ' ' i; do
                 [[ -z "$i" || "${onlyonce/ ${i%% *} / }" == "$onlyonce" ]] &&
                 continue
                 # flatten array with spaces on either side,
@@ -152,7 +153,7 @@ if command -v sqlmap > /dev/null; then
                 COMPREPLY=" ${COMPREPLY[@]} "
                 # remove word from list of completions
                 COMPREPLY=( ${COMPREPLY/ ${i%% *} / } )
-                done
+			done
                 printf '%s ' "${COMPREPLY[@]}") <<<"${COMP_WORDS[@]}"
             ) )
 

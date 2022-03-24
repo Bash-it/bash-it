@@ -1,7 +1,5 @@
-# Aliases for Terraform and Terragrunt
-
-cite 'about-alias'
-about-alias 'Terragrunt abbreviations'
+# shellcheck shell=bash
+about-alias 'Aliases for Terraform and Terragrunt'
 
 alias tg='terragrunt'
 alias tgv='terragrunt validate'

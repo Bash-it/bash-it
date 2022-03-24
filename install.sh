@@ -83,8 +83,8 @@ function _bash-it_check_for_backup() {
 	fi
 	echo -e "\033[0;33mBackup file already exists. Make sure to backup your .bashrc before running this installation.\033[0m" >&2
 
-	if ! [[ $overwrite_backup ]]; then
-		while ! [[ $silent ]]; do
+	if [[ -z "${overwrite_backup}" ]]; then
+		while [[ -z "${silent}" ]]; do
 			read -e -n 1 -r -p "Would you like to overwrite the existing backup? This will delete your existing backup file ($HOME/$BACKUP_FILE) [y/N] " RESP
 			case $RESP in
 				[yY])
@@ -100,9 +100,9 @@ function _bash-it_check_for_backup() {
 			esac
 		done
 	fi
-	if ! [[ $overwrite_backup ]]; then
+	if [[ -z "${overwrite_backup}" ]]; then
 		echo -e "\033[91mInstallation aborted. Please come back soon!\033[m"
-		if [[ $silent ]]; then
+		if [[ -n "${silent}" ]]; then
 			echo -e "\033[91mUse \"-f\" flag to force overwrite of backup.\033[m"
 		fi
 		exit 1
@@ -114,8 +114,8 @@ function _bash-it_check_for_backup() {
 function _bash-it_modify_config_files() {
 	_bash-it_check_for_backup
 
-	if ! [[ $silent ]]; then
-		while ! [[ $append_to_config ]]; do
+	if [[ -z "${silent}" ]]; then
+		while [[ -z "${append_to_config}" ]]; do
 			read -e -n 1 -r -p "Would you like to keep your $CONFIG_FILE and append bash-it templates at the end? [y/N] " choice
 			case $choice in
 				[yY])
@@ -131,7 +131,7 @@ function _bash-it_modify_config_files() {
 			esac
 		done
 	fi
-	if [[ $append_to_config ]]; then
+	if [[ -n "${append_to_config}" ]]; then
 		# backup/append
 		_bash-it_backup_append
 	else
@@ -174,17 +174,17 @@ done
 
 shift $((OPTIND - 1))
 
-if [[ $silent ]] && [[ $interactive ]]; then
+if [[ -n "${silent}" && -n "${interactive}" ]]; then
 	echo -e "\033[91mOptions --silent and --interactive are mutually exclusive. Please choose one or the other.\033[m"
 	exit 1
 fi
 
-if [[ $no_modify_config ]] && [[ $append_to_config ]]; then
+if [[ -n "${no_modify_config}" && -n "${append_to_config}" ]]; then
 	echo -e "\033[91mOptions --no-modify-config and --append-to-config are mutually exclusive. Please choose one or the other.\033[m"
 	exit 1
 fi
 
-BASH_IT="$(cd "$(dirname "$0")" && pwd)"
+BASH_IT="$(cd "${BASH_SOURCE%/*}" && pwd)"
 
 case $OSTYPE in
 	darwin*)
@@ -197,7 +197,7 @@ esac
 
 BACKUP_FILE=$CONFIG_FILE.bak
 echo "Installing bash-it"
-if ! [[ $no_modify_config ]]; then
+if [[ -z "${no_modify_config}" ]]; then
 	_bash-it_modify_config_files
 fi
 
@@ -208,29 +208,26 @@ export BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE=''
 source "${BASH_IT}"/vendor/github.com/erichs/composure/composure.sh
 # shellcheck source=./lib/utilities.bash
 source "$BASH_IT/lib/utilities.bash"
+# shellcheck source=./lib/log.bash
+source "${BASH_IT}/lib/log.bash"
 cite _about _param _example _group _author _version
 # shellcheck source=./lib/helpers.bash
 source "$BASH_IT/lib/helpers.bash"
 
-if [[ $interactive ]] && ! [[ $silent ]]; then
+if [[ -n $interactive && -z "${silent}" ]]; then
 	for type in "aliases" "plugins" "completion"; do
-		echo -e "\033[0;32mEnabling $type\033[0m"
-		_bash-it_load_some $type
+		echo -e "\033[0;32mEnabling ${type}\033[0m"
+		_bash-it_load_some "$type"
 	done
 else
 	echo ""
-	echo -e "\033[0;32mEnabling reasonable defaults\033[0m"
-	_enable-completion bash-it
-	_enable-completion system
-	_enable-plugin base
-	_enable-plugin alias-completion
-	_enable-alias general
+	_bash-it-profile-load "default"
 fi
 
 echo ""
 echo -e "\033[0;32mInstallation finished successfully! Enjoy bash-it!\033[0m"
 # shellcheck disable=SC2086
-echo -e "\033[0;32mTo start using it, open a new tab or 'source "$HOME/$CONFIG_FILE"'.\033[0m"
+echo -e "\033[0;32mTo start using it, open a new tab or 'source "~/$CONFIG_FILE"'.\033[0m"
 echo ""
 echo "To show the available aliases/completions/plugins, type one of the following:"
 echo "  bash-it show aliases"

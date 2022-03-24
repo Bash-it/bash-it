@@ -3,14 +3,14 @@ cite "about-completion"
 about-completion "composer completion"
 
 function __composer_completion() {
-	local cur coms opts com
+	local cur coms opts com words
 	COMPREPLY=()
 	_get_comp_words_by_ref -n : cur words
 
 	# lookup for command
 	for word in "${words[@]:1}"; do
-		if [[ $word != -* ]]; then
-			com=$word
+		if [[ "${word}" != -* ]]; then
+			com="${word}"
 			break
 		fi
 	done
@@ -19,7 +19,7 @@ function __composer_completion() {
 	if [[ ${cur} == --* ]]; then
 		opts="--help --quiet --verbose --version --ansi --no-ansi --no-interaction --profile --no-plugins --working-dir"
 
-		case "$com" in
+		case "${com}" in
 			about)
 				opts="${opts} "
 				;;
@@ -109,18 +109,18 @@ function __composer_completion() {
 
 		# shellcheck disable=SC2207
 		COMPREPLY=($(compgen -W "${opts}" -- "${cur}"))
-		__ltrim_colon_completions "$cur"
+		__ltrim_colon_completions "${cur}"
 
 		return 0
 	fi
 
 	# completing for a command
-	if [[ "$cur" == "$com" ]]; then
+	if [[ "${cur}" == "${com}" ]]; then
 		coms="about archive browse clear-cache config create-project depends diagnose dump-autoload exec global help init install licenses list outdated prohibits remove require run-script search self-update show status suggests update validate"
 
 		# shellcheck disable=SC2207
 		COMPREPLY=($(compgen -W "${coms}" -- "${cur}"))
-		__ltrim_colon_completions "$cur"
+		__ltrim_colon_completions "${cur}"
 
 		return 0
 	fi

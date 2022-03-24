@@ -42,6 +42,7 @@ _KAC_is_file_newer_than() {
 _KAC_regen_cache() {
 	local CACHE_NAME=$1
 	local CACHE_PATH="$_KNIFE_AUTOCOMPLETE_CACHE_DIR/$CACHE_NAME"
+	# shellcheck disable=SC2155
 	local TMP_FILE=$(mktemp "$_KAC_CACHE_TMP_DIR/$CACHE_NAME.XXXX")
 	shift 1
 	# discard the temp file if it's empty AND the previous command didn't exit successfully, but still mark the cache as updated
@@ -54,18 +55,19 @@ _KAC_regen_cache() {
 
 # cached files can't have spaces in their names
 _KAC_get_cache_name_from_command() {
-	echo "${@/ /_SPACE_}"
+	echo "${@// /_SPACE_}"
 }
 
 # the reverse operation from the function above
 _KAC_get_command_from_cache_name() {
-	echo "${@/_SPACE_/ }"
+	echo "${@//_SPACE_/ }"
 }
 
 # given a command as argument, it fetches the cache for that command if it can find it
 # otherwise it waits for the cache to be generated
 # in either case, it regenerates the cache, and sets the _KAC_CACHE_PATH env variable
 # for obvious reason, do NOT call that in a sub-shell (in particular, no piping)
+# shellcheck disable=SC2155
 _KAC_get_and_regen_cache() {
 	# the cache name can't have space in it
 	local CACHE_NAME=$(_KAC_get_cache_name_from_command "$@")
@@ -100,7 +102,7 @@ _KAC_clean_cache() {
 
 # perform a cache cleaning when loading this file
 # On big systems this could baloon up to a 30 second run or more, so not enabling by default.
-[[ "${KNIFE_CACHE_CLEAN}" ]] && _KAC_clean_cache
+[[ -n "${KNIFE_CACHE_CLEAN}" ]] && _KAC_clean_cache
 
 #####################################
 ### End of cache helper functions ###
@@ -118,7 +120,7 @@ _KAC_get_current_base_command() {
 	local PREVIOUS="knife"
 	local I=1
 	local CURRENT
-	while [ $I -le "$COMP_CWORD" ]; do
+	while [[ "${I}" -le "${COMP_CWORD}" ]]; do
 		# command words are all lower-case
 		echo "${COMP_WORDS[$I]}" | grep -E "^[a-z]+$" > /dev/null || break
 		CURRENT="$PREVIOUS ${COMP_WORDS[$I]}"
@@ -127,12 +129,13 @@ _KAC_get_current_base_command() {
 		I=$((I + 1))
 	done
 	_KAC_CURRENT_COMMAND=$PREVIOUS
-	[ $I -le "$COMP_CWORD" ] && _KAC_CURRENT_COMMAND_NB_WORDS=$I
+	[[ "${I}" -le "${COMP_CWORD}" ]] && _KAC_CURRENT_COMMAND_NB_WORDS="${I}"
 }
 
 # searches the position of the currently completed argument in the current base command
 # (i.e. handles "plural" arguments such as knife cookbook upload cookbook1 cookbook2 and so on...)
 # assumes the current base command is complete
+# shellcheck disable=SC2155
 _KAC_get_current_arg_position() {
 	local CURRENT_ARG_POS=$((_KAC_CURRENT_COMMAND_NB_WORDS + 1))
 	local COMPLETE_COMMAND=$(grep -E "^$_KAC_CURRENT_COMMAND" "$_KAC_CACHE_PATH")
@@ -150,10 +153,11 @@ _KAC_get_current_arg_position() {
 _knife() {
 	_KAC_get_and_regen_cache _KAC_knife_commands
 	local RAW_LIST ITEM REGEN_CMD ARG_POSITION
+	# shellcheck disable=SC2034
 	COMREPLY=()
 	# get correct command & arg pos
 	_KAC_get_current_base_command && ARG_POSITION=$(_KAC_get_current_arg_position) || ARG_POSITION=$((COMP_CWORD + 1))
-	RAW_LIST=$(grep -E "^$_KAC_CURRENT_COMMAND" "$_KAC_CACHE_PATH" | cut -d ' ' -f $ARG_POSITION | uniq)
+	RAW_LIST=$(grep -E "^${_KAC_CURRENT_COMMAND}" "${_KAC_CACHE_PATH}" | cut -d ' ' -f "${ARG_POSITION}" | uniq)
 
 	# we need to process that raw list a bit, most notably for placeholders
 	# NOTE: I chose to explicitely fetch & cache _certain_ informations for the server (cookbooks & node names, etc)

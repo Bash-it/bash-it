@@ -1,12 +1,10 @@
-#!/usr/bin/env bats
+# shellcheck shell=bats
 
-load ../test_helper
-load "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
-load ../../lib/appearance
-load ../../plugins/available/base.plugin
+load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
-cite _about _param _example _group _author _version
-load ../../lib/log
+function local_setup_file() {
+  setup_libs "log"
+}
 
 @test "lib log: basic debug logging with BASH_IT_LOG_LEVEL_ALL" {
   BASH_IT_LOG_LEVEL=$BASH_IT_LOG_LEVEL_ALL
