@@ -16,6 +16,18 @@
 # since 'fasd' is messing with the $PROMPT_COMMAND
 
 
+case $HISTCONTROL in
+*'auto'*)
+	: # Do nothing, already configured.
+	;;
+*)
+	# Append new history lines to history file
+	HISTCONTROL="${HISTCONTROL:-}${HISTCONTROL:+:}autosave"
+	;;
+esac
+safe_append_preexec '_bash-it-history-auto-load'
+safe_append_prompt_command '_bash-it-history-auto-save'
+
 PROMPT_END_CLEAN="${green}→${reset_color}"
 PROMPT_END_DIRTY="${red}→${reset_color}"
 
@@ -28,8 +40,6 @@ prompt_setter() {
   if [[ $exit_status -eq 0 ]]; then PROMPT_END=$PROMPT_END_CLEAN
     else PROMPT_END=$PROMPT_END_DIRTY
   fi
-  # Save history
-  _save-and-reload-history 1
   PS1="($(clock_prompt)) $(scm_char) [${blue}\u${reset_color}@${green}\H${reset_color}] ${yellow}\w${reset_color}$(scm_prompt_info) ${reset_color}\n$(prompt_end) "
   PS2='> '
   PS4='+ '
