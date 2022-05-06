@@ -17,7 +17,7 @@ I'm stuck in the LightDM login screen after setting up bash-it
 **Solution**\ : Check `this comment <https://github.com/Bash-it/bash-it/issues/672#issuecomment-257870653>`_ for detailed information about the cause and solution for this issue.
 
 Pre-commit installation is failed with "unrecognized option --gdwarf-5" error
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Possible issue**\ : You might have an incompatible version of GCC is installed. Supported versions are below ``gcc-10``
 
