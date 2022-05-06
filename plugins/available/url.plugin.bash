@@ -17,6 +17,7 @@ function slugify() {
 	fi
 
 	# Pass 1 - Clean the url
+	# Credits: https://stackoverflow.com/a/20007549/10362396
 	SLUG=$(echo -n "$TXT" | tr -cd ' [:alnum:]._-' | tr -s ' ')
 
 	# Pass 2 - Transformation
