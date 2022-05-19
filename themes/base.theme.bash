@@ -404,7 +404,7 @@ function nvm_version_prompt() {
 
 function node_native_version_prompt() {
 	local node
-	if which -s node; then
+	if _command_exists node; then
 		node=$(node --version 2> /dev/null)
 		echo -ne "${NODE_THEME_PROMPT_PREFIX-}${node}${NODE_THEME_PROMPT_SUFFIX-}"
 	fi
