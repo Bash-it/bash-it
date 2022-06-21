@@ -100,6 +100,7 @@ plugins/available/battery.plugin.bash
 plugins/available/blesh.plugin.bash
 plugins/available/cmd-returned-notify.plugin.bash
 plugins/available/colors.plugin.bash
+plugins/available/cryptography.plugin.bash
 plugins/available/direnv.plugin.bash
 plugins/available/dirs.plugin.bash
 plugins/available/docker-machine.plugin.bash
