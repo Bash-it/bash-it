@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-ep="encrypt-payload"
-dp="decrypt-payload"
-enc="encrypt-payload"
-dec="decrypt-payload"
+alias ep="encrypt-payload"
+alias dp="decrypt-payload"
+alias enc="encrypt-payload"
+alias dec="decrypt-payload"
