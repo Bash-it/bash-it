@@ -25,7 +25,7 @@ function encrypt-payload() {
 			echo "[x] Something went wrong!"
 			rm -rf "$OUTFILE"
 		else
-			echo "[!] Saved the encrypted file to '$OUTFILE'"
+			echo "[+] Saved the encrypted file to '$OUTFILE'"
 		fi
 	else
 		# if payload file then encrypt with stdin
@@ -57,7 +57,7 @@ function decrypt-payload() {
 			echo "[x] Something went wrong!"
 			rm -rf "$OUTFILE"
 		else
-			echo "[!] Saved the encrypted file to '$OUTFILE'"
+			echo "[+] Saved the decrypted file to '$OUTFILE'"
 		fi
 	else
 		# if payload file then encrypt with stdin
