@@ -153,7 +153,7 @@ alias gsd='git svn dcommit'
 alias gsr='git svn rebase' # Git SVN
 
 # stash
-alias gst='git status' #
+alias gst='git status' #gst stands for git status
 alias gstb='git stash branch'
 alias gstd='git stash drop'
 alias gstl='git stash list'
