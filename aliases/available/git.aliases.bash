@@ -138,8 +138,8 @@ alias gus='git reset HEAD'
 alias gpristine='git reset --hard && git clean -dfx'
 
 # status
-alias gss='git status -s'
 alias gst='git status' #gst stands for git status
+alias gss='git status -s'
 
 # shortlog
 alias gcount='git shortlog -sn'
