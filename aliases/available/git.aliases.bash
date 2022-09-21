@@ -138,8 +138,8 @@ alias gus='git reset HEAD'
 alias gpristine='git reset --hard && git clean -dfx'
 
 # status
-alias gs='git status'
 alias gss='git status -s'
+alias gst='git status' #gst stands for git status
 
 # shortlog
 alias gcount='git shortlog -sn'
@@ -153,7 +153,7 @@ alias gsd='git svn dcommit'
 alias gsr='git svn rebase' # Git SVN
 
 # stash
-alias gst='git status' #gst stands for git status
+alias gs='git stash'
 alias gstb='git stash branch'
 alias gstd='git stash drop'
 alias gstl='git stash list'
