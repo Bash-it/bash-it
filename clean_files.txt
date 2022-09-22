@@ -46,6 +46,7 @@ completion/available/dmidecode.completion.bash
 completion/available/docker-machine.completion.bash
 completion/available/docker.completion.bash
 completion/available/dotnet.completion.bash
+completion/available/flutter.completion.bash
 completion/available/gcloud.completion.bash
 completion/available/gem.completion.bash
 completion/available/git.completion.bash
