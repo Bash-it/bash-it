@@ -24,14 +24,22 @@ I'm getting strange line break and wrapping behaviour on macOS
 
 **Solution**\ : Bash-it requires Bash 4.?? or later to run correctly. Any reasonably current Linux distribution should have shipped with a compatible version of Bash. However, macOS users must upgrade from the included, obsolete Bash version 3. While some functionality might work with Bash 3, there is no guarantee that everything will work perfectly. Thus, we recommend using `Homebrew <https://brew.sh/>`_ to ensure Bash is up to date:
 
-**x86 Mac:**\ 
-.. code-block:: console
-    $ brew install bash
-    $ sudo sh -c 'echo /usr/local/bin/bash >> /etc/shells'
-    $ chsh -s /usr/local/bin/bash
+x86 Mac
+^^^^^^^
 
-**M1 Mac:**\ Homebrew's default installation location on M1 is ``/opt/homebrew/bin/``:
-.. code-block:: console
-    $ brew install bash
-    $ sudo sh -c 'echo /opt/homebrew/bin/bash >> /etc/shells'
-    $ chsh -s /opt/homebrew/bin/bash
+  .. code-block:: bash
+
+     brew install bash
+     sudo sh -c 'echo /usr/local/bin/bash >> /etc/shells'
+     chsh -s /usr/local/bin/bash
+
+M1 Mac
+^^^^^^
+
+Homebrew's default installation location on M1 is ``/opt/homebrew/bin/``:
+
+  .. code-block:: bash
+
+     brew install bash
+     sudo sh -c 'echo /opt/homebrew/bin/bash >> /etc/shells'
+     chsh -s /opt/homebrew/bin/bash
