@@ -42,27 +42,6 @@ Stop polluting your `~/bin` directory and your `.bashrc` file, fork/clone Bash-i
    ``git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it``
 2) Run ``~/.bash_it/install.sh``
 
-### Bash Dependency
-
-Bash-it requires Bash 4.?? or later to run correctly. Any reasonably current Linux distribution should have shipped with a compatible version of Bash. However, macOS users must upgrade from the included, obsolete Bash version 3. While some functionality might work with Bash 3, there is no guarantee that everything will work perfectly. Thus, we recommend using [Homebrew](https://brew.sh/) to ensure Bash is up to date:
-
-**x86 Mac**
-
-```bash
-$ brew install bash
-$ sudo sh -c 'echo /usr/local/bin/bash >> /etc/shells'
-$ chsh -s /usr/local/bin/bash
-```
-
-**M1 Mac**
-Homebrew's default installation location on M1 is ``/opt/homebrew/bin/``:
-
-```bash
-$ brew install bash
-$ sudo sh -c 'echo /opt/homebrew/bin/bash >> /etc/shells'
-$ chsh -s /opt/homebrew/bin/bash
-```
-
 That's it! :smiley:  
 
 You can check out more components of Bash-it, and customize it to your desire.  
