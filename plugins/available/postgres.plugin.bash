@@ -50,7 +50,7 @@ function postgres_status {
 
 
 function is_postgres_running {
-  $POSTGRES_BIN/pg_ctl -D $PGDATA status | egrep -o "no server running"
+  $POSTGRES_BIN/pg_ctl -D $PGDATA status | grep -Eo "no server running"
 }
 
 
