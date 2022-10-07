@@ -40,13 +40,13 @@ function __awskeys_help {
 function __awskeys_get {
     local ln=$(grep -n "\[ *$1 *\]" "${AWS_SHARED_CREDENTIALS_FILE}" | cut -d ":" -f 1)
     if [[ -n "${ln}" ]]; then
-        tail -n +${ln} "${AWS_SHARED_CREDENTIALS_FILE}" | egrep -m 2 "aws_access_key_id|aws_secret_access_key"
-        tail -n +${ln} "${AWS_SHARED_CREDENTIALS_FILE}" | egrep -m 1 "aws_session_token"
+        tail -n +${ln} "${AWS_SHARED_CREDENTIALS_FILE}" | grep -E -m 2 "aws_access_key_id|aws_secret_access_key"
+        tail -n +${ln} "${AWS_SHARED_CREDENTIALS_FILE}" | grep -E -m 1 "aws_session_token"
     fi
 }
 
 function __awskeys_list {
-    local credentials_list="$((egrep '^\[ *[a-zA-Z0-9_-]+ *\]$' "${AWS_SHARED_CREDENTIALS_FILE}"; grep "\[profile" "${AWS_CONFIG_FILE}" | sed "s|\[profile |\[|g") | sort | uniq)"
+    local credentials_list="$((grep -E '^\[ *[a-zA-Z0-9_-]+ *\]$' "${AWS_SHARED_CREDENTIALS_FILE}"; grep "\[profile" "${AWS_CONFIG_FILE}" | sed "s|\[profile |\[|g") | sort | uniq)"
     if [[ -n $"{credentials_list}" ]]; then
         echo -e "Available credentials profiles:\n"
         for profile in ${credentials_list}; do
