@@ -71,10 +71,6 @@ alias rd='rmdir'
 # Shorten extract
 alias xt='extract'
 
-# sudo editors
-alias svim='sudo ${VISUAL:-vim}'
-alias snano='sudo nano'
-
 # Display whatever file is regular file or folder
 function catt() {
 	for i in "$@"; do
