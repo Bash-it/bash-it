@@ -211,7 +211,7 @@ function _is_function() {
 	_example '$ _is_function ls && echo exists'
 	_group 'lib'
 	local msg="${2:-Function '$1' does not exist}"
-	if LC_ALL=C type -t "$1" | _bash-it-egrep -q 'function'; then
+	if LC_ALL=C type -t "$1" | _bash-it-fgrep -q 'function'; then
 		return 0
 	else
 		_log_debug "$msg"

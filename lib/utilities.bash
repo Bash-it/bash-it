@@ -60,15 +60,21 @@ function _bash-it-array-dedup() {
 	printf '%s\n' "$@" | sort -u
 }
 
-# Outputs a full path of the grep found on the filesystem
+# Runs `grep` with *just* the provided arguments
 function _bash-it-grep() {
-	: "${BASH_IT_GREP:=$(type -P egrep || type -P grep)}"
-	printf "%s" "${BASH_IT_GREP:-/usr/bin/grep}"
+	: "${BASH_IT_GREP:=$(type -P grep)}"
+	"${BASH_IT_GREP:-/usr/bin/grep}" "$@"
 }
 
-# Runs `grep` with extended regular expressions
+# Runs `grep` with fixed-string expressions (-F)
+function _bash-it-fgrep() {
+	: "${BASH_IT_GREP:=$(type -P grep)}"
+	"${BASH_IT_GREP:-/usr/bin/grep}" -F "$@"
+}
+
+# Runs `grep` with extended regular expressions (-E)
 function _bash-it-egrep() {
-	: "${BASH_IT_GREP:=$(type -P egrep || type -P grep)}"
+	: "${BASH_IT_GREP:=$(type -P grep)}"
 	"${BASH_IT_GREP:-/usr/bin/grep}" -E "$@"
 }
 
@@ -150,12 +156,12 @@ function _bash-it-component-list-matching() {
 
 function _bash-it-component-list-enabled() {
 	local IFS=$'\n' component="$1"
-	_bash-it-component-help "${component}" | _bash-it-egrep '\[x\]' | awk '{print $1}' | sort -u
+	_bash-it-component-help "${component}" | _bash-it-fgrep '[x]' | awk '{print $1}' | sort -u
 }
 
 function _bash-it-component-list-disabled() {
 	local IFS=$'\n' component="$1"
-	_bash-it-component-help "${component}" | _bash-it-egrep -v '\[x\]' | awk '{print $1}' | sort -u
+	_bash-it-component-help "${component}" | _bash-it-fgrep -v '[x]' | awk '{print $1}' | sort -u
 }
 
 # Checks if a given item is enabled for a particular component/file-type.

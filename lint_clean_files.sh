@@ -8,8 +8,8 @@
 # shellcheck disable=SC2002  # Prefer 'cat' for cleaner script
 mapfile -t FILES < <(
 	cat clean_files.txt \
-		| grep -v -E '^\s*$' \
-		| grep -v -E '^\s*#' \
+		| grep -E -v '^\s*$' \
+		| grep -E -v '^\s*#' \
 		| xargs -n1 -I{} find "{}" -type f
 )
 
