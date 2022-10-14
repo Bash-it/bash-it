@@ -14,6 +14,10 @@ export BASH_IT="{{BASH_IT}}"
 # location /.bash_it/themes/
 export BASH_IT_THEME='bobby'
 
+# Some themes can show whether `sudo` has a current token or not.
+# Set `$THEME_CHECK_SUDO` to `true` to check every prompt:
+#THEME_CHECK_SUDO='true'
+
 # (Advanced): Change this to the name of your remote repo if you
 # cloned bash-it with a remote other than origin such as `bash-it`.
 # export BASH_IT_REMOTE='bash-it'
@@ -33,6 +37,9 @@ export IRC_CLIENT='irssi'
 
 # Set this to the command you use for todo.txt-cli
 export TODO="t"
+
+# Set this to the location of your work or project folders
+#BASH_IT_PROJECT_PATHS="${HOME}/Projects:/Volumes/work/src"
 
 # Set this to false to turn off version control status checking within the prompt for all themes
 export SCM_CHECK=true

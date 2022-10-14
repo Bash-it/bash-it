@@ -348,6 +348,19 @@ NWinkler
 
 ----
 
+.. _oh_my_posh_image:
+
+Oh-My-Posh
+^^^^^^^^^^
+
+
+.. image:: https://bash-it.github.io/bash-it/docs/images/oh-my-posh.png
+   :target: https://bash-it.github.io/bash-it/docs/images/oh-my-posh.png
+   :alt:
+
+
+----
+
 Pete
 ^^^^
 

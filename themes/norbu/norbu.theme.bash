@@ -1,21 +1,23 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
 
-function set_prompt_symbol () {
-    if test $1 -eq 0 ; then
-	PROMPT_SYMBOL=">_"
-    else
-	PROMPT_SYMBOL="${orange}>_${normal}"
-    fi
+function set_prompt_symbol() {
+	if [[ $1 -eq 0 ]]; then
+		prompt_symbol=">_"
+	else
+		prompt_symbol="${orange?}>_${normal?}"
+	fi
 }
-function prompt_command() {
-    set_prompt_symbol $?
-    if test -z "$VIRTUAL_ENV" ; then
-	PYTHON_VIRTUALENV=""
-    else
-	PYTHON_VIRTUALENV="${bold_yellow}[`basename \"$VIRTUAL_ENV\"`]"
-    fi
 
-    PS1="${bold_orange}${PYTHON_VIRTUALENV}${reset_color}${bold_green}[\w]${bold_blue}\[$(scm_prompt_info)\]${normal} \n${PROMPT_SYMBOL} "
+function prompt_command() {
+	local ret_val="$?" prompt_symbol scm_prompt_info
+	if [[ -n "${VIRTUAL_ENV:-}" ]]; then
+		PYTHON_VIRTUALENV="${bold_yellow?}[${VIRTUAL_ENV##*/}]"
+	fi
+
+	scm_prompt_info="$(scm_prompt_info)"
+	set_prompt_symbol "${ret_val}"
+	PS1="${bold_orange?}${PYTHON_VIRTUALENV:-}${reset_color?}${bold_green?}[\w]${bold_blue?}[${scm_prompt_info}]${normal?} \n${prompt_symbol} "
 }
 
 # scm themeing

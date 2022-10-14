@@ -1,34 +1,31 @@
-#!/usr/bin/env bats
+# shellcheck shell=bats
 
-load ../test_helper
-load ../../lib/helpers
-load "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
-load ../../plugins/available/ruby.plugin
+load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
-function local_setup {
-  setup_test_fixture
-
-  export OLD_PATH="$PATH"
-  export PATH="/usr/bin:/bin:/usr/sbin"
-}
-
-function local_teardown {
-  export PATH="$OLD_PATH"
-  unset OLD_PATH
+function local_setup_file() {
+  setup_libs "helpers"
 }
 
 @test "plugins ruby: remove_gem is defined" {
+  run load "${BASH_IT?}/plugins/available/ruby.plugin.bash"
+  assert_success
+  load "${BASH_IT?}/plugins/available/ruby.plugin.bash"
+
   run type remove_gem
   assert_line -n 1 "remove_gem () "
 }
 
 @test "plugins ruby: PATH includes ~/.gem/ruby/bin" {
-  if ! which ruby >/dev/null; then
+  if ! type ruby >/dev/null; then
     skip 'ruby not installed'
   fi
 
-  load ../../plugins/available/ruby.plugin
+  mkdir -p "$(ruby -e 'print Gem.user_dir')/bin"
 
-  local last_path_entry=$(echo $PATH | tr ":" "\n" | tail -1)
-  [[ "${last_path_entry}" == "${HOME}"/.gem/ruby/*/bin ]]
+  run load "${BASH_IT?}/plugins/available/ruby.plugin.bash"
+  assert_success
+  load "${BASH_IT?}/plugins/available/ruby.plugin.bash"
+
+  local last_path_entry="$(tail -1 <<<"${PATH//:/$'\n'}")"
+  [[ "${last_path_entry}" == "$(ruby -e 'print Gem.user_dir')/bin" ]]
 }

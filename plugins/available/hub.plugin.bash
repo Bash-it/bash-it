@@ -1,4 +1,7 @@
+# shellcheck shell=bash
 cite about-plugin
 about-plugin 'load hub, if you are using it'
 
-command -v hub &> /dev/null && eval "$(hub alias -s)"
+if _command_exists hub; then
+	eval "$(hub alias -s)"
+fi

@@ -13,18 +13,24 @@ insert_final_newline = true
 trim_trailing_whitespace = false
 
 [.git*]
+indent_size = tab
 indent_style = tab
 
-[{**.*sh,test/run}]
+[{**.*sh,test/run,**.bats}]
+indent_size = tab
 indent_style = tab
-indent_size = 4
 
 shell_variant      = bash
 binary_next_line   = true  # like -bn
 switch_case_indent = true  # like -ci
 space_redirects    = true  # like -sr
-keep_padding       = false  # like -kp
+keep_padding       = false # like -kp
 end_of_line        = lf
 charset            = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
+
+[**.bats]
+indent_size = tab
+indent_style = tab
+shell_variant	= bats

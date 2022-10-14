@@ -15,7 +15,7 @@ repos:
       - id: mixed-line-ending
       - id: check-added-large-files
   - repo: https://github.com/jumanjihouse/pre-commit-hooks
-    rev: 2.1.4
+    rev: 2.1.5
     hooks:
       - id: git-check  # Configure in .gitattributes
       - id: shellcheck

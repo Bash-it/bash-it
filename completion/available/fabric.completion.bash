@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 #
 # Bash completion support for Fabric (http://fabfile.org/)
 #
@@ -41,8 +41,8 @@ export FAB_COMPLETION_CACHED_TASKS_FILENAME=".fab_tasks~"
 
 
 # Set command to get time of last file modification as seconds since Epoch
-case `uname` in
-    Darwin|FreeBSD)
+case "$OSTYPE" in
+    'darwin'*|'freebsd'*)
         __FAB_COMPLETION_MTIME_COMMAND="stat -f '%m'"
         ;;
     *)
@@ -91,7 +91,7 @@ function __fab_completion() {
         -*)
             if [[ -z "${__FAB_COMPLETION_LONG_OPT}" ]]; then
                 export __FAB_COMPLETION_LONG_OPT=$(
-                    fab --help | egrep -o "\-\-[A-Za-z_\-]+\=?" | sort -u)
+                    fab --help | grep -E -o "\-\-[A-Za-z_\-]+\=?" | sort -u)
             fi
             opts="${__FAB_COMPLETION_LONG_OPT}"
             ;;
@@ -101,7 +101,7 @@ function __fab_completion() {
         # -*)
         #     if [[ -z "${__FAB_COMPLETION_SHORT_OPT}" ]]; then
         #         export __FAB_COMPLETION_SHORT_OPT=$(
-        #             fab --help | egrep -o "^ +\-[A-Za-z_\]" | sort -u)
+        #             fab --help | grep -E -o "^ +\-[A-Za-z_\]" | sort -u)
         #     fi
         #     opts="${__FAB_COMPLETION_SHORT_OPT}"
         #     ;;

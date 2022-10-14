@@ -1,8 +1,8 @@
-cite 'about-alias'
+# shellcheck shell=bash
 about-alias 'todo.txt-cli abbreviations'
 
-alias tls="$TODO ls"
-alias ta="$TODO a"
-alias trm="$TODO rm"
-alias tdo="$TODO do"
-alias tpri="$TODO pri"
+alias tls='"${TODO?}" ls'
+alias ta='"${TODO?}" a'
+alias trm='"${TODO?}" rm'
+alias tdo='"${TODO?}" do'
+alias tpri='"${TODO?}" pri'

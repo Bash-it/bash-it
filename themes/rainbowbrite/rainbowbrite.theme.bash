@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 
 # based off of n0qorg
 # looks like, if you're in a git repo:
@@ -7,9 +7,7 @@
 
 prompt_setter() {
   # Save history
-  history -a
-  history -c
-  history -r
+  _save-and-reload-history 1
   # displays user@server in purple
   # PS1="$red$(scm_char) $purple\u@\h$reset_color:$blue\w$yellow$(scm_prompt_info)$(ruby_version_prompt) $black\$$reset_color "
   # no user@server

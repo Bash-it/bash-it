@@ -1,4 +1,6 @@
 # shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
+# shellcheck disable=SC2154 #TODO: fix these all.
 
 # Detect whether a reboot is required
 function show_reboot_required() {
@@ -29,15 +31,6 @@ function set_user_color() {
 			printf '%s' "${cyan}"
 			;;
 	esac
-}
-
-scm_prompt() {
-	CHAR=$(scm_char)
-	if [ "$CHAR" = "$SCM_NONE_CHAR" ]; then
-		return
-	else
-		echo "[$(scm_char)$(scm_prompt_info)]"
-	fi
 }
 
 # Define custom colors we need

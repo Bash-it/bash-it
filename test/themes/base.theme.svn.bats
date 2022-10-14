@@ -1,33 +1,10 @@
-#!/usr/bin/env bats
+# shellcheck shell=bats
 
-load ../test_helper
-load "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
-load ../../lib/log
+load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
-cite _about _param _example _group _author _version
-
-load ../../lib/helpers
-load ../../themes/base.theme
-
-function local_setup {
-  setup_test_fixture
-
-  # Copy the test fixture to the Bash-it folder
-  if command -v rsync &> /dev/null
-  then
-    rsync -a "$BASH_IT/test/fixtures/bash_it/" "$BASH_IT/"
-  else
-    find "$BASH_IT/test/fixtures/bash_it" \
-      -mindepth 1 -maxdepth 1 \
-      -exec cp -r {} "$BASH_IT/" \;
-  fi
-
-  export OLD_PATH="$PATH"
-}
-
-function local_teardown {
-  export PATH="$OLD_PATH"
-  unset OLD_PATH
+function local_setup_file() {
+  setup_libs "colors" #"theme"
+  load "${BASH_IT?}/themes/base.theme.bash"
 }
 
 function setup_repo {
@@ -56,8 +33,8 @@ function setup_svn_path {
 
   setup_svn_path "$BASH_IT/test/fixtures/svn/working"
 
-  # Load the base theme again so that the working SVN script is detected
-  load ../../themes/base.theme
+  # Init the base theme again so that the working SVN script is detected
+  _bash_it_appearance_scm_init
 
   scm
   # Make sure that the SVN command is used
@@ -73,8 +50,8 @@ function setup_svn_path {
 
   setup_svn_path "$BASH_IT/test/fixtures/svn/working"
 
-  # Load the base theme again so that the working SVN script is detected
-  load ../../themes/base.theme
+  # init the base theme again so that the working SVN script is detected
+  _bash_it_appearance_scm_init
 
   scm
   # Make sure that the SVN command is used
@@ -89,8 +66,8 @@ function setup_svn_path {
 
   setup_svn_path "$BASH_IT/test/fixtures/svn/working"
 
-  # Load the base theme again so that the working SVN script is detected
-  load ../../themes/base.theme
+  # Init the base theme again so that the working SVN script is detected
+  _bash_it_appearance_scm_init
 
   scm
   # Make sure that no SVN command is used
@@ -103,8 +80,8 @@ function setup_svn_path {
 
   setup_svn_path "$BASH_IT/test/fixtures/svn/broken"
 
-  # Load the base theme again so that the broken SVN script is detected
-  load ../../themes/base.theme
+  # Init the base theme again so that the broken SVN script is detected
+  _bash_it_appearance_scm_init
 
   scm
   # Make sure that no SVN command is not used
@@ -120,8 +97,8 @@ function setup_svn_path {
 
   setup_svn_path "$BASH_IT/test/fixtures/svn/broken"
 
-  # Load the base theme again so that the broken SVN script is detected
-  load ../../themes/base.theme
+  # Init the base theme again so that the broken SVN script is detected
+  _bash_it_appearance_scm_init
 
   scm
   # Make sure that no SVN command is used

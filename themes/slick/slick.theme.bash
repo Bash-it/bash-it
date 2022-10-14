@@ -43,18 +43,8 @@ is_vim_shell() {
         fi
 }
 
-modern_scm_prompt() {
-        CHAR=$(scm_char)
-        if [ $CHAR = $SCM_NONE_CHAR ]
-        then
-                return
-        else
-                echo "[$(scm_char)][$(scm_prompt_info)]"
-        fi
-}
-
 prompt() {
-
+   SCM_PROMPT_FORMAT='[%s][%s]'
    case $HOSTNAME in
     "clappy"* ) my_ps_host="${green}\h${normal}";
             ;;
@@ -70,10 +60,10 @@ prompt() {
 
     # nice prompt
     case "`id -u`" in
-        0) PS1="${TITLEBAR}[$my_ps_root][$my_ps_host]$(modern_scm_prompt)$(__my_rvm_ruby_version)[${cyan}\w${normal}]$(is_vim_shell)
+        0) PS1="${TITLEBAR}[$my_ps_root][$my_ps_host]$(scm_prompt)$(__my_rvm_ruby_version)[${cyan}\w${normal}]$(is_vim_shell)
 $ "
         ;;
-      *) PS1="${TITLEBAR}[$my_ps_user][$my_ps_host]$(modern_scm_prompt)$(__my_rvm_ruby_version)$(__my_venv_prompt)[${cyan}\w${normal}]$(is_vim_shell)
+      *) PS1="${TITLEBAR}[$my_ps_user][$my_ps_host]$(scm_prompt)$(__my_rvm_ruby_version)$(__my_venv_prompt)[${cyan}\w${normal}]$(is_vim_shell)
 $ "
         ;;
     esac
