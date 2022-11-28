@@ -40,10 +40,11 @@ _lp_git_branch()
     # not 1.7.9 (Ubuntu 12.04)
     if branch="$(\git symbolic-ref -q HEAD)"; then
         __lp_escape "$(\git rev-parse --short=5 -q HEAD 2>/dev/null):${branch#refs/heads/}"
+        lp_vcs_branch="$ret"
     else
         # In detached head state, use commit instead
         # No escape needed
-        \git rev-parse --short -q HEAD 2>/dev/null
+        lp_vcs_branch="$(\git rev-parse --short -q HEAD 2>/dev/null)"
     fi
 }
 
