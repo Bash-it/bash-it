@@ -48,7 +48,7 @@ _lp_git_branch()
     local commit branch ret
 
     commit="$(\git rev-parse --short -q HEAD 2>/dev/null)"
-    
+
     # Recent versions of Git support the --short option for symbolic-ref, but
     # not 1.7.9 (Ubuntu 12.04)
     if branch="$(\git symbolic-ref -q HEAD)"; then
