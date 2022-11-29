@@ -35,7 +35,7 @@ _lp_git_branch()
 
     \git rev-parse --is-inside-work-tree >/dev/null 2>&1 || return
 
-    local branch
+    local branch ret
     # Recent versions of Git support the --short option for symbolic-ref, but
     # not 1.7.9 (Ubuntu 12.04)
     if branch="$(\git symbolic-ref -q HEAD)"; then
