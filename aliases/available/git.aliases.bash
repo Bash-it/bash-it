@@ -200,9 +200,5 @@ function gdv() {
 }
 
 function get_default_branch() {
-	if git branch | grep -q '^. main\s*$'; then
-		echo main
-	else
-		echo master
-	fi
+	git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'
 }
