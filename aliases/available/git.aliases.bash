@@ -12,10 +12,14 @@ alias gav='git add -v'
 
 # branch
 alias gb='git branch'
-alias gbD='git branch -D'
-alias gba='git branch -a'
+alias gba='git branch --all'
 alias gbd='git branch -d'
-alias gbm='git branch -m'
+alias gbD='git branch -D'
+alias gbl='git branch --list'
+alias gbla='git branch --list --all'
+alias gblr='git branch --list --remotes'
+alias gbm='git branch --move'
+alias gbr='git branch --remotes'
 alias gbt='git branch --track'
 alias gdel='git branch -D'
 
