@@ -259,7 +259,7 @@ function __check_completion () {
 
 @test "completion bash-it: enable - provide the a* aliases when not enabled" {
   run __check_completion 'bash-it enable alias a'
-  assert_line -n 0 "all ag ansible apt atom"
+  assert_line -n 0 "all ag ansible apt aptitude atom"
 }
 
 @test "completion bash-it: enable - provide the a* aliases when atom is enabled with the old location and name" {
@@ -267,7 +267,7 @@ function __check_completion () {
   assert_link_exist "$BASH_IT/aliases/enabled/atom.aliases.bash"
 
   run __check_completion 'bash-it enable alias a'
-  assert_line -n 0 "all ag ansible apt"
+  assert_line -n 0 "all ag ansible apt aptitude"
 }
 
 @test "completion bash-it: enable - provide the a* aliases when atom is enabled with the old location and priority-based name" {
@@ -275,7 +275,7 @@ function __check_completion () {
   assert_link_exist "$BASH_IT/aliases/enabled/150---atom.aliases.bash"
 
   run __check_completion 'bash-it enable alias a'
-  assert_line -n 0 "all ag ansible apt"
+  assert_line -n 0 "all ag ansible apt aptitude"
 }
 
 @test "completion bash-it: enable - provide the a* aliases when atom is enabled with the new location and priority-based name" {
@@ -283,7 +283,7 @@ function __check_completion () {
   assert_link_exist "$BASH_IT/enabled/150---atom.aliases.bash"
 
   run __check_completion 'bash-it enable alias a'
-  assert_line -n 0 "all ag ansible apt"
+  assert_line -n 0 "all ag ansible apt aptitude"
 }
 
 @test "completion bash-it: enable - provide the docker* plugins when docker-compose is enabled with the old location and name" {
