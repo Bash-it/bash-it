@@ -50,7 +50,7 @@ function _bash-it-component-completion-callback-on-init-aliases() {
 		fi
 
 		# skip aliases to pipes, boolean control structures and other command lists
-		chars='\|\&\;\)\(\n\<\>'
+		chars=$'\|\&\;\)\(\n\<\>'
 		if [[ "${alias_defn}" =~ [$chars] ]]; then
 			continue
 		fi
