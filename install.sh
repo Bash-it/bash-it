@@ -158,6 +158,7 @@ while getopts "hsinaf" opt; do
 	case "$opt" in
 		"h")
 			_bash-it_show_usage
+			# shellcheck disable=SC2317
 			exit 0
 			;;
 		"s") silent=true ;;
@@ -167,6 +168,7 @@ while getopts "hsinaf" opt; do
 		"f") overwrite_backup=true ;;
 		"?")
 			_bash-it_show_usage >&2
+			# shellcheck disable=SC2317
 			exit 1
 			;;
 	esac
