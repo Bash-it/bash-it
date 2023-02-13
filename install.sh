@@ -12,7 +12,6 @@ function _bash-it_show_usage() {
 	echo "--no-modify-config (-n): Do not modify existing config file"
 	echo "--append-to-config (-a): Keep existing config file and append bash-it templates at the end"
 	echo "--overwrite-backup (-f): Overwrite existing backup"
-	exit 0
 }
 
 # enable a thing
@@ -158,6 +157,7 @@ while getopts "hsinaf" opt; do
 	case "$opt" in
 		"h")
 			_bash-it_show_usage
+			exit 0
 			;;
 		"s") silent=true ;;
 		"i") interactive=true ;;
@@ -166,6 +166,7 @@ while getopts "hsinaf" opt; do
 		"f") overwrite_backup=true ;;
 		"?")
 			_bash-it_show_usage >&2
+			exit 1
 			;;
 	esac
 done
