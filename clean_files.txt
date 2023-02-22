@@ -76,6 +76,7 @@ completion/available/system.completion.bash
 completion/available/vault.completion.bash
 completion/available/vuejs.completion.bash
 completion/available/wpscan.completion.bash
+completion/available/yarn.completion.bash
 
 # libraries
 lib/appearance.bash
