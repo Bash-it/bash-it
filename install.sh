@@ -12,7 +12,6 @@ function _bash-it_show_usage() {
 	echo "--no-modify-config (-n): Do not modify existing config file"
 	echo "--append-to-config (-a): Keep existing config file and append bash-it templates at the end"
 	echo "--overwrite-backup (-f): Overwrite existing backup"
-	exit 0
 }
 
 # enable a thing
