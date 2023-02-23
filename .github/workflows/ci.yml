@@ -7,7 +7,7 @@ jobs:
   bats-test:
     strategy:
       matrix:
-        os: [ubuntu-20.04, ubuntu-18.04, macos-10.15, macos-11]
+        os: [ubuntu-20.04, ubuntu-22.04, macos-12, macos-11]
 
     runs-on: ${{ matrix.os }}
 
@@ -49,10 +49,17 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: 3.8
+    # - name: Update APT Package Lists
+      # run: sudo apt-get update
     - name: Install shfmt
       run: GO111MODULE=on go get mvdan.cc/sh/v3/cmd/shfmt
     - name: Install shellcheck
-      run: brew install shellcheck
+      env:
+        scversion: stable # Or latest, vxx, etc
+      run: |
+        wget -qO- "https://github.com/koalaman/shellcheck/releases/download/${scversion?}/shellcheck-${scversion?}.linux.x86_64.tar.xz" | tar -xJv "shellcheck-${scversion}/shellcheck"
+        sudo cp "shellcheck-${scversion}/shellcheck" /usr/bin/
+        shellcheck --version
     - name: Install pre-commit
       run: python3 -m pip install -r test/lint-requirements.txt
     - name: Run lint

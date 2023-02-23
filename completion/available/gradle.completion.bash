@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 # Copyright (c) 2017 Eric Wendelin
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -66,7 +68,7 @@ __gradle-generate-script-cache() {
 
     if [[ ! $(find $cache_dir/$cache_name -mmin -$cache_ttl_mins 2>/dev/null) ]]; then
         # Cache all Gradle scripts
-        local gradle_build_scripts=$(find $project_root_dir -type f -name "*.gradle" -o -name "*.gradle.kts" 2>/dev/null | egrep -v "$script_exclude_pattern")
+        local gradle_build_scripts=$(find $project_root_dir -type f -name "*.gradle" -o -name "*.gradle.kts" 2>/dev/null | grep -E -v "$script_exclude_pattern")
         printf "%s\n" "${gradle_build_scripts[@]}" > $cache_dir/$cache_name
     fi
 }

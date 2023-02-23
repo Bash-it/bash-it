@@ -2,12 +2,24 @@
 #
 # Functions for measuring and reporting how long a command takes to run.
 
-: "${COMMAND_DURATION_START_SECONDS:=${EPOCHREALTIME:-$SECONDS}}"
+# Get shell duration in decimal format regardless of runtime locale.
+# Notice: This function runs as a sub-shell - notice '(' vs '{'.
+function _shell_duration_en() (
+	# DFARREL You would think LC_NUMERIC would do it, but not working in my local
+	LC_ALL='en_US.UTF-8'
+	printf "%s" "${EPOCHREALTIME:-$SECONDS}"
+)
+
+: "${COMMAND_DURATION_START_SECONDS:=$(_shell_duration_en)}"
 : "${COMMAND_DURATION_ICON:=🕘}"
 : "${COMMAND_DURATION_MIN_SECONDS:=1}"
 
 function _command_duration_pre_exec() {
-	COMMAND_DURATION_START_SECONDS="${EPOCHREALTIME:-$SECONDS}"
+	COMMAND_DURATION_START_SECONDS="$(_shell_duration_en)"
+}
+
+function _command_duration_pre_cmd() {
+	COMMAND_DURATION_START_SECONDS=""
 }
 
 function _dynamic_clock_icon {
@@ -20,14 +32,18 @@ function _dynamic_clock_icon {
 
 function _command_duration() {
 	[[ -n "${BASH_IT_COMMAND_DURATION:-}" ]] || return
+	[[ -n "${COMMAND_DURATION_START_SECONDS:-}" ]] || return
 
 	local command_duration=0 command_start="${COMMAND_DURATION_START_SECONDS:-0}"
 	local -i minutes=0 seconds=0 deciseconds=0
 	local -i command_start_seconds="${command_start%.*}"
 	local -i command_start_deciseconds=$((10#${command_start##*.}))
-	local current_time="${EPOCHREALTIME:-$SECONDS}"
+	command_start_deciseconds="${command_start_deciseconds:0:1}"
+	local current_time
+	current_time="$(_shell_duration_en)"
 	local -i current_time_seconds="${current_time%.*}"
 	local -i current_time_deciseconds="$((10#${current_time##*.}))"
+	current_time_deciseconds="${current_time_deciseconds:0:1}"
 
 	if [[ "${command_start_seconds:-0}" -gt 0 ]]; then
 		# seconds
@@ -43,17 +59,18 @@ function _command_duration() {
 		command_duration=0
 	fi
 
-	if ((command_duration > 0)); then
+	if ((command_duration >= COMMAND_DURATION_MIN_SECONDS)); then
 		minutes=$((command_duration / 60))
 		seconds=$((command_duration % 60))
-	fi
 
-	_dynamic_clock_icon "${command_duration}"
-	if ((minutes > 0)); then
-		printf "%s%s%dm %ds" "${COMMAND_DURATION_ICON:-}" "${COMMAND_DURATION_COLOR:-}" "$minutes" "$seconds"
-	elif ((seconds >= COMMAND_DURATION_MIN_SECONDS)); then
-		printf "%s%s%d.%01ds" "${COMMAND_DURATION_ICON:-}" "${COMMAND_DURATION_COLOR:-}" "$seconds" "$deciseconds"
+		_dynamic_clock_icon "${command_duration}"
+		if ((minutes > 0)); then
+			printf "%s %s%dm %ds" "${COMMAND_DURATION_ICON:-}" "${COMMAND_DURATION_COLOR:-}" "$minutes" "$seconds"
+		else
+			printf "%s %s%d.%01ds" "${COMMAND_DURATION_ICON:-}" "${COMMAND_DURATION_COLOR:-}" "$seconds" "$deciseconds"
+		fi
 	fi
 }
 
 _bash_it_library_finalize_hook+=("safe_append_preexec '_command_duration_pre_exec'")
+_bash_it_library_finalize_hook+=("safe_append_prompt_command '_command_duration_pre_cmd'")
