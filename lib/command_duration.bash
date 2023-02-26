@@ -59,16 +59,16 @@ function _command_duration() {
 		command_duration=0
 	fi
 
-	if ((command_duration > 0)); then
+	if ((command_duration >= COMMAND_DURATION_MIN_SECONDS)); then
 		minutes=$((command_duration / 60))
 		seconds=$((command_duration % 60))
-	fi
 
-	_dynamic_clock_icon "${command_duration}"
-	if ((minutes > 0)); then
-		printf "%s %s%dm %ds" "${COMMAND_DURATION_ICON:-}" "${COMMAND_DURATION_COLOR:-}" "$minutes" "$seconds"
-	elif ((seconds >= COMMAND_DURATION_MIN_SECONDS)); then
-		printf "%s %s%d.%01ds" "${COMMAND_DURATION_ICON:-}" "${COMMAND_DURATION_COLOR:-}" "$seconds" "$deciseconds"
+		_dynamic_clock_icon "${command_duration}"
+		if ((minutes > 0)); then
+			printf "%s %s%dm %ds" "${COMMAND_DURATION_ICON:-}" "${COMMAND_DURATION_COLOR:-}" "$minutes" "$seconds"
+		else
+			printf "%s %s%d.%01ds" "${COMMAND_DURATION_ICON:-}" "${COMMAND_DURATION_COLOR:-}" "$seconds" "$deciseconds"
+		fi
 	fi
 }
 
