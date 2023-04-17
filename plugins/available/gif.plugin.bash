@@ -72,9 +72,9 @@ function v2gif() {
 	eval set -- "$args"
 	local use_gifski=""
 	local opt_del_after=""
-	local maxsize=""
-	local lossiness=""
-	local maxwidthski=""
+	local maxsize=()
+	local lossiness=()
+	local maxwidthski=()
 	local giftagopt=""
 	local giftag=""
 	local defaultfps=10
@@ -112,8 +112,8 @@ function v2gif() {
 				shift
 				;;
 			-w | --width)
-				maxsize="-vf scale=$2:-1"
-				maxwidthski="-W $2"
+				maxsize=(-vf "scale=$2:-1")
+				maxwidthski=(-W "$2")
 				giftag="${giftag}-w$2"
 				shift 2
 				;;
@@ -124,7 +124,7 @@ function v2gif() {
 				;;
 			-l | --lossy)
 				# Use giflossy parameter
-				lossiness="--lossy=$2"
+				lossiness=("--lossy=$2")
 				giftag="${giftag}-l$2"
 				shift 2
 				;;
@@ -170,7 +170,7 @@ function v2gif() {
 		local del_after=$opt_del_after
 
 		if [[ -n "$make_webm" ]]; then
-			$ffmpeg -loglevel panic -i "$file" \
+			$ffmpeg -loglevel warning -i "$file" \
 				-c:v libvpx -crf 4 -threads 0 -an -b:v 2M -auto-alt-ref 0 \
 				-quality best -loop 0 "${file%.*}.webm" || return 2
 		fi
@@ -190,12 +190,12 @@ function v2gif() {
 
 		if [[ "$use_gifski" = "true" ]]; then
 			# I trust @pornel to do his own resizing optimization choices
-			$ffmpeg -loglevel panic -i "$file" -r "$fps" -vcodec png v2gif-tmp-%05d.png \
-				&& $gifski v2gif-tmp-*.png "$maxwidthski" --fps "$(printf "%.0f" "$fps")" -o "$output_file" || return 2
+			$ffmpeg -loglevel warning -i "$file" -r "$fps" -vcodec png v2gif-tmp-%05d.png \
+				&& $gifski "${maxwidthski[@]}" --fps "$(printf "%.0f" "$fps")" -o "$output_file" v2gif-tmp-*.png || return 2
 		else
-			$ffmpeg -loglevel panic -i "$file" "$maxsize" -r "$fps" -vcodec png v2gif-tmp-%05d.png \
+			$ffmpeg -loglevel warning -i "$file" "${maxsize[@]}" -r "$fps" -vcodec png v2gif-tmp-%05d.png \
 				&& $convert +dither -layers Optimize v2gif-tmp-*.png GIF:- \
-				| $gifsicle "$lossiness" --no-warnings --colors 256 --delay="$(echo "100/$fps" | bc)" --loop --optimize=3 --multifile - > "$output_file" || return 2
+				| $gifsicle "${lossiness[@]}" --no-warnings --colors 256 --delay="$(echo "100/$fps" | bc)" --loop --optimize=3 --multifile - > "$output_file" || return 2
 		fi
 
 		rm v2gif-tmp-*.png
@@ -305,7 +305,7 @@ function any2webm() {
 
 		echo "$(tput setaf 2)Creating '$output_file' ...$(tput sgr 0)"
 
-		$ffmpeg -loglevel panic -i "$file" \
+		$ffmpeg -loglevel warning -i "$file" \
 			-c:v libvpx -crf 4 -threads 0 -an -b:v "$bandwidth" -auto-alt-ref 0 \
 			-quality best "$fps" "$size" -loop 0 -pix_fmt yuva420p "$output_file" || return 2
 
