@@ -9,8 +9,16 @@ cite about-plugin
 about-plugin 'node version manager configuration'
 
 export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+
+# first check if NVM is managed by brew
+NVM_BREW_PREFIX=""
+if _bash_it_homebrew_check
+then
+  NVM_BREW_PREFIX=$(brew --prefix nvm 2>/dev/null)
+fi
+
 # This loads nvm
-if _bash_it_homebrew_check && [[ -s "$(brew --prefix nvm)/nvm.sh" ]]
+if [[ -n "$NVM_BREW_PREFIX" && -s "${NVM_BREW_PREFIX}/nvm.sh" ]]
 then
   source "$(brew --prefix nvm)/nvm.sh"
 else
