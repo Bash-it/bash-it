@@ -9,39 +9,43 @@
 ## Parsers ##
 #############
 
-____brainy_top_left_parse() {
+function ____brainy_top_left_parse() {
 	ifs_old="${IFS}"
 	IFS="|"
 	read -r -a args <<< "$@"
 	IFS="${ifs_old}"
-	if [ -n "${args[3]}" ]; then
+	if [ -n "${args[3]}" ] 
+     then
 		_TOP_LEFT+="${args[2]}${args[3]}"
 	fi
 	_TOP_LEFT+="${args[0]}${args[1]}"
-	if [ -n "${args[4]}" ]; then
+	if [ -n "${args[4]}" ] 
+     then
 		_TOP_LEFT+="${args[2]}${args[4]}"
 	fi
 	_TOP_LEFT+=" "
 }
 
-____brainy_top_right_parse() {
+function ____brainy_top_right_parse() {
 	ifs_old="${IFS}"
 	IFS="|"
 	read -r -a args <<< "$@"
 	IFS="${ifs_old}"
 	_TOP_RIGHT+=" "
-	if [ -n "${args[3]}" ]; then
+	if [ -n "${args[3]}" ] 
+     then
 		_TOP_RIGHT+="${args[2]}${args[3]}"
 	fi
 	_TOP_RIGHT+="${args[0]}${args[1]}"
-	if [ -n "${args[4]}" ]; then
+	if [ -n "${args[4]}" ] 
+     then
 		_TOP_RIGHT+="${args[2]}${args[4]}"
 	fi
 	__TOP_RIGHT_LEN=$((__TOP_RIGHT_LEN + ${#args[1]} + ${#args[3]} + ${#args[4]} + 1))
 	((__SEG_AT_RIGHT += 1))
 }
 
-____brainy_bottom_parse() {
+function ____brainy_bottom_parse() {
 	ifs_old="${IFS}"
 	IFS="|"
 	read -r -a args <<< "$@"
@@ -50,7 +54,7 @@ ____brainy_bottom_parse() {
 	[ ${#args[1]} -gt 0 ] && _BOTTOM+=" "
 }
 
-____brainy_top() {
+function ____brainy_top() {
 	_TOP_LEFT=""
 	_TOP_RIGHT=""
 	__TOP_RIGHT_LEN=0
@@ -76,7 +80,7 @@ ____brainy_top() {
 	printf "%s%s" "${_TOP_LEFT}" "${_TOP_RIGHT}"
 }
 
-____brainy_bottom() {
+function ____brainy_bottom() {
 	_BOTTOM=""
 	for seg in $___BRAINY_BOTTOM; do
 		info="$(___brainy_prompt_"${seg}")"
@@ -89,30 +93,33 @@ ____brainy_bottom() {
 ## Segments ##
 ##############
 
-___brainy_prompt_user_info() {
+function ___brainy_prompt_user_info() {
 	color=$bold_blue
-	if [ "${THEME_SHOW_SUDO}" == "true" ]; then
-		if sudo -vn 1> /dev/null 2>&1; then
+	if [ "${THEME_SHOW_SUDO}" == "true" ] 
+     then
+		if sudo -vn 1> /dev/null 2>&1 
+     then
 			color=$bold_red
 		fi
 	fi
 	box="[|]"
 	info="\u@\H"
-	if [ -n "${SSH_CLIENT}" ]; then
+	if [ -n "${SSH_CLIENT}" ] 
+     then
 		printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
 	else
 		printf "%s|%s" "${color}" "${info}"
 	fi
 }
 
-___brainy_prompt_dir() {
+function ___brainy_prompt_dir() {
 	color=$bold_yellow
 	box="[|]"
 	info="\w"
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
 }
 
-___brainy_prompt_scm() {
+function ___brainy_prompt_scm() {
 	[ "${THEME_SHOW_SCM}" != "true" ] && return
 	color=$bold_green
 	box="$(scm_char) "
@@ -120,7 +127,7 @@ ___brainy_prompt_scm() {
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
 }
 
-___brainy_prompt_python() {
+function ___brainy_prompt_python() {
 	[ "${THEME_SHOW_PYTHON}" != "true" ] && return
 	color=$bold_yellow
 	box="[|]"
@@ -128,7 +135,7 @@ ___brainy_prompt_python() {
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_blue}" "${box}"
 }
 
-___brainy_prompt_ruby() {
+function ___brainy_prompt_ruby() {
 	[ "${THEME_SHOW_RUBY}" != "true" ] && return
 	color=$bold_white
 	box="[|]"
@@ -136,7 +143,7 @@ ___brainy_prompt_ruby() {
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_red}" "${box}"
 }
 
-___brainy_prompt_todo() {
+function ___brainy_prompt_todo() {
 	[ "${THEME_SHOW_TODO}" != "true" ] \
 		|| [ -z "$(which todo.sh)" ] && return
 	color=$bold_white
@@ -145,7 +152,7 @@ ___brainy_prompt_todo() {
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_green}" "${box}"
 }
 
-___brainy_prompt_clock() {
+function ___brainy_prompt_clock() {
 	[ "${THEME_SHOW_CLOCK}" != "true" ] && return
 	color=$THEME_CLOCK_COLOR
 	box="[|]"
@@ -153,16 +160,18 @@ ___brainy_prompt_clock() {
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_purple}" "${box}"
 }
 
-___brainy_prompt_battery() {
+function ___brainy_prompt_battery() {
 	! _command_exists battery_percentage \
 		|| [ "${THEME_SHOW_BATTERY}" != "true" ] \
 		|| [ "$(battery_percentage)" = "no" ] && return
 
 	info=$(battery_percentage)
 	color=$bold_green
-	if [ "$info" -lt 50 ]; then
+	if [ "$info" -lt 50 ] 
+     then
 		color=$bold_yellow
-	elif [ "$info" -lt 25 ]; then
+	elif [ "$info" -lt 25 ] 
+     then
 		color=$bold_red
 	fi
 	box="[|]"
@@ -173,13 +182,13 @@ ___brainy_prompt_battery() {
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
 }
 
-___brainy_prompt_exitcode() {
+function ___brainy_prompt_exitcode() {
 	[ "${THEME_SHOW_EXITCODE}" != "true" ] && return
 	color=$bold_purple
 	[ "$exitcode" -ne 0 ] && printf "%s|%s" "${color}" "${exitcode}"
 }
 
-___brainy_prompt_char() {
+function ___brainy_prompt_char() {
 	color=$bold_white
 	prompt_char="${__BRAINY_PROMPT_CHAR_PS1}"
 	printf "%s|%s" "${color}" "${prompt_char}"
@@ -189,19 +198,19 @@ ___brainy_prompt_char() {
 ## cli ##
 #########
 
-__brainy_show() {
+function __brainy_show() {
 	typeset _seg=${1:-}
 	shift
 	export "THEME_SHOW_${_seg}"=true
 }
 
-__brainy_hide() {
+function __brainy_hide() {
 	typeset _seg=${1:-}
 	shift
 	export "THEME_SHOW_${_seg}"=false
 }
 
-_brainy_completion() {
+function _brainy_completion() {
 	local cur _action actions segments
 	COMPREPLY=()
 	cur="${COMP_WORDS[COMP_CWORD]}"
@@ -221,7 +230,7 @@ _brainy_completion() {
 	return 0
 }
 
-brainy() {
+function brainy() {
 	typeset action=${1:-}
 	shift
 	typeset segs=${*:-}
@@ -284,16 +293,16 @@ ___BRAINY_BOTTOM=${___BRAINY_BOTTOM:-"exitcode char"}
 ## Prompt ##
 ############
 
-__brainy_ps1() {
+function __brainy_ps1() {
 	printf "%s%s%s" "$(____brainy_top)" "$(____brainy_bottom)" "${normal}"
 }
 
-__brainy_ps2() {
+function __brainy_ps2() {
 	color=$bold_white
 	printf "%s%s%s" "${color}" "${__BRAINY_PROMPT_CHAR_PS2}  " "${normal}"
 }
 
-_brainy_prompt() {
+function _brainy_prompt() {
 	exitcode="$?"
 
 	PS1="$(__brainy_ps1)"

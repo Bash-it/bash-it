@@ -85,7 +85,8 @@ function git_prompt_info() {
 }
 
 function __exit_prompt() {
-	if [[ "$exit_code" -ne 0 ]]; then
+	if [[ "$exit_code" -ne 0 ]] 
+     then
 		echo "${purple?}${EXIT_CODE_ICON}${yellow?}${exit_code}${bold_orange?} "
 	else
 		echo "${bold_green}"
@@ -93,13 +94,15 @@ function __exit_prompt() {
 }
 
 function __aws_profile_prompt() {
-	if [[ -n "${AWS_PROFILE}" ]]; then
+	if [[ -n "${AWS_PROFILE}" ]] 
+     then
 		echo -n "${bold_purple?}${AWS_PROFILE_CHAR}${normal?}${AWS_PROFILE} "
 	fi
 }
 
 function __scaleway_profile_prompt() {
-	if [[ -n "${SCW_PROFILE}" ]]; then
+	if [[ -n "${SCW_PROFILE}" ]] 
+     then
 		echo -n "${bold_purple?}${SCALEWAY_PROFILE_CHAR}${normal?}${SCW_PROFILE} "
 	fi
 }
@@ -120,7 +123,8 @@ function __cloud_prompt() {
 function __terraform_prompt() {
 	local terraform_workspace=""
 
-	if [ -d .terraform ]; then
+	if [ -d .terraform ] 
+     then
 		terraform_workspace="$(terraform_workspace_prompt)"
 		[[ -n "${terraform_workspace}" ]] && echo "${bold_purple?}${TERRAFORM_CHAR}${normal?}${terraform_workspace} "
 	fi
@@ -142,8 +146,10 @@ function __ruby_prompt() {
 
 function __ssh_prompt() {
 	# Detect ssh
-	if [[ -n "${SSH_CONNECTION}" ]] && [ "$SSH_INFO" = true ]; then
-		if [ "$HOST_INFO" = long ]; then
+	if [[ -n "${SSH_CONNECTION}" ]] && [ "$SSH_INFO" = true ] 
+     then
+		if [ "$HOST_INFO" = long ] 
+     then
 			host="\H"
 		else
 			host="\h"
@@ -154,9 +160,11 @@ function __ssh_prompt() {
 
 function __python_venv_prompt() {
 	# Detect python venv
-	if [[ -n "${CONDA_DEFAULT_ENV}" ]]; then
+	if [[ -n "${CONDA_DEFAULT_ENV}" ]] 
+     then
 		echo "${bold_purple?}$PYTHON_VENV_CHAR${normal?}${CONDA_DEFAULT_ENV} "
-	elif [[ -n "${VIRTUAL_ENV}" ]]; then
+	elif [[ -n "${VIRTUAL_ENV}" ]] 
+     then
 		echo "${bold_purple?}$PYTHON_VENV_CHAR${normal?}$(basename "${VIRTUAL_ENV}") "
 	fi
 }
@@ -164,7 +172,8 @@ function __python_venv_prompt() {
 function __path_prompt() {
 	local dir_color=${green?}
 	# Detect root shell
-	if [ "$(whoami)" = root ]; then
+	if [ "$(whoami)" = root ] 
+     then
 		dir_color=${red?}
 	fi
 
@@ -193,7 +202,8 @@ function __prompt-command() {
 	done
 
 	# Cut prompt when it's too long
-	if [[ ${#PS1} -gt $((COLUMNS * 2)) ]]; then
+	if [[ ${#PS1} -gt $((COLUMNS * 2)) ]] 
+     then
 		wrap_char="\n"
 	fi
 

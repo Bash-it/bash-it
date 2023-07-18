@@ -4,12 +4,17 @@ _is_function _init_completion ||
 _is_function _rl_enabled ||
   _log_error '_rl_enabled not found. Ensure bash-completion 2.0 or newer is installed and configured properly.'
 
-_pj() {
+function _pj() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   _is_function _init_completion || return
   _is_function _rl_enabled || return
   [ -n "$BASH_IT_PROJECT_PATHS" ] || return
   shift
-  [ "$1" == "open" ] && shift
+  [ "${1}" == "open" ] && shift
 
   local cur prev words cword
   _init_completion || return
@@ -21,20 +26,25 @@ _pj() {
   local -r mark_dirs=$(_rl_enabled mark-directories && echo y)
   local -r mark_symdirs=$(_rl_enabled mark-symlinked-directories && echo y)
 
-  for i in ${BASH_IT_PROJECT_PATHS//:/$'\n'}; do
+  for i in ${BASH_IT_PROJECT_PATHS//:/$'\n'}
+   do
     # create an array of matched subdirs
     k="${#COMPREPLY[@]}"
-    for j in $( compgen -d $i/$cur ); do
-      if [[ ( $mark_symdirs && -h $j || $mark_dirs && ! -h $j ) && ! -d ${j#$i/} ]]; then
+    for j in $( compgen -d $i/$cur )
+     do
+      if [[ ( ${mark_symdirs} && -h $j || ${mark_dirs} && ! -h $j ) && ! -d ${j#$i/} ]]
+       then
         j+="/"
       fi
       COMPREPLY[k++]=${j#$i/}
     done
   done
 
-  if [[ ${#COMPREPLY[@]} -eq 1 ]]; then
+  if [[ ${#COMPREPLY[@]} -eq 1 ]]
+   then
     i=${COMPREPLY[0]}
-    if [[ "$i" == "$cur" && $i != "*/" ]]; then
+    if [[ "$i" == "$cur" && $i != "*/" ]]
+     then
       COMPREPLY[0]="${i}/"
     fi
   fi

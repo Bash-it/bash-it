@@ -2,7 +2,8 @@
 cite "about-completion"
 about-completion "Google Cloud SDK completion"
 
-if _command_exists gcloud; then
+if _command_exists gcloud 
+     then
 	# get install path
 	GOOGLE_SDK_ROOT=${GOOGLE_SDK_ROOT:-$(gcloud info --format="value(installation.sdk_root)")}
 

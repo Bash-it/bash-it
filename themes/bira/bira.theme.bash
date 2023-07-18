@@ -9,7 +9,8 @@ VIRTUALENV_THEME_PROMPT_SUFFIX="›${reset_color?}"
 
 bold="\[\e[1m\]"
 
-if [[ ${UID} -eq 0 ]]; then
+if [[ ${UID} -eq 0 ]] 
+     then
 	user_host="${bold_red?}\u@\h${normal?}${reset_color?}"
 else
 	user_host="${bold_green?}\u@\h${normal?}${reset_color?}"

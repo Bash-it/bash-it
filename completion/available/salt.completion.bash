@@ -27,16 +27,24 @@
 # TODO: is it ok to use '--timeout 2' ?
 
 
-_salt_get_grains(){
-    if [ "$1" = 'local' ] ; then
+function _salt_get_grains()
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+    if [ "${1}" = 'local' ] 
+     then
         salt-call --out=txt -- grains.ls | sed  's/^.*\[//' | tr -d ",']" |sed 's:\([a-z0-9]\) :\1\: :g'
     else
       salt '*' --timeout 2 --out=txt -- grains.ls | sed  's/^.*\[//' | tr -d ",']" |sed 's:\([a-z0-9]\) :\1\: :g'
     fi
 }
 
-_salt_get_grain_values(){
-    if [ "$1" = 'local' ] ; then
+function _salt_get_grain_values()
+{
+    if [ "${1}" = 'local' ] 
+     then
         salt-call --out=txt -- grains.item $1 |sed 's/^\S*:\s//' |grep -v '^\s*$'
     else
         salt '*' --timeout 2 --out=txt -- grains.item $1 |sed 's/^\S*:\s//' |grep -v '^\s*$'
@@ -44,15 +52,22 @@ _salt_get_grain_values(){
 }
 
 
-_salt(){
+function  _salt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     local cur prev opts _salt_grains _salt_coms pprev ppprev
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    if [ ${COMP_CWORD} -gt 2 ]; then
+    if [ ${COMP_CWORD} -gt 2 ]
+     then
     pprev="${COMP_WORDS[COMP_CWORD-2]}"
     fi
-    if [ ${COMP_CWORD} -gt 3 ]; then
+    if [ ${COMP_CWORD} -gt 3 ]
+     then
     ppprev="${COMP_WORDS[COMP_CWORD-3]}"
     fi
 
@@ -64,7 +79,8 @@ _salt(){
           --ipcidr --out=pprint --out=yaml --out=overstatestage --out=json \
           --out=raw --out=highstate --out=key --out=txt --no-color --out-indent= "
 
-    if [[ "${cur}" == -* ]] ; then
+    if [[ "${cur}" == -* ]] 
+     then
         COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
         return 0
     fi
@@ -72,7 +88,8 @@ _salt(){
     # 2 special cases for filling up grain values
     case "${pprev}" in
     -G|--grain|--grain-pcre)
-    if [ "${cur}" = ":" ]; then
+    if [ "${cur}" = ":" ]
+     then
         COMPREPLY=($(compgen -W "`_salt_get_grain_values ${prev}`"  ))
         return 0
     fi
@@ -80,17 +97,20 @@ _salt(){
     esac
     case "${ppprev}" in
     -G|--grain|--grain-pcre)
-        if [ "${prev}" = ":" ]; then
+        if [ "${prev}" = ":" ]
+     then
         COMPREPLY=( $(compgen -W "`_salt_get_grain_values ${pprev}`" -- ${cur}) )
         return 0
         fi
     ;;
     esac
 
-    if [ "${cur}" = "=" ] && [[ "${prev}" == --* ]]; then
+    if [ "${cur}" = "=" ] && [[ "${prev}" == --* ]]
+     then
        cur=""
     fi
-    if [ "${prev}" = "=" ] && [[ "${pprev}" == --* ]]; then
+    if [ "${prev}" = "=" ] && [[ "${pprev}" == --* ]]
+     then
        prev="${pprev}"
     fi
 
@@ -141,7 +161,12 @@ _salt(){
 complete -F _salt salt
 
 
-_saltkey(){
+function _saltkey() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     local cur prev opts prev pprev
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
@@ -153,21 +178,26 @@ _saltkey(){
           -d --delete= -D --delete-all -f --finger= -F --finger-all \
           --out=pprint --out=yaml --out=overstatestage --out=json --out=raw \
           --out=highstate --out=key --out=txt --no-color --out-indent= "
-    if [ ${COMP_CWORD} -gt 2 ]; then
+    if [ ${COMP_CWORD} -gt 2 ]
+     then
         pprev="${COMP_WORDS[COMP_CWORD-2]}"
     fi
-    if [ ${COMP_CWORD} -gt 3 ]; then
+    if [ ${COMP_CWORD} -gt 3 ]
+     then
         ppprev="${COMP_WORDS[COMP_CWORD-3]}"
     fi
-    if [[ "${cur}" == -* ]] ; then
+    if [[ "${cur}" == -* ]] 
+     then
         COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
         return 0
     fi
 
-    if [ "${cur}" = "=" ] && [[ "${prev}" == --* ]]; then
+    if [ "${cur}" = "=" ] && [[ "${prev}" == --* ]]
+     then
        cur=""
     fi
-    if [ "${prev}" = "=" ] && [[ "${pprev}" == --* ]]; then
+    if [ "${prev}" = "=" ] && [[ "${pprev}" == --* ]]
+     then
        prev="${pprev}"
     fi
 
@@ -217,7 +247,12 @@ _saltkey(){
 
 complete -F _saltkey salt-key
 
-_saltcall(){
+function _saltcall() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     local cur prev opts _salt_coms pprev ppprev
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
@@ -226,21 +261,26 @@ _saltcall(){
           -m --module-dirs= -g --grains --return= --local -c --config-dir= -l --log-level= \
           --out=pprint --out=yaml --out=overstatestage --out=json --out=raw \
           --out=highstate --out=key --out=txt --no-color --out-indent= "
-    if [ ${COMP_CWORD} -gt 2 ]; then
+    if [ ${COMP_CWORD} -gt 2 ]
+     then
         pprev="${COMP_WORDS[COMP_CWORD-2]}"
     fi
-    if [ ${COMP_CWORD} -gt 3 ]; then
+    if [ ${COMP_CWORD} -gt 3 ]
+     then
         ppprev="${COMP_WORDS[COMP_CWORD-3]}"
     fi
-    if [[ "${cur}" == -* ]] ; then
+    if [[ "${cur}" == -* ]] 
+     then
         COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
         return 0
     fi
 
-    if [ "${cur}" = "=" ] && [[ ${prev} == --* ]]; then
+    if [ "${cur}" = "=" ] && [[ ${prev} == --* ]]
+     then
        cur=""
     fi
-    if [ "${prev}" = "=" ] && [[ ${pprev} == --* ]]; then
+    if [ "${prev}" = "=" ] && [[ ${pprev} == --* ]]
+     then
        prev="${pprev}"
     fi
 
@@ -270,7 +310,12 @@ _saltcall(){
 complete -F _saltcall salt-call
 
 
-_saltcp(){
+function _saltcp() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     local cur prev opts target prefpart postpart helper filt pprev ppprev
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
@@ -281,15 +326,18 @@ _saltcp(){
           -R --range -C --compound -I --pillar \
           --out=pprint --out=yaml --out=overstatestage --out=json --out=raw \
           --out=highstate --out=key --out=txt --no-color --out-indent= "
-    if [[ "${cur}" == -* ]] ; then
+    if [[ "${cur}" == -* ]] 
+     then
         COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
         return 0
     fi
 
-    if [ "${cur}" = "=" ] && [[ "${prev}" == --* ]]; then
+    if [ "${cur}" = "=" ] && [[ "${prev}" == --* ]]
+     then
        cur=""
     fi
-    if [ "${prev}" = "=" ] && [[ "${pprev}" == --* ]]; then
+    if [ "${prev}" = "=" ] && [[ "${pprev}" == --* ]]
+     then
        prev=${pprev}
     fi
 

@@ -45,11 +45,13 @@ function _command_duration() {
 	local -i current_time_deciseconds="$((10#${current_time##*.}))"
 	current_time_deciseconds="${current_time_deciseconds:0:1}"
 
-	if [[ "${command_start_seconds:-0}" -gt 0 ]]; then
+	if [[ "${command_start_seconds:-0}" -gt 0 ]] 
+     then
 		# seconds
 		command_duration="$((current_time_seconds - command_start_seconds))"
 
-		if ((current_time_deciseconds >= command_start_deciseconds)); then
+		if ((current_time_deciseconds >= command_start_deciseconds)) 
+     then
 			deciseconds="$((current_time_deciseconds - command_start_deciseconds))"
 		else
 			((command_duration -= 1))
@@ -59,12 +61,14 @@ function _command_duration() {
 		command_duration=0
 	fi
 
-	if ((command_duration >= COMMAND_DURATION_MIN_SECONDS)); then
+	if ((command_duration >= COMMAND_DURATION_MIN_SECONDS)) 
+     then
 		minutes=$((command_duration / 60))
 		seconds=$((command_duration % 60))
 
 		_dynamic_clock_icon "${command_duration}"
-		if ((minutes > 0)); then
+		if ((minutes > 0)) 
+     then
 			printf "%s %s%dm %ds" "${COMMAND_DURATION_ICON:-}" "${COMMAND_DURATION_COLOR:-}" "$minutes" "$seconds"
 		else
 			printf "%s %s%d.%01ds" "${COMMAND_DURATION_ICON:-}" "${COMMAND_DURATION_COLOR:-}" "$seconds" "$deciseconds"

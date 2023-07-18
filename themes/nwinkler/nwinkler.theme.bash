@@ -23,9 +23,10 @@ function prompt_end() {
   echo -e "$PROMPT_END"
 }
 
-prompt_setter() {
+function prompt_setter() {
   local exit_status=$?
-  if [[ $exit_status -eq 0 ]]; then PROMPT_END=$PROMPT_END_CLEAN
+  if [[ $exit_status -eq 0 ]] 
+     then PROMPT_END=$PROMPT_END_CLEAN
     else PROMPT_END=$PROMPT_END_DIRTY
   fi
   # Save history

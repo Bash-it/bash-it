@@ -7,17 +7,21 @@ function __powerline_left_segment {
   local separator=""
   local pad_before_segment=" "
 
-  if [[ "${SEGMENTS_AT_LEFT}" -eq 0 ]]; then
-    if [[ "${POWERLINE_COMPACT_BEFORE_FIRST_SEGMENT}" -ne 0 ]]; then
+  if [[ "${SEGMENTS_AT_LEFT}" -eq 0 ]] 
+     then
+    if [[ "${POWERLINE_COMPACT_BEFORE_FIRST_SEGMENT}" -ne 0 ]] 
+     then
       pad_before_segment=""
     fi
   else
-    if [[ "${POWERLINE_COMPACT_AFTER_SEPARATOR}" -ne 0 ]]; then
+    if [[ "${POWERLINE_COMPACT_AFTER_SEPARATOR}" -ne 0 ]] 
+     then
       pad_before_segment=""
     fi
     # Since the previous segment wasn't the last segment, add padding, if needed
     #
-    if [[ "${POWERLINE_COMPACT_BEFORE_SEPARATOR}" -eq 0 ]]; then
+    if [[ "${POWERLINE_COMPACT_BEFORE_SEPARATOR}" -eq 0 ]] 
+     then
       LEFT_PROMPT+=" "
     fi
     LEFT_PROMPT+="${POWERLINE_LEFT_SEPARATOR}"

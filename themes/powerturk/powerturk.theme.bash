@@ -45,7 +45,8 @@ _swd(){
     current="" # The section of the path we're currently working on.
     end="${2:-${PWD}}/" # The unmodified rest of the path.
 
-    if [[ "$end" =~ "$HOME" ]]; then
+    if [[ "$end" =~ "$HOME" ]] 
+     then
         INHOME=1
         end="${end#$HOME}" #strip /home/username from start of string
         begin="$HOME"      #start expansion from the right spot
@@ -86,7 +87,8 @@ _swd(){
     shortenedpath="${shortenedpath#/}" # strip leading /
 
     # Replaces slashes with  except first occurence.
-    if [ $INHOME -eq 1 ]; then
+    if [ $INHOME -eq 1 ] 
+     then
         echo "~/$shortenedpath" | sed "s/\///2g" # make sure it starts with ~/
     else
         echo "/$shortenedpath"  | sed "s/\///2g" # Make sure it starts with /
@@ -96,10 +98,12 @@ _swd(){
 
 }
 function set_rgb_color {
-    if [[ "${1}" != "-" ]]; then
+    if [[ "${1}" != "-" ]] 
+     then
         fg="38;5;${1}"
     fi
-    if [[ "${2}" != "-" ]]; then
+    if [[ "${2}" != "-" ]] 
+     then
         bg="48;5;${2}"
         [[ -n "${fg}" ]] && bg=";${bg}"
     fi
@@ -107,7 +111,8 @@ function set_rgb_color {
 }
 
 function powerline_shell_prompt {
-    if [[ -n "${SSH_CLIENT}" ]]; then
+    if [[ -n "${SSH_CLIENT}" ]] 
+     then
         SHELL_PROMPT="${bold_white}$(set_rgb_color - ${SHELL_SSH_THEME_PROMPT_COLOR}) ${SHELL_SSH_CHAR}\u@\h ${normal}"
         LAST_THEME_COLOR=${SHELL_SSH_THEME_PROMPT_COLOR}
     else
@@ -119,13 +124,16 @@ function powerline_shell_prompt {
 function powerline_virtualenv_prompt {
     local environ=""
 
-    if [[ -n "$CONDA_DEFAULT_ENV" ]]; then
+    if [[ -n "$CONDA_DEFAULT_ENV" ]] 
+     then
         environ="conda: $CONDA_DEFAULT_ENV"
-    elif [[ -n "$VIRTUAL_ENV" ]]; then
+    elif [[ -n "$VIRTUAL_ENV" ]] 
+     then
         environ=$(basename "$VIRTUAL_ENV")
     fi
 
-    if [[ -n "$environ" ]]; then
+    if [[ -n "$environ" ]] 
+     then
         VIRTUALENV_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${VIRTUALENV_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}$(set_rgb_color - ${VIRTUALENV_THEME_PROMPT_COLOR}) ${VIRTUALENV_CHAR}$environ ${normal}"
         LAST_THEME_COLOR=${VIRTUALENV_THEME_PROMPT_COLOR}
     else
@@ -136,17 +144,22 @@ function powerline_virtualenv_prompt {
 function powerline_scm_prompt {
     scm_prompt_vars
 
-    if [[ "${SCM_NONE_CHAR}" != "${SCM_CHAR}" ]]; then
-        if [[ "${SCM_DIRTY}" -eq 3 ]]; then
+    if [[ "${SCM_NONE_CHAR}" != "${SCM_CHAR}" ]] 
+     then
+        if [[ "${SCM_DIRTY}" -eq 3 ]] 
+     then
             SCM_PROMPT="$(set_rgb_color ${SCM_THEME_PROMPT_STAGED_COLOR} ${SCM_THEME_PROMPT_COLOR})"
-        elif [[ "${SCM_DIRTY}" -eq 2 ]]; then
+        elif [[ "${SCM_DIRTY}" -eq 2 ]] 
+     then
             SCM_PROMPT="$(set_rgb_color ${SCM_THEME_PROMPT_UNSTAGED_COLOR} ${SCM_THEME_PROMPT_COLOR})"
-        elif [[ "${SCM_DIRTY}" -eq 1 ]]; then
+        elif [[ "${SCM_DIRTY}" -eq 1 ]] 
+     then
             SCM_PROMPT="$(set_rgb_color ${SCM_THEME_PROMPT_DIRTY_COLOR} ${SCM_THEME_PROMPT_COLOR})"
         else
             SCM_PROMPT="$(set_rgb_color ${SCM_THEME_PROMPT_CLEAN_COLOR} ${SCM_THEME_PROMPT_COLOR})"
         fi
-        if [[ "${SCM_GIT_CHAR}" == "${SCM_CHAR}" ]]; then
+        if [[ "${SCM_GIT_CHAR}" == "${SCM_CHAR}" ]] 
+     then
             SCM_PROMPT+=" ${SCM_CHAR}${SCM_BRANCH}${SCM_STATE}"
         fi
         SCM_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${SCM_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}${SCM_PROMPT} ${normal}"
@@ -162,7 +175,8 @@ CWD_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${CWD_THEME_PROMPT_COLOR})${THEM
 }
 
 function powerline_last_status_prompt {
-    if [[ "$1" -eq 0 ]]; then
+    if [[ "${1}" -eq 0 ]] 
+     then
         LAST_STATUS_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} -)${THEME_PROMPT_SEPARATOR}${normal}"
     else
         LAST_STATUS_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${LAST_STATUS_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}$(set_rgb_color - ${LAST_STATUS_THEME_PROMPT_COLOR}) ${LAST_STATUS} ${normal}$(set_rgb_color ${LAST_STATUS_THEME_PROMPT_COLOR} -)${THEME_PROMPT_SEPARATOR}${normal}"

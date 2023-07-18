@@ -1,23 +1,24 @@
 #!/usr/bin/env bash
 
-__tonka_time() {
+function __tonka_time() {
   THEME_CLOCK_FORMAT="%H%M"
   clock_prompt
 }
 
-__tonka_date() {
+function __tonka_date() {
   THEME_CLOCK_FORMAT="%a,%d %b %y"
   clock_prompt
 }
 
-__tonka_clock() {
+function __tonka_clock() {
   local LIGHT_BLUE="\[\033[1;34m\]"
-  if [[ "${THEME_SHOW_CLOCK}" = "true" ]]; then
+  if [[ "${THEME_SHOW_CLOCK}" = "true" ]] 
+     then
     echo "$(__tonka_time)${LIGHT_BLUE}:$(__tonka_date)${LIGHT_BLUE}:"
   fi
 }
 
-prompt_setter() {
+function prompt_setter() {
 
 #   Named "Tonka" because of the colour scheme
 local WHITE="\[\033[1;37m\]"

@@ -36,7 +36,8 @@
 # then add the following to your .bashrc:
 
 # export THEME=$HOME/.bash/themes/agnoster-bash/agnoster.bash
-# if [[ -f $THEME ]]; then
+# if [[ -f $THEME ]] 
+     then
 #     export DEFAULT_USER=`whoami`
 #     source $THEME
 # fi
@@ -70,8 +71,9 @@ PROMPT_DIRTRIM=2 # bash4 and above
 
 ######################################################################
 DEBUG=0
-debug() {
-	if [[ ${DEBUG} -ne 0 ]]; then
+function debug() {
+	if [[ ${DEBUG} -ne 0 ]] 
+     then
 		echo >&2 -e "$@"
 	fi
 }
@@ -87,8 +89,8 @@ RIGHT_SEPARATOR=''
 LEFT_SUBSEG=''
 RIGHT_SUBSEG=''
 
-text_effect() {
-	case "$1" in
+function text_effect() {
+	case "${1}" in
 		reset) echo 0 ;;
 		bold) echo 1 ;;
 		underline) echo 4 ;;
@@ -98,8 +100,8 @@ text_effect() {
 # to add colors, see
 # http://bitmote.com/index.php?post/2012/11/19/Using-ANSI-Color-Codes-to-Colorize-Your-Bash-Prompt-on-Linux
 # under the "256 (8-bit) Colors" section, and follow the example for orange below
-fg_color() {
-	case "$1" in
+function fg_color() {
+	case "${1}" in
 		black) echo 30 ;;
 		red) echo 31 ;;
 		green) echo 32 ;;
@@ -112,8 +114,8 @@ fg_color() {
 	esac
 }
 
-bg_color() {
-	case "$1" in
+function bg_color() {
+	case "${1}" in
 		black) echo 40 ;;
 		red) echo 41 ;;
 		green) echo 42 ;;
@@ -129,7 +131,7 @@ bg_color() {
 # TIL: declare is global not local, so best use a different name
 # for codes (mycodes) as otherwise it'll clobber the original.
 # this changes from BASH v3 to BASH v4.
-ansi() {
+function ansi() {
 	local seq
 	declare -a mycodes=("${!1}")
 
@@ -137,7 +139,8 @@ ansi() {
 
 	seq=""
 	for ((i = 0; i < ${#mycodes[@]}; i++)); do
-		if [[ -n $seq ]]; then
+		if [[ -n $seq ]] 
+     then
 			seq="${seq};"
 		fi
 		seq="${seq}${mycodes[$i]}"
@@ -147,14 +150,14 @@ ansi() {
 	# PR="$PR\[\033[${seq}m\]"
 }
 
-ansi_single() {
-	echo -ne '\[\033['"$1"'m\]'
+function ansi_single() {
+	echo -ne '\[\033['"${1}"'m\]'
 }
 
 # Begin a segment
 # Takes two arguments, background and foreground. Both can be omitted,
 # rendering default background/foreground.
-prompt_segment() {
+function prompt_segment() {
 	local bg fg
 	declare -a codes
 
@@ -164,16 +167,19 @@ prompt_segment() {
 	# if it did anything, but it messed up things like
 	# prompt_status - Erik 1/14/17
 
-	#    if [[ -z $1 || ( -z $2 && $2 != default ) ]]; then
+	#    if [[ -z $1 || ( -z $2 && $2 != default ) ]] 
+     then
 	codes=("${codes[@]}" "$(text_effect reset)")
 	#    fi
-	if [[ -n $1 ]]; then
-		bg=$(bg_color "$1")
+	if [[ -n $1 ]] 
+     then
+		bg=$(bg_color "${1}")
 		codes=("${codes[@]}" "$bg")
 		debug "Added $bg as background to codes"
 	fi
-	if [[ -n $2 ]]; then
-		fg=$(fg_color "$2")
+	if [[ -n $2 ]] 
+     then
+		fg=$(fg_color "${2}")
 		codes=("${codes[@]}" "$fg")
 		debug "Added $fg as foreground to codes"
 	fi
@@ -181,8 +187,9 @@ prompt_segment() {
 	debug "Codes: "
 	# declare -p codes
 
-	if [[ $CURRENT_BG != NONE && $1 != "$CURRENT_BG" ]]; then
-		declare -a intermediate=("$(fg_color "$CURRENT_BG")" "$(bg_color "$1")")
+	if [[ $CURRENT_BG != NONE && $1 != "$CURRENT_BG" ]] 
+     then
+		declare -a intermediate=("$(fg_color "$CURRENT_BG")" "$(bg_color "${1}")")
 		debug "pre prompt " "$(ansi intermediate[@])"
 		PR="$PR $(ansi intermediate[@])$SEGMENT_SEPARATOR"
 		debug "post prompt " "$(ansi codes[@])"
@@ -196,8 +203,9 @@ prompt_segment() {
 }
 
 # End the prompt, closing any open segments
-prompt_end() {
-	if [[ -n $CURRENT_BG ]]; then
+function prompt_end() {
+	if [[ -n $CURRENT_BG ]] 
+     then
 		declare -a codes=("$(text_effect reset)" "$(fg_color "$CURRENT_BG")")
 		PR="$PR $(ansi codes[@])$SEGMENT_SEPARATOR"
 	fi
@@ -207,8 +215,9 @@ prompt_end() {
 }
 
 ### virtualenv prompt
-prompt_virtualenv() {
-	if [[ -n $VIRTUAL_ENV ]]; then
+function prompt_virtualenv() {
+	if [[ -n $VIRTUAL_ENV ]] 
+     then
 		color=cyan
 		prompt_segment $color "$PRIMARY_FG"
 		ve=$(basename "$VIRTUAL_ENV")
@@ -220,33 +229,36 @@ prompt_virtualenv() {
 # Each component will draw itself, and hide itself if no information needs to be shown
 
 # Context: user@hostname (who am I and where am I)
-prompt_context() {
+function prompt_context() {
 	local user="${USER:-${LOGNAME:?}}"
 
-	if [[ $user != "$DEFAULT_USER" || -n $SSH_CLIENT ]]; then
+	if [[ $user != "$DEFAULT_USER" || -n $SSH_CLIENT ]] 
+     then
 		prompt_segment black default "$user@\h"
 	fi
 }
 
 # prints history followed by HH:MM, useful for remembering what
 # we did previously
-prompt_histdt() {
+function prompt_histdt() {
 	prompt_segment black default "\! [\A]"
 }
 
-git_status_dirty() {
+function git_status_dirty() {
 	dirty=$(git status -s 2> /dev/null | tail -n 1)
 	[[ -n $dirty ]] && echo " ●"
 }
 
 # Git: branch/detached head, dirty status
-prompt_git() {
+function prompt_git() {
 	local ref dirty
-	if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+	if git rev-parse --is-inside-work-tree > /dev/null 2>&1 
+     then
 		ZSH_THEME_GIT_PROMPT_DIRTY='±'
 		dirty=$(git_status_dirty)
 		ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git show-ref --head -s --abbrev | head -n1 2> /dev/null)"
-		if [[ -n $dirty ]]; then
+		if [[ -n $dirty ]] 
+     then
 			prompt_segment yellow black
 		else
 			prompt_segment green black
@@ -256,7 +268,7 @@ prompt_git() {
 }
 
 # Dir: current working directory
-prompt_dir() {
+function prompt_dir() {
 	prompt_segment blue black '\w'
 }
 
@@ -264,7 +276,7 @@ prompt_dir() {
 # - was there an error
 # - am I root
 # - are there background jobs?
-prompt_status() {
+function prompt_status() {
 	local symbols
 	symbols=()
 	[[ $RETVAL -ne 0 ]] && symbols+=("$(ansi_single "$(fg_color red)")✘")
@@ -280,12 +292,12 @@ prompt_status() {
 # requires setting prompt_foo to use PRIGHT vs PR
 # doesn't quite work per above
 
-rightprompt() {
+function rightprompt() {
 	printf "%*s" $COLUMNS "$PRIGHT"
 }
 
 # quick right prompt I grabbed to test things.
-__command_rprompt() {
+function __command_rprompt() {
 	local times=n=$COLUMNS tz
 	for tz in ZRH:Europe/Zurich PIT:US/Eastern \
 		MTV:US/Pacific TOK:Asia/Tokyo; do
@@ -299,7 +311,7 @@ __command_rprompt() {
 # PROMPT_COMMAND=__command_rprompt
 
 # this doens't wrap code in \[ \]
-ansi_r() {
+function ansi_r() {
 	local seq
 	declare -a mycodes2=("${!1}")
 
@@ -307,7 +319,8 @@ ansi_r() {
 
 	seq=""
 	for ((i = 0; i < ${#mycodes2[@]}; i++)); do
-		if [[ -n $seq ]]; then
+		if [[ -n $seq ]] 
+     then
 			seq="${seq};"
 		fi
 		seq="${seq}${mycodes2[$i]}"
@@ -320,7 +333,7 @@ ansi_r() {
 # Begin a segment on the right
 # Takes two arguments, background and foreground. Both can be omitted,
 # rendering default background/foreground.
-prompt_right_segment() {
+function prompt_right_segment() {
 	local bg fg
 	declare -a codes
 
@@ -331,16 +344,19 @@ prompt_right_segment() {
 	# if it did anything, but it messed up things like
 	# prompt_status - Erik 1/14/17
 
-	#    if [[ -z $1 || ( -z $2 && $2 != default ) ]]; then
+	#    if [[ -z $1 || ( -z $2 && $2 != default ) ]] 
+     then
 	codes=("${codes[@]}" "$(text_effect reset)")
 	#    fi
-	if [[ -n $1 ]]; then
-		bg=$(bg_color "$1")
+	if [[ -n $1 ]] 
+     then
+		bg=$(bg_color "${1}")
 		codes=("${codes[@]}" "$bg")
 		debug "Added $bg as background to codes"
 	fi
-	if [[ -n $2 ]]; then
-		fg=$(fg_color "$2")
+	if [[ -n $2 ]] 
+     then
+		fg=$(fg_color "${2}")
 		codes=("${codes[@]}" "$fg")
 		debug "Added $fg as foreground to codes"
 	fi
@@ -349,10 +365,11 @@ prompt_right_segment() {
 	# declare -p codes
 
 	# right always has a separator
-	# if [[ $CURRENT_RBG != NONE && $1 != $CURRENT_RBG ]]; then
+	# if [[ $CURRENT_RBG != NONE && $1 != $CURRENT_RBG ]] 
+     then
 	#     $CURRENT_RBG=
 	# fi
-	declare -a intermediate2=("$(fg_color "$1")" "$(bg_color $CURRENT_RBG)")
+	declare -a intermediate2=("$(fg_color "${1}")" "$(bg_color $CURRENT_RBG)")
 	# PRIGHT="$PRIGHT---"
 	debug "pre prompt " "$(ansi_r intermediate2[@])"
 	PRIGHT="$PRIGHT$(ansi_r intermediate2[@])$RIGHT_SEPARATOR"
@@ -383,7 +400,7 @@ prompt_right_segment() {
 #               (add-hook 'comint-preoutput-filter-functions
 #                         'dirtrack-filter-out-pwd-prompt t t)))
 
-prompt_emacsdir() {
+function prompt_emacsdir() {
 	# no color or other setting... this will be deleted per above
 	PR="DIR \w DIR$PR"
 }
@@ -391,7 +408,7 @@ prompt_emacsdir() {
 ######################################################################
 ## Main prompt
 
-build_prompt() {
+function build_prompt() {
 	[[ -n ${AG_EMACS_DIR+x} ]] && prompt_emacsdir
 	prompt_status
 	#[[ -z ${AG_NO_HIST+x} ]] && prompt_histdt
@@ -407,7 +424,7 @@ build_prompt() {
 # this doesn't work... new model: create a prompt via a PR variable and
 # use that.
 
-set_bash_prompt() {
+function set_bash_prompt() {
 	RETVAL=$?
 	PR=""
 	PRIGHT=""

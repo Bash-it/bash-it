@@ -11,7 +11,8 @@ function pj() {
 	local cmd PS3 dest d
 	local -a dests
 
-	if [[ "$proj" == "open" ]]; then
+	if [[ "$proj" == "open" ]] 
+     then
 		shift
 		proj="${1}"
 		cmd="${EDITOR?}"
@@ -21,7 +22,8 @@ function pj() {
 	# with the same name in project directories
 	IFS=':' read -ra dests <<< "${BASH_IT_PROJECT_PATHS?${FUNCNAME[0]}: project working folders must be configured}"
 	for d in "${!dests[@]}"; do
-		if [[ ! -d "${dests[d]}/${proj}" ]]; then
+		if [[ ! -d "${dests[d]}/${proj}" ]] 
+     then
 			unset 'dests[d]'
 		fi
 	done

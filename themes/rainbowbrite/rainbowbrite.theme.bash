@@ -5,7 +5,7 @@
 # ± ~/path/to (branch ✓) $
 # in glorious red / blue / yellow color scheme
 
-prompt_setter() {
+function prompt_setter() {
   # Save history
   _save-and-reload-history 1
   # displays user@server in purple

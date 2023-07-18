@@ -6,7 +6,8 @@ function sudo-command-line() {
   group "sudo"
 
   [[ ${#READLINE_LINE} -eq 0 ]] && READLINE_LINE=$(fc -l -n -1 | xargs)
-  if [[ $READLINE_LINE == sudo\ * ]]; then
+  if [[ $READLINE_LINE == sudo\ * ]] 
+     then
     READLINE_LINE="${READLINE_LINE#sudo }"
   else
     READLINE_LINE="sudo $READLINE_LINE"
@@ -17,6 +18,7 @@ function sudo-command-line() {
 # Define shortcut keys: [Esc] [Esc]
 
 # Readline library requires bash version 4 or later
-if [ "${BASH_VERSINFO}" -ge 4 ]; then
+if [ "${BASH_VERSINFO}" -ge 4 ] 
+     then
   bind -x '"\e\e": sudo-command-line'
 fi

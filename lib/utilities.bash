@@ -40,7 +40,8 @@ function _bash-it-get-component-type-from-path() {
 #   $ _bash-it-array-contains-element apple "@{fruits[@]}" && echo 'contains apple'
 #   contains apple
 #
-#   $ if _bash-it-array-contains-element pear "${fruits[@]}"; then
+#   $ if _bash-it-array-contains-element pear "${fruits[@]}" 
+     then
 #       echo "contains pear!"
 #     fi
 #   contains pear!
@@ -87,7 +88,8 @@ function _bash-it-component-help() {
 	local component file func
 	_bash-it-component-pluralize "${1}" component
 	_bash-it-component-cache-file "${component}" file
-	if [[ ! -s "${file?}" || -z "$(find "${file}" -mmin -300)" ]]; then
+	if [[ ! -s "${file?}" || -z "$(find "${file}" -mmin -300)" ]] 
+     then
 		func="_bash-it-${component?}"
 		"${func}" | _bash-it-egrep '\[[x ]\]' >| "${file}"
 	fi
@@ -106,9 +108,11 @@ function _bash-it-component-singularize() {
 	local _result="${2:-${FUNCNAME[0]//-/_}}"
 	local _component_to_single="${1?${FUNCNAME[0]}: component name required}"
 	local -i len="$((${#_component_to_single} - 2))"
-	if [[ "${_component_to_single:${len}:2}" == 'ns' ]]; then
+	if [[ "${_component_to_single:${len}:2}" == 'ns' ]] 
+     then
 		_component_to_single="${_component_to_single%s}"
-	elif [[ "${_component_to_single}" == "aliases" ]]; then
+	elif [[ "${_component_to_single}" == "aliases" ]] 
+     then
 		_component_to_single="${_component_to_single%es}"
 	fi
 	printf -v "${_result?}" '%s' "${_component_to_single}"
@@ -119,9 +123,11 @@ function _bash-it-component-pluralize() {
 	local _component_to_plural="${1?${FUNCNAME[0]}: component name required}"
 	local -i len="$((${#_component_to_plural} - 1))"
 	# pluralize component name for consistency
-	if [[ "${_component_to_plural:${len}:1}" != 's' ]]; then
+	if [[ "${_component_to_plural:${len}:1}" != 's' ]] 
+     then
 		_component_to_plural="${_component_to_plural}s"
-	elif [[ "${_component_to_plural}" == "alias" ]]; then
+	elif [[ "${_component_to_plural}" == "alias" ]] 
+     then
 		_component_to_plural="${_component_to_plural}es"
 	fi
 	printf -v "${_result?}" '%s' "${_component_to_plural}"
@@ -131,7 +137,8 @@ function _bash-it-component-cache-clean() {
 	local component="${1:-}"
 	local cache
 	local -a components=('aliases' 'plugins' 'completions')
-	if [[ -z "${component}" ]]; then
+	if [[ -z "${component}" ]] 
+     then
 		for component in "${components[@]}"; do
 			_bash-it-component-cache-clean "${component}"
 		done
@@ -143,24 +150,24 @@ function _bash-it-component-cache-clean() {
 
 # Returns an array of items within each compoenent.
 function _bash-it-component-list() {
-	local IFS=$'\n' component="$1"
+	local IFS=$'\n' component="${1}"
 	_bash-it-component-help "${component}" | awk '{print $1}' | sort -u
 }
 
 function _bash-it-component-list-matching() {
-	local component="$1"
+	local component="${1}"
 	shift
-	local term="$1"
+	local term="${1}"
 	_bash-it-component-help "${component}" | _bash-it-egrep -- "${term}" | awk '{print $1}' | sort -u
 }
 
 function _bash-it-component-list-enabled() {
-	local IFS=$'\n' component="$1"
+	local IFS=$'\n' component="${1}"
 	_bash-it-component-help "${component}" | _bash-it-fgrep '[x]' | awk '{print $1}' | sort -u
 }
 
 function _bash-it-component-list-disabled() {
-	local IFS=$'\n' component="$1"
+	local IFS=$'\n' component="${1}"
 	_bash-it-component-help "${component}" | _bash-it-fgrep -v '[x]' | awk '{print $1}' | sort -u
 }
 
@@ -174,7 +181,8 @@ function _bash-it-component-list-disabled() {
 function _bash-it-component-item-is-enabled() {
 	local component_type item_name each_file
 
-	if [[ -f "${1?}" ]]; then
+	if [[ -f "${1?}" ]] 
+     then
 		item_name="$(_bash-it-get-component-name-from-path "${1}")"
 		component_type="$(_bash-it-get-component-type-from-path "${1}")"
 	else
@@ -184,7 +192,8 @@ function _bash-it-component-item-is-enabled() {
 	for each_file in "${BASH_IT}/enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR?}${item_name}.${component_type}"*."bash" \
 		"${BASH_IT}/${component_type}"*/"enabled/${item_name}.${component_type}"*."bash" \
 		"${BASH_IT}/${component_type}"*/"enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR?}${item_name}.${component_type}"*."bash"; do
-		if [[ -f "${each_file}" ]]; then
+		if [[ -f "${each_file}" ]] 
+     then
 			return 0
 		fi
 	done

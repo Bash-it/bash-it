@@ -20,7 +20,8 @@ _command_exists goenv \
 export GOENV_ROOT="${GOENV_ROOT:-$HOME/.goenv}"
 
 # Add GOENV_ROOT/bin to PATH, if that's where it's installed
-if ! _command_exists goenv && [[ -x "$GOENV_ROOT/bin/goenv" ]]; then
+if ! _command_exists goenv && [[ -x "$GOENV_ROOT/bin/goenv" ]] 
+     then
 	pathmunge "$GOENV_ROOT/bin"
 fi
 
@@ -33,7 +34,8 @@ _bash-it-goenv-preexec() {
 	GOENV_OLD_VERSION="$(goenv version-name)"
 }
 _bash-it-goenv-precmd() {
-	if [[ -n $GOENV_OLD_VERSION ]] && [[ "$GOENV_OLD_VERSION" != "$(goenv version-name)" ]]; then
+	if [[ -n $GOENV_OLD_VERSION ]] && [[ "$GOENV_OLD_VERSION" != "$(goenv version-name)" ]] 
+     then
 		exec env -u PATH -u GOROOT -u GOPATH -u GOENV_OLD_VERSION "${0/-/}" --login
 	fi
 	unset GOENV_OLD_VERSION

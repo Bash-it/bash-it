@@ -8,7 +8,8 @@ __gem_completion() {
 	case $prev in
 		install)
 			# list the remote gems and add to completion
-			if [ -z "$REMOTE_GEMS" ]; then
+			if [ -z "$REMOTE_GEMS" ] 
+     then
 				read -r -a REMOTE_GEMS <<< "$(gem list --remote --no-versions | sed 's/\*\*\* REMOTE GEMS \*\*\*//' | tr '\n' ' ')"
 			fi
 

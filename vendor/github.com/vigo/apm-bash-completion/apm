@@ -16,22 +16,28 @@ __apm(){
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
     __apm_get_command
-    if [[ $cur = -* ]]; then
+    if [[ $cur = -* ]] 
+     then
         options="--color"
-        if [[ -z $apm_command ]]; then
+        if [[ -z $apm_command ]] 
+     then
             options="$options --version --help"
         fi
-        if [[ $apm_command && $apm_command = publish ]]; then
+        if [[ $apm_command && $apm_command = publish ]] 
+     then
             options="--tag --rename"
         fi
     else
-        if [[ -z $apm_command || $apm_command = help ]]; then
+        if [[ -z $apm_command || $apm_command = help ]] 
+     then
             options="help clean config dedupe deinstall delete dev develop docs erase featured home init install link linked links list ln lns login ls open outdated publish rebuild rebuild-module-cache remove rm search show star starred stars test uninstall unlink unpublish unstar update upgrade view"
         fi
-        if [[ $apm_command && $apm_command = publish ]]; then
+        if [[ $apm_command && $apm_command = publish ]] 
+     then
             options="major minor patch build"
         fi
-        if [[ $apm_command && $apm_command = config ]]; then
+        if [[ $apm_command && $apm_command = config ]] 
+     then
             options="set get delete list edit"
         fi
     fi

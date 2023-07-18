@@ -5,9 +5,11 @@ about-plugin 'miscellaneous tools'
 function ips() {
 	about 'display all ip addresses for this host'
 	group 'base'
-	if _command_exists ifconfig; then
+	if _command_exists ifconfig 
+     then
 		ifconfig | awk '/inet /{ gsub(/addr:/, ""); print $2 }'
-	elif _command_exists ip; then
+	elif _command_exists ip 
+     then
 		ip addr | grep -oP 'inet \K[\d.]+'
 	else
 		echo "You don't have ifconfig or ip command installed!"
@@ -27,7 +29,8 @@ function myip() {
 	group 'base'
 	list=("http://myip.dnsomatic.com/" "http://checkip.dyndns.com/" "http://checkip.dyndns.org/")
 	for url in "${list[@]}"; do
-		if res="$(curl -fs "${url}")"; then
+		if res="$(curl -fs "${url}")" 
+     then
 			break
 		fi
 	done
@@ -42,7 +45,8 @@ function pickfrom() {
 	group 'base'
 	local file=${1:-}
 	local -i n=0 length
-	if [[ ! -r "$file" ]]; then
+	if [[ ! -r "$file" ]] 
+     then
 		reference "${FUNCNAME[0]}" && return
 	fi
 	length="$(wc -l < "$file")"
@@ -67,11 +71,13 @@ function passgen() {
 
 # Create alias pass to passgen when pass isn't installed or
 # BASH_IT_LEGACY_PASS is true.
-if ! _command_exists pass || [[ "${BASH_IT_LEGACY_PASS:-}" == true ]]; then
+if ! _command_exists pass || [[ "${BASH_IT_LEGACY_PASS:-}" == true ]] 
+     then
 	alias pass=passgen
 fi
 
-if _command_exists markdown && _command_exists browser; then
+if _command_exists markdown && _command_exists browser 
+     then
 	function pmdown() {
 		about 'preview markdown file in a browser'
 		param '1: markdown file'
@@ -127,21 +133,25 @@ function t() {
 
 	local todotxt="${XDG_STATE_HOME:-~/.local/state}/bash_it/todo.txt"
 
-	if _bash-it-component-item-is-enabled plugin todo; then
+	if _bash-it-component-item-is-enabled plugin todo 
+     then
 		todo.sh "$@"
 		return
-	elif [[ ! -f "${todotxt}" && -f ~/.t ]]; then
+	elif [[ ! -f "${todotxt}" && -f ~/.t ]] 
+     then
 		mv -vn ~/.t "${todotxt}" # Verbose, so the user knows. Don't overwrite, just in case.
 	fi
 
-	if [[ "$#" -eq 0 ]]; then
+	if [[ "$#" -eq 0 ]] 
+     then
 		cat "${todotxt}"
 	else
 		echo "$@" >| "${todotxt}"
 	fi
 }
 
-if _command_exists mkisofs; then
+if _command_exists mkisofs 
+     then
 	function mkiso() {
 		about 'creates iso from current dir in the parent dir (unless defined)'
 		param '1: ISO name'
@@ -155,7 +165,8 @@ if _command_exists mkisofs; then
 		local destpath="${2:-../}"
 		local srcpath="${3:-${PWD}}"
 
-		if [[ ! -f "${destpath%/}/${isoname}.iso" ]]; then
+		if [[ ! -f "${destpath%/}/${isoname}.iso" ]] 
+     then
 			echo "writing ${isoname}.iso to ${destpath} from ${srcpath}"
 			mkisofs -V "${isoname}" -iso-level 3 -r -o "${destpath%/}/${isoname}.iso" "${srcpath}"
 		else
@@ -174,7 +185,8 @@ function buf() {
 	cp -a "${filename}" "${filename}_${filetime}"
 }
 
-if ! _command_exists del; then
+if ! _command_exists del 
+     then
 	function del() {
 		about 'move files to hidden folder in tmp, that gets cleared on each reboot'
 		param 'file or folder to be deleted'

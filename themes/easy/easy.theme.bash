@@ -8,7 +8,8 @@ SCM_THEME_PROMPT_CLEAN=" ${bold_green?}✓"
 
 function prompt_command() {
 	local scm_prompt_info
-	if [ "${USER:-${LOGNAME?}}" = root ]; then
+	if [ "${USER:-${LOGNAME?}}" = root ] 
+     then
 		cursor_color="${bold_red?}"
 		user_color="${green?}"
 	else

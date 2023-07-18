@@ -54,7 +54,8 @@ function v2gif() {
 	}
 	getopt="$(type -p getopt)"
 
-	if [[ "$OSTYPE" == "darwin"* ]]; then
+	if [[ "$OSTYPE" == "darwin"* ]] 
+     then
 		# Getopt on BSD is incompatible with GNU
 		getopt=/usr/local/opt/gnu-getopt/bin/getopt
 		[[ -x "$getopt" ]] || {
@@ -83,7 +84,7 @@ function v2gif() {
 	local make_webm=""
 	local alert=5000
 	while [[ $# -ge 1 ]]; do
-		case "$1" in
+		case "${1}" in
 			--)
 				# No more options left.
 				shift
@@ -124,13 +125,13 @@ function v2gif() {
 				;;
 			-f | --fps)
 				# select fps
-				infps="$2"
+				infps="${2}"
 				giftag="${giftag}-f$2"
 				shift 2
 				;;
 			-a | --alert)
 				# set size alert
-				alert="$2"
+				alert="${2}"
 				shift 2
 				;;
 			-m | --webm)
@@ -141,7 +142,8 @@ function v2gif() {
 		esac
 	done
 
-	if [[ -z "$*" ]]; then
+	if [[ -z "$*" ]] 
+     then
 		echo "$(tput setaf 1)No input files given. Example: v2gif file [file...] [-w <max width (pixels)>] [-l <lossy level>] $(tput sgr 0)"
 		echo "-d/--del/--delete Delete original vid if done suceessfully (and file not over the size limit)"
 		echo "-h/--high         High Quality - use Gifski instead of gifsicle"
@@ -163,18 +165,21 @@ function v2gif() {
 		local output_file="${file%.*}${giftag}.gif"
 		local del_after=$opt_del_after
 
-		if [[ -n "$make_webm" ]]; then
+		if [[ -n "$make_webm" ]] 
+     then
 			$ffmpeg -loglevel panic -i "$file" \
 				-c:v libvpx -crf 4 -threads 0 -an -b:v 2M -auto-alt-ref 0 \
 				-quality best -loop 0 "${file%.*}.webm" || return 2
 		fi
 
 		# Set FPS to match the video if possible, otherwise fallback to default.
-		if [[ -n "$infps" ]]; then
+		if [[ -n "$infps" ]] 
+     then
 			fps=$infps
 		else
 			fps=$defaultfps
-			if [[ -x "$mediainfo" ]]; then
+			if [[ -x "$mediainfo" ]] 
+     then
 				fps=$($mediainfo "$file" | grep "Frame rate   " | sed 's/.*: \([0-9.]\+\) .*/\1/' | head -1)
 				[[ -z "$fps" ]] && fps=$($mediainfo "$file" | grep "Minimum frame rate" | sed 's/.*: \([0-9.]\+\) .*/\1/' | head -1)
 			fi
@@ -182,7 +187,8 @@ function v2gif() {
 
 		echo "$(tput setaf 2)Creating '$output_file' at $fps FPS ...$(tput sgr 0)"
 
-		if [[ "$use_gifski" = "true" ]]; then
+		if [[ "$use_gifski" = "true" ]] 
+     then
 			# I trust @pornel to do his own resizing optimization choices
 			$ffmpeg -loglevel panic -i "$file" -r "$fps" -vcodec png v2gif-tmp-%05d.png \
 				&& $gifski v2gif-tmp-*.png "$maxwidthski" --fps "$(printf "%.0f" "$fps")" -o "$output_file" || return 2
@@ -195,9 +201,11 @@ function v2gif() {
 		rm v2gif-tmp-*.png
 
 		# Checking if the file is bigger than Twitter likes and warn
-		if [[ $alert -gt 0 ]]; then
+		if [[ $alert -gt 0 ]] 
+     then
 			out_size=$(wc --bytes < "$output_file")
-			if [[ $out_size -gt $((alert * 1000)) ]]; then
+			if [[ $out_size -gt $((alert * 1000)) ]] 
+     then
 				echo "$(tput setaf 3)Warning: '$output_file' is $((out_size / 1000))kb.$(tput sgr 0)"
 				[[ "$del_after" == "true" ]] && echo "$(tput setaf 3)Warning: Keeping '$file' even though --del requested.$(tput sgr 0)"
 				del_after=""
@@ -242,7 +250,7 @@ function any2webm() {
 	local bandwidth="2M"
 	local alert=5000
 	while [[ $# -ge 1 ]]; do
-		case "$1" in
+		case "${1}" in
 			--)
 				# No more options left.
 				shift
@@ -271,19 +279,20 @@ function any2webm() {
 				;;
 			-b | --bandwidth)
 				# select bandwidth
-				bandwidth="$2"
+				bandwidth="${2}"
 				webmtag="${webmtag}-b$2"
 				shift 2
 				;;
 			-a | --alert)
 				# set size alert
-				alert="$2"
+				alert="${2}"
 				shift 2
 				;;
 		esac
 	done
 
-	if [[ -z "$*" ]]; then
+	if [[ -z "$*" ]] 
+     then
 		echo "$(tput setaf 1)No input files given. Example: any2webm file [file...] [-w <max width (pixels)>] < $(tput sgr 0)"
 		return 1
 	fi
@@ -304,9 +313,11 @@ function any2webm() {
 			-quality best "$fps" "$size" -loop 0 -pix_fmt yuva420p "$output_file" || return 2
 
 		# Checking if the file is bigger than Twitter likes and warn
-		if [[ $alert -gt 0 ]]; then
+		if [[ $alert -gt 0 ]] 
+     then
 			out_size=$(wc --bytes < "$output_file")
-			if [[ $out_size -gt $((alert * 1000)) ]]; then
+			if [[ $out_size -gt $((alert * 1000)) ]] 
+     then
 				echo "$(tput setaf 3)Warning: '$output_file' is $((out_size / 1000))kb.$(tput sgr 0)"
 				[[ "$del_after" == "true" ]] && echo "$(tput setaf 3)Warning: Keeping '$file' even though --del requested.$(tput sgr 0)"
 				del_after=""

@@ -36,7 +36,8 @@ To achieve this, you can add this snippet in your ``.bash_profile``\ :
 
 .. code-block::
 
-   if [ -f ~/.bashrc ]; then
+   if [ -f ~/.bashrc ] 
+     then
      . ~/.bashrc
    fi
 

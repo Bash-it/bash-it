@@ -21,7 +21,7 @@ esac
 
 PS3=">> "
 
-__my_rvm_ruby_version() {
+function __my_rvm_ruby_version() {
     local gemset=$(echo $GEM_HOME | awk -F'@' '{print $2}')
   [ "$gemset" != "" ] && gemset="@$gemset"
     local version=$(echo $MY_RUBY_HOME | awk -F'-' '{print $2}')
@@ -29,7 +29,7 @@ __my_rvm_ruby_version() {
   [ "$full" != "" ] && echo "[$full]"
 }
 
-is_vim_shell() {
+function is_vim_shell() {
         if [ ! -z "$VIMRUNTIME" ]
         then
                 echo "[${cyan}vim shell${normal}]"
@@ -37,7 +37,7 @@ is_vim_shell() {
 }
 
 # show chroot if exist
-chroot(){
+function chroot(){
     if [ -n "$debian_chroot" ]
     then
         my_ps_chroot="${bold_cyan}$debian_chroot${normal}";
@@ -46,7 +46,7 @@ chroot(){
     }
 
 # show virtualenvwrapper
-my_ve(){
+function my_ve(){
 
     if [ -n "$CONDA_DEFAULT_ENV" ]
     then
@@ -60,7 +60,7 @@ my_ve(){
     echo "";
     }
 
-prompt() {
+function prompt() {
     SCM_PROMPT_FORMAT='[%s][%s]'
     my_ps_host="${green}\h${normal}";
     # yes, these are the the same for now ...

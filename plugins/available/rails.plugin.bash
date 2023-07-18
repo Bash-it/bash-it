@@ -7,7 +7,8 @@ function killrails() {
   group 'rails'
 
   railsPid="$(cat tmp/pids/server.pid)"
-  if [ ! -z "$railsPid" ]; then
+  if [ ! -z "$railsPid" ] 
+     then
     echo "[OK] Rails Server Process Id : ${railsPid}"
     kill -9 $railsPid
     echo "[OK] Process Killed"

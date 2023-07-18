@@ -21,7 +21,7 @@ esac
 
 PS3=">> "
 
-__my_rvm_ruby_version() {
+function __my_rvm_ruby_version() {
     local gemset=$(echo $GEM_HOME | awk -F'@' '{print $2}')
   [ "$gemset" != "" ] && gemset="@$gemset"
     local version=$(echo $MY_RUBY_HOME | awk -F'-' '{print $2}')
@@ -29,21 +29,21 @@ __my_rvm_ruby_version() {
   [ "$full" != "" ] && echo "[$full]"
 }
 
-__my_venv_prompt() {
+function __my_venv_prompt() {
   if [ ! -z "$VIRTUAL_ENV" ]
   then
     echo "[${blue}@${normal}${VIRTUAL_ENV##*/}]"
   fi
 }
 
-is_vim_shell() {
+function is_vim_shell() {
         if [ ! -z "$VIMRUNTIME" ]
         then
                 echo "[${cyan}vim shell${normal}]"
         fi
 }
 
-prompt() {
+function prompt() {
    SCM_PROMPT_FORMAT='[%s][%s]'
    case $HOSTNAME in
     "clappy"* ) my_ps_host="${green}\h${normal}";

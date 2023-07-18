@@ -1,13 +1,15 @@
 # shellcheck shell=bash
 about-plugin 'osx-specific functions'
 
-if [[ "${OSTYPE}" != 'darwin'* ]]; then
+if [[ "${OSTYPE}" != 'darwin'* ]] 
+     then
 	_log_warning "This plugin only works with Mac OS X."
 	return 1
 fi
 
 # OS X: Open new tabs in same directory
-if _is_function update_terminal_cwd; then
+if _is_function update_terminal_cwd 
+     then
 	safe_append_prompt_command 'update_terminal_cwd'
 fi
 
@@ -82,7 +84,8 @@ function list-jvms() {
 
 	# Map state of JVM
 	for ((i = 0; i < ${#JVMS[@]}; i++)); do
-		if [[ -f "${JVMS[i]}/Contents/Info.plist" ]]; then
+		if [[ -f "${JVMS[i]}/Contents/Info.plist" ]] 
+     then
 			JVMS_STATES[i]=enabled
 		else
 			JVMS_STATES[i]=disabled
@@ -105,11 +108,13 @@ function pick-default-jvm() {
 	# OPTION for default jdk and set variables
 	while [[ ! "$OPTION" =~ ^[0-9]+$ || OPTION -ge "${#JVMS[@]}" ]]; do
 		read -rp "Enter Default JVM: " OPTION
-		if [[ ! "$OPTION" =~ ^[0-9]+$ ]]; then
+		if [[ ! "$OPTION" =~ ^[0-9]+$ ]] 
+     then
 			echo "Please enter a number"
 		fi
 
-		if [[ OPTION -ge "${#JVMS[@]}" ]]; then
+		if [[ OPTION -ge "${#JVMS[@]}" ]] 
+     then
 			echo "Please select one of the displayed JVMs"
 		fi
 	done
@@ -119,13 +124,15 @@ function pick-default-jvm() {
 
 	# Disable all jdk
 	for ((i = 0; i < ${#JVMS[@]}; i++)); do
-		if [[ "${JVMS[i]}" != "${DEFAULT_JVM_DIR}" && -f "${JVMS[i]}/Contents/Info.plist" ]]; then
+		if [[ "${JVMS[i]}" != "${DEFAULT_JVM_DIR}" && -f "${JVMS[i]}/Contents/Info.plist" ]] 
+     then
 			sudo mv "${JVMS[i]}/Contents/Info.plist" "${JVMS[i]}/Contents/Info.plist.disable"
 		fi
 	done
 
 	# Enable default jdk
-	if [[ -f "${DEFAULT_JVM_DIR}/Contents/Info.plist.disable" ]]; then
+	if [[ -f "${DEFAULT_JVM_DIR}/Contents/Info.plist.disable" ]] 
+     then
 		sudo mv -vn "${DEFAULT_JVM_DIR}/Contents/Info.plist.disable" "${DEFAULT_JVM_DIR}/Contents/Info.plist" \
 			&& echo "Enabled ${DEFAULT_JVM} as default JVM"
 	fi

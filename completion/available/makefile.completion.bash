@@ -3,7 +3,8 @@
 # Bash completion for Makefile
 # Loosely adapted from http://stackoverflow.com/a/38415982/1472048
 
-_makecomplete() {
+function _makecomplete() 
+{
   COMPREPLY=()
 
   # https://www.gnu.org/software/make/manual/html_node/Makefile-Names.html

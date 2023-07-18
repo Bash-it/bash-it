@@ -121,18 +121,18 @@ function __color_rgb() {
 }
 
 function __color() {
-	color="$1"
+	color="${1}"
 	shift
-	case "$1" in
+	case "${1}" in
 		fg | bg)
-			side="$1"
+			side="${1}"
 			shift
 			;;
 		*) side="fg" ;;
 	esac
-	case "$1" in
+	case "${1}" in
 		normal | bright)
-			mode="$1"
+			mode="${1}"
 			shift
 			;;
 		*) mode=normal ;;

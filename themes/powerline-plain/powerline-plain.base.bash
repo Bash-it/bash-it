@@ -6,17 +6,21 @@ function __powerline_left_segment {
   IFS="${OLD_IFS}"
   local pad_before_segment=" "
 
-  if [[ "${SEGMENTS_AT_LEFT}" -eq 0 ]]; then
-    if [[ "${POWERLINE_COMPACT_BEFORE_FIRST_SEGMENT}" -ne 0 ]]; then
+  if [[ "${SEGMENTS_AT_LEFT}" -eq 0 ]] 
+     then
+    if [[ "${POWERLINE_COMPACT_BEFORE_FIRST_SEGMENT}" -ne 0 ]] 
+     then
       pad_before_segment=""
     fi
   else
-    if [[ "${POWERLINE_COMPACT_AFTER_SEPARATOR}" -ne 0 ]]; then
+    if [[ "${POWERLINE_COMPACT_AFTER_SEPARATOR}" -ne 0 ]] 
+     then
       pad_before_segment=""
     fi
     # Since the previous segment wasn't the last segment, add padding, if needed
     #
-    if [[ "${POWERLINE_COMPACT_BEFORE_SEPARATOR}" -eq 0 ]]; then
+    if [[ "${POWERLINE_COMPACT_BEFORE_SEPARATOR}" -eq 0 ]] 
+     then
       LEFT_PROMPT+="$(set_color - ${LAST_SEGMENT_COLOR}) ${normal}"
     fi
   fi
@@ -44,11 +48,13 @@ function __powerline_prompt_command {
 
   [[ "${last_status}" -ne 0 ]] && __powerline_left_segment $(__powerline_last_status_prompt ${last_status})
 
-  if [[ -n "${LEFT_PROMPT}" ]] && [[ "${POWERLINE_COMPACT_AFTER_LAST_SEGMENT}" -eq 0 ]]; then
+  if [[ -n "${LEFT_PROMPT}" ]] && [[ "${POWERLINE_COMPACT_AFTER_LAST_SEGMENT}" -eq 0 ]] 
+     then
     __powerline_left_last_segment_padding
   fi
 
-  if [[ "${POWERLINE_COMPACT_PROMPT}" -eq 0 ]]; then
+  if [[ "${POWERLINE_COMPACT_PROMPT}" -eq 0 ]] 
+     then
     LEFT_PROMPT+=" "
   fi
 

@@ -23,7 +23,8 @@ function _get_process_status_field() {
   field="${2}"
   status_file="/proc/${pid}/status"
   if ! ([[ -d "${status_file%/*}" ]] \
-    && [[ -r "${status_file}" ]]); then
+    && [[ -r "${status_file}" ]]) 
+     then
     echo ""; return;
   fi
   grep "${field}:" "${status_file}" \
@@ -35,7 +36,8 @@ function _get_process_status_field() {
 function _is_item_in_list() {
   local item
   for item in "${@:1}"; do
-    if [[ "${item}" == "${1}" ]]; then
+    if [[ "${item}" == "${1}" ]] 
+     then
       return 1
     fi
   done
@@ -55,7 +57,8 @@ function _is_proc_alive_at_pid() {
   actual_name=$(_get_process_status_field "${pid}" "Name")
   [[ "${expected_name}" == "${actual_name}" ]] || return 1
   actual_state=$(_get_process_status_field "${pid}" "State")
-  if _is_item_in_list "${actual_state}" "X" "T" "Z"; then
+  if _is_item_in_list "${actual_state}" "X" "T" "Z" 
+     then
     return 1
   fi
   return 0
@@ -71,26 +74,30 @@ function _ensure_valid_sshagent_env() {
   type restorecon &> /dev/null
   tmp_res="$?"
 
-  if [[ "${tmp_res}" -eq 0 ]]; then
+  if [[ "${tmp_res}" -eq 0 ]] 
+     then
     restorecon -rv "${HOME}/.ssh"
   fi
 
   # no env file -> shoot a new agent
-  if ! [[ -r "${SSH_AGENT_ENV}" ]]; then
+  if ! [[ -r "${SSH_AGENT_ENV}" ]] 
+     then
     ssh-agent > "${SSH_AGENT_ENV}"
     return
   fi
 
   ## do not trust pre-existing SSH_AGENT_ENV
   agent_pid=$(_get_sshagent_pid_from_env_file "${SSH_AGENT_ENV}")
-  if [[ -z "${agent_pid}" ]]; then
+  if [[ -z "${agent_pid}" ]] 
+     then
     # no pid detected -> shoot a new agent
     ssh-agent > "${SSH_AGENT_ENV}"
     return
   fi
 
   ## do not trust SSH_AGENT_PID
-  if _is_proc_alive_at_pid "${agent_pid}"; then
+  if _is_proc_alive_at_pid "${agent_pid}" 
+     then
     return
   fi
 

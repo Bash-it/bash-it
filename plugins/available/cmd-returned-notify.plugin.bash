@@ -7,7 +7,8 @@ function precmd_return_notification() {
 	local current_time
 	current_time="$(_shell_duration_en)"
 	local -i command_duration="$((${current_time%.*} - ${command_start%.*}))"
-	if [[ "${command_duration}" -gt "${NOTIFY_IF_COMMAND_RETURNS_AFTER:-5}" ]]; then
+	if [[ "${command_duration}" -gt "${NOTIFY_IF_COMMAND_RETURNS_AFTER:-5}" ]] 
+     then
 		printf '\a'
 	fi
 	return 0

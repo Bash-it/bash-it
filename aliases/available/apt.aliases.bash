@@ -6,8 +6,15 @@ cite 'about-alias'
 about-alias 'Apt and dpkg aliases for Ubuntu and Debian distros.'
 
 # set apt aliases
-function _set_pkg_aliases() {
-	if _command_exists apt; then
+function _set_pkg_aliases() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
+	if _command_exists apt 
+     then
 		alias apts='apt-cache search'
 		alias aptshow='apt-cache show'
 		alias aptinst='sudo apt-get install -V'

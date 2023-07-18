@@ -31,8 +31,10 @@ function _bash-it-log-prefix-by-path() {
 	component_name="${component_name##[[:digit:]][[:digit:]][[:digit:]]"${BASH_IT_LOAD_PRIORITY_SEPARATOR:----}"}"
 
 	# best-guess for files without a type
-	if [[ "${component_type:-${component_name}}" == "${component_name}" ]]; then
-		if [[ "${component_directory}" == *'vendor'* ]]; then
+	if [[ "${component_type:-${component_name}}" == "${component_name}" ]] 
+     then
+		if [[ "${component_directory}" == *'vendor'* ]] 
+     then
 			component_type='vendor'
 		else
 			component_type="${component_directory##*/}"
@@ -59,7 +61,8 @@ function _bash-it-log-message() {
 	local color="${1-${echo_cyan:-}}"
 	local level="${2:-TRACE}"
 	local message="${level%: }: ${prefix%: }: ${3?}"
-	if _has_colors; then
+	if _has_colors 
+     then
 		printf '%b%s%b\n' "${color}" "${message}" "${echo_normal:-}"
 	else
 		printf '%s\n' "${message}"
@@ -72,8 +75,9 @@ function _log_debug() {
 	: _example '$ _log_debug "Loading plugin git..."'
 	: _group 'log'
 
-	if [[ "${BASH_IT_LOG_LEVEL:-0}" -ge "${BASH_IT_LOG_LEVEL_INFO?}" ]]; then
-		_bash-it-log-message "${echo_green:-}" "DEBUG: " "$1"
+	if [[ "${BASH_IT_LOG_LEVEL:-0}" -ge "${BASH_IT_LOG_LEVEL_INFO?}" ]] 
+     then
+		_bash-it-log-message "${echo_green:-}" "DEBUG: " "${1}"
 	fi
 }
 
@@ -83,8 +87,9 @@ function _log_warning() {
 	: _example '$ _log_warning "git binary not found, disabling git plugin..."'
 	: _group 'log'
 
-	if [[ "${BASH_IT_LOG_LEVEL:-0}" -ge "${BASH_IT_LOG_LEVEL_WARNING?}" ]]; then
-		_bash-it-log-message "${echo_yellow:-}" " WARN: " "$1"
+	if [[ "${BASH_IT_LOG_LEVEL:-0}" -ge "${BASH_IT_LOG_LEVEL_WARNING?}" ]] 
+     then
+		_bash-it-log-message "${echo_yellow:-}" " WARN: " "${1}"
 	fi
 }
 
@@ -94,7 +99,8 @@ function _log_error() {
 	: _example '$ _log_error "Failed to load git plugin..."'
 	: _group 'log'
 
-	if [[ "${BASH_IT_LOG_LEVEL:-0}" -ge "${BASH_IT_LOG_LEVEL_ERROR?}" ]]; then
-		_bash-it-log-message "${echo_red:-}" "ERROR: " "$1"
+	if [[ "${BASH_IT_LOG_LEVEL:-0}" -ge "${BASH_IT_LOG_LEVEL_ERROR?}" ]] 
+     then
+		_bash-it-log-message "${echo_red:-}" "ERROR: " "${1}"
 	fi
 }

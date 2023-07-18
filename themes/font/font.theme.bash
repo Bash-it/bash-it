@@ -49,7 +49,8 @@ function prompt_command() {
     virtualenv="${white}$(virtualenv_prompt)"
 
     # Set return status color
-    if [[ ${RC} == 0 ]]; then
+    if [[ ${RC} == 0 ]] 
+     then
         ret_status="${bold_green}"
     else
         ret_status="${bold_red}"

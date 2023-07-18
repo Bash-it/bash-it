@@ -2,7 +2,8 @@
 # shellcheck disable=SC2034 # Expected behavior for themes.
 
 function set_prompt_symbol() {
-	if [[ $1 -eq 0 ]]; then
+	if [[ $1 -eq 0 ]] 
+     then
 		prompt_symbol=">_"
 	else
 		prompt_symbol="${orange?}>_${normal?}"
@@ -11,7 +12,8 @@ function set_prompt_symbol() {
 
 function prompt_command() {
 	local ret_val="$?" prompt_symbol scm_prompt_info
-	if [[ -n "${VIRTUAL_ENV:-}" ]]; then
+	if [[ -n "${VIRTUAL_ENV:-}" ]] 
+     then
 		PYTHON_VIRTUALENV="${bold_yellow?}[${VIRTUAL_ENV##*/}]"
 	fi
 

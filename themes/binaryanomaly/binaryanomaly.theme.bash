@@ -4,8 +4,10 @@
 
 # Detect whether a reboot is required
 function show_reboot_required() {
-	if [ -n "$_bf_prompt_reboot_info" ]; then
-		if [ -f /var/run/reboot-required ]; then
+	if [ -n "$_bf_prompt_reboot_info" ] 
+     then
+		if [ -f /var/run/reboot-required ] 
+     then
 			printf "Reboot required!"
 		fi
 	fi
@@ -14,7 +16,8 @@ function show_reboot_required() {
 # Set different host color for local and remote sessions
 function set_host_color() {
 	# Detect if connection is through SSH
-	if [[ -n $SSH_CLIENT ]]; then
+	if [[ -n $SSH_CLIENT ]] 
+     then
 		printf '%s' "${lime_yellow}"
 	else
 		printf '%s' "${light_orange}"

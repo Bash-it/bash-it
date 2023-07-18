@@ -16,7 +16,8 @@ function local_setup_file() {
 }
 
 @test "plugins ruby: PATH includes ~/.gem/ruby/bin" {
-  if ! type ruby >/dev/null; then
+  if ! type ruby >/dev/null 
+     then
     skip 'ruby not installed'
   fi
 

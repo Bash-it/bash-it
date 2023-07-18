@@ -9,19 +9,24 @@ function awskeys {
     about 'helper function for AWS credentials file'
     group 'aws'
 
-    if [[ ! -f "${AWS_SHARED_CREDENTIALS_FILE}" ]]; then
+    if [[ ! -f "${AWS_SHARED_CREDENTIALS_FILE}" ]] 
+     then
         echo "AWS credentials file not found"
         return 1
     fi
 
-    if [[ $# -eq 1 ]] && [[ "$1" = "list" ]]; then
-        __awskeys_list "$2"
-    elif [[ $# -eq 1 ]] && [[ "$1" = "unset" ]]; then
-        __awskeys_unset "$2"
-    elif [[ $# -eq 2 ]] && [[ "$1" = "show" ]]; then
-        __awskeys_show "$2"
-    elif [[ $# -eq 2 ]] && [[ "$1" = "export" ]]; then
-        __awskeys_export "$2"
+    if [[ $# -eq 1 ]] && [[ "${1}" = "list" ]] 
+     then
+        __awskeys_list "${2}"
+    elif [[ $# -eq 1 ]] && [[ "${1}" = "unset" ]] 
+     then
+        __awskeys_unset "${2}"
+    elif [[ $# -eq 2 ]] && [[ "${1}" = "show" ]] 
+     then
+        __awskeys_show "${2}"
+    elif [[ $# -eq 2 ]] && [[ "${1}" = "export" ]] 
+     then
+        __awskeys_export "${2}"
     else
         __awskeys_help
     fi
@@ -40,7 +45,8 @@ function __awskeys_help {
 
 function __awskeys_get {
     local ln=$(grep -n "\[ *$1 *\]" "${AWS_SHARED_CREDENTIALS_FILE}" | cut -d ":" -f 1)
-    if [[ -n "${ln}" ]]; then
+    if [[ -n "${ln}" ]] 
+     then
         tail -n +${ln} "${AWS_SHARED_CREDENTIALS_FILE}" | grep -F -m 2 -e "aws_access_key_id" -e "aws_secret_access_key"
         tail -n +${ln} "${AWS_SHARED_CREDENTIALS_FILE}" | grep -F -m 1 "aws_session_token"
     fi
@@ -48,7 +54,8 @@ function __awskeys_get {
 
 function __awskeys_list {
     local credentials_list="$((grep -E '^\[ *[a-zA-Z0-9_-]+ *\]$' "${AWS_SHARED_CREDENTIALS_FILE}"; grep "\[profile" "${AWS_CONFIG_FILE}" | sed "s|\[profile |\[|g") | sort | uniq)"
-    if [[ -n $"{credentials_list}" ]]; then
+    if [[ -n $"{credentials_list}" ]] 
+     then
         echo -e "Available credentials profiles:\n"
         for profile in ${credentials_list}; do
             echo "    $(echo ${profile} | tr -d "[]")"
@@ -61,7 +68,8 @@ function __awskeys_list {
 
 function __awskeys_show {
     local p_keys="$(__awskeys_get $1)"
-    if [[ -n "${p_keys}" ]]; then
+    if [[ -n "${p_keys}" ]] 
+     then
         echo "${p_keys}"
     else
         echo "Profile $1 not found in credentials file"
@@ -69,15 +77,17 @@ function __awskeys_show {
 }
 
 function __awskeys_export {
-    if [[ $(__awskeys_list) == *"$1"* ]]; then
+    if [[ $(__awskeys_list) == *"${1}"* ]] 
+     then
         local p_keys=( $(__awskeys_get $1 | tr -d " ") )
-        if [[ -n "${p_keys}" ]]; then
+        if [[ -n "${p_keys}" ]] 
+     then
             for p_key in ${p_keys[@]}; do
                 local key="${p_key%=*}"
                 export "$(echo ${key} | tr [:lower:] [:upper:])=${p_key#*=}"
             done
         fi
-        export AWS_PROFILE="$1"
+        export AWS_PROFILE="${1}"
     else
         echo "Profile $1 not found in credentials file"
     fi

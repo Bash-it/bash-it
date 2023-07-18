@@ -1,10 +1,10 @@
 #!/usr/bin/bash
-_vboxmanage_realopts() {
+function _vboxmanage_realopts() {
     echo $(vboxmanage|grep -i vboxmanage|cut -d' ' -f2|grep '\['|tr -s '[\[\|\]\n' ' ')
     echo " "
 }
 
-__vboxmanage_startvm() {
+function __vboxmanage_startvm() {
     RUNNING=$(vboxmanage list runningvms | cut -d' ' -f1 | tr -d '"')
     TOTAL=$(vboxmanage list vms | cut -d' ' -f1 | tr -d '"')
 
@@ -12,7 +12,8 @@ __vboxmanage_startvm() {
     for VM in $TOTAL; do
     MATCH=0;
     for RUN in $RUNNING "x"; do
-        if [ "$VM" == "$RUN" ]; then
+        if [ "$VM" == "$RUN" ] 
+     then
         MATCH=1
         fi
     done
@@ -21,11 +22,12 @@ __vboxmanage_startvm() {
     echo $AVAILABLE
 }
 
-__vboxmanage_list() {
+function __vboxmanage_list() {
     INPUT=$(vboxmanage list | tr -s '[\[\]\|\n]' ' ' | cut -d' ' -f4-)
 
     PRUNED=""
-    if [ "$1" == "long" ]; then
+    if [ "${1}" == "long" ] 
+     then
     for WORD in $INPUT; do
         [ "$WORD" == "-l" ] && continue;
         [ "$WORD" == "--long" ] && continue;
@@ -40,9 +42,10 @@ __vboxmanage_list() {
 }
 
 
-__vboxmanage_list_vms() {
+function __vboxmanage_list_vms() {
     VMS=""
-    if [ "x$1" == "x" ]; then
+    if [ "x$1" == "x" ] 
+     then
     SEPARATOR=" "
     else
     SEPARATOR=$1
@@ -56,9 +59,10 @@ __vboxmanage_list_vms() {
     echo $VMS
 }
 
-__vboxmanage_list_runningvms() {
+function __vboxmanage_list_runningvms() {
     VMS=""
-    if [ "$1" == "" ]; then
+    if [ "${1}" == "" ] 
+     then
     SEPARATOR=" "
     else
     SEPARATOR=$1
@@ -73,7 +77,7 @@ __vboxmanage_list_runningvms() {
 
 }
 
-__vboxmanage_controlvm() {
+function __vboxmanage_controlvm() {
     echo "pause resume reset poweroff savestate acpipowerbutton"
     echo "acpisleepbutton keyboardputscancode guestmemoryballoon"
     echo "gueststatisticsinterval usbattach usbdetach vrde vrdeport"
@@ -93,7 +97,7 @@ __vboxmanage_controlvm() {
 
 }
 
-__vboxmanage_default() {
+function __vboxmanage_default() {
     realopts=$(_vboxmanage_realopts)
     opts=$realopts$(vboxmanage | grep -i vboxmanage | cut -d' ' -f2 | grep -v '\[' | sort | uniq)
     pruned=""
@@ -113,23 +117,28 @@ __vboxmanage_default() {
     MATCH=0
     for OPT in "${COMP_WORDS[@]}"; do
             # opts=$(echo ${opts} | grep -v $OPT);
-        if [ "$OPT" == "$WORD" ]; then
+        if [ "$OPT" == "$WORD" ] 
+     then
         MATCH=1
         break;
         fi
-        if [ "$OPT" == "-v" ] && [ "$WORD" == "--version" ]; then
+        if [ "$OPT" == "-v" ] && [ "$WORD" == "--version" ] 
+     then
         MATCH=1
         break;
         fi
-        if [ "$OPT" == "--version" ] && [ "$WORD" == "-v" ]; then
+        if [ "$OPT" == "--version" ] && [ "$WORD" == "-v" ] 
+     then
         MATCH=1
         break;
         fi
-        if [ "$OPT" == "-q" ] && [ "$WORD" == "--nologo" ]; then
+        if [ "$OPT" == "-q" ] && [ "$WORD" == "--nologo" ] 
+     then
         MATCH=1
         break;
         fi
-        if [ "$OPT" == "--nologo" ] && [ "$WORD" == "-q" ]; then
+        if [ "$OPT" == "--nologo" ] && [ "$WORD" == "-q" ] 
+     then
         MATCH=1
         break;
         fi
@@ -144,7 +153,7 @@ __vboxmanage_default() {
     return 0
 }
 
-_vboxmanage() {
+function _vboxmanage() {
     # vboxmanage | grep -i vboxmanage | cut -d' ' -f2 | sort | uniq
     local cur p1 p2 p3 p4 opts
     COMPREPLY=()
@@ -199,7 +208,8 @@ _vboxmanage() {
     esac
 
     for VM in $(__vboxmanage_list_vms); do
-    if [ "$VM" == "$prev" ]; then
+    if [ "$VM" == "$prev" ] 
+     then
         pprev=${COMP_WORDS[COMP_CWORD-2]}
         # echo "previous: $pprev"
         case $pprev in

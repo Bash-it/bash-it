@@ -16,11 +16,14 @@ RVM_THEME_PROMPT_SUFFIX="|"
 function get_hour_color {
     hour_color=$red
     min=$(date +%M)
-    if [ "$min" -lt "15" ]; then
+    if [ "$min" -lt "15" ] 
+     then
         hour_color=$white
-    elif [ "$min" -lt "30" ]; then
+    elif [ "$min" -lt "30" ] 
+     then
         hour_color=$green
-    elif [ "$min" -lt "45" ]; then
+    elif [ "$min" -lt "45" ] 
+     then
         hour_color=$yellow
     else
         hour_color=$red

@@ -6,7 +6,8 @@ rm_svn(){
   param '1: directory to search for files'
   group 'svn'
 
-  if [ -z "$1" ]; then
+  if [ -z "${1}" ] 
+     then
       reference rm_svn
       return
   fi

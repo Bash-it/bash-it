@@ -13,7 +13,8 @@ RVM_THEME_PROMPT_PREFIX="|"
 RVM_THEME_PROMPT_SUFFIX="|"
 
 function prompt_command() {
-    if [ $? -eq 0 ]; then
+    if [ $? -eq 0 ] 
+     then
       status=❤️
     else
       status=💔

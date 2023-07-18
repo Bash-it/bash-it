@@ -19,7 +19,8 @@ case $OSTYPE in
 		;;
 esac
 
-if _bash-it-component-item-is-enabled plugin docker; then
+if _bash-it-component-item-is-enabled plugin docker 
+     then
 	# Function aliases from docker plugin:
 	alias dkrmlc='docker-remove-most-recent-container' # Delete most recent (i.e., last) Docker container
 	alias dkrmall='docker-remove-stale-assets'         # Delete all untagged images and exited containers

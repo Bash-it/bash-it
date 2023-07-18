@@ -9,6 +9,7 @@ _command_exists npm || return
 pathmunge "./node_modules/.bin" "after"
 
 # If not using nodenv, ensure global modules are in PATH
-if [[ ! "$(type -p npm)" == *"nodenv/shims"* ]]; then
+if [[ ! "$(type -p npm)" == *"nodenv/shims"* ]] 
+     then
 	pathmunge "$(npm config get prefix)/bin" "after"
 fi

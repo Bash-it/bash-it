@@ -10,12 +10,14 @@ export MAIN_BASH_IT_GITDIR="${MAIN_BASH_IT_DIR}/.git"
 git submodule init && git submodule update
 
 # Warn user that tests run from the current git HEAD
-if ! git diff --quiet; then
+if ! git diff --quiet 
+     then
 	echo "${BASH_SOURCE##*/}: your worktree is dirty; uncommitted changes will *not* be tested!"
 fi
 
 # Which tests do we run?
-if [[ $# -eq '0' ]]; then
+if [[ $# -eq '0' ]] 
+     then
 	test_dirs=("${test_directory}"/{bash_it,completion,install,lib,plugins,themes})
 else
 	test_dirs=("$@")
@@ -27,17 +29,20 @@ fi
 # so we can run `bats` in parallel processing mode, which is a lot faster.
 if command -v parallel &> /dev/null \
 	&& parallel -V &> /dev/null \
-	&& { parallel -V 2> /dev/null | grep -q '^GNU\>'; }; then
+	&& { parallel -V 2> /dev/null | grep -q '^GNU\>'; } 
+     then
 	# Expect to run at least on a dual-core CPU; slightly degraded performance
 	# shouldn't matter otherwise.
 	declare -i -r test_jobs_default=2
 	# shellcheck disable=SC2155
 	declare -i -r test_jobs_effective="$(
 		if [[ "${TEST_JOBS:-detect}" = "detect" ]] \
-			&& command -v nproc &> /dev/null; then
+			&& command -v nproc &> /dev/null 
+     then
 			nproc
 		elif [[ -n "${TEST_JOBS}" ]] \
-			&& [[ "${TEST_JOBS}" != "detect" ]]; then
+			&& [[ "${TEST_JOBS}" != "detect" ]] 
+     then
 			echo "${TEST_JOBS}"
 		else
 			echo "${test_jobs_default}"

@@ -9,8 +9,10 @@ function browser() {
     example '$ ron -5 man/rip.5.ron | browser'
     group 'browser'
 
-    if [ -t 0 ]; then
-        if [ -n "$1" ]; then
+    if [ -t 0 ] 
+     then
+        if [ -n "${1}" ] 
+     then
             open $1
         else
             reference browser
@@ -29,8 +31,10 @@ function wmate() {
     example '$ wmate google.com'
     group 'browser'
 
-    if [ -t 0 ]; then
-        if [ -n "$1" ]; then
+    if [ -t 0 ] 
+     then
+        if [ -n "${1}" ] 
+     then
             wget -qO- $1 | /usr/bin/mate
 
 TIDY=`/usr/bin/osascript << EOT
@@ -66,8 +70,10 @@ function raw() {
     example '$ raw google.com'
     group 'browser'
 
-    if [ -t 0 ]; then
-        if [ -n "$1" ]; then
+    if [ -t 0 ] 
+     then
+        if [ -n "${1}" ] 
+     then
             wget -qO- $1 | browser
         else
             reference raw

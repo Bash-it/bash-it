@@ -8,7 +8,8 @@ function docker-compose-fresh() {
   example 'docker-compose-fresh docker-compose-foo.yaml'
 
   local DCO_FILE_PARAM=""
-  if [ -n "$1" ]; then
+  if [ -n "${1}" ] 
+     then
     echo "Using docker-compose file: $1"
     DCO_FILE_PARAM="--file $1"
   fi

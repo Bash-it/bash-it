@@ -43,14 +43,16 @@ function git_rollback() {
 	group 'git'
 
 	function is_clean() {
-		if [[ $(git diff --shortstat 2> /dev/null | tail -n1) != "" ]]; then
+		if [[ $(git diff --shortstat 2> /dev/null | tail -n1) != "" ]] 
+     then
 			echo "Your branch is dirty, please commit your changes"
 			kill -INT $$
 		fi
 	}
 
 	function commit_exists() {
-		if git rev-list --quiet "${1:?}"; then
+		if git rev-list --quiet "${1:?}" 
+     then
 			echo "Commit ${1} does not exist"
 			kill -INT $$
 		fi
@@ -64,12 +66,12 @@ function git_rollback() {
 
 				[yY])
 					echo "Rolling back to commit ${1} with unstaged changes"
-					git reset "$1"
+					git reset "${1}"
 					break
 					;;
 				[nN])
 					echo "Rolling back to commit ${1} with a clean working tree"
-					git reset --hard "$1"
+					git reset --hard "${1}"
 					break
 					;;
 				*)
@@ -79,9 +81,10 @@ function git_rollback() {
 		done
 	}
 
-	if [ -n "$(git symbolic-ref HEAD 2> /dev/null)" ]; then
+	if [ -n "$(git symbolic-ref HEAD 2> /dev/null)" ] 
+     then
 		is_clean
-		commit_exists "$1"
+		commit_exists "${1}"
 
 		while true; do
 			# shellcheck disable=SC2162
@@ -89,7 +92,7 @@ function git_rollback() {
 			case "${RESP}" in
 
 				[yY])
-					keep_changes "$1"
+					keep_changes "${1}"
 					break
 					;;
 				[nN])
@@ -117,7 +120,7 @@ function local-ignore() {
 	about 'adds file or path to git exclude file'
 	param '1: file or path fragment to ignore'
 	group 'git'
-	echo "$1" >> .git/info/exclude
+	echo "${1}" >> .git/info/exclude
 }
 
 # get a quick overview for your git repo
@@ -125,7 +128,8 @@ function git_info() {
 	about 'overview for your git repo'
 	group 'git'
 
-	if [ -n "$(git symbolic-ref HEAD 2> /dev/null)" ]; then
+	if [ -n "$(git symbolic-ref HEAD 2> /dev/null)" ] 
+     then
 		# print informations
 		echo "git repo overview"
 		echo "-----------------"
@@ -140,7 +144,8 @@ function git_info() {
 
 		# print status of working repo
 		echo "status:"
-		if [ -n "$(git status -s 2> /dev/null)" ]; then
+		if [ -n "$(git status -s 2> /dev/null)" ] 
+     then
 			git status -s
 		else
 			echo "working directory is clean"
@@ -165,20 +170,24 @@ function git_stats {
 	# awesome work from https://github.com/esc/git-stats
 	# including some modifications
 
-	if [ -n "$(git symbolic-ref HEAD 2> /dev/null)" ]; then
+	if [ -n "$(git symbolic-ref HEAD 2> /dev/null)" ] 
+     then
 		echo "Number of commits per author:"
 		git --no-pager shortlog -sn --all
 		AUTHORS=$(git shortlog -sn --all | cut -f2 | cut -f1 -d' ')
 		LOGOPTS=""
-		if [ "$1" == '-w' ]; then
+		if [ "${1}" == '-w' ] 
+     then
 			LOGOPTS="${LOGOPTS} -w"
 			shift
 		fi
-		if [ "$1" == '-M' ]; then
+		if [ "${1}" == '-M' ] 
+     then
 			LOGOPTS="${LOGOPTS} -M"
 			shift
 		fi
-		if [ "$1" == '-C' ]; then
+		if [ "${1}" == '-C' ] 
+     then
 			LOGOPTS="${LOGOPTS} -C --find-copies-harder"
 			shift
 		fi
@@ -211,12 +220,15 @@ function gittowork() {
 
 	result=$(curl -L "https://www.gitignore.io/api/$1" 2> /dev/null)
 
-	if [[ "${result}" =~ ERROR ]]; then
+	if [[ "${result}" =~ ERROR ]] 
+     then
 		echo "Query '$1' has no match. See a list of possible queries with 'gittowork list'"
-	elif [[ $1 == list ]]; then
+	elif [[ $1 == list ]] 
+     then
 		echo "${result}"
 	else
-		if [[ -f .gitignore ]]; then
+		if [[ -f .gitignore ]] 
+     then
 			result=$(grep -v "# Created by http://www.gitignore.io" <<< "${result}")
 			echo ".gitignore already exists, appending..."
 		fi
@@ -240,21 +252,24 @@ function gitignore-reload() {
 	err=0
 
 	# Disallow unstaged changes in the working tree
-	if ! git diff-files --quiet --ignore-submodules --; then
+	if ! git diff-files --quiet --ignore-submodules -- 
+     then
 		echo >&2 "ERROR: Cannot reload .gitignore: Your index contains unstaged changes."
 		git diff-index --cached --name-status -r --ignore-submodules HEAD -- >&2
 		err=1
 	fi
 
 	# Disallow uncommited changes in the index
-	if ! git diff-index --cached --quiet HEAD --ignore-submodules; then
+	if ! git diff-index --cached --quiet HEAD --ignore-submodules 
+     then
 		echo >&2 "ERROR: Cannot reload .gitignore: Your index contains uncommited changes."
 		git diff-index --cached --name-status -r --ignore-submodules HEAD -- >&2
 		err=1
 	fi
 
 	# Prompt user to commit or stash changes and exit
-	if [[ "${err}" == 1 ]]; then
+	if [[ "${err}" == 1 ]] 
+     then
 		echo >&2 "Please commit or stash them."
 	fi
 
@@ -262,7 +277,8 @@ function gitignore-reload() {
 
 	# If we're here, then there are no uncommited or unstaged changes dangling around.
 	# Proceed to reload .gitignore
-	if [[ "${err}" == 0 ]]; then
+	if [[ "${err}" == 0 ]] 
+     then
 		# Remove all cached files
 		git rm -r --cached .
 
@@ -282,7 +298,8 @@ function git-changelog() {
 	group 'git'
 	example '$ git-changelog origin/master...origin/release [md|txt]'
 
-	if [[ "$1" != *"..."* ]]; then
+	if [[ "${1}" != *"..."* ]] 
+     then
 		echo "Please include the valid 'diff' to make changelog"
 		return 1
 	fi
@@ -290,11 +307,12 @@ function git-changelog() {
 	# shellcheck disable=SC2155
 	local NEXT=$(date +%F)
 
-	if [[ "$2" == "md" ]]; then
+	if [[ "${2}" == "md" ]] 
+     then
 		echo "# CHANGELOG $1"
 
 		# shellcheck disable=SC2162
-		git log "$1" --no-merges --format="%cd" --date=short | sort -u -r | while read DATE; do
+		git log "${1}" --no-merges --format="%cd" --date=short | sort -u -r | while read DATE; do
 			echo
 			echo "### ${DATE}"
 			git log --no-merges --format=" * (%h) %s by [%an](mailto:%ae)" --since="${DATE} 00:00:00" --until="${DATE} 24:00:00"
@@ -305,7 +323,7 @@ function git-changelog() {
 		echo ----------------------
 
 		# shellcheck disable=SC2162
-		git log "$1" --no-merges --format="%cd" --date=short | sort -u -r | while read DATE; do
+		git log "${1}" --no-merges --format="%cd" --date=short | sort -u -r | while read DATE; do
 			echo
 			echo "[${DATE}]"
 			git log --no-merges --format=" * (%h) %s by %an <%ae>" --since="${DATE} 00:00:00" --until="${DATE} 24:00:00"

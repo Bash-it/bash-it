@@ -79,7 +79,8 @@ then
         ;;
         esac
 
-        if [[ "$cur" == * ]]; then
+        if [[ "$cur" == * ]] 
+     then
         COMPREPLY=( $( compgen -W '-h --help -hh --version -v -d -u --url -l -x -m -r -g -c --method \
         --data --param-del --cookie --cookie-del --load-cookies \
         --drop-set-cookie --user-agent --random-agent --host --referer \

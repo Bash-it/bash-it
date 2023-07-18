@@ -9,8 +9,10 @@ function _git-symbolic-ref() {
 # same commit. _git-branch is used to explicitly choose the checked-out
 # branch.
 function _git-branch() {
-	if [[ "${SCM_GIT_GITSTATUS_RAN:-}" == "true" ]]; then
-		if [[ -n "${VCS_STATUS_LOCAL_BRANCH:-}" ]]; then
+	if [[ "${SCM_GIT_GITSTATUS_RAN:-}" == "true" ]] 
+     then
+		if [[ -n "${VCS_STATUS_LOCAL_BRANCH:-}" ]] 
+     then
 			echo "${VCS_STATUS_LOCAL_BRANCH}"
 		else
 			return 1
@@ -21,8 +23,10 @@ function _git-branch() {
 }
 
 function _git-tag() {
-	if [[ "${SCM_GIT_GITSTATUS_RAN:-}" == "true" ]]; then
-		if [[ -n "${VCS_STATUS_TAG:-}" ]]; then
+	if [[ "${SCM_GIT_GITSTATUS_RAN:-}" == "true" ]] 
+     then
+		if [[ -n "${VCS_STATUS_TAG:-}" ]] 
+     then
 			echo "${VCS_STATUS_TAG}"
 		fi
 	else
@@ -35,7 +39,8 @@ function _git-commit-description() {
 }
 
 function _git-short-sha() {
-	if [[ "${SCM_GIT_GITSTATUS_RAN:-}" == "true" ]]; then
+	if [[ "${SCM_GIT_GITSTATUS_RAN:-}" == "true" ]] 
+     then
 		echo "${VCS_STATUS_COMMIT:0:7}"
 	else
 		git rev-parse --short HEAD
@@ -44,7 +49,8 @@ function _git-short-sha() {
 
 # Try the checked-out branch first to avoid collision with branches pointing to the same ref.
 function _git-friendly-ref() {
-	if [[ "${SCM_GIT_GITSTATUS_RAN:-}" == "true" ]]; then
+	if [[ "${SCM_GIT_GITSTATUS_RAN:-}" == "true" ]] 
+     then
 		_git-branch || _git-tag || _git-short-sha # there is no tag based describe output in gitstatus
 	else
 		_git-branch || _git-tag || _git-commit-description || _git-short-sha
@@ -93,7 +99,8 @@ function _git-hide-status() {
 
 function _git-status() {
 	local git_status_flags=
-	if [[ "${SCM_GIT_IGNORE_UNTRACKED:-}" == "true" ]]; then
+	if [[ "${SCM_GIT_IGNORE_UNTRACKED:-}" == "true" ]] 
+     then
 		git_status_flags='-uno'
 	fi
 	git status --porcelain "${git_status_flags:---}" 2> /dev/null
@@ -126,20 +133,25 @@ function _git-status-counts() {
 function _git-remote-info() {
 	local same_branch_name="" branch_prefix
 	# prompt handling only, reimplement because patching the routine below gets ugly
-	if [[ "${SCM_GIT_GITSTATUS_RAN:-}" == "true" ]]; then
+	if [[ "${SCM_GIT_GITSTATUS_RAN:-}" == "true" ]] 
+     then
 		[[ "${VCS_STATUS_REMOTE_NAME?}" == "" ]] && return
 		[[ "${VCS_STATUS_LOCAL_BRANCH?}" == "${VCS_STATUS_REMOTE_BRANCH?}" ]] && same_branch_name=true
 		# no multiple remote support in gitstatusd
-		if [[ "${SCM_GIT_SHOW_REMOTE_INFO:-}" == "true" || "${SCM_GIT_SHOW_REMOTE_INFO:-}" == "auto" ]]; then
-			if [[ ${same_branch_name:-} != "true" ]]; then
+		if [[ "${SCM_GIT_SHOW_REMOTE_INFO:-}" == "true" || "${SCM_GIT_SHOW_REMOTE_INFO:-}" == "auto" ]] 
+     then
+			if [[ ${same_branch_name:-} != "true" ]] 
+     then
 				remote_info="${VCS_STATUS_REMOTE_NAME?}/${VCS_STATUS_REMOTE_BRANCH?}"
 			else
 				remote_info="${VCS_STATUS_REMOTE_NAME?}"
 			fi
-		elif [[ ${same_branch_name:-} != "true" ]]; then
+		elif [[ ${same_branch_name:-} != "true" ]] 
+     then
 			remote_info="${VCS_STATUS_REMOTE_BRANCH?}"
 		fi
-		if [[ -n "${remote_info:-}" ]]; then
+		if [[ -n "${remote_info:-}" ]] 
+     then
 			# no support for gone remote branches in gitstatusd
 			branch_prefix="${SCM_THEME_BRANCH_TRACK_PREFIX:-}"
 			echo "${branch_prefix}${remote_info:-}"
@@ -149,20 +161,25 @@ function _git-remote-info() {
 
 		[[ "$(_git-branch)" == "$(_git-upstream-branch)" ]] && same_branch_name=true
 		if [[ ("${SCM_GIT_SHOW_REMOTE_INFO}" == "auto" && "$(_git-num-remotes)" -ge 2) ||
-		"${SCM_GIT_SHOW_REMOTE_INFO}" == "true" ]]; then
-			if [[ ${same_branch_name:-} != "true" ]]; then
+		"${SCM_GIT_SHOW_REMOTE_INFO}" == "true" ]] 
+     then
+			if [[ ${same_branch_name:-} != "true" ]] 
+     then
 				# shellcheck disable=SC2016
 				remote_info='$(_git-upstream)'
 			else
 				remote_info="$(_git-upstream-remote)"
 			fi
-		elif [[ ${same_branch_name:-} != "true" ]]; then
+		elif [[ ${same_branch_name:-} != "true" ]] 
+     then
 			# shellcheck disable=SC2016
 			remote_info='$(_git-upstream-branch)'
 		fi
-		if [[ -n "${remote_info:-}" ]]; then
+		if [[ -n "${remote_info:-}" ]] 
+     then
 			local branch_prefix
-			if _git-upstream-branch-gone; then
+			if _git-upstream-branch-gone 
+     then
 				branch_prefix="${SCM_THEME_BRANCH_GONE_PREFIX:-}"
 			else
 				branch_prefix="${SCM_THEME_BRANCH_TRACK_PREFIX:-}"

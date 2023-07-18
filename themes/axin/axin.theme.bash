@@ -3,8 +3,10 @@
 # Axin Bash Prompt, inspired by theme "Sexy" and "Bobby"
 # thanks to them
 
-if tput setaf 1 &> /dev/null; then
-	if [[ $(tput colors) -ge 256 ]] 2> /dev/null; then
+if tput setaf 1 &> /dev/null 
+     then
+	if [[ $(tput colors) -ge 256 ]] 2> /dev/null 
+     then
 		MAGENTA=$(tput setaf 9)
 		ORANGE=$(tput setaf 172)
 		GREEN=$(tput setaf 190)

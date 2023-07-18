@@ -16,7 +16,8 @@ _docker_bash_completion_paths=(
 )
 
 for fn in "${_docker_bash_completion_paths[@]}"; do
-	if [ -r "$fn" ]; then
+	if [ -r "$fn" ] 
+     then
 		# shellcheck disable=SC1090
 		source "$fn"
 		break

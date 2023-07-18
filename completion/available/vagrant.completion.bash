@@ -23,7 +23,7 @@
 # SOFTWARE.
 
 
-__pwdln() {
+function __pwdln() {
    pwdmod="${PWD}/"
    itr=0
    until [[ -z "$pwdmod" ]];do
@@ -33,7 +33,7 @@ __pwdln() {
    echo -n $(($itr-1))
 }
 
-__vagrantinvestigate() {
+function __vagrantinvestigate() {
     if [ -f "${PWD}/.vagrant" -o -d "${PWD}/.vagrant" ];then
       echo "${PWD}/.vagrant"
       return 0
@@ -50,7 +50,7 @@ __vagrantinvestigate() {
    return 1
 }
 
-_vagrant() {
+function _vagrant() {
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
     commands="box cloud destroy global-status halt help hostmanager init login package plugin port powershell provision push rdp reload resume scp snapshot ssh ssh-config status suspend up upload validate vbguest version winrm winrm-config"
@@ -119,7 +119,8 @@ _vagrant() {
       action="${COMP_WORDS[COMP_CWORD-2]}"
       case "$action" in
           "up")
-              if [ "$prev" == "--no-provision" ]; then
+              if [ "$prev" == "--no-provision" ] 
+     then
                   COMPREPLY=($(compgen -W "${vm_list}" -- ${cur}))
                   return 0
               fi
@@ -135,7 +136,8 @@ _vagrant() {
               esac
               ;;
           "snapshot")
-              if [ "$prev" == "restore" ]; then
+              if [ "$prev" == "restore" ] 
+     then
                   COMPREPLY=($(compgen -W "${vm_list}" -- ${cur}))
                   return 0
               fi
@@ -149,7 +151,8 @@ _vagrant() {
       prev="${COMP_WORDS[COMP_CWORD-2]}"
       case "$action" in
           "snapshot")
-              if [ "$prev" == "restore" ]; then
+              if [ "$prev" == "restore" ] 
+     then
                   local snapshot_list="$(vagrant snapshot list ${cur} 2>/dev/null | awk '{ORS=" "} /==>/ {next} {print}')"
                   COMPREPLY=($(compgen -W "${snapshot_list}" -- ${cur}))
                   return 0

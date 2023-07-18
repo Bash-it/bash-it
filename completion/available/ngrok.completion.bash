@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 
-__ngrok_completion() {
+function __ngrok_completion() 
+{
 	# shellcheck disable=SC2155
 	local prev=$(_get_pword)
 	# shellcheck disable=SC2155

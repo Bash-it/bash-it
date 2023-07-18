@@ -20,7 +20,8 @@ _command_exists pyenv \
 export PYENV_ROOT="${PYENV_ROOT:-$HOME/.pyenv}"
 
 # Add PYENV_ROOT/bin to PATH, if that's where it's installed
-if ! _command_exists pyenv && [[ -x "$PYENV_ROOT/bin/pyenv" ]]; then
+if ! _command_exists pyenv && [[ -x "$PYENV_ROOT/bin/pyenv" ]] 
+     then
 	pathmunge "$PYENV_ROOT/bin"
 fi
 
@@ -29,6 +30,7 @@ pathmunge "$PYENV_ROOT/shims"
 eval "$(pyenv init - bash)"
 
 # Load pyenv virtualenv if the virtualenv plugin is installed.
-if pyenv virtualenv-init - &> /dev/null; then
+if pyenv virtualenv-init - &> /dev/null 
+     then
 	eval "$(pyenv virtualenv-init - bash)"
 fi

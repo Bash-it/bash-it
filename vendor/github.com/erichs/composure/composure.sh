@@ -11,51 +11,55 @@
 
 # 'plumbing' functions
 
-_bootstrap_composure() {
+_function bootstrap_composure() {
   _generate_metadata_functions
   _load_composed_functions
   _determine_printf_cmd
 }
 
-_get_composure_dir ()
+function _get_composure_dir ()
 {
-  if [ -n "${XDG_DATA_HOME:-}" ]; then
+  if [ -n "${XDG_DATA_HOME:-}" ] 
+     then
     echo "$XDG_DATA_HOME/composure"
   else
     echo "$HOME/.local/composure"
   fi
 }
 
-_get_author_name ()
+function _get_author_name ()
 {
   typeset name localname
   localname="$(git --git-dir "$(_get_composure_dir)/.git" config --get user.name)"
   for name in "${GIT_AUTHOR_NAME:-}" "$localname"; do
-    if [ -n "$name" ]; then
+    if [ -n "$name" ] 
+     then
       echo "$name"
       break
     fi
   done
 }
 
-_composure_keywords ()
+function _composure_keywords ()
 {
   echo "about author example group param version"
 }
 
-_letterpress ()
+function _letterpress ()
 {
-  typeset rightcol="$1" leftcol="${2:- }" leftwidth="${3:-20}"
+  typeset rightcol="${1}" leftcol="${2:- }" leftwidth="${3:-20}"
 
-  if [ -z "$rightcol" ]; then
+  if [ -z "$rightcol" ] 
+     then
     return
   fi
 
   $_printf_cmd "%-*s%s\n" "$leftwidth" "$leftcol" "$rightcol"
 }
 
-_determine_printf_cmd() {
-  if [ -z "${_printf_cmd:-}" ]; then
+function _determine_printf_cmd() {
+  if [ -z "${_printf_cmd:-}" ] 
+     then
     _printf_cmd=printf
     # prefer GNU gprintf if available
     [ -x "$(which gprintf 2>/dev/null)" ] && _printf_cmd=gprintf
@@ -63,9 +67,9 @@ _determine_printf_cmd() {
   fi
 }
 
-_longest_function_name_length ()
+function _longest_function_name_length ()
 {
-  echo "$1" | awk 'BEGIN{ maxlength=0 }
+  echo "${1}" | awk 'BEGIN{ maxlength=0 }
   {
   for(i=1;i<=NF;i++)
     if (length($i)>maxlength)
@@ -76,16 +80,16 @@ _longest_function_name_length ()
   END{ print maxlength}'
 }
 
-_temp_filename_for ()
+function _temp_filename_for ()
 {
   typeset file="$(mktemp "/tmp/$1.XXXX")"
   command rm "$file" 2>/dev/null   # ensure file is unlinked prior to use
   echo "$file"
 }
 
-_prompt ()
+function _prompt ()
 {
-  typeset prompt="$1"
+  typeset prompt="${1}"
   typeset result
   case "$(_shell)" in
     bash)
@@ -96,27 +100,31 @@ _prompt ()
   echo "$result"
 }
 
-_add_composure_file ()
+function _add_composure_file ()
 {
-  typeset func="$1"
-  typeset file="$2"
-  typeset operation="$3"
+  typeset func="${1}"
+  typeset file="${2}"
+  typeset operation="${3}"
   typeset comment="${4:-}"
   typeset composure_dir=$(_get_composure_dir)
 
   (
-    if ! cd "$composure_dir"; then
+    if ! cd "$composure_dir" 
+     then
       printf "%s\n" "Oops! Can't find $composure_dir!"
       return
     fi
-    if git rev-parse 2>/dev/null; then
-      if [ ! -f "$file" ]; then
+    if git rev-parse 2>/dev/null 
+     then
+      if [ ! -f "$file" ] 
+     then
         printf "%s\n" "Oops! Couldn't find $file to version it for you..."
         return
       fi
       cp "$file" "$composure_dir/$func.inc"
       git add --all .
-      if [ -z "$comment" ]; then
+      if [ -z "$comment" ] 
+     then
         comment="$(_prompt 'Git Comment: ')"
       fi
       git commit -m "$operation $func: $comment"
@@ -124,19 +132,22 @@ _add_composure_file ()
   )
 }
 
-_transcribe ()
+function _transcribe ()
 {
-  typeset func="$1"
-  typeset file="$2"
-  typeset operation="$3"
+  typeset func="${1}"
+  typeset file="${2}"
+  typeset operation="${3}"
   typeset comment="${4:-}"
   typeset composure_dir=$(_get_composure_dir)
 
-  if git --version >/dev/null 2>&1; then
-    if [ -d "$composure_dir" ]; then
+  if git --version >/dev/null 2>&1 
+     then
+    if [ -d "$composure_dir" ] 
+     then
       _add_composure_file "$func" "$file" "$operation" "$comment"
     else
-      if [ "${USE_COMPOSURE_REPO:-}" = "0" ]; then
+      if [ "${USE_COMPOSURE_REPO:-}" = "0" ] 
+     then
         return  # if you say so...
       fi
       printf "%s\n" "I see you don't have a $composure_dir repo..."
@@ -173,7 +184,7 @@ _transcribe ()
   fi
 }
 
-_typeset_functions ()
+function _typeset_functions ()
 {
   # unfortunately, there does not seem to be a easy, portable way to list just the
   # names of the defined shell functions...
@@ -189,7 +200,7 @@ _typeset_functions ()
   esac
 }
 
-_typeset_functions_about ()
+function _typeset_functions_about ()
 {
   typeset f
   for f in $(_typeset_functions); do
@@ -197,7 +208,7 @@ _typeset_functions_about ()
   done
 }
 
-_shell () {
+function _shell () {
   # here's a hack I modified from a StackOverflow post:
   # get the ps listing for the current process ($$), and print the last column (CMD)
   # stripping any leading hyphens shells sometimes throw in there
@@ -205,7 +216,7 @@ _shell () {
   echo "${this##*/}"  # e.g. /bin/bash => bash
 }
 
-_generate_metadata_functions() {
+function _generate_metadata_functions() {
   typeset f
   for f in $(_composure_keywords)
   do
@@ -213,17 +224,18 @@ _generate_metadata_functions() {
   done
 }
 
-_list_composure_files () {
+function _list_composure_files () {
   typeset composure_dir="$(_get_composure_dir)"
   [ -d "$composure_dir" ] && find "$composure_dir" -maxdepth 1 -name '*.inc'
 }
 
-_load_composed_functions () {
+function _load_composed_functions () {
   # load previously composed functions into shell
   # you may disable this by adding the following line to your shell startup:
   # export LOAD_COMPOSED_FUNCTIONS=0
 
-  if [ "${LOAD_COMPOSED_FUNCTIONS:-}" = "0" ]; then
+  if [ "${LOAD_COMPOSED_FUNCTIONS:-}" = "0" ] 
+     then
     return  # if you say so...
   fi
 
@@ -234,18 +246,18 @@ _load_composed_functions () {
   done
 }
 
-_strip_trailing_whitespace () {
+function _strip_trailing_whitespace () {
   sed -e 's/ \+$//'
 }
 
-_strip_semicolons () {
+function _strip_semicolons () {
   sed -e 's/;$//'
 }
 
 
 # 'porcelain' functions
 
-cite ()
+function cite ()
 {
   about 'creates one or more meta keywords for use in your functions'
   param 'one or more keywords'
@@ -267,7 +279,8 @@ cite ()
   # contractions, and consider single or double quoting if it contains
   # non-alphanumeric characters
 
-  if [ -z "$1" ]; then
+  if [ -z "${1}" ] 
+     then
     printf '%s\n' 'missing parameter(s)'
     reference cite
     return
@@ -279,7 +292,7 @@ cite ()
   done
 }
 
-draft ()
+function draft ()
 {
   about 'wraps command from history into a new function, default is last command'
   param '1: name to give function'
@@ -292,20 +305,23 @@ draft ()
   typeset func=$1
   typeset num=$2
 
-  if [ -z "$func" ]; then
+  if [ -z "$func" ] 
+     then
     printf '%s\n' 'missing parameter(s)'
     reference draft
     return
   fi
 
   # aliases bind tighter than function names, disallow them
-  if type -a "$func" 2>/dev/null | grep -q 'is.*alias'; then
+  if type -a "$func" 2>/dev/null | grep -q 'is.*alias' 
+     then
     printf '%s\n' "sorry, $(type -a "$func"). please choose another name."
     return
   fi
 
   typeset cmd
-  if [ -z "$num" ]; then
+  if [ -z "$num" ] 
+     then
     # some versions of 'fix command, fc' need corrective lenses...
     typeset lines=$(fc -ln -1 | grep -q draft && echo 2 || echo 1)
     # parse last command from fc output
@@ -331,7 +347,7 @@ draft ()
   revise "$func"
 }
 
-glossary ()
+function glossary ()
 {
   about 'displays help summary for all functions, or summary for a group of functions'
   param '1: optional, group name'
@@ -345,9 +361,11 @@ glossary ()
 
   for func in $(echo $functionlist); do
 
-    if [ "X${targetgroup}X" != "XX" ]; then
+    if [ "X${targetgroup}X" != "XX" ] 
+     then
       typeset group="$(typeset -f -- $func | metafor group)"
-      if [ "$group" != "$targetgroup" ]; then
+      if [ "$group" != "$targetgroup" ] 
+     then
         continue  # skip non-matching groups, if specified
       fi
     fi
@@ -360,7 +378,7 @@ glossary ()
   done
 }
 
-metafor ()
+function metafor ()
 {
   about 'prints function metadata associated with keyword'
   param '1: meta keyword'
@@ -369,7 +387,8 @@ metafor ()
 
   typeset keyword=$1
 
-  if [ -z "$keyword" ]; then
+  if [ -z "$keyword" ] 
+     then
     printf '%s\n' 'missing parameter(s)'
     reference metafor
     return
@@ -382,7 +401,7 @@ metafor ()
   sed -n "/$keyword / s/['\";]*\$//;s/^[ 	]*\(: _\)*$keyword ['\"]*\([^([].*\)*\$/\2/p"
 }
 
-reference ()
+function reference ()
 {
   about 'displays apidoc help for a specific function'
   param '1: function name'
@@ -390,7 +409,8 @@ reference ()
   group 'composure'
 
   typeset func=$1
-  if [ -z "$func" ]; then
+  if [ -z "$func" ] 
+     then
     printf '%s\n' 'missing parameter(s)'
     reference reference
     return
@@ -402,16 +422,19 @@ reference ()
   _letterpress "$about" "$func"
 
   typeset author="$(typeset -f $func | metafor author)"
-  if [ -n "$author" ]; then
+  if [ -n "$author" ] 
+     then
     _letterpress "$author" 'author:'
   fi
 
   typeset version="$(typeset -f $func | metafor version)"
-  if [ -n "$version" ]; then
+  if [ -n "$version" ] 
+     then
     _letterpress "$version" 'version:'
   fi
 
-  if [ -n "$(typeset -f $func | metafor param)" ]; then
+  if [ -n "$(typeset -f $func | metafor param)" ] 
+     then
     printf "parameters:\n"
     typeset -f $func | metafor param | while read -r line
     do
@@ -419,7 +442,8 @@ reference ()
     done
   fi
 
-  if [ -n "$(typeset -f $func | metafor example)" ]; then
+  if [ -n "$(typeset -f $func | metafor example)" ] 
+     then
     printf "examples:\n"
     typeset -f $func | metafor example | while read -r line
     do
@@ -428,7 +452,7 @@ reference ()
   fi
 }
 
-revise ()
+function revise ()
 {
   about 'loads function into editor for revision'
   param '<optional> -e: revise version stored in ENV'
@@ -439,13 +463,15 @@ revise ()
   group 'composure'
 
   typeset source='git'
-  if [ "$1" = '-e' ]; then
+  if [ "${1}" = '-e' ] 
+     then
     source='env'
     shift
   fi
 
   typeset func=$1
-  if [ -z "$func" ]; then
+  if [ -z "$func" ] 
+     then
     printf '%s\n' 'missing parameter(s)'
     reference revise
     return
@@ -454,7 +480,8 @@ revise ()
   typeset composure_dir=$(_get_composure_dir)
   typeset temp=$(_temp_filename_for revise)
   # populate tempfile...
-  if [ "$source" = 'env' ] || [ ! -f "$composure_dir/$func.inc" ]; then
+  if [ "$source" = 'env' ] || [ ! -f "$composure_dir/$func.inc" ] 
+     then
     # ...with ENV if specified or not previously versioned
     typeset -f $func > $temp
   else
@@ -468,7 +495,8 @@ revise ()
   fi
 
   $EDITOR "$temp"
-  if [ -s "$temp" ]; then
+  if [ -s "$temp" ] 
+     then
     typeset edit='N'
 
     # source edited file
@@ -496,7 +524,7 @@ revise ()
   command rm "$temp"
 }
 
-write ()
+function write ()
 {
 about 'writes one or more composed function definitions to stdout'
 param 'one or more function names'
@@ -504,7 +532,8 @@ example '$ write finddown foo'
 example '$ write finddown'
 group 'composure'
 
-if [ -z "$1" ]; then
+if [ -z "${1}" ] 
+     then
   printf '%s\n' 'missing parameter(s)'
   reference write
   return

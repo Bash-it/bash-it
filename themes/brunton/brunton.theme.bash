@@ -11,7 +11,8 @@ SCM_SVN_CHAR="${bold_cyan?}⑆${normal?}"
 SCM_HG_CHAR="${bold_red?}☿${normal?}"
 
 function is_vim_shell() {
-	if [[ -n "${VIMRUNTIME:-}" ]]; then
+	if [[ -n "${VIMRUNTIME:-}" ]] 
+     then
 		echo "[${cyan?}vim shell${normal?}]"
 	fi
 }

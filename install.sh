@@ -2,7 +2,12 @@
 # bash-it installer
 
 # Show how to use this installer
-function _bash-it_show_usage() {
+function _bash-it_show_usage() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	echo -e "\n$0 : Install bash-it"
 	echo -e "Usage:\n$0 [arguments] \n"
 	echo "Arguments:"
@@ -15,13 +20,20 @@ function _bash-it_show_usage() {
 }
 
 # enable a thing
-function _bash-it_load_one() {
+function _bash-it_load_one() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
 	file_type=$1
 	file_to_enable=$2
 	mkdir -p "$BASH_IT/${file_type}/enabled"
 
 	dest="${BASH_IT}/${file_type}/enabled/${file_to_enable}"
-	if [ ! -e "${dest}" ]; then
+	if [ ! -e "${dest}" ] 
+     then
 		ln -sf "../available/${file_to_enable}" "${dest}"
 	else
 		echo "File ${dest} exists, skipping"
@@ -29,7 +41,13 @@ function _bash-it_load_one() {
 }
 
 # Interactively enable several things
-function _bash-it_load_some() {
+function _bash-it_load_some() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
 	file_type=$1
 	single_type=$(echo "$file_type" | sed -e "s/aliases$/alias/g" | sed -e "s/plugins$/plugin/g")
 	enable_func="_enable-$single_type"
@@ -56,33 +74,58 @@ function _bash-it_load_some() {
 }
 
 # Back up existing profile
-function _bash-it_backup() {
+function _bash-it_backup() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
 	test -w "$HOME/$CONFIG_FILE" \
 		&& cp -aL "$HOME/$CONFIG_FILE" "$HOME/$CONFIG_FILE.bak" \
 		&& echo -e "\033[0;32mYour original $CONFIG_FILE has been backed up to $CONFIG_FILE.bak\033[0m"
 }
 
 # Back up existing profile and create new one for bash-it
-function _bash-it_backup_new() {
+function _bash-it_backup_new() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
 	_bash-it_backup
 	sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" > "$HOME/$CONFIG_FILE"
 	echo -e "\033[0;32mCopied the template $CONFIG_FILE into ~/$CONFIG_FILE, edit this file to customize bash-it\033[0m"
 }
 
 # Back up existing profile and append bash-it templates at the end
-function _bash-it_backup_append() {
+function _bash-it_backup_append() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_bash-it_backup
 	(sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" | tail -n +2) >> "$HOME/$CONFIG_FILE"
 	echo -e "\033[0;32mBash-it template has been added to your $CONFIG_FILE\033[0m"
 }
 
-function _bash-it_check_for_backup() {
-	if ! [[ -e "$HOME/$BACKUP_FILE" ]]; then
+function _bash-it_check_for_backup() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
+	if ! [[ -e "$HOME/$BACKUP_FILE" ]] 
+     then
 		return
 	fi
 	echo -e "\033[0;33mBackup file already exists. Make sure to backup your .bashrc before running this installation.\033[0m" >&2
 
-	if [[ -z "${overwrite_backup}" ]]; then
+	if [[ -z "${overwrite_backup}" ]] 
+     then
 		while [[ -z "${silent}" ]]; do
 			read -e -n 1 -r -p "Would you like to overwrite the existing backup? This will delete your existing backup file ($HOME/$BACKUP_FILE) [y/N] " RESP
 			case $RESP in
@@ -99,9 +142,11 @@ function _bash-it_check_for_backup() {
 			esac
 		done
 	fi
-	if [[ -z "${overwrite_backup}" ]]; then
+	if [[ -z "${overwrite_backup}" ]] 
+     then
 		echo -e "\033[91mInstallation aborted. Please come back soon!\033[m"
-		if [[ -n "${silent}" ]]; then
+		if [[ -n "${silent}" ]] 
+     then
 			echo -e "\033[91mUse \"-f\" flag to force overwrite of backup.\033[m"
 		fi
 		exit 1
@@ -110,10 +155,17 @@ function _bash-it_check_for_backup() {
 	fi
 }
 
-function _bash-it_modify_config_files() {
+function _bash-it_modify_config_files() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
 	_bash-it_check_for_backup
 
-	if [[ -z "${silent}" ]]; then
+	if [[ -z "${silent}" ]] 
+     then
 		while [[ -z "${append_to_config}" ]]; do
 			read -e -n 1 -r -p "Would you like to keep your $CONFIG_FILE and append bash-it templates at the end? [y/N] " choice
 			case $choice in
@@ -130,7 +182,8 @@ function _bash-it_modify_config_files() {
 			esac
 		done
 	fi
-	if [[ -n "${append_to_config}" ]]; then
+	if [[ -n "${append_to_config}" ]] 
+     then
 		# backup/append
 		_bash-it_backup_append
 	else
@@ -173,12 +226,14 @@ done
 
 shift $((OPTIND - 1))
 
-if [[ -n "${silent}" && -n "${interactive}" ]]; then
+if [[ -n "${silent}" && -n "${interactive}" ]] 
+     then
 	echo -e "\033[91mOptions --silent and --interactive are mutually exclusive. Please choose one or the other.\033[m"
 	exit 1
 fi
 
-if [[ -n "${no_modify_config}" && -n "${append_to_config}" ]]; then
+if [[ -n "${no_modify_config}" && -n "${append_to_config}" ]] 
+     then
 	echo -e "\033[91mOptions --no-modify-config and --append-to-config are mutually exclusive. Please choose one or the other.\033[m"
 	exit 1
 fi
@@ -196,7 +251,8 @@ esac
 
 BACKUP_FILE=$CONFIG_FILE.bak
 echo "Installing bash-it"
-if [[ -z "${no_modify_config}" ]]; then
+if [[ -z "${no_modify_config}" ]] 
+     then
 	_bash-it_modify_config_files
 fi
 
@@ -213,7 +269,8 @@ cite _about _param _example _group _author _version
 # shellcheck source=./lib/helpers.bash
 source "$BASH_IT/lib/helpers.bash"
 
-if [[ -n $interactive && -z "${silent}" ]]; then
+if [[ -n $interactive && -z "${silent}" ]] 
+     then
 	for type in "aliases" "plugins" "completion"; do
 		echo -e "\033[0;32mEnabling ${type}\033[0m"
 		_bash-it_load_some "$type"

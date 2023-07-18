@@ -27,8 +27,8 @@
 # To use, source this file on bash:
 #   . completion-bundle
 
-__bundle() {
-    local bundle_bin=("${_RUBY_COMMAND_PREFIX[@]}" "$1")
+function __bundle() {
+    local bundle_bin=("${_RUBY_COMMAND_PREFIX[@]}" "${1}")
     local cur prev
     _get_comp_words_by_ref -n : cur prev
     local bundle_command
@@ -37,7 +37,8 @@ __bundle() {
     COMPREPLY=()
 
     local options
-    if [[ $cur = -* && $bundle_command != exec ]]; then
+    if [[ $cur = -* && $bundle_command != exec ]] 
+     then
         options="-V --help --no-color --no-no-color --verbose --no-verbose"
         case $bundle_command in
         "")
@@ -140,10 +141,12 @@ __bundle() {
             esac
             ;;
         exec)
-            if [[ $COMP_CWORD -eq $bundle_command_index ]]; then
+            if [[ $COMP_CWORD -eq $bundle_command_index ]] 
+     then
                 # Figure out Bundler's binaries dir
                 local bundler_bin=$(__bundle_exec_ruby 'puts Bundler.bundle_path + "bin"')
-                if [[ -d $bundler_bin ]]; then
+                if [[ -d $bundler_bin ]] 
+     then
                     local binaries=("$bundler_bin"/*)
                     # If there are binaries, strip directory name and use them
                     [[ -f "$binaries" ]] && options="${binaries[@]##*/}"
@@ -190,7 +193,7 @@ __bundle() {
     COMPREPLY=($(compgen -W "${options[*]}" -- "$cur"))
 }
 
-__bundle_get_command() {
+function __bundle_get_command() {
     local i
     for ((i=1; i < $COMP_CWORD; ++i)); do
         local arg=${COMP_WORDS[$i]}
@@ -216,13 +219,14 @@ __bundle_get_command() {
 #
 # Multiple groups can be entered, separated either by spaces or by colons.
 # Input is read from $cur, and the result is directly written to $COMPREPLY.
-__bundle_complete_groups() {
+function __bundle_complete_groups() {
     # Group being currently written
     local cur_group=${cur##*[ :]}
     # All groups written before
     local prefix=${cur%"$cur_group"}
     local groups=$(__bundle_exec_ruby 'puts Bundler.definition.dependencies.map(&:groups).reduce(:|).map(&:to_s)')
-    if [[ ! $groups ]]; then
+    if [[ ! $groups ]] 
+     then
         COMPREPLY=()
         return
     fi
@@ -241,7 +245,7 @@ __bundle_complete_groups() {
 #
 # Runs a Ruby script with Bundler loaded.
 # Results may be cached.
-__bundle_exec_ruby() {
+function __bundle_exec_ruby() {
     local bundle_bin=(${bundle_bin[@]:-bundle})
     # Lockfile is inferred here, and might not be correct (for example, when
     # running on a subdirectory). However, a wrong file path won't be a
@@ -256,11 +260,13 @@ __bundle_exec_ruby() {
     local cache_id_line="${bundle_bin[*]} @ $lockfile: ${*//$'\n'/ }"
 
     if [[ (! -f $lockfile || $cachefile -nt $lockfile) &&
-          $(head -n 1 -- "$cachefile" 2>/dev/null) = "$cache_id_line" ]]; then
+          $(head -n 1 -- "$cachefile" 2>/dev/null) = "$cache_id_line" ]] 
+     then
         tail -n +2 -- "$cachefile"
     else
         local output=$("${bundle_bin[@]}" exec ruby -e "$@" 2>/dev/null)
-        if [[ $? -eq 0 ]]; then
+        if [[ $? -eq 0 ]] 
+     then
             (mkdir -p -- "$cachedir" &&
              echo "$cache_id_line"$'\n'"$output" >$cachefile) 2>/dev/null
             echo "$output"

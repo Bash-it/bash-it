@@ -18,7 +18,7 @@ function setup_repo {
 }
 
 function setup_svn_path {
-  local svn_path="$1"
+  local svn_path="${1}"
 
   # Make sure that the requested SVN script is available
   assert_file_exist "$svn_path/svn"

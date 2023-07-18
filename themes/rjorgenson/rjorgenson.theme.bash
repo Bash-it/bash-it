@@ -30,7 +30,7 @@ esac
 
 PS3=">> "
 
-__my_rvm_ruby_version() {
+function __my_rvm_ruby_version() {
     local gemset=$(echo $GEM_HOME | awk -F'@' '{print $2}')
   [ "$gemset" != "" ] && gemset="@$gemset"
     local version=$(echo $MY_RUBY_HOME | awk -F'-' '{print $2}')
@@ -38,7 +38,7 @@ __my_rvm_ruby_version() {
   [ "$full" != "" ] && echo "${BRACKET_COLOR}[${STRING_COLOR}$full${BRACKET_COLOR}]${normal}"
 }
 
-is_vim_shell() {
+function is_vim_shell() {
         if [ ! -z "$VIMRUNTIME" ]
         then
                 echo "${BRACKET_COLOR}[${STRING_COLOR}vim shell${BRACKET_COLOR}]${normal}"
@@ -46,28 +46,31 @@ is_vim_shell() {
 }
 
 function is_integer() { # helper function for todo-txt-count
-    [ "$1" -eq "$1" ] > /dev/null 2>&1
+    [ "${1}" -eq "${1}" ] > /dev/null 2>&1
         return $?
 }
 
-todo_txt_count() {
-    if `hash todo.sh 2>&-`; then # is todo.sh installed
+function todo_txt_count() {
+    if `hash todo.sh 2>&-` 
+     then # is todo.sh installed
         count=`todo.sh ls | grep -E "TODO: [0-9]+ of ([0-9]+) tasks shown" | awk '{ print $4 }'`
-        if is_integer $count; then # did we get a sane answer back
+        if is_integer $count 
+     then # did we get a sane answer back
             echo "${BRACKET_COLOR}[${STRING_COLOR}T:$count${BRACKET_COLOR}]$normal"
         fi
     fi
 }
 
-my_prompt_char() {
-    if [[ $OSTYPE =~ "darwin" ]]; then
+function my_prompt_char() {
+    if [[ $OSTYPE =~ "darwin" ]] 
+     then
         echo "${BRACKET_COLOR}➞  ${normal}"
     else
         echo "${BRACKET_COLOR}➞ ${normal}"
     fi
 }
 
-prompt() {
+function prompt() {
 	SCM_PROMPT_FORMAT="${BRACKET_COLOR}[%s${BRACKET_COLOR}][${STRING_COLOR}%s${BRACKET_COLOR}]"
 
     my_ps_host="${STRING_COLOR}\h${normal}";

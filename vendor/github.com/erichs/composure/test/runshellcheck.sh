@@ -13,7 +13,8 @@ cat $metricfile
 
 # check for shellcheck.net errors
 cat $metricfile | grep -q error
-if [ $? -eq 0 ]; then
+if [ $? -eq 0 ] 
+     then
   echo "! shellcheck.net:../composure.sh:0  [ errors ]  FAILED"
   rm $metricfile
   exit 2
@@ -21,7 +22,8 @@ fi
 
 # check for shellcheck.net warnings
 cat $metricfile | grep -q warning
-if [ $? -eq 0 ]; then
+if [ $? -eq 0 ] 
+     then
   echo "! shellcheck.net:../composure.sh:0  [ warnings ]  FAILED"
   rm $metricfile
   exit 2

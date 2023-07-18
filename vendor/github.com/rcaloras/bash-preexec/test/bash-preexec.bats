@@ -18,7 +18,7 @@ test_echo() {
 }
 
 test_preexec_echo() {
-  printf "%s\n" "$1"
+  printf "%s\n" "${1}"
 }
 
 @test "__bp_install_after_session_init should exit with 1 if we're not using bash" {

@@ -45,7 +45,8 @@ function _grunt_gruntfile() {
   local curpath="$PWD"
   while [[ "$curpath" ]]; do
     for gruntfile in "$curpath/"{G,g}runtfile.{js,coffee}; do
-      if [[ -e "$gruntfile" ]]; then
+      if [[ -e "$gruntfile" ]] 
+     then
         echo "$gruntfile"
         return
       fi

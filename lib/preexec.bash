@@ -40,19 +40,23 @@ function __check_preexec_conflict() {
 function safe_append_prompt_command() {
 	local prompt_re prompt_er f
 
-	if [[ "${bash_preexec_imported:-${__bp_imported:-missing}}" == "defined" ]]; then
+	if [[ "${bash_preexec_imported:-${__bp_imported:-missing}}" == "defined" ]] 
+     then
 		# We are using bash-preexec
 		__bp_trim_whitespace f "${1?}"
-		if ! __check_precmd_conflict "${f}"; then
+		if ! __check_precmd_conflict "${f}" 
+     then
 			precmd_functions+=("${f}")
 		fi
 	else
 		# Match on word-boundaries
 		prompt_re='(^|[^[:alnum:]_])'
 		prompt_er='([^[:alnum:]_]|$)'
-		if [[ ${PROMPT_COMMAND} =~ ${prompt_re}"${1}"${prompt_er} ]]; then
+		if [[ ${PROMPT_COMMAND} =~ ${prompt_re}"${1}"${prompt_er} ]] 
+     then
 			return
-		elif [[ -z ${PROMPT_COMMAND} ]]; then
+		elif [[ -z ${PROMPT_COMMAND} ]] 
+     then
 			PROMPT_COMMAND="${1}"
 		else
 			PROMPT_COMMAND="${1};${PROMPT_COMMAND}"
@@ -63,10 +67,12 @@ function safe_append_prompt_command() {
 function safe_append_preexec() {
 	local prompt_re f
 
-	if [[ "${bash_preexec_imported:-${__bp_imported:-missing}}" == "defined" ]]; then
+	if [[ "${bash_preexec_imported:-${__bp_imported:-missing}}" == "defined" ]] 
+     then
 		# We are using bash-preexec
 		__bp_trim_whitespace f "${1?}"
-		if ! __check_preexec_conflict "${f}"; then
+		if ! __check_preexec_conflict "${f}" 
+     then
 			preexec_functions+=("${f}")
 		fi
 	else

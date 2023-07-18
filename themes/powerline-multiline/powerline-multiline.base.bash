@@ -1,7 +1,7 @@
 . "$BASH_IT/themes/powerline/powerline.base.bash"
 
 function __powerline_last_status_prompt {
-  [[ "$1" -ne 0 ]] && echo "$(set_color ${LAST_STATUS_THEME_PROMPT_COLOR} -) ${1} ${normal}"
+  [[ "${1}" -ne 0 ]] && echo "$(set_color ${LAST_STATUS_THEME_PROMPT_COLOR} -) ${1} ${normal}"
 }
 
 function __powerline_right_segment {
@@ -11,23 +11,28 @@ function __powerline_right_segment {
   local padding=0
   local pad_before_segment=" "
 
-  if [[ "${SEGMENTS_AT_RIGHT}" -eq 0 ]]; then
-    if [[ "${POWERLINE_COMPACT_AFTER_LAST_SEGMENT}" -ne 0 ]]; then
+  if [[ "${SEGMENTS_AT_RIGHT}" -eq 0 ]] 
+     then
+    if [[ "${POWERLINE_COMPACT_AFTER_LAST_SEGMENT}" -ne 0 ]] 
+     then
       pad_before_segment=""
     fi
     RIGHT_PROMPT+="$(set_color ${params[1]} -)${POWERLINE_RIGHT_END}${normal}"
     (( padding += 1 ))
   else
-    if [[ "${POWERLINE_COMPACT_BEFORE_SEPARATOR}" -ne 0 ]]; then
+    if [[ "${POWERLINE_COMPACT_BEFORE_SEPARATOR}" -ne 0 ]] 
+     then
       pad_before_segment=""
     fi
     # Since the previous segment wasn't the last segment, add padding, if needed
     #
-    if [[ "${POWERLINE_COMPACT_AFTER_SEPARATOR}" -eq 0 ]]; then
+    if [[ "${POWERLINE_COMPACT_AFTER_SEPARATOR}" -eq 0 ]] 
+     then
       RIGHT_PROMPT+="$(set_color - ${LAST_SEGMENT_COLOR}) ${normal}"
       (( padding += 1 ))
     fi
-    if [[ "${LAST_SEGMENT_COLOR}" -eq "${params[1]}" ]]; then
+    if [[ "${LAST_SEGMENT_COLOR}" -eq "${params[1]}" ]] 
+     then
       RIGHT_PROMPT+="$(set_color - ${LAST_SEGMENT_COLOR})${POWERLINE_RIGHT_SEPARATOR_SOFT}${normal}"
     else
       RIGHT_PROMPT+="$(set_color ${params[1]} ${LAST_SEGMENT_COLOR})${POWERLINE_RIGHT_SEPARATOR}${normal}"
@@ -69,21 +74,24 @@ function __powerline_prompt_command {
     [[ -n "${info}" ]] && __powerline_left_segment "${info}"
   done
 
-  if [[ -n "${LEFT_PROMPT}" ]] && [[ "${POWERLINE_COMPACT_AFTER_LAST_SEGMENT}" -eq 0 ]]; then
+  if [[ -n "${LEFT_PROMPT}" ]] && [[ "${POWERLINE_COMPACT_AFTER_LAST_SEGMENT}" -eq 0 ]] 
+     then
     __powerline_left_last_segment_padding
   fi
 
   [[ -n "${LEFT_PROMPT}" ]] && LEFT_PROMPT+="$(set_color ${LAST_SEGMENT_COLOR} -)${POWERLINE_LEFT_END}${normal}"
 
   ## right prompt ##
-  if [[ -n "${POWERLINE_RIGHT_PROMPT}" ]]; then
+  if [[ -n "${POWERLINE_RIGHT_PROMPT}" ]] 
+     then
     # LEFT_PROMPT+="${move_cursor_rightmost}"
     for segment in $POWERLINE_RIGHT_PROMPT; do
       local info="$(__powerline_${segment}_prompt)"
       [[ -n "${info}" ]] && __powerline_right_segment "${info}"
     done
 
-    if [[ -n "${RIGHT_PROMPT}" ]] && [[ "${POWERLINE_COMPACT_BEFORE_FIRST_SEGMENT}" -eq 0 ]]; then
+    if [[ -n "${RIGHT_PROMPT}" ]] && [[ "${POWERLINE_COMPACT_BEFORE_FIRST_SEGMENT}" -eq 0 ]] 
+     then
       __powerline_right_first_segment_padding
     fi
 
@@ -93,7 +101,8 @@ function __powerline_prompt_command {
   fi
 
   local prompt="${PROMPT_CHAR}"
-  if [[ "${POWERLINE_COMPACT_PROMPT}" -eq 0 ]]; then
+  if [[ "${POWERLINE_COMPACT_PROMPT}" -eq 0 ]] 
+     then
     prompt+=" "
   fi
 

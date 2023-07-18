@@ -23,7 +23,8 @@ function __check_completion() {
   COMP_LAST=$((${COMP_POINT} - 1))
 
   # If the last character was a space...
-  if [[ ${COMP_LINE:$COMP_LAST} = ' ' ]]; then
+  if [[ ${COMP_LINE:$COMP_LAST} = ' ' ]] 
+     then
     # ...then add an empty array item
     COMP_WORDS+=('')
   fi

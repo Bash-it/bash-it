@@ -45,7 +45,8 @@ done
 
 # Load theme, if a theme was set
 # shellcheck source-path=SCRIPTDIR/themes
-if [[ -n "${BASH_IT_THEME:-}" ]]; then
+if [[ -n "${BASH_IT_THEME:-}" ]] 
+     then
 	_log_debug "Loading theme '${BASH_IT_THEME}'."
 	BASH_IT_LOG_PREFIX="themes: githelpers: "
 	source "${BASH_IT}/themes/githelpers.theme.bash"
@@ -64,7 +65,8 @@ fi
 _log_debug "Loading custom aliases, completion, plugins..."
 for _bash_it_main_file_type in "aliases" "completion" "plugins"; do
 	_bash_it_main_file_custom="${BASH_IT}/${_bash_it_main_file_type}/custom.${_bash_it_main_file_type}.bash"
-	if [[ -s "${_bash_it_main_file_custom}" ]]; then
+	if [[ -s "${_bash_it_main_file_custom}" ]] 
+     then
 		_bash-it-log-prefix-by-path "${_bash_it_main_file_custom}"
 		_log_debug "Loading component..."
 		# shellcheck disable=SC1090
@@ -76,7 +78,8 @@ done
 # Custom
 _log_debug "Loading general custom files..."
 for _bash_it_main_file_custom in "${BASH_IT_CUSTOM}"/*.bash "${BASH_IT_CUSTOM}"/*/*.bash; do
-	if [[ -s "${_bash_it_main_file_custom}" ]]; then
+	if [[ -s "${_bash_it_main_file_custom}" ]] 
+     then
 		_bash-it-log-prefix-by-path "${_bash_it_main_file_custom}"
 		_log_debug "Loading custom file..."
 		# shellcheck disable=SC1090
@@ -85,21 +88,25 @@ for _bash_it_main_file_custom in "${BASH_IT_CUSTOM}"/*.bash "${BASH_IT_CUSTOM}"/
 	BASH_IT_LOG_PREFIX="core: main: "
 done
 
-if [[ -n "${PROMPT:-}" ]]; then
+if [[ -n "${PROMPT:-}" ]] 
+     then
 	PS1="${PROMPT}"
 fi
 
 # Adding Support for other OSes
-if _command_exists gloobus-preview; then
+if _command_exists gloobus-preview 
+     then
 	PREVIEW="gloobus-preview"
-elif [[ -d /Applications/Preview.app ]]; then
+elif [[ -d /Applications/Preview.app ]] 
+     then
 	PREVIEW="/Applications/Preview.app"
 else
 	PREVIEW="less"
 fi
 
 # BASH_IT_RELOAD_LEGACY is set.
-if [[ -n "${BASH_IT_RELOAD_LEGACY:-}" ]] && ! _command_exists reload; then
+if [[ -n "${BASH_IT_RELOAD_LEGACY:-}" ]] && ! _command_exists reload 
+     then
 	# shellcheck disable=SC2139
 	alias reload="builtin source '${BASH_IT_BASHRC?}'"
 fi

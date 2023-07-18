@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Bash Maven completion
 
-_mvn()
+function _mvn()
 {
    local cmds cur colonprefixes
    cmds="clean validate compile test package integration-test   \

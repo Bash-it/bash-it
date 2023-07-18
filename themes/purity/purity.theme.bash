@@ -18,9 +18,11 @@ STATUS_THEME_PROMPT_OK="${bold_green?}❯${reset_color?}${normal?} "
 function venv_prompt() {
 	python_venv=""
 	# Detect python venv
-	if [[ -n "${CONDA_DEFAULT_ENV:-}" ]]; then
+	if [[ -n "${CONDA_DEFAULT_ENV:-}" ]] 
+     then
 		python_venv="(${PYTHON_VENV_CHAR}${CONDA_DEFAULT_ENV}) "
-	elif [[ -n "${VIRTUAL_ENV}" ]]; then
+	elif [[ -n "${VIRTUAL_ENV}" ]] 
+     then
 		python_venv="(${PYTHON_VENV_CHAR}${VIRTUAL_ENV##*/}) "
 	fi
 	[[ -n "${python_venv}" ]] && echo "${python_venv}"

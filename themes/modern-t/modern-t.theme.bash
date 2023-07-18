@@ -25,14 +25,14 @@ esac
 
 PS3=">> "
 
-is_vim_shell() {
+function is_vim_shell() {
 	if [ ! -z "$VIMRUNTIME" ]
 	then
 		echo "[${cyan}vim shell${normal}]"
 	fi
 }
 
-prompt() {
+function prompt() {
 	SCM_PROMPT_FORMAT='[%s][%s]'
 	if [ $? -ne 0 ]
 	then

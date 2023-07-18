@@ -1,19 +1,20 @@
 #!/bin/bash
 
-_basename_no_extension () {
+function _basename_no_extension () {
   sed -e 's/^.*\/\(.*\)\.inc$/\1/'
 }
 
-_composure_functions () {
+function _composure_functions () {
   _list_composure_files | _basename_no_extension
 }
 
-_load_tab_completions () {
+function _load_tab_completions () {
   # support tab completion for 'revise' command
   # you may disable this by adding the following line to your shell startup:
   # export COMPOSURE_TAB_COMPLETION=0
 
-  if [ "$COMPOSURE_TAB_COMPLETION" = "0" ]; then
+  if [ "$COMPOSURE_TAB_COMPLETION" = "0" ] 
+     then
     return  # if you say so...
   fi
 
@@ -52,7 +53,7 @@ BASHDATA
 
 # Second-order functions for composure
 
-findgroup ()
+function findgroup ()
 {
     about 'finds all functions belonging to group'
     param '1: name of group'
@@ -63,13 +64,14 @@ findgroup ()
     for func in $(_typeset_functions)
     do
         typeset group="$(typeset -f $func | metafor group)"
-        if [ "$group" = "$1" ]; then
+        if [ "$group" = "${1}" ] 
+     then
             echo "$func"
         fi
     done
 }
 
-overview ()
+function overview ()
 {
     about 'gives overview of available shell functions, by group'
     group 'composure'
@@ -81,7 +83,8 @@ overview ()
     for func in $(_typeset_functions);
     do
         typeset group="$(typeset -f $func | metafor group)";
-        if [ -z "$group" ]; then
+        if [ -z "$group" ] 
+     then
             group='misc';
         fi;
         typeset about="$(typeset -f $func | metafor about)";
@@ -102,7 +105,7 @@ overview ()
     command rm $grouplist 2> /dev/null
 }
 
-recompose ()
+function recompose ()
 {
     about 'loads a stored function from ~/.composure repo'
     param '1: name of function'
@@ -112,7 +115,7 @@ recompose ()
     . $(_get_composure_dir)/$1.inc
 }
 
-unique_metafor ()
+function unique_metafor ()
 {
     about 'displays all unique metadata for a given keyword'
     param '1: keyword'
@@ -127,7 +130,7 @@ unique_metafor ()
     command rm $file 2>/dev/null
 }
 
-compost () {
+function compost () {
 	about 'delete function stored in composure repo'
 	param '1: name of function'
 	example '$ compost myfunc'

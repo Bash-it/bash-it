@@ -5,7 +5,8 @@ targetdir="$BASH_IT/themes/liquidprompt/liquidprompt"
 gray="\[\e[1;90m\]"
 
 cwd="$PWD"
-if cd "$targetdir" &>/dev/null && git rev-parse --is-inside-work-tree &>/dev/null; then
+if cd "$targetdir" &>/dev/null && git rev-parse --is-inside-work-tree &>/dev/null 
+     then
     true
 else
     git clone https://github.com/nojhan/liquidprompt.git "$targetdir" && \
@@ -38,7 +39,8 @@ _lp_git_branch()
     local branch
     # Recent versions of Git support the --short option for symbolic-ref, but
     # not 1.7.9 (Ubuntu 12.04)
-    if branch="$(\git symbolic-ref -q HEAD)"; then
+    if branch="$(\git symbolic-ref -q HEAD)" 
+     then
         _lp_escape "$(\git rev-parse --short=5 -q HEAD 2>/dev/null):${branch#refs/heads/}"
     else
         # In detached head state, use commit instead
@@ -48,7 +50,8 @@ _lp_git_branch()
 }
 
 _lp_time() {
-    if (( LP_ENABLE_TIME )) && (( ! LP_TIME_ANALOG )); then
+    if (( LP_ENABLE_TIME )) && (( ! LP_TIME_ANALOG )) 
+     then
         LP_TIME="${gray}$(date +%d-%H:%M)${normal}"
     else
         LP_TIME=""

@@ -8,7 +8,7 @@ function local_setup_file() {
 
 function setup_go_path()
 {
-  local go_path="$1"
+  local go_path="${1}"
 
   # Make sure that the requested GO folder is available
   assert_dir_exist "$go_path/bin"

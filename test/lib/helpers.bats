@@ -513,14 +513,15 @@ function local_setup() {
 }
 
 function __migrate_all_components() {
-  subdirectory="$1"
-  one_type="$2"
-  priority="$3"
+  subdirectory="${1}"
+  one_type="${2}"
+  priority="${3}"
 
   for f in "${BASH_IT}/$subdirectory/available/"*.bash
   do
     to_enable=$(basename $f)
-    if [ -z "$priority" ]; then
+    if [ -z "$priority" ] 
+     then
       ln -s "../available/$to_enable" "${BASH_IT}/${subdirectory}/enabled/$to_enable"
     else
       ln -s "../available/$to_enable" "${BASH_IT}/${subdirectory}/enabled/$priority---$to_enable"

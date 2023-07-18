@@ -6,7 +6,8 @@ function _bash-it-preview() {
 	local BASH_IT_THEME BASH_IT_LOG_LEVEL
 	local themes IFS=$'\n' cur
 
-	if [[ $# -gt '0' ]]; then
+	if [[ $# -gt '0' ]] 
+     then
 		themes=("$@")
 	else
 		themes=("${BASH_IT?}/themes"/*/*.theme.bash)
@@ -14,7 +15,8 @@ function _bash-it-preview() {
 		themes=("${themes[@]%.theme.bash}")
 	fi
 
-	if [[ ${COMP_CWORD:-} -gt '0' ]]; then
+	if [[ ${COMP_CWORD:-} -gt '0' ]] 
+     then
 		cur="${COMP_WORDS[COMP_CWORD]}"
 		read -d '' -ra COMPREPLY < <(compgen -W "all${IFS}${themes[*]}" -- "${cur}")
 		return
@@ -28,7 +30,8 @@ function _bash-it-preview() {
 	done
 }
 
-if [[ -n "${BASH_PREVIEW:-}" ]]; then
+if [[ -n "${BASH_PREVIEW:-}" ]] 
+     then
 	_bash-it-preview "${BASH_PREVIEW}" "$@"
 	unset BASH_PREVIEW #Prevent infinite looping
 fi

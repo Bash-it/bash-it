@@ -90,7 +90,8 @@ function get_ip_info {
 
 # Displays ip prompt
 function ip_prompt_info() {
-    if [[ $IP_ENABLED == 1 ]]; then
+    if [[ $IP_ENABLED == 1 ]] 
+     then
         echo -e " ${DEFAULT_COLOR}(${IP_COLOR}$(get_ip_info)${DEFAULT_COLOR})"
     fi
 }
@@ -120,7 +121,8 @@ function virtual_prompt_info() {
 
 # Parse git info
 function git_prompt_info() {
-    if [[ -n $(git status -s 2> /dev/null |grep -v ^# |grep -v "working directory clean") ]]; then
+    if [[ -n $(git status -s 2> /dev/null |grep -v ^# |grep -v "working directory clean") ]] 
+     then
         state=${GIT_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
     else
         state=${GIT_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
@@ -135,7 +137,8 @@ function git_prompt_info() {
 
 # Parse hg info
 function hg_prompt_info() {
-    if [[ -n $(hg status 2> /dev/null) ]]; then
+    if [[ -n $(hg status 2> /dev/null) ]] 
+     then
         state=${HG_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
     else
         state=${HG_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
@@ -150,7 +153,8 @@ function hg_prompt_info() {
 
 # Parse svn info
 function svn_prompt_info() {
-    if [[ -n $(svn status --ignore-externals -q 2> /dev/null) ]]; then
+    if [[ -n $(svn status --ignore-externals -q 2> /dev/null) ]] 
+     then
         state=${SVN_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
     else
         state=${SVN_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
@@ -188,7 +192,8 @@ function prompt() {
     local UC=$USER_COLOR
     [ $UID -eq "0" ] && UC=$SUPERUSER_COLOR
 
-    if [[ $VIRTUAL_PROMPT_ENABLED == 1 ]]; then
+    if [[ $VIRTUAL_PROMPT_ENABLED == 1 ]] 
+     then
         PS1="$(scm_char) ${UC}\u ${DEFAULT_COLOR}at ${MACHINE_COLOR}\h$(ip_prompt_info) ${DEFAULT_COLOR}in ${DIRECTORY_COLOR}$(limited_pwd)${DEFAULT_COLOR}$(virtual_prompt_info)$(scm_prompt_info)${reset_color} \$ "
     else
         PS1="$(scm_char) ${UC}\u ${DEFAULT_COLOR}at ${MACHINE_COLOR}\h$(ip_prompt_info) ${DEFAULT_COLOR}in ${DIRECTORY_COLOR}$(limited_pwd)${DEFAULT_COLOR}$(scm_prompt_info)${reset_color} \$ "

@@ -3,7 +3,8 @@
 function _user-prompt() {
 	local -r user='\u'
 
-	if [[ "${EUID}" -eq 0 ]]; then
+	if [[ "${EUID}" -eq 0 ]] 
+     then
 		# Privileged users:
 		local -r user_color="${bold_red?}"
 	else
@@ -19,7 +20,8 @@ function _host-prompt() {
 	local -r host='\h'
 
 	# Check whether or not $SSH_TTY is set:
-	if [[ -z "${SSH_TTY:-}" ]]; then
+	if [[ -z "${SSH_TTY:-}" ]] 
+     then
 		# For local hosts, set the host's prompt color to blue:
 		local -r host_color="${bold_blue?}"
 	else
@@ -43,7 +45,8 @@ function _exit-status-prompt() {
 	local -r exit_status="${2}"
 
 	# Check the exit status of the last command captured by $exit_status:
-	if [[ "${exit_status}" -eq 0 ]]; then
+	if [[ "${exit_status}" -eq 0 ]] 
+     then
 		# For commands that return an exit status of zero, set the exit status's
 		# notifier to green:
 		local -r exit_status_color="${bold_green?}"
@@ -53,10 +56,12 @@ function _exit-status-prompt() {
 		local -r exit_status_color="${bold_red?}"
 	fi
 
-	if [[ "${prompt_string}" -eq 1 ]]; then
+	if [[ "${prompt_string}" -eq 1 ]] 
+     then
 		# $PS1:
 		printf '%b +%b' "${exit_status_color}" "${normal?} "
-	elif [[ "${prompt_string}" -eq 2 ]]; then
+	elif [[ "${prompt_string}" -eq 2 ]] 
+     then
 		# $PS2:
 		printf '%b |%b' "${exit_status_color}" "${normal?} "
 	else

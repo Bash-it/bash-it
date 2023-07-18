@@ -19,7 +19,8 @@ export GOPATH="${GOPATH:-$(go env GOPATH)}"
 _bash-it-gopath-pathmunge() {
 	_about 'Ensures paths in GOPATH are added to PATH using pathmunge, with /bin appended'
 	_group 'go'
-	if [[ -z $GOPATH ]]; then
+	if [[ -z $GOPATH ]] 
+     then
 		echo 'GOPATH empty' >&2
 		return 1
 	fi
@@ -28,7 +29,8 @@ _bash-it-gopath-pathmunge() {
 	i=${#paths[@]}
 	while [[ $i -gt 0 ]]; do
 		i=$((i - 1))
-		if [[ -n "${paths[i]}" ]]; then
+		if [[ -n "${paths[i]}" ]] 
+     then
 			pathmunge "${paths[i]}/bin"
 		fi
 	done

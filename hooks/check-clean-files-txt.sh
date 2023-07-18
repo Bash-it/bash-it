@@ -2,7 +2,8 @@
 
 file=$1
 # Should only be run on clean_files.txt
-if [ "$file" != "clean_files.txt" ]; then
+if [ "$file" != "clean_files.txt" ] 
+     then
 	echo "Please run this script on clean_files.txt only!"
 	exit 1
 fi
@@ -14,12 +15,13 @@ function compare_lines() {
 		[[ $line =~ "#" ]] && continue
 		[[ $line == "" ]] && continue
 		# Actual check
-		if [[ $prev > $line ]]; then
+		if [[ $prev > $line ]] 
+     then
 			echo "$line should be before $prev"
 			exit 1
 		fi
 		prev=$line
-	done <<< "$1"
+	done <<< "${1}"
 }
 
 # We compare using the legacy way

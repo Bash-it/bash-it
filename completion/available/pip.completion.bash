@@ -8,8 +8,14 @@
 # So that pip is in the system's path.
 _command_exists pip || return
 
-function __bash_it_complete_pip() {
-	if _command_exists _pip_completion; then
+function __bash_it_complete_pip() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	if _command_exists _pip_completion
+	 then
 		complete -o default -F _pip_completion pip
 		_pip_completion "$@"
 	else
@@ -17,4 +23,5 @@ function __bash_it_complete_pip() {
 		_pip_completion "$@"
 	fi
 }
+
 complete -o default -F __bash_it_complete_pip pip

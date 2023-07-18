@@ -13,9 +13,11 @@ GIT_SHA_PREFIX="${blue}"
 GIT_SHA_SUFFIX="${reset_color}"
 
 function rvm_version_prompt {
-  if which rvm &> /dev/null; then
+  if which rvm &> /dev/null 
+     then
     rvm=$(rvm-prompt) || return
-    if [ -n "$rvm" ]; then
+    if [ -n "$rvm" ] 
+     then
       echo -e "$rvm"
     fi
   fi

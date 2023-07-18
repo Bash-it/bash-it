@@ -60,12 +60,14 @@ function dirs-help() {
 # Usage:
 
 : "${BASH_IT_DIRS_BKS:=${XDG_STATE_HOME:-${HOME}/.local/state}/bash_it/dirs}"
-if [[ -f "${BASH_IT_DIRS_BKS?}" ]]; then
+if [[ -f "${BASH_IT_DIRS_BKS?}" ]] 
+     then
 	# shellcheck disable=SC1090
 	source "${BASH_IT_DIRS_BKS?}"
 else
 	mkdir -p "${BASH_IT_DIRS_BKS%/*}"
-	if [[ -f ~/.dirs ]]; then
+	if [[ -f ~/.dirs ]] 
+     then
 		mv -vn ~/.dirs "${BASH_IT_DIRS_BKS?}"
 		# shellcheck disable=SC1090
 		source "${BASH_IT_DIRS_BKS?}"
@@ -99,7 +101,7 @@ function S() {
 
 	sed "/$1/d" "${BASH_IT_DIRS_BKS?}" > "${BASH_IT_DIRS_BKS?}.new"
 	command mv "${BASH_IT_DIRS_BKS?}.new" "${BASH_IT_DIRS_BKS?}"
-	echo "$1"=\""${PWD}"\" >> "${BASH_IT_DIRS_BKS?}"
+	echo "${1}"=\""${PWD}"\" >> "${BASH_IT_DIRS_BKS?}"
 	# shellcheck disable=SC1090
 	source "${BASH_IT_DIRS_BKS?}"
 }

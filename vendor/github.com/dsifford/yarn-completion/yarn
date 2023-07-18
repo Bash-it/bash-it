@@ -29,11 +29,12 @@
 #	If FIELDTYPE is array, boolean, number, or string, then the field values are returned.
 #	<field-key> must be a first-level field in the json file.
 ##
-__yarn_get_package_fields() {
+function __yarn_get_package_fields() {
 	declare cwd=$PWD field_type=object field_key opt package_dot_json OPTIND OPTARG
 
 	while [[ -n $cwd ]]; do
-		if [[ -f "$cwd/package.json" ]]; then
+		if [[ -f "$cwd/package.json" ]] 
+     then
 			package_dot_json="$cwd/package.json"
 			break
 		fi
@@ -43,11 +44,14 @@ __yarn_get_package_fields() {
 	while getopts ":gt:" opt; do
 		case $opt in
 			g)
-				if [[ -f $HOME/.config/yarn/global/package.json ]]; then
+				if [[ -f $HOME/.config/yarn/global/package.json ]] 
+     then
 					package_dot_json="$HOME/.config/yarn/global/package.json"
-				elif [[ -f $HOME/.local/share/yarn/global/package.json ]]; then
+				elif [[ -f $HOME/.local/share/yarn/global/package.json ]] 
+     then
 					package_dot_json="$HOME/.local/share/yarn/global/package.json"
-				elif [[ -f $HOME/.yarn/global/package.json ]]; then
+				elif [[ -f $HOME/.yarn/global/package.json ]] 
+     then
 					package_dot_json="$HOME/.yarn/global/package.json"
 				else
 					package_dot_json=""
@@ -112,7 +116,7 @@ __yarn_get_package_fields() {
 #  *args
 #   cword
 ##
-__yarn_count_args() {
+function __yarn_count_args() {
 	args=0
 	declare -i counter=0 depth=0
 	declare arg_flag_pattern opt OPTIND
@@ -133,8 +137,10 @@ __yarn_count_args() {
 			-* | =) ;;
 			*)
 				# shellcheck disable=SC2053
-				if [[ ${words[counter - 1]} != $arg_flag_pattern ]]; then
-					if ((depth-- <= 0)); then
+				if [[ ${words[counter - 1]} != $arg_flag_pattern ]] 
+     then
+					if ((depth-- <= 0)) 
+     then
 						((args++))
 					fi
 				fi
@@ -162,7 +168,7 @@ __yarn_count_args() {
 #   subcommands
 #   words
 ##
-__yarn_get_command() {
+function __yarn_get_command() {
 	declare -i counter=0 cmd_depth=0 OPTIND
 	declare cmdlist word opt
 
@@ -200,7 +206,7 @@ __yarn_get_command() {
 # Globals:
 #   cur
 ##
-__yarn_fallback() {
+function __yarn_fallback() {
 	case "$cur" in
 		-*)
 			COMPREPLY=($(compgen -W "$(__yarn_flags)" -- "$cur"))
@@ -223,7 +229,7 @@ __yarn_fallback() {
 #   global_flags
 #   words
 ##
-__yarn_flags() {
+function __yarn_flags() {
 	declare word
 	declare -a existing_flags=()
 
@@ -250,12 +256,13 @@ __yarn_flags() {
 #   cur
 #   prev
 ##
-__yarn_flag_args() {
+function __yarn_flag_args() {
 	declare {arg,bool,dir,file,int,special}_flag_pattern
 	arg_flag_pattern="@($(tr ' ' '|' <<< "${arg_flags[*]}"))"
 
 	# shellcheck disable=SC2053
-	if [[ $prev != $arg_flag_pattern ]]; then
+	if [[ $prev != $arg_flag_pattern ]] 
+     then
 		return 1
 	fi
 
@@ -300,7 +307,7 @@ __yarn_flag_args() {
 	return 0
 }
 
-_yarn_add() {
+function _yarn_add() {
 	((depth++))
 	flags=(
 		--audit -A
@@ -314,7 +321,7 @@ _yarn_add() {
 	return 1
 }
 
-_yarn_audit() {
+function _yarn_audit() {
 	((depth++))
 	flags=(
 		--groups
@@ -324,7 +331,7 @@ _yarn_audit() {
 	return 1
 }
 
-_yarn_autoclean() {
+function _yarn_autoclean() {
 	((depth++))
 	flags=(
 		--force -F
@@ -333,7 +340,7 @@ _yarn_autoclean() {
 	return 1
 }
 
-_yarn_cache() {
+function _yarn_cache() {
 	((depth++))
 	declare cmd
 	flags=(
@@ -364,7 +371,7 @@ _yarn_cache() {
 	esac
 }
 
-_yarn_check() {
+function _yarn_check() {
 	((depth++))
 	flags=(
 		--integrity
@@ -373,7 +380,7 @@ _yarn_check() {
 	return 1
 }
 
-_yarn_config() {
+function _yarn_config() {
 	((depth++))
 	declare cmd
 	declare subcommands=(
@@ -408,7 +415,8 @@ _yarn_config() {
 			case "$cur" in
 				-*) ;;
 				*)
-					if [[ $prev == @(get|delete) ]]; then
+					if [[ $prev == @(get|delete) ]] 
+     then
 						COMPREPLY=($(compgen -W "${known_keys[*]}" -- "$cur"))
 						return 0
 					fi
@@ -423,7 +431,8 @@ _yarn_config() {
 					)
 					;;
 				*)
-					if [[ $prev == set ]]; then
+					if [[ $prev == set ]] 
+     then
 						COMPREPLY=($(compgen -W "${known_keys[*]}" -- "$cur"))
 						return 0
 					fi
@@ -443,7 +452,7 @@ _yarn_config() {
 	return 1
 }
 
-_yarn_create() {
+function _yarn_create() {
 	((depth++))
 	declare -i args
 	case "$cur" in
@@ -456,7 +465,7 @@ _yarn_create() {
 	return 1
 }
 
-_yarn_generate_lock_entry() {
+function _yarn_generate_lock_entry() {
 	((depth++))
 	flags=(
 		--resolved
@@ -465,7 +474,7 @@ _yarn_generate_lock_entry() {
 	return 1
 }
 
-_yarn_global() {
+function _yarn_global() {
 	((depth++))
 	declare cmd cmdlist
 	flags=(
@@ -503,14 +512,15 @@ _yarn_global() {
 	return 1
 }
 
-_yarn_help() {
+function _yarn_help() {
 	((depth++))
 	declare -i args
 	case "$cur" in
 		-*) ;;
 		*)
 			__yarn_count_args -d $depth
-			if ((args == 0)); then
+			if ((args == 0)) 
+     then
 				COMPREPLY=($(compgen -W "${commands[*]}" -- "$cur"))
 				return 0
 			fi
@@ -519,7 +529,7 @@ _yarn_help() {
 	return 1
 }
 
-_yarn_info() {
+function _yarn_info() {
 	((depth++))
 	flags=(
 		--json
@@ -574,7 +584,7 @@ _yarn_info() {
 	return 1
 }
 
-_yarn_init() {
+function _yarn_init() {
 	((depth++))
 	flags=(
 		--yes -y
@@ -584,7 +594,7 @@ _yarn_init() {
 	return 1
 }
 
-_yarn_install() {
+function _yarn_install() {
 	((depth++))
 	flags=(
 		--audit -A
@@ -592,7 +602,7 @@ _yarn_install() {
 	return 1
 }
 
-_yarn_licenses() {
+function _yarn_licenses() {
 	((depth++))
 	declare cmd
 	subcommands=(
@@ -614,7 +624,7 @@ _yarn_licenses() {
 	return 1
 }
 
-_yarn_list() {
+function _yarn_list() {
 	((depth++))
 	flags=(
 		--depth
@@ -623,7 +633,7 @@ _yarn_list() {
 	return 1
 }
 
-_yarn_node() {
+function _yarn_node() {
 	((depth++))
 	flags=(
 		--into
@@ -631,7 +641,7 @@ _yarn_node() {
 	return 1
 }
 
-_yarn_outdated() {
+function _yarn_outdated() {
 	((depth++))
 	case "$cur" in
 		-*) ;;
@@ -648,7 +658,7 @@ _yarn_outdated() {
 	return 1
 }
 
-_yarn_owner() {
+function _yarn_owner() {
 	((depth++))
 	declare cmd
 	subcommands=(
@@ -657,7 +667,8 @@ _yarn_owner() {
 		remove
 	)
 	__yarn_get_command
-	if [[ $cmd == owner ]]; then
+	if [[ $cmd == owner ]] 
+     then
 		case "$cur" in
 			-*) ;;
 			*)
@@ -669,7 +680,7 @@ _yarn_owner() {
 	return 1
 }
 
-_yarn_pack() {
+function _yarn_pack() {
 	((depth++))
 	flags=(
 		--filename -f
@@ -677,7 +688,7 @@ _yarn_pack() {
 	return 1
 }
 
-_yarn_policies() {
+function _yarn_policies() {
 	((depth++))
 	declare standard_policies=(
 		latest
@@ -702,7 +713,7 @@ _yarn_policies() {
 	return 1
 }
 
-_yarn_publish() {
+function _yarn_publish() {
 	((depth++))
 	flags=(
 		--access
@@ -723,7 +734,7 @@ _yarn_publish() {
 	return 1
 }
 
-_yarn_remove() {
+function _yarn_remove() {
 	((depth++))
 	declare cmd dependencies devDependencies
 	flags=(
@@ -753,7 +764,7 @@ _yarn_remove() {
 	return 1
 }
 
-_yarn_run() {
+function _yarn_run() {
 	((depth++))
 	declare cmd
 	subcommands=(
@@ -761,7 +772,8 @@ _yarn_run() {
 		$(__yarn_get_package_fields scripts)
 	)
 	__yarn_get_command
-	if [[ $cmd == run ]]; then
+	if [[ $cmd == run ]] 
+     then
 		case "$cur" in
 			-*) ;;
 			*)
@@ -773,7 +785,7 @@ _yarn_run() {
 	return 1
 }
 
-_yarn_tag() {
+function _yarn_tag() {
 	((depth++))
 	declare cmd
 	subcommands=(
@@ -796,7 +808,7 @@ _yarn_tag() {
 	return 1
 }
 
-_yarn_team() {
+function _yarn_team() {
 	((depth++))
 	declare cmd
 	subcommands=(
@@ -821,7 +833,7 @@ _yarn_team() {
 	return 1
 }
 
-_yarn_unplug() {
+function _yarn_unplug() {
 	((depth++))
 	flags=(
 		--clear
@@ -843,7 +855,7 @@ _yarn_unplug() {
 	return 1
 }
 
-_yarn_upgrade() {
+function _yarn_upgrade() {
 	((depth++))
 	declare cmd dependencies devDependencies
 	flags=(
@@ -879,7 +891,7 @@ _yarn_upgrade() {
 	return 1
 }
 
-_yarn_upgrade_interactive() {
+function _yarn_upgrade_interactive() {
 	((depth++))
 	flags=(
 		--caret -C
@@ -891,7 +903,7 @@ _yarn_upgrade_interactive() {
 	return 1
 }
 
-_yarn_version() {
+function _yarn_version() {
 	((depth++))
 	flags=(
 		--major
@@ -910,7 +922,7 @@ _yarn_version() {
 	return 1
 }
 
-_yarn_workspace() {
+function _yarn_workspace() {
 	((depth++))
 	declare -i args
 	declare workspaces_info
@@ -922,7 +934,8 @@ _yarn_workspace() {
 			case "$args" in
 				[0-2])
 					workspaces_info=$(yarn workspaces info -s 2> /dev/null)
-					if [[ -n $workspaces_info ]]; then
+					if [[ -n $workspaces_info ]] 
+     then
 						mapfile -t < <(
 							sed -n 's/^ \{2\}"\([^"]*\)": {$/\1/p' <<< "$workspaces_info"
 						)
@@ -938,7 +951,8 @@ _yarn_workspace() {
 					declare cmd
 					workspaces_info=$(yarn workspaces info -s 2> /dev/null)
 
-					if [[ -n $workspaces_info ]]; then
+					if [[ -n $workspaces_info ]] 
+     then
 						PWD=$(
 							sed -n '/^ \{2\}"'"${COMP_WORDS[2]}"'": {$/,/^ \{2\}},\{0,1\}$/{
 								s/^ \{4\}"location": "\([^"]*\)",$/\1/p
@@ -956,7 +970,7 @@ _yarn_workspace() {
 	return 1
 }
 
-_yarn_workspaces() {
+function _yarn_workspaces() {
 	((depth++))
 	declare cmd
 	subcommands=(
@@ -985,7 +999,7 @@ _yarn_workspaces() {
 	return 1
 }
 
-_yarn_why() {
+function _yarn_why() {
 	((depth++))
 	case "$cur" in
 		-*) ;;
@@ -1002,7 +1016,7 @@ _yarn_why() {
 	return 1
 }
 
-_yarn_yarn() {
+function _yarn_yarn() {
 	((depth++))
 	case "$cur" in
 		-*) ;;
@@ -1014,7 +1028,7 @@ _yarn_yarn() {
 	return 1
 }
 
-_yarn() {
+function _yarn() {
 	# shellcheck disable=SC2064
 	trap "
 		PWD=$PWD
@@ -1186,9 +1200,11 @@ _yarn() {
 	declare -a flags=()
 
 	COMPREPLY=()
-	if command -v _get_comp_words_by_ref > /dev/null; then
+	if command -v _get_comp_words_by_ref > /dev/null 
+     then
 		_get_comp_words_by_ref -n = -n @ -n : cur prev words cword
-	elif command -v _init_completion > /dev/null; then
+	elif command -v _init_completion > /dev/null 
+     then
 		_init_completion
 	fi
 
@@ -1196,12 +1212,14 @@ _yarn() {
 
 	__yarn_flag_args || "_yarn_${cmd//-/_}" 2> /dev/null || __yarn_fallback
 
-	if command -v __ltrim_colon_completions > /dev/null; then
+	if command -v __ltrim_colon_completions > /dev/null 
+     then
 		__ltrim_colon_completions "$cur"
 	fi
 }
 
-if [[ ${BASH_VERSINFO[0]} -ge 4 && ${BASH_VERSINFO[1]} -ge 4 ]]; then
+if [[ ${BASH_VERSINFO[0]} -ge 4 && ${BASH_VERSINFO[1]} -ge 4 ]] 
+     then
 	complete -o nosort -F _yarn yarn
 else
 	complete -F _yarn yarn

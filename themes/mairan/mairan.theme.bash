@@ -1,7 +1,9 @@
 # Mairan Bash Prompt, inspired by "Zork"
 
-if tput setaf 1 &> /dev/null; then
-    if [[ $(tput colors) -ge 256 ]] 2>/dev/null; then
+if tput setaf 1 &> /dev/null 
+     then
+    if [[ $(tput colors) -ge 256 ]] 2>/dev/null 
+     then
       MAGENTA=$(tput setaf 9)
       ORANGE=$(tput setaf 172)
       GREEN=$(tput setaf 190)

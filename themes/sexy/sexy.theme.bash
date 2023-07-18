@@ -9,8 +9,10 @@
 # Default setting
 SEXY_THEME_SHOW_PYTHON="${SEXY_THEME_SHOW_PYTHON:=false}"
 
-if tput setaf 1 &> /dev/null; then
-    if [[ $(tput colors) -ge 256 ]] 2>/dev/null; then
+if tput setaf 1 &> /dev/null 
+     then
+    if [[ $(tput colors) -ge 256 ]] 2>/dev/null 
+     then
       MAGENTA=$(tput setaf 9)
       ORANGE=$(tput setaf 172)
       GREEN=$(tput setaf 190)
@@ -35,20 +37,21 @@ else
     RESET="\033[m"
 fi
 
-parse_git_dirty () {
+function parse_git_dirty () {
   [[ $(git status 2> /dev/null | tail -n1 | cut -c 1-17) != "nothing to commit" ]] && echo "*"
 }
-parse_git_branch () {
+function parse_git_branch () {
   git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1$(parse_git_dirty)/"
 }
-env_prompt () {
+function env_prompt () {
   echo -e "($(virtualenv_prompt)$(condaenv_prompt))"
 }
 
 function prompt_command() {
   PS1="\[${BOLD}${MAGENTA}\]\u \[$WHITE\]at \[$ORANGE\]\h \[$WHITE\]in \[$GREEN\]\w\[$WHITE\]\$([[ -n \$(git branch 2> /dev/null) ]] && echo \" on \")\[$PURPLE\]\$(parse_git_branch)\[$WHITE\]\n\$ \[$RESET\]"
 
-  if [ "$SEXY_THEME_SHOW_PYTHON" = true ] ; then
+  if [ "$SEXY_THEME_SHOW_PYTHON" = true ]  
+     then
     PS1="\[${BOLD}${WHITE}\]$(env_prompt) "$PS1
   fi
 }

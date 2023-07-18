@@ -32,7 +32,8 @@ function docker-enter() {
 function docker-remove-images() {
   about 'attempt to remove images with supplied tags or all if no tags are supplied'
   group 'docker'
-  if [ -z "$1" ]; then
+  if [ -z "${1}" ] 
+     then
     docker rmi $(docker images -q)
   else
     DOCKER_IMAGES=""
@@ -47,7 +48,8 @@ function docker-remove-images() {
 function docker-image-dependencies() {
   about 'attempt to create a Graphiz image of the supplied image ID dependencies'
   group 'docker'
-  if hash dot 2>/dev/null; then
+  if hash dot 2>/dev/null 
+     then
     OUT=$(mktemp -t docker-viz-XXXX.png)
     docker images -viz | dot -Tpng > $OUT
     case $OSTYPE in
@@ -75,7 +77,8 @@ function docker-archive-content() {
   param '1: image archive name'
   example 'docker-archive-content images.tar.gz'
 
-  if [ -n "$1" ]; then
+  if [ -n "${1}" ] 
+     then
     tar -xzOf $1 manifest.json | jq '[.[] | .RepoTags] | add'
   fi
 }

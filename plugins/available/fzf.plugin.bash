@@ -4,16 +4,19 @@
 cite about-plugin
 about-plugin 'load fzf, if you are using it'
 
-if [ -r ~/.fzf.bash ] ; then
+if [ -r ~/.fzf.bash ]  
+     then
   source ~/.fzf.bash
-elif [ -r "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash ] ; then
+elif [ -r "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash ]  
+     then
   source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash
 fi
 
 # No need to continue if the command is not present
 _command_exists fzf || return
 
-if [ -z ${FZF_DEFAULT_COMMAND+x}  ] && _command_exists fd ; then
+if [ -z ${FZF_DEFAULT_COMMAND+x}  ] && _command_exists fd  
+     then
   export FZF_DEFAULT_COMMAND='fd --type f'
 fi
 
@@ -25,7 +28,7 @@ fe() {
 
   local IFS=$'\n'
   local files
-  files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
+  files=($(fzf-tmux --query="${1}" --multi --select-1 --exit-0))
   [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
 }
 

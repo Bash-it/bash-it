@@ -1,6 +1,11 @@
 # shellcheck shell=bash
 
-function __notify-send_completions() {
+function __notify-send_completions() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	# shellcheck disable=SC2155
 	local curr=$(_get_cword)
 	# shellcheck disable=SC2155

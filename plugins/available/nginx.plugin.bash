@@ -9,7 +9,8 @@ function nginx_reload() {
 	group 'nginx'
 
 	local FILE="${NGINX_PATH?}/logs/nginx.pid"
-	if [[ -s $FILE ]]; then
+	if [[ -s $FILE ]] 
+     then
 		echo "Reloading NGINX..."
 		read -r PID < "${FILE}"
 		sudo kill -HUP "${PID?}"
@@ -24,7 +25,8 @@ function nginx_stop() {
 	group 'nginx'
 
 	local FILE="${NGINX_PATH?}/logs/nginx.pid"
-	if [[ -s $FILE ]]; then
+	if [[ -s $FILE ]] 
+     then
 		echo "Stopping NGINX..."
 		read -r PID < "${FILE}"
 		sudo kill -INT "${PID?}"
@@ -39,7 +41,8 @@ function nginx_start() {
 	group 'nginx'
 
 	local FILE="${NGINX_PATH?}/sbin/nginx"
-	if [[ -x $FILE ]]; then
+	if [[ -x $FILE ]] 
+     then
 		echo "Starting NGINX..."
 		sudo "${FILE}"
 	else

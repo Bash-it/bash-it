@@ -17,7 +17,8 @@ _serverProfiles(){
     
     for i in  ${!COMP_WORDS[*]}
     do
-      if [[ "${COMP_WORDS[i]}" == "-Djboss.server.base.dir" || "${COMP_WORDS[i]}" == "-Djboss.domain.base.dir" ]]; then
+      if [[ "${COMP_WORDS[i]}" == "-Djboss.server.base.dir" || "${COMP_WORDS[i]}" == "-Djboss.domain.base.dir" ]] 
+     then
         serverdir="${COMP_WORDS[i+2]}/configuration"
       fi 
       

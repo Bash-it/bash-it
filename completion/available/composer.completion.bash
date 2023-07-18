@@ -2,21 +2,29 @@
 cite "about-completion"
 about-completion "composer completion"
 
-function __composer_completion() {
+function __composer_completion() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
 	local cur coms opts com words
 	COMPREPLY=()
 	_get_comp_words_by_ref -n : cur words
 
 	# lookup for command
 	for word in "${words[@]:1}"; do
-		if [[ "${word}" != -* ]]; then
+		if [[ "${word}" != -* ]] 
+     then
 			com="${word}"
 			break
 		fi
 	done
 
 	# completing for an option
-	if [[ ${cur} == --* ]]; then
+	if [[ ${cur} == --* ]] 
+     then
 		opts="--help --quiet --verbose --version --ansi --no-ansi --no-interaction --profile --no-plugins --working-dir"
 
 		case "${com}" in
@@ -115,7 +123,8 @@ function __composer_completion() {
 	fi
 
 	# completing for a command
-	if [[ "${cur}" == "${com}" ]]; then
+	if [[ "${cur}" == "${com}" ]] 
+     then
 		coms="about archive browse clear-cache config create-project depends diagnose dump-autoload exec global help init install licenses list outdated prohibits remove require run-script search self-update show status suggests update validate"
 
 		# shellcheck disable=SC2207

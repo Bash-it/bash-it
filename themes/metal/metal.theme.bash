@@ -53,7 +53,8 @@ icon_end="└🤘-> "
 
 # Display virtual environment info
 function virtualenv_prompt {
-  if [[ -n "$VIRTUAL_ENV" ]]; then
+  if [[ -n "$VIRTUAL_ENV" ]] 
+     then
     virtualenv=`basename "$VIRTUAL_ENV"`
     echo -e "$VIRTUALENV_CHAR$virtualenv "
   fi

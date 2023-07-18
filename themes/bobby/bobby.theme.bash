@@ -17,7 +17,8 @@ RVM_THEME_PROMPT_SUFFIX="|"
 function __bobby_clock() {
 	printf '%s' "$(clock_prompt) "
 
-	if [[ "${THEME_SHOW_CLOCK_CHAR:-}" == "true" ]]; then
+	if [[ "${THEME_SHOW_CLOCK_CHAR:-}" == "true" ]] 
+     then
 		printf '%s' "$(clock_char) "
 	fi
 }
