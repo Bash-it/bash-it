@@ -41,7 +41,12 @@ USER_HOST_THEME_PROMPT_SUFFIX=" "
 VIRTUALENV_THEME_PROMPT_PREFIX='('
 VIRTUALENV_THEME_PROMPT_SUFFIX=') '
 
-function prompt_command() {
+function prompt_command() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     # This needs to be first to save last command return code
     local RC="$?"
 
@@ -60,6 +65,9 @@ function prompt_command() {
     history -a
 
     PS1="$(clock_prompt)${virtualenv}$(user_host_prompt)${bold_cyan}\W $(scm_prompt_char_info)${ret_status}→ ${normal}"
-}
 
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
+}
 safe_append_prompt_command prompt_command

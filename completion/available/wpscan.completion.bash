@@ -17,6 +17,9 @@ function __wpscan_completion()
 			COMPREPLY+=("$_opt_")
 		fi
 	done
+    ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 complete -F __wpscan_completion wpscan

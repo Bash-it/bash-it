@@ -71,11 +71,20 @@ PROMPT_DIRTRIM=2 # bash4 and above
 
 ######################################################################
 DEBUG=0
-function debug() {
+function debug() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	if [[ ${DEBUG} -ne 0 ]] 
      then
-		echo >&2 -e "$@"
+		echo >&2 -e "${@}"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 ######################################################################
@@ -89,18 +98,32 @@ RIGHT_SEPARATOR=''
 LEFT_SUBSEG=''
 RIGHT_SUBSEG=''
 
-function text_effect() {
+function text_effect() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	case "${1}" in
 		reset) echo 0 ;;
 		bold) echo 1 ;;
 		underline) echo 4 ;;
 	esac
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # to add colors, see
 # http://bitmote.com/index.php?post/2012/11/19/Using-ANSI-Color-Codes-to-Colorize-Your-Bash-Prompt-on-Linux
 # under the "256 (8-bit) Colors" section, and follow the example for orange below
-function fg_color() {
+function fg_color() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	case "${1}" in
 		black) echo 30 ;;
 		red) echo 31 ;;
@@ -112,9 +135,18 @@ function fg_color() {
 		white) echo 37 ;;
 		orange) echo 38\;5\;166 ;;
 	esac
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function bg_color() {
+function bg_color() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	case "${1}" in
 		black) echo 40 ;;
 		red) echo 41 ;;
@@ -126,12 +158,21 @@ function bg_color() {
 		white) echo 47 ;;
 		orange) echo 48\;5\;166 ;;
 	esac
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # TIL: declare is global not local, so best use a different name
 # for codes (mycodes) as otherwise it'll clobber the original.
 # this changes from BASH v3 to BASH v4.
-function ansi() {
+function ansi() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local seq
 	declare -a mycodes=("${!1}")
 
@@ -148,16 +189,30 @@ function ansi() {
 	debug "ansi debug:" '\\[\\033['"${seq}"'m\\]'
 	echo -ne '\[\033['"${seq}"'m\]'
 	# PR="$PR\[\033[${seq}m\]"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function ansi_single() {
+function ansi_single() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	echo -ne '\[\033['"${1}"'m\]'
 }
 
 # Begin a segment
 # Takes two arguments, background and foreground. Both can be omitted,
 # rendering default background/foreground.
-function prompt_segment() {
+function prompt_segment() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local bg fg
 	declare -a codes
 
@@ -200,10 +255,19 @@ function prompt_segment() {
 	fi
 	CURRENT_BG=$1
 	[[ -n $3 ]] && PR="$PR$3"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # End the prompt, closing any open segments
-function prompt_end() {
+function prompt_end() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	if [[ -n $CURRENT_BG ]] 
      then
 		declare -a codes=("$(text_effect reset)" "$(fg_color "$CURRENT_BG")")
@@ -212,10 +276,19 @@ function prompt_end() {
 	declare -a reset=("$(text_effect reset)")
 	PR="$PR $(ansi reset[@])"
 	CURRENT_BG=''
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 ### virtualenv prompt
-function prompt_virtualenv() {
+function prompt_virtualenv() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	if [[ -n $VIRTUAL_ENV ]] 
      then
 		color=cyan
@@ -223,34 +296,66 @@ function prompt_virtualenv() {
 		ve=$(basename "$VIRTUAL_ENV")
 		prompt_segment $color white "$ve"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 ### Prompt components
 # Each component will draw itself, and hide itself if no information needs to be shown
 
 # Context: user@hostname (who am I and where am I)
-function prompt_context() {
+function prompt_context() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local user="${USER:-${LOGNAME:?}}"
 
 	if [[ $user != "$DEFAULT_USER" || -n $SSH_CLIENT ]] 
      then
 		prompt_segment black default "$user@\h"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # prints history followed by HH:MM, useful for remembering what
 # we did previously
-function prompt_histdt() {
+function prompt_histdt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	prompt_segment black default "\! [\A]"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function git_status_dirty() {
+function git_status_dirty() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	dirty=$(git status -s 2> /dev/null | tail -n 1)
 	[[ -n $dirty ]] && echo " ●"
 }
 
 # Git: branch/detached head, dirty status
-function prompt_git() {
+function prompt_git() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local ref dirty
 	if git rev-parse --is-inside-work-tree > /dev/null 2>&1 
      then
@@ -265,18 +370,36 @@ function prompt_git() {
 		fi
 		PR="$PR${ref/refs\/heads\// }$dirty"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # Dir: current working directory
-function prompt_dir() {
+function prompt_dir() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	prompt_segment blue black '\w'
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # Status:
 # - was there an error
 # - am I root
 # - are there background jobs?
-function prompt_status() {
+function prompt_status() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local symbols
 	symbols=()
 	[[ $RETVAL -ne 0 ]] && symbols+=("$(ansi_single "$(fg_color red)")✘")
@@ -284,6 +407,10 @@ function prompt_status() {
 	[[ $(jobs -l | wc -l) -gt 0 ]] && symbols+=("$(ansi_single "$(fg_color cyan)")⚙")
 
 	[[ -n "${symbols[*]}" ]] && prompt_segment black default "${symbols[@]}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 ######################################################################
@@ -292,12 +419,26 @@ function prompt_status() {
 # requires setting prompt_foo to use PRIGHT vs PR
 # doesn't quite work per above
 
-function rightprompt() {
+function rightprompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	printf "%*s" $COLUMNS "$PRIGHT"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # quick right prompt I grabbed to test things.
-function __command_rprompt() {
+function __command_rprompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local times=n=$COLUMNS tz
 	for tz in ZRH:Europe/Zurich PIT:US/Eastern \
 		MTV:US/Pacific TOK:Asia/Tokyo; do
@@ -307,11 +448,20 @@ function __command_rprompt() {
 		n=$(("$n" - 10))
 	done
 	[ -z "$times" ] || printf "%${n}s$times\\r" ''
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 # PROMPT_COMMAND=__command_rprompt
 
 # this doens't wrap code in \[ \]
-function ansi_r() {
+function ansi_r() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local seq
 	declare -a mycodes2=("${!1}")
 
@@ -328,12 +478,21 @@ function ansi_r() {
 	debug "ansi debug:" '\\[\\033['"${seq}"'m\\]'
 	echo -ne '\033['"${seq}"'m'
 	# PR="$PR\[\033[${seq}m\]"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # Begin a segment on the right
 # Takes two arguments, background and foreground. Both can be omitted,
 # rendering default background/foreground.
-function prompt_right_segment() {
+function prompt_right_segment() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local bg fg
 	declare -a codes
 
@@ -381,6 +540,10 @@ function prompt_right_segment() {
 	# fi
 	CURRENT_RBG=$1
 	[[ -n $3 ]] && PRIGHT="$PRIGHT$3"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 ######################################################################
@@ -400,15 +563,29 @@ function prompt_right_segment() {
 #               (add-hook 'comint-preoutput-filter-functions
 #                         'dirtrack-filter-out-pwd-prompt t t)))
 
-function prompt_emacsdir() {
+function prompt_emacsdir() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	# no color or other setting... this will be deleted per above
 	PR="DIR \w DIR$PR"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 ######################################################################
 ## Main prompt
 
-function build_prompt() {
+function build_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	[[ -n ${AG_EMACS_DIR+x} ]] && prompt_emacsdir
 	prompt_status
 	#[[ -z ${AG_NO_HIST+x} ]] && prompt_histdt
@@ -417,6 +594,10 @@ function build_prompt() {
 	prompt_dir
 	prompt_git
 	prompt_end
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # from orig...
@@ -424,7 +605,12 @@ function build_prompt() {
 # this doesn't work... new model: create a prompt via a PR variable and
 # use that.
 
-function set_bash_prompt() {
+function set_bash_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	RETVAL=$?
 	PR=""
 	PRIGHT=""
@@ -435,6 +621,10 @@ function set_bash_prompt() {
 	# uncomment below to use right prompt
 	#     PS1='\[$(tput sc; printf "%*s" $COLUMNS "$PRIGHT"; tput rc)\]'$PR
 	PS1=$PR
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 PROMPT_COMMAND=set_bash_prompt

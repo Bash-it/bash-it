@@ -2,19 +2,39 @@
 
 load ../test_helper
 
-function local_setup() {
+function local_setup() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   load ../../completion/available/defaults.completion
-  function _known_hosts() { :; }
-  function defaults() { echo 'NSGlobalDomain, Bash It'; }
+  function _known_hosts() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	###################################################### :; }
+  function defaults() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	###################################################### echo 'NSGlobalDomain, Bash It'; }
 }
 
-function __check_completion() {
+function __check_completion() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   # Get the parameters as a single value
   COMP_LINE=$*
 
   # Get the parameters as an array
-  eval set -- "$@"
-  COMP_WORDS=("$@")
+  eval set -- "${@}"
+  COMP_WORDS=("${@}")
 
   # Index of the cursor in the line
   COMP_POINT=${#COMP_LINE}

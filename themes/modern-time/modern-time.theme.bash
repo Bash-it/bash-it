@@ -21,18 +21,43 @@ esac
 
 PS3=">> "
 
-function is_vim_shell() {
+function is_vim_shell() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	if [ ! -z "$VIMRUNTIME" ]
 	then
 		echo "[${cyan}vim shell${normal}]"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function modern_current_time_prompt() {
+
+function modern_current_time_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	echo "[$(date '+%l:%M%p')]"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function prompt() {
+
+function prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	SCM_PROMPT_FORMAT='[%s][%s]'
 	if [ $? -ne 0 ]
 	then
@@ -45,7 +70,12 @@ ${bold_red}└─▪${normal} "
 		PS1="${TITLEBAR}┌─$(scm_prompt)$(modern_current_time_prompt)[${cyan}\W${normal}]$(is_vim_shell)
 └─▪ "
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 PS2="└─▪ "
 

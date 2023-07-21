@@ -11,24 +11,49 @@
 
 # 'plumbing' functions
 
-_function bootstrap_composure() {
+_function bootstrap_composure() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   _generate_metadata_functions
   _load_composed_functions
   _determine_printf_cmd
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _get_composure_dir ()
+
+function _get_composure_dir() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
   if [ -n "${XDG_DATA_HOME:-}" ] 
      then
     echo "$XDG_DATA_HOME/composure"
   else
     echo "$HOME/.local/composure"
   fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _get_author_name ()
+
+function _get_author_name() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
   typeset name localname
   localname="$(git --git-dir "$(_get_composure_dir)/.git" config --get user.name)"
   for name in "${GIT_AUTHOR_NAME:-}" "$localname"; do
@@ -38,15 +63,35 @@ function _get_author_name ()
       break
     fi
   done
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _composure_keywords ()
+
+function _composure_keywords() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
   echo "about author example group param version"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _letterpress ()
+
+function _letterpress() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
   typeset rightcol="${1}" leftcol="${2:- }" leftwidth="${3:-20}"
 
   if [ -z "$rightcol" ] 
@@ -55,9 +100,19 @@ function _letterpress ()
   fi
 
   $_printf_cmd "%-*s%s\n" "$leftwidth" "$leftcol" "$rightcol"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _determine_printf_cmd() {
+
+function _determine_printf_cmd() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   if [ -z "${_printf_cmd:-}" ] 
      then
     _printf_cmd=printf
@@ -65,10 +120,20 @@ function _determine_printf_cmd() {
     [ -x "$(which gprintf 2>/dev/null)" ] && _printf_cmd=gprintf
     export _printf_cmd
   fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _longest_function_name_length ()
+
+function _longest_function_name_length() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
   echo "${1}" | awk 'BEGIN{ maxlength=0 }
   {
   for(i=1;i<=NF;i++)
@@ -78,17 +143,37 @@ function _longest_function_name_length ()
     }
   }
   END{ print maxlength}'
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _temp_filename_for ()
+
+function _temp_filename_for() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
   typeset file="$(mktemp "/tmp/$1.XXXX")"
   command rm "$file" 2>/dev/null   # ensure file is unlinked prior to use
   echo "$file"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _prompt ()
+
+function _prompt() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
   typeset prompt="${1}"
   typeset result
   case "$(_shell)" in
@@ -98,10 +183,20 @@ function _prompt ()
       echo -n "$prompt" >&2; read -r result;;
   esac
   echo "$result"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _add_composure_file ()
+
+function _add_composure_file() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
   typeset func="${1}"
   typeset file="${2}"
   typeset operation="${3}"
@@ -130,10 +225,20 @@ function _add_composure_file ()
       git commit -m "$operation $func: $comment"
     fi
   )
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _transcribe ()
+
+function _transcribe() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
   typeset func="${1}"
   typeset file="${2}"
   typeset operation="${3}"
@@ -182,10 +287,20 @@ function _transcribe ()
       done
      fi
   fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _typeset_functions ()
+
+function _typeset_functions() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
   # unfortunately, there does not seem to be a easy, portable way to list just the
   # names of the defined shell functions...
 
@@ -198,38 +313,88 @@ function _typeset_functions ()
       typeset +f | sed 's/().*$//'
       ;;
   esac
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _typeset_functions_about ()
+
+function _typeset_functions_about() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
   typeset f
   for f in $(_typeset_functions); do
     typeset -f -- "$f" | grep -qE "^about[[:space:]]|[[:space:]]about[[:space:]]" && echo -- "$f"
   done
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _shell () {
+
+function _shell() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   # here's a hack I modified from a StackOverflow post:
   # get the ps listing for the current process ($$), and print the last column (CMD)
   # stripping any leading hyphens shells sometimes throw in there
   typeset this=$(ps -o comm -p $$ | tail -1 | awk '{print $NF}' | sed 's/^-*//')
   echo "${this##*/}"  # e.g. /bin/bash => bash
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _generate_metadata_functions() {
+
+function _generate_metadata_functions() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   typeset f
   for f in $(_composure_keywords)
   do
     eval "$f() { :; }"
   done
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _list_composure_files () {
+
+function _list_composure_files () 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   typeset composure_dir="$(_get_composure_dir)"
   [ -d "$composure_dir" ] && find "$composure_dir" -maxdepth 1 -name '*.inc'
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _load_composed_functions () {
+
+function _load_composed_functions () 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   # load previously composed functions into shell
   # you may disable this by adding the following line to your shell startup:
   # export LOAD_COMPOSED_FUNCTIONS=0
@@ -244,21 +409,51 @@ function _load_composed_functions () {
     # shellcheck source=/dev/null
     . "$inc"
   done
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _strip_trailing_whitespace () {
+
+function _strip_trailing_whitespace () 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   sed -e 's/ \+$//'
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _strip_semicolons () {
+
+function _strip_semicolons () 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   sed -e 's/;$//'
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 
 # 'porcelain' functions
 
-function cite ()
+function cite() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
   about 'creates one or more meta keywords for use in your functions'
   param 'one or more keywords'
   example '$ cite url username'
@@ -287,13 +482,23 @@ function cite ()
   fi
 
   typeset keyword
-  for keyword in "$@"; do
+  for keyword in "${@}"; do
     eval "$keyword() { :; }"
   done
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function draft ()
+
+function draft() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
   about 'wraps command from history into a new function, default is last command'
   param '1: name to give function'
   param '2: optional history line number'
@@ -345,10 +550,20 @@ function draft ()
   _transcribe "$func" "$file" Draft "Initial draft"
   command rm "$file" 2>/dev/null
   revise "$func"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function glossary ()
+
+function glossary() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
   about 'displays help summary for all functions, or summary for a group of functions'
   param '1: optional, group name'
   example '$ glossary'
@@ -376,10 +591,20 @@ function glossary ()
       func=" " # only display function name once
     done
   done
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function metafor ()
+
+function metafor() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
   about 'prints function metadata associated with keyword'
   param '1: meta keyword'
   example '$ typeset -f glossary | metafor example'
@@ -399,10 +624,20 @@ function metafor ()
 
   # grep keyword # strip trailing '|"|; # ignore thru keyword and leading '|"
   sed -n "/$keyword / s/['\";]*\$//;s/^[ 	]*\(: _\)*$keyword ['\"]*\([^([].*\)*\$/\2/p"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function reference ()
+
+function reference() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
   about 'displays apidoc help for a specific function'
   param '1: function name'
   example '$ reference revise'
@@ -450,10 +685,20 @@ function reference ()
       _letterpress "$line"
     done
   fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function revise ()
+
+function revise() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
   about 'loads function into editor for revision'
   param '<optional> -e: revise version stored in ENV'
   param '1: name of function'
@@ -522,10 +767,20 @@ function revise ()
     printf '%s\n' 'zero-length file, revision aborted!'
   fi
   command rm "$temp"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function write ()
+
+function write() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
 about 'writes one or more composed function definitions to stdout'
 param 'one or more function names'
 example '$ write finddown foo'
@@ -545,14 +800,19 @@ echo "#!/usr/bin/env ${SHELL##*/}"
 cat <<END
 for f in $(_composure_keywords)
 do
-  eval "\$f() { :; }"
+  eval "\$f() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	###################################################### :; }"
 done
 unset f
 END
 
 # write out function definitons
 # shellcheck disable=SC2034
-typeset -f cite "$@"
+typeset -f cite "${@}"
 
 cat <<END
 main() {
@@ -562,7 +822,12 @@ main() {
 
 main \$*
 END
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 _bootstrap_composure
 
@@ -588,3 +853,4 @@ HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTIO
 CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 EOF
+

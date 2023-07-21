@@ -2,7 +2,12 @@ cite about-plugin
 about-plugin 'one command to extract them all...'
 
 # extract file(s) from compressed status
-extract() {
+function extract() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     local opt
     local OPTIND=1
     while getopts "hv" opt; do
@@ -56,7 +61,7 @@ End-Of-Usage
                 *.tar.Z) tar "x${verbose}Zf" "${1}" -C "$filedirname/$targetdirname" ;;
                 *.bz2) bunzip2 "${1}" ;;
                 *.deb) dpkg-deb -x${verbose} "${1}" "${1:0:-4}" ;;
-                *.pax.gz) gunzip "${1}"; set -- "$@" "${1:0:-3}" ;;
+                *.pax.gz) gunzip "${1}"; set -- "${@}" "${1:0:-3}" ;;
                 *.gz) gunzip "${1}" ;;
                 *.pax) pax -r -f "${1}" ;;
                 *.pkg) pkgutil --expand "${1}" "${1:0:-4}" ;;
@@ -73,4 +78,8 @@ End-Of-Usage
 
         shift
     done
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+

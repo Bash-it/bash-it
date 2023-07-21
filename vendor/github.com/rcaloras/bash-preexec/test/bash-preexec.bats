@@ -1,6 +1,11 @@
 #!/usr/bin/env bats
 
-setup() {
+setup() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   PROMPT_COMMAND=''        # in case the invoking shell has set this
   history -s fake command  # preexec requires there be some history
   set -o nounset           # in case the user has this set
@@ -8,16 +13,31 @@ setup() {
   source "${BATS_TEST_DIRNAME}/../bash-preexec.sh"
 }
 
-bp_install() {
+bp_install() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   __bp_install_after_session_init
   eval "$PROMPT_COMMAND"
 }
 
-test_echo() {
+test_echo() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   echo "test echo"
 }
 
-test_preexec_echo() {
+test_preexec_echo() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   printf "%s\n" "${1}"
 }
 
@@ -50,7 +70,12 @@ test_preexec_echo() {
 
 @test "__bp_install should preserve an existing DEBUG trap" {
   trap_invoked_count=0
-  foo() { (( trap_invoked_count += 1 )); }
+  foo() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	###################################################### (( trap_invoked_count += 1 )); }
 
   # note setting this causes BATS to mis-report the failure line when this test fails
   trap foo DEBUG
@@ -135,7 +160,12 @@ test_preexec_echo() {
     PROMPT_COMMAND="$PROMPT_COMMAND; echo after"
     PROMPT_COMMAND="echo after2; $PROMPT_COMMAND;"
 
-    precmd() { echo "inside precmd"; }
+    precmd() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	###################################################### echo "inside precmd"; }
     run eval "$PROMPT_COMMAND"
     [ "${lines[0]}" == "after2" ]
     [ "${lines[1]}" == "before" ]
@@ -161,14 +191,29 @@ test_preexec_echo() {
 }
 
 @test "precmd should set \$? to be the previous exit code" {
-    echo_exit_code() {
+    echo_exit_code() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
       echo "$?"
     }
-    return_exit_code() {
+    return_exit_code() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
       return $1
     }
     # Helper function is necessary because Bats' run doesn't preserve $?
-    set_exit_code_and_run_precmd() {
+    set_exit_code_and_run_precmd() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
       return_exit_code 251
       __bp_precmd_invoke_cmd
     }
@@ -180,11 +225,21 @@ test_preexec_echo() {
 }
 
 @test "precmd should set \$BP_PIPESTATUS to the previous \$PIPESTATUS" {
-  echo_pipestatus() {
+  echo_pipestatus() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     echo "${BP_PIPESTATUS[*]}"
   }
   # Helper function is necessary because Bats' run doesn't preserve $PIPESTATUS
-  set_pipestatus_and_run_precmd() {
+  set_pipestatus_and_run_precmd() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     false | true
     __bp_precmd_invoke_cmd
   }
@@ -196,7 +251,12 @@ test_preexec_echo() {
 }
 
 @test "precmd should set \$_ to be the previous last arg" {
-    echo_last_arg() {
+    echo_last_arg() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
       echo "$_"
     }
     precmd_functions+=(echo_last_arg)
@@ -223,8 +283,18 @@ test_preexec_echo() {
 }
 
 @test "preexec should execute multiple functions in the order added to their arrays" {
-    fun_1() { echo "$1 one"; }
-    fun_2() { echo "$1 two"; }
+    fun_1() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	###################################################### echo "$1 one"; }
+    fun_2() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	###################################################### echo "$1 two"; }
     preexec_functions+=(fun_1)
     preexec_functions+=(fun_2)
     __bp_interactive_mode
@@ -237,8 +307,18 @@ test_preexec_echo() {
 }
 
 @test "preecmd should execute multiple functions in the order added to their arrays" {
-    fun_1() { echo "one"; }
-    fun_2() { echo "two"; }
+    fun_1() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	###################################################### echo "one"; }
+    fun_2() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	###################################################### echo "two"; }
     precmd_functions+=(fun_1)
     precmd_functions+=(fun_2)
 
@@ -251,7 +331,12 @@ test_preexec_echo() {
 
 @test "preexec should execute a function with IFS defined to local scope" {
     IFS=_
-    name_with_underscores_1() { parts=(1_2); echo $parts; }
+    name_with_underscores_1() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	###################################################### parts=(1_2); echo $parts; }
     preexec_functions+=(name_with_underscores_1)
 
     __bp_interactive_mode
@@ -262,7 +347,12 @@ test_preexec_echo() {
 
 @test "precmd should execute a function with IFS defined to local scope" {
     IFS=_
-    name_with_underscores_2() { parts=(2_2); echo $parts; }
+    name_with_underscores_2() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	###################################################### parts=(2_2); echo $parts; }
     precmd_functions+=(name_with_underscores_2)
     run '__bp_precmd_invoke_cmd'
     [ $status -eq 0 ]
@@ -270,7 +360,12 @@ test_preexec_echo() {
 }
 
 @test "preexec should set \$? to be the exit code of preexec_functions" {
-    return_nonzero() {
+    return_nonzero() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
       return 1
     }
     preexec_functions+=(return_nonzero)

@@ -5,9 +5,19 @@
 # host directory (branch*)»
 # for example:
 # ananas ~/Code/bash-it/themes (master*)»
-function prompt_command() {
+function prompt_command() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     PS1="${bold_blue}[$(hostname)]${normal} \w${normal} ${bold_white}[$(git_prompt_info)]${normal}» "
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 safe_append_prompt_command prompt_command
 

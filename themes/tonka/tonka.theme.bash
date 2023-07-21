@@ -1,24 +1,59 @@
 #!/usr/bin/env bash
 
-function __tonka_time() {
+function __tonka_time() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   THEME_CLOCK_FORMAT="%H%M"
   clock_prompt
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __tonka_date() {
+
+function __tonka_date() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   THEME_CLOCK_FORMAT="%a,%d %b %y"
   clock_prompt
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __tonka_clock() {
+
+function __tonka_clock() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   local LIGHT_BLUE="\[\033[1;34m\]"
   if [[ "${THEME_SHOW_CLOCK}" = "true" ]] 
      then
     echo "$(__tonka_time)${LIGHT_BLUE}:$(__tonka_date)${LIGHT_BLUE}:"
   fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function prompt_setter() {
+
+function prompt_setter() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 
 #   Named "Tonka" because of the colour scheme
 local WHITE="\[\033[1;37m\]"
@@ -48,7 +83,12 @@ $WHITE\$ $LIGHT_BLUE)-$YELLOW-$NO_COLOUR "
 
 PS2="$LIGHT_BLUE-$YELLOW-$YELLOW-$NO_COLOUR "
 
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 safe_append_prompt_command prompt_setter
 

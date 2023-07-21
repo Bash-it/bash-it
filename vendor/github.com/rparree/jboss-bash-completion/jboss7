@@ -6,7 +6,13 @@
 
 
 
-_serverProfiles(){
+function _serverProfiles() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
     if [[ $COMP_WORDS == *standalone.sh* ]]
     then
       serverdir="../standalone/configuration/"
@@ -31,18 +37,42 @@ _serverProfiles(){
       unset IFS
       COMPREPLY=( $(compgen -W "${fls} initial boot last v" -- "$cur" ))
     fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-_bindingAddress(){
+
+
+function _bindingAddress() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
   # from /etc/bash_completion.d/ssh
     COMPREPLY=( "${COMPREPLY[@]}" $( compgen -W \
     "0.0.0.0 $( PATH="$PATH:/sbin" ifconfig -a | \
     sed -ne 's/.*addr:\([^[:space:]]*\).*/\1/p' \
         -ne 's/.*inet[[:space:]]\{1,\}\([^[:space:]]*\).*/\1/p' )" \
     -- "$cur" ) )
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-_jboss(){
+
+
+function _jboss() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
     
     local cur prev words cword
     COMPREPLY=()
@@ -136,7 +166,12 @@ _jboss(){
                 $( compgen -W "$commandsWithEqualSign"  -S '=' -- "$cur" ) )       
     return 0
 
-  
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
+
 complete -o nospace -F _jboss standalone.sh
 complete -o nospace -F _jboss domain.sh

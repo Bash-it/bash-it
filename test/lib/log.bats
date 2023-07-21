@@ -2,7 +2,12 @@
 
 load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
-function local_setup_file() {
+function local_setup_file() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   setup_libs "log"
 }
 

@@ -21,29 +21,64 @@ esac
 
 PS3=">> "
 
-function __my_rvm_ruby_version() {
+function __my_rvm_ruby_version() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     local gemset=$(echo $GEM_HOME | awk -F'@' '{print $2}')
   [ "$gemset" != "" ] && gemset="@$gemset"
     local version=$(echo $MY_RUBY_HOME | awk -F'-' '{print $2}')
     local full="$version$gemset"
   [ "$full" != "" ] && echo "[$full]"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __my_venv_prompt() {
+
+function __my_venv_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   if [ ! -z "$VIRTUAL_ENV" ]
   then
     echo "[${blue}@${normal}${VIRTUAL_ENV##*/}]"
   fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function is_vim_shell() {
+
+function is_vim_shell() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
         if [ ! -z "$VIMRUNTIME" ]
         then
                 echo "[${cyan}vim shell${normal}]"
         fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function prompt() {
+
+function prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
    SCM_PROMPT_FORMAT='[%s][%s]'
    case $HOSTNAME in
     "clappy"* ) my_ps_host="${green}\h${normal}";
@@ -67,7 +102,12 @@ $ "
 $ "
         ;;
     esac
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 PS2="> "
 

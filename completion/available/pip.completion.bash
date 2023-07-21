@@ -17,11 +17,15 @@ function __bash_it_complete_pip()
 	if _command_exists _pip_completion
 	 then
 		complete -o default -F _pip_completion pip
-		_pip_completion "$@"
+		_pip_completion "${@}"
 	else
 		eval "$(pip completion --bash)"
-		_pip_completion "$@"
+		_pip_completion "${@}"
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 complete -o default -F __bash_it_complete_pip pip

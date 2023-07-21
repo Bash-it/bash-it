@@ -2,7 +2,12 @@
 cite about-plugin
 about-plugin 'sshagent helper functions'
 
-function _get_sshagent_pid_from_env_file() {
+function _get_sshagent_pid_from_env_file() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   local env_file="${1}"
   [[ -r "${env_file}" ]] || {
     echo "";
@@ -11,9 +16,17 @@ function _get_sshagent_pid_from_env_file() {
   tail -1 "${env_file}" \
   | cut -d' ' -f4 \
   | cut -d';' -f1
+  ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _get_process_status_field() {
+function _get_process_status_field() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   # uses /proc filesystem
   local \
     pid \
@@ -31,9 +44,17 @@ function _get_process_status_field() {
   | cut -d':' -f2 \
   | sed -e 's/[[:space:]]\+//g' \
   | cut -d'(' -f1
+  ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _is_item_in_list() {
+function _is_item_in_list() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   local item
   for item in "${@:1}"; do
     if [[ "${item}" == "${1}" ]] 
@@ -42,10 +63,18 @@ function _is_item_in_list() {
     fi
   done
   return 0
+  ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-function _is_proc_alive_at_pid() {
+function _is_proc_alive_at_pid() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   local \
     pid \
     expected_name \
@@ -62,10 +91,18 @@ function _is_proc_alive_at_pid() {
     return 1
   fi
   return 0
+  ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-function _ensure_valid_sshagent_env() {
+function _ensure_valid_sshagent_env() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   local \
     agent_pid \
     tmp_res
@@ -103,10 +140,18 @@ function _ensure_valid_sshagent_env() {
 
   ssh-agent > "${SSH_AGENT_ENV}"
   return
+  ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-function _ensure_sshagent_dead() {
+function _ensure_sshagent_dead() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   [[ -r "${SSH_AGENT_ENV}" ]] \
   || return ## no agent file - no problems
   ## ensure the file indeed points to a really running agent:
@@ -124,10 +169,18 @@ function _ensure_sshagent_dead() {
   echo -e -n "Killing ssh-agent (pid:${agent_pid}) ... "
   kill -9 "${agent_pid}" && echo "DONE" || echo "FAILED"
   rm -f "${SSH_AGENT_ENV}"
+  ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-function sshagent() {
+function sshagent() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   about 'ensures ssh-agent is up and running'
   param '1: on|off '
   example '$ sshagent on'
@@ -145,6 +198,9 @@ function sshagent() {
     *)
       ;;
   esac
+  ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 sshagent on

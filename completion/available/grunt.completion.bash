@@ -41,7 +41,12 @@
 # eval "$(grunt --completion=bash)"
 
 # Search the current directory and all parent directories for a gruntfile.
-function _grunt_gruntfile() {
+function _grunt_gruntfile() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   local curpath="$PWD"
   while [[ "$curpath" ]]; do
     for gruntfile in "$curpath/"{G,g}runtfile.{js,coffee}; do
@@ -54,10 +59,19 @@ function _grunt_gruntfile() {
     curpath="${curpath%/*}"
   done
   return 1
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # Enable bash autocompletion.
-function _grunt_completions() {
+function _grunt_completions() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   # The currently-being-completed word.
   local cur="${COMP_WORDS[COMP_CWORD]}"
   # The current gruntfile, if it exists.
@@ -71,6 +85,10 @@ function _grunt_completions() {
   [[ "$cur" == -* ]] && compls="$compls $opts"
   # Tell complete what stuff to show.
   COMPREPLY=($(compgen -W "$compls" -- "$cur"))
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 complete -o default -F _grunt_completions grunt

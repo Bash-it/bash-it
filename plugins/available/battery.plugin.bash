@@ -1,7 +1,12 @@
 # shellcheck shell=bash
 about-plugin 'display info about your battery charge level'
 
-function ac_adapter_connected() {
+function ac_adapter_connected() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local batteries
 	if _command_exists upower 
      then
@@ -20,9 +25,18 @@ function ac_adapter_connected() {
      then
 		WMIC Path Win32_Battery Get BatteryStatus /Format:List | grep -q 'BatteryStatus=2'
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function ac_adapter_disconnected() {
+function ac_adapter_disconnected() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local batteries
 	if _command_exists upower 
      then
@@ -41,9 +55,18 @@ function ac_adapter_disconnected() {
      then
 		WMIC Path Win32_Battery Get BatteryStatus /Format:List | grep -q 'BatteryStatus=1'
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function battery_percentage() {
+function battery_percentage() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'displays battery charge as a percentage of full (100%)'
 	group 'battery'
 
@@ -75,9 +98,18 @@ function battery_percentage() {
 	else
 		echo "${command_output}"
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function battery_charge() {
+function battery_charge() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'graphical display of your battery charge'
 	group 'battery'
 
@@ -143,4 +175,8 @@ function battery_charge() {
 			echo "${danger_color}UNPLG${normal?}"
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }

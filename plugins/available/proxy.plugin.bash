@@ -1,7 +1,12 @@
 # shellcheck shell=bash
 about-plugin 'Proxy Tools'
 
-function disable-proxy() {
+function disable-proxy() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'Disables proxy settings for Bash, npm and SSH'
 	group 'proxy'
 
@@ -17,9 +22,17 @@ function disable-proxy() {
 	npm-disable-proxy
 	ssh-disable-proxy
 	svn-disable-proxy
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function enable-proxy() {
+function enable-proxy() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'Enables proxy settings for Bash, npm and SSH'
 	group 'proxy'
 
@@ -35,9 +48,17 @@ function enable-proxy() {
 	npm-enable-proxy
 	ssh-enable-proxy
 	svn-enable-proxy
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function enable-proxy-alt() {
+function enable-proxy-alt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'Enables alternate proxy settings for Bash, npm and SSH'
 	group 'proxy'
 
@@ -53,9 +74,17 @@ function enable-proxy-alt() {
 	npm-enable-proxy "${http_proxy:-}" "${https_proxy:-}"
 	ssh-enable-proxy
 	svn-enable-proxy "${http_proxy:-}"
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function show-proxy() {
+function show-proxy() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'Shows the proxy settings for Bash, Git, npm and SSH'
 	group 'proxy'
 
@@ -69,9 +98,17 @@ function show-proxy() {
 	git-global-show-proxy
 	svn-show-proxy
 	ssh-show-proxy
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function proxy-help() {
+function proxy-help() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'Provides an overview of the bash-it proxy configuration'
 	group 'proxy'
 
@@ -90,9 +127,17 @@ Run 'glossary proxy' to show the available proxy functions with a short descript
 EOF
 
 	bash-it-show-proxy
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function bash-it-show-proxy() {
+function bash-it-show-proxy() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'Shows the bash-it proxy settings'
 	group 'proxy'
 
@@ -102,9 +147,17 @@ function bash-it-show-proxy() {
 	echo "(These variables will be used to set the proxy when you call 'enable-proxy')"
 	echo ""
 	env | grep -e "BASH_IT.*PROXY"
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function npm-show-proxy() {
+function npm-show-proxy() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'Shows the npm proxy settings'
 	group 'proxy'
 
@@ -117,9 +170,17 @@ function npm-show-proxy() {
 		echo "npm HTTPS proxy: $(npm config get https-proxy)"
 		echo "npm proxy exceptions: $(npm config get noproxy)"
 	fi
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function npm-disable-proxy() {
+function npm-disable-proxy() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'Disables npm proxy settings'
 	group 'proxy'
 
@@ -130,9 +191,17 @@ function npm-disable-proxy() {
 		npm config delete noproxy
 		echo "Disabled npm proxy settings"
 	fi
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function npm-enable-proxy() {
+function npm-enable-proxy() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'Enables npm proxy settings'
 	group 'proxy'
 
@@ -147,9 +216,17 @@ function npm-enable-proxy() {
 		npm config set noproxy "${my_no_proxy:-}" || return
 		echo "Enabled npm proxy settings"
 	fi
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function git-global-show-proxy() {
+function git-global-show-proxy() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'Shows global Git proxy settings'
 	group 'proxy'
 
@@ -161,9 +238,17 @@ function git-global-show-proxy() {
 		echo "Git (Global) HTTP  proxy: $(git config --global --get http.proxy)"
 		echo "Git (Global) HTTPS proxy: $(git config --global --get https.proxy)"
 	fi
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function git-global-disable-proxy() {
+function git-global-disable-proxy() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'Disables global Git proxy settings'
 	group 'proxy'
 
@@ -173,9 +258,17 @@ function git-global-disable-proxy() {
 		git config --global --unset-all https.proxy
 		echo "Disabled global Git proxy settings"
 	fi
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function git-global-enable-proxy() {
+function git-global-enable-proxy() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'Enables global Git proxy settings'
 	group 'proxy'
 
@@ -187,9 +280,17 @@ function git-global-enable-proxy() {
 		git config --global --add https.proxy "${BASH_IT_HTTPS_PROXY:?}"
 		echo "Enabled global Git proxy settings"
 	fi
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function git-show-proxy() {
+function git-show-proxy() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'Shows current Git project proxy settings'
 	group 'proxy'
 
@@ -200,9 +301,17 @@ function git-show-proxy() {
 		echo "Git HTTP  proxy: $(git config --get http.proxy)"
 		echo "Git HTTPS proxy: $(git config --get https.proxy)"
 	fi
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function git-disable-proxy() {
+function git-disable-proxy() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'Disables current Git project proxy settings'
 	group 'proxy'
 
@@ -212,9 +321,17 @@ function git-disable-proxy() {
 		git config --unset-all https.proxy
 		echo "Disabled Git project proxy settings"
 	fi
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function git-enable-proxy() {
+function git-enable-proxy() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'Enables current Git project proxy settings'
 	group 'proxy'
 
@@ -226,9 +343,17 @@ function git-enable-proxy() {
 		git config --add https.proxy "${BASH_IT_HTTPS_PROXY:?}"
 		echo "Enabled Git project proxy settings"
 	fi
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function svn-show-proxy() {
+function svn-show-proxy() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'Shows SVN proxy settings'
 	group 'proxy'
 
@@ -256,9 +381,17 @@ if (config.has_section('global')):
 	print 'http-proxy-exceptions: ' + proxy_exceptions
 END
 	fi
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function svn-disable-proxy() {
+function svn-disable-proxy() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'Disables SVN proxy settings'
 	group 'proxy'
 
@@ -285,9 +418,17 @@ if config.has_section('global'):
 	print 'Disabled SVN proxy settings'
 END
 	fi
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function svn-enable-proxy() {
+function svn-enable-proxy() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'Enables SVN proxy settings'
 	group 'proxy'
 
@@ -322,9 +463,17 @@ with open(os.path.expanduser('~/.subversion/servers'), 'wb') as configfile:
 print 'Enabled SVN proxy settings'
 END
 	fi
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function ssh-show-proxy() {
+function ssh-show-proxy() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'Shows SSH config proxy settings (from ~/.ssh/config)'
 	group 'proxy'
 
@@ -359,9 +508,17 @@ function ssh-show-proxy() {
 		    }
 		' ~/.ssh/config | column -t
 	fi
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function ssh-disable-proxy() {
+function ssh-disable-proxy() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'Disables SSH config proxy settings'
 	group 'proxy'
 
@@ -370,9 +527,17 @@ function ssh-disable-proxy() {
 		sed -e's/^.*ProxyCommand/#	ProxyCommand/' "${BASH_IT_SED_I_PARAMETERS[@]}" ~/.ssh/config
 		echo "Disabled SSH config proxy settings"
 	fi
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function ssh-enable-proxy() {
+function ssh-enable-proxy() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'Enables SSH config proxy settings'
 	group 'proxy'
 
@@ -381,4 +546,7 @@ function ssh-enable-proxy() {
 		sed -e's/#	ProxyCommand/	ProxyCommand/' "${BASH_IT_SED_I_PARAMETERS[@]}" ~/.ssh/config
 		echo "Enabled SSH config proxy settings"
 	fi
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }

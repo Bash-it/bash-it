@@ -33,6 +33,10 @@ function __gradle-set-project-root-dir()
 
     project_root_dir="$(_bash-it-find-in-ancestor "settings.gradle" "gradlew")"
     return "${?}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 function __gradle-init-cache-dir() 
@@ -44,6 +48,10 @@ function __gradle-init-cache-dir()
 
     cache_dir="$HOME/.gradle/completion"
     mkdir -p ${cache_dir}
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 function __gradle-set-build-file() 
@@ -62,6 +70,10 @@ function __gradle-set-build-file()
             sed -n -e "s/rootProject\.buildFileName = [\'\"]\(.*\)[\'\"]/\1/p")
         gradle_build_file="$project_root_dir/${build_file_name:-build.gradle}"
     fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 function __gradle-set-cache-name() 
@@ -73,6 +85,10 @@ function __gradle-set-cache-name()
 
     # Cache name is constructed from the absolute path of the build file.
     cache_name=$(echo $gradle_build_file | sed -e 's/\//_/g')
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 function __gradle-set-files-checksum() 
@@ -92,6 +108,10 @@ function __gradle-set-files-checksum()
     else
         echo "Cannot generate completions as neither md5 nor md5sum exist on \$PATH"
     fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 function __gradle-generate-script-cache() 
@@ -111,6 +131,10 @@ function __gradle-generate-script-cache()
         local gradle_build_scripts=$(find $project_root_dir -type f -name "*.gradle" -o -name "*.gradle.kts" 2>/dev/null | grep -E -v "$script_exclude_pattern")
         printf "%s\n" "${gradle_build_scripts[@]}" > $cache_dir/$cache_name
     fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 function __gradle-long-options() 
@@ -162,6 +186,10 @@ function __gradle-long-options()
 --version               - Prints Gradle version info
 --warn                  - Log warnings and errors only"
     COMPREPLY=( $(compgen -W "$args" -- "${COMP_WORDS[COMP_CWORD]}") )
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 function __gradle-properties() 
@@ -183,6 +211,10 @@ function __gradle-properties()
 -Dorg.gradle.workers.max=         - Set the number of workers Gradle is allowed to use"
     COMPREPLY=( $(compgen -W "$args" -- "${COMP_WORDS[COMP_CWORD]}") )
     return 0
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 function __gradle-short-options() 
@@ -213,6 +245,10 @@ function __gradle-short-options()
 -P                      - Sets a project property of the root project
 -S                      - Print out the full (very verbose) stacktrace"
     COMPREPLY=( $(compgen -W "$args" -- "${COMP_WORDS[COMP_CWORD]}") )
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 function __gradle-notify-tasks-cache-build() 
@@ -226,6 +262,10 @@ function __gradle-notify-tasks-cache-build()
     __gradle-generate-tasks-cache
     # Remove "please wait" message by writing a bunch of spaces then moving back to the left
     echo -e "                                         \b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\c"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 function __gradle-generate-tasks-cache() 
@@ -287,6 +327,10 @@ function __gradle-generate-tasks-cache()
 
     printf "%s\n" "${gradle_all_tasks[@]}" > ${cache_dir}/${gradle_files_checksum}
     echo ${gradle_files_checksum} > ${cache_dir}/${cache_name}.md5
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 function __gradle-completion-init() 
@@ -314,6 +358,10 @@ function __gradle-completion-init()
     IFS="$OLDIFS"
 
     return 0
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 function _gradle() 
@@ -396,6 +444,10 @@ wrapper              - Generates Gradle wrapper files."
     fi
 
     return 0
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 complete -F _gradle gradle

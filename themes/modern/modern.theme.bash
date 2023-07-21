@@ -22,14 +22,29 @@ esac
 
 PS3=">> "
 
-function is_vim_shell() {
+function is_vim_shell() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	if [ -n "$VIMRUNTIME" ] 
      then
 		echo "[${cyan}vim shell${normal}]"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function detect_venv() {
+
+function detect_venv() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	python_venv=""
 	# Detect python venv
 	if [[ -n "${CONDA_DEFAULT_ENV}" ]] 
@@ -39,9 +54,19 @@ function detect_venv() {
      then
 		python_venv="($PYTHON_VENV_CHAR$(basename "${VIRTUAL_ENV}")) "
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function prompt() {
+
+function prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	SCM_PROMPT_FORMAT='[%s][%s]'
 	retval=$?
 	if [[ retval -ne 0 ]] 
@@ -52,7 +77,12 @@ function prompt() {
 	fi
 	detect_venv
 	PS1+="${python_venv}${dir_color}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 PS2="└─▪ "
 

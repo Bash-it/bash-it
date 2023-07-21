@@ -1,10 +1,26 @@
 # shellcheck shell=bash
 
-function _p4-opened {
+function _p4-opened() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	timeout 2.0s p4 opened -s 2> /dev/null
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _p4-opened-counts {
+
+
+function _p4-opened-counts() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	# Return the following counts seperated by tabs:
 	#  - count of opened files
 	#  - count of pending changesets (other than defaults)
@@ -42,4 +58,10 @@ function _p4-opened-counts {
     print opened "\t" non_default_changes "\t" default_changes "\t" type_array["add"] "\t" type_array["edit"] "\t" type_array["delete"]
   }
 '
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
+

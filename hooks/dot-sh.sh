@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 exit_code=0
-for file in "$@"; do
+for file in "${@}"; do
 	# Confirm file is executable
 	#
 	if [[ ! -x "${file}" ]] 

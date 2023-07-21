@@ -1,6 +1,11 @@
 # shellcheck shell=bash
 
-function __dart_completion() {
+function __dart_completion() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	# shellcheck disable=SC2155
 	local prev=$(_get_pword)
 	# shellcheck disable=SC2155
@@ -43,6 +48,10 @@ function __dart_completion() {
 			COMPREPLY=($(compgen -W "$HELP $VERBOSE --version --enable-analytics --disable-analytics help analyze compile create format pub run test" -- "$curr"))
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 complete -F __dart_completion dart

@@ -50,6 +50,10 @@ function _pj()
   fi
 
   return 0
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 complete -F _pj -o nospace pj

@@ -20,7 +20,7 @@ if [[ $# -eq '0' ]]
      then
 	test_dirs=("${test_directory}"/{bash_it,completion,install,lib,plugins,themes})
 else
-	test_dirs=("$@")
+	test_dirs=("${@}")
 fi
 
 # Make sure that the `parallel` command is installed,

@@ -16,7 +16,12 @@ export GOPATH="${GOPATH:-$(go env GOPATH)}"
 # might be managed differently, we add each path's /bin folder to PATH using pathmunge,
 # while preserving ordering.
 # e.g. GOPATH=foo:bar  ->  PATH=foo/bin:bar/bin
-_bash-it-gopath-pathmunge() {
+function _bash-it-gopath-pathmunge() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'Ensures paths in GOPATH are added to PATH using pathmunge, with /bin appended'
 	_group 'go'
 	if [[ -z $GOPATH ]] 
@@ -34,5 +39,9 @@ _bash-it-gopath-pathmunge() {
 			pathmunge "${paths[i]}/bin"
 		fi
 	done
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 _bash-it-gopath-pathmunge

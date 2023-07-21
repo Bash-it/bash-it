@@ -2,11 +2,24 @@
 
 load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
-function local_setup() {
+function local_setup() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   export HOME="$BATS_TEST_TMPDIR"
+  ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function local_setup_file() {
+function local_setup_file() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   # Determine which config file to use based on OS.
   case $OSTYPE in
     darwin*)
@@ -17,6 +30,9 @@ function local_setup_file() {
       ;;
   esac
   # don't load any libraries as the tests here test the *whole* kit
+  ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 @test "install: verify that the install script exists" {

@@ -30,15 +30,33 @@ eval "$(goenv init - bash)"
 
 # If moving to a directory with a goenv version set, reload the shell
 # to ensure the shell environment matches expectations.
-_bash-it-goenv-preexec() {
+function _bash-it-goenv-preexec() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	GOENV_OLD_VERSION="$(goenv version-name)"
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
-_bash-it-goenv-precmd() {
+
+function _bash-it-goenv-precmd() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	if [[ -n $GOENV_OLD_VERSION ]] && [[ "$GOENV_OLD_VERSION" != "$(goenv version-name)" ]] 
      then
 		exec env -u PATH -u GOROOT -u GOPATH -u GOENV_OLD_VERSION "${0/-/}" --login
 	fi
 	unset GOENV_OLD_VERSION
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 preexec_functions+=(_bash-it-goenv-preexec)
 precmd_functions+=(_bash-it-goenv-precmd)

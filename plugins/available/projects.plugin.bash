@@ -3,7 +3,12 @@ about-plugin 'quickly navigate configured project paths'
 
 : "${BASH_IT_PROJECT_PATHS:=$HOME/Projects:$HOME/src:$HOME/work}"
 
-function pj() {
+function pj() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'navigate quickly to your various project directories'
 	group 'projects'
 
@@ -54,6 +59,9 @@ function pj() {
 	esac
 
 	"${cmd:-cd}" "${dest}"
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 alias pjo="pj open"

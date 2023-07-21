@@ -1,6 +1,11 @@
 # shellcheck shell=bash
 
-function _sdkman_complete() {
+function _sdkman_complete() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local CANDIDATES
 	local CANDIDATE_VERSIONS
 	local SDKMAN_CANDIDATES_CSV="${SDKMAN_CANDIDATES_CSV:-}"
@@ -49,15 +54,33 @@ function _sdkman_complete() {
 	fi
 
 	return 0
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _sdkman_candidate_local_versions() {
+function _sdkman_candidate_local_versions() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 
 	CANDIDATE_VERSIONS=$(__sdkman_cleanup_local_versions "${1}")
 
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _sdkman_candidate_all_versions() {
+function _sdkman_candidate_all_versions() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 
 	candidate="${1}"
 	CANDIDATE_LOCAL_VERSIONS=$(__sdkman_cleanup_local_versions "$candidate")
@@ -80,12 +103,25 @@ function _sdkman_candidate_all_versions() {
 		CANDIDATE_VERSIONS="$(echo "$CANDIDATE_ONLINE_VERSIONS $CANDIDATE_LOCAL_VERSIONS" | tr ' ' '\n' | grep -v -e '^[[:space:]|\*|\>|\+]*$' | sort -u) "
 	fi
 
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __sdkman_cleanup_local_versions() {
+function __sdkman_cleanup_local_versions() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 
 	__sdkman_build_version_csv "${1}" | tr ',' ' '
 
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 complete -F _sdkman_complete sdk

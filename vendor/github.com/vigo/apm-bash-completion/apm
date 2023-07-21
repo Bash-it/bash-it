@@ -10,7 +10,13 @@
 # you need to activate this via
 # $ source apm
 
-__apm(){
+function __apm() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
     local cur prev options apm_command
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
@@ -42,8 +48,19 @@ __apm(){
         fi
     fi
     COMPREPLY=($(compgen -W "$options" -- "$cur"))
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
-__apm_get_command() {
+
+
+function __apm_get_command() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     local i
     for ((i=1; i < $COMP_CWORD; ++i)); do
         local arg=${COMP_WORDS[$i]}
@@ -65,5 +82,11 @@ __apm_get_command() {
             return;;
         esac
     done
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
+
 complete -F __apm -o bashdefault -o default apm

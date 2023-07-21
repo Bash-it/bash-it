@@ -1,6 +1,12 @@
 . "$BASH_IT/themes/powerline/powerline.base.bash"
 
-function __powerline_left_segment {
+function __powerline_left_segment() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
   local OLD_IFS="${IFS}"; IFS="|"
   local params=( $1 )
   IFS="${OLD_IFS}"
@@ -32,8 +38,24 @@ function __powerline_left_segment {
   (( SEGMENTS_AT_LEFT += 1 ))
 
   _save-and-reload-history "${HISTORY_AUTOSAVE:-0}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_left_last_segment_padding {
+
+function __powerline_left_last_segment_padding() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
   LEFT_PROMPT+="$(set_color ${LAST_SEGMENT_COLOR} -) ${normal}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+

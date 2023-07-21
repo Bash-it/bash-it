@@ -23,7 +23,12 @@
 # SOFTWARE.
 
 
-function __pwdln() {
+function __pwdln() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
    pwdmod="${PWD}/"
    itr=0
    until [[ -z "$pwdmod" ]];do
@@ -31,9 +36,18 @@ function __pwdln() {
       pwdmod="${pwdmod#*/}"
    done
    echo -n $(($itr-1))
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __vagrantinvestigate() {
+function __vagrantinvestigate() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     if [ -f "${PWD}/.vagrant" -o -d "${PWD}/.vagrant" ];then
       echo "${PWD}/.vagrant"
       return 0
@@ -48,9 +62,18 @@ function __vagrantinvestigate() {
       done
    fi
    return 1
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _vagrant() {
+function _vagrant() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
     commands="box cloud destroy global-status halt help hostmanager init login package plugin port powershell provision push rdp reload resume scp snapshot ssh ssh-config status suspend up upload validate vbguest version winrm winrm-config"
@@ -162,5 +185,9 @@ function _vagrant() {
           ;;
       esac
     fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 complete -F _vagrant vagrant

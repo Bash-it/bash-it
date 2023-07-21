@@ -2,9 +2,17 @@
 
 load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
-function local_setup_file() {
+function local_setup_file() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   setup_libs "helpers"
   load "${BASH_IT?}/plugins/available/battery.plugin.bash"
+  ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # Sets up the `_command_exists` function so that it only responds `true` if called with

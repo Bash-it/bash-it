@@ -1,13 +1,22 @@
 cite about-plugin
 about-plugin 'speeds up your life by using gitstatus for git status calculations. install from https://github.com/romkatv/gitstatus'
 
-function gitstatus_on_disable() {
+function gitstatus_on_disable() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   about 'Destructor of gitstatus plugin'
   group 'gitstatus'
 
   unset SCM_GIT_USE_GITSTATUS
   _command_exists gitstatus_stop && gitstatus_stop
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 # No scm-check
 [[ $SCM_CHECK == "true" ]] || return

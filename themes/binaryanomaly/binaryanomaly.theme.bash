@@ -3,7 +3,12 @@
 # shellcheck disable=SC2154 #TODO: fix these all.
 
 # Detect whether a reboot is required
-function show_reboot_required() {
+function show_reboot_required() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	if [ -n "$_bf_prompt_reboot_info" ] 
      then
 		if [ -f /var/run/reboot-required ] 
@@ -11,10 +16,19 @@ function show_reboot_required() {
 			printf "Reboot required!"
 		fi
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # Set different host color for local and remote sessions
-function set_host_color() {
+function set_host_color() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	# Detect if connection is through SSH
 	if [[ -n $SSH_CLIENT ]] 
      then
@@ -22,10 +36,19 @@ function set_host_color() {
 	else
 		printf '%s' "${light_orange}"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # Set different username color for users and root
-function set_user_color() {
+function set_user_color() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	case $(id -u) in
 		0)
 			printf '%s' "${red}"
@@ -34,12 +57,21 @@ function set_user_color() {
 			printf '%s' "${cyan}"
 			;;
 	esac
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # Define custom colors we need
 # non-printable bytes in PS1 need to be contained within \[ \].
 # Otherwise, bash will count them in the length of the prompt
-function set_custom_colors() {
+function set_custom_colors() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	dark_grey="\[$(tput setaf 8)\]"
 	light_grey="\[$(tput setaf 248)\]"
 
@@ -48,13 +80,31 @@ function set_custom_colors() {
 	lime_yellow="\[$(tput setaf 190)\]"
 
 	powder_blue="\[$(tput setaf 153)\]"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__ps_time() {
+__ps_time() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	printf '%s' "$(clock_prompt)${normal}\n"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function prompt_command() {
+function prompt_command() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	ps_reboot="${bright_yellow}$(show_reboot_required)${normal}\n"
 
 	ps_username="$(set_user_color)\u${normal}"
@@ -68,7 +118,10 @@ function prompt_command() {
 	ps_user_input="${normal}"
 
 	# Set prompt
-	PS1="$ps_reboot$(__ps_time)$ps_username$ps_uh_separator$ps_hostname $ps_path $ps_scm_prompt$ps_user_mark$ps_user_input"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # Initialize custom colors

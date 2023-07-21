@@ -21,6 +21,10 @@ function __notify-send_completions()
 			COMPREPLY=($(compgen -W "-? --help -u --urgency -t --expire-time -a --app-name -i --icon -c --category -h --hint -v --version" -- "$curr"))
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 complete -F __notify-send_completions notify-send

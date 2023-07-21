@@ -4,7 +4,12 @@ about-plugin 'manage your nginx service'
 pathmunge "${NGINX_PATH:=/opt/nginx}/sbin" after
 export NGINX_PATH
 
-function nginx_reload() {
+function nginx_reload() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'reload your nginx config'
 	group 'nginx'
 
@@ -18,9 +23,18 @@ function nginx_reload() {
 		echo "Nginx pid file not found"
 		return 0
 	fi
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function nginx_stop() {
+
+function nginx_stop() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'stop nginx'
 	group 'nginx'
 
@@ -34,9 +48,18 @@ function nginx_stop() {
 		echo "Nginx pid file not found"
 		return 0
 	fi
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function nginx_start() {
+
+function nginx_start() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'start nginx'
 	group 'nginx'
 
@@ -48,11 +71,24 @@ function nginx_start() {
 	else
 		echo "Couldn't start nginx"
 	fi
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function nginx_restart() {
+
+function nginx_restart() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'restart nginx'
 	group 'nginx'
 
 	nginx_stop && nginx_start
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+

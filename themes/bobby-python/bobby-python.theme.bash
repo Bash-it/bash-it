@@ -13,7 +13,12 @@ GIT_THEME_PROMPT_SUFFIX="${green?}|"
 
 CONDAENV_THEME_PROMPT_SUFFIX="|"
 
-function prompt_command() {
+function prompt_command() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	PS1="\n${yellow?}$(python_version_prompt) " # Name of virtual env followed by python version
 	PS1+="${purple?}\h "
 	PS1+="${reset_color?}in "
@@ -21,6 +26,10 @@ function prompt_command() {
 	PS1+="${bold_cyan?}$(scm_char)"
 	PS1+="${green?}$(scm_prompt_info) "
 	PS1+="${green?}→${reset_color?} "
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 safe_append_prompt_command prompt_command

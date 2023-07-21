@@ -2,7 +2,12 @@ cite about-plugin
 about-plugin 'Helper functions for Ruby on Rails'
 
 # Quick function to kill a daemonized Rails server
-function killrails() {
+function killrails() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   about 'Searches for a daemonized Rails server in tmp/pids and attempts to kill it.'
   group 'rails'
 
@@ -16,4 +21,7 @@ function killrails() {
     echo "[FAIL] Error killing Rails server"
     return 1
   fi
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }

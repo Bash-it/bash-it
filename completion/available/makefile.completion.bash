@@ -5,6 +5,10 @@
 
 function _makecomplete() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   COMPREPLY=()
 
   # https://www.gnu.org/software/make/manual/html_node/Makefile-Names.html
@@ -31,6 +35,10 @@ function _makecomplete()
   done < <(compgen -W "$(tr ' ' '\n' <<<"${targets[@]}" | sort -u)" -- "${COMP_WORDS[COMP_CWORD]}")
 
   return 0
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 complete -o nospace -F _makecomplete make

@@ -3,7 +3,12 @@
 
 export COMP_WORDBREAKS=${COMP_WORDBREAKS/\:/}
 
-_sshcomplete() {
+_sshcomplete() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     local CURRENT_PROMPT="${COMP_WORDS[COMP_CWORD]}"
     if [[ ${CURRENT_PROMPT} == *@*  ]]  
      then
@@ -40,6 +45,10 @@ _sshcomplete() {
     fi
 
     return 0
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 complete -o default -o nospace -F _sshcomplete ssh scp slogin sftp

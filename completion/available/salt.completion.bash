@@ -39,16 +39,28 @@ function _salt_get_grains()
     else
       salt '*' --timeout 2 --out=txt -- grains.ls | sed  's/^.*\[//' | tr -d ",']" |sed 's:\([a-z0-9]\) :\1\: :g'
     fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 function _salt_get_grain_values()
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     if [ "${1}" = 'local' ] 
      then
         salt-call --out=txt -- grains.item $1 |sed 's/^\S*:\s//' |grep -v '^\s*$'
     else
         salt '*' --timeout 2 --out=txt -- grains.item $1 |sed 's/^\S*:\s//' |grep -v '^\s*$'
     fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
@@ -156,6 +168,10 @@ function  _salt()
     COMPREPLY=( $(compgen -W "${all}" -- ${cur}) )
 
   return 0
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 complete -F _salt salt
@@ -243,6 +259,10 @@ function _saltkey()
     esac
     COMPREPLY=($(compgen -W "${opts} " -- ${cur}))
     return 0
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 complete -F _saltkey salt-key
@@ -305,6 +325,10 @@ function _saltcall()
     _salt_coms="$(salt-call --out=txt -- sys.list_functions|sed 's/^.*\[//' | tr -d ",']"  )"
     COMPREPLY=( $(compgen -W "${opts} ${_salt_coms}" -- ${cur} ))
     return 0
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 complete -F _saltcall salt-call
@@ -386,6 +410,10 @@ function _saltcp()
 
    # default is using opts:
    COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 complete -F _saltcp salt-cp

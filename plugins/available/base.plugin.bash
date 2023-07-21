@@ -2,7 +2,12 @@
 cite about-plugin
 about-plugin 'miscellaneous tools'
 
-function ips() {
+function ips() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'display all ip addresses for this host'
 	group 'base'
 	if _command_exists ifconfig 
@@ -14,17 +19,35 @@ function ips() {
 	else
 		echo "You don't have ifconfig or ip command installed!"
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function down4me() {
+function down4me() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'checks whether a website is down for you, or everybody'
 	param '1: website url'
 	example '$ down4me http://www.google.com'
 	group 'base'
 	curl -Ls "http://downforeveryoneorjustme.com/$1" | sed '/just you/!d;s/<[^>]*>//g'
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function myip() {
+function myip() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'displays your ip address, as seen by the Internet'
 	group 'base'
 	list=("http://myip.dnsomatic.com/" "http://checkip.dyndns.com/" "http://checkip.dyndns.org/")
@@ -36,9 +59,18 @@ function myip() {
 	done
 	res="$(echo "$res" | grep -Eo '[0-9\.]+')"
 	echo -e "Your public IP is: ${echo_bold_green-} $res ${echo_normal-}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function pickfrom() {
+function pickfrom() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'picks random line from file'
 	param '1: filename'
 	example '$ pickfrom /usr/share/dict/words'
@@ -52,9 +84,18 @@ function pickfrom() {
 	length="$(wc -l < "$file")"
 	n=$((RANDOM * length / 32768 + 1))
 	head -n "$n" "$file" | tail -1
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function passgen() {
+function passgen() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'generates random password from dictionary words'
 	param 'optional integer length'
 	param 'if unset, defaults to 4'
@@ -67,6 +108,10 @@ function passgen() {
 	pass="$(for i in $(eval "echo {1..$length}"); do pickfrom /usr/share/dict/words; done)"
 	echo "With spaces (easier to memorize): ${pass//$'\n'/ }"
 	echo "Without spaces (easier to brute force): ${pass//$'\n'/}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # Create alias pass to passgen when pass isn't installed or
@@ -78,7 +123,12 @@ fi
 
 if _command_exists markdown && _command_exists browser 
      then
-	function pmdown() {
+	function pmdown() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 		about 'preview markdown file in a browser'
 		param '1: markdown file'
 		example '$ pmdown README.md'
@@ -88,7 +138,12 @@ if _command_exists markdown && _command_exists browser
 	}
 fi
 
-function mkcd() {
+function mkcd() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'make one or more directories and cd into the last one'
 	param 'one or more directories to create'
 	example '$ mkcd foo'
@@ -96,37 +151,73 @@ function mkcd() {
 	example '$ mkcd foo foo1 foo2 fooN'
 	example '$ mkcd /tmp/img/photos/large /tmp/img/photos/self /tmp/img/photos/Beijing'
 	group 'base'
-	mkdir -p -- "$@" && cd -- "${!#}" || return
+	mkdir -p -- "${@}" && cd -- "${!#}" || return
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # shellcheck disable=SC2010
-function lsgrep() {
+function lsgrep() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'search through directory contents with grep'
 	group 'base'
-	ls | grep "$@"
+	ls | grep "${@}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function quiet() {
+function quiet() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'what *does* this do?'
 	group 'base'
-	nohup "$@" &> /dev/null < /dev/null &
+	nohup "${@}" &> /dev/null < /dev/null &
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function usage() {
+function usage() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'disk usage per directory, in Mac OS X and Linux'
 	param '1: directory name'
 	group 'base'
 	case $OSTYPE in
 		*'darwin'*)
-			du -hd 1 "$@"
+			du -hd 1 "${@}"
 			;;
 		*'linux'*)
-			du -h --max-depth=1 "$@"
+			du -h --max-depth=1 "${@}"
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function t() {
+function t() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'todo.sh if available, otherwise one thing todo'
 	param 'if not set, display todo item'
 	param '1: todo text'
@@ -135,7 +226,7 @@ function t() {
 
 	if _bash-it-component-item-is-enabled plugin todo 
      then
-		todo.sh "$@"
+		todo.sh "${@}"
 		return
 	elif [[ ! -f "${todotxt}" && -f ~/.t ]] 
      then
@@ -146,52 +237,83 @@ function t() {
      then
 		cat "${todotxt}"
 	else
-		echo "$@" >| "${todotxt}"
+		echo "${@}" >| "${todotxt}"
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 if _command_exists mkisofs 
      then
-	function mkiso() {
-		about 'creates iso from current dir in the parent dir (unless defined)'
-		param '1: ISO name'
-		param '2: dest/path'
-		param '3: src/path'
-		example 'mkiso'
-		example 'mkiso ISO-Name dest/path src/path'
-		group 'base'
+	function mkiso() 
+		{
+			############ STACK_TRACE_BUILDER #####################
+			Function_Name="${FUNCNAME[0]}"
+			Function_PATH="${Function_PATH}/${Function_Name}"
+			######################################################
+				about 'creates iso from current dir in the parent dir (unless defined)'
+				param '1: ISO name'
+				param '2: dest/path'
+				param '3: src/path'
+				example 'mkiso'
+				example 'mkiso ISO-Name dest/path src/path'
+				group 'base'
 
-		local isoname="${1:-${PWD##*/}}"
-		local destpath="${2:-../}"
-		local srcpath="${3:-${PWD}}"
+				local isoname="${1:-${PWD##*/}}"
+				local destpath="${2:-../}"
+				local srcpath="${3:-${PWD}}"
 
-		if [[ ! -f "${destpath%/}/${isoname}.iso" ]] 
-     then
-			echo "writing ${isoname}.iso to ${destpath} from ${srcpath}"
-			mkisofs -V "${isoname}" -iso-level 3 -r -o "${destpath%/}/${isoname}.iso" "${srcpath}"
-		else
-			echo "${destpath%/}/${isoname}.iso already exists"
-		fi
-	}
+				if [[ ! -f "${destpath%/}/${isoname}.iso" ]] 
+			then
+					echo "writing ${isoname}.iso to ${destpath} from ${srcpath}"
+					mkisofs -V "${isoname}" -iso-level 3 -r -o "${destpath%/}/${isoname}.iso" "${srcpath}"
+				else
+					echo "${destpath%/}/${isoname}.iso already exists"
+				fi
+				
+			############### Stack_TRACE_BUILDER ################
+			Function_PATH="$( dirname ${Function_PATH} )"
+			####################################################
+		}
 fi
 
 # useful for administrators and configs
-function buf() {
+function buf() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'back up file with timestamp'
 	param 'filename'
 	group 'base'
 	local filename="${1?}" filetime
 	filetime=$(date +%Y%m%d_%H%M%S)
 	cp -a "${filename}" "${filename}_${filetime}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 if ! _command_exists del 
      then
-	function del() {
-		about 'move files to hidden folder in tmp, that gets cleared on each reboot'
-		param 'file or folder to be deleted'
-		example 'del ./file.txt'
-		group 'base'
-		mkdir -p /tmp/.trash && mv "$@" /tmp/.trash
-	}
+	function del() 
+		{
+			############ STACK_TRACE_BUILDER #####################
+			Function_Name="${FUNCNAME[0]}"
+			Function_PATH="${Function_PATH}/${Function_Name}"
+			######################################################
+				about 'move files to hidden folder in tmp, that gets cleared on each reboot'
+				param 'file or folder to be deleted'
+				example 'del ./file.txt'
+				group 'base'
+				mkdir -p /tmp/.trash && mv "${@}" /tmp/.trash
+			
+			############### Stack_TRACE_BUILDER ################
+			Function_PATH="$( dirname ${Function_PATH} )"
+			####################################################
+		}
 fi

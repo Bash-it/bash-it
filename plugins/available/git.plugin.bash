@@ -9,7 +9,11 @@ function git_remote {
 
 	echo "Running: git remote add origin ${GIT_HOSTING:?}:$1.git"
 	git remote add origin "${GIT_HOSTING}:${1}".git
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 function git_first_push {
 	about 'push into origin refs/heads/master'
@@ -17,18 +21,35 @@ function git_first_push {
 
 	echo "Running: git push origin master:refs/heads/master"
 	git push origin master:refs/heads/master
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function git_pub() {
+function git_pub() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'publishes current branch to remote origin'
 	group 'git'
 	BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 	echo "Publishing ${BRANCH} to remote origin"
 	git push -u origin "${BRANCH}"
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function git_revert() {
+
+function git_revert() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'applies changes to HEAD that revert all changes after this commit'
 	group 'git'
 
@@ -36,30 +57,67 @@ function git_revert() {
 	git reset --soft "HEAD@{1}"
 	git commit -m "Revert to ${1}"
 	git reset --hard
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function git_rollback() {
+
+function git_rollback() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'resets the current HEAD to this commit'
 	group 'git'
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
+}
 
-	function is_clean() {
-		if [[ $(git diff --shortstat 2> /dev/null | tail -n1) != "" ]] 
-     then
-			echo "Your branch is dirty, please commit your changes"
-			kill -INT $$
-		fi
+	function is_clean() 
+	{
+		############ STACK_TRACE_BUILDER #####################
+		Function_Name="${FUNCNAME[0]}"
+		Function_PATH="${Function_PATH}/${Function_Name}"
+		######################################################
+			if [[ $(git diff --shortstat 2> /dev/null | tail -n1) != "" ]] 
+		then
+				echo "Your branch is dirty, please commit your changes"
+				kill -INT $$
+			fi
+		############### Stack_TRACE_BUILDER ################
+		Function_PATH="$( dirname ${Function_PATH} )"
+		####################################################
 	}
 
-	function commit_exists() {
-		if git rev-list --quiet "${1:?}" 
-     then
-			echo "Commit ${1} does not exist"
-			kill -INT $$
-		fi
+
+	function commit_exists() 
+	{
+		############ STACK_TRACE_BUILDER #####################
+		Function_Name="${FUNCNAME[0]}"
+		Function_PATH="${Function_PATH}/${Function_Name}"
+		######################################################
+			if git rev-list --quiet "${1:?}" 
+		then
+				echo "Commit ${1} does not exist"
+				kill -INT $$
+			fi
+		############### Stack_TRACE_BUILDER ################
+		Function_PATH="$( dirname ${Function_PATH} )"
+		####################################################
 	}
 
-	function keep_changes() {
-		while true; do
+
+	function keep_changes() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+		while true
+		 do
 			# shellcheck disable=SC2162
 			read -p "Do you want to keep all changes from rolled back revisions in your working tree? [Y/N]" RESP
 			case "${RESP}" in
@@ -79,7 +137,6 @@ function git_rollback() {
 					;;
 			esac
 		done
-	}
 
 	if [ -n "$(git symbolic-ref HEAD 2> /dev/null)" ] 
      then
@@ -106,25 +163,52 @@ function git_rollback() {
 	else
 		echo "you're currently not in a git repository"
 	fi
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function git_remove_missing_files() {
+
+function git_remove_missing_files() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about "git rm's missing files"
 	group 'git'
 
 	git ls-files -d -z | xargs -0 git update-index --remove
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
+
 # Adds files to git's exclude file (same as .gitignore)
-function local-ignore() {
+function local-ignore() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'adds file or path to git exclude file'
 	param '1: file or path fragment to ignore'
 	group 'git'
 	echo "${1}" >> .git/info/exclude
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
+
 # get a quick overview for your git repo
-function git_info() {
+function git_info() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'overview for your git repo'
 	group 'git'
 
@@ -161,7 +245,11 @@ function git_info() {
 		echo "you're currently not in a git repository"
 
 	fi
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 function git_stats {
 	about 'display stats per author'
@@ -210,9 +298,18 @@ function git_stats {
 	else
 		echo "you're currently not in a git repository"
 	fi
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function gittowork() {
+
+function gittowork() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'Places the latest .gitignore file for a given project type in the current directory, or concatenates onto an existing .gitignore'
 	group 'git'
 	param '1: the language/type of the project, used for determining the contents of the .gitignore file'
@@ -234,9 +331,18 @@ function gittowork() {
 		fi
 		echo "${result}" >> .gitignore
 	fi
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function gitignore-reload() {
+
+function gitignore-reload() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'Empties the git cache, and readds all files not blacklisted by .gitignore'
 	group 'git'
 	example '$ gitignore-reload'
@@ -288,9 +394,18 @@ function gitignore-reload() {
 		git add .
 		echo >&2 "Files readded. Commit your new changes now."
 	fi
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function git-changelog() {
+
+function git-changelog() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	# ---------------------------------------------------------------
 	#  ORIGINAL ANSWER: https://stackoverflow.com/a/2979587/10362396 |
 	# ---------------------------------------------------------------
@@ -331,4 +446,7 @@ function git-changelog() {
 			NEXT=${DATE}
 		done
 	fi
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }

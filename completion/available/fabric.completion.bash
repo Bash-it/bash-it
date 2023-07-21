@@ -63,6 +63,10 @@ function __fab_chache_mtime()
 
     ${__FAB_COMPLETION_MTIME_COMMAND} \
         $FAB_COMPLETION_CACHED_TASKS_FILENAME | xargs -n 1 expr
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
@@ -85,6 +89,10 @@ function __fab_fabfile_mtime()
         find $f/*.py -exec ${__FAB_COMPLETION_MTIME_COMMAND} {} + \
             | xargs -n 1 expr | sort -n -r | head -1
     fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
@@ -153,5 +161,9 @@ function __fab_completion()
 
     # Set possible completions
     COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 complete -o default -o nospace -F __fab_completion fab

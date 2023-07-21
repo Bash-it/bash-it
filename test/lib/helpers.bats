@@ -2,14 +2,27 @@
 
 load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
-function local_setup_file() {
+function local_setup_file() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   setup_libs "colors"
   load "${BASH_IT?}/plugins/available/base.plugin.bash"
 }
 
-function local_setup() {
+function local_setup() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   # Copy the test fixture to the Bash-it folder
   cp -RP "$BASH_IT/test/fixtures/bash_it"/* "$BASH_IT/"
+  ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # TODO Create global __is_enabled function
@@ -512,7 +525,12 @@ function local_setup() {
   assert_link_exist "$BASH_IT/enabled/250---ssh.plugin.bash"
 }
 
-function __migrate_all_components() {
+function __migrate_all_components() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   subdirectory="${1}"
   one_type="${2}"
   priority="${3}"
@@ -542,6 +560,9 @@ function __migrate_all_components() {
 
   all_enabled_new_after=$(compgen -G "${BASH_IT}/enabled/*.$one_type.bash" | wc -l | xargs)
   assert_equal "$all_enabled_old" "$all_enabled_new_after"
+  ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 @test "helpers: migrate all plugins" {

@@ -12,7 +12,12 @@ about-plugin 'video to gif, gif to WebM helper functions'
 # Optional: if lossy is not important, Ubuntu has gifsicle packaged for apt-get, instead of giflossy
 # Optional: gifski (from `brew install gifski` or github.com/ImageOptim/gifski)
 #           for high quality huge files.
-function v2gif() {
+function v2gif() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'Converts a .mov/.avi/.mp4 file into an into an animated GIF.'
 	group 'gif'
 	param '1: MOV/AVI/MP4 file name(s)'
@@ -65,7 +70,7 @@ function v2gif() {
 	fi
 
 	# Parse the options
-	args=$("$getopt" -l "alert:" -l "lossy:" -l "width:" -l del,delete -l high -l tag -l "fps:" -l webm -o "a:l:w:f:dhmt" -- "$@") || {
+	args=$("$getopt" -l "alert:" -l "lossy:" -l "width:" -l del,delete -l high -l tag -l "fps:" -l webm -o "a:l:w:f:dhmt" -- "${@}") || {
 		echo 'Terminating...' >&2
 		return 2
 	}
@@ -217,9 +222,18 @@ function v2gif() {
 	done
 
 	echo "$(tput setaf 2)Done.$(tput sgr 0)"
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function any2webm() {
+
+function any2webm() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'Converts an movies and Animated GIF files into an into a modern quality WebM video.'
 	group 'gif'
 	param '1: GIF/video file name(s)'
@@ -235,7 +249,7 @@ function any2webm() {
 	local args out_size
 
 	# Parse the options
-	args=$(getopt -l alert -l "bandwidth:" -l "width:" -l del,delete -l tag -l "fps:" -l webm -o "a:b:w:f:dt" -- "$@") || {
+	args=$(getopt -l alert -l "bandwidth:" -l "width:" -l del,delete -l tag -l "fps:" -l webm -o "a:b:w:f:dt" -- "${@}") || {
 		echo 'Terminating...' >&2
 		return 2
 	}
@@ -329,4 +343,8 @@ function any2webm() {
 	done
 
 	echo "$(tput setaf 2)Done.$(tput sgr 0)"
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+

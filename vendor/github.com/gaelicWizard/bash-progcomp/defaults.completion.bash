@@ -7,15 +7,30 @@
 # Version 2.0 written by John Pell on 2021-09-11.
 #
 
-function matchpattern()
+function matchpattern() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
 	local PATTERN=${2:?$FUNCNAME: a pattern is required}
 	local SEP=${3:-|}
 	[[ -z "${PATTERN##*${SEP}${1}${SEP}*}" ]]
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _defaults_verbs()
+
+function _defaults_verbs() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
 	local IFS=$'\n'	# Treat only newlines as delimiters in string operations.
 	local LC_CTYPE='C'	# Do not consider character set in string operations.
 	local LC_COLLATE='C'	# Do not consider character set in pattern matching.
@@ -37,10 +52,20 @@ function _defaults_verbs()
 
 	COMPREPLY=($(compgen -W "${candidates[*]}" | grep -i "^${cur}"))
 	return 0
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _defaults_domains()
+
+function _defaults_domains() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
 	local IFS=$'\n'	# Treat only newlines as delimiters in string operations.
 	local LC_CTYPE='C'	# Do not consider character set in string operations.
 	local LC_COLLATE='C'	# Do not consider character set in pattern matching.
@@ -66,10 +91,20 @@ function _defaults_domains()
 	fi
 
 	return 0
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _defaults()
+
+function _defaults() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
 	local IFS=$'\n'	# Treat only newlines as delimiters in string operations.
 	local LC_CTYPE='C'	# Do not consider character set in string operations.
 	local LC_COLLATE='C'	# Do not consider character set in pattern matching.
@@ -252,7 +287,12 @@ function _defaults()
 	esac
 
 	return 0
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 complete -F _defaults -o default defaults
 

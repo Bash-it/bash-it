@@ -1,6 +1,12 @@
 . "$BASH_IT/themes/powerline/powerline.base.bash"
 
-function __powerline_left_segment {
+function __powerline_left_segment() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
   local OLD_IFS="${IFS}"; IFS="|"
   local params=( $1 )
   IFS="${OLD_IFS}"
@@ -28,9 +34,20 @@ function __powerline_left_segment {
   LEFT_PROMPT+="$(set_color - ${params[1]})${pad_before_segment}${params[0]}${normal}"
   LAST_SEGMENT_COLOR=${params[1]}
   (( SEGMENTS_AT_LEFT += 1 ))
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_prompt_command {
+
+function __powerline_prompt_command() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
   local last_status="$?" ## always the first
 
   LEFT_PROMPT=""
@@ -64,4 +81,9 @@ function __powerline_prompt_command {
   unset LAST_SEGMENT_COLOR \
         LEFT_PROMPT \
         SEGMENTS_AT_LEFT
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+

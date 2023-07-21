@@ -2,10 +2,18 @@
 
 load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
-function local_setup_file() {
+function local_setup_file() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   # Copy the test fixture to the Bash-it folder
   cp -fRP "${BASH_IT?}/test/fixtures/bash_it"/* "${BASH_IT?}/" || true
   # don't load any libraries as the tests here test the *whole* kit
+  ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 @test "bash-it: verify that the test fixture is available" {

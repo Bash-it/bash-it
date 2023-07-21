@@ -49,6 +49,10 @@ funciton _complete_invoke()
     #
     # COMPREPLY is the list of valid completions handed back to `complete`.
     COMPREPLY=( $(compgen -W "${candidates}" -- $2) )
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 

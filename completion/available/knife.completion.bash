@@ -35,8 +35,16 @@ stat -c %Y /dev/null > /dev/null 2>&1 && _KAC_STAT_COMMAND="stat -c %Y" || _KAC_
 # returns 1 otherwise
 function _KAC_is_file_newer_than() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	[ -f "${1}" ] || return 1
 	[ $(($(date +%s) - $($_KAC_STAT_COMMAND "${1}"))) -gt "${2}" ] && return 1 || return 0
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # helper function for _KAC_get_and_regen_cache, see doc below
@@ -52,12 +60,16 @@ function _KAC_regen_cache()
 	local TMP_FILE="$(mktemp "${_KAC_CACHE_TMP_DIR}/${CACHE_NAME}.XXXX")"
 	shift 1
 	# discard the temp file if it's empty AND the previous command didn't exit successfully, but still mark the cache as updated
-	if ! "$@" > "$TMP_FILE" 2> /dev/null
+	if ! "${@}" > "$TMP_FILE" 2> /dev/null
 	 then
 		[[ $(wc -l "$TMP_FILE") == 0 ]] && rm -f "$TMP_FILE" && touch "$CACHE_PATH" && return 1
 	else
 		mv -f "$TMP_FILE" "$CACHE_PATH"
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # cached files can't have spaces in their names
@@ -68,6 +80,10 @@ function _KAC_get_cache_name_from_command()
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
 	echo "${@// /_SPACE_}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # the reverse operation from the function above
@@ -78,6 +94,10 @@ function _KAC_get_command_from_cache_name()
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
 	echo "${@//_SPACE_/ }"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # given a command as argument, it fetches the cache for that command if it can find it
@@ -92,7 +112,7 @@ function _KAC_get_and_regen_cache()
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
 	# the cache name can't have space in it
-	local CACHE_NAME=$(_KAC_get_cache_name_from_command "$@")
+	local CACHE_NAME=$(_KAC_get_cache_name_from_command "${@}")
 	local REGEN_CMD="_KAC_regen_cache ${CACHE_NAME} $*"
 	_KAC_CACHE_PATH="${_KNIFE_AUTOCOMPLETE_CACHE_DIR}/${CACHE_NAME}"
 	# no need to wait for the regen if the file already exists
@@ -102,7 +122,11 @@ function _KAC_get_and_regen_cache()
 	else
 		${REGEN_CMD}
 	fi
-}
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
+}}
 
 # performs two things: first, deletes all obsolete temp files
 # then refreshes stale caches that haven't been called in a long time
@@ -128,6 +152,10 @@ function _KAC_clean_cache()
 			# then regen the cache
 			_KAC_get_and_regen_cache "${CMD}" > /dev/null
 		done
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # perform a cache cleaning when loading this file
@@ -146,6 +174,10 @@ function _KAC_knife_commands()
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
 	knife --help | grep -E "^knife" | sed -E 's/ \(options\)//g'
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # rebuilds the knife base command currently being completed, and assigns it to $_KAC_CURRENT_COMMAND
@@ -171,6 +203,10 @@ function _KAC_get_current_base_command()
 	done
 	_KAC_CURRENT_COMMAND="${PREVIOUS}"
 	[[ "${I}" -le "${COMP_CWORD}" ]] && _KAC_CURRENT_COMMAND_NB_WORDS="${I}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # searches the position of the currently completed argument in the current base command
@@ -194,6 +230,10 @@ function _KAC_get_current_arg_position()
 		CURRENT_ARG_POS=$((CURRENT_ARG_POS + 1))
 	done
 	echo "${CURRENT_ARG_POS}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # the actual auto-complete function
@@ -253,6 +293,10 @@ function _knife()
 	done
 	# shellcheck disable=SC2207,SC2086
 	COMPREPLY=($(compgen -W "${LIST}" -- ${COMP_WORDS[COMP_CWORD]}))
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 complete -F _knife knife

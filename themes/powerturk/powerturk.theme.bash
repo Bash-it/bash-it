@@ -28,7 +28,12 @@ CWD_THEME_PROMPT_COLOR=240
 
 LAST_STATUS_THEME_PROMPT_COLOR=52
 
-_collapsed_wd() {
+function _collapsed_wd() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   # echo -e "\u2771\u276d\u276f"
   echo $(pwd | perl -pe "
    BEGIN {
@@ -36,9 +41,20 @@ _collapsed_wd() {
       binmode STDOUT, ':encoding(UTF-8)';
    }; s|^$HOME|<HOME>|g; s|/([^/])[^/]*(?=/)|/\$1|g") | \
     sed -re "s/\//  /g"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-_swd(){
+
+function _swd()() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+  
 # Adapted from http://stackoverflow.com/a/2951707/1766716
     begin="" # The unshortened beginning of the path.
     shortbegin="" # The shortened beginning of the path.
@@ -96,8 +112,19 @@ _swd(){
 
     shopt "$NGV" nullglob # Reset nullglob in case this is being used as a function.
 
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
-function set_rgb_color {
+
+function set_rgb_color() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+  
     if [[ "${1}" != "-" ]] 
      then
         fg="38;5;${1}"
@@ -108,9 +135,20 @@ function set_rgb_color {
         [[ -n "${fg}" ]] && bg=";${bg}"
     fi
     echo -e "\[\033[${fg}${bg}m\]"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function powerline_shell_prompt {
+
+function powerline_shell_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+  
     if [[ -n "${SSH_CLIENT}" ]] 
      then
         SHELL_PROMPT="${bold_white}$(set_rgb_color - ${SHELL_SSH_THEME_PROMPT_COLOR}) ${SHELL_SSH_CHAR}\u@\h ${normal}"
@@ -119,9 +157,20 @@ function powerline_shell_prompt {
         SHELL_PROMPT="${bold_white}$(set_rgb_color - ${SHELL_THEME_PROMPT_COLOR}) ${normal}"
         LAST_THEME_COLOR=${SHELL_THEME_PROMPT_COLOR}
     fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function powerline_virtualenv_prompt {
+
+function powerline_virtualenv_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+  
     local environ=""
 
     if [[ -n "$CONDA_DEFAULT_ENV" ]] 
@@ -139,9 +188,20 @@ function powerline_virtualenv_prompt {
     else
         VIRTUALENV_PROMPT=""
     fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function powerline_scm_prompt {
+
+function powerline_scm_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+  
     scm_prompt_vars
 
     if [[ "${SCM_NONE_CHAR}" != "${SCM_CHAR}" ]] 
@@ -167,23 +227,54 @@ function powerline_scm_prompt {
     else
         SCM_PROMPT=""
     fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function powerline_cwd_prompt {
+
+function powerline_cwd_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+  
 CWD_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${CWD_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}$(set_rgb_color 0 ${CWD_THEME_PROMPT_COLOR}) $(_swd)${normal}$(set_rgb_color ${CWD_THEME_PROMPT_COLOR} -)${normal}"
     LAST_THEME_COLOR=${CWD_THEME_PROMPT_COLOR}
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function powerline_last_status_prompt {
+function powerline_last_status_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+  
     if [[ "${1}" -eq 0 ]] 
      then
         LAST_STATUS_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} -)${THEME_PROMPT_SEPARATOR}${normal}"
     else
         LAST_STATUS_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${LAST_STATUS_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}$(set_rgb_color - ${LAST_STATUS_THEME_PROMPT_COLOR}) ${LAST_STATUS} ${normal}$(set_rgb_color ${LAST_STATUS_THEME_PROMPT_COLOR} -)${THEME_PROMPT_SEPARATOR}${normal}"
     fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function powerline_prompt_command() {
+
+function powerline_prompt_command() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     local LAST_STATUS="$?"
 
     powerline_shell_prompt
@@ -193,6 +284,11 @@ function powerline_prompt_command() {
     powerline_last_status_prompt LAST_STATUS
 
     PS1="${SHELL_PROMPT}${VIRTUALENV_PROMPT}${SCM_PROMPT}${CWD_PROMPT}${LAST_STATUS_PROMPT} "
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 PROMPT_COMMAND=powerline_prompt_command

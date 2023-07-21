@@ -83,7 +83,7 @@ function catt()
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
 
-	for i in "$@"; do
+	for i in "${@}"; do
 		if [[ -d "$i" ]] 
      then
 			ls "$i"
@@ -91,6 +91,10 @@ function catt()
 			cat "$i"
 		fi
 	done
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # The Bash-it aliases were moved to the `bash-it.aliases.bash` file. The intent of this

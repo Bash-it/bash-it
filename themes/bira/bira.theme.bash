@@ -16,12 +16,21 @@ else
 	user_host="${bold_green?}\u@\h${normal?}${reset_color?}"
 fi
 
-function prompt_command() {
+function prompt_command() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local current_dir=" ${bold_blue?}\w${normal?}${reset_color?}"
 	local virtualenv_prompt scm_prompt_info
 	virtualenv_prompt="$(virtualenv_prompt)"
 	scm_prompt_info="$(scm_prompt_info)"
 	PS1="╭─${user_host?}${current_dir}${virtualenv_prompt}${scm_prompt_info}\n╰─${bold?}\\$ ${normal?}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 safe_append_prompt_command prompt_command

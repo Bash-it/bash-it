@@ -17,8 +17,18 @@ curl https://raw.githubusercontent.com/rcaloras/bash-preexec/master/bash-preexec
 # Source our file to bring it into our environment
 source ~/.bash-preexec.sh
 # Define a couple functions.
-preexec() { echo "just typed $1"; }
-precmd() { echo "printing the prompt"; }
+preexec() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	###################################################### echo "just typed $1"; }
+precmd() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	###################################################### echo "printing the prompt"; }
 ```
 
 ## Install
@@ -37,8 +47,18 @@ Two functions **preexec** and **precmd** can now be defined and they'll be autom
 * `precmd` Executed just before each prompt. Equivalent to PROMPT_COMMAND, but more flexible and resilient.
 ```bash
 source ~/.bash-preexec.sh
-preexec() { echo "just typed $1"; }
-precmd() { echo "printing the prompt"; }
+preexec() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	###################################################### echo "just typed $1"; }
+precmd() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	###################################################### echo "printing the prompt"; }
 ```
 Should output something like:
 ```
@@ -55,22 +75,42 @@ You can also define functions to be invoked by appending them to two different a
 #### preexec
 ```bash
 # Define some function to use preexec
-preexec_hello_world() { echo "You just entered $1"; }
+preexec_hello_world() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	###################################################### echo "You just entered $1"; }
 # Add it to the array of functions to be invoked each time.
 preexec_functions+=(preexec_hello_world)
 ```
 
 #### precmd
 ```bash
-precmd_hello_world() { echo "This is invoked before the prompt is displayed"; }
+precmd_hello_world() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	###################################################### echo "This is invoked before the prompt is displayed"; }
 precmd_functions+=(precmd_hello_world)
 ```
 
 You can also define multiple functions to be invoked like so.
 
 ```bash
-precmd_hello_one() { echo "This is invoked on precmd first"; }
-precmd_hello_two() { echo "This is invoked on precmd second"; }
+precmd_hello_one() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	###################################################### echo "This is invoked on precmd first"; }
+precmd_hello_two() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	###################################################### echo "This is invoked on precmd second"; }
 precmd_functions+=(precmd_hello_one)
 precmd_functions+=(precmd_hello_two)
 ```

@@ -83,21 +83,46 @@ IP_SEPARATOR=', '
 
 # FUNCS =======================================================================
 
-function get_ip_info {
+function get_ip_info()
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     myip=$(curl -s checkip.dyndns.org | grep -Eo '[0-9\.]+')
     echo -e "$(ips | sed -e :a -e '$!N;s/\n/${IP_SEPARATOR}/;ta' | sed -e 's/127\.0\.0\.1\${IP_SEPARATOR}//g'), ${myip}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
+
 # Displays ip prompt
-function ip_prompt_info() {
+function ip_prompt_info() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     if [[ $IP_ENABLED == 1 ]] 
      then
         echo -e " ${DEFAULT_COLOR}(${IP_COLOR}$(get_ip_info)${DEFAULT_COLOR})"
     fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
+
 # Displays virtual info prompt (virtualenv/rvm)
-function virtual_prompt_info() {
+function virtual_prompt_info() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     local virtual_env_info=$(virtualenv_prompt)
     local rvm_info=$(ruby_version_prompt)
     local virtual_prompt=""
@@ -117,10 +142,20 @@ function virtual_prompt_info() {
         virtual_prompt="${virtual_prompt}rvm: ${RVM_COLOR}$rvm_info${DEFAULT_COLOR}"
     fi
     echo -e "$prefix$virtual_prompt$suffix"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
+
 # Parse git info
-function git_prompt_info() {
+function git_prompt_info() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     if [[ -n $(git status -s 2> /dev/null |grep -v ^# |grep -v "working directory clean") ]] 
      then
         state=${GIT_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
@@ -133,10 +168,20 @@ function git_prompt_info() {
     commit_id=$(git rev-parse HEAD 2>/dev/null) || return
 
     echo -e "$prefix${REF_COLOR}${ref#refs/heads/}${DEFAULT_COLOR}:${commit_id:0:$MAX_GIT_HEX_LENGTH}$state$suffix"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
+
 # Parse hg info
-function hg_prompt_info() {
+function hg_prompt_info() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     if [[ -n $(hg status 2> /dev/null) ]] 
      then
         state=${HG_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
@@ -149,10 +194,20 @@ function hg_prompt_info() {
     changeset=$(hg summary 2> /dev/null | grep parent | awk '{print $2}')
 
     echo -e "$prefix${REF_COLOR}${branch}${DEFAULT_COLOR}:${changeset#*:}$state$suffix"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
+
 # Parse svn info
-function svn_prompt_info() {
+function svn_prompt_info() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     if [[ -n $(svn status --ignore-externals -q 2> /dev/null) ]] 
      then
         state=${SVN_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
@@ -167,10 +222,20 @@ function svn_prompt_info() {
     revision=$(svn info 2> /dev/null | sed -ne 's#^Revision: ##p' )
 
     echo -e "$prefix${REF_COLOR}$ref${DEFAULT_COLOR}:$revision$state$suffix"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
+
 # Displays last X characters of pwd
-function limited_pwd() {
+function limited_pwd() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 
     # Replace $HOME with ~ if possible
     RELATIVE_PWD=${PWD/#$HOME/\~}
@@ -185,10 +250,20 @@ function limited_pwd() {
     else
         echo -e "${RELATIVE_PWD}"
     fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
+
 # Displays the current prompt
-function prompt() {
+function prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     local UC=$USER_COLOR
     [ $UID -eq "0" ] && UC=$SUPERUSER_COLOR
 
@@ -200,6 +275,11 @@ function prompt() {
     fi
     PS2='> '
     PS4='+ '
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 safe_append_prompt_command prompt

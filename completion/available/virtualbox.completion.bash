@@ -1,10 +1,24 @@
 #!/usr/bin/bash
-function _vboxmanage_realopts() {
+function _vboxmanage_realopts() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     echo $(vboxmanage|grep -i vboxmanage|cut -d' ' -f2|grep '\['|tr -s '[\[\|\]\n' ' ')
     echo " "
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __vboxmanage_startvm() {
+function __vboxmanage_startvm() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     RUNNING=$(vboxmanage list runningvms | cut -d' ' -f1 | tr -d '"')
     TOTAL=$(vboxmanage list vms | cut -d' ' -f1 | tr -d '"')
 
@@ -20,9 +34,18 @@ function __vboxmanage_startvm() {
     (( $MATCH == 0 )) && AVAILABLE="$AVAILABLE $VM "
     done
     echo $AVAILABLE
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __vboxmanage_list() {
+function __vboxmanage_list() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     INPUT=$(vboxmanage list | tr -s '[\[\]\|\n]' ' ' | cut -d' ' -f4-)
 
     PRUNED=""
@@ -39,10 +62,19 @@ function __vboxmanage_list() {
     fi
 
     echo $PRUNED
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-function __vboxmanage_list_vms() {
+function __vboxmanage_list_vms() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     VMS=""
     if [ "x$1" == "x" ] 
      then
@@ -57,9 +89,18 @@ function __vboxmanage_list_vms() {
     done
 
     echo $VMS
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __vboxmanage_list_runningvms() {
+function __vboxmanage_list_runningvms() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     VMS=""
     if [ "${1}" == "" ] 
      then
@@ -75,9 +116,18 @@ function __vboxmanage_list_runningvms() {
 
     echo $VMS
 
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __vboxmanage_controlvm() {
+function __vboxmanage_controlvm() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     echo "pause resume reset poweroff savestate acpipowerbutton"
     echo "acpisleepbutton keyboardputscancode guestmemoryballoon"
     echo "gueststatisticsinterval usbattach usbdetach vrde vrdeport"
@@ -95,9 +145,18 @@ function __vboxmanage_controlvm() {
                           #                 <hostport>,[<guestip>],<guestport>
                           #   natpf<1-N> delete <rulename>
 
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __vboxmanage_default() {
+function __vboxmanage_default() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     realopts=$(_vboxmanage_realopts)
     opts=$realopts$(vboxmanage | grep -i vboxmanage | cut -d' ' -f2 | grep -v '\[' | sort | uniq)
     pruned=""
@@ -151,9 +210,18 @@ function __vboxmanage_default() {
     # COMPREPLY=($(compgen -W "${pruned}" -- ${cur}))
     echo $pruned
     return 0
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _vboxmanage() {
+function _vboxmanage() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     # vboxmanage | grep -i vboxmanage | cut -d' ' -f2 | sort | uniq
     local cur p1 p2 p3 p4 opts
     COMPREPLY=()
@@ -228,5 +296,9 @@ function _vboxmanage() {
     done
 
     # echo "Got to end withoug completion"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 complete -F _vboxmanage vboxmanage

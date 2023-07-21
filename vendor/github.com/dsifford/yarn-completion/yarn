@@ -29,7 +29,12 @@
 #	If FIELDTYPE is array, boolean, number, or string, then the field values are returned.
 #	<field-key> must be a first-level field in the json file.
 ##
-function __yarn_get_package_fields() {
+function __yarn_get_package_fields() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	declare cwd=$PWD field_type=object field_key opt package_dot_json OPTIND OPTARG
 
 	while [[ -n $cwd ]]; do
@@ -100,6 +105,10 @@ function __yarn_get_package_fields() {
 			sed -n 's/[[:space:]]*'"$field_key"':[[:space:]]*"\(.*\)".*/\1/p' "$package_dot_json"
 			;;
 	esac
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 ###
@@ -116,7 +125,12 @@ function __yarn_get_package_fields() {
 #  *args
 #   cword
 ##
-function __yarn_count_args() {
+function __yarn_count_args() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	args=0
 	declare -i counter=0 depth=0
 	declare arg_flag_pattern opt OPTIND
@@ -148,7 +162,12 @@ function __yarn_count_args() {
 		esac
 		((counter++))
 	done
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 ###
 # Retrieves the command or subcommand at a given depth, or the last occurring
@@ -168,7 +187,12 @@ function __yarn_count_args() {
 #   subcommands
 #   words
 ##
-function __yarn_get_command() {
+function __yarn_get_command() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	declare -i counter=0 cmd_depth=0 OPTIND
 	declare cmdlist word opt
 
@@ -195,7 +219,12 @@ function __yarn_get_command() {
 		esac
 		((counter++))
 	done
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 ###
 # Global fallback completion generator if all else fails.
@@ -206,7 +235,12 @@ function __yarn_get_command() {
 # Globals:
 #   cur
 ##
-function __yarn_fallback() {
+function __yarn_fallback() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	case "$cur" in
 		-*)
 			COMPREPLY=($(compgen -W "$(__yarn_flags)" -- "$cur"))
@@ -215,7 +249,12 @@ function __yarn_fallback() {
 			COMPREPLY=($(compgen -o plusdirs -f -- "$cur"))
 			;;
 	esac
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 ###
 # Process and merge local and global flags after removing the flags that
@@ -229,7 +268,12 @@ function __yarn_fallback() {
 #   global_flags
 #   words
 ##
-function __yarn_flags() {
+function __yarn_flags() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	declare word
 	declare -a existing_flags=()
 
@@ -244,7 +288,12 @@ function __yarn_flags() {
 	LC_ALL=C comm -23 \
 		<(echo "${flags[@]}" "${global_flags[@]}" | tr ' ' '\n' | LC_ALL=C sort -u) \
 		<(echo "${existing_flags[@]}" | tr ' ' '\n' | LC_ALL=C sort -u)
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 ###
 # Handles completions for flags that require, or optionally take, arguments.
@@ -256,7 +305,12 @@ function __yarn_flags() {
 #   cur
 #   prev
 ##
-function __yarn_flag_args() {
+function __yarn_flag_args() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	declare {arg,bool,dir,file,int,special}_flag_pattern
 	arg_flag_pattern="@($(tr ' ' '|' <<< "${arg_flags[*]}"))"
 
@@ -305,9 +359,19 @@ function __yarn_flag_args() {
 			;;
 	esac
 	return 0
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_add() {
+
+function _yarn_add() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	flags=(
 		--audit -A
@@ -319,9 +383,19 @@ function _yarn_add() {
 		--ignore-workspace-root-check -W
 	)
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_audit() {
+
+function _yarn_audit() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	flags=(
 		--groups
@@ -329,18 +403,38 @@ function _yarn_audit() {
 		--summary
 	)
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_autoclean() {
+
+function _yarn_autoclean() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	flags=(
 		--force -F
 		--init -I
 	)
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_cache() {
+
+function _yarn_cache() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	declare cmd
 	flags=(
@@ -369,18 +463,38 @@ function _yarn_cache() {
 			return 1
 			;;
 	esac
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_check() {
+
+function _yarn_check() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	flags=(
 		--integrity
 		--verify-tree
 	)
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_config() {
+
+function _yarn_config() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	declare cmd
 	declare subcommands=(
@@ -450,9 +564,19 @@ function _yarn_config() {
 			;;
 	esac
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_create() {
+
+function _yarn_create() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	declare -i args
 	case "$cur" in
@@ -463,18 +587,38 @@ function _yarn_create() {
 			;;
 	esac
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_generate_lock_entry() {
+
+function _yarn_generate_lock_entry() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	flags=(
 		--resolved
 		--use-manifest
 	)
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_global() {
+
+function _yarn_global() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	declare cmd cmdlist
 	flags=(
@@ -510,9 +654,19 @@ function _yarn_global() {
 	esac
 
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_help() {
+
+function _yarn_help() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	declare -i args
 	case "$cur" in
@@ -527,9 +681,19 @@ function _yarn_help() {
 			;;
 	esac
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_info() {
+
+function _yarn_info() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	flags=(
 		--json
@@ -582,9 +746,18 @@ function _yarn_info() {
 			;;
 	esac
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_init() {
+function _yarn_init() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	flags=(
 		--yes -y
@@ -592,17 +765,37 @@ function _yarn_init() {
 		--install -i
 	)
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_install() {
+
+function _yarn_install() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	flags=(
 		--audit -A
 	)
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_licenses() {
+
+function _yarn_licenses() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	declare cmd
 	subcommands=(
@@ -622,26 +815,56 @@ function _yarn_licenses() {
 			;;
 	esac
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_list() {
+
+function _yarn_list() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	flags=(
 		--depth
 		--pattern
 	)
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_node() {
+
+function _yarn_node() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	flags=(
 		--into
 	)
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_outdated() {
+
+function _yarn_outdated() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	case "$cur" in
 		-*) ;;
@@ -656,9 +879,19 @@ function _yarn_outdated() {
 			;;
 	esac
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_owner() {
+
+function _yarn_owner() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	declare cmd
 	subcommands=(
@@ -678,17 +911,37 @@ function _yarn_owner() {
 		esac
 	fi
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_pack() {
+
+function _yarn_pack() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	flags=(
 		--filename -f
 	)
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_policies() {
+
+function _yarn_policies() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	declare standard_policies=(
 		latest
@@ -711,9 +964,18 @@ function _yarn_policies() {
 			;;
 	esac
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_publish() {
+function _yarn_publish() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	flags=(
 		--access
@@ -732,9 +994,19 @@ function _yarn_publish() {
 		--tag
 	)
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_remove() {
+
+function _yarn_remove() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	declare cmd dependencies devDependencies
 	flags=(
@@ -762,9 +1034,19 @@ function _yarn_remove() {
 			;;
 	esac
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_run() {
+
+function _yarn_run() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	declare cmd
 	subcommands=(
@@ -783,9 +1065,19 @@ function _yarn_run() {
 		esac
 	fi
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_tag() {
+
+function _yarn_tag() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	declare cmd
 	subcommands=(
@@ -806,9 +1098,19 @@ function _yarn_tag() {
 			;;
 	esac
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_team() {
+
+function _yarn_team() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	declare cmd
 	subcommands=(
@@ -831,9 +1133,19 @@ function _yarn_team() {
 			;;
 	esac
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_unplug() {
+
+function _yarn_unplug() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	flags=(
 		--clear
@@ -853,9 +1165,19 @@ function _yarn_unplug() {
 
 	esac
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_upgrade() {
+
+function _yarn_upgrade() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	declare cmd dependencies devDependencies
 	flags=(
@@ -889,9 +1211,19 @@ function _yarn_upgrade() {
 			;;
 	esac
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_upgrade_interactive() {
+
+function _yarn_upgrade_interactive() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	flags=(
 		--caret -C
@@ -901,9 +1233,18 @@ function _yarn_upgrade_interactive() {
 		--tilde -T
 	)
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_version() {
+function _yarn_version() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	flags=(
 		--major
@@ -920,9 +1261,19 @@ function _yarn_version() {
 		--prerelease
 	)
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_workspace() {
+
+function _yarn_workspace() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	declare -i args
 	declare workspaces_info
@@ -968,9 +1319,19 @@ function _yarn_workspace() {
 			;;
 	esac
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_workspaces() {
+
+function _yarn_workspaces() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	declare cmd
 	subcommands=(
@@ -997,9 +1358,19 @@ function _yarn_workspaces() {
 			;;
 	esac
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_why() {
+
+function _yarn_why() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	case "$cur" in
 		-*) ;;
@@ -1014,9 +1385,19 @@ function _yarn_why() {
 			;;
 	esac
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn_yarn() {
+
+function _yarn_yarn() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	((depth++))
 	case "$cur" in
 		-*) ;;
@@ -1026,9 +1407,19 @@ function _yarn_yarn() {
 			;;
 	esac
 	return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _yarn() {
+
+function _yarn() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	# shellcheck disable=SC2064
 	trap "
 		PWD=$PWD
@@ -1216,6 +1607,10 @@ function _yarn() {
      then
 		__ltrim_colon_completions "$cur"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 if [[ ${BASH_VERSINFO[0]} -ge 4 && ${BASH_VERSINFO[1]} -ge 4 ]] 

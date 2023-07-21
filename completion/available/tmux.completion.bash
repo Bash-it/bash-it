@@ -6,6 +6,10 @@
 
 function _tmux_expand ()
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     [ "$cur" != "${cur%\\}" ] && cur="$cur"'\';
     if [[ "$cur" == \~*/* ]] 
      then
@@ -22,6 +26,10 @@ function _tmux_expand ()
 
 function _tmux_filedir ()
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     local IFS='
 ';
     _tmux_expand || return 0;
@@ -31,19 +39,48 @@ function _tmux_filedir ()
         return 0;
     fi;
     COMPREPLY=(${COMPREPLY[@]} $( eval compgen -f -- \"$cur\" ))
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _tmux_complete_client() {
+function _tmux_complete_client() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     local IFS=$'\n'
     local cur="${1}"
     COMPREPLY=( ${COMPREPLY[@]:-} $(compgen -W "$(tmux -q list-clients 2>/dev/null | cut -f 1 -d ':')" -- "${cur}") )
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
-function _tmux_complete_session() {
+
+function _tmux_complete_session() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     local IFS=$'\n'
     local cur="${1}"
     COMPREPLY=( ${COMPREPLY[@]:-} $(compgen -W "$(tmux -q list-sessions 2>/dev/null | cut -f 1 -d ':')" -- "${cur}") )
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
-function _tmux_complete_window() {
+
+function _tmux_complete_window() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     local IFS=$'\n'
     local cur="${1}"
     local session_name="$(echo "${cur}" | sed 's/\\//g' | cut -d ':' -f 1)"
@@ -58,9 +95,18 @@ function _tmux_complete_window() {
     cur="$(echo "${cur}" | sed -e 's/:/\\\\:/')"
     sessions="$(echo "${sessions}" | sed -e 's/:/\\\\:/')"
     COMPREPLY=( ${COMPREPLY[@]:-} $(compgen -W "${sessions}" -- "${cur}") )
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _tmux() {
+function _tmux() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     local cur prev
     local i cmd cmd_index option option_index
     local opts=""
@@ -195,6 +241,10 @@ function _tmux() {
 
       return 0
 
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 complete -F _tmux tmux
 

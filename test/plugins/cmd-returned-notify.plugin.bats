@@ -2,9 +2,17 @@
 
 load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
-function local_setup_file() {
-  setup_libs "command_duration"
-  load "${BASH_IT?}/plugins/available/cmd-returned-notify.plugin.bash"
+function local_setup_file() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	setup_libs "command_duration"
+	load "${BASH_IT?}/plugins/available/cmd-returned-notify.plugin.bash"
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 @test "plugins cmd-returned-notify: notify after elapsed time" {
@@ -31,6 +39,7 @@ function local_setup_file() {
 	assert_success
 	assert_output ""
 }
+
 @test "lib command_duration: preexec set COMMAND_DURATION_START_SECONDS" {
 	export COMMAND_DURATION_START_SECONDS=
 	assert_equal "${COMMAND_DURATION_START_SECONDS}" ""

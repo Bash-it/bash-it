@@ -9,4 +9,4 @@ about-alias 'the silver searcher (ag) aliases'
 #   -F (-F or --quit-if-one-screen) Auto exit if <1 screen
 #   -X (-X or --no-init) Disable termcap init & deinit
 
-alias ag='ag --smart-case --pager="less -MIRFX"'
+alias ag=$("ag --smart-case --pager="less -MIRFX")

@@ -12,7 +12,12 @@ else
 	return 1
 fi
 
-function pyedit() {
+function pyedit() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'opens python module in your EDITOR'
 	param '1: python module to open'
 	example '$ pyedit requests'
@@ -33,4 +38,7 @@ function pyedit() {
 		echo "$EDITOR ${xpyc%.*}.py"
 		${VISUAL:-${EDITOR:-${ALTERNATE_EDITOR:-nano}}} "${xpyc%.*}.py"
 	fi
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }

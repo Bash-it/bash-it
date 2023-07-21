@@ -12,7 +12,12 @@ SCM_THEME_PROMPT_SUFFIX=""
 GIT_SHA_PREFIX="${blue}"
 GIT_SHA_SUFFIX="${reset_color}"
 
-function rvm_version_prompt {
+function rvm_version_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   if which rvm &> /dev/null 
      then
     rvm=$(rvm-prompt) || return
@@ -21,13 +26,31 @@ function rvm_version_prompt {
       echo -e "$rvm"
     fi
   fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function git_short_sha() {
+function git_short_sha() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   SHA=$(git rev-parse --short HEAD 2> /dev/null) && echo "$GIT_SHA_PREFIX$SHA$GIT_SHA_SUFFIX"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function prompt() {
+function prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     local return_status=""
     local ruby="${red}$(ruby_version_prompt)${reset_color}"
     local user_host="${green}\h @ \w${reset_color}"
@@ -36,6 +59,10 @@ function prompt() {
     local prompt_char="${purple}>_${reset_color} "
 
     PS1="\n${user_host}${prompt_symbol}${ruby} ${git_branch} ${return_status}\n${prompt_char}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 safe_append_prompt_command prompt

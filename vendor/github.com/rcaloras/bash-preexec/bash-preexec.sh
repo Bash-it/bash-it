@@ -66,7 +66,12 @@ __bp_install_string=$'__bp_trap_string="$(trap -p DEBUG)"\ntrap - DEBUG\n__bp_in
 
 # Fails if any of the given variables are readonly
 # Reference https://stackoverflow.com/a/4441178
-function __bp_require_not_readonly() {
+function __bp_require_not_readonly() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   local var
   for var; do
     if ! ( unset "$var" 2> /dev/null ) 
@@ -75,12 +80,23 @@ function __bp_require_not_readonly() {
       return 1
     fi
   done
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
+
 
 # Remove ignorespace and or replace ignoreboth from HISTCONTROL
 # so we can accurately invoke preexec with a command from our
 # history even if it starts with a space.
-function __bp_adjust_histcontrol() {
+function __bp_adjust_histcontrol() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     local histcontrol
     histcontrol="${HISTCONTROL:-}"
     histcontrol="${histcontrol//ignorespace}"
@@ -90,7 +106,13 @@ function __bp_adjust_histcontrol() {
         histcontrol="ignoredups:${histcontrol//ignoreboth}"
     fi;
     export HISTCONTROL="$histcontrol"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
+
 
 # This variable describes whether we are currently in "interactive mode";
 # i.e. whether this shell has just executed a prompt and is waiting for user
@@ -105,37 +127,74 @@ declare -a preexec_functions
 
 # Trims leading and trailing whitespace from $2 and writes it to the variable
 # name passed as $1
-function __bp_trim_whitespace() {
+function __bp_trim_whitespace() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     local var=${1:?} text=${2:-}
     text="${text#"${text%%[![:space:]]*}"}"   # remove leading whitespace characters
     text="${text%"${text##*[![:space:]]}"}"   # remove trailing whitespace characters
     printf -v "$var" '%s' "$text"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
+
 
 
 # Trims whitespace and removes any leading or trailing semicolons from $2 and
 # writes the resulting string to the variable name passed as $1. Used for
 # manipulating substrings in PROMPT_COMMAND
-function __bp_sanitize_string() {
+function __bp_sanitize_string() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     local var=${1:?} text=${2:-} sanitized
     __bp_trim_whitespace sanitized "$text"
     sanitized=${sanitized%;}
     sanitized=${sanitized#;}
     __bp_trim_whitespace sanitized "$sanitized"
     printf -v "$var" '%s' "$sanitized"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
+
 
 # This function is installed as part of the PROMPT_COMMAND;
 # It sets a variable to indicate that the prompt was just displayed,
 # to allow the DEBUG trap to know that the next command is likely interactive.
-function __bp_interactive_mode() {
+function __bp_interactive_mode() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     __bp_preexec_interactive_mode="on";
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 
 # This function is installed as part of the PROMPT_COMMAND.
 # It will invoke any functions defined in the precmd_functions array.
-function __bp_precmd_invoke_cmd() {
+function __bp_precmd_invoke_cmd() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     # Save the returned value from our last command, and from each process in
     # its pipeline. Note: this MUST be the first thing done in this function.
     __bp_last_ret_value="$?" BP_PIPESTATUS=("${PIPESTATUS[@]}")
@@ -162,16 +221,39 @@ function __bp_precmd_invoke_cmd() {
             "$precmd_function"
         fi
     done
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
+
 
 # Sets a return value in $?. We may want to get access to the $? variable in our
 # precmd functions. This is available for instance in zsh. We can simulate it in bash
 # by setting the value here.
-function __bp_set_ret_value() {
+function __bp_set_ret_value() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     return ${1:-}
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __bp_in_prompt_command() {
+
+
+
+function __bp_in_prompt_command() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 
     local prompt_command_array
     IFS=$'\n;' read -rd '' -a prompt_command_array <<< "${PROMPT_COMMAND:-}"
@@ -189,13 +271,24 @@ function __bp_in_prompt_command() {
     done
 
     return 1
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
+
 
 # This function is installed as the DEBUG trap.  It is invoked before each
 # interactive prompt display.  Its purpose is to inspect the current
 # environment to attempt to detect if the current command is being invoked
 # interactively, and invoke 'preexec' if so.
-function __bp_preexec_invoke_exec() {
+function __bp_preexec_invoke_exec() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 
     # Save the contents of $_ so that it can be restored later on.
     # https://stackoverflow.com/questions/40944532/bash-preserve-in-a-debug-trap#40944702
@@ -286,9 +379,20 @@ function __bp_preexec_invoke_exec() {
     # will cause the user's command not to execute.
     # Run `shopt -s extdebug` to enable
     __bp_set_ret_value "$preexec_ret_value" "$__bp_last_argument_prev_command"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __bp_install() {
+
+
+function __bp_install() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     # Exit if we already have this installed.
     if [[ "${PROMPT_COMMAND:-}" == *"__bp_precmd_invoke_cmd"* ]] 
      then
@@ -347,12 +451,23 @@ function __bp_install() {
     # Invoke our two functions manually that were added to $PROMPT_COMMAND
     __bp_precmd_invoke_cmd
     __bp_interactive_mode
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
+
 
 # Sets an installation string as part of our PROMPT_COMMAND to install
 # after our session has started. This allows bash-preexec to be included
 # at any point in our bash profile.
-function __bp_install_after_session_init() {
+function __bp_install_after_session_init() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     # bash-preexec needs to modify these variables in order to work correctly
     # if it can't, just stop the installation
     __bp_require_not_readonly PROMPT_COMMAND HISTCONTROL HISTTIMEFORMAT || return
@@ -364,7 +479,13 @@ function __bp_install_after_session_init() {
         PROMPT_COMMAND=${sanitized_prompt_command}$'\n'
     fi;
     PROMPT_COMMAND+=${__bp_install_string}
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
+
 
 # Run our install so long as we're not delaying it.
 if [[ -z "${__bp_delay_install:-}" ]] 

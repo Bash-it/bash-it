@@ -8,18 +8,40 @@ function _shell_duration_en() (
 	# DFARREL You would think LC_NUMERIC would do it, but not working in my local
 	LC_ALL='en_US.UTF-8'
 	printf "%s" "${EPOCHREALTIME:-$SECONDS}"
-)
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
+}
 
 : "${COMMAND_DURATION_START_SECONDS:=$(_shell_duration_en)}"
 : "${COMMAND_DURATION_ICON:=🕘}"
 : "${COMMAND_DURATION_MIN_SECONDS:=1}"
 
-function _command_duration_pre_exec() {
+function _command_duration_pre_exec() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	COMMAND_DURATION_START_SECONDS="$(_shell_duration_en)"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _command_duration_pre_cmd() {
+function _command_duration_pre_cmd() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	COMMAND_DURATION_START_SECONDS=""
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 function _dynamic_clock_icon {
@@ -28,9 +50,18 @@ function _dynamic_clock_icon {
 	# so between 144 and 155 in base 10.
 	printf -v clock_hand '%x' $(((${1:-${SECONDS}} % 12) + 144))
 	printf -v 'COMMAND_DURATION_ICON' '%b' "\xf0\x9f\x95\x$clock_hand"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _command_duration() {
+function _command_duration() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	[[ -n "${BASH_IT_COMMAND_DURATION:-}" ]] || return
 	[[ -n "${COMMAND_DURATION_START_SECONDS:-}" ]] || return
 
@@ -74,6 +105,10 @@ function _command_duration() {
 			printf "%s %s%d.%01ds" "${COMMAND_DURATION_ICON:-}" "${COMMAND_DURATION_COLOR:-}" "$seconds" "$deciseconds"
 		fi
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 _bash_it_library_finalize_hook+=("safe_append_preexec '_command_duration_pre_exec'")

@@ -22,12 +22,20 @@ if [[ ${BASH_VERSINFO[0]} -lt 4 ]]
 	return
 fi
 
-function _replace_by_history() {
+function _replace_by_history() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local HISTTIMEFORMAT= # Ensure we can parse history properly
 	#TODO: "${histlines[@]/*( )+([[:digit:]])*( )/}"
 	local l
 	l="$(history | tail -r | sed -e 's/^\ *[0-9]*\ *//' | percol --query "${READLINE_LINE:-}")"
 	READLINE_LINE="${l}"
 	READLINE_POINT=${#l}
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 bind -x '"\C-r": _replace_by_history'

@@ -1,14 +1,39 @@
 #!/bin/bash
 
-function _basename_no_extension () {
+function _basename_no_extension () 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   sed -e 's/^.*\/\(.*\)\.inc$/\1/'
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _composure_functions () {
+
+function _composure_functions () 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   _list_composure_files | _basename_no_extension
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _load_tab_completions () {
+
+function _load_tab_completions () 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   # support tab completion for 'revise' command
   # you may disable this by adding the following line to your shell startup:
   # export COMPOSURE_TAB_COMPLETION=0
@@ -21,7 +46,12 @@ function _load_tab_completions () {
   case "$(_shell)" in
     zsh)
       read -r -d '' SCRIPT <<ZSHDATA
-_zsh_revise_complete () {
+_zsh_revise_complete () 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
    typeset word completions
    word="\$1"
    completions="\$(_composure_functions)"
@@ -34,7 +64,12 @@ ZSHDATA
       ;;
     bash)
       read -r -d '' SCRIPT <<BASHDATA
-_bash_revise_complete () {
+_bash_revise_complete () 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   typeset cur
   cur=\${COMP_WORDS[COMP_CWORD]}
   COMPREPLY=( \$(compgen -W "\$(_composure_functions)" -- \$cur) )
@@ -49,7 +84,12 @@ BASHDATA
       echo "composure tab completions unavailable"
       ;;
   esac
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 # Second-order functions for composure
 
@@ -69,7 +109,12 @@ function findgroup ()
             echo "$func"
         fi
     done
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 function overview ()
 {
@@ -103,7 +148,12 @@ function overview ()
         command rm $gfile 2> /dev/null;
     done | less
     command rm $grouplist 2> /dev/null
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 function recompose ()
 {
@@ -113,7 +163,12 @@ function recompose ()
     group 'composure'
 
     . $(_get_composure_dir)/$1.inc
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 function unique_metafor ()
 {
@@ -128,9 +183,19 @@ function unique_metafor ()
     typeset -f | metafor $keyword >> $file
     cat $file | sort | uniq
     command rm $file 2>/dev/null
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function compost () {
+
+function compost () 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'delete function stored in composure repo'
 	param '1: name of function'
 	example '$ compost myfunc'
@@ -143,6 +208,11 @@ function compost () {
 	  cd $(_get_composure_dir)
     git rm "$func.inc" && git commit -m "Delete function $func"
   )
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 _load_tab_completions

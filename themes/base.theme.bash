@@ -97,7 +97,12 @@ RBFU_THEME_PROMPT_SUFFIX='|'
 : "${SVN_EXE:=${SCM_SVN?}}"
 : "${P4_EXE:=${SCM_P4?}}"
 
-function _bash_it_appearance_scm_init() {
+function _bash_it_appearance_scm_init() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	GIT_EXE="$(type -P "${SCM_GIT:-git}" || true)"
 	HG_EXE="$(type -P "${SCM_HG:-hg}" || true)"
 	SVN_EXE="$(type -P "${SCM_SVN:-svn}" || true)"
@@ -114,10 +119,21 @@ function _bash_it_appearance_scm_init() {
 		fi
 	fi
 	return 0
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
+
 _bash_it_library_finalize_hook+=('_bash_it_appearance_scm_init')
 
-function scm() {
+function scm() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	if [[ "${SCM_CHECK:-true}" == "false" ]] 
      then
 		SCM="${SCM_NONE-NONE}"
@@ -136,9 +152,20 @@ function scm() {
 	else
 		SCM="${SCM_NONE-NONE}"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function scm_prompt() {
+
+
+function scm_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local format="${SCM_PROMPT_FORMAT-"[%s%s]"}"
 	local scm_char scm_prompt_info
 	scm_char="$(scm_char)"
@@ -149,9 +176,20 @@ function scm_prompt() {
 		# shellcheck disable=2059
 		printf "${format}" "${scm_char}" "${scm_prompt_info}"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function scm_prompt_char() {
+
+
+function scm_prompt_char() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	if [[ -z "${SCM:-}" ]] 
      then
 		scm
@@ -174,9 +212,20 @@ function scm_prompt_char() {
 			SCM_CHAR="${SCM_NONE_CHAR:-}"
 			;;
 	esac
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function scm_prompt_vars() {
+
+
+function scm_prompt_vars() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	scm
 	scm_prompt_char
 	SCM_DIRTY=0
@@ -184,21 +233,48 @@ function scm_prompt_vars() {
 
 	local prompt_vars="${SCM}_prompt_vars"
 	_is_function "${prompt_vars}" && "${prompt_vars}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function scm_prompt_info() {
+
+
+function scm_prompt_info() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	scm
 	scm_prompt_char
 	scm_prompt_info_common
 }
 
-function scm_prompt_char_info() {
+function scm_prompt_char_info() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	scm_prompt_char
 	echo -ne "${SCM_THEME_CHAR_PREFIX-}${SCM_CHAR?}${SCM_THEME_CHAR_SUFFIX-}"
 	scm_prompt_info_common
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function scm_prompt_info_common() {
+
+
+function scm_prompt_info_common() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local prompt_info
 	SCM_DIRTY=0
 	SCM_STATE=''
@@ -220,9 +296,19 @@ function scm_prompt_info_common() {
 			;;
 	esac
 	_is_function "${prompt_info}" && "${prompt_info}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function terraform_workspace_prompt() {
+
+function terraform_workspace_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	if _command_exists terraform 
      then
 		if [[ -d .terraform ]] 
@@ -230,16 +316,38 @@ function terraform_workspace_prompt() {
 			terraform workspace show 2> /dev/null
 		fi
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function active_gcloud_account_prompt() {
+
+
+function active_gcloud_account_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	if _command_exists gcloud 
      then
 		gcloud config list account --format "value(core.account)" 2> /dev/null
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function git_prompt_minimal_info() {
+
+
+function git_prompt_minimal_info() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	SCM_STATE="${SCM_THEME_PROMPT_CLEAN?}"
 
 	_git-hide-status && return
@@ -256,9 +364,20 @@ function git_prompt_minimal_info() {
 	SCM_PREFIX="${SCM_THEME_PROMPT_PREFIX-}"
 	SCM_SUFFIX="${SCM_THEME_PROMPT_SUFFIX-}"
 	echo -ne "${SCM_PREFIX}${SCM_BRANCH}${SCM_STATE}${SCM_SUFFIX}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function git_prompt_vars() {
+
+
+function git_prompt_vars() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	if [[ "${SCM_GIT_USE_GITSTATUS:-false}" != "false" ]] && _command_exists gitstatus_query && gitstatus_query && [[ "${VCS_STATUS_RESULT:-}" == "ok-sync" ]] 
      then
 		# we can use faster gitstatus
@@ -346,9 +465,20 @@ function git_prompt_vars() {
 	SCM_SUFFIX="${GIT_THEME_PROMPT_SUFFIX:-${SCM_THEME_PROMPT_SUFFIX-}}"
 
 	SCM_CHANGE=$(_git-short-sha 2> /dev/null || true)
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function p4_prompt_vars() {
+
+
+function p4_prompt_vars() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local opened_count non_default_changes default_count \
 		add_file_count edit_file_count delete_file_count
 
@@ -370,9 +500,20 @@ function p4_prompt_vars() {
 
 	SCM_PREFIX="${P4_THEME_PROMPT_PREFIX:-${SCM_THEME_PROMPT_PREFIX-}}"
 	SCM_SUFFIX="${P4_THEME_PROMPT_SUFFIX:-${SCM_THEME_PROMPT_SUFFIX-}}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function svn_prompt_vars() {
+
+
+function svn_prompt_vars() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	if [[ -n "$(svn status | head -c1 2> /dev/null)" ]] 
      then
 		SCM_DIRTY=1
@@ -385,9 +526,20 @@ function svn_prompt_vars() {
 	SCM_SUFFIX="${SVN_THEME_PROMPT_SUFFIX:-${SCM_THEME_PROMPT_SUFFIX-}}"
 	SCM_BRANCH="$(svn info --show-item=url 2> /dev/null | awk -F/ '{ for (i=0; i<=NF; i++) { if ($i == "branches" || $i == "tags" ) { print $(i+1); break }; if ($i == "trunk") { print $i; break } } }')" || return
 	SCM_CHANGE="$(svn info --show-item=revision 2> /dev/null)"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function hg_prompt_vars() {
+
+
+function hg_prompt_vars() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local hg_root bookmark
 	if [[ -n $(hg status 2> /dev/null) ]] 
      then
@@ -419,9 +571,20 @@ function hg_prompt_vars() {
 	else
 		SCM_CHANGE=$(hg summary 2> /dev/null | grep parent: | awk '{print $2}')
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function nvm_version_prompt() {
+
+
+function nvm_version_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local node
 	if _is_function nvm 
      then
@@ -429,13 +592,35 @@ function nvm_version_prompt() {
 		[[ "${node}" == "system" ]] && return
 		echo -ne "${NVM_THEME_PROMPT_PREFIX-}${node}${NVM_THEME_PROMPT_SUFFIX-}"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function node_version_prompt() {
+
+
+function node_version_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	nvm_version_prompt
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function rvm_version_prompt() {
+
+
+function rvm_version_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	if _command_exists rvm 
      then
 		rvm="$(rvm-prompt)" || return
@@ -444,9 +629,20 @@ function rvm_version_prompt() {
 			echo -ne "${RVM_THEME_PROMPT_PREFIX-}${rvm}${RVM_THEME_PROMPT_SUFFIX-}"
 		fi
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function rbenv_version_prompt() {
+
+
+function rbenv_version_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	if _command_exists rbenv 
      then
 		rbenv=$(rbenv version-name) || return
@@ -456,16 +652,38 @@ function rbenv_version_prompt() {
 			echo -ne "${RBENV_THEME_PROMPT_PREFIX-}${rbenv}${RBENV_THEME_PROMPT_SUFFIX-}"
 		fi
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function rbfu_version_prompt() {
+
+
+function rbfu_version_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	if [[ -n "${RBFU_RUBY_VERSION:-}" ]] 
      then
 		echo -ne "${RBFU_THEME_PROMPT_PREFIX-}${RBFU_RUBY_VERSION}${RBFU_THEME_PROMPT_SUFFIX-}"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function chruby_version_prompt() {
+
+
+function chruby_version_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	if _is_function chruby 
      then
 		if _is_function chruby_auto 
@@ -481,9 +699,20 @@ function chruby_version_prompt() {
 		fi
 		echo -ne "${CHRUBY_THEME_PROMPT_PREFIX-}${ruby_version}${CHRUBY_THEME_PROMPT_SUFFIX-}"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function ruby_version_prompt() {
+
+
+function ruby_version_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	if [[ "${THEME_SHOW_RUBY_PROMPT:-}" == "true" ]] 
      then
 		rbfu_version_prompt
@@ -491,54 +720,142 @@ function ruby_version_prompt() {
 		rvm_version_prompt
 		chruby_version_prompt
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function k8s_context_prompt() {
+
+
+function k8s_context_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	kubectl config current-context 2> /dev/null
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function k8s_namespace_prompt() {
+
+
+function k8s_namespace_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	kubectl config view --minify --output 'jsonpath={..namespace}' 2> /dev/null
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function virtualenv_prompt() {
+
+
+function virtualenv_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local virtualenv
 	if [[ -n "${VIRTUAL_ENV:-}" ]] 
      then
 		virtualenv="${VIRTUAL_ENV##*/}"
 		echo -ne "${VIRTUALENV_THEME_PROMPT_PREFIX-}${virtualenv}${VIRTUALENV_THEME_PROMPT_SUFFIX-}"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function condaenv_prompt() {
+
+
+function condaenv_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	if [[ -n "${CONDA_DEFAULT_ENV:-}" ]] 
      then
 		echo -ne "${CONDAENV_THEME_PROMPT_PREFIX-}${CONDA_DEFAULT_ENV}${CONDAENV_THEME_PROMPT_SUFFIX-}"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function py_interp_prompt() {
+
+
+function py_interp_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local py_version
 	py_version="$(python --version 2>&1 | awk 'NR==1{print "py-"$2;}')" || return
 	echo -ne "${PYTHON_THEME_PROMPT_PREFIX-}${py_version}${PYTHON_THEME_PROMPT_SUFFIX-}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function python_version_prompt() {
+
+
+function python_version_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	virtualenv_prompt
 	condaenv_prompt
 	py_interp_prompt
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function git_user_info() {
+
+
+function git_user_info() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local current_user
 	# support two or more initials, set by 'git pair' plugin
 	current_user="$(git config user.initials | sed 's% %+%')"
 	# if `user.initials` weren't set, attempt to extract initials from `user.name`
 	[[ -z "${current_user}" ]] && current_user=$(printf "%s" "$(for word in $(git config user.name | PERLIO=:utf8 perl -pe '$_=lc'); do printf "%s" "${word:0:1}"; done)")
 	[[ -n "${current_user}" ]] && printf "%s" "${SCM_THEME_CURRENT_USER_PREFFIX-}${current_user}${SCM_THEME_CURRENT_USER_SUFFIX-}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function clock_char() {
+
+
+function clock_char() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local clock_char clock_char_color show_clock_char
 	clock_char="${THEME_CLOCK_CHAR:-⌚}"
 	clock_char_color="${THEME_CLOCK_CHAR_COLOR:-${normal:-}}"
@@ -548,9 +865,20 @@ function clock_char() {
      then
 		echo -ne "${clock_char_color}${CLOCK_CHAR_THEME_PROMPT_PREFIX-}${clock_char}${CLOCK_CHAR_THEME_PROMPT_SUFFIX-}"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function clock_prompt() {
+
+
+function clock_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local clock_color="${THEME_CLOCK_COLOR:-${normal?}}"
 	local clock_format="${THEME_CLOCK_FORMAT:-"%H:%M:%S"}"
 	local show_clock="${THEME_SHOW_CLOCK:-${THEME_CLOCK_CHECK:-true}}"
@@ -560,47 +888,135 @@ function clock_prompt() {
      then
 		echo -ne "${clock_color}${CLOCK_THEME_PROMPT_PREFIX-}${clock_string}${CLOCK_THEME_PROMPT_SUFFIX-}"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function user_host_prompt() {
+
+
+function user_host_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	if [[ "${THEME_SHOW_USER_HOST:-false}" == "true" ]] 
      then
 		echo -ne "${USER_HOST_THEME_PROMPT_PREFIX-}\u@${THEME_PROMPT_HOST:-\h}${USER_HOST_THEME_PROMPT_SUFFIX-}"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
+
+
 # backwards-compatibility
-function git_prompt_info() {
+function git_prompt_info() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_git-hide-status && return
 	git_prompt_vars
 	echo -ne "${SCM_PREFIX?}${SCM_BRANCH?}${SCM_STATE?}${SCM_SUFFIX?}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function p4_prompt_info() {
+
+
+function p4_prompt_info() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	p4_prompt_vars
 	echo -ne "${SCM_PREFIX?}${SCM_BRANCH?}:${SCM_CHANGE?}${SCM_STATE?}${SCM_SUFFIX?}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function svn_prompt_info() {
+
+
+function svn_prompt_info() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	svn_prompt_vars
 	echo -ne "${SCM_PREFIX?}${SCM_BRANCH?}${SCM_STATE?}${SCM_SUFFIX?}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function hg_prompt_info() {
+
+
+function hg_prompt_info() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	hg_prompt_vars
 	echo -ne "${SCM_PREFIX?}${SCM_BRANCH?}:${SCM_CHANGE#*:}${SCM_STATE?}${SCM_SUFFIX?}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function scm_char() {
+
+
+function scm_char() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	scm_prompt_char
 	echo -ne "${SCM_THEME_CHAR_PREFIX?}${SCM_CHAR?}${SCM_THEME_CHAR_SUFFIX?}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function prompt_char() {
+
+
+function prompt_char() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	scm_char
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function battery_char() {
+
+
+function battery_char() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	# The battery_char function depends on the presence of the battery_percentage function.
 	if [[ "${THEME_BATTERY_PERCENTAGE_CHECK}" == true ]] && _command_exists battery_percentage 
      then
@@ -608,27 +1024,60 @@ function battery_char() {
 	else
 		false
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
+
 
 if ! _command_exists battery_charge 
      then
 	# if user has installed battery plugin, skip this...
-	function battery_charge() {
+	function battery_charge() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 		: # no op
 	}
 fi
 
-function aws_profile() {
+function aws_profile() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	if [[ -n "${AWS_DEFAULT_PROFILE:-}" ]] 
      then
 		echo -ne "${AWS_DEFAULT_PROFILE}"
 	else
 		echo -ne "default"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _save-and-reload-history() {
+
+
+function _save-and-reload-history() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local autosave="${1:-${HISTORY_AUTOSAVE:-0}}"
 	[[ ${autosave} -eq 1 ]] && local HISTCONTROL="${HISTCONTROL:-}${HISTCONTROL:+:}autoshare"
 	_bash-it-history-auto-save && _bash-it-history-auto-load
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
+

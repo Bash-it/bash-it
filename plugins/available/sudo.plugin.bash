@@ -1,7 +1,12 @@
 cite about-plugin
 about-plugin 'Toggle sudo at the beginning of the current or the previous command by hitting the ESC key twice'
 
-function sudo-command-line() {
+function sudo-command-line() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   about "toggle sudo at the beginning of the current or the previous command by hitting the ESC key twice"
   group "sudo"
 
@@ -13,6 +18,9 @@ function sudo-command-line() {
     READLINE_LINE="sudo $READLINE_LINE"
   fi
   READLINE_POINT=${#READLINE_LINE}
+  ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # Define shortcut keys: [Esc] [Esc]

@@ -207,7 +207,11 @@ function gdv()
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
 
-	git diff --ignore-all-space "$@" | vim -R -
+	git diff --ignore-all-space "${@}" | vim -R -
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 function get_default_branch() 
@@ -223,4 +227,8 @@ function get_default_branch()
 	else
 		echo master
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }

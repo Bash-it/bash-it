@@ -29,6 +29,10 @@ function _set_pkg_aliases()
 
 		alias pkgfiles='dpkg --listfiles'
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 _set_pkg_aliases

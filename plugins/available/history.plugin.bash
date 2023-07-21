@@ -13,7 +13,12 @@ shopt -s histappend
 # resize history to 100x the default (500)
 : "${HISTSIZE:=50000}"
 
-function top-history() {
+function top-history() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'print the name and count of the most commonly run tools'
 
 	# - Make sure formatting doesn't interfer with our parsing
@@ -33,4 +38,8 @@ function top-history() {
 			--table \
 			--table-columns 'Command Count,Command Name' \
 			--output-separator ' | '
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+

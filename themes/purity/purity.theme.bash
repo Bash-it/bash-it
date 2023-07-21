@@ -15,7 +15,12 @@ STATUS_THEME_PROMPT_BAD="${bold_red?}❯${reset_color?}${normal?} "
 STATUS_THEME_PROMPT_OK="${bold_green?}❯${reset_color?}${normal?} "
 : "${PURITY_THEME_PROMPT_COLOR:=$blue}"
 
-function venv_prompt() {
+function venv_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	python_venv=""
 	# Detect python venv
 	if [[ -n "${CONDA_DEFAULT_ENV:-}" ]] 
@@ -26,9 +31,20 @@ function venv_prompt() {
 		python_venv="(${PYTHON_VENV_CHAR}${VIRTUAL_ENV##*/}) "
 	fi
 	[[ -n "${python_venv}" ]] && echo "${python_venv}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function prompt_command() {
+
+
+function prompt_command() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local retval="$?" ret_status python_venv scm_prompt_info venv_prompt
 	case "${retval}" in
 		0)
@@ -41,6 +57,12 @@ function prompt_command() {
 	scm_prompt_info="$(scm_prompt_info)"
 	venv_prompt="$(venv_prompt)"
 	PS1="\n${PURITY_THEME_PROMPT_COLOR}\w ${scm_prompt_info}\n${ret_status}${venv_prompt}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
+
 
 safe_append_prompt_command prompt_command

@@ -6,8 +6,12 @@ then __array_offset=0
 else __array_offset=1
 fi
 
-autoenv_init()
+function autoenv_init()
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   typeset target home _file
   typeset -a _files
   target=$1
@@ -30,11 +34,19 @@ autoenv_init()
     source "${_files[_file-__array_offset]}"
     : $(( _file -= 1 ))
   done
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-cd()
+function cd()
 {
-  if builtin cd "$@"
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+  if builtin cd "${@}"
   then
     autoenv_init
     return 0
@@ -42,4 +54,8 @@ cd()
     echo "else?"
     return $?
   fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }

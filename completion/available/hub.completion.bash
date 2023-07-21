@@ -36,7 +36,12 @@ if _is_function _git && ! _is_function __git_list_all_commands_without_hub
         sed 's/__git_list_all_commands/__git_list_all_commands_without_hub/')"
 
   # Wrap the 'list_all_commands' function with extra hub commands
-  __git_list_all_commands() {
+  __git_list_all_commands() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     cat <<-EOF
 alias
 pull-request
@@ -52,7 +57,11 @@ ci-status
 sync
 EOF
     __git_list_all_commands_without_hub
-  }
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
+}
 
   # Ensure cached commands are cleared
   __git_all_commands=""
@@ -90,7 +99,11 @@ EOF
       ((c++))
     done
     __gitcomp "$s ${shells}"
-  }
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
+}
 
   # hub browse [-u] [--|[USER/]REPOSITORY] [SUBPAGE]
  function _git_browse() 
@@ -140,7 +153,11 @@ EOF
     else
       __gitcomp "$u"
     fi
-  }
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
+}
 
   # hub compare [-u] [USER[/REPOSITORY]] [[START...]END]
   function _git_compare() 
@@ -242,7 +259,11 @@ EOF
         fi
         ;;
     esac
-  }
+ 	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
+}
 
   # hub create [NAME] [-p] [-d DESCRIPTION] [-h HOMEPAGE]
   function _git_create() 
@@ -281,7 +302,11 @@ EOF
         __gitcomp "${repo} ${flags}"
         ;;
     esac
-  }
+ 	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
+}
 
   # hub fork [--no-remote] [--remote-name REMOTE] [--org ORGANIZATION]
   function _git_fork() 
@@ -319,7 +344,11 @@ EOF
         __gitcomp "${flags}"
         ;;
     esac
-  }
+ 	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
+}
 
   # hub pull-request [-f] [-m <MESSAGE>|-F <FILE>|-i <ISSUE>|<ISSUE-URL>] [-b <BASE>] [-h <HEAD>] [-a <USER>] [-M <MILESTONE>] [-l <LABELS>]
  fucntion _git_pull_request() 
@@ -361,7 +390,11 @@ EOF
         __gitcomp "${flags}"
         ;;
     esac
-  }
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
+}
 
   ###################
   # Helper functions
@@ -410,7 +443,11 @@ EOF
         fi
       done < "${config}"
     fi
-  }
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
+}
 
   # __hub_github_repos [FORMAT]
   # List all github hosted repository
@@ -442,7 +479,11 @@ EOF
     command git config --get-regexp 'remote\.[^.]*\.url' |
     grep -E ' ((https?|git)://|git@)github\.com[:/][^:/]+/[^/]+$' |
     sed -E 's#^remote\.([^.]+)\.url +.+[:/](([^/]+)/[^.]+)(\.git)?$#'"$format"'#'
-  }
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
+}
 
   # __hub_heads
   # List all local "branch", and remote "owner/repo:branch"
@@ -468,7 +509,11 @@ EOF
         done
       done
     fi
-  }
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
+}
 
   # __hub_revlist [REMOTE]
   # List all tags, and branches under REMOTE, without the "remote/" prefix
@@ -490,7 +535,11 @@ EOF
       command git --git-dir="$dir" for-each-ref --format='%(refname:short)' \
         "refs/tags/"
     fi
-  }
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
+}
 
   # Enable completion for hub even when not using the alias
   complete -o bashdefault -o default -o nospace -F _git hub 2>/dev/null \

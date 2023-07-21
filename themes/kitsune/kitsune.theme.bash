@@ -23,9 +23,18 @@ else
 		SC="${red}T_T";
 fi
 BC=`battery_percentage`
-function prompt_command() {
+function prompt_command() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	#PS1="${TITLEBAR}[\u@\h \W $(scm_prompt_info)]\$ "
 	PS1="\n${cyan}┌─${bold_white}[\u@\h]${cyan}─${bold_yellow}(\w)$(scm_prompt_info)\n${cyan}└─${bold_green}[\A]-${green}($BC%)${bold_cyan}-[${green}${bold_green}\$${bold_cyan}]${green} "
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # scm theming

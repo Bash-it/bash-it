@@ -1,10 +1,27 @@
 . "$BASH_IT/themes/powerline/powerline.base.bash"
 
-function __powerline_last_status_prompt {
+function __powerline_last_status_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
   [[ "${1}" -ne 0 ]] && echo "$(set_color ${LAST_STATUS_THEME_PROMPT_COLOR} -) ${1} ${normal}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_right_segment {
+
+function __powerline_right_segment() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
   local OLD_IFS="${IFS}"; IFS="|"
   local params=( $1 )
   IFS="${OLD_IFS}"
@@ -48,14 +65,36 @@ function __powerline_right_segment {
   (( RIGHT_PROMPT_LENGTH += padding ))
   LAST_SEGMENT_COLOR="${params[1]}"
   (( SEGMENTS_AT_RIGHT += 1 ))
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_right_first_segment_padding {
+
+function __powerline_right_first_segment_padding() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+{
   RIGHT_PROMPT+="$(set_color - ${LAST_SEGMENT_COLOR}) ${normal}"
   (( RIGHT_PROMPT_LENGTH += 1 ))
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_prompt_command {
+
+function __powerline_prompt_command() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
   local last_status="$?" ## always the first
   local move_cursor_rightmost='\033[500C'
 
@@ -112,4 +151,9 @@ function __powerline_prompt_command {
   unset LAST_SEGMENT_COLOR \
         LEFT_PROMPT RIGHT_PROMPT RIGHT_PROMPT_LENGTH \
         SEGMENTS_AT_LEFT SEGMENTS_AT_RIGHT
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+

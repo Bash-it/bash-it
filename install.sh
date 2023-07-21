@@ -17,6 +17,10 @@ function _bash-it_show_usage()
 	echo "--no-modify-config (-n): Do not modify existing config file"
 	echo "--append-to-config (-a): Keep existing config file and append bash-it templates at the end"
 	echo "--overwrite-backup (-f): Overwrite existing backup"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # enable a thing
@@ -38,6 +42,10 @@ function _bash-it_load_one()
 	else
 		echo "File ${dest} exists, skipping"
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # Interactively enable several things
@@ -71,6 +79,10 @@ function _bash-it_load_some()
 			esac
 		done
 	done
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # Back up existing profile
@@ -84,6 +96,10 @@ function _bash-it_backup()
 	test -w "$HOME/$CONFIG_FILE" \
 		&& cp -aL "$HOME/$CONFIG_FILE" "$HOME/$CONFIG_FILE.bak" \
 		&& echo -e "\033[0;32mYour original $CONFIG_FILE has been backed up to $CONFIG_FILE.bak\033[0m"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # Back up existing profile and create new one for bash-it
@@ -97,6 +113,10 @@ function _bash-it_backup_new()
 	_bash-it_backup
 	sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" > "$HOME/$CONFIG_FILE"
 	echo -e "\033[0;32mCopied the template $CONFIG_FILE into ~/$CONFIG_FILE, edit this file to customize bash-it\033[0m"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # Back up existing profile and append bash-it templates at the end
@@ -109,6 +129,10 @@ function _bash-it_backup_append()
 	_bash-it_backup
 	(sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" | tail -n +2) >> "$HOME/$CONFIG_FILE"
 	echo -e "\033[0;32mBash-it template has been added to your $CONFIG_FILE\033[0m"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 function _bash-it_check_for_backup() 
@@ -153,6 +177,10 @@ function _bash-it_check_for_backup()
 	else
 		echo -e "\033[0;32mOverwriting backup...\033[m"
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 function _bash-it_modify_config_files() 
@@ -190,18 +218,22 @@ function _bash-it_modify_config_files()
 		# backup/new by default
 		_bash-it_backup_new
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-for param in "$@"; do
+for param in "${@}"; do
 	shift
 	case "$param" in
-		"--help") set -- "$@" "-h" ;;
-		"--silent") set -- "$@" "-s" ;;
-		"--interactive") set -- "$@" "-i" ;;
-		"--no-modify-config") set -- "$@" "-n" ;;
-		"--append-to-config") set -- "$@" "-a" ;;
-		"--overwrite-backup") set -- "$@" "-f" ;;
-		*) set -- "$@" "$param" ;;
+		"--help") set -- "${@}" "-h" ;;
+		"--silent") set -- "${@}" "-s" ;;
+		"--interactive") set -- "${@}" "-i" ;;
+		"--no-modify-config") set -- "${@}" "-n" ;;
+		"--append-to-config") set -- "${@}" "-a" ;;
+		"--overwrite-backup") set -- "${@}" "-f" ;;
+		*) set -- "${@}" "$param" ;;
 	esac
 done
 

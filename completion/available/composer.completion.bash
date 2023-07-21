@@ -133,6 +133,10 @@ function __composer_completion()
 
 		return 0
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 complete -o default -F __composer_completion composer

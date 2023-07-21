@@ -36,9 +36,9 @@ elif _bash_it_homebrew_check
 		3.2* | 4.0* | 4.1*)
 			# Import version 1.x of bash-completion, if installed.
 			BASH_COMPLETION="${BASH_IT_HOMEBREW_PREFIX}/opt/bash-completion@1/etc/bash_completion"
-			if [[ -r "$BASH_COMPLETION" ]] 
+			if [[ -r "${BASH_COMPLETION}" ]] 
      then
-				source "$BASH_COMPLETION"
+				source "${BASH_COMPLETION}"
 			else
 				unset BASH_COMPLETION
 			fi

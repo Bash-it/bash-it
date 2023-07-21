@@ -1,7 +1,12 @@
 cite about-plugin
 about-plugin 'mankier.com explain function to explain other commands'
 
-explain () {
+function explain () 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   about 'explain any bash command via mankier.com manpage API'
   param '1: Name of the command to explain'
   example '$ explain                # interactive mode. Type commands to explain in REPL'
@@ -22,4 +27,9 @@ explain () {
     echo "explain                  interactive mode."
     echo "explain 'cmd -o | ...'   one quoted command to explain it."
   fi
+  
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+

@@ -12,7 +12,12 @@ GIT_THEME_PROMPT_SUFFIX="${green}|"
 RVM_THEME_PROMPT_PREFIX="|"
 RVM_THEME_PROMPT_SUFFIX="|"
 
-function prompt_command() {
+function prompt_command() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     if [ $? -eq 0 ] 
      then
       status=❤️
@@ -20,7 +25,12 @@ function prompt_command() {
       status=💔
     fi
     PS1="\n${yellow}$(ruby_version_prompt) ${purple}\h ${reset_color}in ${green}\w $status \n${bold_cyan} ${blue}|$(clock_prompt)|${green}$(scm_prompt_info) ${green}→${reset_color} "
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 THEME_CLOCK_COLOR=${THEME_CLOCK_COLOR:-"$blue"}
 

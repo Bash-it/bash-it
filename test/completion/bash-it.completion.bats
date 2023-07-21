@@ -2,9 +2,17 @@
 
 load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
-function local_setup_file() {
+function local_setup_file() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   setup_libs "helpers"
   load "${BASH_IT?}/completion/available/bash-it.completion.bash"
+  ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 @test "completion bash-it: ensure that the _bash-it function is available" {
@@ -13,13 +21,18 @@ function local_setup_file() {
   assert_output "function"
 }
 
-function __check_completion () {
+function __check_completion () 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   # Get the parameters as a single value
   COMP_LINE=$*
 
   # Get the parameters as an array
-  eval set -- "$@"
-  COMP_WORDS=("$@")
+  eval set -- "${@}"
+  COMP_WORDS=("${@}")
 
   # Index of the cursor in the line
   COMP_POINT=${#COMP_LINE}
@@ -42,6 +55,9 @@ function __check_completion () {
 
   # Return the completion output
   echo "${COMPREPLY[@]}"
+  ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 @test "completion bash-it: doctor - show options" {

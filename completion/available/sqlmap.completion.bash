@@ -12,6 +12,10 @@ then
 
     function _sqlmap()
     {
+    ############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
         local cur prev
 
         COMPREPLY=()
@@ -161,6 +165,10 @@ then
     #    else
     #        _filedir bat
         fi
+    
+    ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
     }
 
 

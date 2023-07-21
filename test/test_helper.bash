@@ -1,10 +1,23 @@
 # shellcheck shell=bash
 
-function setup_file() {
+function setup_file() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	common_setup_file
+ 	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function common_setup_file() {
+function common_setup_file() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	# export *everything* to subshells, needed to support tests
 	set -a
 
@@ -51,10 +64,18 @@ function common_setup_file() {
 	# Run any local test setup
 	local_setup_file
 	set +a # not needed, but symetiric!
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # Load standard _Bash It_ libraries
-function setup_libs() {
+function setup_libs() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local lib
 	# Use a loop to allow convenient short-circuiting for some test files
 	for lib in "log" "utilities" "helpers" "search" "preexec" "colors" "command_duration"; do
@@ -63,21 +84,53 @@ function setup_libs() {
 		[[ "${lib}" == "${1:-}" ]] && return 0 || true
 	done
 	return 0
+    ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function local_setup_file() {
+function local_setup_file() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	true
+    ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function local_setup() {
+function local_setup() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	true
+    ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function local_teardown() {
+function local_teardown() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	true
+    ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function clean_test_fixture() {
+function clean_test_fixture() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	rm -rf "${BASH_IT_CONFIG?}/enabled"
 	rm -rf "${BASH_IT_CONFIG?}/aliases/enabled"
 	rm -rf "${BASH_IT_CONFIG?}/completion/enabled"
@@ -85,16 +138,32 @@ function clean_test_fixture() {
 
 	rm -rf "${BASH_IT_CONFIG?}/tmp/cache"
 	rm -rf "${BASH_IT_CONFIG?}/profiles"/test*.bash_it
+    ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function setup_test_fixture() {
+function setup_test_fixture() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	mkdir -p "${BASH_IT_CONFIG?}/enabled"
 	mkdir -p "${BASH_IT_CONFIG?}/aliases/enabled"
 	mkdir -p "${BASH_IT_CONFIG?}/completion/enabled"
 	mkdir -p "${BASH_IT_CONFIG?}/plugins/enabled"
+    ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function setup() {
+function setup() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	# be independent of git's system configuration
 	export GIT_CONFIG_NOSYSTEM
 	# Locate the temporary folder:
@@ -103,15 +172,34 @@ function setup() {
 
 	setup_test_fixture
 	local_setup
+    ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function teardown() {
+function teardown() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	unset GIT_CONFIG_NOSYSTEM
 	local_teardown
 	clean_test_fixture
+    ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function teardown_file() {
+function teardown_file() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	# This only serves to clean metadata from the real git repo.
 	git --git-dir="${MAIN_BASH_IT_GITDIR?}" worktree remove -f "${BASH_IT?}"
+    ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }

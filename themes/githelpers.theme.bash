@@ -1,14 +1,30 @@
 # shellcheck shell=bash
 
-function _git-symbolic-ref() {
+function _git-symbolic-ref() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	git symbolic-ref -q HEAD 2> /dev/null
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
+
 
 # When on a branch, this is often the same as _git-commit-description,
 # but this can be different when two branches are pointing to the
 # same commit. _git-branch is used to explicitly choose the checked-out
 # branch.
-function _git-branch() {
+function _git-branch() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	if [[ "${SCM_GIT_GITSTATUS_RAN:-}" == "true" ]] 
      then
 		if [[ -n "${VCS_STATUS_LOCAL_BRANCH:-}" ]] 
@@ -20,9 +36,20 @@ function _git-branch() {
 	else
 		git symbolic-ref -q --short HEAD 2> /dev/null || return 1
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _git-tag() {
+
+
+function _git-tag() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	if [[ "${SCM_GIT_GITSTATUS_RAN:-}" == "true" ]] 
      then
 		if [[ -n "${VCS_STATUS_TAG:-}" ]] 
@@ -32,50 +59,127 @@ function _git-tag() {
 	else
 		git describe --tags --exact-match 2> /dev/null
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _git-commit-description() {
+
+
+function _git-commit-description() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	git describe --contains --all 2> /dev/null
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _git-short-sha() {
+
+
+function _git-short-sha() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	if [[ "${SCM_GIT_GITSTATUS_RAN:-}" == "true" ]] 
      then
 		echo "${VCS_STATUS_COMMIT:0:7}"
 	else
 		git rev-parse --short HEAD
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
+
+
 # Try the checked-out branch first to avoid collision with branches pointing to the same ref.
-function _git-friendly-ref() {
+function _git-friendly-ref() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	if [[ "${SCM_GIT_GITSTATUS_RAN:-}" == "true" ]] 
      then
 		_git-branch || _git-tag || _git-short-sha # there is no tag based describe output in gitstatus
 	else
 		_git-branch || _git-tag || _git-commit-description || _git-short-sha
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _git-num-remotes() {
+
+
+function _git-num-remotes() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	git remote | wc -l
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _git-upstream() {
+
+
+function _git-upstream() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local ref
 	ref="$(_git-symbolic-ref)" || return 1
 	git for-each-ref --format="%(upstream:short)" "${ref}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _git-upstream-remote() {
+
+
+function _git-upstream-remote() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local upstream branch
 	upstream="$(_git-upstream)" || return 1
 
 	branch="$(_git-upstream-branch)" || return 1
 	echo "${upstream%"/${branch}"}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _git-upstream-branch() {
+
+
+function _git-upstream-branch() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local ref
 	ref="$(_git-symbolic-ref)" || return 1
 
@@ -83,30 +187,85 @@ function _git-upstream-branch() {
 	# regex replacement gives the wrong result for any remotes with slashes in the name,
 	# so only use when the strip format fails.
 	git for-each-ref --format="%(upstream:strip=3)" "${ref}" 2> /dev/null || git for-each-ref --format="%(upstream)" "${ref}" | sed -e "s/.*\/.*\/.*\///"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _git-upstream-behind-ahead() {
+
+
+function _git-upstream-behind-ahead() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	git rev-list --left-right --count "$(_git-upstream)...HEAD" 2> /dev/null
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _git-upstream-branch-gone() {
+
+
+function _git-upstream-branch-gone() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	[[ "$(git status -s -b | sed -e 's/.* //')" == "[gone]" ]]
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _git-hide-status() {
+
+
+function _git-hide-status() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	[[ "$(git config --get bash-it.hide-status)" == "1" ]]
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _git-status() {
+
+
+function _git-status() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local git_status_flags=
 	if [[ "${SCM_GIT_IGNORE_UNTRACKED:-}" == "true" ]] 
      then
 		git_status_flags='-uno'
 	fi
 	git status --porcelain "${git_status_flags:---}" 2> /dev/null
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _git-status-counts() {
+
+
+function _git-status-counts() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_git-status | awk '
   BEGIN {
     untracked=0;
@@ -128,9 +287,20 @@ function _git-status-counts() {
   END {
     print untracked "\t" unstaged "\t" staged
   }'
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _git-remote-info() {
+
+
+function _git-remote-info() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local same_branch_name="" branch_prefix
 	# prompt handling only, reimplement because patching the routine below gets ugly
 	if [[ "${SCM_GIT_GITSTATUS_RAN:-}" == "true" ]] 
@@ -187,4 +357,9 @@ function _git-remote-info() {
 			echo "${branch_prefix}${remote_info:-}"
 		fi
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+

@@ -2,7 +2,12 @@
 cite about-plugin
 about-plugin 'manage your jekyll site'
 
-function editpost() {
+function editpost() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'edit a post'
 	param '1: site directory'
 	group 'jekyll'
@@ -45,9 +50,18 @@ function editpost() {
 	ret="$?"
 	popd > /dev/null || return "$ret"
 	return "$ret"
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function newpost() {
+
+function newpost() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'create a new post'
 	param '1: site directory'
 	group 'jekyll'
@@ -189,9 +203,18 @@ function newpost() {
 	ret="$?"
 	popd > /dev/null || return "$ret"
 	return "$ret"
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function testsite() {
+
+function testsite() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'launches local jekyll server'
 	param '1: site directory'
 	group 'jekyll'
@@ -224,9 +247,18 @@ function testsite() {
 	ret="$?"
 	popd > /dev/null || return "$ret"
 	return "$ret"
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function buildsite() {
+
+function buildsite() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'builds site'
 	param '1: site directory'
 	group 'jekyll'
@@ -260,9 +292,18 @@ function buildsite() {
 	ret="$?"
 	popd > /dev/null || return "$ret"
 	return "$ret"
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function deploysite() {
+
+function deploysite() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'rsyncs site to remote host'
 	param '1: site directory'
 	group 'jekyll'
@@ -298,7 +339,11 @@ function deploysite() {
 	ret="$?"
 	popd > /dev/null || return "$ret"
 	return "$ret"
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 # Load the Jekyll config
 if [[ -s "$HOME/.jekyllconfig" ]] 

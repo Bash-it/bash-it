@@ -2,13 +2,18 @@
 #
 # Displays the prompt from each _Bash It_ theme.
 
-function _bash-it-preview() {
+function _bash-it-preview() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local BASH_IT_THEME BASH_IT_LOG_LEVEL
 	local themes IFS=$'\n' cur
 
 	if [[ $# -gt '0' ]] 
      then
-		themes=("$@")
+		themes=("${@}")
 	else
 		themes=("${BASH_IT?}/themes"/*/*.theme.bash)
 		themes=("${themes[@]##*/}")
@@ -28,10 +33,14 @@ function _bash-it-preview() {
 		BASH_IT_LOG_LEVEL=0
 		bash --init-file "${BASH_IT?}/bash_it.sh" -i <<< '_bash-it-flash-term "${#BASH_IT_THEME}" "${BASH_IT_THEME}"'
 	done
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 if [[ -n "${BASH_PREVIEW:-}" ]] 
      then
-	_bash-it-preview "${BASH_PREVIEW}" "$@"
+	_bash-it-preview "${BASH_PREVIEW}" "${@}"
 	unset BASH_PREVIEW #Prevent infinite looping
 fi

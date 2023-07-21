@@ -4,45 +4,85 @@ cite about-plugin
 about-plugin 'CNB pack cli aliases'
 
 
-__pack_debug()
+function __pack_debug() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     if [[ -n ${BASH_COMP_DEBUG_FILE} ]] 
      then
         echo "$*" >> "${BASH_COMP_DEBUG_FILE}"
     fi
+  
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 # Homebrew on Macs have version 1.3 of bash-completion which doesn't include
 # _init_completion. This is a very minimal version of that function.
-__pack_init_completion()
+function __pack_init_completion() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     COMPREPLY=()
-    _get_comp_words_by_ref "$@" cur prev words cword
+    _get_comp_words_by_ref "${@}" cur prev words cword
+  
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__pack_index_of_word()
+
+function __pack_index_of_word() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     local w word=$1
     shift
     index=0
-    for w in "$@"; do
+    for w in "${@}"; do
         [[ $w = "$word" ]] && return
         index=$((index+1))
     done
     index=-1
+  
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__pack_contains_word()
+
+function __pack_contains_word() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     local w word=$1; shift
-    for w in "$@"; do
+    for w in "${@}"; do
         [[ $w = "$word" ]] && return
     done
     return 1
+  
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__pack_handle_reply()
+
+function __pack_handle_reply() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     __pack_debug "${FUNCNAME[0]}"
     case $cur in
         -*)
@@ -140,23 +180,50 @@ __pack_handle_reply()
      then
        compopt -o nospace
     fi
+  
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 # The arguments should be in the form "ext1|ext2|extn"
-__pack_handle_filename_extension_flag()
+function __pack_handle_filename_extension_flag() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     local ext="${1}"
     _filedir "@(${ext})"
+  
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__pack_handle_subdirs_in_dir_flag()
+
+function __pack_handle_subdirs_in_dir_flag() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     local dir="${1}"
     pushd "${dir}" >/dev/null 2>&1 && _filedir -d && popd >/dev/null 2>&1
+  
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__pack_handle_flag()
+
+function __pack_handle_flag() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     __pack_debug "${FUNCNAME[0]}: c is $c words[c] is ${words[c]}"
 
     # if a command required a flag, and we found it, unset must_have_one_flag()
@@ -209,10 +276,19 @@ __pack_handle_flag()
 
     c=$((c+1))
 
+  
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__pack_handle_noun()
+
+function __pack_handle_noun() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     __pack_debug "${FUNCNAME[0]}: c is $c words[c] is ${words[c]}"
 
     if __pack_contains_word "${words[c]}" "${must_have_one_noun[@]}" 
@@ -225,10 +301,19 @@ __pack_handle_noun()
 
     nouns+=("${words[c]}")
     c=$((c+1))
+  
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__pack_handle_command()
+
+function __pack_handle_command() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     __pack_debug "${FUNCNAME[0]}: c is $c words[c] is ${words[c]}"
 
     local next_command
@@ -246,10 +331,19 @@ __pack_handle_command()
     c=$((c+1))
     __pack_debug "${FUNCNAME[0]}: looking for ${next_command}"
     declare -F "$next_command" >/dev/null && $next_command
+  
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__pack_handle_word()
+
+function __pack_handle_word() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     if [[ $c -ge $cword ]] 
      then
         __pack_handle_reply
@@ -279,10 +373,19 @@ __pack_handle_word()
         __pack_handle_noun
     fi
     __pack_handle_word
+  
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-_pack_build()
+
+function _pack_build() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     last_command="pack_build"
 
     command_aliases=()
@@ -326,10 +429,19 @@ _pack_build()
     must_have_one_flag=()
     must_have_one_noun=()
     noun_aliases=()
+  
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-_pack_run()
+
+function _pack_run() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     last_command="pack_run"
 
     command_aliases=()
@@ -373,10 +485,19 @@ _pack_run()
     must_have_one_flag=()
     must_have_one_noun=()
     noun_aliases=()
+  
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-_pack_rebase()
+
+function _pack_rebase() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     last_command="pack_rebase"
 
     command_aliases=()
@@ -406,10 +527,19 @@ _pack_rebase()
     must_have_one_flag=()
     must_have_one_noun=()
     noun_aliases=()
+  
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-_pack_create-builder()
+
+function _pack_create-builder() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     last_command="pack_create-builder"
 
     command_aliases=()
@@ -442,10 +572,19 @@ _pack_create-builder()
     must_have_one_flag+=("-b")
     must_have_one_noun=()
     noun_aliases=()
+  
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-_pack_set-run-image-mirrors()
+
+function _pack_set-run-image-mirrors() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     last_command="pack_set-run-image-mirrors"
 
     command_aliases=()
@@ -474,10 +613,19 @@ _pack_set-run-image-mirrors()
     must_have_one_flag+=("-m")
     must_have_one_noun=()
     noun_aliases=()
+  
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-_pack_inspect-builder()
+
+function _pack_inspect-builder() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     last_command="pack_inspect-builder"
 
     command_aliases=()
@@ -501,10 +649,19 @@ _pack_inspect-builder()
     must_have_one_flag=()
     must_have_one_noun=()
     noun_aliases=()
+  
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-_pack_set-default-builder()
+
+function _pack_set-default-builder() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     last_command="pack_set-default-builder"
 
     command_aliases=()
@@ -528,10 +685,19 @@ _pack_set-default-builder()
     must_have_one_flag=()
     must_have_one_noun=()
     noun_aliases=()
+  
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-_pack_version()
+
+function _pack_version() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     last_command="pack_version"
 
     command_aliases=()
@@ -555,10 +721,19 @@ _pack_version()
     must_have_one_flag=()
     must_have_one_noun=()
     noun_aliases=()
+  
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-_pack_completion()
+
+function _pack_completion() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     last_command="pack_completion"
 
     command_aliases=()
@@ -582,10 +757,19 @@ _pack_completion()
     must_have_one_flag=()
     must_have_one_noun=()
     noun_aliases=()
+  
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-_pack_root_command()
+
+function _pack_root_command() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     last_command="pack"
 
     command_aliases=()
@@ -618,10 +802,19 @@ _pack_root_command()
     must_have_one_flag=()
     must_have_one_noun=()
     noun_aliases=()
+  
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__start_pack()
+
+function __start_pack() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     local cur prev words cword
     declare -A flaghash 2>/dev/null || :
     declare -A aliashash 2>/dev/null || :
@@ -645,7 +838,12 @@ __start_pack()
     local nouns=()
 
     __pack_handle_word
+  
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 if [[ $(type -t compopt) = "builtin" ]] 
      then

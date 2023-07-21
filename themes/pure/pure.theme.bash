@@ -14,7 +14,12 @@ SCM_HG_CHAR="${bold_red?}☿${normal?}"
 VIRTUALENV_THEME_PROMPT_PREFIX="("
 VIRTUALENV_THEME_PROMPT_SUFFIX=")"
 
-function pure_prompt() {
+function pure_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local ps_host="${bold_blue?}\h${normal?}"
 	local ps_user="${green?}\u${normal?}"
 	local ps_user_mark="${green?} \$ ${normal?}"
@@ -32,6 +37,12 @@ function pure_prompt() {
 			;;
 	esac
 	PS1="${virtualenv_prompt}${ps_user}@${ps_host}${scm_prompt}:${ps_path}${ps_user_mark}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
+
 
 safe_append_prompt_command pure_prompt

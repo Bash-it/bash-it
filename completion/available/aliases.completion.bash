@@ -121,6 +121,10 @@ function _bash-it-component-completion-callback-on-init-aliases()
 	done < <(alias -p)
 	# shellcheck source=/dev/null
 	source "$tmp_file" && command rm -f "$tmp_file"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 _bash-it-component-completion-callback-on-init-aliases

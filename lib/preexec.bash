@@ -12,11 +12,9 @@ __bp_delay_install="delayed"
 source "${BASH_IT?}/vendor/github.com/rcaloras/bash-preexec/bash-preexec.sh"
 
 # Block damanaging user's `$HISTCONTROL`
-function __bp_adjust_histcontrol() { :; }
-
+__bp_adjust_histcontrol() 
 # Don't fail on readonly variables
-function __bp_require_not_readonly() { :; }
-
+ __bp_require_not_readonly() 
 # For performance, testing, and to avoid unexpected behavior: disable DEBUG traps in subshells.
 # See bash-it/bash-it#1040 and rcaloras/bash-preexec#26
 : "${__bp_enable_subshells:=}" # blank
@@ -25,19 +23,42 @@ function __bp_require_not_readonly() { :; }
 _bash_it_library_finalize_hook+=('__bp_install_after_session_init')
 
 ## Helper functions
-function __check_precmd_conflict() {
+function __check_precmd_conflict() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local f
 	__bp_trim_whitespace f "${1?}"
 	_bash-it-array-contains-element "${f}" "${precmd_functions[@]}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __check_preexec_conflict() {
+function __check_preexec_conflict() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local f
 	__bp_trim_whitespace f "${1?}"
 	_bash-it-array-contains-element "${f}" "${preexec_functions[@]}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function safe_append_prompt_command() {
+function safe_append_prompt_command() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local prompt_re prompt_er f
 
 	if [[ "${bash_preexec_imported:-${__bp_imported:-missing}}" == "defined" ]] 
@@ -62,9 +83,18 @@ function safe_append_prompt_command() {
 			PROMPT_COMMAND="${1};${PROMPT_COMMAND}"
 		fi
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function safe_append_preexec() {
+function safe_append_preexec() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local prompt_re f
 
 	if [[ "${bash_preexec_imported:-${__bp_imported:-missing}}" == "defined" ]] 
@@ -78,4 +108,8 @@ function safe_append_preexec() {
 	else
 		_log_error "${FUNCNAME[0]}: can't append to preexec hook because _bash-preexec.sh_ hasn't been loaded"
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }

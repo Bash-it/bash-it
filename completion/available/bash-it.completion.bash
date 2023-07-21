@@ -10,6 +10,10 @@ function _compreply_candidates()
 	local IFS=$'\n'
 
 	read -d '' -ra COMPREPLY < <(compgen -W "${candidates[*]}" -- "${cur}")
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 function _bash-it() 
@@ -100,6 +104,10 @@ function _bash-it()
 			_compreply_candidates
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # Activate completion for bash-it and its common misspellings

@@ -30,17 +30,33 @@
 #
 # To uninstall, just remove the line from your .bash_profile and .bashrc.
 
-_django_completion()
+function _django_completion() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
     COMPREPLY=( $( COMP_WORDS="${COMP_WORDS[*]}" \
                    COMP_CWORD=$COMP_CWORD \
                    DJANGO_AUTO_COMPLETE=1 $1 ) )
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
+
 # When the django-admin.py deprecation ends, remove django-admin.py.
 complete -F _django_completion -o default django-admin.py manage.py django-admin
 
-_python_django_completion()
+function _python_django_completion() 
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
     if [[ ${COMP_CWORD} -ge 2 ]] 
      then
         local PYTHON_EXE=${COMP_WORDS[0]##*/}
@@ -55,7 +71,13 @@ _python_django_completion()
             fi
         fi
     fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
+
 
 # Support for multiple interpreters.
 unset pythons

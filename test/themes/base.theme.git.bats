@@ -4,34 +4,71 @@
 
 load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
-function local_setup_file() {
+function local_setup_file() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   setup_libs "colors" #"theme"
   load "${BASH_IT?}/themes/base.theme.bash"
   load "${BASH_IT?}/themes/githelpers.theme.bash"
+  ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-add_commit() {
+add_commit() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   local file_name="general-${RANDOM}"
   touch "${file_name}"
   echo "" >> "${file_name}"
   git add "${file_name}"
   git commit -m"message"
+  ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-enter_new_git_repo() {
+enter_new_git_repo() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   repo="$(setup_repo)"
   pushd "${repo}"
+  ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-setup_repo() {
+setup_repo() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   upstream="$(mktemp -d)"
   pushd "$upstream" > /dev/null
   git init . > /dev/null
 
   echo "$upstream"
+  ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-setup_repo_with_upstream() {
+setup_repo_with_upstream() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   upstream="$(setup_repo)"
   pushd "$upstream" > /dev/null
   add_commit > /dev/null
@@ -57,6 +94,9 @@ setup_repo_with_upstream() {
   popd > /dev/null
 
   echo "$downstream"
+  ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 @test 'themes base: Git: when tracking a remote branch: it shows the commits ahead and behind' {

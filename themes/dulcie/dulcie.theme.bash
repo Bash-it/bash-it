@@ -15,15 +15,38 @@
 DULCIE_COLOR=${DULCIE_COLOR:=1} # 0 = monochrome, 1 = colorful
 DULCIE_MULTILINE=${DULCIE_MULTILINE:=1} # 0 = Single line, 1 = SCM in separate line
 
-function dulcie_color() {
+function dulcie_color() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   echo -en "\[\e[38;5;${1}m\]"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function dulcie_background() {
+function dulcie_background() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   echo -en "\[\e[48;5;${1}m\]"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function dulcie_prompt() {
+function dulcie_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   color_user_root=$(dulcie_color 169)
   color_user_nonroot="${green}"
   color_host_local=$(dulcie_color 230)
@@ -98,6 +121,10 @@ function dulcie_prompt() {
     PS1="${reset_color}[${DULCIE_USER}@${DULCIE_HOST}$(scm_prompt_info)${reset_color} ${DULCIE_WORKINGDIR}]"
   fi
   PS1="${PS1}${DULCIE_PROMPTCHAR} "
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 safe_append_prompt_command dulcie_prompt

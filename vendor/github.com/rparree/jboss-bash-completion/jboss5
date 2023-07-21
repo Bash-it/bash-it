@@ -6,7 +6,13 @@
 
 
 
-_serverProfiles5(){
+function _serverProfiles5() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
  # from http://unix.stackexchange.com/questions/34238/complete-files-from-a-different-directory-in-bash
     if [ -d "../server" ]
     then
@@ -16,20 +22,42 @@ _serverProfiles5(){
     else
       COMPREPLY=( $(compgen -W "default standard all web minimal production" -- ${cur}) )
     fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-_bindingAddress5(){
+
+
+function _bindingAddress5() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
   # from /etc/bash_completion.d/ssh
     COMPREPLY=( "${COMPREPLY[@]}" $( compgen -W \
     "0.0.0.0 $( PATH="$PATH:/sbin" ifconfig -a | \
     sed -ne 's/.*addr:\([^[:space:]]*\).*/\1/p' \
         -ne 's/.*inet[[:space:]]\{1,\}\([^[:space:]]*\).*/\1/p' )" \
     -- "$cur" ) )
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-_jboss5()
+
+
+function _jboss5() 
 {
-    
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
     local cur prev words cword
     COMPREPLY=()
     _get_comp_words_by_ref -n = cur prev words cword
@@ -91,5 +119,11 @@ _jboss5()
     return 0
 
   
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
+
 complete -o nospace -F _jboss5 run.sh

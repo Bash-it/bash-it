@@ -1,6 +1,11 @@
 
 #To set color for foreground and background
-function set_color {
+function set_color() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   set +u
   if [[ "${1}" != "-" ]] 
      then
@@ -15,7 +20,12 @@ function set_color {
 }
 
 #Customising User Info Segment
-function __powerline_user_info_prompt {
+function __powerline_user_info_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   local user_info="${USER}"
   local color=${USER_INFO_THEME_PROMPT_COLOR}
   local fg_color=15
@@ -47,10 +57,19 @@ function __powerline_user_info_prompt {
       ;;
   esac
   [[ -n "${user_info}" ]] && echo "${user_info}|${color}|${fg_color}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 #Customising Ruby Prompt
-function __powerline_ruby_prompt {
+function __powerline_ruby_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   local ruby_version=""
   local fg_color=206
 
@@ -63,10 +82,19 @@ function __powerline_ruby_prompt {
   fi
 
   [[ -n "${ruby_version}" ]] && echo "${RUBY_CHAR}${ruby_version}|${RUBY_THEME_PROMPT_COLOR}|${fg_color}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 #Customising Python (venv) Prompt
-function __powerline_python_venv_prompt {
+function __powerline_python_venv_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################{
   set +u
   local python_venv=""
   local fg_color=206
@@ -81,10 +109,19 @@ function __powerline_python_venv_prompt {
   fi
 
   [[ -n "${python_venv}" ]] && echo "${PYTHON_VENV_CHAR}${python_venv}|${PYTHON_VENV_THEME_PROMPT_COLOR}|${fg_color}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 #Customising SCM(GIT) Prompt
-function __powerline_scm_prompt {
+function __powerline_scm_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   local color=""
   local scm_prompt=""
   local fg_color=206
@@ -126,34 +163,79 @@ function __powerline_scm_prompt {
     fi
     echo "${scm_prompt}${scm}|${color}|${fg_color}"
   fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_cwd_prompt {
+function __powerline_cwd_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   local cwd=$(pwd | sed "s|^${HOME}|~|")
   local fg_color=16
 
   echo "${cwd}|${CWD_THEME_PROMPT_COLOR}|${fg_color}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_hostname_prompt {
+function __powerline_hostname_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   local fg_color=206
 
   echo "$(hostname -s)|${HOST_THEME_PROMPT_COLOR}|${fg_color}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_wd_prompt {
+function __powerline_wd_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   local fg_color=206
 
   echo "\W|${CWD_THEME_PROMPT_COLOR}|${fg_color}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_clock_prompt {
+function __powerline_clock_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     local fg_color=206
 
   echo "$(date +"${THEME_CLOCK_FORMAT}")|${CLOCK_THEME_PROMPT_COLOR}|${fg_color}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_battery_prompt {
+function __powerline_battery_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   local color=""
   local battery_status="$(battery_percentage 2> /dev/null)"
   local fg_color=255
@@ -174,36 +256,72 @@ function __powerline_battery_prompt {
     ac_adapter_connected && battery_status="${BATTERY_AC_CHAR}${battery_status}"
     echo "${battery_status}%|${color}|${fg_color}"
   fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_in_vim_prompt {
+function __powerline_in_vim_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################{
   local fg_color=206
 
   if [ -n "$VIMRUNTIME" ] 
      then
     echo "${IN_VIM_THEME_PROMPT_TEXT}|${IN_VIM_THEME_PROMPT_COLOR}|${fg_color}"
   fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_aws_profile_prompt {
+function __powerline_aws_profile_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################{
   local fg_color=206
 
   if [[ -n "${AWS_PROFILE}" ]] 
      then
     echo "${AWS_PROFILE_CHAR}${AWS_PROFILE}|${AWS_PROFILE_PROMPT_COLOR}|${fg_color}"
   fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_in_toolbox_prompt {
+function __powerline_in_toolbox_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   local fg_color=206
 
   if [ -f /run/.containerenv ] && [ -f /run/.toolboxenv ] 
      then
     echo "${IN_TOOLBOX_THEME_PROMPT_TEXT}|${IN_TOOLBOX_THEME_PROMPT_COLOR}|${fg_color}"
   fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_left_segment {
+function __powerline_left_segment() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   local OLD_IFS="${IFS}"; IFS="|"
   local params=( $1 )
   IFS="${OLD_IFS}"
@@ -221,13 +339,31 @@ function __powerline_left_segment {
   #seperator char color = current bg
   LAST_SEGMENT_COLOR=${params[1]}
   (( SEGMENTS_AT_LEFT += 1 ))
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_last_status_prompt {
+function __powerline_last_status_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   [[ "${1}" -ne 0 ]] && echo "${1}|${LAST_STATUS_THEME_PROMPT_COLOR}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_prompt_command {
+function __powerline_prompt_command() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   local last_status="$?" ## always the first
   local separator_char="${POWERLINE_PROMPT_CHAR}"
 
@@ -256,4 +392,8 @@ function __powerline_prompt_command {
   unset LAST_SEGMENT_COLOR \
         LEFT_PROMPT \
         SEGMENTS_AT_LEFT
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }

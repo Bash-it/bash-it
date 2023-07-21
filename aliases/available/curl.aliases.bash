@@ -24,6 +24,10 @@ function _set_pkg_aliases()
 		# see only response headers from a get request
 		alias clhead='curl -D - -so /dev/null'
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 _set_pkg_aliases

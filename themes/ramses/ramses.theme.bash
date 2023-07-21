@@ -21,32 +21,71 @@ esac
 
 PS3=">> "
 
-function __my_rvm_ruby_version() {
+function __my_rvm_ruby_version() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     local gemset=$(echo $GEM_HOME | awk -F'@' '{print $2}')
   [ "$gemset" != "" ] && gemset="@$gemset"
     local version=$(echo $MY_RUBY_HOME | awk -F'-' '{print $2}')
     local full="$version$gemset"
   [ "$full" != "" ] && echo "[$full]"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function is_vim_shell() {
+
+
+function is_vim_shell() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
         if [ ! -z "$VIMRUNTIME" ]
         then
                 echo "[${cyan}vim shell${normal}]"
         fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
+
+
 # show chroot if exist
-function chroot(){
+function chroot() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
     if [ -n "$debian_chroot" ]
     then
         my_ps_chroot="${bold_cyan}$debian_chroot${normal}";
         echo "($my_ps_chroot)";
     fi
-    }
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
+}
+
+
 
 # show virtualenvwrapper
-function my_ve(){
+function my_ve() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 
     if [ -n "$CONDA_DEFAULT_ENV" ]
     then
@@ -58,9 +97,20 @@ function my_ve(){
         echo "($my_ps_ve)";
     fi
     echo "";
-    }
 
-function prompt() {
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
+}
+
+
+
+function prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     SCM_PROMPT_FORMAT='[%s][%s]'
     my_ps_host="${green}\h${normal}";
     # yes, these are the the same for now ...
@@ -84,7 +134,13 @@ function prompt() {
 ▪ "
         ;;
     esac
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
+
 
 PS2="▪ "
 

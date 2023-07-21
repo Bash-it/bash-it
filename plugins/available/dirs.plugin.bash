@@ -32,7 +32,12 @@ alias pu="pushd"
 # Pop current location
 alias po="popd"
 
-function dirs-help() {
+function dirs-help() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'directory navigation alias usage'
 	group 'dirs'
 
@@ -54,7 +59,11 @@ function dirs-help() {
 	echo "7	: Change to stack location 7."
 	echo "8	: Change to stack location 8."
 	echo "9	: Change to stack location 9."
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 # Add bookmarking functionality
 # Usage:
@@ -79,16 +88,30 @@ fi
 alias L='cat "${BASH_IT_DIRS_BKS?}"'
 
 # Goes to destination dir, otherwise stay in the dir
-function G() {
+function G() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'goes to destination dir'
 	param '1: directory'
 	example '$ G ..'
 	group 'dirs'
 
 	cd "${1:-${PWD}}" || return
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function S() {
+
+function S() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'save a bookmark'
 	param '1: bookmark name'
 	example '$ S mybkmrk'
@@ -104,9 +127,18 @@ function S() {
 	echo "${1}"=\""${PWD}"\" >> "${BASH_IT_DIRS_BKS?}"
 	# shellcheck disable=SC1090
 	source "${BASH_IT_DIRS_BKS?}"
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function R() {
+
+function R() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'remove a bookmark'
 	param '1: bookmark name'
 	example '$ R mybkmrk'
@@ -119,6 +151,10 @@ function R() {
 
 	sed "/$1/d" "${BASH_IT_DIRS_BKS?}" > "${BASH_IT_DIRS_BKS?}.new"
 	command mv "${BASH_IT_DIRS_BKS?}.new" "${BASH_IT_DIRS_BKS?}"
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 alias U='source "${BASH_IT_DIRS_BKS?}"' # Update bookmark stack
