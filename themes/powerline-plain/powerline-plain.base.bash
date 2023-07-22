@@ -1,4 +1,4 @@
-. "$BASH_IT/themes/powerline/powerline.base.bash"
+. "${BASH_IT}/themes/powerline/powerline.base.bash"
 
 function __powerline_left_segment() 
 {

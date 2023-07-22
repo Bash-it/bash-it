@@ -52,14 +52,14 @@ function _git_flow ()
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
 	local subcommands="init feature release hotfix"
-	local subcommand="$(__git_find_subcommand "$subcommands")"
-	if [ -z "$subcommand" ] 
+	local subcommand="$(__git_find_subcommand "${subcommands}")"
+	if [ -z "${subcommand}" ] 
      then
-		__gitcomp "$subcommands"
+		__gitcomp "${subcommands}"
 		return
 	fi
 
-	case "$subcommand" in
+	case "${subcommand}" in
 	feature)
 		__git_flow_feature
 		return
@@ -89,14 +89,14 @@ function __git_flow_feature ()
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
 	local subcommands="list start finish publish track diff rebase checkout pull"
-	local subcommand="$(__git_find_subcommand "$subcommands")"
-	if [ -z "$subcommand" ] 
+	local subcommand="$(__git_find_subcommand "${subcommands}")"
+	if [ -z "${subcommand}" ] 
      then
-		__gitcomp "$subcommands"
+		__gitcomp "${subcommands}"
 		return
 	fi
 
-	case "$subcommand" in
+	case "${subcommand}" in
 	pull)
 		__gitcomp "$(__git_remotes)"
 		return
@@ -169,14 +169,14 @@ function __git_flow_release ()
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
 	local subcommands="list start finish"
-	local subcommand="$(__git_find_subcommand "$subcommands")"
-	if [ -z "$subcommand" ] 
+	local subcommand="$(__git_find_subcommand "${subcommands}")"
+	if [ -z "${subcommand}" ] 
      then
-		__gitcomp "$subcommands"
+		__gitcomp "${subcommands}"
 		return
 	fi
 
-	case "$subcommand" in
+	case "${subcommand}" in
 	finish)
 		__gitcomp "$(__git_flow_list_releases)"
 		return
@@ -212,14 +212,14 @@ function __git_flow_hotfix ()
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
 	local subcommands="list start finish"
-	local subcommand="$(__git_find_subcommand "$subcommands")"
-	if [ -z "$subcommand" ] 
+	local subcommand="$(__git_find_subcommand "${subcommands}")"
+	if [ -z "${subcommand}" ] 
      then
-		__gitcomp "$subcommands"
+		__gitcomp "${subcommands}"
 		return
 	fi
 
-	case "$subcommand" in
+	case "${subcommand}" in
 	finish)
 		__gitcomp "$(__git_flow_list_hotfixes)"
 		return
@@ -232,23 +232,19 @@ function __git_flow_hotfix ()
 	############### Stack_TRACE_BUILDER ################
 	Function_PATH="$( dirname ${Function_PATH} )"
 	####################################################
-	
-	############### Stack_TRACE_BUILDER ################
-	Function_PATH="$( dirname ${Function_PATH} )"
-	####################################################
 }
 
 function __git_flow_list_hotfixes ()
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	git flow hotfix list 2> /dev/null
 	
 	############### Stack_TRACE_BUILDER ################
 	Function_PATH="$( dirname ${Function_PATH} )"
-	####################################################
-	
-	############### Stack_TRACE_BUILDER ################
-	Function_PATH="$( dirname ${Function_PATH} )"
-	####################################################
+    ####################################################
 }
 
 # temporarily wrap __git_find_on_cmdline() for backwards compatibility

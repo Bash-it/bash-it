@@ -46,7 +46,7 @@ function __gradle-init-cache-dir()
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
 
-    cache_dir="$HOME/.gradle/completion"
+    cache_dir="${HOME}/.gradle/completion"
     mkdir -p ${cache_dir}
 	
 	############### Stack_TRACE_BUILDER ################
@@ -64,11 +64,10 @@ function __gradle-set-build-file()
     # Look for default build script in the settings file (settings.gradle by default)
     # Otherwise, default is the file 'build.gradle' in the current directory.
     gradle_build_file="$project_root_dir/build.gradle"
-    if [[ -f "$project_root_dir/settings.gradle" ]]
+    if [[ -f "${project_root_dir}/settings.gradle" ]]
      then
-        local build_file_name=$(grep "^rootProject\.buildFileName" "$project_root_dir/settings.gradle" | \
-            sed -n -e "s/rootProject\.buildFileName = [\'\"]\(.*\)[\'\"]/\1/p")
-        gradle_build_file="$project_root_dir/${build_file_name:-build.gradle}"
+        local build_file_name=$(grep "^rootProject\.buildFileName" "${project_root_dir}/settings.gradle" | sed -n -e "s/rootProject\.buildFileName = [\'\"]\(.*\)[\'\"]/\1/p")
+        gradle_build_file="${project_root_dir}/${build_file_name:-build.gradle}"
     fi
 	
 	############### Stack_TRACE_BUILDER ################
@@ -84,7 +83,7 @@ function __gradle-set-cache-name()
 	######################################################
 
     # Cache name is constructed from the absolute path of the build file.
-    cache_name=$(echo $gradle_build_file | sed -e 's/\//_/g')
+    cache_name=$(echo ${gradle_build_file} | sed -e 's/\//_/g')
 	
 	############### Stack_TRACE_BUILDER ################
 	Function_PATH="$( dirname ${Function_PATH} )"
@@ -101,12 +100,12 @@ function __gradle-set-files-checksum()
     # Cache MD5 sum of all Gradle scripts and modified timestamps
     if _command_exists md5
      then
-        gradle_files_checksum=$(md5 -q -s "$(cat "$cache_dir/$cache_name" | xargs ls -o 2>/dev/null)")
+        gradle_files_checksum=$(md5 -q -s "$(cat "${cache_dir}/${cache_name}" | xargs ls -o 2>/dev/null)")
     elif _command_exists md5sum
      then
-        gradle_files_checksum=$(cat "$cache_dir/$cache_name" | xargs ls -o 2>/dev/null | md5sum | awk '{print $1}')
+        gradle_files_checksum=$(cat "${cache_dir}/${cache_name}" | xargs ls -o 2>/dev/null | md5sum | awk '{print $1}')
     else
-        echo "Cannot generate completions as neither md5 nor md5sum exist on \$PATH"
+        echo "Cannot generate completions as neither md5 nor md5sum exist on \${path}"
     fi
 	
 	############### Stack_TRACE_BUILDER ################
@@ -125,11 +124,11 @@ function __gradle-generate-script-cache()
     local cache_ttl_mins=${GRADLE_CACHE_TTL_MINUTES:-30240}
     local script_exclude_pattern=${GRADLE_COMPLETION_EXCLUDE_PATTERN:-"/(build|integTest|out)/"}
 
-    if [[ ! $(find $cache_dir/$cache_name -mmin -$cache_ttl_mins 2>/dev/null) ]]
+    if [[ ! $(find ${cache_dir}/${cache_name} -mmin -${cache_ttl_mins} 2>/dev/null) ]]
      then
         # Cache all Gradle scripts
-        local gradle_build_scripts=$(find $project_root_dir -type f -name "*.gradle" -o -name "*.gradle.kts" 2>/dev/null | grep -E -v "$script_exclude_pattern")
-        printf "%s\n" "${gradle_build_scripts[@]}" > $cache_dir/$cache_name
+        local gradle_build_scripts=$(find ${project_root_dir} -type f -name "*.gradle" -o -name "*.gradle.kts" 2>/dev/null | grep -E -v "${script_exclude_pattern}")
+        printf "%s\n" "${gradle_build_scripts[@]}" > ${cache_dir}/${cache_name}
     fi
 	
 	############### Stack_TRACE_BUILDER ################
@@ -297,8 +296,9 @@ function __gradle-generate-tasks-cache()
     local -a gradle_all_tasks=()
     local -a root_tasks=()
     local -a subproject_tasks=()
-    for output_line in $gradle_tasks_output; do
-        if [[ $output_line =~ ^([[:lower:]][[:alnum:][:punct:]]*)([[:space:]]-[[:space:]]([[:print:]]*))? ]]
+    for output_line in $gradle_tasks_output
+     do
+        if [[ ${output_line} =~ ^([[:lower:]][[:alnum:][:punct:]]*)([[:space:]]-[[:space:]]([[:print:]]*))? ]]
          then
             task_name="${BASH_REMATCH[1]}"
             task_description="${BASH_REMATCH[3]}"

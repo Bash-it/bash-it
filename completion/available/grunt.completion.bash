@@ -50,9 +50,9 @@ function _grunt_gruntfile()
   local curpath="$PWD"
   while [[ "$curpath" ]]; do
     for gruntfile in "$curpath/"{G,g}runtfile.{js,coffee}; do
-      if [[ -e "$gruntfile" ]] 
+      if [[ -e "${gruntfile}" ]] 
      then
-        echo "$gruntfile"
+        echo "${gruntfile}"
         return
       fi
     done
@@ -79,12 +79,12 @@ function _grunt_completions()
   # The current grunt version, available tasks, options, etc.
   local gruntinfo="$(grunt --version --verbose 2>/dev/null)"
   # Options and tasks.
-  local opts="$(echo "$gruntinfo" | awk '/Available options: / {$1=$2=""; print $0}')"
-  local compls="$(echo "$gruntinfo" | awk '/Available tasks: / {$1=$2=""; print $0}')"
+  local opts="$(echo "${gruntinfo}" | awk '/Available options: / {$1=$2=""; print $0}')"
+  local compls="$(echo "${gruntinfo}" | awk '/Available tasks: / {$1=$2=""; print $0}')"
   # Only add -- or - options if the user has started typing -
-  [[ "$cur" == -* ]] && compls="$compls $opts"
+  [[ "${cur}" == -* ]] && compls="${compls} ${opts}"
   # Tell complete what stuff to show.
-  COMPREPLY=($(compgen -W "$compls" -- "$cur"))
+  COMPREPLY=($(compgen -W "${compls}" -- "${cur}"))
 	
 	############### Stack_TRACE_BUILDER ################
 	Function_PATH="$( dirname ${Function_PATH} )"

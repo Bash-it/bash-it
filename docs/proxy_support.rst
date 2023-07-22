@@ -27,7 +27,7 @@ The following backends are currently supported (in addition to the shell's envir
 The ``proxy`` plugin changes the configuration files of these tools to enable or disable the proxy settings.
 
 Bash-it uses the following variables to set the shell's proxy settings when you call ``enable-proxy``.
-These variables are best defined in a custom script in Bash-it's custom script folder (\ ``$BASH_IT/custom``\ ), e.g. ``$BASH_IT/custom/proxy.env.bash``
+These variables are best defined in a custom script in Bash-it's custom script folder (\ ``${BASH_IT}/custom``\ ), e.g. ``${BASH_IT}/custom/proxy.env.bash``
 
 
 * ``BASH_IT_HTTP_PROXY`` and `BASH_IT_HTTPS_PROXY`: Define the proxy URL to be used, e.g. 'http://localhost:1234'

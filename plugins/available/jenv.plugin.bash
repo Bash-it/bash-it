@@ -7,7 +7,7 @@ about-plugin 'load jenv, if you are using it'
 # - Check if installed manually to $HOME
 _command_exists jenv ||
   [[ -n "$JENV_ROOT" && -x "$JENV_ROOT/bin/jenv" ]] ||
-  [[ -x "$HOME/.jenv/bin/jenv" ]] ||
+  [[ -x "${HOME}/.jenv/bin/jenv" ]] ||
   return
 
 # Set JENV_ROOT, if not already set

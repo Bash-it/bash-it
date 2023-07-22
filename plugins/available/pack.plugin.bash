@@ -44,7 +44,7 @@ function __pack_index_of_word()
 	Function_Name="${FUNCNAME[0]}"
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
-    local w word=$1
+    local w word="${1}"
     shift
     index=0
     for w in "${@}"; do
@@ -65,7 +65,7 @@ function __pack_contains_word()
 	Function_Name="${FUNCNAME[0]}"
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
-    local w word=$1; shift
+    local w word="${1}"; shift
     for w in "${@}"; do
         [[ $w = "$word" ]] && return
     done

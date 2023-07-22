@@ -47,41 +47,41 @@ function __bundle()
         options="-V --help --no-color --no-no-color --verbose --no-verbose"
         case $bundle_command in
         "")
-            options="$options --version";;
+            options="${options} --version";;
         check)
-            options="$options --dry-run --gemfile --path -r --retry";;
+            options="${options} --dry-run --gemfile --path -r --retry";;
         clean)
-            options="$options --dry-run --force";;
+            options="${options} --dry-run --force";;
         config)
-            options="$options --local --global --delete";;
+            options="${options} --local --global --delete";;
         doctor)
-            options="$options --gemfile --quiet --no-quiet";;
+            options="${options} --gemfile --quiet --no-quiet";;
         gem)
-            options="$options -b -e -t --bin --coc --no-coc --edit --exe
+            options="${options} -b -e -t --bin --coc --no-coc --edit --exe
                      --no-exe --ext --no-ext --mit --no-mit --test";;
         init)
-            options="$options --gemspec";;
+            options="${options} --gemspec";;
         install)
-            options="$options --binstubs --clean --deployment --force --frozen
+            options="${options} --binstubs --clean --deployment --force --frozen
                      --full-index --gemfile --jobs --local --no-cache
                      --no-prune --path --quiet --retry --shebang --standalone
                      --system --trust-policy --with --without";;
         lock)
-            options="$options --add-platform --conservative --full-index
+            options="${options} --add-platform --conservative --full-index
                      --local --lockfile --major --minor --patch --print
                      --remove-platform --strict --update";;
         package)
-            options="$options --all --all-platforms";;
+            options="${options} --all --all-platforms";;
         platform)
-            options="$options --ruby";;
+            options="${options} --ruby";;
         show)
             options="$options --outdated --paths --no-paths";;
         update)
-            options="$options --bundler --conservative --force --full-index
+            options="${options} --bundler --conservative --force --full-index
                      --group --jobs --local --major --minor --patch --quiet
                      --ruby --source --strict";;
         viz)
-            options="$options -f -F -R -v -W --file --format --requirements
+            options="${options} -f -F -R -v -W --file --format --requirements
                      --no-requirements --version --no-version --without";;
         esac
     else
@@ -92,7 +92,7 @@ function __bundle()
                      platform clean doctor"
             ;;
         check | install)
-            case $prev in
+            case ${prev} in
             --binstubs | --path)
                 _filedir -d
                 return;;
@@ -105,7 +105,7 @@ function __bundle()
             esac
             ;;
         config)
-            case $prev in
+            case ${prev} in
             config | --*)
                 case $cur in
                 local.*)
@@ -150,11 +150,11 @@ function __bundle()
      then
                 # Figure out Bundler's binaries dir
                 local bundler_bin=$(__bundle_exec_ruby 'puts Bundler.bundle_path + "bin"')
-                if [[ -d $bundler_bin ]] 
+                if [[ -d ${bundler_bin} ]] 
      then
-                    local binaries=("$bundler_bin"/*)
+                    local binaries=("${bundler_bin}"/*)
                     # If there are binaries, strip directory name and use them
-                    [[ -f "$binaries" ]] && options="${binaries[@]##*/}"
+                    [[ -f "${binaries}" ]] && options="${binaries[@]##*/}"
                 else
                     # No binaries found; use full command completion
                     COMPREPLY=($(compgen -c -- "$cur"))
@@ -176,7 +176,7 @@ function __bundle()
             esac
             ;;
         update)
-            case $prev in
+            case ${prev} in
             --group)
                 __bundle_complete_groups
                 return;;
@@ -185,7 +185,7 @@ function __bundle()
             esac
             ;;
         viz)
-            case $prev in
+            case ${prev} in
             -F | --format)
                 options="dot jpg png svg";;
             -W | --without)
@@ -209,12 +209,13 @@ function __bundle_get_command()
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
     local i
-    for ((i=1; i < $COMP_CWORD; ++i)); do
+    for ((i=1; i < $COMP_CWORD; ++i))
+     do
         local arg=${COMP_WORDS[$i]}
 
-        case $arg in
+        case ${arg} in
         [^-]*)
-            bundle_command=$arg
+            bundle_command=${arg}
             bundle_command_index=$((i + 1))
             return;;
         --version)
@@ -248,7 +249,7 @@ function __bundle_complete_groups()
     # All groups written before
     local prefix=${cur%"$cur_group"}
     local groups=$(__bundle_exec_ruby 'puts Bundler.definition.dependencies.map(&:groups).reduce(:|).map(&:to_s)')
-    if [[ ! $groups ]] 
+    if [[ ! ${groups} ]] 
      then
         COMPREPLY=()
         return
@@ -257,8 +258,8 @@ function __bundle_complete_groups()
     # strips it; groups may be separated by ':', ' ', or '\ '
     local excluded=$'\ndefault\n'${prefix//[: \'\"\\]/$'\n'}
     # Include them twice to ensure they are duplicates
-    groups=$groups$excluded$excluded
-    COMPREPLY=($(compgen -W "$(sort <<<"$groups" | uniq -u)" -- "$cur_group"))
+    groups=${groups}${excluded}${excluded}
+    COMPREPLY=($(compgen -W "$(sort <<<"${groups}" | uniq -u)" -- "${cur_group}"))
     # Prepend prefix to all entries
     COMPREPLY=("${COMPREPLY[@]/#/$prefix}")
     __ltrim_colon_completions "$cur"
@@ -284,24 +285,23 @@ function __bundle_exec_ruby()
     # cadastrophic mistake; it just means the cache won't be invalidated when
     # the local gem list changes (but will still invalidate if the command is
     # run on another directory)
-    local lockfile=$PWD/Gemfile.lock
+    local lockfile=${PWD}/Gemfile.lock
     local cachedir=${XDG_CACHE_HOME:-~/.cache}/completion-ruby
-    local cachefile=$cachedir/bundle--exec-ruby
+    local cachefile=${cachedir}/bundle--exec-ruby
     # A representation of all arguments with newlines replaced by spaces,
     # to fit in a single line as a cache identifier
     local cache_id_line="${bundle_bin[*]} @ $lockfile: ${*//$'\n'/ }"
 
-    if [[ (! -f $lockfile || $cachefile -nt $lockfile) &&
-          $(head -n 1 -- "$cachefile" 2>/dev/null) = "$cache_id_line" ]] 
+    if [[ (! -f $lockfile || $cachefile -nt $lockfile) &&  $(head -n 1 -- "${cachefile}" 2>/dev/null) = "$cache_id_line" ]] 
      then
-        tail -n +2 -- "$cachefile"
+        tail -n +2 -- "${cachefile}"
     else
         local output=$("${bundle_bin[@]}" exec ruby -e "${@}" 2>/dev/null)
         if [[ $? -eq 0 ]] 
      then
-            (mkdir -p -- "$cachedir" &&
-             echo "$cache_id_line"$'\n'"$output" >$cachefile) 2>/dev/null
-            echo "$output"
+            (mkdir -p -- "${cachedir}" &&
+             echo "${cache_id_line}"$'\n'"$output" >${cachefile}) 2>/dev/null
+            echo "${output}"
         fi
     fi
 	

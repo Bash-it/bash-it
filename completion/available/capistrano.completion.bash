@@ -12,7 +12,7 @@ function _capcomplete()
     if [ -f Capfile ] 
      then
         recent=`ls -t .cap_tasks~ Capfile **/*.cap 2> /dev/null | head -n 1`
-        if [[ $recent != '.cap_tasks~' ]] 
+        if [[ ${recent} != '.cap_tasks~' ]] 
      then
             cap --version | grep 'Capistrano v2.' > /dev/null
             if [ $? -eq 0 ] 

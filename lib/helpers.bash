@@ -528,7 +528,7 @@ function _bash-it-migrate()
 	migrated_something=false
 
 	for file_type in "aliases" "plugins" "completion"; do
-		for _bash_it_config_file in "${BASH_IT}/$file_type/enabled"/*.bash; do
+		for _bash_it_config_file in "${BASH_IT}/${file_type}/enabled"/*.bash; do
 			[[ -f "$_bash_it_config_file" ]] || continue
 
 			# Get the type of component from the extension
@@ -1271,7 +1271,7 @@ function _enable-thing()
      then
 		for _bash_it_config_file in "${BASH_IT}/${subdirectory}/available"/*.bash; do
 			to_enable="${_bash_it_config_file##*/}"
-			_enable-thing "$subdirectory" "$file_type" "${to_enable%."${file_type/alias/aliases}".bash}" "${load_priority}"
+			_enable-thing "$subdirectory" "${file_type}" "${to_enable%."${file_type/alias/aliases}".bash}" "${load_priority}"
 		done
 	else
 		to_enables=("${BASH_IT}/$subdirectory/available/${file_entity}.${suffix}.bash")
@@ -1499,8 +1499,8 @@ function pathmunge()
 	######################################################
 	about 'prevent duplicate directories in your PATH variable'
 	group 'helpers'
-	example 'pathmunge /path/to/dir is equivalent to PATH=/path/to/dir:$PATH'
-	example 'pathmunge /path/to/dir after is equivalent to PATH=$PATH:/path/to/dir'
+	example 'pathmunge /path/to/dir is equivalent to PATH=/path/to/dir:${PATH}'
+	example 'pathmunge /path/to/dir after is equivalent to PATH=${PATH}:/path/to/dir'
 
 	if [[ -d "${1:-}" && ! ${PATH} =~ (^|:)"${1}"($|:) ]] 
      then
@@ -1508,7 +1508,7 @@ function pathmunge()
      then
 			export PATH="${PATH}:${1}"
 		else
-			export PATH="${1}:$PATH"
+			export PATH="${1}:${PATH}"
 		fi
 	fi
 	

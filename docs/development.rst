@@ -52,7 +52,7 @@ The main ``bash_it.sh`` script loads the frameworks individual components in the
 * Custom ``aliases``
 * Custom ``plugins``
 * Custom ``completions``
-* Additional custom files from either ``$BASH_IT/custom`` or ``$BASH_IT_CUSTOM``
+* Additional custom files from either ``${BASH_IT}/custom`` or ``$BASH_IT_CUSTOM``
 
 This order is subject to change.
 
@@ -62,7 +62,7 @@ Individual Component Load Order
 For ``aliases``\ , ``plugins`` and ``completions``\ , the following rules are applied that influence the load order:
 
 
-* There is a global ``enabled`` directory, which the enabled components are linked into. Enabled plugins are symlinked from ``$BASH_IT/plugins/available`` to ``$BASH_IT/enabled`` for example. All component types are linked into the same common ``$BASH_IT/enabled`` directory.
+* There is a global ``enabled`` directory, which the enabled components are linked into. Enabled plugins are symlinked from ``${BASH_IT}/plugins/available`` to ``${BASH_IT}/enabled`` for example. All component types are linked into the same common ``${BASH_IT}/enabled`` directory.
 * Within the common ``enabled`` directories, the files are loaded in alphabetical order, which is based on the item's load priority (see next item).
 * When enabling a component, a *load priority* is assigned to the file. The following default priorities are used:
 

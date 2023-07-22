@@ -13,7 +13,7 @@ about-plugin 'load pyenv, if you are using it'
 # - Check if installed manually to $HOME
 _command_exists pyenv \
 	|| [[ -n "$PYENV_ROOT" && -x "$PYENV_ROOT/bin/pyenv" ]] \
-	|| [[ -x "$HOME/.pyenv/bin/pyenv" ]] \
+	|| [[ -x "${HOME}/.pyenv/bin/pyenv" ]] \
 	|| return 0
 
 # Set PYENV_ROOT, if not already set

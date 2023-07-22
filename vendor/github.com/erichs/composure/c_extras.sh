@@ -177,7 +177,7 @@ function unique_metafor ()
     example '$ unique_metafor group'
     group 'composure'
 
-    typeset keyword=$1
+    typeset keyword="${1}"
 
     typeset file=$(mktemp /tmp/composure.XXXX)
     typeset -f | metafor $keyword >> $file
@@ -201,7 +201,7 @@ function compost ()
 	example '$ compost myfunc'
 	group 'composure'
 
-  typeset func=$1
+  typeset func="${1}"
   [ -z "$func" ] && echo "you must specify a function name!" && return 1
 
   (

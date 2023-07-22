@@ -31,9 +31,9 @@ function _bash-it_load_one()
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
 
-	file_type=$1
+	file_type="${1}"
 	file_to_enable=$2
-	mkdir -p "$BASH_IT/${file_type}/enabled"
+	mkdir -p "${BASH_IT}/${file_type}/enabled"
 
 	dest="${BASH_IT}/${file_type}/enabled/${file_to_enable}"
 	if [ ! -e "${dest}" ] 
@@ -56,18 +56,20 @@ function _bash-it_load_some()
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
 
-	file_type=$1
-	single_type=$(echo "$file_type" | sed -e "s/aliases$/alias/g" | sed -e "s/plugins$/plugin/g")
+	file_type="${1}"
+	single_type=$(echo "${file_type}" | sed -e "s/aliases$/alias/g" | sed -e "s/plugins$/plugin/g")
 	enable_func="_enable-$single_type"
-	[ -d "$BASH_IT/$file_type/enabled" ] || mkdir "$BASH_IT/$file_type/enabled"
-	for path in "$BASH_IT/${file_type}/available/"[^_]*; do
-		file_name=$(basename "$path")
-		while true; do
+	[ -d "${BASH_IT}/${file_type}/enabled" ] || mkdir "${BASH_IT}/${file_type}/enabled"
+	for path in "${BASH_IT}/${file_type}/available/"[^_]*
+	 do
+		file_name=$(basename "${path}")
+		while true
+			do
 			just_the_name="${file_name%%.*}"
-			read -r -e -n 1 -p "Would you like to enable the $just_the_name $file_type? [y/N] " RESP
+			read -r -e -n 1 -p "Would you like to enable the ${just_the_name} ${file_type}? [y/N] " RESP
 			case $RESP in
 				[yY])
-					$enable_func "$just_the_name"
+					$enable_func "${just_the_name}"
 					break
 					;;
 				[nN] | "")
@@ -93,9 +95,9 @@ function _bash-it_backup()
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
 
-	test -w "$HOME/$CONFIG_FILE" \
-		&& cp -aL "$HOME/$CONFIG_FILE" "$HOME/$CONFIG_FILE.bak" \
-		&& echo -e "\033[0;32mYour original $CONFIG_FILE has been backed up to $CONFIG_FILE.bak\033[0m"
+	test -w "${HOME}/${CONFIG_FILE}" \
+		&& cp -aL "${HOME}/${CONFIG_FILE}" "${HOME}/${CONFIG_FILE}.bak" \
+		&& echo -e "\033[0;32mYour original ${CONFIG_FILE} has been backed up to ${CONFIG_FILE}.bak\033[0m"
 	
 	############### Stack_TRACE_BUILDER ################
 	Function_PATH="$( dirname ${Function_PATH} )"
@@ -111,8 +113,8 @@ function _bash-it_backup_new()
 	######################################################
 
 	_bash-it_backup
-	sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" > "$HOME/$CONFIG_FILE"
-	echo -e "\033[0;32mCopied the template $CONFIG_FILE into ~/$CONFIG_FILE, edit this file to customize bash-it\033[0m"
+	sed "s|{{BASH_IT}}|$BASH_IT|" "${BASH_IT}/template/bash_profile.template.bash" > "${HOME}/$CONFIG_FILE"
+	echo -e "\033[0;32mCopied the template ${CONFIG_FILE} into ~/$CONFIG_FILE, edit this file to customize bash-it\033[0m"
 	
 	############### Stack_TRACE_BUILDER ################
 	Function_PATH="$( dirname ${Function_PATH} )"
@@ -127,8 +129,8 @@ function _bash-it_backup_append()
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
 	_bash-it_backup
-	(sed "s|{{BASH_IT}}|$BASH_IT|" "$BASH_IT/template/bash_profile.template.bash" | tail -n +2) >> "$HOME/$CONFIG_FILE"
-	echo -e "\033[0;32mBash-it template has been added to your $CONFIG_FILE\033[0m"
+	(sed "s|{{BASH_IT}}|${BASH_IT}|" "${BASH_IT}/template/bash_profile.template.bash" | tail -n +2) >> "${HOME}/${CONFIG_FILE}"
+	echo -e "\033[0;32mBash-it template has been added to your ${CONFIG_FILE}\033[0m"
 	
 	############### Stack_TRACE_BUILDER ################
 	Function_PATH="$( dirname ${Function_PATH} )"
@@ -142,7 +144,7 @@ function _bash-it_check_for_backup()
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
 
-	if ! [[ -e "$HOME/$BACKUP_FILE" ]] 
+	if ! [[ -e "${HOME}/${BACKUP_FILE}" ]] 
      then
 		return
 	fi
@@ -151,7 +153,7 @@ function _bash-it_check_for_backup()
 	if [[ -z "${overwrite_backup}" ]] 
      then
 		while [[ -z "${silent}" ]]; do
-			read -e -n 1 -r -p "Would you like to overwrite the existing backup? This will delete your existing backup file ($HOME/$BACKUP_FILE) [y/N] " RESP
+			read -e -n 1 -r -p "Would you like to overwrite the existing backup? This will delete your existing backup file (${HOME}/${BACKUP_FILE}) [y/N] " RESP
 			case $RESP in
 				[yY])
 					overwrite_backup=true
@@ -195,8 +197,8 @@ function _bash-it_modify_config_files()
 	if [[ -z "${silent}" ]] 
      then
 		while [[ -z "${append_to_config}" ]]; do
-			read -e -n 1 -r -p "Would you like to keep your $CONFIG_FILE and append bash-it templates at the end? [y/N] " choice
-			case $choice in
+			read -e -n 1 -r -p "Would you like to keep your ${CONFIG_FILE} and append bash-it templates at the end? [y/N] " choice
+			case ${choice} in
 				[yY])
 					append_to_config=true
 					break
@@ -239,7 +241,7 @@ done
 
 OPTIND=1
 while getopts "hsinaf" opt; do
-	case "$opt" in
+	case "${opt}" in
 		"h")
 			_bash-it_show_usage
 			exit 0
@@ -274,14 +276,14 @@ BASH_IT="$(cd "${BASH_SOURCE%/*}" && pwd)"
 
 case $OSTYPE in
 	darwin*)
-		CONFIG_FILE=.bash_profile
+		CONFIG_FILE=".bash_profile"
 		;;
 	*)
-		CONFIG_FILE=.bashrc
+		CONFIG_FILE=".bashrc"
 		;;
 esac
 
-BACKUP_FILE=$CONFIG_FILE.bak
+BACKUP_FILE=${CONFIG_FILE}.bak
 echo "Installing bash-it"
 if [[ -z "${no_modify_config}" ]] 
      then
@@ -292,20 +294,20 @@ fi
 export BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE=''
 # Load dependencies for enabling components
 # shellcheck disable=SC1090
-source "${BASH_IT}"/vendor/github.com/erichs/composure/composure.sh
+source "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
 # shellcheck source=./lib/utilities.bash
-source "$BASH_IT/lib/utilities.bash"
+source "${BASH_IT}/lib/utilities.bash"
 # shellcheck source=./lib/log.bash
 source "${BASH_IT}/lib/log.bash"
 cite _about _param _example _group _author _version
 # shellcheck source=./lib/helpers.bash
-source "$BASH_IT/lib/helpers.bash"
+source "${BASH_IT}/lib/helpers.bash"
 
-if [[ -n $interactive && -z "${silent}" ]] 
+if [[ -n ${interactive} && -z "${silent}" ]] 
      then
 	for type in "aliases" "plugins" "completion"; do
 		echo -e "\033[0;32mEnabling ${type}\033[0m"
-		_bash-it_load_some "$type"
+		_bash-it_load_some "${type}"
 	done
 else
 	echo ""
@@ -315,7 +317,7 @@ fi
 echo ""
 echo -e "\033[0;32mInstallation finished successfully! Enjoy bash-it!\033[0m"
 # shellcheck disable=SC2086
-echo -e "\033[0;32mTo start using it, open a new tab or 'source "~/$CONFIG_FILE"'.\033[0m"
+echo -e "\033[0;32mTo start using it, open a new tab or 'source "~/${CONFIG_FILE}"'.\033[0m"
 echo ""
 echo "To show the available aliases/completions/plugins, type one of the following:"
 echo "  bash-it show aliases"

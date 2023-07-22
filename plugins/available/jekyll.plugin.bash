@@ -346,7 +346,7 @@ function deploysite()
 
 
 # Load the Jekyll config
-if [[ -s "$HOME/.jekyllconfig" ]] 
+if [[ -s "${HOME}/.jekyllconfig" ]] 
      then
-	source "$HOME/.jekyllconfig"
+	source "${HOME}/.jekyllconfig"
 fi

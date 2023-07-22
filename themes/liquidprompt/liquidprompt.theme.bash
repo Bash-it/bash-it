@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Wrapper to use liquidprompt with bashit
 
-targetdir="$BASH_IT/themes/liquidprompt/liquidprompt"
+targetdir="${BASH_IT}/themes/liquidprompt/liquidprompt"
 gray="\[\e[1;90m\]"
 
 cwd="$PWD"

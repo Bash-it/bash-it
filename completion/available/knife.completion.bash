@@ -8,7 +8,7 @@
 ### feel free to change those constants
 # the dir where to store the cache (must be writable and readable by the current user)
 # must be an absolute path
-_KNIFE_AUTOCOMPLETE_CACHE_DIR="$HOME/.knife_autocomplete_cache"
+_KNIFE_AUTOCOMPLETE_CACHE_DIR="${HOME}/.knife_autocomplete_cache"
 # the maximum # of _seconds_ after which a cache will be considered stale
 # (a cache is refreshed whenever it is used! this is only for caches that might not have been used for a long time)
 # WARNING: keep that value > 100

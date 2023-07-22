@@ -38,7 +38,7 @@ function _get_composure_dir()
      then
     echo "$XDG_DATA_HOME/composure"
   else
-    echo "$HOME/.local/composure"
+    echo "${HOME}/.local/composure"
   fi
 
 	############### Stack_TRACE_BUILDER ################
@@ -507,8 +507,8 @@ function draft()
   example '$ draft newfunc 1120  # wraps command at history line 1120 in newfunc()'
   group 'composure'
 
-  typeset func=$1
-  typeset num=$2
+  typeset func="${1}"
+  typeset num="${2}"
 
   if [ -z "$func" ] 
      then
@@ -610,7 +610,7 @@ function metafor()
   example '$ typeset -f glossary | metafor example'
   group 'composure'
 
-  typeset keyword=$1
+  typeset keyword="${1}"
 
   if [ -z "$keyword" ] 
      then
@@ -643,7 +643,7 @@ function reference()
   example '$ reference revise'
   group 'composure'
 
-  typeset func=$1
+  typeset func="${1}"
   if [ -z "$func" ] 
      then
     printf '%s\n' 'missing parameter(s)'
@@ -714,7 +714,7 @@ function revise()
     shift
   fi
 
-  typeset func=$1
+  typeset func="${1}"
   if [ -z "$func" ] 
      then
     printf '%s\n' 'missing parameter(s)'

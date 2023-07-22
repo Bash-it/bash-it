@@ -10,6 +10,6 @@ if _command_exists gcloud
 	# source all the bash completion file that are available
 	for i in "${GOOGLE_SDK_ROOT}"/*.bash.inc; do
 		# shellcheck disable=SC1090
-		source "$i"
+		source "${i}"
 	done
 fi

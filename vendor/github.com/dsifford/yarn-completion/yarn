@@ -49,15 +49,15 @@ function __yarn_get_package_fields()
 	while getopts ":gt:" opt; do
 		case $opt in
 			g)
-				if [[ -f $HOME/.config/yarn/global/package.json ]] 
+				if [[ -f ${HOME}/.config/yarn/global/package.json ]] 
      then
-					package_dot_json="$HOME/.config/yarn/global/package.json"
-				elif [[ -f $HOME/.local/share/yarn/global/package.json ]] 
+					package_dot_json="${HOME}/.config/yarn/global/package.json"
+				elif [[ -f ${HOME}/.local/share/yarn/global/package.json ]] 
      then
-					package_dot_json="$HOME/.local/share/yarn/global/package.json"
-				elif [[ -f $HOME/.yarn/global/package.json ]] 
+					package_dot_json="${HOME}/.local/share/yarn/global/package.json"
+				elif [[ -f ${HOME}/.yarn/global/package.json ]] 
      then
-					package_dot_json="$HOME/.yarn/global/package.json"
+					package_dot_json="${HOME}/.yarn/global/package.json"
 				else
 					package_dot_json=""
 				fi

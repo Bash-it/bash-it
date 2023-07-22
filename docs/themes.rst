@@ -3,9 +3,9 @@
 Themes
 ------
 
-There are over 50+ Bash-it themes to pick from in ``$BASH_IT/themes``.
+There are over 50+ Bash-it themes to pick from in ``${BASH_IT}/themes``.
 The default theme is ``bobby``.
-Set ``BASH_IT_THEME`` to the theme name you want, or if you've developed your own custom theme outside of ``$BASH_IT/themes``\ ,
+Set ``BASH_IT_THEME`` to the theme name you want, or if you've developed your own custom theme outside of ``${BASH_IT}/themes``\ ,
 point the ``BASH_IT_THEME`` variable directly to the theme file.
 To disable theming completely, leave the variable empty.
 

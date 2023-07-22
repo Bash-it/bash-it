@@ -76,7 +76,7 @@ Define your custom glyphs before sourcing bash-it:
 .. code-block:: bash
 
    export BARBUK_GITHUB_CHAR='•'
-   source "$BASH_IT"/bash_it.sh
+   source "${BASH_IT}"/bash_it.sh
 
 SSH prompt
 ----------
@@ -96,7 +96,7 @@ can use the short hostname format with ``BARBUK_HOST_INFO``.
    export BARBUK_HOST_INFO=short
    # true or false
    export BARBUK_SSH_INFO=false
-   source "$BASH_IT"/bash_it.sh
+   source "${BASH_IT}"/bash_it.sh
 
 Keep theme with sudoer
 ^^^^^^^^^^^^^^^^^^^^^^

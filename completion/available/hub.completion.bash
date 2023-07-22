@@ -78,17 +78,17 @@ EOF
     Function_PATH="${Function_PATH}/${Function_Name}"
     ######################################################
     local i c=2 s=-s sh shells="bash zsh sh ksh csh fish"
-    while [ $c -lt $cword ]
+    while [ $c -lt ${cword} ]
      do
       i="${words[c]}"
-      case "$i" in
+      case "${i}" in
         -s)
           unset s
           ;;
         *)
           for sh in ${shells}
            do
-            if [ "$sh" = "$i" ]
+            if [ "${sh}" = "${i}" ]
              then
               unset shells
               break
@@ -175,7 +175,7 @@ EOF
           unset u
           ;;
         *)
-          if [ -z "$rev" ] 
+          if [ -z "${rev}" ] 
      then
             # Even though the logic below is able to complete both user/repo
             # and revision in the right place, when there is only one argument
@@ -217,9 +217,9 @@ EOF
       else
         for i in $(__hub_github_repos)
          do
-          remote=${i%%:*}
-          repo=${i#*:}
-          owner=${repo%%/*}
+          remote="${i%%:*}"
+          repo="${i#*:}"
+          owner="${repo%%/*}"
           if [ "$user" = "$owner" ]
            then
             break
@@ -229,11 +229,11 @@ EOF
     else
       for i in $(__hub_github_repos)
        do
-        remote=${i%%:*}
-        repo=${i#*:}
-        owner=${repo%%/*}
-        case "$arg_repo" in
-          "$repo"|"$owner")
+        remote="${i%%:*}"
+        repo="${i#*:}"
+        owner="${repo%%/*}"
+        case "${arg_repo}" in
+          "${repo}"|"${owner}")
             break
             ;;
         esac
@@ -250,12 +250,12 @@ EOF
       *)
         if [ -z "${arg_repo}${rev}" ] 
      then
-          __gitcomp "$u $(__hub_github_repos '\o\n\p') $(__hub_revlist ${remote})"
-        elif [ -z "$rev" ] 
+          __gitcomp "${u} $(__hub_github_repos '\o\n\p') $(__hub_revlist ${remote})"
+        elif [ -z "${rev}" ] 
      then
-          __gitcomp "$u $(__hub_revlist ${remote})"
+          __gitcomp "${u} $(__hub_revlist ${remote})"
         else
-          __gitcomp "$u"
+          __gitcomp "${u}"
         fi
         ;;
     esac
@@ -273,24 +273,24 @@ EOF
     Function_PATH="${Function_PATH}/${Function_Name}"
     ######################################################
     local i c=2 name repo flags="-p -d -h"
-    while [ $c -lt $cword ]
+    while [ $c -lt ${cword} ]
      do
       i="${words[c]}"
       case "$i" in
         -d|-h)
           ((c++))
-          flags=${flags/$i/}
+          flags=${flags/${i}/}
           ;;
         -p)
-          flags=${flags/$i/}
+          flags=${flags/${i}/}
           ;;
         *)
-          name=$i
+          name=${i}
           ;;
       esac
       ((c++))
     done
-    if [ -z "$name" ] 
+    if [ -z "${name}" ] 
      then
       repo="$(basename "${PWD}")"
     fi
@@ -463,7 +463,7 @@ EOF
       Function_Name="${FUNCNAME[0]}"
       Function_PATH="${Function_PATH}/${Function_Name}"
       ######################################################
-    local f format=$1
+    local f format="${1}"
     if [ -z "$(__gitdir)" ] 
      then
       return

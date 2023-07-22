@@ -24,7 +24,7 @@ function gitstatus_on_disable()
 # non-interactive shell
 [[ $- == *i* ]] || return
 
-: "${SCM_GIT_GITSTATUS_DIR:="$HOME/gitstatus"}"
+: "${SCM_GIT_GITSTATUS_DIR:="${HOME}/gitstatus"}"
 if [[ -d ${SCM_GIT_GITSTATUS_DIR} ]] 
      then
   source "${SCM_GIT_GITSTATUS_DIR}/gitstatus.plugin.sh"

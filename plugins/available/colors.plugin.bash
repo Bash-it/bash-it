@@ -20,7 +20,7 @@ function __make_ansi()
 	Function_Name="${FUNCNAME[0]}"
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
-	next=$1
+	next="${1}"
 	shift
 	echo -e "\[\e[$("__$next" "${@}")m\]"
 	
@@ -35,7 +35,7 @@ function __make_echo()
 	Function_Name="${FUNCNAME[0]}"
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
-	next=$1
+	next="${1}"
 	shift
 	echo -e "\033[$("__$next" "${@}")m"
 	
@@ -50,7 +50,7 @@ function __reset()
 	Function_Name="${FUNCNAME[0]}"
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
-	next=$1
+	next="${1}"
 	shift
 	out="$("__$next" "${@}")"
 	echo "0${out:+;${out}}"
@@ -66,7 +66,7 @@ function __bold()
 	Function_Name="${FUNCNAME[0]}"
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
-	next=$1
+	next="${1}"
 	shift
 	out="$("__$next" "${@}")"
 	echo "${out:+${out};}1"
@@ -82,7 +82,7 @@ function __faint()
 	Function_Name="${FUNCNAME[0]}"
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
-	next=$1
+	next="${1}"
 	shift
 	out="$("__$next" "${@}")"
 	echo "${out:+${out};}2"
@@ -98,7 +98,7 @@ function __italic()
 	Function_Name="${FUNCNAME[0]}"
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
-	next=$1
+	next="${1}"
 	shift
 	out="$("__$next" "${@}")"
 	echo "${out:+${out};}3"
@@ -114,7 +114,7 @@ function __underline()
 	Function_Name="${FUNCNAME[0]}"
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
-	next=$1
+	next="${1}"
 	shift
 	out="$("__$next" "${@}")"
 	echo "${out:+${out};}4"
@@ -130,7 +130,7 @@ function __negative()
 	Function_Name="${FUNCNAME[0]}"
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
-	next=$1
+	next="${1}"
 	shift
 	out="$("__$next" "${@}")"
 	echo "${out:+${out};}7"
@@ -142,7 +142,7 @@ function __crossed()
 	Function_Name="${FUNCNAME[0]}"
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
-	next=$1
+	next="${1}"
 	shift
 	out="$("__$next" "${@}")"
 	echo "${out:+${out};}8"
@@ -313,7 +313,7 @@ function __color_rgb()
 	Function_Name="${FUNCNAME[0]}"
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
-	r=$1 && g=$2 && b=$3
+	r="${1}" && g="${2}" && b=$3
 	[[ $r == "$g" && $g == "$b" ]] && echo $((r / 11 + 232)) && return # gray range above 232
 	echo "8;5;$(((r * 36 + b * 6 + g) / 51 + 16))"
 	############### Stack_TRACE_BUILDER ################
@@ -347,7 +347,7 @@ function __color()
 	[[ $color == "rgb" ]] && rgb="$1 $2 $3"
 	shift 3
 
-	next=$1
+	next="${1}"
 	shift
 	out="$("__$next" "${@}")"
 	echo "$("__color_${mode}_${side}" "$("__color_${color}" "$rgb")")${out:+;${out}}"
@@ -480,7 +480,7 @@ function __color_parse()
 	Function_Name="${FUNCNAME[0]}"
 	Function_PATH="${Function_PATH}/${Function_Name}"
 	######################################################
-	next=$1
+	next="${1}"
 	shift
 	echo "$("__$next" "${@}")"
 	############### Stack_TRACE_BUILDER ################

@@ -39,7 +39,7 @@ function setup_svn_path {
   repo="$(setup_repo)"
   pushd "$repo"
 
-  setup_svn_path "$BASH_IT/test/fixtures/svn/working"
+  setup_svn_path "${BASH_IT}/test/fixtures/svn/working"
 
   # Init the base theme again so that the working SVN script is detected
   _bash_it_appearance_scm_init
@@ -56,7 +56,7 @@ function setup_svn_path {
   mkdir foo
   pushd foo
 
-  setup_svn_path "$BASH_IT/test/fixtures/svn/working"
+  setup_svn_path "${BASH_IT}/test/fixtures/svn/working"
 
   # init the base theme again so that the working SVN script is detected
   _bash_it_appearance_scm_init
@@ -72,7 +72,7 @@ function setup_svn_path {
 
   rm -rf .svn
 
-  setup_svn_path "$BASH_IT/test/fixtures/svn/working"
+  setup_svn_path "${BASH_IT}/test/fixtures/svn/working"
 
   # Init the base theme again so that the working SVN script is detected
   _bash_it_appearance_scm_init
@@ -86,7 +86,7 @@ function setup_svn_path {
   repo="$(setup_repo)"
   pushd "$repo"
 
-  setup_svn_path "$BASH_IT/test/fixtures/svn/broken"
+  setup_svn_path "${BASH_IT}/test/fixtures/svn/broken"
 
   # Init the base theme again so that the broken SVN script is detected
   _bash_it_appearance_scm_init
@@ -103,7 +103,7 @@ function setup_svn_path {
   mkdir foo
   pushd foo
 
-  setup_svn_path "$BASH_IT/test/fixtures/svn/broken"
+  setup_svn_path "${BASH_IT}/test/fixtures/svn/broken"
 
   # Init the base theme again so that the broken SVN script is detected
   _bash_it_appearance_scm_init

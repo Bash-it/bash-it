@@ -14,7 +14,7 @@ function autoenv_init()
 	######################################################
   typeset target home _file
   typeset -a _files
-  target=$1
+  target="${1}"
   home="${HOME%/*}"
 
   _files=( $(

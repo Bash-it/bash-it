@@ -14,7 +14,7 @@ function __dart_completion()
 	local HELP="--help -h"
 	local VERBOSE="-v --verbose"
 
-	case $prev in
+	case ${prev} in
 		analyze)
 			# shellcheck disable=SC2207
 			COMPREPLY=($(compgen -W "$HELP --fatal-infos --no-fatal-warnings --fatal-warnings" -- "$curr"))

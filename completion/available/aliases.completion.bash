@@ -50,45 +50,45 @@ function _bash-it-component-completion-callback-on-init-aliases()
 		alias_defn="${alias_defn%\'}"
 		alias_cmd="${alias_defn%%[[:space:]]*}" # first word of alias
 		if [[ ${alias_defn} == ${alias_cmd} ]] 
-     then
-			alias_args=''
-		else
-			alias_args="${alias_defn#*[[:space:]]}" # everything after first word
+			then
+			    alias_args=''
+			else
+				alias_args="${alias_defn#*[[:space:]]}" # everything after first word
 		fi
 
 		# skip aliases to pipes, boolean control structures and other command lists
 		chars=$'|&;()<>\n'
 		if [[ "${alias_defn}" =~ [$chars] ]] 
-     then
-			continue
+     		then
+				continue
 		fi
 		# avoid expanding wildcards
 		read -ra alias_arg_words <<< "$alias_args"
 
 		# skip alias if there is no completion function triggered by the aliased command
-		if ! _bash-it-array-contains-element "$alias_cmd" "${completions[@]}" 
-     then
-			if [[ -n "$completion_loader" ]] 
-     then
-				# force loading of completions for the aliased command
-				"${completion_loader:?}" "${alias_cmd}"
-				# 124 means completion loader was successful
-				[[ $? -eq 124 ]] || continue
-				completions+=("$alias_cmd")
-			else
-				continue
-			fi
+		if ! _bash-it-array-contains-element "${alias_cmd}" "${completions[@]}" 
+     		then
+				if [[ -n "$completion_loader" ]] 
+					then
+						# force loading of completions for the aliased command
+						"${completion_loader:?}" "${alias_cmd}"
+						# 124 means completion loader was successful
+						[[ $? -eq 124 ]] || continue
+						completions+=("$alias_cmd")
+					else
+						continue
+				fi
 		fi
 		new_completion="$(complete -p "$alias_cmd" 2> /dev/null)"
 
 		# create a wrapper inserting the alias arguments if any
-		if [[ -n $alias_args ]] 
-     then
+		if [[ -n ${alias_args} ]] 
+  			  then
 			compl_func="${new_completion/#* -F /}"
 			compl_func="${compl_func%% *}"
 			# avoid recursive call loops by ignoring our own functions
 			if [[ "${compl_func#_"$namespace"::}" == "$compl_func" ]] 
-     then
+     	then
 				compl_wrapper="_${namespace}::${alias_name}"
 				echo "function $compl_wrapper {
                         local compl_word=\${2?}
@@ -96,9 +96,9 @@ function _bash-it-component-completion-callback-on-init-aliases()
                         # check if prec_word is the alias itself. if so, replace it
                         # with the last word in the unaliased form, i.e.,
                         # alias_cmd + ' ' + alias_args.
-                        if [[ \$COMP_LINE == \"\$prec_word \$compl_word\" ]] 
-     then
-                            prec_word='$alias_cmd $alias_args'
+                        if [[ \$COMP{_LINE == \"\${prec_word} \${compl_word}\" ]] 
+     						then
+                            prec_word='${alias_cmd} $alias_args'
                             prec_word=\${prec_word#* }
                         fi
                         (( COMP_CWORD += ${#alias_arg_words[@]} ))
@@ -108,19 +108,19 @@ function _bash-it-component-completion-callback-on-init-aliases()
                         (( COMP_POINT += \${#COMP_LINE} ))
                         \"$compl_func\" \"$alias_cmd\" \"\$compl_word\" \"\$prec_word\"
                     }" >> "$tmp_file"
-				new_completion="${new_completion/ -F $compl_func / -F $compl_wrapper }"
+				new_completion="${new_completion}/ -F ${compl_func} / -F ${compl_wrapper} }"
 			fi
 		fi
 
 		# replace completion trigger by alias
-		if [[ -n $new_completion ]] 
+		if [[ -n ${new_completion} ]] 
      then
-			new_completion="${new_completion% *} $alias_name"
+			new_completion="${new_completion% *} ${alias_name}"
 			echo "$new_completion" >> "$tmp_file"
 		fi
 	done < <(alias -p)
 	# shellcheck source=/dev/null
-	source "$tmp_file" && command rm -f "$tmp_file"
+	source "${tmp_file}" && command rm -f "${tmp_file}"
 	
 	############### Stack_TRACE_BUILDER ################
 	Function_PATH="$( dirname ${Function_PATH} )"

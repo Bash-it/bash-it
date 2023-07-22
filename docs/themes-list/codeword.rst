@@ -23,6 +23,6 @@ Examples
 .. code-block:: bash
 
    user@example.lan:~ $ cd /tmp/foo/bar/baz
-   user@example.lan:/tmp/foo/bar/baz $ cd $HOME/workspace
+   user@example.lan:/tmp/foo/bar/baz $ cd ${HOME}/workspace
    user@example.lan:~/workspace $ cd sampleRepo/
    user@example.lan:~/workspace/sampleRepo [± |master ↑1 ↓3 {1} S:2 ?:1 ✗|] $

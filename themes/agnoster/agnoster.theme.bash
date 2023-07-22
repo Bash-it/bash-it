@@ -253,7 +253,7 @@ function prompt_segment()
 		debug "no current BG, codes is " "${codes[@]}"
 		PR="$PR$(ansi codes[@]) "
 	fi
-	CURRENT_BG=$1
+	CURRENT_BG="${1}"
 	[[ -n $3 ]] && PR="$PR$3"
 
 	############### Stack_TRACE_BUILDER ################
@@ -538,7 +538,7 @@ function prompt_right_segment()
 	#     debug "no current BG, codes is $codes[@]"
 	#     PRIGHT="$PRIGHT$(ansi codes[@]) "
 	# fi
-	CURRENT_RBG=$1
+	CURRENT_RBG="${1}"
 	[[ -n $3 ]] && PRIGHT="$PRIGHT$3"
 
 	############### Stack_TRACE_BUILDER ################

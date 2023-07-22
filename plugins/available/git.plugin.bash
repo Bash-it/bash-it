@@ -287,10 +287,10 @@ function git_stats {
 			git log ${LOGOPTS} --all --numstat --format="%n" --author="${a}" | cut -f3 | sort -iu | wc -l
 			echo -n "Number of lines added: "
 			# shellcheck disable=SC2086
-			git log ${LOGOPTS} --all --numstat --format="%n" --author="${a}" | cut -f1 | awk '{s+=$1} END {print s}'
+			git log ${LOGOPTS} --all --numstat --format="%n" --author="${a}" | cut -f1 | awk '{s+="${1}"} END {print s}'
 			echo -n "Number of lines deleted: "
 			# shellcheck disable=SC2086
-			git log ${LOGOPTS} --all --numstat --format="%n" --author="${a}" | cut -f2 | awk '{s+=$1} END {print s}'
+			git log ${LOGOPTS} --all --numstat --format="%n" --author="${a}" | cut -f2 | awk '{s+="${1}"} END {print s}'
 			echo -n "Number of merges: "
 			# shellcheck disable=SC2086
 			git log ${LOGOPTS} --all --merges --author="${a}" | grep -c '^commit'

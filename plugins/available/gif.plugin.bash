@@ -112,7 +112,7 @@ function v2gif()
 				shift
 				;;
 			-w | --width)
-				maxsize="-vf scale=$2:-1"
+				maxsize="-vf scale="${2}":-1"
 				maxwidthski="-W $2"
 				giftag="${giftag}-w$2"
 				shift 2
@@ -124,7 +124,7 @@ function v2gif()
 				;;
 			-l | --lossy)
 				# Use giflossy parameter
-				lossiness="--lossy=$2"
+				lossiness="--lossy="${2}""
 				giftag="${giftag}-l$2"
 				shift 2
 				;;

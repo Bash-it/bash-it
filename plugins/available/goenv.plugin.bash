@@ -13,7 +13,7 @@ about-plugin 'load goenv, if you are using it'
 # - Check if installed manually to $HOME
 _command_exists goenv \
 	|| [[ -n "$GOENV_ROOT" && -x "$GOENV_ROOT/bin/goenv" ]] \
-	|| [[ -x "$HOME/.goenv/bin/goenv" ]] \
+	|| [[ -x "${HOME}/.goenv/bin/goenv" ]] \
 	|| return 0
 
 # Set GOENV_ROOT, if not already set

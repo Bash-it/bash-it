@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-source "$BASH_IT/themes/doubletime/doubletime.theme.bash"
+source "${BASH_IT}/themes/doubletime/doubletime.theme.bash"
 
 function prompt_setter() 
 {

@@ -29,11 +29,11 @@ _git_bash_completion_paths=(
 # Load the first completion file found
 _git_bash_completion_found=false
 for _comp_path in "${_git_bash_completion_paths[@]}"; do
-	if [[ -r "$_comp_path" ]] 
+	if [[ -r "${_comp_path}" ]] 
      then
 		_git_bash_completion_found=true
 		# shellcheck disable=SC1090 # don't follow
-		source "$_comp_path"
+		source "${_comp_path}"
 		break
 	fi
 done

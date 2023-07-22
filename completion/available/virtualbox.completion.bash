@@ -80,7 +80,7 @@ function __vboxmanage_list_vms()
      then
     SEPARATOR=" "
     else
-    SEPARATOR=$1
+    SEPARATOR="${1}"
     fi
 
     for VM in $(vboxmanage list vms | cut -d' ' -f1 | tr -d '"'); do
@@ -106,7 +106,7 @@ function __vboxmanage_list_runningvms()
      then
     SEPARATOR=" "
     else
-    SEPARATOR=$1
+    SEPARATOR="${1}"
     fi
 
     for VM in $(vboxmanage list runningvms | cut -d' ' -f1 | tr -d '"'); do

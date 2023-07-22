@@ -13,7 +13,7 @@ function __gem_completion()
 	case $prev in
 		install)
 			# list the remote gems and add to completion
-			if [ -z "$REMOTE_GEMS" ] 
+			if [ -z "${REMOTE_GEMS}" ] 
      then
 				read -r -a REMOTE_GEMS <<< "$(gem list --remote --no-versions | sed 's/\*\*\* REMOTE GEMS \*\*\*//' | tr '\n' ' ')"
 			fi
@@ -29,7 +29,7 @@ function __gem_completion()
 
 			local cur=${COMP_WORDS[COMP_CWORD]}
 			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "${LOCAL_GEMS[*]}" -- "$cur"))
+			COMPREPLY=($(compgen -W "${LOCAL_GEMS[*]}" -- "${cur}"))
 			return 0
 			;;
 	esac

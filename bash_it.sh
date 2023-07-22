@@ -25,8 +25,9 @@ source "${BASH_IT}/lib/log.bash"
 # libraries, but skip appearance (themes) for now
 _log_debug "Loading libraries(except appearance)..."
 APPEARANCE_LIB="${BASH_IT}/lib/appearance.bash"
-for _bash_it_main_file_lib in "${BASH_IT}/lib"/*.bash; do
-	[[ "$_bash_it_main_file_lib" == "$APPEARANCE_LIB" ]] && continue
+for _bash_it_main_file_lib in "${BASH_IT}/lib"/*.bash
+ do
+	[[ "$_bash_it_main_file_lib" == "${APPEARANCE_LIB}" ]] && continue
 	_bash-it-log-prefix-by-path "${_bash_it_main_file_lib}"
 	_log_debug "Loading library file..."
 	# shellcheck disable=SC1090
@@ -36,11 +37,12 @@ done
 
 # Load the global "enabled" directory, then enabled aliases, completion, plugins
 # "_bash_it_main_file_type" param is empty so that files get sourced in glob order
-for _bash_it_main_file_type in "" "aliases" "plugins" "completion"; do
-	BASH_IT_LOG_PREFIX="core: reloader: "
-	# shellcheck disable=SC2140
-	source "${BASH_IT}/scripts/reloader.bash" ${_bash_it_main_file_type:+"skip" "$_bash_it_main_file_type"}
-	BASH_IT_LOG_PREFIX="core: main: "
+for _bash_it_main_file_type in "" "aliases" "plugins" "completion"
+	do
+		BASH_IT_LOG_PREFIX="core: reloader: "
+		# shellcheck disable=SC2140
+		source "${BASH_IT}/scripts/reloader.bash" ${_bash_it_main_file_type:+"skip" "$_bash_it_main_file_type"}
+		BASH_IT_LOG_PREFIX="core: main: "
 done
 
 # Load theme, if a theme was set
@@ -58,12 +60,13 @@ if [[ -n "${BASH_IT_THEME:-}" ]]
 	BASH_IT_LOG_PREFIX="lib: appearance: "
 	# appearance (themes) now, after all dependencies
 	# shellcheck source=SCRIPTDIR/lib/appearance.bash
-	source "$APPEARANCE_LIB"
+	source "${APPEARANCE_LIB}"
 	BASH_IT_LOG_PREFIX="core: main: "
 fi
 
 _log_debug "Loading custom aliases, completion, plugins..."
-for _bash_it_main_file_type in "aliases" "completion" "plugins"; do
+for _bash_it_main_file_type in "aliases" "completion" "plugins"
+ do
 	_bash_it_main_file_custom="${BASH_IT}/${_bash_it_main_file_type}/custom.${_bash_it_main_file_type}.bash"
 	if [[ -s "${_bash_it_main_file_custom}" ]] 
      then
@@ -90,7 +93,7 @@ done
 
 if [[ -n "${PROMPT:-}" ]] 
      then
-	PS1="${PROMPT}"
+		PS1="${PROMPT}"
 fi
 
 # Adding Support for other OSes

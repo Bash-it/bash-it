@@ -104,4 +104,4 @@ function catt()
 # bash-it disable alias general
 # bash-it enable alias bash-it
 # shellcheck source-path=SCRIPTDIR
-source "$BASH_IT/aliases/available/bash-it.aliases.bash"
+source "${BASH_IT}/aliases/available/bash-it.aliases.bash"
