@@ -21,7 +21,8 @@ alias skype='open -a Skype'
 alias mou='open -a Mou'
 alias subl='open -a "Sublime Text"'
 
-if [[ -s /usr/bin/firefox ]]; then
+if [[ -s /usr/bin/firefox ]] 
+     then
 	unalias firefox
 fi
 

@@ -1,7 +1,8 @@
 # shellcheck shell=bash
 about-alias 'kubectl aliases'
 
-if _command_exists kubectl; then
+if _command_exists kubectl 
+     then
 	alias kc='kubectl'
 	alias kcgp='kubectl get pods'
 	alias kcgd='kubectl get deployments'

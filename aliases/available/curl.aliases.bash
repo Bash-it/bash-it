@@ -2,8 +2,15 @@
 about-alias 'Curl aliases for convenience.'
 
 # set apt aliases
-function _set_pkg_aliases() {
-	if _command_exists curl; then
+function _set_pkg_aliases() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
+	if _command_exists curl 
+     then
 		# follow redirects
 		alias cl='curl -L'
 		# follow redirects, download as original name
@@ -17,6 +24,10 @@ function _set_pkg_aliases() {
 		# see only response headers from a get request
 		alias clhead='curl -D - -so /dev/null'
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 _set_pkg_aliases

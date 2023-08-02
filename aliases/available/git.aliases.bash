@@ -91,7 +91,8 @@ alias ggui='git gui'
 # home
 alias ghm='cd "$(git rev-parse --show-toplevel)"' # Git home
 # appendage to ghm
-if ! _command_exists gh; then
+if ! _command_exists gh 
+     then
 	alias gh='ghm'
 fi
 
@@ -199,14 +200,35 @@ case $OSTYPE in
 esac
 
 # functions
-function gdv() {
-	git diff --ignore-all-space "$@" | vim -R -
+function gdv() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
+	git diff --ignore-all-space "${@}" | vim -R -
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function get_default_branch() {
-	if git branch | grep -q '^. main\s*$'; then
+function get_default_branch() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
+	if git branch | grep -q '^. main\s*$' 
+     then
 		echo main
 	else
 		echo master
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
