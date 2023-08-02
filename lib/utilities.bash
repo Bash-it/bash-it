@@ -59,7 +59,7 @@ function _bash-it-get-component-type-from-path()
 #   contains apple
 #
 #   $ if _bash-it-array-contains-element pear "${fruits[@]}" 
-     then
+#     then
 #       echo "contains pear!"
 #     fi
 #   contains pear!
