@@ -3,14 +3,21 @@
 cite about-plugin
 about-plugin 'render commandline output in your browser'
 
-function browser() {
+function browser() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     about 'pipe html to a browser'
     example '$ echo "<h1>hi mom!</h1>" | browser'
     example '$ ron -5 man/rip.5.ron | browser'
     group 'browser'
 
-    if [ -t 0 ]; then
-        if [ -n "$1" ]; then
+    if [ -t 0 ] 
+     then
+        if [ -n "${1}" ] 
+     then
             open $1
         else
             reference browser
@@ -21,16 +28,27 @@ function browser() {
         cat /dev/stdin > $f
         open $f
     fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-function wmate() {
+function wmate() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     about 'pipe hot spicy interwebs into textmate and cleanup!'
     example '$ wmate google.com'
     group 'browser'
 
-    if [ -t 0 ]; then
-        if [ -n "$1" ]; then
+    if [ -t 0 ] 
+     then
+        if [ -n "${1}" ] 
+     then
             wget -qO- $1 | /usr/bin/mate
 
 TIDY=`/usr/bin/osascript << EOT
@@ -59,18 +77,33 @@ EOT`
             reference wmate
       fi
     fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function raw() {
+function raw() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     about 'write wget into a temp file and pump it into your browser'
     example '$ raw google.com'
     group 'browser'
 
-    if [ -t 0 ]; then
-        if [ -n "$1" ]; then
+    if [ -t 0 ] 
+     then
+        if [ -n "${1}" ] 
+     then
             wget -qO- $1 | browser
         else
             reference raw
         fi
     fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }

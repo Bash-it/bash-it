@@ -14,7 +14,8 @@ BASH_IT_LOAD_PRIORITY_SEPARATOR="---"
 # To use this in Bash-it for inline replacements with `sed`, use the following syntax:
 # sed "${BASH_IT_SED_I_PARAMETERS[@]}" -e "..." file
 # shellcheck disable=SC2034 # expected for this case
-if sed --version > /dev/null 2>&1; then
+if sed --version > /dev/null 2>&1 
+     then
 	# GNU sed accepts "long" options
 	BASH_IT_SED_I_PARAMETERS=('-i')
 else
@@ -22,55 +23,92 @@ else
 	BASH_IT_SED_I_PARAMETERS=('-i' '')
 fi
 
-function _command_exists() {
+function _command_exists() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'checks for existence of a command'
 	_param '1: command to check'
 	_param '2: (optional) log message to include when command not found'
 	_example '$ _command_exists ls && echo exists'
 	_group 'lib'
 	local msg="${2:-Command '$1' does not exist}"
-	if type -t "$1" > /dev/null; then
+	if type -t "${1}" > /dev/null 
+     then
 		return 0
 	else
-		_log_debug "$msg"
+		_log_debug "${msg}"
 		return 1
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _binary_exists() {
+function _binary_exists() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'checks for existence of a binary'
 	_param '1: binary to check'
 	_param '2: (optional) log message to include when binary not found'
 	_example '$ _binary_exists ls && echo exists'
 	_group 'lib'
 	local msg="${2:-Binary '$1' does not exist}"
-	if type -P "$1" > /dev/null; then
+	if type -P "${1}" > /dev/null 
+     then
 		return 0
 	else
-		_log_debug "$msg"
+		_log_debug "${msg}"
 		return 1
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _completion_exists() {
+function _completion_exists() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'checks for existence of a completion'
 	_param '1: command to check'
 	_param '2: (optional) log message to include when completion is found'
 	_example '$ _completion_exists gh && echo exists'
 	_group 'lib'
 	local msg="${2:-Completion for '$1' already exists}"
-	if complete -p "$1" &> /dev/null; then
-		_log_debug "$msg"
+	if complete -p "${1}" &> /dev/null 
+     then
+		_log_debug "${msg}"
 		return 0
 	else
 		return 1
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _bash_it_homebrew_check() {
-	if _binary_exists 'brew'; then
+function _bash_it_homebrew_check() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	if _binary_exists 'brew' 
+     then
 		# Homebrew is installed
-		if [[ "${BASH_IT_HOMEBREW_PREFIX:-unset}" == 'unset' ]]; then
+		if [[ "${BASH_IT_HOMEBREW_PREFIX:-unset}" == 'unset' ]] 
+     then
 			# variable isn't set
 			BASH_IT_HOMEBREW_PREFIX="$(brew --prefix)"
 		else
@@ -81,10 +119,23 @@ function _bash_it_homebrew_check() {
 		BASH_IT_HOMEBREW_PREFIX=
 		false # return failure if brew not installed.
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _make_reload_alias() {
+function _make_reload_alias() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	echo "source '${BASH_IT?}/scripts/reloader.bash' '${1?}' '${2?}'"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # Alias for reloading aliases
@@ -99,7 +150,12 @@ alias reload_completion="$(_make_reload_alias completion completion)"
 # shellcheck disable=SC2139
 alias reload_plugins="$(_make_reload_alias plugin plugins)"
 
-function bash-it() {
+function bash-it() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'Bash-it help and maintenance'
 	param '1: verb [one of: help | show | enable | disable | migrate | update | search | preview | version | reload | restart | doctor ] '
 	param '2: component type [one of: alias(es) | completion(s) | plugin(s) ] or search term(s)'
@@ -144,11 +200,11 @@ function bash-it() {
 			func=_bash-it-profile-$component
 			;;
 		search)
-			_bash-it-search "$component" "$@"
+			_bash-it-search "$component" "${@}"
 			return
 			;;
 		preview)
-			_bash-it-preview "$component" "$@"
+			_bash-it-preview "$component" "${@}"
 			return
 			;;
 		update)
@@ -173,11 +229,14 @@ function bash-it() {
 	esac
 
 	# pluralize component if necessary
-	if ! _is_function "$func"; then
-		if _is_function "${func}s"; then
+	if ! _is_function "$func" 
+     then
+		if _is_function "${func}s" 
+     then
 			func="${func}s"
 		else
-			if _is_function "${func}es"; then
+			if _is_function "${func}es" 
+     then
 				func="${func}es"
 			else
 				echo "oops! $component is not a valid option!"
@@ -187,23 +246,34 @@ function bash-it() {
 		fi
 	fi
 
-	if [[ "$verb" == "enable" || "$verb" == "disable" ]]; then
+	if [[ "$verb" == "enable" || "$verb" == "disable" ]] 
+     then
 		# Automatically run a migration if required
 		_bash-it-migrate
 
-		for arg in "$@"; do
-			"$func" "$arg"
+		for arg in "${@}"; do
+			"${func}" "${arg}"
 		done
 
-		if [[ -n "${BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE:-}" ]]; then
+		if [[ -n "${BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE:-}" ]] 
+     then
 			_bash-it-reload
 		fi
 	else
-		"$func" "$@"
+		"$func" "${@}"
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _is_function() {
+function _is_function() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'sets $? to true if parameter is the name of a function'
 	_param '1: name of alleged function'
 	_param '2: (optional) log message to include when function not found'
@@ -211,54 +281,110 @@ function _is_function() {
 	_example '$ _is_function ls && echo exists'
 	_group 'lib'
 	local msg="${2:-Function '$1' does not exist}"
-	if LC_ALL=C type -t "$1" | _bash-it-fgrep -q 'function'; then
+	if LC_ALL=C type -t "${1}" | _bash-it-fgrep -q 'function' 
+     then
 		return 0
 	else
-		_log_debug "$msg"
+		_log_debug "${msg}"
 		return 1
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _bash-it-aliases() {
+function _bash-it-aliases() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'summarizes available bash_it aliases'
 	_group 'lib'
 
 	_bash-it-describe "aliases" "an" "alias" "Alias"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _bash-it-completions() {
+function _bash-it-completions() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'summarizes available bash_it completions'
 	_group 'lib'
 
 	_bash-it-describe "completion" "a" "completion" "Completion"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _bash-it-plugins() {
+function _bash-it-plugins() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'summarizes available bash_it plugins'
 	_group 'lib'
 
 	_bash-it-describe "plugins" "a" "plugin" "Plugin"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _bash-it-update-dev() {
+function _bash-it-update-dev() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'updates Bash-it to the latest master'
 	_group 'lib'
 
-	_bash-it-update- dev "$@"
+	_bash-it-update- dev "${@}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _bash-it-update-stable() {
+function _bash-it-update-stable() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'updates Bash-it to the latest tag'
 	_group 'lib'
 
-	_bash-it-update- stable "$@"
+	_bash-it-update- stable "${@}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _bash-it_update_migrate_and_restart() {
+function _bash-it_update_migrate_and_restart() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'Checks out the wanted version, pops directory and restart. Does not return (because of the restart!)'
 	_param '1: Which branch to checkout to'
 	_param '2: Which type of version we are using'
-	if git checkout "${1?}" &> /dev/null; then
+	if git checkout "${1?}" &> /dev/null 
+     then
 		echo "Bash-it successfully updated."
 		echo ""
 		echo "Migrating your installation to the latest ${2:-} version now..."
@@ -271,16 +397,26 @@ function _bash-it_update_migrate_and_restart() {
 	else
 		echo "Error updating Bash-it, please, check if your Bash-it installation folder (${BASH_IT}) is clean."
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _bash-it-update-() {
+function _bash-it-update-() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'updates Bash-it'
 	_param '1: What kind of update to do (stable|dev)'
 	_group 'lib'
 
 	local silent word DIFF version TARGET revision status revert log_color RESP
-	for word in "$@"; do
-		if [[ "${word}" == "--silent" || "${word}" == "-s" ]]; then
+	for word in "${@}"; do
+		if [[ "${word}" == "--silent" || "${word}" == "-s" ]] 
+     then
 			silent=true
 		fi
 	done
@@ -288,27 +424,32 @@ function _bash-it-update-() {
 	pushd "${BASH_IT?}" > /dev/null || return
 
 	DIFF=$(git diff --name-status)
-	if [[ -n "$DIFF" ]]; then
+	if [[ -n "$DIFF" ]] 
+     then
 		echo -e "Local changes detected in bash-it directory. Clean '$BASH_IT' directory to proceed.\n$DIFF"
 		popd > /dev/null || return
 		return 1
 	fi
 
-	if [[ -z "$BASH_IT_REMOTE" ]]; then
+	if [[ -z "$BASH_IT_REMOTE" ]] 
+     then
 		BASH_IT_REMOTE="origin"
 	fi
 
 	git fetch "$BASH_IT_REMOTE" --tags &> /dev/null
 
-	if [[ -z "$BASH_IT_DEVELOPMENT_BRANCH" ]]; then
+	if [[ -z "$BASH_IT_DEVELOPMENT_BRANCH" ]] 
+     then
 		BASH_IT_DEVELOPMENT_BRANCH="master"
 	fi
 	# Defaults to stable update
-	if [[ -z "${1:-}" || "$1" == "stable" ]]; then
+	if [[ -z "${1:-}" || "${1}" == "stable" ]] 
+     then
 		version="stable"
 		TARGET=$(git describe --tags "$(git rev-list --tags --max-count=1)" 2> /dev/null)
 
-		if [[ -z "$TARGET" ]]; then
+		if [[ -z "$TARGET" ]] 
+     then
 			echo "Can not find tags, so can not update to latest stable version..."
 			popd > /dev/null || return
 			return
@@ -321,14 +462,17 @@ function _bash-it-update-() {
 	revision="HEAD..${TARGET}"
 	status="$(git rev-list "${revision}" 2> /dev/null)"
 
-	if [[ -z "${status}" && "${version}" == "stable" ]]; then
+	if [[ -z "${status}" && "${version}" == "stable" ]] 
+     then
 		revision="${TARGET}..HEAD"
 		status="$(git rev-list "${revision}" 2> /dev/null)"
 		revert=true
 	fi
 
-	if [[ -n "${status}" ]]; then
-		if [[ -n "${revert}" ]]; then
+	if [[ -n "${status}" ]] 
+     then
+		if [[ -n "${revert}" ]] 
+     then
 			echo "Your version is a more recent development version ($(git log -1 --format=%h HEAD))"
 			echo "You can continue in order to revert and update to the latest stable version"
 			echo ""
@@ -338,7 +482,8 @@ function _bash-it-update-() {
 		git log --no-merges --format="${log_color}%h: %s (%an)" "${revision}"
 		echo ""
 
-		if [[ -n "${silent}" ]]; then
+		if [[ -n "${silent}" ]] 
+     then
 			echo "Updating to ${TARGET}($(git log -1 --format=%h "${TARGET}"))..."
 			_bash-it_update_migrate_and_restart "$TARGET" "$version"
 		else
@@ -356,16 +501,26 @@ function _bash-it-update-() {
 			esac
 		fi
 	else
-		if [[ "${version}" == "stable" ]]; then
+		if [[ "${version}" == "stable" ]] 
+     then
 			echo "You're on the latest stable version. If you want to check out the latest 'dev' version, please run \"bash-it update dev\""
 		else
 			echo "Bash-it is up to date, nothing to do!"
 		fi
 	fi
 	popd > /dev/null || return
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _bash-it-migrate() {
+function _bash-it-migrate() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'migrates Bash-it configuration from a previous format to the current one'
 	_group 'lib'
 
@@ -373,7 +528,7 @@ function _bash-it-migrate() {
 	migrated_something=false
 
 	for file_type in "aliases" "plugins" "completion"; do
-		for _bash_it_config_file in "${BASH_IT}/$file_type/enabled"/*.bash; do
+		for _bash_it_config_file in "${BASH_IT}/${file_type}/enabled"/*.bash; do
 			[[ -f "$_bash_it_config_file" ]] || continue
 
 			# Get the type of component from the extension
@@ -394,17 +549,28 @@ function _bash-it-migrate() {
 		done
 	done
 
-	if [[ -n "${BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE:-}" ]]; then
+	if [[ -n "${BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE:-}" ]] 
+     then
 		_bash-it-reload
 	fi
 
-	if [[ "$migrated_something" == "true" ]]; then
+	if [[ "$migrated_something" == "true" ]] 
+     then
 		echo ""
 		echo "If any migration errors were reported, please try the following: reload && bash-it migrate"
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _bash-it-version() {
+function _bash-it-version() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'shows current Bash-it version'
 	_group 'lib'
 
@@ -412,13 +578,15 @@ function _bash-it-version() {
 
 	pushd "${BASH_IT?}" > /dev/null || return
 
-	if [[ -z "${BASH_IT_REMOTE:-}" ]]; then
+	if [[ -z "${BASH_IT_REMOTE:-}" ]] 
+     then
 		BASH_IT_REMOTE="origin"
 	fi
 
 	BASH_IT_GIT_REMOTE="$(git remote get-url "$BASH_IT_REMOTE")"
 	BASH_IT_GIT_URL="${BASH_IT_GIT_REMOTE%.git}"
-	if [[ "$BASH_IT_GIT_URL" == *"git@"* ]]; then
+	if [[ "${BASH_IT_GIT_URL}" == *"git@"* ]] 
+     then
 		# Fix URL in case it is ssh based URL
 		BASH_IT_GIT_URL="${BASH_IT_GIT_URL/://}"
 		BASH_IT_GIT_URL="${BASH_IT_GIT_URL/git@/https://}"
@@ -426,25 +594,35 @@ function _bash-it-version() {
 
 	current_tag="$(git describe --exact-match --tags 2> /dev/null)"
 
-	if [[ -z "$current_tag" ]]; then
+	if [[ -z "$current_tag" ]] 
+     then
 		BASH_IT_GIT_VERSION_INFO="$(git log --pretty=format:'%h on %aI' -n 1)"
 		TARGET="${BASH_IT_GIT_VERSION_INFO%% *}"
 		echo "Version type: dev"
 		echo "Current git SHA: $BASH_IT_GIT_VERSION_INFO"
-		echo "Commit info: $BASH_IT_GIT_URL/commit/$TARGET"
+		echo "Commit info: ${BASH_IT_GIT_URL}/commit/${TARGET}"
 	else
 		TARGET="$current_tag"
 		echo "Version type: stable"
-		echo "Current tag: $current_tag"
-		echo "Tag information: $BASH_IT_GIT_URL/releases/tag/$current_tag"
+		echo "Current tag: ${current_tag}"
+		echo "Tag information: ${BASH_IT_GIT_URL}/releases/tag/$current_tag"
 	fi
 
-	echo "Compare to latest: $BASH_IT_GIT_URL/compare/$TARGET...master"
+	echo "Compare to latest: ${BASH_IT_GIT_URL}/compare/${TARGET}...master"
 
 	popd > /dev/null || return
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _bash-it-doctor() {
+function _bash-it-doctor() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'reloads a profile file with a BASH_IT_LOG_LEVEL set'
 	_param '1: BASH_IT_LOG_LEVEL argument: "errors" "warnings" "all"'
 	_group 'lib'
@@ -452,37 +630,82 @@ function _bash-it-doctor() {
 	# shellcheck disable=SC2034 # expected for this case
 	local BASH_IT_LOG_LEVEL="${1?}"
 	_bash-it-reload
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _bash-it-doctor-all() {
+function _bash-it-doctor-all() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'reloads a profile file with error, warning and debug logs'
 	_group 'lib'
 
 	_bash-it-doctor "${BASH_IT_LOG_LEVEL_ALL?}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _bash-it-doctor-warnings() {
+function _bash-it-doctor-warnings() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'reloads a profile file with error and warning logs'
 	_group 'lib'
 
 	_bash-it-doctor "${BASH_IT_LOG_LEVEL_WARNING?}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _bash-it-doctor-errors() {
+function _bash-it-doctor-errors() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'reloads a profile file with error logs'
 	_group 'lib'
 
 	_bash-it-doctor "${BASH_IT_LOG_LEVEL_ERROR?}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _bash-it-doctor-() {
+function _bash-it-doctor-() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'default bash-it doctor behavior, behaves like bash-it doctor all'
 	_group 'lib'
 
 	_bash-it-doctor-all
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _bash-it-profile-save() {
+function _bash-it-profile-save() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'saves the current configuration to the "profile" directory'
 	_group 'lib'
 
@@ -500,7 +723,8 @@ function _bash-it-profile-save() {
 	done
 
 	local profile_path="${BASH_IT}/profiles/${name}.bash_it" RESP
-	if [[ -s "$profile_path" ]]; then
+	if [[ -s "$profile_path" ]] 
+     then
 		echo -e "${echo_yellow?}Profile '$name' already exists.${echo_reset_color?}"
 		while true; do
 			read -r -e -n 1 -p "Would you like to overwrite existing profile? [y/N] " RESP
@@ -524,9 +748,11 @@ function _bash-it-profile-save() {
 	echo "# This file is auto generated by Bash-it. Do not edit manually!" > "$profile_path"
 	for subdirectory in "plugins" "completion" "aliases"; do
 		echo "Saving $subdirectory configuration..."
-		for f in "${BASH_IT}/$subdirectory/available"/*.bash; do
-			if _bash-it-component-item-is-enabled "$f"; then
-				if [[ -z "${component_exists:-}" ]]; then
+		for f in "${BASH_IT}/${subdirectory}/available"/*.bash; do
+			if _bash-it-component-item-is-enabled "$f" 
+     then
+				if [[ -z "${component_exists:-}" ]] 
+     then
 					# This is the first component of this type, print the header
 					component_exists="yes"
 					something_exists="yes"
@@ -538,7 +764,8 @@ function _bash-it-profile-save() {
 			fi
 		done
 	done
-	if [[ -z "${something_exists:-}" ]]; then
+	if [[ -z "${something_exists:-}" ]] 
+     then
 		echo "It seems like no configuration was enabled.."
 		echo "Make sure to double check that this is the wanted behavior."
 	fi
@@ -547,9 +774,18 @@ function _bash-it-profile-save() {
 	echo ""
 	echo "Profile location: $profile_path"
 	echo "Load the profile by invoking \"bash-it profile load $name\""
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-_bash-it-profile-load-parse-profile() {
+function _bash-it-profile-load-parse-profile() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'Internal function used to parse the profile file'
 	_param '1: path to the profile file'
 	_param '2: dry run- only check integrity of the profile file'
@@ -565,9 +801,10 @@ _bash-it-profile-load-parse-profile() {
 		subdirectory=${line[0]}
 		component=${line[1]}
 
-		to_enable=("${BASH_IT}/$subdirectory/available/$component.${subdirectory%s}"*.bash)
+		to_enable=("${BASH_IT}/${subdirectory}/available/${component}.${subdirectory%s}"*.bash)
 		# Ignore botched lines
-		if [[ ! -e "${to_enable[0]}" ]]; then
+		if [[ ! -e "${to_enable[0]}" ]] 
+     then
 			echo -e "${echo_orange?}Bad line(#$num) in profile, aborting load...${line[*]}${echo_reset_color?}"
 			bad="bad line"
 			break
@@ -575,14 +812,23 @@ _bash-it-profile-load-parse-profile() {
 		# Do not actually modify config on dry run
 		[[ -z "${2:-}" ]] || continue
 		# Actually enable the component
-		$enable_func "$component"
+		$enable_func "${component}"
 	done < "${1?}"
 
 	# Make sure to propagate the error
 	[[ -z ${bad:-} ]]
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-_bash-it-profile-list() {
+function _bash-it-profile-list() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'lists all profiles from the "profiles" directory'
 	_group 'lib'
 	local profile
@@ -592,81 +838,132 @@ _bash-it-profile-list() {
 		profile="${profile##*/}"
 		echo "${profile/.bash_it/}"
 	done
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-_bash-it-profile-rm() {
+function _bash-it-profile-rm() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'Removes a profile from the "profiles" directory'
 	_group 'lib'
 
 	local name="${1:-}"
-	if [[ -z $name ]]; then
+	if [[ -z $name ]] 
+     then
 		echo -e "${echo_orange?}Please specify profile name to remove...${echo_reset_color?}"
 		return 1
 	fi
 
 	# Users should not be allowed to delete the default profile
-	if [[ $name == "default" ]]; then
+	if [[ $name == "default" ]] 
+     then
 		echo -e "${echo_orange?}Can not remove the default profile...${echo_reset_color?}"
 		return 1
 	fi
 
 	local profile_path="${BASH_IT}/profiles/$name.bash_it"
-	if [[ ! -f "$profile_path" ]]; then
+	if [[ ! -f "${profile_path}" ]] 
+     then
 		echo -e "${echo_orange?}Could not find profile '$name'...${echo_reset_color?}"
 		return 1
 	fi
 
-	command rm "$profile_path"
+	command rm "${profile_path}"
 	echo "Removed profile '$name' successfully!"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-_bash-it-profile-load() {
+function _bash-it-profile-load() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'loads a configuration from the "profiles" directory'
 	_group 'lib'
 
 	local name="${1:-}"
-	if [[ -z $name ]]; then
+	if [[ -z $name ]] 
+     then
 		echo -e "${echo_orange?}Please specify profile name to load, not changing configuration...${echo_reset_color?}"
 		return 1
 	fi
 
 	local profile_path="${BASH_IT}/profiles/$name.bash_it"
-	if [[ ! -f "$profile_path" ]]; then
-		echo -e "${echo_orange?}Could not find profile '$name', not changing configuration...${echo_reset_color?}"
+	if [[ ! -f "${profile_path}" ]] 
+     then
+		echo -e "${echo_orange?}Could not find profile '${name}', not changing configuration...${echo_reset_color?}"
 		return 1
 	fi
 
-	echo "Trying to parse profile '$name'..."
-	if _bash-it-profile-load-parse-profile "$profile_path" "dry"; then
-		echo "Profile '$name' parsed successfully!"
+	echo "Trying to parse profile '${name}'..."
+	if _bash-it-profile-load-parse-profile "$profile_path" "dry" 
+     then
+		echo "Profile '${name}' parsed successfully!"
 		echo "Disabling current configuration..."
 		_disable-all
 		echo ""
 		echo "Enabling configuration based on profile..."
-		_bash-it-profile-load-parse-profile "$profile_path"
+		_bash-it-profile-load-parse-profile "${profile_path}"
 		echo ""
-		echo "Profile '$name' enabled!"
+		echo "Profile '${name}' enabled!"
 	else
 		false # failure
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _bash-it-restart() {
+function _bash-it-restart() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'restarts the shell in order to fully reload it'
 	_group 'lib'
 
 	exec "${0#-}" --rcfile "${BASH_IT_BASHRC:-${HOME?}/.bashrc}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _bash-it-reload() {
+function _bash-it-reload() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'reloads the shell initialization file'
 	_group 'lib'
 
 	# shellcheck disable=SC1090
 	source "${BASH_IT_BASHRC:-${HOME?}/.bashrc}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _bash-it-describe() {
+function _bash-it-describe() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'summarizes available bash_it components'
 	_param '1: subdirectory'
 	_param '2: preposition'
@@ -675,38 +972,57 @@ function _bash-it-describe() {
 	_example '$ _bash-it-describe "plugins" "a" "plugin" "Plugin"'
 
 	local subdirectory preposition file_type column_header f enabled enabled_file
-	subdirectory="$1"
-	preposition="$2"
-	file_type="$3"
-	column_header="$4"
+	subdirectory="${1}"
+	preposition="${2}"
+	file_type="${3}"
+	column_header="${4}"
 
 	printf "%-20s %-10s %s\n" "$column_header" 'Enabled?' 'Description'
-	for f in "${BASH_IT?}/$subdirectory/available"/*.*.bash; do
+	for f in "${BASH_IT?}/${subdirectory}/available"/*.*.bash; do
 		enabled=''
 		enabled_file="${f##*/}"
 		enabled_file="${enabled_file%."${file_type}"*.bash}"
 		_bash-it-component-item-is-enabled "${file_type}" "${enabled_file}" && enabled='x'
 		printf "%-20s %-10s %s\n" "$enabled_file" "[${enabled:- }]" "$(metafor "about-$file_type" < "$f")"
 	done
-	printf '\n%s\n' "to enable $preposition $file_type, do:"
-	printf '%s\n' "$ bash-it enable $file_type  <$file_type name> [$file_type name]... -or- $ bash-it enable $file_type all"
-	printf '\n%s\n' "to disable $preposition $file_type, do:"
-	printf '%s\n' "$ bash-it disable $file_type <$file_type name> [$file_type name]... -or- $ bash-it disable $file_type all"
+	printf '\n%s\n' "to enable ${preposition} ${file_type}, do:"
+	printf '%s\n' "$ bash-it enable ${file_type}  <$file_type name> [${file_type} name]... -or- $ bash-it enable ${file_type} all"
+	printf '\n%s\n' "to disable ${preposition} ${file_type}, do:"
+	printf '%s\n' "$ bash-it disable ${file_type} <$file_type name> [${file_type} name]... -or- $ bash-it disable ${file_type} all"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _on-disable-callback() {
+function _on-disable-callback() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'Calls the disabled plugin destructor, if present'
 	_param '1: plugin name'
 	_example '$ _on-disable-callback gitstatus'
 	_group 'lib'
 
 	local callback="${1}_on_disable"
-	if _command_exists "$callback"; then
-		"$callback"
+	if _command_exists "${callback}" 
+     then
+		"${callback}"
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _disable-all() {
+function _disable-all() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'disables all bash_it components'
 	_example '$ _disable-all'
 	_group 'lib'
@@ -714,9 +1030,18 @@ function _disable-all() {
 	_disable-plugin "all"
 	_disable-alias "all"
 	_disable-completion "all"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _disable-plugin() {
+function _disable-plugin() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'disables bash_it plugin'
 	_param '1: plugin name'
 	_example '$ disable-plugin rvm'
@@ -724,27 +1049,54 @@ function _disable-plugin() {
 
 	_disable-thing "plugins" "plugin" "${1?}"
 	_on-disable-callback "${1?}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _disable-alias() {
+function _disable-alias() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'disables bash_it alias'
 	_param '1: alias name'
 	_example '$ disable-alias git'
 	_group 'lib'
 
 	_disable-thing "aliases" "alias" "${1?}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _disable-completion() {
+function _disable-completion() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'disables bash_it completion'
 	_param '1: completion name'
 	_example '$ disable-completion git'
 	_group 'lib'
 
 	_disable-thing "completion" "completion" "${1?}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _disable-thing() {
+function _disable-thing() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'disables a bash_it component'
 	_param '1: subdirectory'
 	_param '2: file_type'
@@ -755,7 +1107,8 @@ function _disable-thing() {
 	local file_type="${2?}"
 	local file_entity="${3:-}"
 
-	if [[ -z "$file_entity" ]]; then
+	if [[ -z "$file_entity" ]] 
+     then
 		reference "disable-$file_type"
 		return
 	fi
@@ -763,9 +1116,10 @@ function _disable-thing() {
 	local f suffix _bash_it_config_file plugin
 	suffix="${subdirectory/plugins/plugin}"
 
-	if [[ "$file_entity" == "all" ]]; then
+	if [[ "$file_entity" == "all" ]] 
+     then
 		# Disable everything that's using the old structure and everything in the global "enabled" directory.
-		for _bash_it_config_file in "${BASH_IT}/$subdirectory/enabled"/*."${suffix}.bash" "${BASH_IT}/enabled"/*".${suffix}.bash"; do
+		for _bash_it_config_file in "${BASH_IT}/${subdirectory}/enabled"/*."${suffix}.bash" "${BASH_IT}/enabled"/*".${suffix}.bash"; do
 			rm -f "$_bash_it_config_file"
 		done
 	else
@@ -774,66 +1128,123 @@ function _disable-thing() {
 		# node.plugin.bash
 		# Either one will be matched by this glob
 		for plugin in "${BASH_IT}/enabled"/[[:digit:]][[:digit:]][[:digit:]]"${BASH_IT_LOAD_PRIORITY_SEPARATOR}${file_entity}.${suffix}.bash" "${BASH_IT}/$subdirectory/enabled/"{[[:digit:]][[:digit:]][[:digit:]]"${BASH_IT_LOAD_PRIORITY_SEPARATOR}${file_entity}.${suffix}.bash","${file_entity}.${suffix}.bash"}; do
-			if [[ -e "${plugin}" ]]; then
+			if [[ -e "${plugin}" ]] 
+     then
 				rm -f "${plugin}"
 				plugin=
 				break
 			fi
 		done
-		if [[ -n "${plugin}" ]]; then
-			printf '%s\n' "sorry, $file_entity does not appear to be an enabled $file_type."
+		if [[ -n "${plugin}" ]] 
+     then
+			printf '%s\n' "sorry, ${file_entity} does not appear to be an enabled ${file_type}."
 			return
 		fi
 	fi
 
 	_bash-it-component-cache-clean "${file_type}"
 
-	if [[ "$file_entity" == "all" ]]; then
-		_bash-it-component-pluralize "$file_type" file_type
-		printf '%s\n' "$file_entity ${file_type} disabled."
+	if [[ "$file_entity" == "all" ]] 
+     then
+		_bash-it-component-pluralize "${file_type}" file_type
+		printf '%s\n' "${file_entity} ${file_type} disabled."
 	else
-		printf '%s\n' "$file_entity disabled."
+		printf '%s\n' "${file_entity} disabled."
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _enable-plugin() {
+function _enable-plugin() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'enables bash_it plugin'
 	_param '1: plugin name'
 	_example '$ enable-plugin rvm'
 	_group 'lib'
 
 	_enable-thing "plugins" "plugin" "${1?}" "$BASH_IT_LOAD_PRIORITY_PLUGIN"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _enable-plugins() {
+function _enable-plugins() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'alias of _enable-plugin'
-	_enable-plugin "$@"
+	_enable-plugin "${@}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _enable-alias() {
+function _enable-alias() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'enables bash_it alias'
 	_param '1: alias name'
 	_example '$ enable-alias git'
 	_group 'lib'
 
-	_enable-thing "aliases" "alias" "${1?}" "$BASH_IT_LOAD_PRIORITY_ALIAS"
+	_enable-thing "aliases" "alias" "${1?}" "${BASH_IT_LOAD_PRIORITY_ALIAS}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _enable-aliases() {
+function _enable-aliases() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'alias of _enable-alias'
-	_enable-alias "$@"
+	_enable-alias "${@}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _enable-completion() {
+function _enable-completion() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'enables bash_it completion'
 	_param '1: completion name'
 	_example '$ enable-completion git'
 	_group 'lib'
 
-	_enable-thing "completion" "completion" "${1?}" "$BASH_IT_LOAD_PRIORITY_COMPLETION"
+	_enable-thing "completion" "completion" "${1?}" "${BASH_IT_LOAD_PRIORITY_COMPLETION}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _enable-thing() {
+function _enable-thing() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	cite _about _param _example
 	_about 'enables a bash_it component'
 	_param '1: subdirectory'
@@ -847,31 +1258,35 @@ function _enable-thing() {
 	local file_entity="${3:-}"
 	local load_priority="${4:-500}"
 
-	if [[ -z "$file_entity" ]]; then
+	if [[ -z "$file_entity" ]] 
+     then
 		reference "enable-$file_type"
 		return
 	fi
 
 	local _bash_it_config_file to_enable to_enables enabled_plugin local_file_priority use_load_priority
-	local suffix="${subdirectory/plugins/plugin}"
+	local suffix="${subdirectory}/plugins/plugin"
 
-	if [[ "$file_entity" == "all" ]]; then
-		for _bash_it_config_file in "${BASH_IT}/$subdirectory/available"/*.bash; do
+	if [[ "$file_entity" == "all" ]] 
+     then
+		for _bash_it_config_file in "${BASH_IT}/${subdirectory}/available"/*.bash; do
 			to_enable="${_bash_it_config_file##*/}"
-			_enable-thing "$subdirectory" "$file_type" "${to_enable%."${file_type/alias/aliases}".bash}" "$load_priority"
+			_enable-thing "$subdirectory" "${file_type}" "${to_enable%."${file_type/alias/aliases}".bash}" "${load_priority}"
 		done
 	else
-		to_enables=("${BASH_IT}/$subdirectory/available/$file_entity.${suffix}.bash")
-		if [[ ! -e "${to_enables[0]}" ]]; then
-			printf '%s\n' "sorry, $file_entity does not appear to be an available $file_type."
+		to_enables=("${BASH_IT}/$subdirectory/available/${file_entity}.${suffix}.bash")
+		if [[ ! -e "${to_enables[0]}" ]] 
+     then
+			printf '%s\n' "sorry, ${file_entity} does not appear to be an available ${file_type}."
 			return
 		fi
 
 		to_enable="${to_enables[0]##*/}"
 		# Check for existence of the file using a wildcard, since we don't know which priority might have been used when enabling it.
 		for enabled_plugin in "${BASH_IT}/$subdirectory/enabled"/{[[:digit:]][[:digit:]][[:digit:]]"${BASH_IT_LOAD_PRIORITY_SEPARATOR}${to_enable}","${to_enable}"} "${BASH_IT}/enabled"/[[:digit:]][[:digit:]][[:digit:]]"${BASH_IT_LOAD_PRIORITY_SEPARATOR?}${to_enable}"; do
-			if [[ -e "${enabled_plugin}" ]]; then
-				printf '%s\n' "$file_entity is already enabled."
+			if [[ -e "${enabled_plugin}" ]] 
+     then
+				printf '%s\n' "${file_entity} is already enabled."
 				return
 			fi
 		done
@@ -882,29 +1297,48 @@ function _enable-thing() {
 		local_file_priority="$(awk -F': ' '$1 == "# BASH_IT_LOAD_PRIORITY" { print $2 }' "${BASH_IT}/$subdirectory/available/$to_enable")"
 		use_load_priority="${local_file_priority:-$load_priority}"
 
-		ln -s "../$subdirectory/available/$to_enable" "${BASH_IT}/enabled/${use_load_priority}${BASH_IT_LOAD_PRIORITY_SEPARATOR}${to_enable}"
+		ln -s "../${subdirectory}/available/${to_enable}" "${BASH_IT}/enabled/${use_load_priority}${BASH_IT_LOAD_PRIORITY_SEPARATOR}${to_enable}"
 	fi
 
 	_bash-it-component-cache-clean "${file_type}"
 
-	printf '%s\n' "$file_entity enabled with priority $use_load_priority."
+	printf '%s\n' "$file_entity enabled with priority ${use_load_priority}."
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _help-completions() {
+function _help-completions() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'summarize all completions available in bash-it'
 	_group 'lib'
 
 	_bash-it-completions
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _help-aliases() {
+function _help-aliases() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'shows help for all aliases, or a specific alias group'
 	_param '1: optional alias group'
 	_example '$ alias-help'
 	_example '$ alias-help git'
 
-	if [[ -n "${1:-}" ]]; then
-		case "$1" in
+	if [[ -n "${1:-}" ]] 
+     then
+		case "${1}" in
 			custom)
 				alias_path='custom.aliases.bash'
 				;;
@@ -912,7 +1346,7 @@ function _help-aliases() {
 				alias_path="available/${1}.aliases.bash"
 				;;
 		esac
-		metafor alias < "${BASH_IT}/aliases/$alias_path" | sed "s/$/'/"
+		metafor alias < "${BASH_IT}/aliases/${alias_path}" | sed "s/$/'/"
 	else
 		local f
 
@@ -921,21 +1355,40 @@ function _help-aliases() {
 			_help-list-aliases "$f"
 		done
 
-		if [[ -e "${BASH_IT}/aliases/custom.aliases.bash" ]]; then
+		if [[ -e "${BASH_IT}/aliases/custom.aliases.bash" ]] 
+     then
 			_help-list-aliases "${BASH_IT}/aliases/custom.aliases.bash"
 		fi
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _help-list-aliases() {
+function _help-list-aliases() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local file
 	file="$(_bash-it-get-component-name-from-path "${1?}")"
 	printf '\n\n%s:\n' "${file}"
 	# metafor() strips trailing quotes, restore them with sed..
-	metafor alias < "$1" | sed "s/$/'/"
+	metafor alias < "${1}" | sed "s/$/'/"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _help-plugins() {
+function _help-plugins() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'summarize all functions defined by enabled bash-it plugins'
 	_group 'lib'
 
@@ -945,26 +1398,36 @@ function _help-plugins() {
 	grouplist="$(mktemp -t grouplist.XXXXXX)"
 	while read -ra func; do
 		defn="$(declare -f "${func[2]}")"
-		group="$(metafor group <<< "$defn")"
-		if [[ -z "$group" ]]; then
+		group="$(metafor group <<< "${defn}")"
+		if [[ -z "${group}" ]] 
+     then
 			group='misc'
 		fi
 		about="$(metafor about <<< "$defn")"
-		_letterpress "$about" "${func[2]}" >> "$grouplist.$group"
-		echo "$grouplist.$group" >> "$grouplist"
+		_letterpress "${about}" "${func[2]}" >> "${grouplist}.${group}"
+		echo "${grouplist}.${group}" >> "${grouplist}"
 	done < <(declare -F)
 	# clear progress message
 	printf '\r%s\n' '                              '
 	while IFS= read -r gfile; do
 		printf '%s\n' "${gfile##*.}:"
-		cat "$gfile"
+		cat "${gfile}"
 		printf '\n'
-		rm "$gfile" 2> /dev/null
-	done < <(sort -u "$grouplist") | less
-	rm "$grouplist" 2> /dev/null
+		rm "${gfile}" 2> /dev/null
+	done < <(sort -u "${grouplist}") | less
+	rm "${grouplist}" 2> /dev/null
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _help-profile() {
+function _help-profile() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'help message for profile command'
 	_group 'lib'
 
@@ -973,43 +1436,85 @@ function _help-profile() {
 	echo "Use 'bash-it profile save foo' to save the current configuration into a profile named 'foo'."
 	echo "Use 'bash-it profile load foo' to load an existing profile named 'foo'."
 	echo "Use 'bash-it profile rm foo' to remove an existing profile named 'foo'."
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _help-update() {
+function _help-update() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'help message for update command'
 	_group 'lib'
 
 	echo "Check for a new version of Bash-it and update it."
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _help-migrate() {
+function _help-migrate() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'help message for migrate command'
 	_group 'lib'
 
 	echo "Migrates internal Bash-it structure to the latest version in case of changes."
 	echo "The 'migrate' command is run automatically when calling 'update', 'enable' or 'disable'."
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function all_groups() {
+function all_groups() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'displays all unique metadata groups'
 	group 'lib'
 
 	declare -f | metafor group | sort -u
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function pathmunge() {
+function pathmunge() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'prevent duplicate directories in your PATH variable'
 	group 'helpers'
-	example 'pathmunge /path/to/dir is equivalent to PATH=/path/to/dir:$PATH'
-	example 'pathmunge /path/to/dir after is equivalent to PATH=$PATH:/path/to/dir'
+	example 'pathmunge /path/to/dir is equivalent to PATH=/path/to/dir:${PATH}'
+	example 'pathmunge /path/to/dir after is equivalent to PATH=${PATH}:/path/to/dir'
 
-	if [[ -d "${1:-}" && ! $PATH =~ (^|:)"${1}"($|:) ]]; then
-		if [[ "${2:-before}" == "after" ]]; then
-			export PATH="$PATH:${1}"
+	if [[ -d "${1:-}" && ! ${PATH} =~ (^|:)"${1}"($|:) ]] 
+     then
+		if [[ "${2:-before}" == "after" ]] 
+     then
+			export PATH="${PATH}:${1}"
 		else
-			export PATH="${1}:$PATH"
+			export PATH="${1}:${PATH}"
 		fi
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # `_bash-it-find-in-ancestor` uses the shell's ability to run a function in
@@ -1028,8 +1533,9 @@ function _bash-it-find-in-ancestor() (
 	local kin
 	# To keep things simple, we do not search the root dir.
 	while [[ "${PWD}" != '/' ]]; do
-		for kin in "$@"; do
-			if [[ -r "${PWD}/${kin}" ]]; then
+		for kin in "${@}"; do
+			if [[ -r "${PWD}/${kin}" ]] 
+     then
 				printf '%s' "${PWD}"
 				return "$?"
 			fi
@@ -1037,4 +1543,8 @@ function _bash-it-find-in-ancestor() (
 		command cd .. || return "$?"
 	done
 	return 1
-)
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
+}

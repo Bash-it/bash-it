@@ -52,30 +52,74 @@ icon_end="└🤘-> "
 # FUNCTIONS ===================================================================
 
 # Display virtual environment info
-function virtualenv_prompt {
-  if [[ -n "$VIRTUAL_ENV" ]]; then
+function virtualenv_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
+  if [[ -n "$VIRTUAL_ENV" ]] 
+     then
     virtualenv=`basename "$VIRTUAL_ENV"`
     echo -e "$VIRTUALENV_CHAR$virtualenv "
   fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 # Rename tab
-function tabname {
+function tabname() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
   printf "\e]1;$1\a"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
+
 # Rename window
-function winname {
+function winname() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
   printf "\e]2;$1\a"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 # PROMPT OUTPUT ===============================================================
 
 # Displays the current prompt
-function prompt_command() {
+function prompt_command() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   PS1="\n${icon_start}$(virtualenv_prompt)${icon_user}${bold_green}\u${normal}${icon_host}${bold_cyan}\h${normal}${icon_directory}${bold_purple}\W${normal}\$([[ -n \$(git branch 2> /dev/null) ]] && echo \" on ${icon_branch}  \")${white}$(scm_prompt_info)${normal}\n${icon_end}"
   PS2="${icon_end}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 # Runs prompt (this bypasses bash_it $PROMPT setting)
 safe_append_prompt_command prompt_command

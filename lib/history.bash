@@ -2,12 +2,22 @@
 #
 # Functions for working with Bash's command history.
 
-function _bash-it-history-init() {
+function _bash-it-history-init() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	safe_append_preexec '_bash-it-history-auto-save'
 	safe_append_prompt_command '_bash-it-history-auto-load'
 }
 
-function _bash-it-history-auto-save() {
+function _bash-it-history-auto-save() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	case $HISTCONTROL in
 		*'noauto'* | *'autoload'*)
 			: # Do nothing, as configured.
@@ -21,9 +31,18 @@ function _bash-it-history-auto-save() {
 			shopt -q histappend && history -a && return
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _bash-it-history-auto-load() {
+function _bash-it-history-auto-load() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	case $HISTCONTROL in
 		*'noauto'*)
 			: # Do nothing, as configured.
@@ -44,6 +63,10 @@ function _bash-it-history-auto-load() {
 			: # Do nothing, default.
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 _bash_it_library_finalize_hook+=('_bash-it-history-init')

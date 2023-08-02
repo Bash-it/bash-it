@@ -14,15 +14,30 @@ GIT_THEME_PROMPT_SUFFIX="${green?}|"
 RVM_THEME_PROMPT_PREFIX="|"
 RVM_THEME_PROMPT_SUFFIX="|"
 
-function __bobby_clock() {
+function __bobby_clock() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	printf '%s' "$(clock_prompt) "
 
-	if [[ "${THEME_SHOW_CLOCK_CHAR:-}" == "true" ]]; then
+	if [[ "${THEME_SHOW_CLOCK_CHAR:-}" == "true" ]] 
+     then
 		printf '%s' "$(clock_char) "
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function prompt_command() {
+function prompt_command() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	PS1="\n$(battery_char) $(__bobby_clock)"
 	PS1+="${yellow?}$(ruby_version_prompt) "
 	PS1+="${purple?}\h "
@@ -30,6 +45,10 @@ function prompt_command() {
 	PS1+="${green?}\w\n"
 	PS1+="${bold_cyan?}$(scm_prompt_char_info) "
 	PS1+="${green?}→${reset_color?} "
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 : "${THEME_SHOW_CLOCK_CHAR:="true"}"

@@ -41,22 +41,37 @@
 # eval "$(grunt --completion=bash)"
 
 # Search the current directory and all parent directories for a gruntfile.
-function _grunt_gruntfile() {
+function _grunt_gruntfile() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   local curpath="$PWD"
   while [[ "$curpath" ]]; do
     for gruntfile in "$curpath/"{G,g}runtfile.{js,coffee}; do
-      if [[ -e "$gruntfile" ]]; then
-        echo "$gruntfile"
+      if [[ -e "${gruntfile}" ]] 
+     then
+        echo "${gruntfile}"
         return
       fi
     done
     curpath="${curpath%/*}"
   done
   return 1
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # Enable bash autocompletion.
-function _grunt_completions() {
+function _grunt_completions() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   # The currently-being-completed word.
   local cur="${COMP_WORDS[COMP_CWORD]}"
   # The current gruntfile, if it exists.
@@ -64,12 +79,16 @@ function _grunt_completions() {
   # The current grunt version, available tasks, options, etc.
   local gruntinfo="$(grunt --version --verbose 2>/dev/null)"
   # Options and tasks.
-  local opts="$(echo "$gruntinfo" | awk '/Available options: / {$1=$2=""; print $0}')"
-  local compls="$(echo "$gruntinfo" | awk '/Available tasks: / {$1=$2=""; print $0}')"
+  local opts="$(echo "${gruntinfo}" | awk '/Available options: / {$1=$2=""; print $0}')"
+  local compls="$(echo "${gruntinfo}" | awk '/Available tasks: / {$1=$2=""; print $0}')"
   # Only add -- or - options if the user has started typing -
-  [[ "$cur" == -* ]] && compls="$compls $opts"
+  [[ "${cur}" == -* ]] && compls="${compls} ${opts}"
   # Tell complete what stuff to show.
-  COMPREPLY=($(compgen -W "$compls" -- "$cur"))
+  COMPREPLY=($(compgen -W "${compls}" -- "${cur}"))
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 complete -o default -F _grunt_completions grunt

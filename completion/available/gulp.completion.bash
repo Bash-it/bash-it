@@ -39,12 +39,21 @@
 #
 # eval "$(gulp --completion=bash)"
 # Enable bash autocompletion.
-function _gulp_completions() {
-# The currently-being-completed word.
-local cur="${COMP_WORDS[COMP_CWORD]}"
-#Grab tasks
-local compls=$(gulp --tasks-simple)
-# Tell complete what stuff to show.
-COMPREPLY=($(compgen -W "$compls" -- "$cur"))
+function _gulp_completions() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	# The currently-being-completed word.
+	local cur="${COMP_WORDS[COMP_CWORD]}"
+	#Grab tasks
+	local compls=$(gulp --tasks-simple)
+	# Tell complete what stuff to show.
+	COMPREPLY=($(compgen -W "$compls" -- "$cur"))
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 complete -o default -F _gulp_completions gulp

@@ -9,48 +9,84 @@
 ## Parsers ##
 #############
 
-____brainy_top_left_parse() {
+function ____brainy_top_left_parse() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	ifs_old="${IFS}"
 	IFS="|"
-	read -r -a args <<< "$@"
+	read -r -a args <<< "${@}"
 	IFS="${ifs_old}"
-	if [ -n "${args[3]}" ]; then
+	if [ -n "${args[3]}" ] 
+     then
 		_TOP_LEFT+="${args[2]}${args[3]}"
 	fi
 	_TOP_LEFT+="${args[0]}${args[1]}"
-	if [ -n "${args[4]}" ]; then
+	if [ -n "${args[4]}" ] 
+     then
 		_TOP_LEFT+="${args[2]}${args[4]}"
 	fi
 	_TOP_LEFT+=" "
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-____brainy_top_right_parse() {
+function ____brainy_top_right_parse() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	ifs_old="${IFS}"
 	IFS="|"
-	read -r -a args <<< "$@"
+	read -r -a args <<< "${@}"
 	IFS="${ifs_old}"
 	_TOP_RIGHT+=" "
-	if [ -n "${args[3]}" ]; then
+	if [ -n "${args[3]}" ] 
+     then
 		_TOP_RIGHT+="${args[2]}${args[3]}"
 	fi
 	_TOP_RIGHT+="${args[0]}${args[1]}"
-	if [ -n "${args[4]}" ]; then
+	if [ -n "${args[4]}" ] 
+     then
 		_TOP_RIGHT+="${args[2]}${args[4]}"
 	fi
 	__TOP_RIGHT_LEN=$((__TOP_RIGHT_LEN + ${#args[1]} + ${#args[3]} + ${#args[4]} + 1))
 	((__SEG_AT_RIGHT += 1))
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-____brainy_bottom_parse() {
+function ____brainy_bottom_parse() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	ifs_old="${IFS}"
 	IFS="|"
-	read -r -a args <<< "$@"
+	read -r -a args <<< "${@}"
 	IFS="${ifs_old}"
 	_BOTTOM+="${args[0]}${args[1]}"
 	[ ${#args[1]} -gt 0 ] && _BOTTOM+=" "
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-____brainy_top() {
+function ____brainy_top() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_TOP_LEFT=""
 	_TOP_RIGHT=""
 	__TOP_RIGHT_LEN=0
@@ -74,95 +110,181 @@ ____brainy_top() {
 	_TOP_LEFT+="${___cursor_adjust}"
 
 	printf "%s%s" "${_TOP_LEFT}" "${_TOP_RIGHT}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-____brainy_bottom() {
+function ____brainy_bottom() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_BOTTOM=""
 	for seg in $___BRAINY_BOTTOM; do
 		info="$(___brainy_prompt_"${seg}")"
 		[ -n "${info}" ] && ____brainy_bottom_parse "${info}"
 	done
 	printf "\n%s" "${_BOTTOM}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 ##############
 ## Segments ##
 ##############
 
-___brainy_prompt_user_info() {
+function ___brainy_prompt_user_info() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	color=$bold_blue
-	if [ "${THEME_SHOW_SUDO}" == "true" ]; then
-		if sudo -vn 1> /dev/null 2>&1; then
+	if [ "${THEME_SHOW_SUDO}" == "true" ] 
+     then
+		if sudo -vn 1> /dev/null 2>&1 
+     then
 			color=$bold_red
 		fi
 	fi
 	box="[|]"
 	info="\u@\H"
-	if [ -n "${SSH_CLIENT}" ]; then
+	if [ -n "${SSH_CLIENT}" ] 
+     then
 		printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
 	else
 		printf "%s|%s" "${color}" "${info}"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-___brainy_prompt_dir() {
+function ___brainy_prompt_dir() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	color=$bold_yellow
 	box="[|]"
 	info="\w"
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-___brainy_prompt_scm() {
+function ___brainy_prompt_scm() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	[ "${THEME_SHOW_SCM}" != "true" ] && return
 	color=$bold_green
 	box="$(scm_char) "
 	info="$(scm_prompt_info)"
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-___brainy_prompt_python() {
+function ___brainy_prompt_python() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	[ "${THEME_SHOW_PYTHON}" != "true" ] && return
 	color=$bold_yellow
 	box="[|]"
 	info="$(python_version_prompt)"
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_blue}" "${box}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-___brainy_prompt_ruby() {
+function ___brainy_prompt_ruby() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	[ "${THEME_SHOW_RUBY}" != "true" ] && return
 	color=$bold_white
 	box="[|]"
 	info="rb-$(ruby_version_prompt)"
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_red}" "${box}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-___brainy_prompt_todo() {
+function ___brainy_prompt_todo() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	[ "${THEME_SHOW_TODO}" != "true" ] \
 		|| [ -z "$(which todo.sh)" ] && return
 	color=$bold_white
 	box="[|]"
 	info="t:$(todo.sh ls | grep -E "TODO: [0-9]+ of ([0-9]+)" | awk '{ print $4 }')"
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_green}" "${box}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-___brainy_prompt_clock() {
+function ___brainy_prompt_clock() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	[ "${THEME_SHOW_CLOCK}" != "true" ] && return
 	color=$THEME_CLOCK_COLOR
 	box="[|]"
 	info="$(date +"${THEME_CLOCK_FORMAT}")"
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_purple}" "${box}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-___brainy_prompt_battery() {
+function ___brainy_prompt_battery() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	! _command_exists battery_percentage \
 		|| [ "${THEME_SHOW_BATTERY}" != "true" ] \
 		|| [ "$(battery_percentage)" = "no" ] && return
 
 	info=$(battery_percentage)
 	color=$bold_green
-	if [ "$info" -lt 50 ]; then
+	if [ "$info" -lt 50 ] 
+     then
 		color=$bold_yellow
-	elif [ "$info" -lt 25 ]; then
+	elif [ "$info" -lt 25 ] 
+     then
 		color=$bold_red
 	fi
 	box="[|]"
@@ -171,37 +293,82 @@ ___brainy_prompt_battery() {
 	info+=$charging
 	[ "$info" == "100+" ] && info="AC"
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-___brainy_prompt_exitcode() {
+function ___brainy_prompt_exitcode() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	[ "${THEME_SHOW_EXITCODE}" != "true" ] && return
 	color=$bold_purple
 	[ "$exitcode" -ne 0 ] && printf "%s|%s" "${color}" "${exitcode}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-___brainy_prompt_char() {
+function ___brainy_prompt_char() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	color=$bold_white
 	prompt_char="${__BRAINY_PROMPT_CHAR_PS1}"
 	printf "%s|%s" "${color}" "${prompt_char}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 #########
 ## cli ##
 #########
 
-__brainy_show() {
+function __brainy_show() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	typeset _seg=${1:-}
 	shift
 	export "THEME_SHOW_${_seg}"=true
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__brainy_hide() {
+function __brainy_hide() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	typeset _seg=${1:-}
 	shift
 	export "THEME_SHOW_${_seg}"=false
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-_brainy_completion() {
+function _brainy_completion() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local cur _action actions segments
 	COMPREPLY=()
 	cur="${COMP_WORDS[COMP_CWORD]}"
@@ -219,9 +386,18 @@ _brainy_completion() {
 	# shellcheck disable=SC2207
 	COMPREPLY=($(compgen -W "${actions}" -- "${cur}"))
 	return 0
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-brainy() {
+function brainy() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	typeset action=${1:-}
 	shift
 	typeset segs=${*:-}
@@ -238,6 +414,10 @@ brainy() {
 		seg=$(printf "%s" "${seg}" | tr '[:lower:]' '[:upper:]')
 		$func "${seg}"
 	done
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 complete -F _brainy_completion brainy
@@ -284,20 +464,47 @@ ___BRAINY_BOTTOM=${___BRAINY_BOTTOM:-"exitcode char"}
 ## Prompt ##
 ############
 
-__brainy_ps1() {
+function __brainy_ps1() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	printf "%s%s%s" "$(____brainy_top)" "$(____brainy_bottom)" "${normal}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__brainy_ps2() {
+function __brainy_ps2() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	color=$bold_white
 	printf "%s%s%s" "${color}" "${__BRAINY_PROMPT_CHAR_PS2}  " "${normal}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-_brainy_prompt() {
+function _brainy_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	exitcode="$?"
 
 	PS1="$(__brainy_ps1)"
 	PS2="$(__brainy_ps2)"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 safe_append_prompt_command _brainy_prompt

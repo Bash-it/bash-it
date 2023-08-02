@@ -15,18 +15,27 @@ about-plugin 'Search&Select history with percol'
 
 _command_exists percol || return
 
-if [[ ${BASH_VERSINFO[0]} -lt 4 ]]; then
+if [[ ${BASH_VERSINFO[0]} -lt 4 ]] 
+     then
 	_log_warning "You have to upgrade Bash to Bash v4.x to use the 'percol' plugin."
 	_log_warning "Your current Bash version is $BASH_VERSION."
 	return
 fi
 
-function _replace_by_history() {
+function _replace_by_history() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local HISTTIMEFORMAT= # Ensure we can parse history properly
 	#TODO: "${histlines[@]/*( )+([[:digit:]])*( )/}"
 	local l
 	l="$(history | tail -r | sed -e 's/^\ *[0-9]*\ *//' | percol --query "${READLINE_LINE:-}")"
 	READLINE_LINE="${l}"
 	READLINE_POINT=${#l}
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 bind -x '"\C-r": _replace_by_history'

@@ -1,12 +1,28 @@
 # shellcheck shell=bash
 
-function _compreply_candidates() {
+function _compreply_candidates() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
 	local IFS=$'\n'
 
 	read -d '' -ra COMPREPLY < <(compgen -W "${candidates[*]}" -- "${cur}")
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _bash-it() {
+function _bash-it() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+
 	local cur prev verb file_type candidates suffix
 	COMPREPLY=()
 	cur="${COMP_WORDS[COMP_CWORD]}"
@@ -20,7 +36,8 @@ function _bash-it() {
 			_compreply_candidates
 			;;
 		help)
-			if [[ "${prev}" == "aliases" ]]; then
+			if [[ "${prev}" == "aliases" ]] 
+     then
 				candidates=('all' "$(_bash-it-component-list "${file_type}")")
 				_compreply_candidates
 			else
@@ -31,7 +48,8 @@ function _bash-it() {
 		profile)
 			case "${file_type}" in
 				load | rm)
-					if [[ "${file_type}" == "$prev" ]]; then
+					if [[ "${file_type}" == "$prev" ]] 
+     then
 						candidates=("${BASH_IT}/profiles"/*.bash_it)
 						candidates=("${candidates[@]##*/}")
 						candidates=("${candidates[@]%%.bash_it}")
@@ -51,7 +69,8 @@ function _bash-it() {
 			_compreply_candidates
 			;;
 		update)
-			if [[ "${cur}" == -* ]]; then
+			if [[ "${cur}" == -* ]] 
+     then
 				candidates=('-s' '--silent')
 			else
 				candidates=('stable' 'dev')
@@ -64,7 +83,8 @@ function _bash-it() {
 			return 0
 			;;
 		enable | disable)
-			if [[ "${verb}" == "enable" ]]; then
+			if [[ "${verb}" == "enable" ]] 
+     then
 				suffix="disabled"
 			else
 				suffix="enabled"
@@ -84,6 +104,10 @@ function _bash-it() {
 			_compreply_candidates
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # Activate completion for bash-it and its common misspellings

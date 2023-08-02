@@ -5,7 +5,12 @@
 # ± ~/path/to (branch ✓) $
 # in glorious red / blue / yellow color scheme
 
-prompt_setter() {
+function prompt_setter() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   # Save history
   _save-and-reload-history 1
   # displays user@server in purple
@@ -14,7 +19,13 @@ prompt_setter() {
   PS1="$red$(scm_char) $blue\w$yellow$(scm_prompt_info)$(ruby_version_prompt) $black\$$reset_color "
   PS2='> '
   PS4='+ '
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
+
 
 safe_append_prompt_command prompt_setter
 

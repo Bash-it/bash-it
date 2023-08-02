@@ -19,13 +19,29 @@
 PROMPT_END_CLEAN="${green}→${reset_color}"
 PROMPT_END_DIRTY="${red}→${reset_color}"
 
-function prompt_end() {
+function prompt_end() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   echo -e "$PROMPT_END"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-prompt_setter() {
+
+function prompt_setter() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   local exit_status=$?
-  if [[ $exit_status -eq 0 ]]; then PROMPT_END=$PROMPT_END_CLEAN
+  if [[ $exit_status -eq 0 ]] 
+     then PROMPT_END=$PROMPT_END_CLEAN
     else PROMPT_END=$PROMPT_END_DIRTY
   fi
   # Save history
@@ -33,7 +49,12 @@ prompt_setter() {
   PS1="($(clock_prompt)) $(scm_char) [${blue}\u${reset_color}@${green}\H${reset_color}] ${yellow}\w${reset_color}$(scm_prompt_info) ${reset_color}\n$(prompt_end) "
   PS2='> '
   PS4='+ '
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 safe_append_prompt_command prompt_setter
 

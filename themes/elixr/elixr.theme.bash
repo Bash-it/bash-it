@@ -16,8 +16,17 @@ RVM_THEME_PROMPT_SUFFIX=" d|"
 
 BOLD="\[\e[1m\]"
 
-function prompt_command() {
+function prompt_command() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   PS1="\n${bold_cyan}$(scm_prompt_char_info)$(virtualenv_prompt) ${bold_cyan}\w :${reset_color}${normal}${BOLD} "
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 safe_append_prompt_command prompt_command

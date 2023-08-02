@@ -53,11 +53,16 @@ __git_flow_config_file_options="
 	--local --global --system --file=
 	"
 
-_git_flow ()
+function _git_flow ()
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local subcommands="init feature release hotfix support help version config finish delete publish rebase"
 	local subcommand="$(__git_find_on_cmdline "$subcommands")"
-	if [ -z "$subcommand" ]; then
+	if [ -z "$subcommand" ] 
+     then
 		__gitcomp "$subcommands"
 		return
 	fi
@@ -91,13 +96,22 @@ _git_flow ()
 		COMPREPLY=()
 		;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__git_flow_init ()
+function __git_flow_init ()
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local subcommands="help"
 	local subcommand="$(__git_find_on_cmdline "$subcommands")"
-	if [ -z "$subcommand" ]; then
+	if [ -z "$subcommand" ] 
+     then
 		__gitcomp "$subcommands"
 	fi
 
@@ -111,14 +125,23 @@ __git_flow_init ()
 		return
 		;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__git_flow_feature ()
+function __git_flow_feature ()
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local subcommands="list start finish publish track diff rebase checkout pull help delete"
 	local subcommand="$(__git_find_on_cmdline "$subcommands")"
 
-	if [ -z "$subcommand" ]; then
+	if [ -z "$subcommand" ] 
+     then
 		__gitcomp "$subcommands"
 		return
 	fi
@@ -194,13 +217,22 @@ __git_flow_feature ()
 		COMPREPLY=()
 		;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__git_flow_release ()
+function __git_flow_release ()
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local subcommands="list start finish track publish help delete"
 	local subcommand="$(__git_find_on_cmdline "$subcommands")"
-	if [ -z "$subcommand" ]; then
+	if [ -z "$subcommand" ] 
+     then
 		__gitcomp "$subcommands"
 		return
 	fi
@@ -280,13 +312,22 @@ __git_flow_release ()
 		;;
 	esac
 
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__git_flow_hotfix ()
+function __git_flow_hotfix ()
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local subcommands="list start finish track publish help delete"
 	local subcommand="$(__git_find_on_cmdline "$subcommands")"
-	if [ -z "$subcommand" ]; then
+	if [ -z "$subcommand" ] 
+     then
 		__gitcomp "$subcommands"
 		return
 	fi
@@ -364,13 +405,22 @@ __git_flow_hotfix ()
 		COMPREPLY=()
 		;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__git_flow_support ()
+function __git_flow_support ()
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local subcommands="list start help"
 	local subcommand="$(__git_find_on_cmdline "$subcommands")"
-	if [ -z "$subcommand" ]; then
+	if [ -z "$subcommand" ] 
+     then
 		__gitcomp "$subcommands"
 		return
 	fi
@@ -404,13 +454,22 @@ __git_flow_support ()
 		COMPREPLY=()
 		;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__git_flow_config ()
+function __git_flow_config ()
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local subcommands="list set base"
 	local subcommand="$(__git_find_on_cmdline "$subcommands")"
-	if [ -z "$subcommand" ]; then
+	if [ -z "$subcommand" ] 
+     then
 		__gitcomp "$subcommands"
 		return
 	fi
@@ -448,21 +507,38 @@ __git_flow_config ()
 		COMPREPLY=()
 		;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__git_flow_prefix ()
+function __git_flow_prefix ()
 {
-	case "$1" in
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	case "${1}" in
 	feature|release|hotfix|support)
 		git config "gitflow.prefix.$1" 2> /dev/null || echo "$1/"
 		return
 		;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__git_flow_list_local_branches ()
+function __git_flow_list_local_branches ()
 {
-	if [ -n "$1" ]; then
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	if [ -n "${1}" ] 
+     then
 		local prefix="$(__git_flow_prefix $1)"
 		git for-each-ref --shell --format="ref=%(refname:short)" refs/heads/$prefix | \
 			while read -r entry; do
@@ -474,10 +550,18 @@ __git_flow_list_local_branches ()
 		git for-each-ref --format="ref=%(refname:short)" refs/heads/ | sort
 
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__git_flow_list_remote_branches ()
+function __git_flow_list_remote_branches ()
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local prefix="$(__git_flow_prefix $1)"
 	local origin="$(git config gitflow.origin 2> /dev/null || echo "origin")"
 	git for-each-ref --shell --format='%(refname:short)' refs/remotes/$origin/$prefix | \
@@ -486,12 +570,21 @@ __git_flow_list_remote_branches ()
 				ref="${ref##$prefix}"
 				echo "$ref"
 			done | sort
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__git_flow_list_branches ()
+function __git_flow_list_branches ()
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local origin="$(git config gitflow.origin 2> /dev/null || echo "origin")"
-	if [ -n "$1" ]; then
+	if [ -n "${1}" ] 
+     then
 		local prefix="$(__git_flow_prefix $1)"
 		git for-each-ref --shell --format="ref=%(refname:short)" refs/heads/$prefix refs/remotes/$origin/$prefix | \
 			while read -r entry; do
@@ -502,6 +595,10 @@ __git_flow_list_branches ()
 	else
 		git for-each-ref --format="%(refname:short)" refs/heads/ refs/remotes/$origin | sort
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # alias __git_find_on_cmdline for backwards compatibility

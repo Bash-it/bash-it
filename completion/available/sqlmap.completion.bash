@@ -12,6 +12,10 @@ then
 
     function _sqlmap()
     {
+    ############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
         local cur prev
 
         COMPREPLY=()
@@ -79,7 +83,8 @@ then
         ;;
         esac
 
-        if [[ "$cur" == * ]]; then
+        if [[ "$cur" == * ]] 
+     then
         COMPREPLY=( $( compgen -W '-h --help -hh --version -v -d -u --url -l -x -m -r -g -c --method \
         --data --param-del --cookie --cookie-del --load-cookies \
         --drop-set-cookie --user-agent --random-agent --host --referer \
@@ -160,6 +165,10 @@ then
     #    else
     #        _filedir bat
         fi
+    
+    ############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
     }
 
 

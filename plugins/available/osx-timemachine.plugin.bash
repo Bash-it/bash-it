@@ -1,19 +1,34 @@
 # shellcheck shell=bash
 about-plugin 'OS X Time Machine functions'
 
-if [[ "${OSTYPE}" != 'darwin'* ]]; then
+if [[ "${OSTYPE}" != 'darwin'* ]] 
+     then
 	_log_warning "This plugin only works with Mac OS X"
 	return 1
 fi
 
-function time-machine-destination() {
+function time-machine-destination() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	group "osx-timemachine"
 	about "Shows the OS X Time Machine destination/mount point"
 
 	tmutil destinationinfo | grep "Mount Point" | sed -e 's/Mount Point   : \(.*\)/\1/g'
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function time-machine-list-machines() {
+
+function time-machine-list-machines() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	group "osx-timemachine"
 	about "Lists the OS X Time Machine machines on the backup volume"
 
@@ -23,9 +38,18 @@ function time-machine-list-machines() {
 	find "$tmdest" -maxdepth 1 -mindepth 1 -type d | grep -v "/\." | while read -r line; do
 		echo "${line##*/}"
 	done
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function time-machine-list-all-backups() {
+
+function time-machine-list-all-backups() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	group "osx-timemachine"
 	about "Shows all of the backups for the specified machine"
 	param "1: Machine name (optional)"
@@ -39,9 +63,18 @@ function time-machine-list-all-backups() {
 	find "$BACKUP_LOCATION" -maxdepth 1 -mindepth 1 -type d | while read -r line; do
 		echo "$line"
 	done
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function time-machine-list-old-backups() {
+
+function time-machine-list-old-backups() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	group "osx-timemachine"
 	about "Shows all of the backups for the specified machine, except for the most recent backup"
 	param "1: Machine name (optional)"
@@ -56,10 +89,19 @@ function time-machine-list-old-backups() {
 	find "$BACKUP_LOCATION" -maxdepth 1 -mindepth 1 -type d -name 2\* | sed \$d | while read -r line; do
 		echo "$line"
 	done
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
+
 # Taken from here: http://stackoverflow.com/a/30547074/1228454
-function _tm_startsudo() {
+function _tm_startsudo() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local -x SUDO_COMMAND="plugin/osx-timemachine: keep 'sudo' token alive during long-run 'tmutil' commands"
 	sudo "-${SUDO_ASKPASS:+A}v" # validate without running a command, using `ssh-askpass` if available.
 	(while sudo "-${SUDO_ASKPASS:+A}v"; do
@@ -67,14 +109,32 @@ function _tm_startsudo() {
 	done) &
 	SUDO_PID="$!"
 	trap _tm_stopsudo SIGINT SIGTERM
-}
-function _tm_stopsudo() {
-	kill "$SUDO_PID"
-	trap - SIGINT SIGTERM
-	sudo -k
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function time-machine-delete-old-backups() {
+function _tm_stopsudo() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	kill "${SUDO_PID}"
+	trap - SIGINT SIGTERM
+	sudo -k
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
+}
+
+
+function time-machine-delete-old-backups() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	group "osx-timemachine"
 	about "Deletes all of the backups for the specified machine, with the exception of the most recent one"
 	param "1: Machine name (optional)"
@@ -92,4 +152,8 @@ function time-machine-delete-old-backups() {
 	done <<< "$(time-machine-list-old-backups "$COMPUTERNAME")"
 
 	_tm_stopsudo
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+

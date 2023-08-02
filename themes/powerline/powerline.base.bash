@@ -1,35 +1,55 @@
 # shellcheck shell=bash
 # shellcheck disable=SC2034 # Expected behavior for themes.
 
-function set_color() {
+function set_color() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local fg='' bg=''
-	if [[ "${1:-}" != "-" ]]; then
+	if [[ "${1:-}" != "-" ]] 
+     then
 		fg="38;5;${1}"
 	fi
-	if [[ "${2:-}" != "-" ]]; then
+	if [[ "${2:-}" != "-" ]] 
+     then
 		bg="48;5;${2}"
 		[[ -n "${fg}" ]] && bg=";${bg}"
 	fi
 	echo -e "\[\033[${fg}${bg}m\]"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_user_info_prompt() {
+
+function __powerline_user_info_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local user_info=""
 	local color=${USER_INFO_THEME_PROMPT_COLOR}
 
-	if [[ "${THEME_CHECK_SUDO}" = true ]]; then
+	if [[ "${THEME_CHECK_SUDO}" = true ]] 
+     then
 		sudo -vn 1> /dev/null 2>&1 && color=${USER_INFO_THEME_PROMPT_COLOR_SUDO}
 	fi
 
 	case "${POWERLINE_PROMPT_USER_INFO_MODE}" in
 		"sudo")
-			if [[ "${color}" = "${USER_INFO_THEME_PROMPT_COLOR_SUDO}" ]]; then
+			if [[ "${color}" = "${USER_INFO_THEME_PROMPT_COLOR_SUDO}" ]] 
+     then
 				user_info="!"
 			fi
 			;;
 		*)
 			local user=${SHORT_USER:-${USER}}
-			if [[ -n "${SSH_CLIENT}" ]] || [[ -n "${SSH_CONNECTION}" ]]; then
+			if [[ -n "${SSH_CLIENT}" ]] || [[ -n "${SSH_CONNECTION}" ]] 
+     then
 				user_info="${USER_INFO_SSH_CHAR}${user}"
 			else
 				user_info="${user}"
@@ -37,131 +57,278 @@ function __powerline_user_info_prompt() {
 			;;
 	esac
 	[[ -n "${user_info}" ]] && echo "${user_info}|${color}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_terraform_prompt() {
+
+function __powerline_terraform_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local terraform_workspace=""
 
-	if [ -d .terraform ]; then
+	if [ -d .terraform ] 
+     then
 		terraform_workspace="$(terraform_workspace_prompt)"
 		[[ -n "${terraform_workspace}" ]] && echo "${TERRAFORM_CHAR}${terraform_workspace}|${TERRAFORM_THEME_PROMPT_COLOR}"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_gcloud_prompt() {
+
+function __powerline_gcloud_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local active_gcloud_account=""
 
 	active_gcloud_account="$(active_gcloud_account_prompt)"
 	[[ -n "${active_gcloud_account}" ]] && echo "${GCLOUD_CHAR}${active_gcloud_account}|${GCLOUD_THEME_PROMPT_COLOR}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_node_prompt() {
+
+function __powerline_node_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local node_version=""
 
 	node_version="$(node_version_prompt)"
 	[[ -n "${node_version}" ]] && echo "${NODE_CHAR}${node_version}|${NODE_THEME_PROMPT_COLOR}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_ruby_prompt() {
+function __powerline_ruby_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local ruby_version=""
 
-	if _command_exists rvm; then
+	if _command_exists rvm 
+     then
 		ruby_version="$(rvm_version_prompt)"
-	elif _command_exists rbenv; then
+	elif _command_exists rbenv 
+     then
 		ruby_version=$(rbenv_version_prompt)
 	fi
 
 	[[ -n "${ruby_version}" ]] && echo "${RUBY_CHAR}${ruby_version}|${RUBY_THEME_PROMPT_COLOR}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_k8s_context_prompt() {
+
+function __powerline_k8s_context_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local kubernetes_context=""
 
-	if _command_exists kubectl; then
+	if _command_exists kubectl 
+     then
 		kubernetes_context="$(k8s_context_prompt)"
 	fi
 
 	[[ -n "${kubernetes_context}" ]] && echo "${KUBERNETES_CONTEXT_THEME_CHAR}${kubernetes_context}|${KUBERNETES_CONTEXT_THEME_PROMPT_COLOR}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_k8s_namespace_prompt() {
+
+function __powerline_k8s_namespace_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local kubernetes_namespace=""
 
-	if _command_exists kubectl; then
+	if _command_exists kubectl 
+     then
 		kubernetes_namespace="$(k8s_namespace_prompt)"
 	fi
 
 	[[ -n "${kubernetes_namespace}" ]] && echo "${KUBERNETES_NAMESPACE_THEME_CHAR}${kubernetes_namespace}|${KUBERNETES_NAMESPACE_THEME_PROMPT_COLOR}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_python_venv_prompt() {
+
+function __powerline_python_venv_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local python_venv=""
 
-	if [[ -n "${CONDA_DEFAULT_ENV:-}" ]]; then
+	if [[ -n "${CONDA_DEFAULT_ENV:-}" ]] 
+     then
 		python_venv="${CONDA_DEFAULT_ENV}"
 		PYTHON_VENV_CHAR=${CONDA_PYTHON_VENV_CHAR}
-	elif [[ -n "${VIRTUAL_ENV:-}" ]]; then
+	elif [[ -n "${VIRTUAL_ENV:-}" ]] 
+     then
 		python_venv="${VIRTUAL_ENV##*/}"
 	fi
 
 	[[ -n "${python_venv}" ]] && echo "${PYTHON_VENV_CHAR}${python_venv}|${PYTHON_VENV_THEME_PROMPT_COLOR}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_scm_prompt() {
+
+function __powerline_scm_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local color=""
 	local scm_prompt=""
 
 	scm_prompt_vars
 
-	if [[ "${SCM_NONE_CHAR}" != "${SCM_CHAR}" ]]; then
-		if [[ "${SCM_DIRTY}" -eq 3 ]]; then
+	if [[ "${SCM_NONE_CHAR}" != "${SCM_CHAR}" ]] 
+     then
+		if [[ "${SCM_DIRTY}" -eq 3 ]] 
+     then
 			color=${SCM_THEME_PROMPT_STAGED_COLOR}
-		elif [[ "${SCM_DIRTY}" -eq 2 ]]; then
+		elif [[ "${SCM_DIRTY}" -eq 2 ]] 
+     then
 			color=${SCM_THEME_PROMPT_UNSTAGED_COLOR}
-		elif [[ "${SCM_DIRTY}" -eq 1 ]]; then
+		elif [[ "${SCM_DIRTY}" -eq 1 ]] 
+     then
 			color=${SCM_THEME_PROMPT_DIRTY_COLOR}
 		else
 			color=${SCM_THEME_PROMPT_CLEAN_COLOR}
 		fi
-		if [[ "${SCM_GIT_CHAR}" == "${SCM_CHAR}" ]]; then
+		if [[ "${SCM_GIT_CHAR}" == "${SCM_CHAR}" ]] 
+     then
 			scm_prompt+="${SCM_CHAR}${SCM_BRANCH}${SCM_STATE}"
-		elif [[ "${SCM_P4_CHAR}" == "${SCM_CHAR}" ]]; then
+		elif [[ "${SCM_P4_CHAR}" == "${SCM_CHAR}" ]] 
+     then
 			scm_prompt+="${SCM_CHAR}${SCM_BRANCH}${SCM_STATE}"
-		elif [[ "${SCM_HG_CHAR}" == "${SCM_CHAR}" ]]; then
+		elif [[ "${SCM_HG_CHAR}" == "${SCM_CHAR}" ]] 
+     then
 			scm_prompt+="${SCM_CHAR}${SCM_BRANCH}${SCM_STATE}"
-		elif [[ "${SCM_SVN_CHAR}" == "${SCM_CHAR}" ]]; then
+		elif [[ "${SCM_SVN_CHAR}" == "${SCM_CHAR}" ]] 
+     then
 			scm_prompt+="${SCM_CHAR}${SCM_BRANCH}${SCM_STATE}"
 		fi
 		echo "${scm_prompt?}|${color}"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_cwd_prompt() {
+
+function __powerline_cwd_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	echo "\w|${CWD_THEME_PROMPT_COLOR}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_hostname_prompt() {
+
+function __powerline_hostname_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	echo "${SHORT_HOSTNAME:-$(hostname -s)}|${HOST_THEME_PROMPT_COLOR}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_wd_prompt() {
+
+function __powerline_wd_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	echo "\W|${CWD_THEME_PROMPT_COLOR}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_clock_prompt() {
+
+function __powerline_clock_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	echo "$(date +"${THEME_CLOCK_FORMAT}")|${CLOCK_THEME_PROMPT_COLOR}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_battery_prompt() {
+
+function __powerline_battery_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local color="" battery_status
 	battery_status="$(battery_percentage 2> /dev/null)"
 
-	if [[ -z "${battery_status}" || "${battery_status}" == "-1" || "${battery_status}" == "no" ]]; then
+	if [[ -z "${battery_status}" || "${battery_status}" == "-1" || "${battery_status}" == "no" ]] 
+     then
 		true
 	else
-		if [[ "$((10#${battery_status}))" -le 5 ]]; then
+		if [[ "$((10#${battery_status}))" -le 5 ]] 
+     then
 			color="${BATTERY_STATUS_THEME_PROMPT_CRITICAL_COLOR}"
-		elif [[ "$((10#${battery_status}))" -le 25 ]]; then
+		elif [[ "$((10#${battery_status}))" -le 25 ]] 
+     then
 			color="${BATTERY_STATUS_THEME_PROMPT_LOW_COLOR}"
 		else
 			color="${BATTERY_STATUS_THEME_PROMPT_GOOD_COLOR}"
@@ -169,78 +336,179 @@ function __powerline_battery_prompt() {
 		ac_adapter_connected && battery_status="${BATTERY_AC_CHAR}${battery_status}"
 		echo "${battery_status}%|${color}"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_in_vim_prompt() {
-	if [[ -n "$VIMRUNTIME" ]]; then
+
+function __powerline_in_vim_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	if [[ -n "$VIMRUNTIME" ]] 
+     then
 		echo "${IN_VIM_THEME_PROMPT_TEXT}|${IN_VIM_THEME_PROMPT_COLOR}"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_aws_profile_prompt() {
-	if [[ -n "${AWS_PROFILE}" ]]; then
+
+function __powerline_aws_profile_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	if [[ -n "${AWS_PROFILE}" ]] 
+     then
 		echo "${AWS_PROFILE_CHAR}${AWS_PROFILE}|${AWS_PROFILE_PROMPT_COLOR}"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_in_toolbox_prompt() {
-	if [ -f /run/.containerenv ] && [ -f /run/.toolboxenv ]; then
+
+function __powerline_in_toolbox_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	if [ -f /run/.containerenv ] && [ -f /run/.toolboxenv ] 
+     then
 		echo "${IN_TOOLBOX_THEME_PROMPT_TEXT}|${IN_TOOLBOX_THEME_PROMPT_COLOR}"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_shlvl_prompt() {
-	if [[ "${SHLVL}" -gt 1 ]]; then
+
+function __powerline_shlvl_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	if [[ "${SHLVL}" -gt 1 ]] 
+     then
 		local prompt="${SHLVL_THEME_PROMPT_CHAR}"
 		local level=$((SHLVL - 1))
 		echo "${prompt}${level}|${SHLVL_THEME_PROMPT_COLOR}"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_dirstack_prompt() {
-	if [[ "${#DIRSTACK[@]}" -gt 1 ]]; then
+
+function __powerline_dirstack_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	if [[ "${#DIRSTACK[@]}" -gt 1 ]] 
+     then
 		local depth=$((${#DIRSTACK[@]} - 1))
 		local prompt="${DIRSTACK_THEME_PROMPT_CHAR}"
-		if [[ "${depth}" -ge 2 ]]; then
+		if [[ "${depth}" -ge 2 ]] 
+     then
 			prompt+="${depth}"
 		fi
 		echo "${prompt}|${DIRSTACK_THEME_PROMPT_COLOR}"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_history_number_prompt() {
+
+function __powerline_history_number_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	echo "${HISTORY_NUMBER_THEME_PROMPT_CHAR}\!|${HISTORY_NUMBER_THEME_PROMPT_COLOR}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_command_number_prompt() {
+
+function __powerline_command_number_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	echo "${COMMAND_NUMBER_THEME_PROMPT_CHAR}\#|${COMMAND_NUMBER_THEME_PROMPT_COLOR}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_duration_prompt() {
+
+function __powerline_duration_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local duration
 	duration=$(_command_duration)
 	[[ -n "$duration" ]] && echo "${duration}|${COMMAND_DURATION_PROMPT_COLOR}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_left_segment() {
+
+function __powerline_left_segment() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local params
 	IFS="|" read -ra params <<< "${1}"
 	local pad_before_segment=" "
 
-	if [[ "${SEGMENTS_AT_LEFT}" -eq 0 ]]; then
-		if [[ "${POWERLINE_COMPACT_BEFORE_FIRST_SEGMENT}" -ne 0 ]]; then
+	if [[ "${SEGMENTS_AT_LEFT}" -eq 0 ]] 
+     then
+		if [[ "${POWERLINE_COMPACT_BEFORE_FIRST_SEGMENT}" -ne 0 ]] 
+     then
 			pad_before_segment=""
 		fi
 	else
-		if [[ "${POWERLINE_COMPACT_AFTER_SEPARATOR}" -ne 0 ]]; then
+		if [[ "${POWERLINE_COMPACT_AFTER_SEPARATOR}" -ne 0 ]] 
+     then
 			pad_before_segment=""
 		fi
 		# Since the previous segment wasn't the last segment, add padding, if needed
 		#
-		if [[ "${POWERLINE_COMPACT_BEFORE_SEPARATOR}" -eq 0 ]]; then
+		if [[ "${POWERLINE_COMPACT_BEFORE_SEPARATOR}" -eq 0 ]] 
+     then
 			LEFT_PROMPT+="$(set_color - "${LAST_SEGMENT_COLOR}") ${normal?}"
 		fi
-		if [[ "${LAST_SEGMENT_COLOR}" -eq "${params[1]}" ]]; then
+		if [[ "${LAST_SEGMENT_COLOR}" -eq "${params[1]}" ]] 
+     then
 			LEFT_PROMPT+="$(set_color - "${LAST_SEGMENT_COLOR}")${POWERLINE_LEFT_SEPARATOR_SOFT}${normal?}"
 		else
 			LEFT_PROMPT+="$(set_color "${LAST_SEGMENT_COLOR}" "${params[1]}")${POWERLINE_LEFT_SEPARATOR}${normal?}"
@@ -250,17 +518,47 @@ function __powerline_left_segment() {
 	LEFT_PROMPT+="$(set_color - "${params[1]}")${pad_before_segment}${params[0]}${normal}"
 	LAST_SEGMENT_COLOR=${params[1]}
 	((SEGMENTS_AT_LEFT += 1))
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_left_last_segment_padding() {
+
+function __powerline_left_last_segment_padding() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	LEFT_PROMPT+="$(set_color - "${LAST_SEGMENT_COLOR}") ${normal?}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_last_status_prompt() {
-	[[ "$1" -ne 0 ]] && echo "${1}|${LAST_STATUS_THEME_PROMPT_COLOR}"
+
+function __powerline_last_status_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	[[ "${1}" -ne 0 ]] && echo "${1}|${LAST_STATUS_THEME_PROMPT_COLOR}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __powerline_prompt_command() {
+
+function __powerline_prompt_command() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local last_status="$?" ## always the first
 	local separator_char="${POWERLINE_PROMPT_CHAR}" info prompt_color
 
@@ -270,7 +568,8 @@ function __powerline_prompt_command() {
 
 	_save-and-reload-history "${HISTORY_AUTOSAVE:-0}"
 
-	if [[ -n "${POWERLINE_PROMPT_DISTRO_LOGO}" ]]; then
+	if [[ -n "${POWERLINE_PROMPT_DISTRO_LOGO}" ]] 
+     then
 		LEFT_PROMPT+="$(set_color "${PROMPT_DISTRO_LOGO_COLOR}" "${PROMPT_DISTRO_LOGO_COLORBG}")${PROMPT_DISTRO_LOGO}$(set_color - -)"
 	fi
 
@@ -282,20 +581,23 @@ function __powerline_prompt_command() {
 
 	[[ "${last_status}" -ne 0 ]] && __powerline_left_segment "$(__powerline_last_status_prompt "${last_status}")"
 
-	if [[ -n "${LEFT_PROMPT}" ]] && [[ "${POWERLINE_COMPACT_AFTER_LAST_SEGMENT:-}" -eq 0 ]]; then
+	if [[ -n "${LEFT_PROMPT}" ]] && [[ "${POWERLINE_COMPACT_AFTER_LAST_SEGMENT:-}" -eq 0 ]] 
+     then
 		__powerline_left_last_segment_padding
 	fi
 
 	# By default we try to match the prompt to the adjacent segment's background color,
 	# but when part of the prompt exists within that segment, we instead match the foreground color.
 	prompt_color="$(set_color "${LAST_SEGMENT_COLOR}" -)"
-	if [[ -n "${LEFT_PROMPT}" ]] && [[ -n "${POWERLINE_LEFT_LAST_SEGMENT_PROMPT_CHAR}" ]]; then
+	if [[ -n "${LEFT_PROMPT}" ]] && [[ -n "${POWERLINE_LEFT_LAST_SEGMENT_PROMPT_CHAR}" ]] 
+     then
 		LEFT_PROMPT+="$(set_color - "${LAST_SEGMENT_COLOR}")${POWERLINE_LEFT_LAST_SEGMENT_PROMPT_CHAR}"
 		prompt_color="${normal?}"
 	fi
 	[[ -n "${LEFT_PROMPT}" ]] && LEFT_PROMPT+="${prompt_color}${separator_char}${normal?}"
 
-	if [[ "${POWERLINE_COMPACT_PROMPT:-}" -eq 0 ]]; then
+	if [[ "${POWERLINE_COMPACT_PROMPT:-}" -eq 0 ]] 
+     then
 		LEFT_PROMPT+=" "
 	fi
 
@@ -305,4 +607,9 @@ function __powerline_prompt_command() {
 	unset LAST_SEGMENT_COLOR \
 		LEFT_PROMPT \
 		SEGMENTS_AT_LEFT
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+

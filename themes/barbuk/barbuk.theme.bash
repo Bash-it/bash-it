@@ -59,7 +59,12 @@ RBENV_THEME_PROMPT_SUFFIX=''
 RBFU_THEME_PROMPT_PREFIX=''
 RBFU_THEME_PROMPT_SUFFIX=''
 
-function __git-uptream-remote-logo_prompt() {
+function __git-uptream-remote-logo_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	[[ "$(_git-upstream)" == "" ]] && SCM_GIT_CHAR="$SCM_GIT_CHAR_DEFAULT"
 
 	local remote remote_domain
@@ -77,109 +82,253 @@ function __git-uptream-remote-logo_prompt() {
 	esac
 
 	echo "${purple?}$(scm_char)"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function git_prompt_info() {
+function git_prompt_info() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	git_prompt_vars
 	echo -e "on $SCM_GIT_CHAR_ICON_BRANCH $SCM_PREFIX$SCM_BRANCH$SCM_STATE$SCM_GIT_AHEAD$SCM_GIT_BEHIND$SCM_GIT_STASH$SCM_SUFFIX "
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __exit_prompt() {
-	if [[ "$exit_code" -ne 0 ]]; then
+function __exit_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	if [[ "$exit_code" -ne 0 ]] 
+     then
 		echo "${purple?}${EXIT_CODE_ICON}${yellow?}${exit_code}${bold_orange?} "
 	else
 		echo "${bold_green}"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __aws_profile_prompt() {
-	if [[ -n "${AWS_PROFILE}" ]]; then
+function __aws_profile_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	if [[ -n "${AWS_PROFILE}" ]] 
+     then
 		echo -n "${bold_purple?}${AWS_PROFILE_CHAR}${normal?}${AWS_PROFILE} "
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __scaleway_profile_prompt() {
-	if [[ -n "${SCW_PROFILE}" ]]; then
+function __scaleway_profile_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	if [[ -n "${SCW_PROFILE}" ]] 
+     then
 		echo -n "${bold_purple?}${SCALEWAY_PROFILE_CHAR}${normal?}${SCW_PROFILE} "
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __gcloud_prompt() {
+function __gcloud_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local active_gcloud_account=""
 
 	active_gcloud_account="$(active_gcloud_account_prompt)"
 	[[ -n "${active_gcloud_account}" ]] && echo "${bold_purple?}${GCLOUD_CHAR}${normal?}${active_gcloud_account} "
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __cloud_prompt() {
+function __cloud_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	__aws_profile_prompt
 	__scaleway_profile_prompt
 	__gcloud_prompt
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __terraform_prompt() {
+function __terraform_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local terraform_workspace=""
 
-	if [ -d .terraform ]; then
+	if [ -d .terraform ] 
+     then
 		terraform_workspace="$(terraform_workspace_prompt)"
 		[[ -n "${terraform_workspace}" ]] && echo "${bold_purple?}${TERRAFORM_CHAR}${normal?}${terraform_workspace} "
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __node_prompt() {
+function __node_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local node_version=""
 
 	node_version="$(node_version_prompt)"
 	[[ -n "${node_version}" ]] && echo "${bold_purple?}${NODE_CHAR}${normal?}${node_version} "
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __ruby_prompt() {
+function __ruby_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local ruby_version=""
 
 	ruby_version="$(ruby_version_prompt)"
 	[[ -n "${ruby_version}" ]] && echo "${bold_purple?}${RUBY_CHAR}${normal?}${ruby_version} "
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __ssh_prompt() {
+function __ssh_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	# Detect ssh
-	if [[ -n "${SSH_CONNECTION}" ]] && [ "$SSH_INFO" = true ]; then
-		if [ "$HOST_INFO" = long ]; then
+	if [[ -n "${SSH_CONNECTION}" ]] && [ "$SSH_INFO" = true ] 
+     then
+		if [ "$HOST_INFO" = long ] 
+     then
 			host="\H"
 		else
 			host="\h"
 		fi
 		echo "${bold_blue?}\u${bold_orange?}@${cyan?}$host ${bold_orange?}in "
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __python_venv_prompt() {
+function __python_venv_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	# Detect python venv
-	if [[ -n "${CONDA_DEFAULT_ENV}" ]]; then
+	if [[ -n "${CONDA_DEFAULT_ENV}" ]] 
+     then
 		echo "${bold_purple?}$PYTHON_VENV_CHAR${normal?}${CONDA_DEFAULT_ENV} "
-	elif [[ -n "${VIRTUAL_ENV}" ]]; then
+	elif [[ -n "${VIRTUAL_ENV}" ]] 
+     then
 		echo "${bold_purple?}$PYTHON_VENV_CHAR${normal?}$(basename "${VIRTUAL_ENV}") "
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __path_prompt() {
+function __path_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local dir_color=${green?}
 	# Detect root shell
-	if [ "$(whoami)" = root ]; then
+	if [ "$(whoami)" = root ] 
+     then
 		dir_color=${red?}
 	fi
 
 	echo "${dir_color}\w${normal} "
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __scm_prompt() {
+function __scm_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	scm_prompt_info
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __duration_prompt() {
+function __duration_prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	[[ -n "$command_duration" ]] && echo "${command_duration} "
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __prompt-command() {
+function __prompt-command() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	exit_code="$?"
 	command_duration=$(_command_duration)
 	local wrap_char
@@ -193,11 +342,16 @@ function __prompt-command() {
 	done
 
 	# Cut prompt when it's too long
-	if [[ ${#PS1} -gt $((COLUMNS * 2)) ]]; then
+	if [[ ${#PS1} -gt $((COLUMNS * 2)) ]] 
+     then
 		wrap_char="\n"
 	fi
 
 	PS1="${PS1}${wrap_char}❯${normal} "
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 safe_append_prompt_command __prompt-command

@@ -25,7 +25,12 @@
 
 # https://github.com/pyinvoke/invoke/blob/master/completion/bash
 
-_complete_invoke() {
+funciton _complete_invoke() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     local candidates
 
     # COMP_WORDS contains the entire command string up til now (including
@@ -44,6 +49,10 @@ _complete_invoke() {
     #
     # COMPREPLY is the list of valid completions handed back to `complete`.
     COMPREPLY=( $(compgen -W "${candidates}" -- $2) )
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 

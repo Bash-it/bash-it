@@ -3,8 +3,10 @@
 # Axin Bash Prompt, inspired by theme "Sexy" and "Bobby"
 # thanks to them
 
-if tput setaf 1 &> /dev/null; then
-	if [[ $(tput colors) -ge 256 ]] 2> /dev/null; then
+if tput setaf 1 &> /dev/null 
+     then
+	if [[ $(tput colors) -ge 256 ]] 2> /dev/null 
+     then
 		MAGENTA=$(tput setaf 9)
 		ORANGE=$(tput setaf 172)
 		GREEN=$(tput setaf 190)
@@ -29,8 +31,17 @@ else
 	RESET="\033[m"
 fi
 
-function prompt_command() {
+function prompt_command() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	PS1="\[${BOLD}${MAGENTA}\]\u \[$WHITE\]@ \[$ORANGE\]\h \[$WHITE\]in \[$GREEN\]\w\[$WHITE\]\[$SCM_THEME_PROMPT_PREFIX\]$(clock_prompt) \[$PURPLE\]$(scm_prompt_info) \n\$ \[$RESET\]"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 THEME_CLOCK_COLOR=${THEME_CLOCK_COLOR:-"${white}"}

@@ -88,71 +88,126 @@ case $TERM in
       ;;
 esac
 
-is_vim_shell() {
+function is_vim_shell() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   if [ ! -z "$VIMRUNTIME" ];
   then
     echo "${D_INTERMEDIATE_COLOR}on ${D_VIMSHELL_COLOR}\
 vim shell${D_DEFAULT_COLOR} "
   fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-mitsuhikos_lastcommandfailed() {
+
+
+function mitsuhikos_lastcommandfailed() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   code=$?
   if [ $code != 0 ];
   then
     echo "${D_INTERMEDIATE_COLOR}exited ${D_CMDFAIL_COLOR}\
 $code ${D_DEFAULT_COLOR}"
   fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
+
+
 # vcprompt for scm instead of bash_it default
-demula_vcprompt() {
+function demula_vcprompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   if [ ! -z "$VCPROMPT_EXECUTABLE" ];
   then
     local D_VCPROMPT_FORMAT="on ${D_SCM_COLOR}%s${D_INTERMEDIATE_COLOR}:\
 ${D_BRANCH_COLOR}%b %r ${D_CHANGES_COLOR}%m%u ${D_DEFAULT_COLOR}"
     $VCPROMPT_EXECUTABLE -f "$D_VCPROMPT_FORMAT"
   fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
+
+
 # checks if the plugin is installed before calling battery_charge
-safe_battery_charge() {
+function safe_battery_charge() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   if _command_exists battery_charge ;
   then
     battery_charge
   fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-prompt_git() {
+
+
+function prompt_git() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local s='';
 	local branchName='';
 
 	# Check if the current directory is in a Git repository.
-	if [ $(git rev-parse --is-inside-work-tree &>/dev/null; echo "${?}") == '0' ]; then
+	if [ $(git rev-parse --is-inside-work-tree &>/dev/null; echo "${?}") == '0' ] 
+     then
 
 		# check if the current directory is in .git before running git checks
-		if [ "$(git rev-parse --is-inside-git-dir 2> /dev/null)" == 'false' ]; then
+		if [ "$(git rev-parse --is-inside-git-dir 2> /dev/null)" == 'false' ] 
+     then
 
 			# Ensure the index is up to date.
 			git update-index --really-refresh -q &>/dev/null;
 
 			# Check for uncommitted changes in the index.
-			if ! $(git diff --quiet --ignore-submodules --cached); then
+			if ! $(git diff --quiet --ignore-submodules --cached) 
+     then
 				s+='+';
 			fi;
 
 			# Check for unstaged changes.
-			if ! $(git diff-files --quiet --ignore-submodules --); then
+			if ! $(git diff-files --quiet --ignore-submodules --) 
+     then
 				s+='!';
 			fi;
 
 			# Check for untracked files.
-			if [ -n "$(git ls-files --others --exclude-standard)" ]; then
+			if [ -n "$(git ls-files --others --exclude-standard)" ] 
+     then
 				s+='?';
 			fi;
 
 			# Check for stashed files.
-			if $(git rev-parse --verify refs/stash &>/dev/null); then
+			if $(git rev-parse --verify refs/stash &>/dev/null) 
+     then
 				s+='$';
 			fi;
 
@@ -171,10 +226,21 @@ prompt_git() {
 	else
 		return;
 	fi;
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
+
+
 # -------------------------------------------------------------- PROMPT OUTPUT
-prompt() {
+function prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   local LAST_COMMAND_FAILED=$(mitsuhikos_lastcommandfailed)
   local SAVE_CURSOR='\033[s'
   local RESTORE_CURSOR='\033[u'
@@ -208,7 +274,13 @@ ${D_INTERMEDIATE_COLOR}$ ${D_DEFAULT_COLOR}"
   fi
 
   PS2="${D_INTERMEDIATE_COLOR}$ ${D_DEFAULT_COLOR}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
+
 
 # Runs prompt (this bypasses bash_it $PROMPT setting)
 safe_append_prompt_command prompt

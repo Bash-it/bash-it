@@ -34,92 +34,178 @@
 __docker_compose_previous_extglob_setting=$(shopt -p extglob)
 shopt -s extglob
 
-__docker_compose_q() {
-	docker-compose 2>/dev/null "${top_level_options[@]}" "$@"
+function __docker_compose_q() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	docker-compose 2>/dev/null "${top_level_options[@]}" "${@}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # Transforms a multiline list of strings into a single line string
 # with the words separated by "|".
-__docker_compose_to_alternatives() {
-	local parts=( $1 )
+function __docker_compose_to_alternatives() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	local parts=( ${1} )
 	local IFS='|'
 	echo "${parts[*]}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # Transforms a multiline list of options into an extglob pattern
 # suitable for use in case statements.
-__docker_compose_to_extglob() {
-	local extglob=$( __docker_compose_to_alternatives "$1" )
+function __docker_compose_to_extglob() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	local extglob=$( __docker_compose_to_alternatives "${1}" )
 	echo "@($extglob)"
 }
 
 # Determines whether the option passed as the first argument exist on
 # the commandline. The option may be a pattern, e.g. `--force|-f`.
-__docker_compose_has_option() {
-	local pattern="$1"
-	for (( i=2; i < $cword; ++i)); do
-		if [[ ${words[$i]} =~ ^($pattern)$ ]] ; then
+function __docker_compose_has_option() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	local pattern="${1}"
+	for (( i=2; i < ${cword}; ++i)); do
+		if [[ ${words[$i]} =~ ^(${pattern})$ ]]  
+     then
 			return 0
 		fi
 	done
 	return 1
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # Returns `key` if we are currently completing the value of a map option (`key=value`)
 # which matches the extglob passed in as an argument.
 # This function is needed for key-specific completions.
-__docker_compose_map_key_of_current_option() {
-        local glob="$1"
+function __docker_compose_map_key_of_current_option() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+        local glob="${1}"
 
         local key glob_pos
-        if [ "$cur" = "=" ] ; then        # key= case
+        if [ "${cur}" = "=" ]  
+    		 then        # key= case
                 key="$prev"
                 glob_pos=$((cword - 2))
-        elif [[ $cur == *=* ]] ; then     # key=value case (OSX)
-                key=${cur%=*}
-                glob_pos=$((cword - 1))
-        elif [ "$prev" = "=" ] ; then
-                key=${words[$cword - 2]}  # key=value case
-                glob_pos=$((cword - 3))
-        else
+       		 elif [[ $cur == *=* ]]  
+     			then     # key=value case (OSX)
+					key=${cur%=*}
+					glob_pos=$((cword - 1))
+        	elif [ "$prev" = "=" ]  
+   				 then
+					key=${words[$cword - 2]}  # key=value case
+					glob_pos=$((cword - 3))
+        	else
                 return
         fi
 
         [ "${words[$glob_pos]}" = "=" ] && ((glob_pos--))  # --option=key=value syntax
 
-        [[ ${words[$glob_pos]} == @($glob) ]] && echo "$key"
+        [[ ${words[$glob_pos]} == @(${glob}) ]] && echo "${key}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # suppress trailing whitespace
-__docker_compose_nospace() {
+function __docker_compose_nospace() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	# compopt is not available in ancient bash versions
 	type compopt &>/dev/null && compopt -o nospace
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
 # Outputs a list of all defined services, regardless of their running state.
 # Arguments for `docker-compose ps` may be passed in order to filter the service list,
 # e.g. `status=running`.
-__docker_compose_services() {
-	__docker_compose_q ps --services "$@"
+function __docker_compose_services() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	__docker_compose_q ps --services "${@}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # Applies completion of services based on the current value of `$cur`.
 # Arguments for `docker-compose ps` may be passed in order to filter the service list,
 # see `__docker_compose_services`.
-__docker_compose_complete_services() {
-	COMPREPLY=( $(compgen -W "$(__docker_compose_services "$@")" -- "$cur") )
+function __docker_compose_complete_services() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	COMPREPLY=( $(compgen -W "$(__docker_compose_services "${@}")" -- "$cur") )
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 # The services for which at least one running container exists
-__docker_compose_complete_running_services() {
+function __docker_compose_complete_running_services() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local names=$(__docker_compose_services --filter status=running)
 	COMPREPLY=( $(compgen -W "$names" -- "$cur") )
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-_docker_compose_build() {
-	case "$prev" in
+function _docker_compose_build() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	case "${prev}" in
 		--build-arg)
 			COMPREPLY=( $( compgen -e -- "$cur" ) )
 			__docker_compose_nospace
@@ -138,11 +224,20 @@ _docker_compose_build() {
 			__docker_compose_complete_services --filter source=build
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-_docker_compose_bundle() {
-	case "$prev" in
+function _docker_compose_bundle() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	case "${prev}" in
 		--output|-o)
 			_filedir
 			return
@@ -150,13 +245,23 @@ _docker_compose_bundle() {
 	esac
 
 	COMPREPLY=( $( compgen -W "--push-images --help --output -o" -- "$cur" ) )
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-_docker_compose_config() {
-	case "$prev" in
+function _docker_compose_config() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	case "${prev}" in
 		--hash)
-			if [[ $cur == \\* ]] ; then
+			if [[ $cur == \\* ]]  
+     then
 				COMPREPLY=( '\*' )
 			else
 				COMPREPLY=( $(compgen -W "$(__docker_compose_services) \\\* " -- "$cur") )
@@ -166,11 +271,20 @@ _docker_compose_config() {
 	esac
 
 	COMPREPLY=( $( compgen -W "--hash --help --quiet -q --resolve-image-digests --services --volumes" -- "$cur" ) )
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-_docker_compose_create() {
-	case "$cur" in
+function _docker_compose_create() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	case "${cur}" in
 		-*)
 			COMPREPLY=( $( compgen -W "--build --force-recreate --help --no-build --no-recreate" -- "$cur" ) )
 			;;
@@ -178,11 +292,20 @@ _docker_compose_create() {
 			__docker_compose_complete_services
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-_docker_compose_docker_compose() {
-	case "$prev" in
+function _docker_compose_docker_compose() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	case "${prev}" in
 		--tlscacert|--tlscert|--tlskey)
 			_filedir
 			return
@@ -199,23 +322,32 @@ _docker_compose_docker_compose() {
 			_filedir -d
 			return
 			;;
-		$(__docker_compose_to_extglob "$daemon_options_with_args") )
+		$(__docker_compose_to_extglob "${daemon_options_with_args}") )
 			return
 			;;
 	esac
 
-	case "$cur" in
+	case "${cur}" in
 		-*)
-			COMPREPLY=( $( compgen -W "$daemon_boolean_options $daemon_options_with_args $top_level_options_with_args --help -h --no-ansi --verbose --version -v" -- "$cur" ) )
+			COMPREPLY=( $( compgen -W "${daemon_boolean_options} ${daemon_options_with_args} ${top_level_options_with_args} --help -h --no-ansi --verbose --version -v" -- "${cur}" ) )
 			;;
 		*)
 			COMPREPLY=( $( compgen -W "${commands[*]}" -- "$cur" ) )
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-_docker_compose_down() {
+function _docker_compose_down() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	case "$prev" in
 		--rmi)
 			COMPREPLY=( $( compgen -W "all local" -- "$cur" ) )
@@ -226,22 +358,31 @@ _docker_compose_down() {
 			;;
 	esac
 
-	case "$cur" in
+	case "${cur}" in
 		-*)
 			COMPREPLY=( $( compgen -W "--help --rmi --timeout -t --volumes -v --remove-orphans" -- "$cur" ) )
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-_docker_compose_events() {
-	case "$prev" in
+function _docker_compose_events() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	case "${prev}" in
 		--json)
 			return
 			;;
 	esac
 
-	case "$cur" in
+	case "${cur}" in
 		-*)
 			COMPREPLY=( $( compgen -W "--help --json" -- "$cur" ) )
 			;;
@@ -249,95 +390,158 @@ _docker_compose_events() {
 			__docker_compose_complete_services
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-_docker_compose_exec() {
-	case "$prev" in
+function _docker_compose_exec() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	case "${prev}" in
 		--index|--user|-u|--workdir|-w)
 			return
 			;;
 	esac
 
-	case "$cur" in
+	case "${cur}" in
 		-*)
-			COMPREPLY=( $( compgen -W "-d --detach --help --index --privileged -T --user -u --workdir -w" -- "$cur" ) )
+			COMPREPLY=( $( compgen -W "-d --detach --help --index --privileged -T --user -u --workdir -w" -- "${cur}" ) )
 			;;
 		*)
 			__docker_compose_complete_running_services
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-_docker_compose_help() {
-	COMPREPLY=( $( compgen -W "${commands[*]}" -- "$cur" ) )
+function _docker_compose_help() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	COMPREPLY=( $( compgen -W "${commands[*]}" -- "${cur}" ) )
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-_docker_compose_images() {
+function _docker_compose_images() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	case "$cur" in
 		-*)
-			COMPREPLY=( $( compgen -W "--help --quiet -q" -- "$cur" ) )
+			COMPREPLY=( $( compgen -W "--help --quiet -q" -- "${cur}" ) )
 			;;
 		*)
 			__docker_compose_complete_services
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-_docker_compose_kill() {
-	case "$prev" in
+function _docker_compose_kill() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	case "${prev}" in
 		-s)
-			COMPREPLY=( $( compgen -W "SIGHUP SIGINT SIGKILL SIGUSR1 SIGUSR2" -- "$(echo $cur | tr '[:lower:]' '[:upper:]')" ) )
+			COMPREPLY=( $( compgen -W "SIGHUP SIGINT SIGKILL SIGUSR1 SIGUSR2" -- "$(echo ${cur} | tr '[:lower:]' '[:upper:]')" ) )
 			return
 			;;
 	esac
 
-	case "$cur" in
+	case "${cur}" in
 		-*)
-			COMPREPLY=( $( compgen -W "--help -s" -- "$cur" ) )
+			COMPREPLY=( $( compgen -W "--help -s" -- "${cur}" ) )
 			;;
 		*)
 			__docker_compose_complete_running_services
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-_docker_compose_logs() {
-	case "$prev" in
+function _docker_compose_logs() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	case "${prev}" in
 		--tail)
 			return
 			;;
 	esac
 
-	case "$cur" in
+	case "${cur}" in
 		-*)
-			COMPREPLY=( $( compgen -W "--follow -f --help --no-color --tail --timestamps -t" -- "$cur" ) )
+			COMPREPLY=( $( compgen -W "--follow -f --help --no-color --tail --timestamps -t" -- "${cur}" ) )
 			;;
 		*)
 			__docker_compose_complete_services
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-_docker_compose_pause() {
-	case "$cur" in
+function _docker_compose_pause() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	case "${cur}" in
 		-*)
-			COMPREPLY=( $( compgen -W "--help" -- "$cur" ) )
+			COMPREPLY=( $( compgen -W "--help" -- "${cur}" ) )
 			;;
 		*)
 			__docker_compose_complete_running_services
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-_docker_compose_port() {
-	case "$prev" in
+function _docker_compose_port() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	case "${prev}" in
 		--protocol)
-			COMPREPLY=( $( compgen -W "tcp udp" -- "$cur" ) )
+			COMPREPLY=( $( compgen -W "tcp udp" -- "${cur}" ) )
 			return;
 			;;
 		--index)
@@ -345,20 +549,29 @@ _docker_compose_port() {
 			;;
 	esac
 
-	case "$cur" in
+	case "${cur}" in
 		-*)
-			COMPREPLY=( $( compgen -W "--help --index --protocol" -- "$cur" ) )
+			COMPREPLY=( $( compgen -W "--help --index --protocol" -- "${cur}" ) )
 			;;
 		*)
 			__docker_compose_complete_services
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-_docker_compose_ps() {
+function _docker_compose_ps() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local key=$(__docker_compose_map_key_of_current_option '--filter')
-	case "$key" in
+	case "${key}" in
 		source)
 			COMPREPLY=( $( compgen -W "build image" -- "${cur##*=}" ) )
 			return
@@ -369,87 +582,133 @@ _docker_compose_ps() {
 			;;
 	esac
 
-	case "$prev" in
+	case "${prev}" in
 		--filter)
-			COMPREPLY=( $( compgen -W "source status" -S "=" -- "$cur" ) )
+			COMPREPLY=( $( compgen -W "source status" -S "=" -- "${cur}" ) )
 			__docker_compose_nospace
 			return;
 			;;
 	esac
 
-	case "$cur" in
+	case "${cur}" in
 		-*)
-			COMPREPLY=( $( compgen -W "--all -a --filter --help --quiet -q --services" -- "$cur" ) )
+			COMPREPLY=( $( compgen -W "--all -a --filter --help --quiet -q --services" -- "${cur}" ) )
 			;;
 		*)
 			__docker_compose_complete_services
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-_docker_compose_pull() {
-	case "$cur" in
+function _docker_compose_pull() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	case "${cur}" in
 		-*)
-			COMPREPLY=( $( compgen -W "--help --ignore-pull-failures --include-deps --no-parallel --quiet -q" -- "$cur" ) )
+			COMPREPLY=( $( compgen -W "--help --ignore-pull-failures --include-deps --no-parallel --quiet -q" -- "${cur}" ) )
 			;;
 		*)
 			__docker_compose_complete_services --filter source=image
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-_docker_compose_push() {
-	case "$cur" in
+function _docker_compose_push() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	case "${cur}" in
 		-*)
-			COMPREPLY=( $( compgen -W "--help --ignore-push-failures" -- "$cur" ) )
+			COMPREPLY=( $( compgen -W "--help --ignore-push-failures" -- "${cur}" ) )
 			;;
 		*)
 			__docker_compose_complete_services
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-_docker_compose_restart() {
-	case "$prev" in
+function _docker_compose_restart() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	case "${prev}" in
 		--timeout|-t)
 			return
 			;;
 	esac
 
-	case "$cur" in
+	case "${cur}" in
 		-*)
-			COMPREPLY=( $( compgen -W "--help --timeout -t" -- "$cur" ) )
+			COMPREPLY=( $( compgen -W "--help --timeout -t" -- "${cur}" ) )
 			;;
 		*)
 			__docker_compose_complete_running_services
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-_docker_compose_rm() {
-	case "$cur" in
+function _docker_compose_rm() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	case "${cur}" in
 		-*)
-			COMPREPLY=( $( compgen -W "--force -f --help --stop -s -v" -- "$cur" ) )
+			COMPREPLY=( $( compgen -W "--force -f --help --stop -s -v" -- "${cur}" ) )
 			;;
 		*)
-			if __docker_compose_has_option "--stop|-s" ; then
+			if __docker_compose_has_option "--stop|-s"  
+     then
 				__docker_compose_complete_services
 			else
 				__docker_compose_complete_services --filter status=stopped
 			fi
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-_docker_compose_run() {
-	case "$prev" in
+function _docker_compose_run() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	case "${prev}" in
 		-e)
-			COMPREPLY=( $( compgen -e -- "$cur" ) )
+			COMPREPLY=( $( compgen -e -- "${cur}" ) )
 			__docker_compose_nospace
 			return
 			;;
@@ -458,21 +717,30 @@ _docker_compose_run() {
 			;;
 	esac
 
-	case "$cur" in
+	case "${cur}" in
 		-*)
-			COMPREPLY=( $( compgen -W "--detach -d --entrypoint -e --help --label -l --name --no-deps --publish -p --rm --service-ports -T --use-aliases --user -u --volume -v --workdir -w" -- "$cur" ) )
+			COMPREPLY=( $( compgen -W "--detach -d --entrypoint -e --help --label -l --name --no-deps --publish -p --rm --service-ports -T --use-aliases --user -u --volume -v --workdir -w" -- "${cur}" ) )
 			;;
 		*)
 			__docker_compose_complete_services
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-_docker_compose_scale() {
-	case "$prev" in
+function _docker_compose_scale() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	case "${prev}" in
 		=)
-			COMPREPLY=("$cur")
+			COMPREPLY=("${cur}")
 			return
 			;;
 		--timeout|-t)
@@ -480,76 +748,121 @@ _docker_compose_scale() {
 			;;
 	esac
 
-	case "$cur" in
+	case "${cur}" in
 		-*)
-			COMPREPLY=( $( compgen -W "--help --timeout -t" -- "$cur" ) )
+			COMPREPLY=( $( compgen -W "--help --timeout -t" -- "${cur}" ) )
 			;;
 		*)
-			COMPREPLY=( $(compgen -S "=" -W "$(__docker_compose_services)" -- "$cur") )
+			COMPREPLY=( $(compgen -S "=" -W "$(__docker_compose_services)" -- "${cur}") )
 			__docker_compose_nospace
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-_docker_compose_start() {
-	case "$cur" in
+function _docker_compose_start() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	case "${cur}" in
 		-*)
-			COMPREPLY=( $( compgen -W "--help" -- "$cur" ) )
+			COMPREPLY=( $( compgen -W "--help" -- "${cur}" ) )
 			;;
 		*)
 			__docker_compose_complete_services --filter status=stopped
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-_docker_compose_stop() {
-	case "$prev" in
+function _docker_compose_stop() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	case "${prev}" in
 		--timeout|-t)
 			return
 			;;
 	esac
 
-	case "$cur" in
+	case "${cur}" in
 		-*)
-			COMPREPLY=( $( compgen -W "--help --timeout -t" -- "$cur" ) )
+			COMPREPLY=( $( compgen -W "--help --timeout -t" -- "${cur}" ) )
 			;;
 		*)
 			__docker_compose_complete_running_services
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-_docker_compose_top() {
-	case "$cur" in
+function _docker_compose_top() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	case "${cur}" in
 		-*)
-			COMPREPLY=( $( compgen -W "--help" -- "$cur" ) )
+			COMPREPLY=( $( compgen -W "--help" -- "${cur}" ) )
 			;;
 		*)
 			__docker_compose_complete_running_services
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-_docker_compose_unpause() {
-	case "$cur" in
+function _docker_compose_unpause() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	case "${cur}" in
 		-*)
-			COMPREPLY=( $( compgen -W "--help" -- "$cur" ) )
+			COMPREPLY=( $( compgen -W "--help" -- "${cur}" ) )
 			;;
 		*)
 			__docker_compose_complete_services --filter status=paused
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-_docker_compose_up() {
-	case "$prev" in
+function _docker_compose_up() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	case "${prev}" in
 		=)
-			COMPREPLY=("$cur")
+			COMPREPLY=("${cur}")
 			return
 			;;
 		--exit-code-from)
@@ -557,7 +870,7 @@ _docker_compose_up() {
 			return
 			;;
 		--scale)
-			COMPREPLY=( $(compgen -S "=" -W "$(__docker_compose_services)" -- "$cur") )
+			COMPREPLY=( $(compgen -S "=" -W "$(__docker_compose_services)" -- "${cur}") )
 			__docker_compose_nospace
 			return
 			;;
@@ -566,28 +879,46 @@ _docker_compose_up() {
 			;;
 	esac
 
-	case "$cur" in
+	case "${cur}" in
 		-*)
-			COMPREPLY=( $( compgen -W "--abort-on-container-exit --always-recreate-deps --build -d --detach --exit-code-from --force-recreate --help --no-build --no-color --no-deps --no-recreate --no-start --renew-anon-volumes -V --remove-orphans --scale --timeout -t" -- "$cur" ) )
+			COMPREPLY=( $( compgen -W "--abort-on-container-exit --always-recreate-deps --build -d --detach --exit-code-from --force-recreate --help --no-build --no-color --no-deps --no-recreate --no-start --renew-anon-volumes -V --remove-orphans --scale --timeout -t" -- "${cur}" ) )
 			;;
 		*)
 			__docker_compose_complete_services
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-_docker_compose_version() {
-	case "$cur" in
+function _docker_compose_version() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	case "${cur}" in
 		-*)
-			COMPREPLY=( $( compgen -W "--short" -- "$cur" ) )
+			COMPREPLY=( $( compgen -W "--short" -- "${cur}" ) )
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 
-_docker_compose() {
-	local previous_extglob_setting=$(shopt -p extglob)
+function _docker_compose() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	local previous_extglob_setting="$(shopt -p extglob)"
 	shopt -s extglob
 
 	local commands=(
@@ -651,18 +982,18 @@ _docker_compose() {
 	local top_level_options=()
 	local counter=1
 
-	while [ $counter -lt $cword ]; do
+	while [ ${counter} -lt ${cword} ]; do
 		case "${words[$counter]}" in
-			$(__docker_compose_to_extglob "$daemon_boolean_options") )
+			$(__docker_compose_to_extglob "${daemon_boolean_options}") )
 				local opt=${words[counter]}
 				top_level_options+=($opt)
 				;;
-			$(__docker_compose_to_extglob "$daemon_options_with_args") )
+			$(__docker_compose_to_extglob "${daemon_options_with_args}") )
 				local opt=${words[counter]}
 				local arg=${words[++counter]}
 				top_level_options+=($opt $arg)
 				;;
-			$(__docker_compose_to_extglob "$top_level_options_with_args") )
+			$(__docker_compose_to_extglob "${top_level_options_with_args}") )
 				(( counter++ ))
 				;;
 			-*)
@@ -676,13 +1007,17 @@ _docker_compose() {
 	done
 
 	local completions_func=_docker_compose_${command//-/_}
-	_is_function $completions_func && $completions_func
+	_is_function ${completions_func} && ${completions_func}
 
 	eval "$previous_extglob_setting"
 	return 0
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-eval "$__docker_compose_previous_extglob_setting"
+eval "${__docker_compose_previous_extglob_setting}"
 unset __docker_compose_previous_extglob_setting
 
 complete -F _docker_compose docker-compose docker-compose.exe

@@ -2,27 +2,35 @@
 cite about-plugin
 about-plugin 'manage your jekyll site'
 
-function editpost() {
+function editpost() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'edit a post'
 	param '1: site directory'
 	group 'jekyll'
 
 	local SITE site POST DATE TITLE POSTS
 	local -i COUNTER=1 POST_TO_EDIT ret
-	if [[ -z "${1:-}" ]]; then
+	if [[ -z "${1:-}" ]] 
+     then
 		echo "Error: no site specified."
 		echo "The site is the name of the directory your project is in."
 		return 1
 	fi
 
 	for site in "${SITES[@]:-}"; do
-		if [[ "${site##*/}" == "$1" ]]; then
+		if [[ "${site##*/}" == "${1}" ]] 
+     then
 			SITE="${site}"
 			break
 		fi
 	done
 
-	if [[ -z "${SITE:-}" ]]; then
+	if [[ -z "${SITE:-}" ]] 
+     then
 		echo "No such site."
 		return 1
 	fi
@@ -42,9 +50,18 @@ function editpost() {
 	ret="$?"
 	popd > /dev/null || return "$ret"
 	return "$ret"
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function newpost() {
+
+function newpost() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'create a new post'
 	param '1: site directory'
 	group 'jekyll'
@@ -52,19 +69,22 @@ function newpost() {
 	local SITE site FNAME_POST_TITLE FNAME YAML_DATE
 	local JEKYLL_FORMATTING FNAME_DATE OPTIONS OPTION POST_TYPE POST_TITLE
 	local -i loc=0 ret
-	if [[ -z "${1:-}" ]]; then
+	if [[ -z "${1:-}" ]] 
+     then
 		echo "Error: no site specified."
 		echo "The site is the name of the directory your project is in."
 		return 1
 	fi
 
-	if [[ -z "${SITE}" ]]; then
+	if [[ -z "${SITE}" ]] 
+     then
 		echo "No such site."
 		return 1
 	fi
 
 	for site in "${SITES[@]}"; do
-		if [[ "${site##*/}" == "$1" ]]; then
+		if [[ "${site##*/}" == "${1}" ]] 
+     then
 			SITE="$site"
 			JEKYLL_FORMATTING="${MARKUPS[loc]}"
 			break
@@ -81,7 +101,8 @@ function newpost() {
 	# If the user is using markdown or textile formatting, let them choose what type of post they want. Sort of like Tumblr.
 	OPTIONS=('Text' 'Quote' 'Image' 'Audio' 'Video' 'Link')
 
-	if [[ $JEKYLL_FORMATTING == "markdown" || $JEKYLL_FORMATTING == "textile" ]]; then
+	if [[ $JEKYLL_FORMATTING == "markdown" || $JEKYLL_FORMATTING == "textile" ]] 
+     then
 		select OPTION in "${OPTIONS[@]}"; do
 			POST_TYPE="${OPTION}"
 			break
@@ -121,7 +142,8 @@ function newpost() {
 	} > "${FNAME}"
 
 	# Generate template text based on the post type
-	if [[ $JEKYLL_FORMATTING == "markdown" ]]; then
+	if [[ $JEKYLL_FORMATTING == "markdown" ]] 
+     then
 		case $POST_TYPE in
 			"Text")
 				true
@@ -148,7 +170,8 @@ function newpost() {
 				echo "[1]: url"
 				;;
 		esac
-	elif [[ $JEKYLL_FORMATTING == "textile" ]]; then
+	elif [[ $JEKYLL_FORMATTING == "textile" ]] 
+     then
 		case $POST_TYPE in
 			"Text")
 				true
@@ -180,29 +203,41 @@ function newpost() {
 	ret="$?"
 	popd > /dev/null || return "$ret"
 	return "$ret"
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function testsite() {
+
+function testsite() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'launches local jekyll server'
 	param '1: site directory'
 	group 'jekyll'
 
 	local SITE site
 	local -i ret
-	if [[ -z "${1:-}" ]]; then
+	if [[ -z "${1:-}" ]] 
+     then
 		echo "Error: no site specified."
 		echo "The site is the name of the directory your project is in."
 		return 1
 	fi
 
 	for site in "${SITES[@]}"; do
-		if [[ "${site##*/}" == "$1" ]]; then
+		if [[ "${site##*/}" == "${1}" ]] 
+     then
 			SITE="$site"
 			break
 		fi
 	done
 
-	if [[ -z "${SITE}" ]]; then
+	if [[ -z "${SITE}" ]] 
+     then
 		echo "No such site."
 		return 1
 	fi
@@ -212,29 +247,41 @@ function testsite() {
 	ret="$?"
 	popd > /dev/null || return "$ret"
 	return "$ret"
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function buildsite() {
+
+function buildsite() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'builds site'
 	param '1: site directory'
 	group 'jekyll'
 
 	local SITE site
 	local -i ret
-	if [[ -z "${1:-}" ]]; then
+	if [[ -z "${1:-}" ]] 
+     then
 		echo "Error: no site specified."
 		echo "The site is the name of the directory your project is in."
 		return 1
 	fi
 
 	for site in "${SITES[@]}"; do
-		if [[ "${site##*/}" == "$1" ]]; then
+		if [[ "${site##*/}" == "${1}" ]] 
+     then
 			SITE="$site"
 			break
 		fi
 	done
 
-	if [[ -z "${SITE}" ]]; then
+	if [[ -z "${SITE}" ]] 
+     then
 		echo "No such site."
 		return 1
 	fi
@@ -245,23 +292,34 @@ function buildsite() {
 	ret="$?"
 	popd > /dev/null || return "$ret"
 	return "$ret"
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function deploysite() {
+
+function deploysite() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'rsyncs site to remote host'
 	param '1: site directory'
 	group 'jekyll'
 
 	local SITE site REMOTE
 	local -i loc=0 ret
-	if [[ -z "${1:-}" ]]; then
+	if [[ -z "${1:-}" ]] 
+     then
 		echo "Error: no site specified."
 		echo "The site is the name of the directory your project is in."
 		return 1
 	fi
 
 	for site in "${SITES[@]}"; do
-		if [[ "${site##*/}" == "$1" ]]; then
+		if [[ "${site##*/}" == "${1}" ]] 
+     then
 			SITE="$site"
 			# shellcheck disable=SC2153 # who knows
 			REMOTE="${REMOTES[loc]}"
@@ -270,7 +328,8 @@ function deploysite() {
 		loc=$((loc + 1))
 	done
 
-	if [[ -z "${SITE}" ]]; then
+	if [[ -z "${SITE}" ]] 
+     then
 		echo "No such site."
 		return 1
 	fi
@@ -280,9 +339,14 @@ function deploysite() {
 	ret="$?"
 	popd > /dev/null || return "$ret"
 	return "$ret"
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
+
 # Load the Jekyll config
-if [[ -s "$HOME/.jekyllconfig" ]]; then
-	source "$HOME/.jekyllconfig"
+if [[ -s "${HOME}/.jekyllconfig" ]] 
+     then
+	source "${HOME}/.jekyllconfig"
 fi

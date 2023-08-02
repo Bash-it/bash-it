@@ -3,7 +3,12 @@ about-plugin 'quickly navigate configured project paths'
 
 : "${BASH_IT_PROJECT_PATHS:=$HOME/Projects:$HOME/src:$HOME/work}"
 
-function pj() {
+function pj() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'navigate quickly to your various project directories'
 	group 'projects'
 
@@ -11,7 +16,8 @@ function pj() {
 	local cmd PS3 dest d
 	local -a dests
 
-	if [[ "$proj" == "open" ]]; then
+	if [[ "$proj" == "open" ]] 
+     then
 		shift
 		proj="${1}"
 		cmd="${EDITOR?}"
@@ -21,7 +27,8 @@ function pj() {
 	# with the same name in project directories
 	IFS=':' read -ra dests <<< "${BASH_IT_PROJECT_PATHS?${FUNCNAME[0]}: project working folders must be configured}"
 	for d in "${!dests[@]}"; do
-		if [[ ! -d "${dests[d]}/${proj}" ]]; then
+		if [[ ! -d "${dests[d]}/${proj}" ]] 
+     then
 			unset 'dests[d]'
 		fi
 	done
@@ -52,6 +59,9 @@ function pj() {
 	esac
 
 	"${cmd:-cd}" "${dest}"
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 alias pjo="pj open"

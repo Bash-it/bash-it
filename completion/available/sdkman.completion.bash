@@ -1,15 +1,22 @@
 # shellcheck shell=bash
 
-function _sdkman_complete() {
+function _sdkman_complete() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local CANDIDATES
 	local CANDIDATE_VERSIONS
 	local SDKMAN_CANDIDATES_CSV="${SDKMAN_CANDIDATES_CSV:-}"
 
 	COMPREPLY=()
 
-	if [ "$COMP_CWORD" -eq 1 ]; then
+	if [ "$COMP_CWORD" -eq 1 ] 
+     then
 		mapfile -t COMPREPLY < <(compgen -W "install uninstall rm list ls use default home env current upgrade ug version broadcast help offline selfupdate update flush" -- "${COMP_WORDS[COMP_CWORD]}")
-	elif [ "$COMP_CWORD" -eq 2 ]; then
+	elif [ "$COMP_CWORD" -eq 2 ] 
+     then
 		case "${COMP_WORDS[COMP_CWORD - 1]}" in
 			"install" | "i" | "uninstall" | "rm" | "list" | "ls" | "use" | "u" | "default" | "d" | "home" | "h" | "current" | "c" | "upgrade" | "ug")
 				CANDIDATES="${SDKMAN_CANDIDATES_CSV//,/${IFS:0:1}}"
@@ -30,7 +37,8 @@ function _sdkman_complete() {
 			*) ;;
 
 		esac
-	elif [ "$COMP_CWORD" -eq 3 ]; then
+	elif [ "$COMP_CWORD" -eq 3 ] 
+     then
 		case "${COMP_WORDS[COMP_CWORD - 2]}" in
 			"uninstall" | "rm" | "use" | "u" | "default" | "d" | "home" | "h")
 				_sdkman_candidate_local_versions "${COMP_WORDS[COMP_CWORD - 1]}"
@@ -46,24 +54,44 @@ function _sdkman_complete() {
 	fi
 
 	return 0
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _sdkman_candidate_local_versions() {
+function _sdkman_candidate_local_versions() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 
-	CANDIDATE_VERSIONS=$(__sdkman_cleanup_local_versions "$1")
+	CANDIDATE_VERSIONS=$(__sdkman_cleanup_local_versions "${1}")
 
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _sdkman_candidate_all_versions() {
+function _sdkman_candidate_all_versions() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 
-	candidate="$1"
+	candidate="${1}"
 	CANDIDATE_LOCAL_VERSIONS=$(__sdkman_cleanup_local_versions "$candidate")
-	if [[ "${SDKMAN_OFFLINE_MODE:-false}" == "true" ]]; then
+	if [[ "${SDKMAN_OFFLINE_MODE:-false}" == "true" ]] 
+     then
 		CANDIDATE_VERSIONS=$CANDIDATE_LOCAL_VERSIONS
 	else
 		# sdkman has a specific output format for Java candidate since
 		# there are multiple vendors and builds.
-		if [ "$candidate" = "java" ]; then
+		if [ "$candidate" = "java" ] 
+     then
 			CANDIDATE_ONLINE_VERSIONS="$(__sdkman_list_versions "$candidate" | grep " " | grep "\." | cut -c 62-)"
 		else
 			CANDIDATE_ONLINE_VERSIONS="$(__sdkman_list_versions "$candidate" | grep " " | grep "\." | cut -c 6-)"
@@ -75,12 +103,25 @@ function _sdkman_candidate_all_versions() {
 		CANDIDATE_VERSIONS="$(echo "$CANDIDATE_ONLINE_VERSIONS $CANDIDATE_LOCAL_VERSIONS" | tr ' ' '\n' | grep -v -e '^[[:space:]|\*|\>|\+]*$' | sort -u) "
 	fi
 
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function __sdkman_cleanup_local_versions() {
+function __sdkman_cleanup_local_versions() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 
-	__sdkman_build_version_csv "$1" | tr ',' ' '
+	__sdkman_build_version_csv "${1}" | tr ',' ' '
 
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 complete -F _sdkman_complete sdk

@@ -13,7 +13,12 @@ GIT_THEME_PROMPT_SUFFIX="${normal})"
 RVM_THEME_PROMPT_PREFIX=""
 RVM_THEME_PROMPT_SUFFIX=""
 
-function prompt_command() {
+function prompt_command() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
     dtime="$(clock_prompt)"
     user_host="${green}\u@${cyan}\h${normal}"
     current_dir="${bold_blue}\w${normal}"
@@ -25,7 +30,12 @@ function prompt_command() {
 
     PS1="${dtime}${user_host}:${current_dir} ${rvm_ruby} ${git_branch}
       $arrow $prompt"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 THEME_CLOCK_COLOR=${THEME_CLOCK_COLOR:-"$yellow"}
 THEME_CLOCK_FORMAT=${THEME_TIME_FORMAT:-"%I:%M:%S "}

@@ -2,13 +2,15 @@
 cite about-plugin
 about-plugin 'load ble.sh, the Bash line editor!'
 
-if [[ ${BLE_VERSION-} ]]; then
+if [[ ${BLE_VERSION-} ]] 
+     then
 	_log_warning "ble.sh is already loaded!"
 	return
 fi
 
 _bash_it_ble_path=${XDG_DATA_HOME:-$HOME/.local/share}/blesh/ble.sh
-if [[ -f $_bash_it_ble_path ]]; then
+if [[ -f $_bash_it_ble_path ]] 
+     then
 	# shellcheck disable=1090
 	source "$_bash_it_ble_path" --attach=prompt
 else

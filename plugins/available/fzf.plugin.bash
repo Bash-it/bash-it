@@ -4,20 +4,28 @@
 cite about-plugin
 about-plugin 'load fzf, if you are using it'
 
-if [ -r ~/.fzf.bash ] ; then
+if [ -r ~/.fzf.bash ]  
+     then
   source ~/.fzf.bash
-elif [ -r "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash ] ; then
+elif [ -r "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash ]  
+     then
   source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash
 fi
 
 # No need to continue if the command is not present
 _command_exists fzf || return
 
-if [ -z ${FZF_DEFAULT_COMMAND+x}  ] && _command_exists fd ; then
+if [ -z ${FZF_DEFAULT_COMMAND+x}  ] && _command_exists fd  
+     then
   export FZF_DEFAULT_COMMAND='fd --type f'
 fi
 
-fe() {
+function fe() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   about "Open the selected file in the default editor"
   group "fzf"
   param "1: Search term"
@@ -25,11 +33,20 @@ fe() {
 
   local IFS=$'\n'
   local files
-  files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
+  files=($(fzf-tmux --query="${1}" --multi --select-1 --exit-0))
   [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-fcd() {
+
+function fcd() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
   about "cd to the selected directory"
   group "fzf"
   param "1: Directory to browse, or . if omitted"
@@ -39,4 +56,8 @@ fcd() {
   dir=$(find ${1:-.} -path '*/\.*' -prune \
                   -o -type d -print 2> /dev/null | fzf +m) &&
   cd "$dir"
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+

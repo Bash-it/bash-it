@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 # Bash Maven completion
 
-_mvn()
+function _mvn()
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
    local cmds cur colonprefixes
    cmds="clean validate compile test package integration-test   \
       verify install deploy test-compile site generate-sources  \
@@ -32,5 +36,9 @@ _mvn()
    done
 
         return 0
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 } &&
 complete -F _mvn mvn

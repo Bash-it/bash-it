@@ -10,7 +10,8 @@ _bash_it_plugin_latex_paths=(
 
 # add mactex to the path if its present
 for _bash_it_plugin_latex_path in "${_bash_it_plugin_latex_paths[@]}"; do
-	if [[ -d "$_bash_it_plugin_latex_path/" ]]; then
+	if [[ -d "$_bash_it_plugin_latex_path/" ]] 
+     then
 		pathmunge "$_bash_it_plugin_latex_path" after && break
 	fi
 done

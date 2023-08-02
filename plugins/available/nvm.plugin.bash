@@ -19,13 +19,22 @@ fi
 
 if ! _command_exists nvm
 then
-  function nvm() {
-    echo "Bash-it no longer bundles the nvm script. Please install the latest version from"
-    echo ""
-    echo "https://github.com/creationix/nvm.git"
-    echo ""
-    echo "if you want to use nvm. You can keep this plugin enabled once you have installed nvm."
+  function nvm() 
+  {
+    ############ STACK_TRACE_BUILDER #####################
+    Function_Name="${FUNCNAME[0]}"
+    Function_PATH="${Function_PATH}/${Function_Name}"
+    ######################################################
+      echo "Bash-it no longer bundles the nvm script. Please install the latest version from"
+      echo ""
+      echo "https://github.com/creationix/nvm.git"
+      echo ""
+      echo "if you want to use nvm. You can keep this plugin enabled once you have installed nvm."
+    ############### Stack_TRACE_BUILDER ################
+    Function_PATH="$( dirname ${Function_PATH} )"
+    ####################################################
   }
+
 
   nvm
 fi

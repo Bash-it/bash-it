@@ -4,14 +4,23 @@ about-plugin 'ruby and rubygems specific functions and settings'
 
 # Make commands installed with 'gem install --user-install' available
 # ~/.gem/ruby/${RUBY_VERSION}/bin/
-if _command_exists ruby && _command_exists gem; then
+if _command_exists ruby && _command_exists gem 
+     then
 	pathmunge "$(ruby -e 'print Gem.user_dir')/bin" after
 fi
 
-function remove_gem() {
+function remove_gem() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'removes installed gem'
 	param '1: installed gem name'
 	group 'ruby'
 
 	gem list | grep "${1:?${FUNCNAME[0]}: no gem name provided}" | awk '{ print $1; }' | xargs sudo gem uninstall
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }

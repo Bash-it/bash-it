@@ -45,16 +45,21 @@
 #
 # Distributed under the [MIT License](http://creativecommons.org/licenses/MIT/)
 
-_git_flow ()
+function _git_flow ()
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local subcommands="init feature release hotfix"
-	local subcommand="$(__git_find_subcommand "$subcommands")"
-	if [ -z "$subcommand" ]; then
-		__gitcomp "$subcommands"
+	local subcommand="$(__git_find_subcommand "${subcommands}")"
+	if [ -z "${subcommand}" ] 
+     then
+		__gitcomp "${subcommands}"
 		return
 	fi
 
-	case "$subcommand" in
+	case "${subcommand}" in
 	feature)
 		__git_flow_feature
 		return
@@ -71,18 +76,27 @@ _git_flow ()
 		COMPREPLY=()
 		;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__git_flow_feature ()
+function __git_flow_feature ()
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local subcommands="list start finish publish track diff rebase checkout pull"
-	local subcommand="$(__git_find_subcommand "$subcommands")"
-	if [ -z "$subcommand" ]; then
-		__gitcomp "$subcommands"
+	local subcommand="$(__git_find_subcommand "${subcommands}")"
+	if [ -z "${subcommand}" ] 
+     then
+		__gitcomp "${subcommands}"
 		return
 	fi
 
-	case "$subcommand" in
+	case "${subcommand}" in
 	pull)
 		__gitcomp "$(__git_remotes)"
 		return
@@ -103,33 +117,66 @@ __git_flow_feature ()
 		COMPREPLY=()
 		;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__git_flow_list_features ()
+function __git_flow_list_features ()
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	git flow feature list 2> /dev/null | tr -d ' |*'
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__git_flow_list_remote_features ()
+function __git_flow_list_remote_features ()
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	git branch -r 2> /dev/null | grep "origin/$(__git_flow_feature_prefix)" | awk '{ sub(/^origin\/$(__git_flow_feature_prefix)/, "", $1); print }'
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__git_flow_feature_prefix ()
+function __git_flow_feature_prefix ()
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	git config gitflow.prefix.feature 2> /dev/null || echo "feature/"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__git_flow_release ()
+function __git_flow_release ()
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local subcommands="list start finish"
-	local subcommand="$(__git_find_subcommand "$subcommands")"
-	if [ -z "$subcommand" ]; then
-		__gitcomp "$subcommands"
+	local subcommand="$(__git_find_subcommand "${subcommands}")"
+	if [ -z "${subcommand}" ] 
+     then
+		__gitcomp "${subcommands}"
 		return
 	fi
 
-	case "$subcommand" in
+	case "${subcommand}" in
 	finish)
 		__gitcomp "$(__git_flow_list_releases)"
 		return
@@ -139,23 +186,40 @@ __git_flow_release ()
 		;;
 	esac
 
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__git_flow_list_releases ()
+function __git_flow_list_releases ()
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	git flow release list 2> /dev/null
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__git_flow_hotfix ()
+function __git_flow_hotfix ()
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local subcommands="list start finish"
-	local subcommand="$(__git_find_subcommand "$subcommands")"
-	if [ -z "$subcommand" ]; then
-		__gitcomp "$subcommands"
+	local subcommand="$(__git_find_subcommand "${subcommands}")"
+	if [ -z "${subcommand}" ] 
+     then
+		__gitcomp "${subcommands}"
 		return
 	fi
 
-	case "$subcommand" in
+	case "${subcommand}" in
 	finish)
 		__gitcomp "$(__git_flow_list_hotfixes)"
 		return
@@ -164,11 +228,23 @@ __git_flow_hotfix ()
 		COMPREPLY=()
 		;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-__git_flow_list_hotfixes ()
+function __git_flow_list_hotfixes ()
 {
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	git flow hotfix list 2> /dev/null
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+    ####################################################
 }
 
 # temporarily wrap __git_find_on_cmdline() for backwards compatibility

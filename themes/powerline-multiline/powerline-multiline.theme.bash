@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-. "$BASH_IT/themes/powerline-multiline/powerline-multiline.base.bash"
+. "${BASH_IT}/themes/powerline-multiline/powerline-multiline.base.bash"
 
 PROMPT_CHAR=${POWERLINE_PROMPT_CHAR:="❯"}
 POWERLINE_LEFT_SEPARATOR=${POWERLINE_LEFT_SEPARATOR:=""}

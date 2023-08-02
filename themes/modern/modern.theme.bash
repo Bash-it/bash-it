@@ -22,33 +22,67 @@ esac
 
 PS3=">> "
 
-is_vim_shell() {
-	if [ -n "$VIMRUNTIME" ]; then
+function is_vim_shell() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	if [ -n "$VIMRUNTIME" ] 
+     then
 		echo "[${cyan}vim shell${normal}]"
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-detect_venv() {
+
+function detect_venv() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	python_venv=""
 	# Detect python venv
-	if [[ -n "${CONDA_DEFAULT_ENV}" ]]; then
+	if [[ -n "${CONDA_DEFAULT_ENV}" ]] 
+     then
 		python_venv="($PYTHON_VENV_CHAR${CONDA_DEFAULT_ENV}) "
-	elif [[ -n "${VIRTUAL_ENV}" ]]; then
+	elif [[ -n "${VIRTUAL_ENV}" ]] 
+     then
 		python_venv="($PYTHON_VENV_CHAR$(basename "${VIRTUAL_ENV}")) "
 	fi
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-prompt() {
+
+function prompt() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	SCM_PROMPT_FORMAT='[%s][%s]'
 	retval=$?
-	if [[ retval -ne 0 ]]; then
+	if [[ retval -ne 0 ]] 
+     then
 		PS1="${TITLEBAR}${bold_red}┌─${reset_color}$(scm_prompt)[${cyan}\u${normal}][${cyan}\w${normal}]$(is_vim_shell)\n${bold_red}└─▪${normal} "
 	else
 		PS1="${TITLEBAR}┌─$(scm_prompt)[${cyan}\u${normal}][${cyan}\w${normal}]$(is_vim_shell)\n└─▪ "
 	fi
 	detect_venv
 	PS1+="${python_venv}${dir_color}"
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 
 PS2="└─▪ "
 

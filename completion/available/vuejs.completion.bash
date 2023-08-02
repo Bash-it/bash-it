@@ -1,6 +1,11 @@
 # shellcheck shell=bash
 
-__vuejs_completion() {
+__vuejs_completion() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	# shellcheck disable=SC2155
 	local prev=$(_get_pword)
 	# shellcheck disable=SC2155
@@ -56,6 +61,10 @@ __vuejs_completion() {
 			COMPREPLY=($(compgen -W "-h --help -v --version create add invoke inspect serve build ui init config outdated upgrade migrate info" -- "$curr"))
 			;;
 	esac
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
 complete -F __vuejs_completion vue

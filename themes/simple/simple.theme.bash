@@ -12,9 +12,20 @@ case $TERM in
 	;;
 esac
 
-function prompt_command() {
+function prompt_command() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	PS1="${TITLEBAR}${orange}${reset_color}${green}\w${bold_blue}\[$(scm_prompt_info)\]${normal} "
+
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
+
 
 # scm themeing
 SCM_THEME_PROMPT_DIRTY=" ✗"

@@ -47,7 +47,12 @@
 #      completions:  git
 #
 
-function _bash-it-search() {
+function _bash-it-search() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'searches for given terms amongst bash-it plugins, aliases and completions'
 	_param '1: term1'
 	_param '2: [ term2 ]...'
@@ -57,13 +62,14 @@ function _bash-it-search() {
 	local BASH_IT_SEARCH_USE_COLOR="${BASH_IT_SEARCH_USE_COLOR:=true}"
 	local -a BASH_IT_COMPONENTS=('aliases' 'plugins' 'completions')
 
-	if [[ $# -eq 0 ]]; then
+	if [[ $# -eq 0 ]] 
+     then
 		_bash-it-search-help
 		return 0
 	fi
 
 	local -a args=()
-	for word in "$@"; do
+	for word in "${@}"; do
 		case "${word}" in
 			'-h' | '--help')
 				_bash-it-search-help
@@ -81,16 +87,26 @@ function _bash-it-search() {
 		esac
 	done
 
-	if [[ ${#args} -gt 0 ]]; then
+	if [[ ${#args} -gt 0 ]] 
+     then
 		for component in "${BASH_IT_COMPONENTS[@]}"; do
 			_bash-it-search-component "${component}" "${args[@]}"
 		done
 	fi
 
 	return 0
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _bash-it-search-help() {
+function _bash-it-search-help() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	printf '%b' "${echo_normal-}
 ${echo_underline_yellow-}USAGE${echo_normal-}
 
@@ -165,26 +181,53 @@ ${echo_underline_yellow-}SUMMARY${echo_normal-}
    each module.
 
 "
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _bash-it-is-partial-match() {
+function _bash-it-is-partial-match() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local component="${1?${FUNCNAME[0]}: component type must be specified}"
 	local term="${2:-}"
 	_bash-it-component-help "${component}" | _bash-it-egrep -i -q -- "${term}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _bash-it-component-term-matches-negation() {
-	local match="$1"
+function _bash-it-component-term-matches-negation() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	local match="${1}"
 	shift
 	local negative
-	for negative in "$@"; do
+	for negative in "${@}"; do
 		[[ "${match}" =~ ${negative} ]] && return 0
 	done
 
 	return 1
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _bash-it-search-component() {
+function _bash-it-search-component() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	_about 'searches for given terms amongst a given component'
 	_param '1: component type, one of: [ aliases | plugins | completions ]'
 	_param '2: term1 term2 @term3'
@@ -199,7 +242,8 @@ function _bash-it-search-component() {
 	local component_singular action action_func
 	local -a search_commands=('enable' 'disable')
 	for search_command in "${search_commands[@]}"; do
-		if _bash-it-array-contains-element "--${search_command}" "$@"; then
+		if _bash-it-array-contains-element "--${search_command}" "${@}" 
+     then
 			component_singular="${component/es/}"           # aliases -> alias
 			component_singular="${component_singular/ns/n}" # plugins -> plugin
 
@@ -209,7 +253,7 @@ function _bash-it-search-component() {
 		fi
 	done
 
-	local -a terms=("$@") # passed on the command line
+	local -a terms=("${@}") # passed on the command line
 
 	local -a exact_terms=()    # terms that should be included only if they match exactly
 	local -a partial_terms=()  # terms that should be included if they match partially
@@ -224,12 +268,16 @@ function _bash-it-search-component() {
 
 	for term in "${terms[@]}"; do
 		local search_term="${term:1}"
-		if [[ "${term:0:2}" == "--" ]]; then
+		if [[ "${term:0:2}" == "--" ]] 
+     then
 			continue
-		elif [[ "${term:0:1}" == "-" ]]; then
+		elif [[ "${term:0:1}" == "-" ]] 
+     then
 			negative_terms+=("${search_term}")
-		elif [[ "${term:0:1}" == "@" ]]; then
-			if _bash-it-array-contains-element "${search_term}" "${component_list[@]:-}"; then
+		elif [[ "${term:0:1}" == "@" ]] 
+     then
+			if _bash-it-array-contains-element "${search_term}" "${component_list[@]:-}" 
+     then
 				exact_terms+=("${search_term}")
 			fi
 		else
@@ -248,16 +296,25 @@ function _bash-it-search-component() {
 	local -a matches=()
 	for match in "${total_matches[@]}"; do
 		local -i include_match=1
-		if [[ ${#negative_terms[@]} -gt 0 ]]; then
+		if [[ ${#negative_terms[@]} -gt 0 ]] 
+     then
 			_bash-it-component-term-matches-negation "${match}" "${negative_terms[@]:-}" && include_match=0
 		fi
 		((include_match)) && matches+=("${match}")
 	done
 
 	_bash-it-search-result "${component}" "${action:-}" "${action_func:-}" "${matches[@]:-}"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
-
-function _bash-it-search-result() {
+function _bash-it-search-result() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local component="${1?${FUNCNAME[0]}: component type must be specified}"
 	shift
 	local action="${1:-}"
@@ -276,7 +333,8 @@ function _bash-it-search-result() {
 		[[ -n "${line}" ]] && matches+=("$line")
 	done < <(_bash-it-array-dedup "${@}")
 
-	if [[ "${BASH_IT_SEARCH_USE_COLOR}" == "true" ]]; then
+	if [[ "${BASH_IT_SEARCH_USE_COLOR}" == "true" ]] 
+     then
 		color_component='\e[1;34m'
 		color_enable='\e[1;32m'
 		suffix_enable=''
@@ -292,14 +350,16 @@ function _bash-it-search-result() {
 		color_off=''
 	fi
 
-	if [[ "${#matches[@]}" -gt 0 ]]; then
+	if [[ "${#matches[@]}" -gt 0 ]] 
+     then
 		printf "${color_component}%13s${color_sep}${color_off} " "${component}"
 
 		for match in "${matches[@]}"; do
 			enabled=0
 			_bash-it-component-item-is-enabled "${component}" "${match}" && enabled=1
 
-			if ((enabled)); then
+			if ((enabled)) 
+     then
 				match_color="${color_enable}"
 				suffix="${suffix_enable}"
 				opposite_suffix="${suffix_disable}"
@@ -315,8 +375,10 @@ function _bash-it-search-result() {
 			len="${#matched}"
 
 			printf '%b' "${match_color}${matched}" # print current state
-			if [[ "${action}" == "${compatible_action}" ]]; then
-				if [[ "${action}" == "enable" && "${BASH_IT_SEARCH_USE_COLOR}" == "true" ]]; then
+			if [[ "${action}" == "${compatible_action}" ]] 
+     then
+				if [[ "${action}" == "enable" && "${BASH_IT_SEARCH_USE_COLOR}" == "true" ]] 
+     then
 					_bash-it-flash-term "${len}" "${matched}"
 				else
 					_bash-it-erase-term "${len}" "${matched}"
@@ -336,14 +398,32 @@ function _bash-it-search-result() {
 		((modified)) && _bash-it-component-cache-clean "${component}"
 		printf "\n"
 	fi
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _bash-it-rewind() {
+function _bash-it-rewind() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local -i len="${1:-0}"
 	printf '%b' "\033[${len}D"
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _bash-it-flash-term() {
+function _bash-it-flash-term() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local -i len="${1:-0}" # redundant
 	local term="${2:-}"
 	# as currently implemented, `$match` has already been printed to screen the first time
@@ -356,9 +436,18 @@ function _bash-it-flash-term() {
 		_bash-it-rewind "${len}"
 		printf '%b' "${color}${term}"
 	done
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
 
-function _bash-it-erase-term() {
+function _bash-it-erase-term() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	local -i len="${1:-0}" i
 	local delay=0.05
 	local term="${2:-}" # calculate length ourselves
@@ -370,4 +459,8 @@ function _bash-it-erase-term() {
 		printf "%.*s" "$i" " "
 		sleep "${delay}"
 	done
+	
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }

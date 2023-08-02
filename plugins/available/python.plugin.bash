@@ -1,16 +1,23 @@
 # shellcheck shell=bash
 about-plugin 'alias "shttp" to SimpleHTTPServer'
 
-if _command_exists python3; then
+if _command_exists python3 
+     then
 	alias shttp='python3 -m http.server'
-elif _command_exists python; then
+elif _command_exists python 
+     then
 	alias shttp='python -m http.server'
 else
 	_log_warning "Unable to load 'plugin/python' due to being unable to find a working 'python'"
 	return 1
 fi
 
-function pyedit() {
+function pyedit() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	about 'opens python module in your EDITOR'
 	param '1: python module to open'
 	example '$ pyedit requests'
@@ -18,10 +25,12 @@ function pyedit() {
 
 	xpyc="$(python -c "import os, sys; f = open(os.devnull, 'w'); sys.stderr = f; module = __import__('$1'); sys.stdout.write(module.__file__)")"
 
-	if [[ "$xpyc" == "" ]]; then
+	if [[ "$xpyc" == "" ]] 
+     then
 		echo "Python module $1 not found"
 		return 1
-	elif [[ "$xpyc" == *__init__.py* ]]; then
+	elif [[ "$xpyc" == *__init__.py* ]] 
+     then
 		xpydir="${xpyc%/*}"
 		echo "$EDITOR $xpydir"
 		${VISUAL:-${EDITOR:-${ALTERNATE_EDITOR:-nano}}} "$xpydir"
@@ -29,4 +38,7 @@ function pyedit() {
 		echo "$EDITOR ${xpyc%.*}.py"
 		${VISUAL:-${EDITOR:-${ALTERNATE_EDITOR:-nano}}} "${xpyc%.*}.py"
 	fi
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }

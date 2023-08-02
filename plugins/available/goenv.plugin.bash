@@ -13,14 +13,15 @@ about-plugin 'load goenv, if you are using it'
 # - Check if installed manually to $HOME
 _command_exists goenv \
 	|| [[ -n "$GOENV_ROOT" && -x "$GOENV_ROOT/bin/goenv" ]] \
-	|| [[ -x "$HOME/.goenv/bin/goenv" ]] \
+	|| [[ -x "${HOME}/.goenv/bin/goenv" ]] \
 	|| return 0
 
 # Set GOENV_ROOT, if not already set
 export GOENV_ROOT="${GOENV_ROOT:-$HOME/.goenv}"
 
 # Add GOENV_ROOT/bin to PATH, if that's where it's installed
-if ! _command_exists goenv && [[ -x "$GOENV_ROOT/bin/goenv" ]]; then
+if ! _command_exists goenv && [[ -x "$GOENV_ROOT/bin/goenv" ]] 
+     then
 	pathmunge "$GOENV_ROOT/bin"
 fi
 
@@ -29,14 +30,33 @@ eval "$(goenv init - bash)"
 
 # If moving to a directory with a goenv version set, reload the shell
 # to ensure the shell environment matches expectations.
-_bash-it-goenv-preexec() {
+function _bash-it-goenv-preexec() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
 	GOENV_OLD_VERSION="$(goenv version-name)"
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
-_bash-it-goenv-precmd() {
-	if [[ -n $GOENV_OLD_VERSION ]] && [[ "$GOENV_OLD_VERSION" != "$(goenv version-name)" ]]; then
+
+function _bash-it-goenv-precmd() 
+{
+	############ STACK_TRACE_BUILDER #####################
+	Function_Name="${FUNCNAME[0]}"
+	Function_PATH="${Function_PATH}/${Function_Name}"
+	######################################################
+	if [[ -n $GOENV_OLD_VERSION ]] && [[ "$GOENV_OLD_VERSION" != "$(goenv version-name)" ]] 
+     then
 		exec env -u PATH -u GOROOT -u GOPATH -u GOENV_OLD_VERSION "${0/-/}" --login
 	fi
 	unset GOENV_OLD_VERSION
+	############### Stack_TRACE_BUILDER ################
+	Function_PATH="$( dirname ${Function_PATH} )"
+	####################################################
 }
+
 preexec_functions+=(_bash-it-goenv-preexec)
 precmd_functions+=(_bash-it-goenv-precmd)
