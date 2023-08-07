@@ -20,7 +20,7 @@ fi
 # This loads nvm
 if [[ -n "$NVM_BREW_PREFIX" && -s "${NVM_BREW_PREFIX}/nvm.sh" ]]
 then
-  source "$(brew --prefix nvm)/nvm.sh"
+  source "${NVM_BREW_PREFIX}/nvm.sh"
 else
   [[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
 fi
