@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 
 # Simplistic one-liner theme to display source control management info beside
 # the ordinary Linux bash prompt.

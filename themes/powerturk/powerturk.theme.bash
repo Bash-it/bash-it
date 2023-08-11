@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 # Power-Turk theme for bash-it
 # Author (C) 2015 Ahmed Seref Guneysu
 

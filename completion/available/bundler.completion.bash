@@ -1,4 +1,4 @@
-#! bash
+# shellcheck shell=bash
 # bash completion for the `bundle` command.
 #
 # Copyright (c) 2008 Daniel Luz

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 
 SCM_THEME_PROMPT_DIRTY=" ${bold_yellow}✗"
 SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓"

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 
 __tonka_time() {
   THEME_CLOCK_FORMAT="%H%M"

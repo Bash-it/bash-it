@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 
 # Emoji-based theme to display source control management and
 # virtual environment info beside the ordinary bash prompt.
