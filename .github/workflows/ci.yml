@@ -44,7 +44,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v2
       with:
-        go-version: 1.17
+        go-version: 1.21.0
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
@@ -52,7 +52,7 @@ jobs:
     # - name: Update APT Package Lists
       # run: sudo apt-get update
     - name: Install shfmt
-      run: GO111MODULE=on go get mvdan.cc/sh/v3/cmd/shfmt
+      run: go install mvdan.cc/sh/v3/cmd/shfmt@latest
     - name: Install shellcheck
       env:
         scversion: stable # Or latest, vxx, etc
