@@ -31,7 +31,7 @@ function _set_pkg_aliases()
 	fi
 	
 	############### Stack_TRACE_BUILDER ################
-	Function_PATH=$( dirname ${Function_PATH} )
+	Function_PATH=$( dirname "${Function_PATH}" )
 	####################################################
 }
 
