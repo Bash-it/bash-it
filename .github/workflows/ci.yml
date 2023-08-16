@@ -52,7 +52,7 @@ jobs:
     # - name: Update APT Package Lists
       # run: sudo apt-get update
     - name: Install shfmt
-      run: GO111MODULE=on go get mvdan.cc/sh/v3/cmd/shfmt
+      run: go install mvdan.cc/sh/v3/cmd/shfmt@latest
     - name: Install shellcheck
       env:
         scversion: stable # Or latest, vxx, etc
