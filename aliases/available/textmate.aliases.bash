@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 about-alias 'textmate abbreviations'
 
-case $OSTYPE in
+case ${OSTYPE} in
 	darwin*)
 		# Textmate
 		alias e='mate . &'

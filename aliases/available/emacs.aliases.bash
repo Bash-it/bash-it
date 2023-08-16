@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 about-alias 'emacs editor'
 
-case $OSTYPE in
+case ${OSTYPE} in
 	linux*)
 		alias em='emacs'
 		alias en='emacs -nw'
