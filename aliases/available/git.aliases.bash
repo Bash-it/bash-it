@@ -97,6 +97,9 @@ fi
 
 # merge
 alias gm='git merge'
+alias gma='git merge --abort'
+alias gmc='git merge --continue'
+alias gms='git merge --squash'
 
 # mv
 alias gmv='git mv'
@@ -132,7 +135,9 @@ alias grm='git rm'
 
 # rebase
 alias grb='git rebase'
+alias grba='git rebase --abort'
 alias grbc='git rebase --continue'
+alias grbi='git rebase --interactive'
 alias grm='git rebase $(get_default_branch)'
 alias grmi='git rebase $(get_default_branch) -i'
 alias grma='GIT_SEQUENCE_EDITOR=: git rebase  $(get_default_branch) -i --autosquash'
