@@ -127,6 +127,9 @@ alias gr='git remote'
 alias gra='git remote add'
 alias grv='git remote -v'
 
+#restore
+alias grs='git restore --staged'
+
 # rm
 alias grm='git rm'
 
