@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 # zitron theme by Florian Baumann <flo@noqqe.de>
 
 ## git-theme

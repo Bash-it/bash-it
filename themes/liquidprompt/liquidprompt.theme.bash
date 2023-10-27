@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 # Wrapper to use liquidprompt with bashit
 
 targetdir="$BASH_IT/themes/liquidprompt/liquidprompt"

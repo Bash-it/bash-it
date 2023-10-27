@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 #
 # Based on 'bobby' theme with the addition of virtualenv_prompt
 #

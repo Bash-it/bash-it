@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 
 SCM_THEME_PROMPT_PREFIX="${cyan} on ${green}"
 SCM_THEME_PROMPT_SUFFIX=""

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 # Bash completion support for  RVM.
 # Source: https://rvm.io/workflow/completion
 

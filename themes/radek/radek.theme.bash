@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 
 GIT_THEME_PROMPT_DIRTY="${red}✗"
 GIT_THEME_PROMPT_CLEAN="${bold_green}✓"

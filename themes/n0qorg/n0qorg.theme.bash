@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 # n0qorg theme by Florian Baumann <flo@noqqe.de>
 
 ## look-a-like

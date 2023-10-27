@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 cite about-plugin
 about-plugin 'sshagent helper functions'
 
