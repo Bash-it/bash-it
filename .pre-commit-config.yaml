@@ -1,0 +1,50 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+---
+# fail_fast: true
+minimum_pre_commit_version: 1.18.1
+exclude: "docs/_build/"
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: ".(md|rst)$"
+      - id: end-of-file-fixer
+      - id: check-merge-conflict
+      - id: mixed-line-ending
+      - id: check-added-large-files
+  - repo: https://github.com/jumanjihouse/pre-commit-hooks
+    rev: 2.1.5
+    hooks:
+      - id: git-check  # Configure in .gitattributes
+      - id: shellcheck
+        exclude: ".bats$"
+      - id: shfmt
+        exclude: ".bats$"
+  - repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.1.7
+    hooks:
+      # - id: forbid-crlf
+      - id: remove-crlf
+        exclude: ".bat$"
+  - repo: local
+    hooks:
+      - id: dot-sh
+        name: Check .sh files against bash-it requirements
+        entry: ./hooks/dot-sh.sh
+        language: system
+        files: "\\.sh$"
+        types: [file]
+      - id: dot-bash
+        name: Check .bash files against bash-it requirements
+        exclude: "test/test_helper.bash"
+        entry: ./hooks/dot-bash.sh
+        language: system
+        files: "\\.bash$"
+        types: [file]
+      - id: clean-files-txt
+        name: Check that clean_files.txt is sorted alphabetically.
+        entry: ./hooks/check-clean-files-txt.sh
+        language: system
+        files: clean_files.txt

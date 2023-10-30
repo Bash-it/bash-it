@@ -1,0 +1,176 @@
+#######################################################################
+# Allow-list of files to be lint-checked by CI
+#
+# Directory Support
+#   Directory references are allowed within the file, ie:
+#
+#       themes/powerline
+#
+#   All files under the referenced directory will be checked
+#
+# Checking Files Locally
+#   You can manually invoke the check via:
+#
+#       lint_clean_files.sh
+#
+
+# root directories
+#
+aliases/
+docs/
+hooks/
+scripts/
+
+# root files
+#
+.gitattributes
+bash_it.sh
+clean_files.txt
+install.sh
+lint_clean_files.sh
+
+# completions
+#
+completion/available/apm.completion.bash
+completion/available/awless.completion.bash
+completion/available/awscli.completion.bash
+completion/available/bash-it.completion.bash
+completion/available/brew.completion.bash
+completion/available/cargo.completion.bash
+completion/available/composer.completion.bash
+completion/available/conda.completion.bash
+completion/available/consul.completion.bash
+completion/available/dart.completion.bash
+completion/available/django.completion.bash
+completion/available/dmidecode.completion.bash
+completion/available/docker-machine.completion.bash
+completion/available/docker.completion.bash
+completion/available/dotnet.completion.bash
+completion/available/flutter.completion.bash
+completion/available/gcloud.completion.bash
+completion/available/gem.completion.bash
+completion/available/git.completion.bash
+completion/available/github-cli.completion.bash
+completion/available/go.completion.bash
+completion/available/helm.completion.bash
+completion/available/jboss5.completion.bash
+completion/available/jboss7.completion.bash
+completion/available/jungle.completion.bash
+completion/available/knife.completion.bash
+completion/available/kontena.completion.bash
+completion/available/kubectl.completion.bash
+completion/available/laravel.completion.bash
+completion/available/lerna.completion.bash
+completion/available/minikube.completion.bash
+completion/available/ngrok.completion.bash
+completion/available/notify-send.completion.bash
+completion/available/npm.completion.bash
+completion/available/packer.completion.bash
+completion/available/pip.completion.bash
+completion/available/pip3.completion.bash
+completion/available/pipenv.completion.bash
+completion/available/pipx.completion.bash
+completion/available/rustup.completion.bash
+completion/available/sdkman.completion.bash
+completion/available/system.completion.bash
+completion/available/vault.completion.bash
+completion/available/vuejs.completion.bash
+completion/available/wpscan.completion.bash
+completion/available/yarn.completion.bash
+
+# libraries
+lib/appearance.bash
+lib/colors.bash
+lib/command_duration.bash
+lib/helpers.bash
+lib/history.bash
+lib/log.bash
+lib/preexec.bash
+lib/preview.bash
+lib/search.bash
+lib/utilities.bash
+
+# plugins
+#
+plugins/available/alias-completion.plugin.bash
+plugins/available/autojump.plugin.bash
+plugins/available/base.plugin.bash
+plugins/available/basher.plugin.bash
+plugins/available/battery.plugin.bash
+plugins/available/blesh.plugin.bash
+plugins/available/cmd-returned-notify.plugin.bash
+plugins/available/colors.plugin.bash
+plugins/available/direnv.plugin.bash
+plugins/available/dirs.plugin.bash
+plugins/available/docker-machine.plugin.bash
+plugins/available/gif.plugin.bash
+plugins/available/git-subrepo.plugin.bash
+plugins/available/git.plugin.bash
+plugins/available/go.plugin.bash
+plugins/available/goenv.plugin.bash
+plugins/available/history-eternal.plugin.bash
+plugins/available/history-search.plugin.bash
+plugins/available/history-substring-search.plugin.bash
+plugins/available/history.plugin.bash
+plugins/available/hub.plugin.bash
+plugins/available/java.plugin.bash
+plugins/available/jekyll.plugin.bash
+plugins/available/jump.plugin.bash
+plugins/available/latex.plugin.bash
+plugins/available/less-pretty-cat.plugin.bash
+plugins/available/man.plugin.bash
+plugins/available/nginx.plugin.bash
+plugins/available/node.plugin.bash
+plugins/available/nodenv.plugin.bash
+plugins/available/osx-timemachine.plugin.bash
+plugins/available/osx.plugin.bash
+plugins/available/percol.plugin.bash
+plugins/available/plenv.plugin.bash
+plugins/available/projects.plugin.bash
+plugins/available/proxy.plugin.bash
+plugins/available/pyenv.plugin.bash
+plugins/available/python.plugin.bash
+plugins/available/rbenv.plugin.bash
+plugins/available/ruby.plugin.bash
+plugins/available/textmate.plugin.bash
+plugins/available/todo.plugin.bash
+plugins/available/xterm.plugin.bash
+plugins/available/zoxide.plugin.bash
+
+# tests
+#
+test/completion/aliases.completion.bats
+test/run
+test/test_helper.bash
+
+# themes
+#
+themes/90210
+themes/agnoster
+themes/atomic
+themes/axin
+themes/bakke
+themes/barbuk
+themes/base.theme.bash
+themes/binaryanomaly
+themes/bira
+themes/bobby
+themes/bobby-python
+themes/brainy
+themes/brunton
+themes/candy
+themes/easy
+themes/essential
+themes/githelpers.theme.bash
+themes/modern
+themes/norbu
+themes/oh-my-posh
+themes/p4helpers.theme.bash
+themes/pete
+themes/powerline
+themes/pure
+themes/purity
+
+# vendor init files
+#
+vendor/.gitattributes

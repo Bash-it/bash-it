@@ -1,4 +1,3 @@
-
 if _command_exists ng; then
   # No longer supported, please see https://github.com/angular/angular-cli/issues/11043
   # Fix courtesy of https://stackoverflow.com/questions/50194674/ng-completion-no-longer-exists

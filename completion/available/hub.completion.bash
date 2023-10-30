@@ -1,13 +1,34 @@
 # hub tab-completion script for bash.
 # This script complements the completion script that ships with git.
 
+# Copyright (c) 2009 Chris Wanstrath
+
+# Permission is hereby granted, free of charge, to any person obtaining
+# a copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including
+# without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to
+# the following conditions:
+
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 # If there is no git tab completion, but we have the _completion loader try to load it
-if ! declare -F _git > /dev/null && declare -F _completion_loader > /dev/null; then
+if ! _is_function _git && _is_function _completion_loader; then
   _completion_loader git
 fi
 
 # Check that git tab completion is available and we haven't already set up completion
-if declare -F _git > /dev/null && ! declare -F __git_list_all_commands_without_hub > /dev/null; then
+if _is_function _git && ! _is_function __git_list_all_commands_without_hub; then
   # Duplicate and rename the 'list_all_commands' function
   eval "$(declare -f __git_list_all_commands | \
         sed 's/__git_list_all_commands/__git_list_all_commands_without_hub/')"
@@ -206,7 +227,7 @@ EOF
       ((c++))
     done
     if [ -z "$name" ]; then
-      repo=$(basename "$(pwd)")
+      repo="$(basename "${PWD}")"
     fi
     case "$prev" in
       -d|-h)

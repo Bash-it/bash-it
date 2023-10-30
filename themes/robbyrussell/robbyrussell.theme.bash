@@ -13,14 +13,13 @@ GIT_THEME_PROMPT_SUFFIX="${bold_blue})"
 RVM_THEME_PROMPT_PREFIX="|"
 RVM_THEME_PROMPT_SUFFIX="|"
 
-function git_prompt_info {
+function git_prompt_info() {
   git_prompt_vars
   echo -e "$SCM_PREFIX${bold_red}$SCM_BRANCH$SCM_STATE$SCM_SUFFIX"
 }
 
-
 function prompt_command() {
-    PS1="${bold_green}➜  ${bold_cyan}\W${reset_color}$(scm_prompt_info)${reset_color} "
+  PS1="${bold_green}➜  ${bold_cyan}\W${reset_color}$(scm_prompt_info)${normal} "
 }
 
-PROMPT_COMMAND=prompt_command;
+PROMPT_COMMAND=prompt_command

@@ -1,2 +1,9 @@
 *.sh text eol=lf
 *.bash text eol=lf
+
+# Docs allow trailing whitespaces
+*.md whitespace=-blank-at-eol
+*.rst whitespace=-blank-at-eol
+
+# Windows files
+*.bat text eol=crlf

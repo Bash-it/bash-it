@@ -1,4 +1,4 @@
-cite 'about-alias'
+# shellcheck shell=bash
 about-alias 'puppet aliases'
 
 # Aliases
@@ -7,4 +7,3 @@ alias puplint="puppet-lint *.pp"
 alias pupagt="puppet agent -t"
 alias pupagtd="puppet agent -t --debug"
 alias pupapp="puppet apply"
-

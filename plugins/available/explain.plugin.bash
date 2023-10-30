@@ -21,4 +21,3 @@ explain () {
     echo "explain 'cmd -o | ...'   one quoted command to explain it."
   fi
 }
-

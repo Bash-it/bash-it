@@ -1,5 +1,20 @@
 #!/bin/bash
 #
+
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Copyright (c) 2014 Docker, Inc
+
 # bash completion for docker-compose
 #
 # This work is based on the completion for the docker command.
@@ -661,7 +676,7 @@ _docker_compose() {
 	done
 
 	local completions_func=_docker_compose_${command//-/_}
-	declare -F $completions_func >/dev/null && $completions_func
+	_is_function $completions_func && $completions_func
 
 	eval "$previous_extglob_setting"
 	return 0

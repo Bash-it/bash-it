@@ -1,0 +1,189 @@
+#!/usr/bin/perl -w
+#
+# WvTest:
+#   Copyright (C)2007-2012 Versabanq Innovations Inc. and contributors.
+#       Licensed under the GNU Library General Public License, version 2.
+#       See the included file named LICENSE for license information.
+#       You can get wvtest from: http://github.com/apenwarr/wvtest
+#
+use strict;
+use Time::HiRes qw(time);
+
+# always flush
+$| = 1;
+
+if (@ARGV < 1) {
+    print STDERR "Usage: $0 <command line...>\n";
+    exit 127;
+}
+
+print STDERR "Testing \"all\" in @ARGV:\n";
+
+my $pid = open(my $fh, "-|");
+if (!$pid) {
+    # child
+    setpgrp();
+    open STDERR, '>&STDOUT' or die("Can't dup stdout: $!\n");
+    exec(@ARGV);
+    exit 126; # just in case
+}
+
+my $istty = -t STDOUT && $ENV{'TERM'} ne "dumb";
+my @log = ();
+my ($gpasses, $gfails) = (0,0);
+
+sub bigkill($)
+{
+    my $pid = shift;
+
+    if (@log) {
+	print "\n" . join("\n", @log) . "\n";
+    }
+
+    print STDERR "\n! Killed by signal    FAILED\n";
+
+    ($pid > 0) || die("pid is '$pid'?!\n");
+
+    local $SIG{CHLD} = sub { }; # this will wake us from sleep() faster
+    kill 15, $pid;
+    sleep(2);
+
+    if ($pid > 1) {
+	kill 9, -$pid;
+    }
+    kill 9, $pid;
+
+    exit(125);
+}
+
+# parent
+local $SIG{INT} = sub { bigkill($pid); };
+local $SIG{TERM} = sub { bigkill($pid); };
+local $SIG{ALRM} = sub {
+    print STDERR "Alarm timed out!  No test results for too long.\n";
+    bigkill($pid);
+};
+
+sub colourize($)
+{
+    my $result = shift;
+    my $pass = ($result eq "ok");
+
+    if ($istty) {
+	my $colour = $pass ? "\e[32;1m" : "\e[31;1m";
+	return "$colour$result\e[0m";
+    } else {
+	return $result;
+    }
+}
+
+sub mstime($$$)
+{
+    my ($floatsec, $warntime, $badtime) = @_;
+    my $ms = int($floatsec * 1000);
+    my $str = sprintf("%d.%03ds", $ms/1000, $ms % 1000);
+
+    if ($istty && $ms > $badtime) {
+        return "\e[31;1m$str\e[0m";
+    } elsif ($istty && $ms > $warntime) {
+        return "\e[33;1m$str\e[0m";
+    } else {
+        return "$str";
+    }
+}
+
+sub resultline($$)
+{
+    my ($name, $result) = @_;
+    return sprintf("! %-65s %s", $name, colourize($result));
+}
+
+my $allstart = time();
+my ($start, $stop);
+
+sub endsect()
+{
+    $stop = time();
+    if ($start) {
+	printf " %s %s\n", mstime($stop - $start, 500, 1000), colourize("ok");
+    }
+}
+
+while (<$fh>)
+{
+    chomp;
+    s/\r//g;
+
+    if (/^\s*Testing "(.*)" with (.*) in (.*):\s*$/)
+    {
+        alarm(120);
+	my ($sect, $shell, $file) = ($1, $2, $3);
+
+	endsect();
+
+  chomp($shell=`basename $shell`);
+
+	printf("! %s %s %s: ", $shell, $file, $sect);
+	@log = ();
+	$start = $stop;
+    }
+    elsif (/^!\s*(.*?)\s+(\S+)\s*$/)
+    {
+        alarm(120);
+
+	my ($name, $result) = ($1, $2);
+	my $pass = ($result eq "ok");
+
+	if (!$start) {
+	    printf("\n! Startup: ");
+	    $start = time();
+	}
+
+	push @log, resultline($name, $result);
+
+	if (!$pass) {
+	    $gfails++;
+	    if (@log) {
+		print "\n" . join("\n", @log) . "\n";
+		@log = ();
+	    }
+	} else {
+	    $gpasses++;
+	    print ".";
+	}
+    }
+    else
+    {
+	push @log, $_;
+    }
+}
+
+endsect();
+
+my $newpid = waitpid($pid, 0);
+if ($newpid != $pid) {
+    die("waitpid returned '$newpid', expected '$pid'\n");
+}
+
+my $code = $?;
+my $ret = ($code >> 8);
+
+# return death-from-signal exits as >128.  This is what bash does if you ran
+# the program directly.
+if ($code && !$ret) { $ret = $code | 128; }
+
+if ($ret && @log) {
+    print "\n" . join("\n", @log) . "\n";
+}
+
+if ($code != 0) {
+    print resultline("Program returned non-zero exit code ($ret)", "FAILED");
+}
+
+my $gtotal = $gpasses+$gfails;
+printf("\nWvTest: %d test%s, %d failure%s, total time %s.\n",
+    $gtotal, $gtotal==1 ? "" : "s",
+    $gfails, $gfails==1 ? "" : "s",
+    mstime(time() - $allstart, 2000, 5000));
+print STDERR "\nWvTest result code: $ret\n";
+exit( $ret ? $ret : ($gfails ? 125 : 0) );

@@ -3,7 +3,6 @@
 # tmux completion
 # See: http://www.debian-administration.org/articles/317 for how to write more.
 # Usage: Put "source bash_completion_tmux.sh" into your .bashrc
-# Based upon the example at http://paste-it.appspot.com/Pj4mLycDE
 
 _tmux_expand ()
 {
@@ -185,4 +184,3 @@ _tmux() {
 complete -F _tmux tmux
 
 # END tmux completion
-

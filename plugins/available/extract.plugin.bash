@@ -37,7 +37,7 @@ End-Of-Usage
 
         local -r filename=$(basename -- $1)
         local -r filedirname=$(dirname -- $1)
-        local targetdirname=$(sed 's/\(\.tar\.bz2$\|\.tbz$\|\.tbz2$\|\.tar\.gz$\|\.tgz$\|\.tar$\|\.tar\.xz$\|\.txz$\|\.tar\.Z$\|\.7z$\)//g' <<< $filename)
+        local targetdirname=$(sed 's/\(\.tar\.bz2$\|\.tbz$\|\.tbz2$\|\.tar\.gz$\|\.tgz$\|\.tar$\|\.tar\.xz$\|\.txz$\|\.tar\.Z$\|\.7z$\|\.nupkg$\|\.zip$\|\.war$\|\.jar$\)//g' <<< $filename)
         if [ "$filename" = "$targetdirname" ]; then
             # archive type either not supported or it doesn't need dir creation
             targetdirname=""
@@ -61,9 +61,9 @@ End-Of-Usage
                 *.rpm) rpm2cpio "$1" | cpio -idm${verbose} ;;
                 *.tar) tar "x${verbose}f" "$1" -C "$filedirname/$targetdirname" ;;
                 *.xz) xz --decompress "$1" ;;
-                *.zip|*.war|*.jar) unzip "$1" ;;
+                *.zip|*.war|*.jar|*.nupkg) unzip "$1" -d "$filedirname/$targetdirname" ;;
                 *.Z) uncompress "$1" ;;
-                *.7z) 7za x "$1" ;;
+                *.7z) 7za x -o"$filedirname/$targetdirname" "$1" ;;
                 *) echo "'$1' cannot be extracted via extract" >&2;;
             esac
         fi

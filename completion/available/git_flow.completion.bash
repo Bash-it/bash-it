@@ -2,47 +2,47 @@
 #
 # git-flow-completion
 # ===================
-# 
+#
 # Bash completion support for [git-flow](http://github.com/nvie/gitflow)
-# 
+#
 # The contained completion routines provide support for completing:
-# 
+#
 #  * git-flow init and version
 #  * feature, hotfix and release branches
 #  * remote feature branch names (for `git-flow feature track`)
-# 
-# 
+#
+#
 # Installation
 # ------------
-# 
+#
 # To achieve git-flow completion nirvana:
-# 
+#
 #  0. Install git-completion.
-# 
+#
 #  1. Install this file. Either:
-# 
+#
 #     a. Place it in a `bash-completion.d` folder:
-# 
+#
 #        * /etc/bash-completion.d
 #        * /usr/local/etc/bash-completion.d
 #        * ~/bash-completion.d
-# 
+#
 #     b. Or, copy it somewhere (e.g. ~/.git-flow-completion.sh) and put the following line in
 #        your .bashrc:
-# 
+#
 #            source ~/.git-flow-completion.sh
-# 
+#
 #  2. If you are using Git < 1.7.1: Edit git-completion.sh and add the following line to the giant
 #     $command case in _git:
-# 
+#
 #         flow)        _git_flow ;;
-# 
-# 
+#
+#
 # The Fine Print
 # --------------
-# 
+#
 # Copyright (c) 2010 [Justin Hileman](http://justinhileman.com)
-# 
+#
 # Distributed under the [MIT License](http://creativecommons.org/licenses/MIT/)
 
 _git_flow ()
@@ -128,7 +128,7 @@ __git_flow_release ()
 		__gitcomp "$subcommands"
 		return
 	fi
-	
+
 	case "$subcommand" in
 	finish)
 		__gitcomp "$(__git_flow_list_releases)"
@@ -172,6 +172,7 @@ __git_flow_list_hotfixes ()
 }
 
 # temporarily wrap __git_find_on_cmdline() for backwards compatibility
-if [ -z "`type -t __git_find_subcommand`" ]; then
+if ! _command_exists __git_find_subcommand
+then
 	alias __git_find_subcommand=__git_find_on_cmdline
 fi

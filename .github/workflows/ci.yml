@@ -1,0 +1,64 @@
+name: CI
+
+# Triggers the workflow on push or pull request events
+on: [push, pull_request]
+
+jobs:
+  bats-test:
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, ubuntu-22.04, macos-12, macos-11]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install greadlink
+      if: startsWith(runner.os, 'macOS')
+      run: brew install coreutils
+    - name: Install parallel
+      if: startsWith(runner.os, 'macOS')
+      run: brew install parallel
+    - name: Test code
+      run: test/run
+
+  build-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.8
+    - name: Install docs dependencies
+      run: python3 -m pip install -r docs/requirements.txt
+    - name: Build the docs
+      run: sphinx-build -W -b html docs docs/_build/html
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: 1.21.0
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.8
+    - name: Install shfmt
+      run: go install mvdan.cc/sh/v3/cmd/shfmt@latest
+    - name: Install shellcheck
+      env:
+        scversion: stable # Or latest, vxx, etc
+      run: |
+        wget -qO- "https://github.com/koalaman/shellcheck/releases/download/${scversion?}/shellcheck-${scversion?}.linux.x86_64.tar.xz" | tar -xJv "shellcheck-${scversion}/shellcheck"
+        sudo cp "shellcheck-${scversion}/shellcheck" /usr/bin/
+        shellcheck --version
+    - name: Install pre-commit
+      run: python3 -m pip install -r test/lint-requirements.txt
+    - name: Run lint
+      run: ./lint_clean_files.sh

@@ -43,7 +43,7 @@ _swd(){
     begin="" # The unshortened beginning of the path.
     shortbegin="" # The shortened beginning of the path.
     current="" # The section of the path we're currently working on.
-    end="${2:-$(pwd)}/" # The unmodified rest of the path.
+    end="${2:-${PWD}}/" # The unmodified rest of the path.
 
     if [[ "$end" =~ "$HOME" ]]; then
         INHOME=1
@@ -182,4 +182,3 @@ function powerline_prompt_command() {
 }
 
 PROMPT_COMMAND=powerline_prompt_command
-

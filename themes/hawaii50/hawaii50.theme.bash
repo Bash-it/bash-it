@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# This theme was obviously inspired a lot by 
+# This theme was obviously inspired a lot by
 #
 # - Demula theme
 #
@@ -17,8 +17,8 @@
 # - configurable directory length
 # - hg, svn, git detection (I work in all of them)
 # - virtualenv, rvm + gemsets
-# 
-# Screenshot: http://i.imgur.com/4IAMJ.png 
+#
+# Screenshot: http://i.imgur.com/4IAMJ.png
 #
 # by Ryan Kanno <ryankanno@localkinegrinds.com>
 #
@@ -26,7 +26,7 @@
 #
 # Note: I also am really new to this bash scripting game, so if you see things
 # that are flat out wrong, or if you think of something neat, just send a pull
-# request.  This probably only works on a Mac - as some functions are OS 
+# request.  This probably only works on a Mac - as some functions are OS
 # specific like getting ip, etc.
 #
 
@@ -88,11 +88,11 @@ function get_ip_info {
     echo -e "$(ips | sed -e :a -e '$!N;s/\n/${IP_SEPARATOR}/;ta' | sed -e 's/127\.0\.0\.1\${IP_SEPARATOR}//g'), ${myip}"
 }
 
-# Displays ip prompt 
+# Displays ip prompt
 function ip_prompt_info() {
     if [[ $IP_ENABLED == 1 ]]; then
         echo -e " ${DEFAULT_COLOR}(${IP_COLOR}$(get_ip_info)${DEFAULT_COLOR})"
-    fi 
+    fi
 }
 
 # Displays virtual info prompt (virtualenv/rvm)
@@ -165,10 +165,10 @@ function svn_prompt_info() {
     echo -e "$prefix${REF_COLOR}$ref${DEFAULT_COLOR}:$revision$state$suffix"
 }
 
-# Displays last X characters of pwd 
+# Displays last X characters of pwd
 function limited_pwd() {
 
-    # Replace $HOME with ~ if possible 
+    # Replace $HOME with ~ if possible
     RELATIVE_PWD=${PWD/#$HOME/\~}
 
     local offset=$((${#RELATIVE_PWD}-$MAX_PWD_LENGTH))

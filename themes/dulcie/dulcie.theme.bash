@@ -77,7 +77,7 @@ dulcie_prompt() {
   printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/\~}"
 
   # Open the new terminal in the same directory
-  declare -f __vte_osc7 > /dev/null && __vte_osc7
+  _is_function __vte_osc7 && __vte_osc7
 
   PS1="${reset_color}[${DULCIE_USER}@${DULCIE_HOST}$(scm_prompt_info)${reset_color} ${DULCIE_WORKINGDIR}]"
   if [[ "${DULCIE_MULTILINE}" -eq "1" ]]; then

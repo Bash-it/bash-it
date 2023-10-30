@@ -1,24 +1,25 @@
-#!/bin/bash
+# shellcheck shell=bash
 
 # ---------------------------------------------------------------------------+
 #                                                                            |
-# Thanks to Alexander Korznikov                                                                 |
+# Thanks to Alexander Korznikov                                              |
 # http://www.korznikov.com/2014/12/bash-tab-completion-for-awesome-tool.html |
-#                                                                            |        
+#                                                                            |
 # ---------------------------------------------------------------------------+
 
-if command -v sqlmap > /dev/null; then
+if _command_exists sqlmap
+then
 
-    _sqlmap()
+    function _sqlmap()
     {
         local cur prev
 
         COMPREPLY=()
-        cur=$(_get_cword)
-        prev=$(_get_pword)
+        cur="$(_get_cword)"
+        prev="$(_get_pword)"
 
         case $prev in
-        
+
     # List directory content
     --tamper)
         COMPREPLY=( $( compgen -W "$tamper" -- "$cur" ) )
@@ -108,7 +109,7 @@ if command -v sqlmap > /dev/null; then
         -z --alert --answers --beep --check-waf --cleanup \
         --dependencies --disable-coloring --gpage --identify-waf \
         --mobile --page-rank --purge-output --smart \
-        --sqlmap-shell --wizard' -- "$cur" ) )     
+        --sqlmap-shell --wizard' -- "$cur" ) )
         # this removes any options from the list of completions that have
         # already been specified somewhere on the command line, as long as
         # these options can only be used once (in a word, "options", in
@@ -143,7 +144,7 @@ if command -v sqlmap > /dev/null; then
         --mobile --page-rank --purge-output --smart \
         --sqlmap-shell --wizard '
         COMPREPLY=( $( \
-            (while read -d ' ' i; do
+		(while read -d ' ' i; do
                 [[ -z "$i" || "${onlyonce/ ${i%% *} / }" == "$onlyonce" ]] &&
                 continue
                 # flatten array with spaces on either side,
@@ -152,10 +153,10 @@ if command -v sqlmap > /dev/null; then
                 COMPREPLY=" ${COMPREPLY[@]} "
                 # remove word from list of completions
                 COMPREPLY=( ${COMPREPLY/ ${i%% *} / } )
-                done
+			done
                 printf '%s ' "${COMPREPLY[@]}") <<<"${COMP_WORDS[@]}"
             ) )
-        
+
     #    else
     #        _filedir bat
         fi

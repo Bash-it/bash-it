@@ -1,0 +1,2 @@
+* -whitespace
+init.d/*.bash text eol=lf

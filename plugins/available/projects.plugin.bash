@@ -1,75 +1,57 @@
-cite about-plugin
-about-plugin 'add "export PROJECT_PATHS=~/projects:~/intertrode/projects" to navigate quickly to your project directories with `pj` and `pjo`'
+# shellcheck shell=bash
+about-plugin 'quickly navigate configured project paths'
 
-function pj {
-about 'navigate quickly to your various project directories'
-group 'projects'
+: "${BASH_IT_PROJECT_PATHS:=$HOME/Projects:$HOME/src:$HOME/work}"
 
+function pj() {
+	about 'navigate quickly to your various project directories'
+	group 'projects'
 
-if [ -z "$PROJECT_PATHS" ]; then
-  echo "error: PROJECT_PATHS not set"
-  return 1
-fi
+	local proj="${1?${FUNCNAME[0]}: project name required}"
+	local cmd PS3 dest d
+	local -a dests
 
+	if [[ "$proj" == "open" ]]; then
+		shift
+		proj="${1}"
+		cmd="${EDITOR?}"
+	fi
 
-local cmd
-local dest
-local -a dests
+	# collect possible destinations to account for directories
+	# with the same name in project directories
+	IFS=':' read -ra dests <<< "${BASH_IT_PROJECT_PATHS?${FUNCNAME[0]}: project working folders must be configured}"
+	for d in "${!dests[@]}"; do
+		if [[ ! -d "${dests[d]}/${proj}" ]]; then
+			unset 'dests[d]'
+		fi
+	done
 
+	case ${#dests[@]} in
+		0)
+			_log_error "BASH_IT_PROJECT_PATHS must contain at least one existing location"
+			return 1
+			;;
+		1)
+			dest="${dests[*]}/${proj}"
+			;;
+		*)
+			PS3="Multiple project directories found. Please select one: "
+			dests+=("cancel")
+			select d in "${dests[@]}"; do
+				case $d in
+					"cancel")
+						return
+						;;
+					*)
+						dest="${d}/${proj}"
+						break
+						;;
+				esac
+			done
+			;;
+	esac
 
-if [ "$1" == "open" ]; then
-  shift
-  cmd="$EDITOR"
-fi
-cmd="${cmd:-cd}"
-
-
-if [ -z "$1" ]; then
-  echo "error: no project provided"
-  return 1
-fi
-
-
-# collect possible destinations to account for directories
-# with the same name in project directories
-for i in ${PROJECT_PATHS//:/$'\n'}; do
-  if [ -d "$i"/"$1" ]; then
-    dests+=("$i/$1")
-  fi
-done
-
-
-# when multiple destinations are found, present a menu
-if [ ${#dests[@]} -eq 0 ]; then
-  echo "error: no such project '$1'"
-  return 1
-
-elif [ ${#dests[@]} -eq 1 ]; then
-  dest="${dests[0]}"
-
-elif [ ${#dests[@]} -gt 1 ]; then
-  PS3="Multiple project directories found. Please select one: "
-  dests+=("cancel")
-  select d in "${dests[@]}"; do
-    case $d in
-      "cancel")
-        return
-        ;;
-      *)
-        dest=$d
-        break
-        ;;
-    esac
-  done
-
-else
-  echo "error: please report this error"
-  return 1 # should never reach this
-
-fi
-
-
-$cmd "$dest"
+	"${cmd:-cd}" "${dest}"
 }
 
 alias pjo="pj open"

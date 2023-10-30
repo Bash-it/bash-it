@@ -1,12 +1,11 @@
-#!/usr/bin/env bats
+# shellcheck shell=bats
 
-load ../test_helper
-load ../../lib/composure
+load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
-cite _about _param _example _group _author _version
-
-load ../../lib/helpers
-load ../../themes/base.theme
+function local_setup_file() {
+  setup_libs "colors" #"theme"
+  load "${BASH_IT?}/themes/base.theme.bash"
+}
 
 @test 'themes base: battery_percentage should not exist' {
   run type -a battery_percentage &> /dev/null
@@ -14,37 +13,39 @@ load ../../themes/base.theme
 }
 
 @test 'themes base: battery_percentage should exist if battery plugin loaded' {
-  load ../../plugins/available/battery.plugin
+  load "${BASH_IT?}/plugins/available/battery.plugin.bash"
 
   run type -a battery_percentage &> /dev/null
   assert_success
 }
 
 @test 'themes base: battery_char should exist' {
-  run type -a battery_char &> /dev/null
+  run type -t battery_char
   assert_success
+  assert_line "function"
 
   run battery_char
-  assert_success
   assert_line -n 0 ""
-
-  run type -a battery_char
-  assert_line "    echo -n"
 }
 
 @test 'themes base: battery_char should exist if battery plugin loaded' {
   unset -f battery_char
-  load ../../plugins/available/battery.plugin
-  load ../../themes/base.theme
 
-  run type -a battery_char &> /dev/null
+  load "${BASH_IT?}/plugins/available/battery.plugin.bash"
+  run type -t battery_percentage
   assert_success
+  assert_line "function"
+
+  load "${BASH_IT?}/themes/base.theme.bash"
+  run type -t battery_char
+  assert_success
+  assert_line "function"
 
   run battery_char
   assert_success
 
   run type -a battery_char
-  assert_line '    if [[ "${THEME_BATTERY_PERCENTAGE_CHECK}" = true ]]; then'
+  assert_output --partial 'THEME_BATTERY_PERCENTAGE_CHECK'
 }
 
 @test 'themes base: battery_charge should exist' {
@@ -53,13 +54,13 @@ load ../../themes/base.theme
 
   run battery_charge
   assert_success
-  assert_line -n 0 ""
+  assert_output ""
 }
 
 @test 'themes base: battery_charge should exist if battery plugin loaded' {
   unset -f battery_charge
-  load ../../plugins/available/battery.plugin
-  load ../../themes/base.theme
+  load "${BASH_IT?}/plugins/available/battery.plugin.bash"
+  load "${BASH_IT?}/themes/base.theme.bash"
 
   run type -a battery_charge &> /dev/null
   assert_success
