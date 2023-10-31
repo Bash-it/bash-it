@@ -1,1 +1,0 @@
-../completion/available/nvm.completion.bash
