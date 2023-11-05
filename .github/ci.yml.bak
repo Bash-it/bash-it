@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Install greadlink
       if: startsWith(runner.os, 'macOS')
       run: brew install coreutils
@@ -26,9 +26,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: 3.8
     - name: Install docs dependencies
@@ -40,19 +40,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Set up Go
-      uses: actions/setup-go@v2
+      uses: actions/setup-go@v4
       with:
-        go-version: 1.17
+        go-version: 1.21.0
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: 3.8
-    # - name: Update APT Package Lists
-      # run: sudo apt-get update
     - name: Install shfmt
-      run: GO111MODULE=on go get mvdan.cc/sh/v3/cmd/shfmt
+      run: go install mvdan.cc/sh/v3/cmd/shfmt@latest
     - name: Install shellcheck
       env:
         scversion: stable # Or latest, vxx, etc
