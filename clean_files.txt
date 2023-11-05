@@ -159,6 +159,7 @@ themes/bobby-python
 themes/brainy
 themes/brunton
 themes/candy
+themes/clean
 themes/easy
 themes/essential
 themes/githelpers.theme.bash
