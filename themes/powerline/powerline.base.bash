@@ -247,7 +247,7 @@ function __powerline_left_segment() {
 		fi
 	fi
 
-	LEFT_PROMPT+="$(set_color - "${params[1]}")${pad_before_segment}${params[0]}${normal}"
+	LEFT_PROMPT+="$(set_color "${POWERLINE_PROMPT_FOREGROUND_COLOR}" "${params[1]}")${pad_before_segment}${params[0]}${normal}"
 	LAST_SEGMENT_COLOR=${params[1]}
 	((SEGMENTS_AT_LEFT += 1))
 }
