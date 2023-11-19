@@ -117,6 +117,7 @@ alias gpuoc='git push --set-upstream origin $(git symbolic-ref --short HEAD)'
 
 # pull
 alias gl='git pull'
+alias glp='git pull --prune'
 alias glum='git pull upstream $(get_default_branch)'
 alias gpl='git pull'
 alias gpp='git pull && git push'
