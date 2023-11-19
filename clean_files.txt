@@ -31,6 +31,7 @@ lint_clean_files.sh
 
 # completions
 #
+completion/available/aliases.completion.bash
 completion/available/apm.completion.bash
 completion/available/awless.completion.bash
 completion/available/awscli.completion.bash
