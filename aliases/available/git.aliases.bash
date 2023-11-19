@@ -152,6 +152,8 @@ alias gsl='git shortlog -sn'
 
 # show
 alias gsh='git show'
+alias gshn='git show --name-only'
+alias gshns='git show --name-status'
 
 # svn
 alias gsd='git svn dcommit'
