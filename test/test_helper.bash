@@ -41,7 +41,7 @@ function common_setup_file() {
 	BASH_IT="${BATS_FILE_TMPDIR//\/\///}/.bash_it"
 
 	# This sets up a local test fixture, i.e. a completely fresh and isolated Bash-it directory. This is done to avoid messing with your own Bash-it source directory.
-	git --git-dir="${MAIN_BASH_IT_GITDIR?}" worktree add -d "${BASH_IT}"
+	git --git-dir="${MAIN_BASH_IT_GITDIR?}" worktree add --detach "${BASH_IT}"
 
 	load "${BASH_IT?}/vendor/github.com/erichs/composure/composure.sh"
 	# support 'plumbing' metadata
