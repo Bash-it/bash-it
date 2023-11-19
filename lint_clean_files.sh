@@ -10,7 +10,7 @@ mapfile -t FILES < <(
 	cat clean_files.txt \
 		| grep -E -v '^\s*$' \
 		| grep -E -v '^\s*#' \
-		| xargs -n1 -I{} find "{}" -type f
+		| xargs -I{} find "{}" -type f
 )
 
 # We clear the BASH_IT variable to help the shellcheck checker
