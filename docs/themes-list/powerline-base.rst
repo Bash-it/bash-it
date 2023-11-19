@@ -81,7 +81,7 @@ The contents of the prompt can be "reordered", all the "segments" (every piece o
 * ``python_venv`` - Python virtual environment information (\ ``virtualenv``\ , ``venv``
   and ``conda`` supported)
 * ``ruby`` - Current ruby version if using ``rvm``
-* ``node`` - Current node version (only ``nvm`` is supported)
+* ``node`` - Current node version (``nvm`` is the default strategy; set ``NODE_VERSION_STRATEGY`` to ``node`` to use ``node --version``)
 * ``scm`` - Version control information, ``git``
 * ``terraform`` - Current terraform workspace
 * ``user_info`` - Current user
