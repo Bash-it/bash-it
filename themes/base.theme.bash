@@ -583,3 +583,14 @@ function _save-and-reload-history() {
 	[[ ${autosave} -eq 1 ]] && local HISTCONTROL="${HISTCONTROL:-}${HISTCONTROL:+:}autoshare"
 	_bash-it-history-auto-save && _bash-it-history-auto-load
 }
+
+function conda_or_venv_prompt() {
+	local python_venv=""
+	if [[ -n "${CONDA_DEFAULT_ENV:-}" ]]; then
+		python_venv=$(condaenv_prompt)
+		PYTHON_VENV_CHAR=${CONDA_PYTHON_VENV_CHAR}
+	elif [[ -n "${VIRTUAL_ENV:-}" ]]; then
+		python_venv=$(virtualenv_prompt)
+	fi
+	[[ -n "${python_venv}" ]] && echo "${PYTHON_VENV_CHAR}${python_venv}"
+}
