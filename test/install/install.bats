@@ -8,15 +8,7 @@ function local_setup() {
 
 function local_setup_file() {
   # Determine which config file to use based on OS.
-  case $OSTYPE in
-    darwin*)
-      export BASH_IT_CONFIG_FILE=.bash_profile
-      ;;
-    *)
-      export BASH_IT_CONFIG_FILE=.bashrc
-      ;;
-  esac
-  # don't load any libraries as the tests here test the *whole* kit
+  export BASH_IT_CONFIG_FILE=.bashrc
 }
 
 @test "install: verify that the install script exists" {
@@ -84,5 +76,5 @@ function local_setup_file() {
   run cat "$HOME/$BASH_IT_CONFIG_FILE"
 
   assert_line "test file content"
-  assert_line "source \"\$BASH_IT\"/bash_it.sh"
+  assert_line 'source "${BASH_IT?}/bash_it.sh"'
 }
