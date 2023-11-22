@@ -17,8 +17,7 @@ function _bash-it-history-auto-save() {
 			history -a
 			;;
 		*)
-			# Append *only* if shell option `histappend` has been enabled.
-			shopt -q histappend && history -a && return
+			: # Do nothing, default.
 			;;
 	esac
 }
