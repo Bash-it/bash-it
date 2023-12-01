@@ -162,6 +162,7 @@ themes/candy
 themes/easy
 themes/essential
 themes/githelpers.theme.bash
+themes/lambda
 themes/modern
 themes/norbu
 themes/oh-my-posh
@@ -170,6 +171,7 @@ themes/pete
 themes/powerline
 themes/pure
 themes/purity
+
 
 # vendor init files
 #
