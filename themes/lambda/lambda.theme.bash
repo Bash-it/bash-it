@@ -1,3 +1,6 @@
+#!/bin/bash
+# shellcheck disable=SC1090,SC2034
+
 function set_prompt {
     local user_color="\[\033[1;31m\]"  # bold red for username
     local at_color="\[\033[1;37m\]"    # bold white for @ symbol
