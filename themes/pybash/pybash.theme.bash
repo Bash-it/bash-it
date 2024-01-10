@@ -18,7 +18,7 @@ IYellow="\e[1;49;33m"
 IWhite="\e[1;49;37m"
 BIWhite="\e[1;49;37m"
 BICyan="\e[1;49;36m"
-IBlue="\e[1;49;34m" 
+IBlue="\e[1;49;34m"
 IPurple="\e[1;49;35m"
 
 #############
@@ -127,7 +127,7 @@ ____pybash_bottom() {
 ___pybash_prompt_user_info() {
   color=$white
   box="${normal}${LineA}\$([[ \$? != 0 ]] && echo \"${IRed}[${IRed}${SX}${IRed}]${normal}${Line}\")${BICyan}[|${BICyan}]${normal}${Line}"
-  info="${IYellow}\u${BICyan}@${IGreen}\h" # the @ is changed from IRed to BICyan
+  info="${IYellow}\u${BICyan}@${IGreen}\h"
   
   printf "%s|%s|%s|%s" "${color}" "${info}" "${white}" "${box}"
 }
@@ -174,7 +174,7 @@ ___pybash_prompt_python() {
   # Combine them with a space
   info="${py_env} ${py_ver}"
 
-  printf "%s|%s|%s|%s" "${color}" "${info}" "${BICyan}" "${box}" 
+  printf "%s|%s|%s|%s" "${color}" "${info}" "${BICyan}" "${box}"
 }
 
 ___pybash_prompt_ruby() {
