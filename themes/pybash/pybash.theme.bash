@@ -126,7 +126,7 @@ ____pybash_bottom() {
 
 ___pybash_prompt_user_info() {
   color=$white
-  box="${normal}${LineA}\$([[ \$? != 0 ]] && echo \"${IRed}[${IRed}${SX}${IRed}]${normal}${Line}\")${Line}${BICyan}[|${BICyan}]${normal}${Line}"
+  box="${normal}${LineA}\$([[ \$? != 0 ]] && echo \"${IRed}[${IRed}${SX}${IRed}]${normal}${Line}\")${BICyan}[|${BICyan}]${normal}${Line}"
   info="${IYellow}\u${BICyan}@${IGreen}\h" # the @ is changed from IRed to BICyan
   
   printf "%s|%s|%s|%s" "${color}" "${info}" "${white}" "${box}"
