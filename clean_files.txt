@@ -17,9 +17,12 @@
 # root directories
 #
 aliases/
+custom/
 docs/
 hooks/
+lib/
 scripts/
+template/
 
 # root files
 #
@@ -28,6 +31,7 @@ bash_it.sh
 clean_files.txt
 install.sh
 lint_clean_files.sh
+uninstall.sh
 
 # completions
 #
@@ -77,18 +81,6 @@ completion/available/vault.completion.bash
 completion/available/vuejs.completion.bash
 completion/available/wpscan.completion.bash
 completion/available/yarn.completion.bash
-
-# libraries
-lib/appearance.bash
-lib/colors.bash
-lib/command_duration.bash
-lib/helpers.bash
-lib/history.bash
-lib/log.bash
-lib/preexec.bash
-lib/preview.bash
-lib/search.bash
-lib/utilities.bash
 
 # plugins
 #

@@ -36,7 +36,6 @@ Automatically via terminal
 
 
 #. You can install the theme automatically using the ``sed`` command from your Linux or OSX Terminal.
-#. On macOS, the ~/.bash_profile is used, not the ~/.bashrc.
 #. For installation on windows you should use `\ ``Git-Bash`` <https://git-for-windows.github.io/>`_ or make sure the terminal emulator you use (ej: cygwin, mintty, etc) has the ``sed`` command installed.
 
 Command to execute For Windows and Linux:
@@ -51,7 +50,7 @@ Command to execute for macOS:
 .. code-block:: bash
 
    # Set the "atomic" theme replacing the theme you are using of bash-it
-   sed -i '' 's/'"$BASH_IT_THEME"'/atomic/g' ~/.bash_profile
+   sed -i '' 's/'"$BASH_IT_THEME"'/atomic/g' ~/.bashrc
 
 Features
 --------
