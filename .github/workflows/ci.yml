@@ -62,3 +62,21 @@ jobs:
       run: python3 -m pip install -r test/lint-requirements.txt
     - name: Run lint
       run: ./lint_clean_files.sh
+
+  lint-differential:
+    runs-on: ubuntu-latest
+
+    permissions:
+      security-events: write
+
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: ShellCheck
+        name: Differential ShellCheck
+        uses: redhat-plumbers-in-action/differential-shellcheck@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
