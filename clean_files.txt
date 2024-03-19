@@ -170,6 +170,7 @@ themes/pete
 themes/powerline
 themes/pure
 themes/purity
+themes/inretio
 
 # vendor init files
 #
