@@ -221,6 +221,21 @@ Envy
 
 ----
 
+Inretio
+^^^^^^^
+
+
+.. image:: https://raw.githubusercontent.com/inretio/bash-it/gh-pages/docs/images/inretio-black.png
+   :target: https://raw.githubusercontent.com/inretio/bash-it/gh-pages/docs/images/inretio-black.png
+   :alt: Inretio theme in dark color scheme
+
+
+.. image:: https://raw.githubusercontent.com/inretio/bash-it/gh-pages/docs/images/inretio-white.png
+   :target: https://raw.githubusercontent.com/inretio/bash-it/gh-pages/docs/images/inretio-white.png
+   :alt: Inretio theme in light color scheme
+
+----
+
 Iterate
 ^^^^^^^
 
