@@ -1,7 +1,7 @@
 .. _inretio:
 
 Inretio Theme
-==========
+=============
 
 Simple theme showing date and time, username and hostname, current folder, Git details and as a bonus - virtual environment along with Python version available in it.
 
