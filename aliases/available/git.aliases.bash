@@ -80,8 +80,8 @@ alias ggup='git log --branches --not --remotes --no-walk --decorate --oneline' #
 alias gll='git log --graph --pretty=oneline --abbrev-commit'
 alias gnew='git log HEAD@{1}..HEAD@{0}' # Show commits since last pull, see http://blogs.atlassian.com/2014/10/advanced-git-aliases/
 alias gwc='git whatchanged'
-alias ghist='git log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short' # Use it to be fast and without color.
-alias gprogress='git log --pretty=format:\"%C(yellow)%h %Cblue%ad %Creset%s%Cgreen [%cn] %Cred%d\" --decorate --date=short' #Usually use "git progress" in the file .gitconfig. The new alias from Git friends will be truly welcome.
+alias ghist='git log --pretty=format:'\''%h %ad | %s%d [%an]'\'' --graph --date=short' # Use it to be fast and without color.
+alias gprogress='git log --pretty=format:'\''%C(yellow)%h %Cblue%ad %Creset%s%Cgreen [%cn] %Cred%d'\'' --decorate --date=short' #Usually use "git progress" in the file .gitconfig. The new alias from Git friends will be truly welcome.
 
 # ls-files
 alias gu='git ls-files . --exclude-standard --others' # Show untracked files
