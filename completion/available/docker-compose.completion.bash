@@ -35,7 +35,7 @@ __docker_compose_previous_extglob_setting=$(shopt -p extglob)
 shopt -s extglob
 
 __docker_compose_q() {
-	docker-compose 2>/dev/null "${top_level_options[@]}" "$@"
+	docker compose 2>/dev/null "${top_level_options[@]}" "$@"
 }
 
 # Transforms a multiline list of strings into a single line string
