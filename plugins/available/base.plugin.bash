@@ -183,3 +183,16 @@ if ! _command_exists del; then
 		mkdir -p /tmp/.trash && mv "$@" /tmp/.trash
 	}
 fi
+
+# replace multiple file extensions at once
+function rex() {
+	about 'mass replace of the extension of multiple files'
+ 	param '1: extension to replace'
+  	param '2: new extenstion'
+   	example 'rex txt md'
+    	group 'base'
+	local ext2replace="${1:-}"
+ 	local newext="${2:-}"
+  	local files=(`ls *.$ext2replace`)
+   	for file in "${files[@]}"; do mv "$file" "${file/%.$ext2replace/.$newext}"; done
+}
