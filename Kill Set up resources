@@ -1,0 +1,2 @@
+rm -r doc-intelligence -f
+git clone https://github.com/MicrosoftLearning/mslearn-ai-document-intelligence doc-intelligence
