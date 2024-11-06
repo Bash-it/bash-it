@@ -21,7 +21,7 @@ export LP_BATTERY_THRESHOLD=${LP_BATTERY_THRESHOLD:-75}
 export LP_LOAD_THRESHOLD=${LP_LOAD_THRESHOLD:-60}
 export LP_TEMP_THRESHOLD=${LP_TEMP_THRESHOLD:-80}
 
-
+unset _lp_legacy _lp_escape __lp_escape
 source "$targetdir/liquidprompt"
 prompt() { true; }
 export PS2=" ┃ "
@@ -29,22 +29,37 @@ export LP_PS1_PREFIX="┌─"
 export LP_PS1_POSTFIX="\n└▪ "
 export LP_ENABLE_RUNTIME=0
 
+_lp_legacy()
+{
+    type -t _lp_escape &> /dev/null
+}
+
+_lp_legacy && __lp_escape()
+{
+    ret="$(_lp_escape "$@")"
+}
+
 _lp_git_branch()
 {
     (( LP_ENABLE_GIT )) || return
 
     \git rev-parse --is-inside-work-tree >/dev/null 2>&1 || return
 
-    local branch
+    local commit branch ret
+
+    commit="$(\git rev-parse --short -q HEAD 2>/dev/null)"
+
     # Recent versions of Git support the --short option for symbolic-ref, but
     # not 1.7.9 (Ubuntu 12.04)
     if branch="$(\git symbolic-ref -q HEAD)"; then
-        _lp_escape "$(\git rev-parse --short=5 -q HEAD 2>/dev/null):${branch#refs/heads/}"
+        __lp_escape "$commit:${branch#refs/heads/}"
+        lp_vcs_branch="$ret"
     else
         # In detached head state, use commit instead
         # No escape needed
-        \git rev-parse --short -q HEAD 2>/dev/null
+        lp_vcs_branch="$commit"
     fi
+    _lp_legacy && echo $lp_vcs_branch || return 0
 }
 
 _lp_time() {
