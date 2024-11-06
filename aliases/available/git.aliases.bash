@@ -153,7 +153,9 @@ alias grma='GIT_SEQUENCE_EDITOR=: git rebase  $(get_default_branch) -i --autosqu
 alias gprom='git fetch origin $(get_default_branch) && git rebase origin/$(get_default_branch) && git update-ref refs/heads/$(get_default_branch) origin/$(get_default_branch)' # Rebase with latest remote
 
 # reset
-alias gus='git reset HEAD'
+alias gus='git reset HEAD'  # read as: 'git unstage'
+alias grh='git reset'  # equivalent to: git reset HEAD
+alias grh!='git reset --hard'
 alias gpristine='git reset --hard && git clean -dfx'
 
 # status
