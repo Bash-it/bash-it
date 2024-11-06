@@ -110,7 +110,8 @@ alias gpatch='git format-patch -1'
 # push
 alias gp='git push'
 alias gpd='git push --delete'
-alias gpf='git push --force'
+alias gpf='git push --force-with-lease'
+alias gpff='git push --force'
 alias gpo='git push origin HEAD'
 alias gpom='git push origin $(get_default_branch)'
 alias gpu='git push --set-upstream'
@@ -211,9 +212,6 @@ function gdv() {
 }
 
 function get_default_branch() {
-	if git branch | grep -q '^. main\s*$'; then
-		echo main
-	else
-		echo master
-	fi
+	branch=$(git symbolic-ref refs/remotes/origin/HEAD)
+	${branch#refs/remotes/origin/}
 }
