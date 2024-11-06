@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 # Bash completion for Makefile
 # Loosely adapted from http://stackoverflow.com/a/38415982/1472048
 
@@ -17,7 +19,7 @@ _makecomplete() {
   for f in "${files[@]}" ; do
     while IFS='' read -r line ; do
       targets+=("$line")
-    done < <(grep -oE '^[a-zA-Z0-9_-]+:([^=]|$)' "$f" | cut -d':' -f1)
+    done < <(grep -E -o '^[a-zA-Z0-9_-]+:([^=]|$)' "$f" | cut -d':' -f1)
   done
 
   [ "${#targets[@]}" -eq 0 ] && return 0

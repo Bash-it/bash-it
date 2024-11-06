@@ -34,6 +34,7 @@ lint_clean_files.sh
 #
 completion/available/apm.completion.bash
 completion/available/awless.completion.bash
+completion/available/awscli.completion.bash
 completion/available/bash-it.completion.bash
 completion/available/brew.completion.bash
 completion/available/cargo.completion.bash
@@ -46,6 +47,7 @@ completion/available/dmidecode.completion.bash
 completion/available/docker-machine.completion.bash
 completion/available/docker.completion.bash
 completion/available/dotnet.completion.bash
+completion/available/flutter.completion.bash
 completion/available/gcloud.completion.bash
 completion/available/gem.completion.bash
 completion/available/git.completion.bash
@@ -75,6 +77,7 @@ completion/available/system.completion.bash
 completion/available/vault.completion.bash
 completion/available/vuejs.completion.bash
 completion/available/wpscan.completion.bash
+completion/available/yarn.completion.bash
 
 # libraries
 lib/appearance.bash
@@ -135,6 +138,12 @@ plugins/available/todo.plugin.bash
 plugins/available/xterm.plugin.bash
 plugins/available/zoxide.plugin.bash
 
+# tests
+#
+test/completion/aliases.completion.bats
+test/run
+test/test_helper.bash
+
 # themes
 #
 themes/90210
@@ -156,6 +165,7 @@ themes/essential
 themes/githelpers.theme.bash
 themes/modern
 themes/norbu
+themes/oh-my-posh
 themes/p4helpers.theme.bash
 themes/pete
 themes/powerline

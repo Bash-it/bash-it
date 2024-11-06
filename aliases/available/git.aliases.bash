@@ -8,13 +8,18 @@ alias get='git'
 alias ga='git add'
 alias gall='git add -A'
 alias gap='git add -p'
+alias gav='git add -v'
 
 # branch
 alias gb='git branch'
-alias gbD='git branch -D'
-alias gba='git branch -a'
+alias gba='git branch --all'
 alias gbd='git branch -d'
-alias gbm='git branch -m'
+alias gbD='git branch -D'
+alias gbl='git branch --list'
+alias gbla='git branch --list --all'
+alias gblr='git branch --list --remotes'
+alias gbm='git branch --move'
+alias gbr='git branch --remotes'
 alias gbt='git branch --track'
 alias gdel='git branch -D'
 
@@ -92,6 +97,9 @@ fi
 
 # merge
 alias gm='git merge'
+alias gma='git merge --abort'
+alias gmc='git merge --continue'
+alias gms='git merge --squash'
 
 # mv
 alias gmv='git mv'
@@ -127,7 +135,9 @@ alias grm='git rm'
 
 # rebase
 alias grb='git rebase'
+alias grba='git rebase --abort'
 alias grbc='git rebase --continue'
+alias grbi='git rebase --interactive'
 alias grm='git rebase $(get_default_branch)'
 alias grmi='git rebase $(get_default_branch) -i'
 alias grma='GIT_SEQUENCE_EDITOR=: git rebase  $(get_default_branch) -i --autosquash'
@@ -147,6 +157,8 @@ alias gsl='git shortlog -sn'
 
 # show
 alias gsh='git show'
+alias gshn='git show --name-only'
+alias gshns='git show --name-status'
 
 # svn
 alias gsd='git svn dcommit'

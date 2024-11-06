@@ -63,12 +63,15 @@ function dirs-help() {
 if [[ -f "${BASH_IT_DIRS_BKS?}" ]]; then
 	# shellcheck disable=SC1090
 	source "${BASH_IT_DIRS_BKS?}"
-elif [[ -f ~/.dirs ]]; then
-	mv -vn ~/.dirs "${BASH_IT_DIRS_BKS?}"
-	# shellcheck disable=SC1090
-	source "${BASH_IT_DIRS_BKS?}"
 else
-	touch "${BASH_IT_DIRS_BKS?}"
+	mkdir -p "${BASH_IT_DIRS_BKS%/*}"
+	if [[ -f ~/.dirs ]]; then
+		mv -vn ~/.dirs "${BASH_IT_DIRS_BKS?}"
+		# shellcheck disable=SC1090
+		source "${BASH_IT_DIRS_BKS?}"
+	else
+		touch "${BASH_IT_DIRS_BKS?}"
+	fi
 fi
 
 alias L='cat "${BASH_IT_DIRS_BKS?}"'
