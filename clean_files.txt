@@ -160,6 +160,7 @@ themes/brainy
 themes/brunton
 themes/candy
 themes/easy
+themes/elixr
 themes/essential
 themes/githelpers.theme.bash
 themes/inretio
