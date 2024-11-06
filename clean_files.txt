@@ -162,6 +162,7 @@ themes/candy
 themes/easy
 themes/essential
 themes/githelpers.theme.bash
+themes/inretio
 themes/modern
 themes/norbu
 themes/oh-my-posh
