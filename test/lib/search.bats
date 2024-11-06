@@ -33,7 +33,7 @@ function local_setup() {
   run _bash-it-search rails ruby gem bundler rake --no-color
 
   assert_line -n 0 '      aliases: bundler   rails   '
-  assert_line -n 1 '      plugins: chruby   chruby-auto   rails   ruby   '
+  assert_line -n 1 '      plugins: chruby   chruby-auto   nenv   nodenv   rails   ruby   '
   assert_line -n 2 '  completions: bundler   gem   rake   '
 }
 
@@ -41,7 +41,7 @@ function local_setup() {
   run _bash-it-search rails ruby gem bundler rake -chruby --no-color
 
   assert_line -n 0 '      aliases: bundler   rails   '
-  assert_line -n 1 '      plugins: rails   ruby   '
+  assert_line -n 1 '      plugins: nenv   nodenv   rails   ruby   '
   assert_line -n 2 '  completions: bundler   gem   rake   '
 }
 
