@@ -39,7 +39,7 @@ _lp_git_branch()
     # Recent versions of Git support the --short option for symbolic-ref, but
     # not 1.7.9 (Ubuntu 12.04)
     if branch="$(\git symbolic-ref -q HEAD)"; then
-        _lp_escape "$(\git rev-parse --short=5 -q HEAD 2>/dev/null):${branch#refs/heads/}"
+        __lp_escape "$(\git rev-parse --short=5 -q HEAD 2>/dev/null):${branch#refs/heads/}"
     else
         # In detached head state, use commit instead
         # No escape needed
