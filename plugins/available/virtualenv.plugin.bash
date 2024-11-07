@@ -11,35 +11,33 @@ elif _command_exists virtualenvwrapper.sh; then
 	source virtualenvwrapper.sh
 fi
 
-
 function mkvenv {
-  about 'create a new virtualenv for this directory'
-  group 'virtualenv'
+	about 'create a new virtualenv for this directory'
+	group 'virtualenv'
 
-  local cwd="${PWD##*/}"
-  mkvirtualenv --distribute "$cwd"
+	local cwd="${PWD##*/}"
+	mkvirtualenv --distribute "$cwd"
 }
 
-
 function mkvbranch {
-  about 'create a new virtualenv for the current branch'
-  group 'virtualenv'
+	about 'create a new virtualenv for the current branch'
+	group 'virtualenv'
 
-  local cwd="${PWD##*/}"
-  mkvirtualenv --distribute "${cwd}@${SCM_BRANCH}"
+	local cwd="${PWD##*/}"
+	mkvirtualenv --distribute "${cwd}@${SCM_BRANCH}"
 }
 
 function wovbranch {
-  about 'sets workon branch'
-  group 'virtualenv'
+	about 'sets workon branch'
+	group 'virtualenv'
 
-  local cwd="${PWD##*/}"
-  workon "${cwd}@${SCM_BRANCH}"
+	local cwd="${PWD##*/}"
+	workon "${cwd}@${SCM_BRANCH}"
 }
 
 function wovenv {
-  about 'works on the virtualenv for this directory'
-  group 'virtualenv'
+	about 'works on the virtualenv for this directory'
+	group 'virtualenv'
 
-  workon "${PWD##*/}"
+	workon "${PWD##*/}"
 }

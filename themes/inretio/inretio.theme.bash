@@ -48,32 +48,32 @@ icon_end="└> "
 
 # Display virtual environment info
 function _virtualenv_prompt {
-  VIRTUALENV_DETAILS=""
-  VIRTUALENV_CHAR=""
+	VIRTUALENV_DETAILS=""
+	VIRTUALENV_CHAR=""
 
-  # $VIRTUAL_ENV is set and is non-zero length
-  if [[ -n "$VIRTUAL_ENV" ]]; then
-    # Check if Python 3 exists
-    if command -v python3 >/dev/null 2>&1; then
-      VIRTUALENV_DETAILS="$($VIRTUAL_ENV/bin/python --version | sed 's,Python ,,') on [$(basename $VIRTUAL_ENV)]"
-      VIRTUALENV_CHAR=" 🐍"
-    else
-      VIRTUALENV_DETAILS="[$(basename $VIRTUAL_ENV)]"
-      VIRTUALENV_CHAR=" ⓔ"
-    fi
-  fi
+	# $VIRTUAL_ENV is set and is non-zero length
+	if [[ -n "$VIRTUAL_ENV" ]]; then
+		# Check if Python 3 exists
+		if command -v python3 > /dev/null 2>&1; then
+			VIRTUALENV_DETAILS="$($VIRTUAL_ENV/bin/python --version | sed 's,Python ,,') on [$(basename $VIRTUAL_ENV)]"
+			VIRTUALENV_CHAR=" 🐍"
+		else
+			VIRTUALENV_DETAILS="[$(basename $VIRTUAL_ENV)]"
+			VIRTUALENV_CHAR=" ⓔ"
+		fi
+	fi
 
-  echo "$VIRTUALENV_CHAR $VIRTUALENV_DETAILS"
+	echo "$VIRTUALENV_CHAR $VIRTUALENV_DETAILS"
 }
 
 # Rename tab
 function tabname {
-  printf "\e]1;$1\a"
+	printf "\e]1;$1\a"
 }
 
 # Rename window
 function winname {
-  printf "\e]2;$1\a"
+	printf "\e]2;$1\a"
 }
 
 _theme_clock() {
@@ -92,8 +92,8 @@ THEME_CLOCK_FORMAT=${THEME_CLOCK_FORMAT:-"%Y-%m-%d %H:%M:%S"}
 
 # Displays the current prompt
 function prompt_command() {
-  PS1="\n${icon_start}$(_theme_clock)${icon_user}${bold_green}\u${normal}${icon_host}${bold_cyan}\h${normal}${green}$(_virtualenv_prompt)${normal}${icon_directory}${bold_purple}\W${normal}\$([[ -n \$(git branch 2> /dev/null) ]] && echo \" on ${icon_branch} $(scm_prompt_info) \")${white}${normal}\n${icon_end}"
-  PS2="${icon_end}"
+	PS1="\n${icon_start}$(_theme_clock)${icon_user}${bold_green}\u${normal}${icon_host}${bold_cyan}\h${normal}${green}$(_virtualenv_prompt)${normal}${icon_directory}${bold_purple}\W${normal}\$([[ -n \$(git branch 2> /dev/null) ]] && echo \" on ${icon_branch} $(scm_prompt_info) \")${white}${normal}\n${icon_end}"
+	PS2="${icon_end}"
 }
 
 # Runs prompt (this bypasses bash_it $PROMPT setting)

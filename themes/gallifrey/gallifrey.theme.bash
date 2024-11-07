@@ -16,18 +16,20 @@ SCM_HG_CHAR="${bold_red}☿${normal}"
 gallifrey_prompt() {
 	SCM_PROMPT_FORMAT='%s%s'
 
-    ps_host="${green}\h${normal}";
-    ps_user_mark="${bold}\$${normal}";
-    ps_root_mark="${normal}§"
-    ps_path="${normal}\w";
+	ps_host="${green}\h${normal}"
+	ps_user_mark="${bold}\$${normal}"
+	ps_root_mark="${normal}§"
+	ps_path="${normal}\w"
 
-    # make it work
-    case $(id -u) in
-        0) PS1="$ps_host $ps_path $(scm_prompt)$ps_root_mark "
-            ;;
-        *) PS1="$ps_host $ps_path $(scm_prompt)$ps_user_mark "
-            ;;
-    esac
+	# make it work
+	case $(id -u) in
+		0)
+			PS1="$ps_host $ps_path $(scm_prompt)$ps_root_mark "
+			;;
+		*)
+			PS1="$ps_host $ps_path $(scm_prompt)$ps_user_mark "
+			;;
+	esac
 }
 
 safe_append_prompt_command gallifrey_prompt

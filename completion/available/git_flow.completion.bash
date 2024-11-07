@@ -45,8 +45,7 @@
 #
 # Distributed under the [MIT License](http://creativecommons.org/licenses/MIT/)
 
-_git_flow ()
-{
+_git_flow() {
 	local subcommands="init feature release hotfix"
 	local subcommand="$(__git_find_subcommand "$subcommands")"
 	if [ -z "$subcommand" ]; then
@@ -55,26 +54,25 @@ _git_flow ()
 	fi
 
 	case "$subcommand" in
-	feature)
-		__git_flow_feature
-		return
-		;;
-	release)
-		__git_flow_release
-		return
-		;;
-	hotfix)
-		__git_flow_hotfix
-		return
-		;;
-	*)
-		COMPREPLY=()
-		;;
+		feature)
+			__git_flow_feature
+			return
+			;;
+		release)
+			__git_flow_release
+			return
+			;;
+		hotfix)
+			__git_flow_hotfix
+			return
+			;;
+		*)
+			COMPREPLY=()
+			;;
 	esac
 }
 
-__git_flow_feature ()
-{
+__git_flow_feature() {
 	local subcommands="list start finish publish track diff rebase checkout pull"
 	local subcommand="$(__git_find_subcommand "$subcommands")"
 	if [ -z "$subcommand" ]; then
@@ -83,45 +81,41 @@ __git_flow_feature ()
 	fi
 
 	case "$subcommand" in
-	pull)
-		__gitcomp "$(__git_remotes)"
-		return
-		;;
-	checkout|finish|diff|rebase)
-		__gitcomp "$(__git_flow_list_features)"
-		return
-		;;
-	publish)
-		__gitcomp "$(comm -23 <(__git_flow_list_features) <(__git_flow_list_remote_features))"
-		return
-		;;
-	track)
-		__gitcomp "$(__git_flow_list_remote_features)"
-		return
-		;;
-	*)
-		COMPREPLY=()
-		;;
+		pull)
+			__gitcomp "$(__git_remotes)"
+			return
+			;;
+		checkout | finish | diff | rebase)
+			__gitcomp "$(__git_flow_list_features)"
+			return
+			;;
+		publish)
+			__gitcomp "$(comm -23 <(__git_flow_list_features) <(__git_flow_list_remote_features))"
+			return
+			;;
+		track)
+			__gitcomp "$(__git_flow_list_remote_features)"
+			return
+			;;
+		*)
+			COMPREPLY=()
+			;;
 	esac
 }
 
-__git_flow_list_features ()
-{
+__git_flow_list_features() {
 	git flow feature list 2> /dev/null | tr -d ' |*'
 }
 
-__git_flow_list_remote_features ()
-{
+__git_flow_list_remote_features() {
 	git branch -r 2> /dev/null | grep "origin/$(__git_flow_feature_prefix)" | awk '{ sub(/^origin\/$(__git_flow_feature_prefix)/, "", $1); print }'
 }
 
-__git_flow_feature_prefix ()
-{
+__git_flow_feature_prefix() {
 	git config gitflow.prefix.feature 2> /dev/null || echo "feature/"
 }
 
-__git_flow_release ()
-{
+__git_flow_release() {
 	local subcommands="list start finish"
 	local subcommand="$(__git_find_subcommand "$subcommands")"
 	if [ -z "$subcommand" ]; then
@@ -130,24 +124,22 @@ __git_flow_release ()
 	fi
 
 	case "$subcommand" in
-	finish)
-		__gitcomp "$(__git_flow_list_releases)"
-		return
-		;;
-	*)
-		COMPREPLY=()
-		;;
+		finish)
+			__gitcomp "$(__git_flow_list_releases)"
+			return
+			;;
+		*)
+			COMPREPLY=()
+			;;
 	esac
 
 }
 
-__git_flow_list_releases ()
-{
+__git_flow_list_releases() {
 	git flow release list 2> /dev/null
 }
 
-__git_flow_hotfix ()
-{
+__git_flow_hotfix() {
 	local subcommands="list start finish"
 	local subcommand="$(__git_find_subcommand "$subcommands")"
 	if [ -z "$subcommand" ]; then
@@ -156,23 +148,21 @@ __git_flow_hotfix ()
 	fi
 
 	case "$subcommand" in
-	finish)
-		__gitcomp "$(__git_flow_list_hotfixes)"
-		return
-		;;
-	*)
-		COMPREPLY=()
-		;;
+		finish)
+			__gitcomp "$(__git_flow_list_hotfixes)"
+			return
+			;;
+		*)
+			COMPREPLY=()
+			;;
 	esac
 }
 
-__git_flow_list_hotfixes ()
-{
+__git_flow_list_hotfixes() {
 	git flow hotfix list 2> /dev/null
 }
 
 # temporarily wrap __git_find_on_cmdline() for backwards compatibility
-if ! _command_exists __git_find_subcommand
-then
+if ! _command_exists __git_find_subcommand; then
 	alias __git_find_subcommand=__git_find_on_cmdline
 fi
