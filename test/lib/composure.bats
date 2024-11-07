@@ -1,7 +1,11 @@
-#!/usr/bin/env bats
+# shellcheck shell=bats
 
-load ../test_helper
-load "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
+load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
+
+function local_setup_file() {
+  true
+  # don't load any libraries as the tests here test the *whole* kit
+}
 
 @test "lib composure: _composure_keywords()" {
   run _composure_keywords

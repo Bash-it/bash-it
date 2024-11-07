@@ -35,7 +35,7 @@ function __powerline_right_segment {
     (( padding += 1 ))
   fi
 
-  RIGHT_PROMPT+="$(set_color - ${params[1]})${pad_before_segment}${params[0]}${normal}"
+  RIGHT_PROMPT+="$(set_color "${POWERLINE_PROMPT_FOREGROUND_COLOR}" ${params[1]})${pad_before_segment}${params[0]}${normal}"
 
   (( padding += ${#pad_before_segment} ))
   (( padding += ${#params[0]} ))
@@ -60,6 +60,8 @@ function __powerline_prompt_command {
   SEGMENTS_AT_LEFT=0
   SEGMENTS_AT_RIGHT=0
   LAST_SEGMENT_COLOR=""
+
+  _save-and-reload-history "${HISTORY_AUTOSAVE:-0}"
 
   ## left prompt ##
   for segment in $POWERLINE_LEFT_PROMPT; do

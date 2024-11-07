@@ -505,6 +505,7 @@ __git_flow_list_branches ()
 }
 
 # alias __git_find_on_cmdline for backwards compatibility
-if [ -z "`type -t __git_find_on_cmdline`" ]; then
+if ! _command_exists __git_find_on_cmdline
+then
 	alias __git_find_on_cmdline=__git_find_subcommand
 fi

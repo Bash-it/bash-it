@@ -1,0 +1,12 @@
+# plugins
+plugins base
+
+# completion
+completion aliases
+completion bash-it
+completion system
+
+# aliases
+aliases general
+# Bad component
+aliases bla

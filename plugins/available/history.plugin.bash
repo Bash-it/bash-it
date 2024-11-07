@@ -1,29 +1,26 @@
 # shellcheck shell=bash
-cite about-plugin
 about-plugin 'improve history handling with sane defaults'
 
-# append to bash_history if Terminal.app quits
+# Append the history list to the file named by the value of the HISTFILE
+# variable when the shell exits, rather than overwriting the file.
 shopt -s histappend
 
-# erase duplicates; alternative option: export HISTCONTROL=ignoredups
-export HISTCONTROL=${HISTCONTROL:-ignorespace:erasedups}
+# 'ignorespace': don't save command lines which begin with a space to history
+# 'erasedups' (alternative 'ignoredups'): don't save duplicates to history
+# 'autoshare': automatically share history between multiple running shells
+: "${HISTCONTROL:=ignorespace:erasedups:autoshare}"
 
 # resize history to 100x the default (500)
-export HISTSIZE=${HISTSIZE:-50000}
+: "${HISTSIZE:=50000}"
 
-top-history() {
+function top-history() {
 	about 'print the name and count of the most commonly run tools'
 
-	if [[ -n $HISTTIMEFORMAT ]]; then
-		# To parse history we need a predictable format, which HISTTIMEFORMAT
-		# gets in the way of. So we unset it and set a trap to guarantee the
-		# user's environment returns to normal even if the pipeline below fails.
-		# shellcheck disable=SC2064
-		trap "export HISTTIMEFORMAT='$HISTTIMEFORMAT'" RETURN
-		unset HISTTIMEFORMAT
-	fi
-
-	history \
+	# - Make sure formatting doesn't interfer with our parsing
+	# - Use awk to count how many times the first command on each line has been called
+	# - Truncate to 10 lines
+	# - Print in column format
+	HISTTIMEFORMAT='' history \
 		| awk '{
 				a[$2]++
 			}END{

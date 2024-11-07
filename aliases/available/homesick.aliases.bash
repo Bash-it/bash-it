@@ -1,4 +1,4 @@
-cite 'about-alias'
+# shellcheck shell=bash
 about-alias 'homesick aliases'
 
 # Aliases
@@ -19,6 +19,5 @@ alias sikpsh="homesick push dotfiles"
 alias sikrc="homesick rc dotfiles"
 alias sikpth="homesick show_path dotfiles"
 alias sikst="homesick status dotfiles"
-alias siktrk="homesick track $1 dotfiles"
 alias sikulnk="homesick unlink dotfiles"
 alias sikv="homesick version"

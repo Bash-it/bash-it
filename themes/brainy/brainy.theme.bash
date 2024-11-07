@@ -1,4 +1,6 @@
 # shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
+# shellcheck disable=SC2154 #TODO: fix these all.
 
 # Brainy Bash Prompt for Bash-it
 # by MunifTanjim
@@ -166,7 +168,7 @@ ___brainy_prompt_battery() {
 	box="[|]"
 	ac_adapter_connected && charging="+"
 	ac_adapter_disconnected && charging="-"
-	info+=$charging
+	info+="$charging"
 	[ "$info" == "100+" ] && info="AC"
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
 }

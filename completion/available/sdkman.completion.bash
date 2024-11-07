@@ -1,7 +1,9 @@
 # shellcheck shell=bash
-_sdkman_complete() {
+
+function _sdkman_complete() {
 	local CANDIDATES
 	local CANDIDATE_VERSIONS
+	local SDKMAN_CANDIDATES_CSV="${SDKMAN_CANDIDATES_CSV:-}"
 
 	COMPREPLY=()
 
@@ -10,7 +12,7 @@ _sdkman_complete() {
 	elif [ "$COMP_CWORD" -eq 2 ]; then
 		case "${COMP_WORDS[COMP_CWORD - 1]}" in
 			"install" | "i" | "uninstall" | "rm" | "list" | "ls" | "use" | "u" | "default" | "d" | "home" | "h" | "current" | "c" | "upgrade" | "ug")
-				CANDIDATES=$(echo "${SDKMAN_CANDIDATES_CSV}" | tr ',' ' ')
+				CANDIDATES="${SDKMAN_CANDIDATES_CSV//,/${IFS:0:1}}"
 				mapfile -t COMPREPLY < <(compgen -W "$CANDIDATES" -- "${COMP_WORDS[COMP_CWORD]}")
 				;;
 			"env")
@@ -46,17 +48,17 @@ _sdkman_complete() {
 	return 0
 }
 
-_sdkman_candidate_local_versions() {
+function _sdkman_candidate_local_versions() {
 
 	CANDIDATE_VERSIONS=$(__sdkman_cleanup_local_versions "$1")
 
 }
 
-_sdkman_candidate_all_versions() {
+function _sdkman_candidate_all_versions() {
 
 	candidate="$1"
 	CANDIDATE_LOCAL_VERSIONS=$(__sdkman_cleanup_local_versions "$candidate")
-	if [ "$SDKMAN_OFFLINE_MODE" = "true" ]; then
+	if [[ "${SDKMAN_OFFLINE_MODE:-false}" == "true" ]]; then
 		CANDIDATE_VERSIONS=$CANDIDATE_LOCAL_VERSIONS
 	else
 		# sdkman has a specific output format for Java candidate since
@@ -70,12 +72,12 @@ _sdkman_candidate_all_versions() {
 		# "+" - local version
 		# "*" - installed
 		# ">" - currently in use
-		CANDIDATE_VERSIONS="$(echo "$CANDIDATE_ONLINE_VERSIONS $CANDIDATE_LOCAL_VERSIONS" | tr ' ' '\n' | grep -v -e '^[[:space:]|\*|\>|\+]*$' | sort | uniq -u) "
+		CANDIDATE_VERSIONS="$(echo "$CANDIDATE_ONLINE_VERSIONS $CANDIDATE_LOCAL_VERSIONS" | tr ' ' '\n' | grep -v -e '^[[:space:]|\*|\>|\+]*$' | sort -u) "
 	fi
 
 }
 
-__sdkman_cleanup_local_versions() {
+function __sdkman_cleanup_local_versions() {
 
 	__sdkman_build_version_csv "$1" | tr ',' ' '
 

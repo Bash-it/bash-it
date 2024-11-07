@@ -26,6 +26,8 @@ function __powerline_left_segment {
   LEFT_PROMPT+="$(set_color ${params[1]} -)${pad_before_segment}${params[0]}${normal}"
   LAST_SEGMENT_COLOR=${params[1]}
   (( SEGMENTS_AT_LEFT += 1 ))
+
+  _save-and-reload-history "${HISTORY_AUTOSAVE:-0}"
 }
 
 function __powerline_left_last_segment_padding {

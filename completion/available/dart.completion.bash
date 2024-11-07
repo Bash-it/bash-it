@@ -1,7 +1,9 @@
 # shellcheck shell=bash
 
 __dart_completion() {
+	# shellcheck disable=SC2155
 	local prev=$(_get_pword)
+	# shellcheck disable=SC2155
 	local curr=$(_get_cword)
 
 	local HELP="--help -h"

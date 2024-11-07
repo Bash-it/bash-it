@@ -676,7 +676,7 @@ _docker_compose() {
 	done
 
 	local completions_func=_docker_compose_${command//-/_}
-	declare -F $completions_func >/dev/null && $completions_func
+	_is_function $completions_func && $completions_func
 
 	eval "$previous_extglob_setting"
 	return 0

@@ -1,93 +1,83 @@
-#!/usr/bin/env bats
+# shellcheck shell=bats
 
-load ../test_helper
-load "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
-load ../../lib/helpers
-load ../../lib/utilities
-load ../../lib/search
+load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
-cite _about _param _example _group _author _version
-
-function local_setup {
-  setup_test_fixture
-}
-
-function has_match() {
-  $(_bash-it-array-contains-element ${@}) && echo "has" "$1"
-}
-
-function item_enabled() {
-  $(_bash-it-component-item-is-enabled ${@}) && echo "$1" "$2" "is enabled"
-}
-
-function item_disabled() {
-  $(_bash-it-component-item-is-disabled ${@}) && echo "$1" "$2" "is disabled"
+function local_setup_file() {
+  setup_libs "helpers"
 }
 
 @test "_bash-it-component-item-is-enabled() - for a disabled item" {
-  run item_enabled aliases svn
-  assert_line -n 0 ''
+  run _bash-it-component-item-is-enabled aliases svn
+  assert_failure
 }
 
 @test "_bash-it-component-item-is-enabled() - for an enabled/disabled item" {
   run bash-it enable alias svn
   assert_line -n 0 'svn enabled with priority 150.'
 
-  run item_enabled alias svn
-  assert_line -n 0 'alias svn is enabled'
+  run _bash-it-component-item-is-enabled alias svn
+  assert_success
+  run _bash-it-component-item-is-disabled alias svn
+  assert_failure
 
   run bash-it disable alias svn
   assert_line -n 0 'svn disabled.'
 
-  run item_enabled alias svn
-  assert_line -n 0 ''
+  run _bash-it-component-item-is-enabled alias svn
+  assert_failure
+  run _bash-it-component-item-is-disabled alias svn
+  assert_success
 }
 
 @test "_bash-it-component-item-is-disabled() - for a disabled item" {
-  run item_disabled alias svn
-  assert_line -n 0 'alias svn is disabled'
+  run _bash-it-component-item-is-disabled alias svn
+  assert_success
 }
 
 @test "_bash-it-component-item-is-disabled() - for an enabled/disabled item" {
   run bash-it enable alias svn
   assert_line -n 0 'svn enabled with priority 150.'
 
-  run item_disabled alias svn
-  assert_line -n 0 ''
+  run _bash-it-component-item-is-disabled alias svn
+  assert_failure
+  run _bash-it-component-item-is-enabled alias svn
+  assert_success
 
   run bash-it disable alias svn
   assert_line -n 0 'svn disabled.'
 
-  run item_disabled alias svn
-  assert_line -n 0 'alias svn is disabled'
+  run _bash-it-component-item-is-disabled alias svn
+  assert_success
+  run _bash-it-component-item-is-enabled alias svn
+  assert_failure
 }
 
 @test "_bash-it-array-contains-element() - when match is found, and is the first" {
   declare -a fruits=(apple pear orange mandarin)
-  run has_match apple "${fruits[@]}"
-  assert_line -n 0 'has apple'
+  run _bash-it-array-contains-element apple "${fruits[@]}"
+  assert_success
 }
 
 @test "_bash-it-array-contains-element() - when match is found, and is the last" {
   declare -a fruits=(apple pear orange mandarin)
-  run has_match mandarin "${fruits[@]}"
-  assert_line -n 0 'has mandarin'
+  run _bash-it-array-contains-element mandarin "${fruits[@]}"
+  assert_success
 }
 
 @test "_bash-it-array-contains-element() - when match is found, and is in the middle" {
   declare -a fruits=(apple pear orange mandarin)
-  run has_match pear "${fruits[@]}"
-  assert_line -n 0 'has pear'
+  run _bash-it-array-contains-element pear "${fruits[@]}"
+  assert_success
 }
 
 @test "_bash-it-array-contains-element() - when match is found, and it has spaces" {
   declare -a fruits=(apple pear orange mandarin "yellow watermelon")
-  run has_match "yellow watermelon" "${fruits[@]}"
-  assert_line -n 0 'has yellow watermelon'
+  run _bash-it-array-contains-element "yellow watermelon" "${fruits[@]}"
+  assert_success
 }
 
 @test "_bash-it-array-contains-element() - when match is not found" {
   declare -a fruits=(apple pear orange mandarin)
-  run has_match xyz "${fruits[@]}"
-  assert_line -n 0 ''
+  run _bash-it-array-contains-element xyz "${fruits[@]}"
+  assert_failure
 }

@@ -1,4 +1,4 @@
-cite 'about-alias'
+# shellcheck shell=bash
 about-alias 'the silver searcher (ag) aliases'
 
 ## Summary for args to less:
