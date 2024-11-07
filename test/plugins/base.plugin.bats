@@ -8,37 +8,39 @@ function local_setup_file() {
 }
 
 @test 'plugins base: ips()' {
-  declare -r localhost='127.0.0.1'
+  readonly localhost='127.0.0.1'
   run ips
   assert_success
-  assert_line $localhost
+  assert_line "$localhost"
 }
 
 @test 'plugins base: myip()' {
+  local mask_ip
   run myip
   assert_success
-  declare -r mask_ip=$(echo $output | tr -s '[0-9]' '?')
-  [[ $mask_ip == 'Your public IP is:'*'?.?.?.?'* ]]
+  shopt -s extglob
+  mask_ip="${output//+([[:digit:]]|[[:digit:]][[:digit:]]|[[:digit:]][[:digit:]][[:digit:]])/?}" #$(echo "$output" | tr -s '0-9' '?')
+  [[ $mask_ip == 'Your public IP is:  ?.?.?.? ' ]]
 }
 
 @test 'plugins base: pickfrom()' {
-  stub_file="${BATS_TEST_TMPDIR}/stub_file"
-  printf "l1\nl2\nl3" > $stub_file
-  run pickfrom $stub_file
+  stub_file="${BATS_TEST_TMPDIR?}/stub_file"
+  printf "l1\nl2\nl3" > "$stub_file"
+  run pickfrom "$stub_file"
   assert_success
   [[ $output == l? ]]
 }
 
 @test 'plugins base: mkcd()' {
-  cd "${BATS_TEST_TMPDIR}"
+  cd "${BATS_TEST_TMPDIR?}"
   declare -r dir_name="-dir_with_dash"
 
   # Make sure that the directory does not exist prior to the test
-  rm -rf "${BATS_TEST_TMPDIR}/${dir_name}"
+  rm -rf "${BATS_TEST_TMPDIR:?}/${dir_name}"
 
   run mkcd "${dir_name}"
   assert_success
-  assert_dir_exist "${BATS_TEST_TMPDIR}/${dir_name}"
+  assert_dir_exist "${BATS_TEST_TMPDIR?}/${dir_name}"
 
   mkcd "${dir_name}"
   assert_equal "${PWD}" "${BATS_TEST_TMPDIR//\/\///}/${dir_name}"
@@ -46,20 +48,20 @@ function local_setup_file() {
 
 @test 'plugins base: lsgrep()' {
   for i in 1 2 3; do mkdir -p "${BASH_IT}/${i}"; done
-  cd $BASH_IT
+  cd "${BASH_IT?}"
   run lsgrep 2
   assert_success
-  assert_equal $output 2
+  assert_equal "$output" 2
 }
 
 @test 'plugins base: buf()' {
-  declare -r file="${BATS_TEST_TMPDIR}/file"
-  touch $file
+  declare -r file="${BATS_TEST_TMPDIR?}/file"
+  touch "$file"
 
   # Take one timestamp before running the `buf` function
   declare -r stamp1=$(date +%Y%m%d_%H%M%S)
 
-  run buf $file
+  run buf "$file"
 
   # Take another timestamp after running `buf`.
   declare -r stamp2=$(date +%Y%m%d_%H%M%S)

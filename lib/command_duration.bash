@@ -26,7 +26,7 @@ function _dynamic_clock_icon {
 	local clock_hand
 	# clock hand value is between 90 and 9b in hexadecimal.
 	# so between 144 and 155 in base 10.
-	printf -v clock_hand '%x' $(((${1:-${SECONDS}} % 12) + 144))
+	printf -v clock_hand '%x' $((((${1:-${SECONDS}} - 1) % 12) + 144))
 	printf -v 'COMMAND_DURATION_ICON' '%b' "\xf0\x9f\x95\x$clock_hand"
 }
 

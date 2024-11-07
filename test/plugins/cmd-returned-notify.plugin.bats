@@ -1,4 +1,5 @@
 # shellcheck shell=bats
+# shellcheck disable=SC2034
 
 load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
@@ -26,13 +27,13 @@ function local_setup_file() {
 }
 
 @test "lib command_duration: preexec no output" {
-	export COMMAND_DURATION_START_SECONDS=
+	COMMAND_DURATION_START_SECONDS=
 	run _command_duration_pre_exec
 	assert_success
 	assert_output ""
 }
 @test "lib command_duration: preexec set COMMAND_DURATION_START_SECONDS" {
-	export COMMAND_DURATION_START_SECONDS=
+	COMMAND_DURATION_START_SECONDS=
 	assert_equal "${COMMAND_DURATION_START_SECONDS}" ""
 	NOW="$(_shell_duration_en)"
 	_command_duration_pre_exec
