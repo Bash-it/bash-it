@@ -29,4 +29,3 @@ In Python virtual environment:
     ┌──[2024-03-20 12:07:32] 🐧 gytis 💻 gytis-legion 🐍 3.12.2 on [general] 📂 general
     └> ls
     bin  include  lib  lib64  pyvenv.cfg  share
-

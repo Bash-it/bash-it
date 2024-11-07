@@ -416,9 +416,9 @@ function node_version_prompt() {
 	_log_debug "node: using version strategy '$NODE_VERSION_STRATEGY'"
 
 	if [ "$NODE_VERSION_STRATEGY" == "nvm" ]; then
-	    nvm_version_prompt
+		nvm_version_prompt
 	elif [ "$NODE_VERSION_STRATEGY" == "node" ]; then
-	    node_native_version_prompt
+		node_native_version_prompt
 	fi
 }
 

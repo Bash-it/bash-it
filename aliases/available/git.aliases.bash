@@ -83,7 +83,7 @@ alias ggup='git log --branches --not --remotes --no-walk --decorate --oneline' #
 alias gll='git log --graph --pretty=oneline --abbrev-commit'
 alias gnew='git log HEAD@{1}..HEAD@{0}' # Show commits since last pull, see http://blogs.atlassian.com/2014/10/advanced-git-aliases/
 alias gwc='git whatchanged'
-alias ghist='git log --pretty=format:'\''%h %ad | %s%d [%an]'\'' --graph --date=short' # Use it to be fast and without color.
+alias ghist='git log --pretty=format:'\''%h %ad | %s%d [%an]'\'' --graph --date=short'                                          # Use it to be fast and without color.
 alias gprogress='git log --pretty=format:'\''%C(yellow)%h %Cblue%ad %Creset%s%Cgreen [%cn] %Cred%d'\'' --decorate --date=short' #Usually use "git progress" in the file .gitconfig. The new alias from Git friends will be truly welcome.
 
 # ls-files
@@ -153,8 +153,8 @@ alias grma='GIT_SEQUENCE_EDITOR=: git rebase  $(get_default_branch) -i --autosqu
 alias gprom='git fetch origin $(get_default_branch) && git rebase origin/$(get_default_branch) && git update-ref refs/heads/$(get_default_branch) origin/$(get_default_branch)' # Rebase with latest remote
 
 # reset
-alias gus='git reset HEAD'  # read as: 'git unstage'
-alias grh='git reset'  # equivalent to: git reset HEAD
+alias gus='git reset HEAD' # read as: 'git unstage'
+alias grh='git reset'      # equivalent to: git reset HEAD
 alias grh!='git reset --hard'
 alias gpristine='git reset --hard && git clean -dfx'
 
