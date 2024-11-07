@@ -1,4 +1,5 @@
 # shellcheck shell=bash
+# shellcheck disable=SC2086
 cite about-plugin
 about-plugin 'Maven jgitflow build helpers'
 
@@ -18,21 +19,21 @@ function hotfix-start {
 	about 'helper function for starting a new hotfix'
 	group 'jgitflow'
 
-  pre-jgitflow && mvn jgitflow:hotfix-start ${JGITFLOW_MVN_ARGUMENTS}
+	pre-jgitflow && mvn jgitflow:hotfix-start ${JGITFLOW_MVN_ARGUMENTS}
 }
 
 function hotfix-finish {
 	about 'helper function for finishing a hotfix'
 	group 'jgitflow'
 
-  pre-jgitflow && mvn jgitflow:hotfix-finish -Darguments="${JGITFLOW_MVN_ARGUMENTS}" && git push && git push origin master && git push --tags && mvn clean
+	pre-jgitflow && mvn jgitflow:hotfix-finish -Darguments="${JGITFLOW_MVN_ARGUMENTS}" && git push && git push origin master && git push --tags && mvn clean
 }
 
 function feature-start {
 	about 'helper function for starting a new feature'
 	group 'jgitflow'
 
-  pre-jgitflow && mvn jgitflow:feature-start ${JGITFLOW_MVN_ARGUMENTS}
+	pre-jgitflow && mvn jgitflow:feature-start ${JGITFLOW_MVN_ARGUMENTS}
 }
 
 function feature-finish {
