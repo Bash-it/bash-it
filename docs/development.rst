@@ -66,7 +66,7 @@ For ``aliases``\ , ``plugins`` and ``completions``\ , the following rules are ap
 * Within the common ``enabled`` directories, the files are loaded in alphabetical order, which is based on the item's load priority (see next item).
 * When enabling a component, a *load priority* is assigned to the file. The following default priorities are used:
 
-  * Aliases: 150
+  * Aliases: 750
   * Plugins: 250
   * Completions: 350
 
@@ -78,7 +78,7 @@ For ``aliases``\ , ``plugins`` and ``completions``\ , the following rules are ap
 
      # BASH_IT_LOAD_PRIORITY: 225
 
-Having the order based on a numeric priority in a common directory allows for more flexibility. While in general, aliases are loaded first (since their default priority is 150), it's possible to load some aliases after the plugins, or some plugins after completions by setting the items' load priority. This is more flexible than a fixed type-based order or a strict alphabetical order based on name.
+Having the order based on a numeric priority in a common directory allows for more flexibility. While in general, aliases are loaded last (since their default priority is 750), it's possible to load some aliases before the plugins, or some plugins after completions by setting the items' load priority. This is more flexible than a fixed type-based order or a strict alphabetical order based on name. Do not schedule aliases earlier than anything else unless you know what you are doing.
 
 These items are subject to change. When making changes to the internal functionality, this page needs to be updated as well.
 
