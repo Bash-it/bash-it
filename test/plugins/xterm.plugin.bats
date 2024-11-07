@@ -1,4 +1,5 @@
 # shellcheck shell=bats
+# shellcheck disable=SC2034
 
 load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
@@ -8,28 +9,28 @@ function local_setup_file() {
 }
 
 @test "plugins xterm: shorten command output" {
-    export SHORT_TERM_LINE=true
+    SHORT_TERM_LINE=true
     run _short-command "${BASH_IT}/test/fixtures/plugin/xterm/files"/*
     assert_success
     assert_output "${BASH_IT}/test/fixtures/plugin/xterm/files/arg0"
 }
 
 @test "plugins xterm: full command output" {
-    export SHORT_TERM_LINE=false
+    SHORT_TERM_LINE=false
     run _short-command "${BASH_IT}/test/fixtures/plugin/xterm/files"/*
     assert_success
     assert_output "$(echo "${BASH_IT}/test/fixtures/plugin/xterm/files"/*)"
 }
 
 @test "plugins xterm: shorten dirname output" {
-    export SHORT_TERM_LINE=true
+    SHORT_TERM_LINE=true
     run _short-dirname
     assert_success
     assert_output "$(basename "${PWD}")"
 }
 
 @test "plugins xterm: full dirname output" {
-    export SHORT_TERM_LINE=false
+    SHORT_TERM_LINE=false
     run _short-dirname
     assert_success
     assert_output "${PWD}"
