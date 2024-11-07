@@ -1,4 +1,4 @@
-#!/bin/bash
+# shellcheck shell=bash
 # shellcheck disable=SC1090,SC2034
 
 function set_prompt {
@@ -12,8 +12,10 @@ function set_prompt {
 	local reset_color="\[\033[0m\]"            # reset color
 	local prompt_symbol_color="\[\033[1;31m\]" # bold red for the prompt symbol
 
-	local end_time=$(date +%s%3N)                 # current time in milliseconds
-	local time_taken=$(((end_time - start_time))) # time in milliseconds
+	local end_time time_taken
+	end_time=$(date +%s%3N) # current time in milliseconds
+	# shellcheck disable=SC2154
+	time_taken=$((end_time - start_time)) # time in milliseconds
 
 	PS1="${user_color}╭─\\u"            # username
 	PS1+="${at_color}@${host_color}\\h" # @ symbol and hostname

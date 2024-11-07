@@ -1,8 +1,10 @@
+# shellcheck shell=bash
 # based on https://gist.github.com/318247
 
 cite about-plugin
 about-plugin 'render commandline output in your browser'
 
+# shellcheck disable=SC2120
 function browser() {
 	about 'pipe html to a browser'
 	example '$ echo "<h1>hi mom!</h1>" | browser'
@@ -11,7 +13,7 @@ function browser() {
 
 	if [ -t 0 ]; then
 		if [ -n "$1" ]; then
-			open $1
+			open "$1"
 		else
 			reference browser
 		fi
@@ -30,9 +32,10 @@ function wmate() {
 
 	if [ -t 0 ]; then
 		if [ -n "$1" ]; then
-			wget -qO- $1 | /usr/bin/mate
+			wget -qO- "$1" | /usr/bin/mate
 
-			TIDY=$(/usr/bin/osascript << EOT
+			TIDY=$(
+				/usr/bin/osascript << EOT
 tell application "TextMate"
 	activate
 end tell
@@ -54,6 +57,7 @@ tell application "System Events"
 end tell
 EOT
 			)
+			export TIDY
 
 		else
 			reference wmate
@@ -68,7 +72,7 @@ function raw() {
 
 	if [ -t 0 ]; then
 		if [ -n "$1" ]; then
-			wget -qO- $1 | browser
+			wget -qO- "$1" | browser
 		else
 			reference raw
 		fi
