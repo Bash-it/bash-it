@@ -168,7 +168,7 @@ ___brainy_prompt_battery() {
 	box="[|]"
 	ac_adapter_connected && charging="+"
 	ac_adapter_disconnected && charging="-"
-	info+=$charging
+	info+="$charging"
 	[ "$info" == "100+" ] && info="AC"
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
 }

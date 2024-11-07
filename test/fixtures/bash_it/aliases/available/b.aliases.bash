@@ -1,3 +1,3 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 
 alias test_alias="b"

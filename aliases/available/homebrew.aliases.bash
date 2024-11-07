@@ -1,7 +1,5 @@
-# Some aliases for Homebrew
-
-cite 'about-alias'
-about-alias 'homebrew abbreviations'
+# shellcheck shell=bash
+about-alias 'Some aliases for Homebrew'
 
 alias bup='brew update && brew upgrade'
 alias bout='brew outdated'

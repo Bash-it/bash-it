@@ -4,9 +4,8 @@
 # Load the `bash-preexec.sh` library, and define helper functions
 
 ## Prepare, load, fix, and install `bash-preexec.sh`
-: "${PROMPT_COMMAND:=}"
 
-# Disable immediate `$PROMPT_COMMAND` modification
+# Disable `$PROMPT_COMMAND` modification for now.
 __bp_delay_install="delayed"
 
 # shellcheck source-path=SCRIPTDIR/../vendor/github.com/rcaloras/bash-preexec
@@ -18,12 +17,12 @@ function __bp_adjust_histcontrol() { :; }
 # Don't fail on readonly variables
 function __bp_require_not_readonly() { :; }
 
-# Disable trap DEBUG on subshells - https://github.com/Bash-it/bash-it/pull/1040
-__bp_enable_subshells= # blank
-set +T
+# For performance, testing, and to avoid unexpected behavior: disable DEBUG traps in subshells.
+# See bash-it/bash-it#1040 and rcaloras/bash-preexec#26
+: "${__bp_enable_subshells:=}" # blank
 
-# Modify `$PROMPT_COMMAND` now
-__bp_install_after_session_init
+# Modify `$PROMPT_COMMAND` in finalize hook
+_bash_it_library_finalize_hook+=('__bp_install_after_session_init')
 
 ## Helper functions
 function __check_precmd_conflict() {
@@ -38,26 +37,20 @@ function __check_preexec_conflict() {
 	_bash-it-array-contains-element "${f}" "${preexec_functions[@]}"
 }
 
-function safe_append_prompt_command {
-	local prompt_re f
-	__bp_trim_whitespace f "${1?}"
+function safe_append_prompt_command() {
+	local prompt_re prompt_er f
 
-	if [ "${__bp_imported:-missing}" == "defined" ]; then
+	if [[ "${bash_preexec_imported:-${__bp_imported:-missing}}" == "defined" ]]; then
 		# We are using bash-preexec
+		__bp_trim_whitespace f "${1?}"
 		if ! __check_precmd_conflict "${f}"; then
 			precmd_functions+=("${f}")
 		fi
 	else
-		# Set OS dependent exact match regular expression
-		if [[ ${OSTYPE} == darwin* ]]; then
-			# macOS
-			prompt_re="[[:<:]]${1}[[:>:]]"
-		else
-			# Linux, FreeBSD, etc.
-			prompt_re="\<${1}\>"
-		fi
-
-		if [[ ${PROMPT_COMMAND} =~ ${prompt_re} ]]; then
+		# Match on word-boundaries
+		prompt_re='(^|[^[:alnum:]_])'
+		prompt_er='([^[:alnum:]_]|$)'
+		if [[ ${PROMPT_COMMAND} =~ ${prompt_re}"${1}"${prompt_er} ]]; then
 			return
 		elif [[ -z ${PROMPT_COMMAND} ]]; then
 			PROMPT_COMMAND="${1}"
@@ -67,12 +60,12 @@ function safe_append_prompt_command {
 	fi
 }
 
-function safe_append_preexec {
+function safe_append_preexec() {
 	local prompt_re f
-	__bp_trim_whitespace f "${1?}"
 
-	if [ "${__bp_imported:-missing}" == "defined" ]; then
+	if [[ "${bash_preexec_imported:-${__bp_imported:-missing}}" == "defined" ]]; then
 		# We are using bash-preexec
+		__bp_trim_whitespace f "${1?}"
 		if ! __check_preexec_conflict "${f}"; then
 			preexec_functions+=("${f}")
 		fi

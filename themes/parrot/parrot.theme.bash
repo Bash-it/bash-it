@@ -2,7 +2,7 @@
 
 # git branch parser
 function parse_git_branch() {
-    echo -e "\033[1;34m$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/')\033[0m"
+    echo -e "\[\033[1;34m\]$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/')\[\033[0m\]"
 }
 
 function parse_git_branch_no_color() {
