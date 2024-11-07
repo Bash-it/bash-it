@@ -21,6 +21,7 @@ docs/
 hooks/
 lib/
 scripts/
+test/
 
 # root files
 #
