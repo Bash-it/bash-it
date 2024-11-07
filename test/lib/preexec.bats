@@ -6,6 +6,7 @@ load ../test_helper
 function local_setup {
 	setup_test_fixture
 	export __bp_enable_subshells=yas
+	export HISTCONTROL=""
 }
 
 @test "vendor preexec: __bp_install_after_session_init() without existing" {
