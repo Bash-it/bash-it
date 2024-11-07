@@ -64,7 +64,7 @@ function v2gif() {
 	fi
 
 	# Parse the options
-	args=$("$getopt" -l "alert:" -l "lossy:" -l "width:" -l del,delete -l high -l tag -l "fps:" -l webm -o "a:l:w:f:dhmt" -- "$@") || {
+	args=$("$getopt" -l "alert:" -l "lossy:" -l "width:" -l del,delete -l high -l help -l tag -l "fps:" -l webm -o "a:l:w:f:dhmt" -- "$@") || {
 		echo 'Terminating...' >&2
 		return 2
 	}
@@ -82,6 +82,7 @@ function v2gif() {
 	local fps=""
 	local make_webm=""
 	local alert=5000
+	local printhelp=""
 	while [[ $# -ge 1 ]]; do
 		case "$1" in
 			--)
@@ -92,6 +93,11 @@ function v2gif() {
 			-d | --del | --delete)
 				# Delete after
 				opt_del_after="true"
+				shift
+				;;
+			--help)
+				# Print Help
+				printhelp="true"
 				shift
 				;;
 			-h | --high)
@@ -141,7 +147,7 @@ function v2gif() {
 		esac
 	done
 
-	if [[ -z "$*" ]]; then
+	if [[ -z "$*" || "$printhelp" ]]; then
 		echo "$(tput setaf 1)No input files given. Example: v2gif file [file...] [-w <max width (pixels)>] [-l <lossy level>] $(tput sgr 0)"
 		echo "-d/--del/--delete Delete original vid if done suceessfully (and file not over the size limit)"
 		echo "-h/--high         High Quality - use Gifski instead of gifsicle"
