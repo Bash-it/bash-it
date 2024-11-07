@@ -1,4 +1,3 @@
-
 # prompt theming
 
 # added TITLEBAR for updating the tab and window titles with the pwd
@@ -23,6 +22,5 @@ SCM_THEME_PROMPT_DIRTY=" ${red}✗"
 SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓"
 SCM_THEME_PROMPT_PREFIX="${green}("
 SCM_THEME_PROMPT_SUFFIX="${green})${reset_color}"
-
 
 safe_append_prompt_command prompt_command

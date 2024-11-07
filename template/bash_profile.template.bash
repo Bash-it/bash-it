@@ -2,8 +2,8 @@
 
 # If not running interactively, don't do anything
 case $- in
-  *i*) ;;
-    *) return;;
+	*i*) ;;
+	*) return ;;
 esac
 
 # Path to the bash it configuration

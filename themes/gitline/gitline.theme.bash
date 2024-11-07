@@ -67,5 +67,4 @@ IN_VIM_THEME_PROMPT_TEXT="vim"
 IN_TOOLBOX_THEME_PROMPT_COLOR=125
 IN_TOOLBOX_THEME_PROMPT_TEXT="⬢ "
 
-
 safe_append_prompt_command __powerline_prompt_command

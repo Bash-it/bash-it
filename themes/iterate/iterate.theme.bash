@@ -28,32 +28,32 @@ RBFU_THEME_PROMPT_PREFIX="|"
 RBFU_THEME_PROMPT_SUFFIX="| "
 
 function rvm_version_prompt {
-  if which rvm &> /dev/null; then
-    rvm_current=$(rvm tools identifier) || return
-    rvm_default=$(rvm strings default) || return
-    [ "$rvm_current" !=  "$rvm_default" ] && ( echo -e "$RVM_THEME_PROMPT_PREFIX$rvm_current$RVM_THEME_PROMPT_SUFFIX" )
-  fi
+	if which rvm &> /dev/null; then
+		rvm_current=$(rvm tools identifier) || return
+		rvm_default=$(rvm strings default) || return
+		[ "$rvm_current" != "$rvm_default" ] && (echo -e "$RVM_THEME_PROMPT_PREFIX$rvm_current$RVM_THEME_PROMPT_SUFFIX")
+	fi
 }
 
 function git_prompt_info {
-  git_prompt_vars
-  echo -e "$SCM_PREFIX$SCM_BRANCH$SCM_STATE$SCM_GIT_AHEAD$SCM_GIT_BEHIND$SCM_GIT_STASH$SCM_SUFFIX"
+	git_prompt_vars
+	echo -e "$SCM_PREFIX$SCM_BRANCH$SCM_STATE$SCM_GIT_AHEAD$SCM_GIT_BEHIND$SCM_GIT_STASH$SCM_SUFFIX"
 }
 
 LAST_PROMPT=""
 function prompt_command() {
-    local new_PS1="${bold_cyan}$(scm_char)${yellow}$(ruby_version_prompt)${green}\w $(scm_prompt_info)"
-    local new_prompt=$(PS1="$new_PS1" "$BASH" --norc -i </dev/null 2>&1 | sed -n '${s/^\(.*\)exit$/\1/p;}')
+	local new_PS1="${bold_cyan}$(scm_char)${yellow}$(ruby_version_prompt)${green}\w $(scm_prompt_info)"
+	local new_prompt=$(PS1="$new_PS1" "$BASH" --norc -i < /dev/null 2>&1 | sed -n '${s/^\(.*\)exit$/\1/p;}')
 
-    if [ "$LAST_PROMPT" = "$new_prompt" ]; then
-        new_PS1=""
-    else
-        LAST_PROMPT="$new_prompt"
-    fi
+	if [ "$LAST_PROMPT" = "$new_prompt" ]; then
+		new_PS1=""
+	else
+		LAST_PROMPT="$new_prompt"
+	fi
 
-    local wrap_char=""
-    [[ $COLUMNS && ${#new_PS1} > $(($COLUMNS/1)) ]] && wrap_char="\n"
-    PS1="${new_PS1}${green}${wrap_char}→${reset_color} "
+	local wrap_char=""
+	[[ $COLUMNS && ${#new_PS1} > $(($COLUMNS / 1)) ]] && wrap_char="\n"
+	PS1="${new_PS1}${green}${wrap_char}→${reset_color} "
 }
 
 safe_append_prompt_command prompt_command

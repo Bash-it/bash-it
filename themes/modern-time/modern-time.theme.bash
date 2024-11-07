@@ -12,18 +12,17 @@ SCM_HG_CHAR="${bold_red}☿${normal}"
 
 case $TERM in
 	xterm*)
-	TITLEBAR="\[\033]0;\w\007\]"
-	;;
+		TITLEBAR="\[\033]0;\w\007\]"
+		;;
 	*)
-	TITLEBAR=""
-	;;
+		TITLEBAR=""
+		;;
 esac
 
 PS3=">> "
 
 is_vim_shell() {
-	if [ ! -z "$VIMRUNTIME" ]
-	then
+	if [ ! -z "$VIMRUNTIME" ]; then
 		echo "[${cyan}vim shell${normal}]"
 	fi
 }
@@ -34,8 +33,7 @@ modern_current_time_prompt() {
 
 prompt() {
 	SCM_PROMPT_FORMAT='[%s][%s]'
-	if [ $? -ne 0 ]
-	then
+	if [ $? -ne 0 ]; then
 		# Yes, the indenting on these is weird, but it has to be like
 		# this otherwise it won't display properly.
 
@@ -48,7 +46,5 @@ ${bold_red}└─▪${normal} "
 }
 
 PS2="└─▪ "
-
-
 
 safe_append_prompt_command prompt

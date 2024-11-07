@@ -29,13 +29,13 @@ _bindingAddress5(){
 
 _jboss5()
 {
-    
+
     local cur prev words cword
     COMPREPLY=()
     _get_comp_words_by_ref -n = cur prev words cword
-  
+
     case $cur in
-	
+
         -Djboss.service.binding.set=*)
             cur=${cur#*=}
             #static list of common bindings sets
@@ -84,12 +84,12 @@ _jboss5()
             ;;
     esac
 
-       
+
     COMPREPLY=( $( compgen -W ' -u  -c -m - -b  -g -l -d -p -n -B -L -C -P -v -help -Djboss.platform.mbeanserver' -- "$cur" ) \
                 $( compgen -W '-Djboss.Domain -Djboss.modcluster.proxyList -Djboss.service.binding.set -Djboss.jvmRoute -Djboss.messaging.ServerPeerID -Djboss.default.jgroups.stack -Dorg.jboss.ejb3.remoting.IsLocalInterceptor.passByRef -Djboss.platform.mbeanserver -Dcom.sun.management.jmxremote.port -Dcom.sun.management.jmxremote.ssl' \
-                           -S '=' -- "$cur" ) )       
+                           -S '=' -- "$cur" ) )
     return 0
 
-  
+
 }
 complete -o nospace -F _jboss5 run.sh

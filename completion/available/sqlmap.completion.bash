@@ -7,80 +7,78 @@
 #                                                                            |
 # ---------------------------------------------------------------------------+
 
-if _command_exists sqlmap
-then
+if _command_exists sqlmap; then
 
-    function _sqlmap()
-    {
-        local cur prev
+	function _sqlmap() {
+		local cur prev
 
-        COMPREPLY=()
-        cur="$(_get_cword)"
-        prev="$(_get_pword)"
+		COMPREPLY=()
+		cur="$(_get_cword)"
+		prev="$(_get_pword)"
 
-        case $prev in
+		case $prev in
 
-    # List directory content
-    --tamper)
-        COMPREPLY=( $( compgen -W "$tamper" -- "$cur" ) )
-        return 0
-        ;;
-    --output-dir|-t|-l|-m|-r|--load-cookies|--proxy-file|--sql-file|--shared-lib|--file-write)
-        _filedir
-        return 0
-        ;;
-    -c)
-        _filedir ini
-        return 0
-        ;;
-    --method)
-        COMPREPLY=( $( compgen -W 'GET POST PUT' -- "$cur" ) )
-        return 0
-        ;;
-    --auth-type)
-        COMPREPLY=( $( compgen -W 'Basic Digest NTLM PKI' -- "$cur" ) )
-        return 0
-        ;;
-    --tor-type)
-        COMPREPLY=( $( compgen -W 'HTTP SOCKS4 SOCKS5' -- "$cur" ) )
-        return 0
-        ;;
-    -v)
-        COMPREPLY=( $( compgen -W '1 2 3 4 5 6' -- "$cur" ) )
-        return 0
-        ;;
-    --dbms)
-        COMPREPLY=( $( compgen -W 'mysql mssql access postgres' -- "$cur" ) )
-        return 0
-        ;;
-    --level|--crawl)
-        COMPREPLY=( $( compgen -W '1 2 3 4 5' -- "$cur" ) )
-        return 0
-        ;;
-    --risk)
-        COMPREPLY=( $( compgen -W '0 1 2 3' -- "$cur" ) )
-        return 0
-        ;;
-    --technique)
-        COMPREPLY=( $( compgen -W 'B E U S T Q' -- "$cur" ) )
-        return 0
-        ;;
-    -s)
-        _filedir sqlite
-        return 0
-        ;;
-    --dump-format)
-        COMPREPLY=( $( compgen -W 'CSV HTML SQLITE' -- "$cur" ) )
-        return 0
-        ;;
-    -x)
-        _filedir xml
-        return 0
-        ;;
-        esac
+			# List directory content
+			--tamper)
+				COMPREPLY=($(compgen -W "$tamper" -- "$cur"))
+				return 0
+				;;
+			--output-dir | -t | -l | -m | -r | --load-cookies | --proxy-file | --sql-file | --shared-lib | --file-write)
+				_filedir
+				return 0
+				;;
+			-c)
+				_filedir ini
+				return 0
+				;;
+			--method)
+				COMPREPLY=($(compgen -W 'GET POST PUT' -- "$cur"))
+				return 0
+				;;
+			--auth-type)
+				COMPREPLY=($(compgen -W 'Basic Digest NTLM PKI' -- "$cur"))
+				return 0
+				;;
+			--tor-type)
+				COMPREPLY=($(compgen -W 'HTTP SOCKS4 SOCKS5' -- "$cur"))
+				return 0
+				;;
+			-v)
+				COMPREPLY=($(compgen -W '1 2 3 4 5 6' -- "$cur"))
+				return 0
+				;;
+			--dbms)
+				COMPREPLY=($(compgen -W 'mysql mssql access postgres' -- "$cur"))
+				return 0
+				;;
+			--level | --crawl)
+				COMPREPLY=($(compgen -W '1 2 3 4 5' -- "$cur"))
+				return 0
+				;;
+			--risk)
+				COMPREPLY=($(compgen -W '0 1 2 3' -- "$cur"))
+				return 0
+				;;
+			--technique)
+				COMPREPLY=($(compgen -W 'B E U S T Q' -- "$cur"))
+				return 0
+				;;
+			-s)
+				_filedir sqlite
+				return 0
+				;;
+			--dump-format)
+				COMPREPLY=($(compgen -W 'CSV HTML SQLITE' -- "$cur"))
+				return 0
+				;;
+			-x)
+				_filedir xml
+				return 0
+				;;
+		esac
 
-        if [[ "$cur" == * ]]; then
-        COMPREPLY=( $( compgen -W '-h --help -hh --version -v -d -u --url -l -x -m -r -g -c --method \
+		if [[ "$cur" == * ]]; then
+			COMPREPLY=($(compgen -W '-h --help -hh --version -v -d -u --url -l -x -m -r -g -c --method \
         --data --param-del --cookie --cookie-del --load-cookies \
         --drop-set-cookie --user-agent --random-agent --host --referer \
         --headers --auth-type --auth-cred --auth-private --ignore-401 \
@@ -109,12 +107,12 @@ then
         -z --alert --answers --beep --check-waf --cleanup \
         --dependencies --disable-coloring --gpage --identify-waf \
         --mobile --page-rank --purge-output --smart \
-        --sqlmap-shell --wizard' -- "$cur" ) )
-        # this removes any options from the list of completions that have
-        # already been specified somewhere on the command line, as long as
-        # these options can only be used once (in a word, "options", in
-        # opposition to "tests" and "actions", as in the find(1) manpage).
-        onlyonce=' -h --help -hh --version -v -d -u --url -l -x -m -r -g -c \
+        --sqlmap-shell --wizard' -- "$cur"))
+			# this removes any options from the list of completions that have
+			# already been specified somewhere on the command line, as long as
+			# these options can only be used once (in a word, "options", in
+			# opposition to "tests" and "actions", as in the find(1) manpage).
+			onlyonce=' -h --help -hh --version -v -d -u --url -l -x -m -r -g -c \
         --drop-set-cookie --random-agent \
         --ignore-401 \
         --ignore-proxy --tor \
@@ -143,26 +141,27 @@ then
         --dependencies --disable-coloring --identify-waf \
         --mobile --page-rank --purge-output --smart \
         --sqlmap-shell --wizard '
-        COMPREPLY=( $( \
-		(while read -d ' ' i; do
-                [[ -z "$i" || "${onlyonce/ ${i%% *} / }" == "$onlyonce" ]] &&
-                continue
-                # flatten array with spaces on either side,
-                # otherwise we cannot grep on word boundaries of
-                # first and last word
-                COMPREPLY=" ${COMPREPLY[@]} "
-                # remove word from list of completions
-                COMPREPLY=( ${COMPREPLY/ ${i%% *} / } )
-			done
-                printf '%s ' "${COMPREPLY[@]}") <<<"${COMP_WORDS[@]}"
-            ) )
+			COMPREPLY=($(
+				(
+					while read -d ' ' i; do
+						[[ -z "$i" || "${onlyonce/ ${i%% *} / }" == "$onlyonce" ]] \
+							&& continue
+						# flatten array with spaces on either side,
+						# otherwise we cannot grep on word boundaries of
+						# first and last word
+						COMPREPLY=" ${COMPREPLY[@]} "
+						# remove word from list of completions
+						COMPREPLY=(${COMPREPLY/ ${i%% *} / })
+					done
+					printf '%s ' "${COMPREPLY[@]}"
+				) <<< "${COMP_WORDS[@]}"
+			))
 
-    #    else
-    #        _filedir bat
-        fi
-    }
+			#    else
+			#        _filedir bat
+		fi
+	}
 
-
-    complete -F _sqlmap sqlmap
+	complete -F _sqlmap sqlmap
 
 fi
