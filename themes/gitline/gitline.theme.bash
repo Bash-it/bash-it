@@ -1,6 +1,7 @@
-#!/usr/bin/env bash
-
-. "$BASH_IT/themes/gitline/powerline.base.bash"
+# shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
+# shellcheck source-path=SCRIPTDIR/../gitline
+source "${BASH_IT?}/themes/gitline/powerline.base.bash"
 
 #For the logo(Uncomment if you want a logo before your name)
 #PROMPT_DISTRO_LOGO="💻"
@@ -9,7 +10,7 @@ PROMPT_DISTRO_LOGO_COLORBG=52
 
 #Prompt Seperator Charactors
 PROMPT_CHAR=${POWERLINE_PROMPT_CHAR:=""}
-POWERLINE_LEFT_SEPARATOR=${POWERLINE_LEFT_SEPARATOR:=""}
+: "${POWERLINE_LEFT_SEPARATOR:=""}"
 
 #USER INFO CHARACTERS
 USER_INFO_SSH_CHAR=${POWERLINE_USER_INFO_SSH_CHAR:=" "}
@@ -54,12 +55,12 @@ LAST_STATUS_THEME_PROMPT_COLOR=52
 CLOCK_THEME_PROMPT_COLOR=240
 
 #For Battery Plugin
-BATTERY_AC_CHAR=${BATTERY_AC_CHAR:="⚡"}
+: "${BATTERY_AC_CHAR:="⚡"}"
 BATTERY_STATUS_THEME_PROMPT_GOOD_COLOR=70
 BATTERY_STATUS_THEME_PROMPT_LOW_COLOR=208
 BATTERY_STATUS_THEME_PROMPT_CRITICAL_COLOR=160
 
-THEME_CLOCK_FORMAT=${THEME_CLOCK_FORMAT:="%H:%M:%S"}
+: "${THEME_CLOCK_FORMAT:="%H:%M:%S"}"
 
 IN_VIM_THEME_PROMPT_COLOR=245
 IN_VIM_THEME_PROMPT_TEXT="vim"
@@ -67,5 +68,6 @@ IN_VIM_THEME_PROMPT_TEXT="vim"
 IN_TOOLBOX_THEME_PROMPT_COLOR=125
 IN_TOOLBOX_THEME_PROMPT_TEXT="⬢ "
 
+: "${POWERLINE_PROMPT:="user_info scm python_venv ruby node cwd"}"
 
 safe_append_prompt_command __powerline_prompt_command
