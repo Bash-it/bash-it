@@ -33,7 +33,6 @@ function wmate() {
 	if [ -t 0 ]; then
 		if [ -n "$1" ]; then
 			wget -qO- "$1" | /usr/bin/mate
-
 			TIDY=$(
 				/usr/bin/osascript << EOT
 tell application "TextMate"

@@ -25,7 +25,7 @@ function local_setup_file() {
   assert_line "function"
 
   run battery_char
-  assert_line -n 0 ""
+  assert_output ""
 }
 
 @test 'themes base: battery_char should exist if battery plugin loaded' {
