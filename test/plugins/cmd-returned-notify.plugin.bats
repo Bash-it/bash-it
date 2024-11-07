@@ -9,8 +9,9 @@ function local_setup_file() {
 }
 
 @test "plugins cmd-returned-notify: notify after elapsed time" {
-	export NOTIFY_IF_COMMAND_RETURNS_AFTER=0
-	export COMMAND_DURATION_START_SECONDS="$(_shell_duration_en)"
+	NOTIFY_IF_COMMAND_RETURNS_AFTER=0
+	COMMAND_DURATION_START_SECONDS="$(_shell_duration_en)"
+	export COMMAND_DURATION_START_SECONDS NOTIFY_IF_COMMAND_RETURNS_AFTER
 	sleep 1
 	run precmd_return_notification
 	assert_success
@@ -18,8 +19,9 @@ function local_setup_file() {
 }
 
 @test "plugins cmd-returned-notify: do not notify before elapsed time" {
-	export NOTIFY_IF_COMMAND_RETURNS_AFTER=10
-	export COMMAND_DURATION_START_SECONDS="$(_shell_duration_en)"
+	NOTIFY_IF_COMMAND_RETURNS_AFTER=10
+	COMMAND_DURATION_START_SECONDS="$(_shell_duration_en)"
+	export COMMAND_DURATION_START_SECONDS NOTIFY_IF_COMMAND_RETURNS_AFTER
 	sleep 1
 	run precmd_return_notification
 	assert_success
