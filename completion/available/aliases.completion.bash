@@ -20,7 +20,7 @@ function _bash-it-component-completion-callback-on-init-aliases() {
 	completions=("${completions[@]##complete -* * -}") # strip all but last option plus trigger(s)
 	completions=("${completions[@]#complete -}")       # strip anything missed
 	completions=("${completions[@]#? * }")             # strip last option and arg, leaving only trigger(s)
-	completions=("${completions[@]#? }")       # strip anything missed
+	completions=("${completions[@]#? }")               # strip anything missed
 	#TODO: this will fail on some completions...
 
 	# create temporary file for wrapper functions and completions
@@ -40,10 +40,10 @@ function _bash-it-component-completion-callback-on-init-aliases() {
 		line="${line#alias -- }"
 		line="${line#alias }"
 		alias_name="${line%%=*}"
-		alias_defn="${line#*=\'}"                 # alias definition
+		alias_defn="${line#*=\'}" # alias definition
 		alias_defn="${alias_defn%\'}"
 		alias_cmd="${alias_defn%%[[:space:]]*}" # first word of alias
-		if [[ ${alias_defn} == ${alias_cmd} ]]; then
+		if [[ ${alias_defn} == "${alias_cmd}" ]]; then
 			alias_args=''
 		else
 			alias_args="${alias_defn#*[[:space:]]}" # everything after first word
@@ -89,7 +89,7 @@ function _bash-it-component-completion-callback-on-init-aliases() {
                             prec_word=\${prec_word#* }
                         fi
                         (( COMP_CWORD += ${#alias_arg_words[@]} ))
-                        COMP_WORDS=(\"$alias_cmd\" \"${alias_arg_words[@]}\" \"\${COMP_WORDS[@]:1}\")
+                        COMP_WORDS=(\"$alias_cmd\" \"${alias_arg_words[*]}\" \"\${COMP_WORDS[@]:1}\")
                         (( COMP_POINT -= \${#COMP_LINE} ))
                         COMP_LINE=\${COMP_LINE/$alias_name/$alias_cmd $alias_args}
                         (( COMP_POINT += \${#COMP_LINE} ))

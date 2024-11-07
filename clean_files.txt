@@ -19,7 +19,9 @@
 aliases/
 docs/
 hooks/
+lib/
 scripts/
+test/
 
 # root files
 #
@@ -31,6 +33,7 @@ lint_clean_files.sh
 
 # completions
 #
+completion/available/aliases.completion.bash
 completion/available/apm.completion.bash
 completion/available/awless.completion.bash
 completion/available/awscli.completion.bash
@@ -46,6 +49,7 @@ completion/available/dmidecode.completion.bash
 completion/available/docker-machine.completion.bash
 completion/available/docker.completion.bash
 completion/available/dotnet.completion.bash
+completion/available/export.completion.bash
 completion/available/flutter.completion.bash
 completion/available/gcloud.completion.bash
 completion/available/gem.completion.bash
@@ -78,18 +82,6 @@ completion/available/vuejs.completion.bash
 completion/available/wpscan.completion.bash
 completion/available/yarn.completion.bash
 
-# libraries
-lib/appearance.bash
-lib/colors.bash
-lib/command_duration.bash
-lib/helpers.bash
-lib/history.bash
-lib/log.bash
-lib/preexec.bash
-lib/preview.bash
-lib/search.bash
-lib/utilities.bash
-
 # plugins
 #
 plugins/available/alias-completion.plugin.bash
@@ -98,6 +90,7 @@ plugins/available/base.plugin.bash
 plugins/available/basher.plugin.bash
 plugins/available/battery.plugin.bash
 plugins/available/blesh.plugin.bash
+plugins/available/browser.plugin.bash
 plugins/available/cmd-returned-notify.plugin.bash
 plugins/available/colors.plugin.bash
 plugins/available/direnv.plugin.bash
@@ -115,6 +108,7 @@ plugins/available/history.plugin.bash
 plugins/available/hub.plugin.bash
 plugins/available/java.plugin.bash
 plugins/available/jekyll.plugin.bash
+plugins/available/jgitflow.plugin.bash
 plugins/available/jump.plugin.bash
 plugins/available/latex.plugin.bash
 plugins/available/less-pretty-cat.plugin.bash
@@ -134,6 +128,7 @@ plugins/available/rbenv.plugin.bash
 plugins/available/ruby.plugin.bash
 plugins/available/textmate.plugin.bash
 plugins/available/todo.plugin.bash
+plugins/available/url.plugin.bash
 plugins/available/xterm.plugin.bash
 plugins/available/zoxide.plugin.bash
 
@@ -159,9 +154,13 @@ themes/bobby-python
 themes/brainy
 themes/brunton
 themes/candy
+themes/clean
 themes/easy
+themes/elixr
 themes/essential
 themes/githelpers.theme.bash
+themes/inretio
+themes/lambda
 themes/modern
 themes/norbu
 themes/oh-my-posh
@@ -170,6 +169,7 @@ themes/pete
 themes/powerline
 themes/pure
 themes/purity
+
 
 # vendor init files
 #
