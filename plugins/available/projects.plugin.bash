@@ -21,7 +21,7 @@ function pj() {
 	# with the same name in project directories
 	IFS=':' read -ra dests <<< "${BASH_IT_PROJECT_PATHS?${FUNCNAME[0]}: project working folders must be configured}"
 	for d in "${!dests[@]}"; do
-		if [[ ! -d "${dests[d]}" ]]; then
+		if [[ ! -d "${dests[d]}/${proj}" ]]; then
 			unset 'dests[d]'
 		fi
 	done

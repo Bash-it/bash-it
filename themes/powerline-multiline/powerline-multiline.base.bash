@@ -35,7 +35,7 @@ function __powerline_right_segment {
     (( padding += 1 ))
   fi
 
-  RIGHT_PROMPT+="$(set_color - ${params[1]})${pad_before_segment}${params[0]}${normal}"
+  RIGHT_PROMPT+="$(set_color "${POWERLINE_PROMPT_FOREGROUND_COLOR}" ${params[1]})${pad_before_segment}${params[0]}${normal}"
 
   (( padding += ${#pad_before_segment} ))
   (( padding += ${#params[0]} ))

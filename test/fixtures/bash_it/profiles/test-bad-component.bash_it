@@ -1,8 +1,8 @@
 # plugins
-plugins alias-completion
 plugins base
 
 # completion
+completion aliases
 completion bash-it
 completion system
 

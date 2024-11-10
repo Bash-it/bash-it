@@ -1,10 +1,15 @@
-cite 'about-alias'
+# shellcheck shell=bash
 about-alias 'maven abbreviations'
 
 alias mci='mvn clean install'
 alias mi='mvn install'
-alias mcp='mvn clean package'
+alias mc='mvn clean'
+alias mct='mvn clean test'
+alias mcc='mvn clean compile'
+alias mccnt='mvn clean compile -DskipTests=true'
 alias mp='mvn package'
+alias mcp='mvn clean package'
+alias mcpnt='mvn clean package -DskipTests=true'
 alias mrprep='mvn release:prepare'
 alias mrperf='mvn release:perform'
 alias mrrb='mvn release:rollback'
@@ -12,3 +17,9 @@ alias mdep='mvn dependency:tree'
 alias mpom='mvn help:effective-pom'
 alias mcisk='mci -Dmaven.test.skip=true'
 alias mcpsk='mcp -Dmaven.test.skip=true'
+
+# Maven service plugin aliases
+alias mspring='mvn spring-boot:run'
+alias mjetty='mvn jetty:run'
+alias mquark='mvn quarkus:dev'
+alias mmicro='mvn mn:run'
