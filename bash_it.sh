@@ -50,8 +50,6 @@ if [[ -n "${BASH_IT_THEME:-}" ]]; then
 	source "${BASH_IT}/themes/githelpers.theme.bash"
 	BASH_IT_LOG_PREFIX="themes: p4helpers: "
 	source "${BASH_IT}/themes/p4helpers.theme.bash"
-	BASH_IT_LOG_PREFIX="themes: command_duration: "
-	source "${BASH_IT}/themes/command_duration.theme.bash"
 	BASH_IT_LOG_PREFIX="themes: base: "
 	source "${BASH_IT}/themes/base.theme.bash"
 

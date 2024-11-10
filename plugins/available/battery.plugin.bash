@@ -4,8 +4,8 @@ about-plugin 'display info about your battery charge level'
 function ac_adapter_connected() {
 	local batteries
 	if _command_exists upower; then
-		batteries="$(upower -e | grep --max-count=1 -i BAT)"
-		upower -i "${batteries}" | grep 'state' | grep -q 'charging\|fully-charged'
+		IFS=$'\n' read -d '' -ra batteries < <(upower -e | grep -i BAT)
+		upower -i "${batteries[0]:-}" | grep 'state' | grep -q 'charging\|fully-charged'
 	elif _command_exists acpi; then
 		acpi -a | grep -q "on-line"
 	elif _command_exists pmset; then
@@ -20,8 +20,8 @@ function ac_adapter_connected() {
 function ac_adapter_disconnected() {
 	local batteries
 	if _command_exists upower; then
-		batteries="$(upower -e | grep --max-count=1 -i BAT)"
-		upower -i "${batteries}" | grep 'state' | grep -q 'discharging'
+		IFS=$'\n' read -d '' -ra batteries < <(upower -e | grep -i BAT)
+		upower -i "${batteries[0]:-}" | grep 'state' | grep -q 'discharging'
 	elif _command_exists acpi; then
 		acpi -a | grep -q "off-line"
 	elif _command_exists pmset; then
@@ -40,8 +40,8 @@ function battery_percentage() {
 	local command_output batteries
 
 	if _command_exists upower; then
-		batteries="$(upower --enumerate | grep --max-count=1 -i BAT)"
-		command_output="$(upower --show-info "${batteries:-}" | grep percentage | grep -o '[0-9]\+' | head -1)"
+		IFS=$'\n' read -d '' -ra batteries < <(upower -e | grep -i BAT)
+		command_output="$(upower --show-info "${batteries[0]:-}" | grep percentage | grep -o '[0-9]\+' | head -1)"
 	elif _command_exists acpi; then
 		command_output=$(acpi -b | awk -F, '/,/{gsub(/ /, "", $0); gsub(/%/,"", $0); print $2}')
 	elif _command_exists pmset; then

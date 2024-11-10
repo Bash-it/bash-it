@@ -4,7 +4,6 @@
 ![Docs Status](https://readthedocs.org/projects/bash-it/badge/)
 ![License](https://img.shields.io/github/license/Bash-it/bash-it)
 ![shell](https://img.shields.io/badge/Shell-Bash-blue)
-[![Join the chat at https://web.libera.chat/?channel=#bash-it](https://img.shields.io/badge/chat-on%20Libera.Chat-brightgreen.svg)](https://web.libera.chat/?channel=#bash-it)
 
 **Bash-it** is a collection of community Bash commands and scripts for Bash 3.2+.
 (And a shameless ripoff of [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) :smiley:)
