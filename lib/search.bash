@@ -347,7 +347,7 @@ function _bash-it-flash-term() {
 	local -i len="${1:-0}" # redundant
 	local term="${2:-}"
 	# as currently implemented, `$match` has already been printed to screen the first time
-	local delay=0.1
+	local delay=0.2
 	local color
 	[[ "${#term}" -gt 0 ]] && len="${#term}"
 
