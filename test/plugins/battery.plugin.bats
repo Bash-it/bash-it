@@ -269,6 +269,7 @@ function setup_upower {
 function setup_ioreg {
 	percent="$1"
 
+	# shellcheck disable=SC2317
 	function ioreg {
 		printf "\"MaxCapacity\" = 100\n\"CurrentCapacity\" = %s" "${percent}"
 	}
