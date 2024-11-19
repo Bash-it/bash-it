@@ -75,6 +75,7 @@ completion/available/pip3.completion.bash
 completion/available/pipenv.completion.bash
 completion/available/pipx.completion.bash
 completion/available/rustup.completion.bash
+completion/available/salt.completion.bash
 completion/available/sdkman.completion.bash
 completion/available/system.completion.bash
 completion/available/vault.completion.bash
