@@ -1,6 +1,9 @@
 # shellcheck shell=bash
 about-alias 'common git abbreviations'
 
+# We can use this variable to make sure that we don't accidentally clash with git-zsh aliases
+_bash_it_git_aliases_enabled=true
+
 alias g='git'
 alias get='git'
 alias got='git '
