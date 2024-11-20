@@ -39,6 +39,7 @@ completion/available/awless.completion.bash
 completion/available/awscli.completion.bash
 completion/available/bash-it.completion.bash
 completion/available/brew.completion.bash
+completion/available/bundler.completion.bash
 completion/available/cargo.completion.bash
 completion/available/composer.completion.bash
 completion/available/conda.completion.bash
@@ -75,6 +76,7 @@ completion/available/pip3.completion.bash
 completion/available/pipenv.completion.bash
 completion/available/pipx.completion.bash
 completion/available/rustup.completion.bash
+completion/available/salt.completion.bash
 completion/available/sdkman.completion.bash
 completion/available/system.completion.bash
 completion/available/vault.completion.bash
@@ -95,12 +97,14 @@ plugins/available/cmd-returned-notify.plugin.bash
 plugins/available/colors.plugin.bash
 plugins/available/direnv.plugin.bash
 plugins/available/dirs.plugin.bash
+plugins/available/docker-compose.plugin.bash
 plugins/available/docker-machine.plugin.bash
 plugins/available/gif.plugin.bash
 plugins/available/git-subrepo.plugin.bash
 plugins/available/git.plugin.bash
 plugins/available/go.plugin.bash
 plugins/available/goenv.plugin.bash
+plugins/available/gradle.plugin.bash
 plugins/available/history-eternal.plugin.bash
 plugins/available/history-search.plugin.bash
 plugins/available/history-substring-search.plugin.bash
