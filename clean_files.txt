@@ -49,6 +49,7 @@ completion/available/dart.completion.bash
 completion/available/dirs.completion.bash
 completion/available/django.completion.bash
 completion/available/dmidecode.completion.bash
+completion/available/docker-compose.completion.bash
 completion/available/docker-machine.completion.bash
 completion/available/docker.completion.bash
 completion/available/dotnet.completion.bash
