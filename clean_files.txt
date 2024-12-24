@@ -40,6 +40,7 @@ completion/available/awscli.completion.bash
 completion/available/bash-it.completion.bash
 completion/available/brew.completion.bash
 completion/available/bundler.completion.bash
+completion/available/capistrano.completion.bash
 completion/available/cargo.completion.bash
 completion/available/composer.completion.bash
 completion/available/conda.completion.bash
