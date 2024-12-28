@@ -30,8 +30,8 @@ function editpost() {
 	pushd "${SITE}/_posts" > /dev/null || return
 
 	for POST in *; do
-		DATE="$(echo "${POST}" | grep -oE "[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}")"
-		TITLE="$(grep -oE "title: (.+)" < "${POST}")"
+		DATE="$(echo "${POST}" | grep -E -o "[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}")"
+		TITLE="$(grep -E -o "title: (.+)" < "${POST}")"
 		TITLE="${TITLE/title: /}"
 		echo "${COUNTER}) 	${DATE}	${TITLE}"
 		POSTS[COUNTER]="$POST"
