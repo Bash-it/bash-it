@@ -163,6 +163,7 @@ themes/easy
 themes/elixr
 themes/essential
 themes/githelpers.theme.bash
+themes/gitline
 themes/inretio
 themes/lambda
 themes/modern
