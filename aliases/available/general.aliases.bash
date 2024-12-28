@@ -18,7 +18,8 @@ fi
 alias c='clear'
 alias cls='clear'
 
-alias pager='${PAGER:-less}'
+alias edit='${EDITOR:-${ALTERNATE_EDITOR:-nano}}'
+alias pager='${PAGER:=less}'
 
 alias q='exit'
 
@@ -41,6 +42,13 @@ alias h='history'
 if ! _command_exists tree; then
 	alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
 fi
+
+# Directory
+alias md='mkdir -p'
+alias rd='rmdir'
+
+# Shorten extract
+alias xt='extract'
 
 # Display whatever file is regular file or folder
 function catt() {

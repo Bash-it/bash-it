@@ -1,18 +1,18 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 
 function _p4-opened {
-  timeout 2.0s p4 opened -s 2> /dev/null
+	timeout 2.0s p4 opened -s 2> /dev/null
 }
 
 function _p4-opened-counts {
-  # Return the following counts seperated by tabs:
-  #  - count of opened files
-  #  - count of pending changesets (other than defaults)
-  #  - count of files in the default changeset
-  #  - count of opened files in add mode
-  #  - count of opened files in edit mode
-  #  - count of opened files in delete mode
-  _p4-opened | awk '
+	# Return the following counts seperated by tabs:
+	#  - count of opened files
+	#  - count of pending changesets (other than defaults)
+	#  - count of files in the default changeset
+	#  - count of opened files in add mode
+	#  - count of opened files in edit mode
+	#  - count of opened files in delete mode
+	_p4-opened | awk '
   BEGIN {
     opened=0;
     type_array["edit"]=0;

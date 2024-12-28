@@ -19,9 +19,7 @@ repos:
     hooks:
       - id: git-check  # Configure in .gitattributes
       - id: shellcheck
-        exclude: ".bats$"
       - id: shfmt
-        exclude: ".bats$"
   - repo: https://github.com/Lucas-C/pre-commit-hooks
     rev: v1.1.7
     hooks:
@@ -38,10 +36,9 @@ repos:
         types: [file]
       - id: dot-bash
         name: Check .bash files against bash-it requirements
-        exclude: "test/test_helper.bash"
         entry: ./hooks/dot-bash.sh
         language: system
-        files: "\\.bash$"
+        files: "\\.ba[ts][sh]$"
         types: [file]
       - id: clean-files-txt
         name: Check that clean_files.txt is sorted alphabetically.

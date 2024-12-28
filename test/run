@@ -2,17 +2,23 @@
 test_directory="$(cd "$(dirname "$0")" && pwd)"
 bats_executable="${test_directory}/../test_lib/bats-core/bin/bats"
 
+# Locate ourselves for easy reference.
+export MAIN_BASH_IT_DIR="${test_directory%/*}"
+export MAIN_BASH_IT_GITDIR="${MAIN_BASH_IT_DIR}/.git"
+
+# Make sure BATS is available:
 git submodule init && git submodule update
 
-if [[ -z "${BASH_IT}" ]]; then
-	BASH_IT="$(cd "${test_directory}" && dirname "${PWD}")"
-	export BASH_IT
+# Warn user that tests run from the current git HEAD
+if ! git diff --quiet; then
+	echo "${BASH_SOURCE##*/}: your worktree is dirty; uncommitted changes will *not* be tested!"
 fi
 
-if [[ -z "$1" ]]; then
+# Which tests do we run?
+if [[ $# -eq '0' ]]; then
 	test_dirs=("${test_directory}"/{bash_it,completion,install,lib,plugins,themes})
 else
-	test_dirs=("$1")
+	test_dirs=("$@")
 fi
 
 # Make sure that the `parallel` command is installed,
@@ -38,8 +44,8 @@ if command -v parallel &> /dev/null \
 		fi
 	)"
 	exec "$bats_executable" "${CI:+--tap}" --jobs "${test_jobs_effective}" \
-		"${test_dirs[@]}"
+		--no-parallelize-within-files "${test_dirs[@]}"
 else
 	# Run `bats` in single-threaded mode.
-	exec "$bats_executable" ${CI:+--tap} "${test_dirs[@]}"
+	exec "$bats_executable" "${CI:+--tap}" "${test_dirs[@]}"
 fi
