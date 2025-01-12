@@ -1,12 +1,14 @@
 # shellcheck shell=bash
-cite about-plugin
 about-plugin 'ruby and rubygems specific functions and settings'
 
 # Make commands installed with 'gem install --user-install' available
 # ~/.gem/ruby/${RUBY_VERSION}/bin/
-if _command_exists ruby && _command_exists gem; then
-	pathmunge "$(ruby -e 'print Gem.user_dir')/bin" after
+if ! _binary_exists ruby || ! _binary_exists gem; then
+	_log_warning "Unable to locate 'gem'."
+	return 1
 fi
+
+pathmunge "$(ruby -e 'print Gem.user_dir')/bin" after
 
 function remove_gem() {
 	about 'removes installed gem'
