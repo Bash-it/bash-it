@@ -13,6 +13,9 @@ case $OSTYPE in
     ;;
 esac
 
+# overriding CONFIG_FILE:
+CONFIG_FILE="${BASH_IT_CONFIG_FILE:-"${CONFIG_FILE}"}"
+
 BACKUP_FILE=$CONFIG_FILE.bak
 
 if [ ! -e "$HOME/$BACKUP_FILE" ]; then
