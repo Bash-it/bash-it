@@ -32,11 +32,11 @@ autoenv_init() {
 }
 
 cd() {
+	local return_code
 	if builtin cd "$@"; then
 		autoenv_init
 		return 0
 	else
-		local return_code
 		return_code=$?
 		echo "else?"
 		return $return_code
