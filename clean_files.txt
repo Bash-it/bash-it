@@ -176,7 +176,7 @@ themes/pete
 themes/powerline
 themes/pure
 themes/purity
-
+themes/rjorgenson
 
 # vendor init files
 #
