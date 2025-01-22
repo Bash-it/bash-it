@@ -39,6 +39,6 @@ cd() {
 	else
 		return_code=$?
 		echo "else?"
-		return $return_code
+		return "$return_code"
 	fi
 }
