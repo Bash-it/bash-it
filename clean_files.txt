@@ -134,6 +134,7 @@ plugins/available/textmate.plugin.bash
 plugins/available/todo.plugin.bash
 plugins/available/url.plugin.bash
 plugins/available/xterm.plugin.bash
+plugins/available/z_autoenv.plugin.bash
 plugins/available/zoxide.plugin.bash
 
 # tests
