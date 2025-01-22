@@ -160,6 +160,7 @@ themes/brainy
 themes/brunton
 themes/candy
 themes/clean
+themes/doubletime
 themes/easy
 themes/elixr
 themes/essential
