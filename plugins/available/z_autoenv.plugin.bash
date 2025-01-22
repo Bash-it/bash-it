@@ -1,4 +1,5 @@
 # shellcheck shell=bash
+# shellcheck disable=SC2207
 cite about-plugin
 about-plugin 'source into environment when cding to directories'
 
