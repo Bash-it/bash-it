@@ -1,4 +1,5 @@
-#! bash
+# shellcheck shell=bash
+# shellcheck disable=SC2207
 # bash completion for the `bundle` command.
 #
 # Copyright (c) 2008 Daniel Luz
@@ -146,6 +147,7 @@ __bundle() {
 								options+=(local. mirror.)
 								# Override $IFS for completion to work
 								local IFS=$'\n'
+								# shellcheck disable=SC2016
 								COMPREPLY=($(compgen -W '${options[@]}' -- "$cur"))
 								return
 								;;
@@ -160,11 +162,13 @@ __bundle() {
 			exec)
 				if [[ $COMP_CWORD -eq $bundle_command_index ]]; then
 					# Figure out Bundler's binaries dir
-					local bundler_bin=$(__bundle_exec_ruby 'puts Bundler.bundle_path + "bin"')
+					local bundler_bin
+					bundler_bin=$(__bundle_exec_ruby 'puts Bundler.bundle_path + "bin"')
 					if [[ -d $bundler_bin ]]; then
-						local binaries=("$bundler_bin"/*)
+						local binaries
+						binaries=("$bundler_bin"/*)
 						# If there are binaries, strip directory name and use them
-						[[ -f "$binaries" ]] && options="${binaries[@]##*/}"
+						[[ -f "${binaries[0]}" ]] && options=("${binaries[@]##*/}")
 					else
 						# No binaries found; use full command completion
 						COMPREPLY=($(compgen -c -- "$cur"))
@@ -172,7 +176,7 @@ __bundle() {
 					fi
 				else
 					local _RUBY_COMMAND_PREFIX=("${bundle_bin[@]}" exec)
-					_command_offset $bundle_command_index
+					_command_offset "$bundle_command_index"
 					return
 				fi
 				;;
@@ -183,7 +187,7 @@ __bundle() {
 						return
 						;;
 					-t | --test)
-						options="minitest rspec"
+						options=("minitest" "rspec")
 						;;
 				esac
 				;;
@@ -201,7 +205,7 @@ __bundle() {
 			viz)
 				case $prev in
 					-F | --format)
-						options="dot jpg png svg"
+						options=("dot" "jpg" "png" "svg")
 						;;
 					-W | --without)
 						__bundle_complete_groups
@@ -216,7 +220,7 @@ __bundle() {
 
 __bundle_get_command() {
 	local i
-	for ((i = 1; i < $COMP_CWORD; ++i)); do
+	for ((i = 1; i < COMP_CWORD; ++i)); do
 		local arg=${COMP_WORDS[$i]}
 
 		case $arg in
@@ -248,7 +252,8 @@ __bundle_complete_groups() {
 	local cur_group=${cur##*[ :]}
 	# All groups written before
 	local prefix=${cur%"$cur_group"}
-	local groups=$(__bundle_exec_ruby 'puts Bundler.definition.dependencies.map(&:groups).reduce(:|).map(&:to_s)')
+	local groups
+	groups=$(__bundle_exec_ruby 'puts Bundler.definition.dependencies.map(&:groups).reduce(:|).map(&:to_s)')
 	if [[ ! $groups ]]; then
 		COMPREPLY=()
 		return
@@ -269,7 +274,7 @@ __bundle_complete_groups() {
 # Runs a Ruby script with Bundler loaded.
 # Results may be cached.
 __bundle_exec_ruby() {
-	local bundle_bin=(${bundle_bin[@]:-bundle})
+	local bundle_bin=("${bundle_bin[@]:-bundle}")
 	# Lockfile is inferred here, and might not be correct (for example, when
 	# running on a subdirectory). However, a wrong file path won't be a
 	# cadastrophic mistake; it just means the cache won't be invalidated when
@@ -286,10 +291,10 @@ __bundle_exec_ruby() {
 		$(head -n 1 -- "$cachefile" 2> /dev/null) = "$cache_id_line" ]]; then
 		tail -n +2 -- "$cachefile"
 	else
-		local output=$("${bundle_bin[@]}" exec ruby -e "$@" 2> /dev/null)
-		if [[ $? -eq 0 ]]; then
+		local output
+		if output=$("${bundle_bin[@]}" exec ruby -e "$@" 2> /dev/null); then
 			(mkdir -p -- "$cachedir" \
-				&& echo "$cache_id_line"$'\n'"$output" > $cachefile) 2> /dev/null
+				&& echo "$cache_id_line"$'\n'"$output" > "$cachefile") 2> /dev/null
 			echo "$output"
 		fi
 	fi

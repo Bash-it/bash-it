@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 # Bash completion support for the 'dirs' plugin (commands G, R).
 
 _dirs-complete() {
@@ -6,7 +6,8 @@ _dirs-complete() {
 
 	# parse all defined shortcuts from ~/.dirs
 	if [ -r "$HOME/.dirs" ]; then
-		COMPREPLY=($(compgen -W "$(grep -v '^#' ~/.dirs | sed -e 's/\(.*\)=.*/\1/')" -- ${CURRENT_PROMPT}))
+		# shellcheck disable=SC2207
+		COMPREPLY=($(compgen -W "$(grep -v '^#' ~/.dirs | sed -e 's/\(.*\)=.*/\1/')" -- "${CURRENT_PROMPT}"))
 	fi
 
 	return 0

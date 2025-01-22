@@ -20,7 +20,6 @@ repos:
       - id: git-check  # Configure in .gitattributes
       - id: shellcheck
       - id: shfmt
-        exclude: ".bats$"
   - repo: https://github.com/Lucas-C/pre-commit-hooks
     rev: v1.1.7
     hooks:

@@ -1,4 +1,5 @@
-#!/bin/bash
+# shellcheck shell=bash
+# shellcheck disable=SC2207
 #
 
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,7 +42,7 @@ __docker_compose_q() {
 # Transforms a multiline list of strings into a single line string
 # with the words separated by "|".
 __docker_compose_to_alternatives() {
-	local parts=($1)
+	local parts=("$1")
 	local IFS='|'
 	echo "${parts[*]}"
 }
@@ -49,7 +50,8 @@ __docker_compose_to_alternatives() {
 # Transforms a multiline list of options into an extglob pattern
 # suitable for use in case statements.
 __docker_compose_to_extglob() {
-	local extglob=$(__docker_compose_to_alternatives "$1")
+	local extglob
+	extglob=$(__docker_compose_to_alternatives "$1")
 	echo "@($extglob)"
 }
 
@@ -57,7 +59,7 @@ __docker_compose_to_extglob() {
 # the commandline. The option may be a pattern, e.g. `--force|-f`.
 __docker_compose_has_option() {
 	local pattern="$1"
-	for ((i = 2; i < $cword; ++i)); do
+	for ((i = 2; i < cword; ++i)); do
 		if [[ ${words[$i]} =~ ^($pattern)$ ]]; then
 			return 0
 		fi
@@ -112,7 +114,8 @@ __docker_compose_complete_services() {
 
 # The services for which at least one running container exists
 __docker_compose_complete_running_services() {
-	local names=$(__docker_compose_services --filter status=running)
+	local names
+	names=$(__docker_compose_services --filter status=running)
 	COMPREPLY=($(compgen -W "$names" -- "$cur"))
 }
 
@@ -193,7 +196,7 @@ _docker_compose_docker_compose() {
 			_filedir -d
 			return
 			;;
-		$(__docker_compose_to_extglob "$daemon_options_with_args"))
+		"$(__docker_compose_to_extglob "$daemon_options_with_args")")
 			return
 			;;
 	esac
@@ -278,7 +281,7 @@ _docker_compose_images() {
 _docker_compose_kill() {
 	case "$prev" in
 		-s)
-			COMPREPLY=($(compgen -W "SIGHUP SIGINT SIGKILL SIGUSR1 SIGUSR2" -- "$(echo $cur | tr '[:lower:]' '[:upper:]')"))
+			COMPREPLY=($(compgen -W "SIGHUP SIGINT SIGKILL SIGUSR1 SIGUSR2" -- "$(echo "$cur" | tr '[:lower:]' '[:upper:]')"))
 			return
 			;;
 	esac
@@ -343,7 +346,8 @@ _docker_compose_port() {
 }
 
 _docker_compose_ps() {
-	local key=$(__docker_compose_map_key_of_current_option '--filter')
+	local key
+	key=$(__docker_compose_map_key_of_current_option '--filter')
 	case "$key" in
 		source)
 			COMPREPLY=($(compgen -W "build image" -- "${cur##*=}"))
@@ -560,7 +564,8 @@ _docker_compose_version() {
 }
 
 _docker_compose() {
-	local previous_extglob_setting=$(shopt -p extglob)
+	local previous_extglob_setting
+	previous_extglob_setting=$(shopt -p extglob)
 	shopt -s extglob
 
 	local commands=(
@@ -624,21 +629,22 @@ _docker_compose() {
 	local top_level_options=()
 	local counter=1
 
-	while [ $counter -lt $cword ]; do
+	while [ $counter -lt "$cword" ]; do
 		case "${words[$counter]}" in
-			$(__docker_compose_to_extglob "$daemon_boolean_options"))
+			"$(__docker_compose_to_extglob "$daemon_boolean_options")")
 				local opt=${words[counter]}
-				top_level_options+=($opt)
+				top_level_options+=("$opt")
 				;;
-			$(__docker_compose_to_extglob "$daemon_options_with_args"))
+			"$(__docker_compose_to_extglob "$daemon_options_with_args")")
 				local opt=${words[counter]}
 				local arg=${words[++counter]}
-				top_level_options+=($opt $arg)
+				top_level_options+=("$opt" "$arg")
 				;;
-			$(__docker_compose_to_extglob "$top_level_options_with_args"))
+			"$(__docker_compose_to_extglob "$top_level_options_with_args")")
 				((counter++))
 				;;
 			-*) ;;
+
 			*)
 				command="${words[$counter]}"
 				break
@@ -648,7 +654,7 @@ _docker_compose() {
 	done
 
 	local completions_func=_docker_compose_${command//-/_}
-	_is_function $completions_func && $completions_func
+	_is_function "$completions_func" && $completions_func
 
 	eval "$previous_extglob_setting"
 	return 0
