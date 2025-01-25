@@ -12,28 +12,25 @@ export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
 
 # first check if NVM is managed by brew
 NVM_BREW_PREFIX=""
-if _bash_it_homebrew_check
-then
-  NVM_BREW_PREFIX=$(brew --prefix nvm 2>/dev/null)
+if _bash_it_homebrew_check; then
+	NVM_BREW_PREFIX=$(brew --prefix nvm 2> /dev/null)
 fi
 
 # This loads nvm
-if [[ -n "$NVM_BREW_PREFIX" && -s "${NVM_BREW_PREFIX}/nvm.sh" ]]
-then
-  source "${NVM_BREW_PREFIX}/nvm.sh"
+if [[ -n "$NVM_BREW_PREFIX" && -s "${NVM_BREW_PREFIX}/nvm.sh" ]]; then
+	source "${NVM_BREW_PREFIX}/nvm.sh"
 else
-  [[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
+	[[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
 fi
 
-if ! _command_exists nvm
-then
-  function nvm() {
-    echo "Bash-it no longer bundles the nvm script. Please install the latest version from"
-    echo ""
-    echo "https://github.com/creationix/nvm.git"
-    echo ""
-    echo "if you want to use nvm. You can keep this plugin enabled once you have installed nvm."
-  }
+if ! _command_exists nvm; then
+	function nvm() {
+		echo "Bash-it no longer bundles the nvm script. Please install the latest version from"
+		echo ""
+		echo "https://github.com/creationix/nvm.git"
+		echo ""
+		echo "if you want to use nvm. You can keep this plugin enabled once you have installed nvm."
+	}
 
-  nvm
+	nvm
 fi
