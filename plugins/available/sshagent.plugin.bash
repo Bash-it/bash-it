@@ -135,7 +135,6 @@ function sshagent() {
 			_ensure_sshagent_dead
 			;;
 		*) ;;
-
 	esac
 }
 

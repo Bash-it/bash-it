@@ -337,4 +337,9 @@ function __powerline_prompt_command() {
 	fi
 
 	PS1="${LEFT_PROMPT?}"
+
+	## cleanup ##
+	unset LAST_SEGMENT_COLOR \
+		LEFT_PROMPT \
+		SEGMENTS_AT_LEFT
 }

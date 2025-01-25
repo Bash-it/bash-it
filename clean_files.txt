@@ -166,6 +166,7 @@ themes/brainy
 themes/brunton
 themes/candy
 themes/clean
+themes/doubletime
 themes/easy
 themes/elixr
 themes/essential
@@ -181,7 +182,7 @@ themes/pete
 themes/powerline
 themes/pure
 themes/purity
-
+themes/rjorgenson
 
 # vendor init files
 #
