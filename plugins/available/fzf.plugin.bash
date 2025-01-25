@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Load after the system completion to make sure that the fzf completions are working
 # BASH_IT_LOAD_PRIORITY: 375
 
@@ -5,8 +6,10 @@ cite about-plugin
 about-plugin 'load fzf, if you are using it'
 
 if [ -r ~/.fzf.bash ]; then
+	# shellcheck disable=SC1090
 	source ~/.fzf.bash
 elif [ -r "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash ]; then
+	# shellcheck disable=SC1091
 	source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash
 fi
 
@@ -25,7 +28,7 @@ fe() {
 
 	local IFS=$'\n'
 	local files
-	files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
+	IFS=" " read -r -a files --query="$1" --multi --select-1 --exit-0 <<< fzf-tmux
 	[[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
 }
 
@@ -36,7 +39,7 @@ fcd() {
 	example "fcd aliases"
 
 	local dir
-	dir=$(find ${1:-.} -path '*/\.*' -prune \
+	dir=$(find "${1:-.}" -path '*/\.*' -prune \
 		-o -type d -print 2> /dev/null | fzf +m) \
-		&& cd "$dir"
+		&& cd "$dir" || return 1
 }

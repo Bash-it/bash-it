@@ -102,6 +102,8 @@ plugins/available/direnv.plugin.bash
 plugins/available/dirs.plugin.bash
 plugins/available/docker-compose.plugin.bash
 plugins/available/docker-machine.plugin.bash
+plugins/available/fasd.plugin.bash
+plugins/available/fzf.plugin.bash
 plugins/available/gif.plugin.bash
 plugins/available/git-subrepo.plugin.bash
 plugins/available/git.plugin.bash
