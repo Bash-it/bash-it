@@ -108,6 +108,7 @@ plugins/available/git.plugin.bash
 plugins/available/go.plugin.bash
 plugins/available/goenv.plugin.bash
 plugins/available/gradle.plugin.bash
+plugins/available/hg.plugin.bash
 plugins/available/history-eternal.plugin.bash
 plugins/available/history-search.plugin.bash
 plugins/available/history-substring-search.plugin.bash
