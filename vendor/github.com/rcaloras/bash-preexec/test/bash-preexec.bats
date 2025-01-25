@@ -1,4 +1,5 @@
 #!/usr/bin/env bats
+# shellcheck disable=SC1091,SC2030,SC2031,SC2089,SC2090,SC2317,SC2216
 
 setup() {
 	PROMPT_COMMAND=''       # in case the invoking shell has set this
@@ -165,7 +166,7 @@ test_preexec_echo() {
 		echo "$?"
 	}
 	return_exit_code() {
-		return $1
+		return "$1"
 	}
 	# Helper function is necessary because Bats' run doesn't preserve $?
 	set_exit_code_and_run_precmd() {
@@ -215,7 +216,7 @@ test_preexec_echo() {
 	preexec_functions+=(test_preexec_echo)
 	__bp_interactive_mode
 	git_command="git commit -a -m 'committing some stuff'"
-	history -s $git_command
+	history -s "$git_command"
 
 	run '__bp_preexec_invoke_exec'
 	[ $status -eq 0 ]
@@ -253,13 +254,13 @@ test_preexec_echo() {
 	IFS=_
 	name_with_underscores_1() {
 		parts=(1_2)
-		echo $parts
+		echo "${parts[*]}"
 	}
 	preexec_functions+=(name_with_underscores_1)
 
 	__bp_interactive_mode
 	run '__bp_preexec_invoke_exec'
-	[ $status -eq 0 ]
+	[ "$status" -eq 0 ]
 	[ "$output" == "1 2" ]
 }
 
@@ -267,7 +268,7 @@ test_preexec_echo() {
 	IFS=_
 	name_with_underscores_2() {
 		parts=(2_2)
-		echo $parts
+		echo "${parts[*]}"
 	}
 	precmd_functions+=(name_with_underscores_2)
 	run '__bp_precmd_invoke_cmd'
@@ -332,7 +333,7 @@ test_preexec_echo() {
 	__bp_interactive_mode
 	git_command="git commit -a -m 'committing some stuff'"
 	HISTTIMEFORMAT='%F %T '
-	history -s $git_command
+	history -s "$git_command"
 
 	run '__bp_preexec_invoke_exec'
 	[ $status -eq 0 ]
