@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # The install directory is hard-coded. TODO: allow the directory to be specified on the command line.
 
 cite about-plugin
