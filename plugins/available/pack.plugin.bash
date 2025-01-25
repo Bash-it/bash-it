@@ -50,7 +50,7 @@ __pack_handle_reply() {
 			else
 				allflags=("${flags[*]} ${two_word_flags[*]}")
 			fi
-			IFS=" " read -r -a COMPREPLY -W "${allflags[*]}" -- "$cur" <<< compgen
+			IFS=" " read -r -a COMPREPLY <<< "$(compgen -W "${allflags[*]}" -- "$cur")"
 			if [[ $(type -t compopt) = "builtin" ]]; then
 				[[ "${COMPREPLY[0]}" == *= ]] || compopt +o nospace
 			fi
@@ -100,10 +100,10 @@ __pack_handle_reply() {
 	if [[ ${#must_have_one_flag[@]} -ne 0 ]]; then
 		completions+=("${must_have_one_flag[@]}")
 	fi
-	IFS=" " read -r -a COMPREPLY -W "${completions[*]}" -- "$cur" <<< compgen
+	IFS=" " read -r -a COMPREPLY <<< "$(compgen -W "${completions[*]}" -- "$cur")"
 
 	if [[ ${#COMPREPLY[@]} -eq 0 && ${#noun_aliases[@]} -gt 0 && ${#must_have_one_noun[@]} -ne 0 ]]; then
-		IFS=" " read -r -a COMPREPLY -W "${noun_aliases[*]}" -- "$cur" <<< compgen
+		IFS=" " read -r -a COMPREPLY <<< "$(compgen -W "${noun_aliases[*]}" -- "$cur")"
 	fi
 
 	if [[ ${#COMPREPLY[@]} -eq 0 ]]; then
