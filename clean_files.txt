@@ -125,6 +125,7 @@ plugins/available/node.plugin.bash
 plugins/available/nodenv.plugin.bash
 plugins/available/osx-timemachine.plugin.bash
 plugins/available/osx.plugin.bash
+plugins/available/pack.plugin.bash
 plugins/available/percol.plugin.bash
 plugins/available/plenv.plugin.bash
 plugins/available/postgres.plugin.bash

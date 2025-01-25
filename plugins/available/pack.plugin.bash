@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # bash completion for pack                                 -*- shell-script -*-
 
 cite about-plugin
@@ -49,7 +50,7 @@ __pack_handle_reply() {
 			else
 				allflags=("${flags[*]} ${two_word_flags[*]}")
 			fi
-			COMPREPLY=($(compgen -W "${allflags[*]}" -- "$cur"))
+			IFS=" " read -r -a COMPREPLY -W "${allflags[*]}" -- "$cur" <<< compgen
 			if [[ $(type -t compopt) = "builtin" ]]; then
 				[[ "${COMPREPLY[0]}" == *= ]] || compopt +o nospace
 			fi
@@ -65,7 +66,7 @@ __pack_handle_reply() {
 				__pack_index_of_word "${flag}" "${flags_with_completion[@]}"
 				COMPREPLY=()
 				if [[ ${index} -ge 0 ]]; then
-					PREFIX=""
+					# PREFIX=""
 					cur="${cur#*=}"
 					${flags_completion[${index}]}
 					if [ -n "${ZSH_VERSION}" ]; then
@@ -99,10 +100,10 @@ __pack_handle_reply() {
 	if [[ ${#must_have_one_flag[@]} -ne 0 ]]; then
 		completions+=("${must_have_one_flag[@]}")
 	fi
-	COMPREPLY=($(compgen -W "${completions[*]}" -- "$cur"))
+	IFS=" " read -r -a COMPREPLY -W "${completions[*]}" -- "$cur" <<< compgen
 
 	if [[ ${#COMPREPLY[@]} -eq 0 && ${#noun_aliases[@]} -gt 0 && ${#must_have_one_noun[@]} -ne 0 ]]; then
-		COMPREPLY=($(compgen -W "${noun_aliases[*]}" -- "$cur"))
+		IFS=" " read -r -a COMPREPLY -W "${noun_aliases[*]}" -- "$cur" <<< compgen
 	fi
 
 	if [[ ${#COMPREPLY[@]} -eq 0 ]]; then
@@ -129,7 +130,7 @@ __pack_handle_filename_extension_flag() {
 
 __pack_handle_subdirs_in_dir_flag() {
 	local dir="$1"
-	pushd "${dir}" > /dev/null 2>&1 && _filedir -d && popd > /dev/null 2>&1
+	pushd "${dir}" > /dev/null 2>&1 && _filedir -d && popd || return 1 > /dev/null 2>&1
 }
 
 __pack_handle_flag() {
@@ -568,6 +569,7 @@ _pack_root_command() {
 __start_pack() {
 	local cur prev words cword
 	declare -A flaghash 2> /dev/null || :
+	export flaghash
 	declare -A aliashash 2> /dev/null || :
 	if declare -F _init_completion > /dev/null 2>&1; then
 		_init_completion -s || return
