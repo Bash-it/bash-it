@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 cite about-plugin
 about-plugin 'speeds up your life by using gitstatus for git status calculations. install from https://github.com/romkatv/gitstatus'
 

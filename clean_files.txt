@@ -105,6 +105,7 @@ plugins/available/docker-machine.plugin.bash
 plugins/available/gif.plugin.bash
 plugins/available/git-subrepo.plugin.bash
 plugins/available/git.plugin.bash
+plugins/available/gitstatus.plugin.bash
 plugins/available/go.plugin.bash
 plugins/available/goenv.plugin.bash
 plugins/available/gradle.plugin.bash
