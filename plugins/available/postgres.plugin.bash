@@ -19,7 +19,7 @@ function postgres_start {
 	group 'postgres'
 
 	echo 'Starting Postgres....'
-	"$POSTGRES_BIN/pg_ctl" -D "$PGDATA" -l "$PGDATA/logfile start"
+	"$POSTGRES_BIN/pg_ctl" -D "$PGDATA" -l "$PGDATA/logfile" start
 }
 
 function postgres_stop {
