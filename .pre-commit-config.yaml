@@ -38,7 +38,7 @@ repos:
         name: Check .bash files against bash-it requirements
         entry: ./hooks/dot-bash.sh
         language: system
-        files: "\\.(bash|bat|sh)$"
+        files: "\\.(bash|bat)$"
         types: [file]
       - id: clean-files-txt
         name: Check that clean_files.txt is sorted alphabetically.
