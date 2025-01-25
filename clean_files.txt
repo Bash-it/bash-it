@@ -133,6 +133,8 @@ plugins/available/pyenv.plugin.bash
 plugins/available/python.plugin.bash
 plugins/available/rbenv.plugin.bash
 plugins/available/ruby.plugin.bash
+plugins/available/sshagent.plugin.bash
+plugins/available/subversion.plugin.bash
 plugins/available/sudo.plugin.bash
 plugins/available/textmate.plugin.bash
 plugins/available/thefuck.plugin.bash
