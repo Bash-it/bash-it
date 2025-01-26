@@ -91,6 +91,7 @@ completion/available/yarn.completion.bash
 #
 plugins/available/alias-completion.plugin.bash
 plugins/available/autojump.plugin.bash
+plugins/available/aws.plugin.bash
 plugins/available/base.plugin.bash
 plugins/available/basher.plugin.bash
 plugins/available/battery.plugin.bash
