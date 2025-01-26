@@ -50,7 +50,7 @@ __pack_handle_reply() {
 			else
 				allflags=("${flags[*]} ${two_word_flags[*]}")
 			fi
-			IFS=" " read -r -a COMPREPLY <<< "$(compgen -W "${allflags[*]}" -- "$cur")"
+			mapfile -t COMPREPLY <<< "$(compgen -W "${allflags[*]}" -- "$cur")"
 			if [[ $(type -t compopt) = "builtin" ]]; then
 				[[ "${COMPREPLY[0]}" == *= ]] || compopt +o nospace
 			fi
@@ -100,10 +100,10 @@ __pack_handle_reply() {
 	if [[ ${#must_have_one_flag[@]} -ne 0 ]]; then
 		completions+=("${must_have_one_flag[@]}")
 	fi
-	IFS=" " read -r -a COMPREPLY <<< "$(compgen -W "${completions[*]}" -- "$cur")"
+	mapfile -t COMPREPLY <<< "$(compgen -W "${completions[*]}" -- "$cur")"
 
 	if [[ ${#COMPREPLY[@]} -eq 0 && ${#noun_aliases[@]} -gt 0 && ${#must_have_one_noun[@]} -ne 0 ]]; then
-		IFS=" " read -r -a COMPREPLY <<< "$(compgen -W "${noun_aliases[*]}" -- "$cur")"
+		mapfile -t COMPREPLY <<< "$(compgen -W "${noun_aliases[*]}" -- "$cur")"
 	fi
 
 	if [[ ${#COMPREPLY[@]} -eq 0 ]]; then
@@ -130,7 +130,7 @@ __pack_handle_filename_extension_flag() {
 
 __pack_handle_subdirs_in_dir_flag() {
 	local dir="$1"
-	pushd "${dir}" > /dev/null 2>&1 && _filedir -d && popd || return 1 > /dev/null 2>&1
+	pushd "${dir}" > /dev/null 2>&1 && _filedir -d && popd > /dev/null 2>&1 || return 1
 }
 
 __pack_handle_flag() {
@@ -568,8 +568,8 @@ _pack_root_command() {
 
 __start_pack() {
 	local cur prev words cword
+	#shellcheck disable=SC2034
 	declare -A flaghash 2> /dev/null || :
-	export flaghash
 	declare -A aliashash 2> /dev/null || :
 	if declare -F _init_completion > /dev/null 2>&1; then
 		_init_completion -s || return

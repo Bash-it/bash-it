@@ -28,8 +28,8 @@ fe() {
 
 	local IFS=$'\n'
 	local files
-	IFS=" " read -r -a files --query="$1" --multi --select-1 --exit-0 <<< fzf-tmux
-	[[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
+	mapfile -t files <<< "$(fzf-tmux --query="$1" --multi --select-1 --exit-0)"
+	[[ -n "${files[0]}" ]] && "${EDITOR:-vim}" "${files[@]}"
 }
 
 fcd() {

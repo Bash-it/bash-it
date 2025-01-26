@@ -20,7 +20,7 @@ function _sqlmap() {
 
 		# List directory content
 		--tamper)
-			IFS=' ' read -r -a COMPREPLY <<< "$(compgen -W "${tamper:-}" -- "$cur")"
+			mapfile -t COMPREPLY <<< "$(compgen -W "${tamper:-}" -- "$cur")"
 			return 0
 			;;
 		--output-dir | -t | -l | -m | -r | --load-cookies | --proxy-file | --sql-file | --shared-lib | --file-write)
@@ -32,35 +32,35 @@ function _sqlmap() {
 			return 0
 			;;
 		--method)
-			IFS=' ' read -r -a COMPREPLY <<< "$(compgen -W 'GET POST PUT' -- "$cur")"
+			mapfile -t COMPREPLY <<< "$(compgen -W 'GET POST PUT' -- "$cur")"
 			return 0
 			;;
 		--auth-type)
-			IFS=' ' read -r -a COMPREPLY <<< "$(compgen -W 'Basic Digest NTLM PKI' -- "$cur")"
+			mapfile -t COMPREPLY <<< "$(compgen -W 'Basic Digest NTLM PKI' -- "$cur")"
 			return 0
 			;;
 		--tor-type)
-			IFS=' ' read -r -a COMPREPLY <<< "$(compgen -W 'HTTP SOCKS4 SOCKS5' -- "$cur")"
+			mapfile -t COMPREPLY <<< "$(compgen -W 'HTTP SOCKS4 SOCKS5' -- "$cur")"
 			return 0
 			;;
 		-v)
-			IFS=' ' read -r -a COMPREPLY <<< "$(compgen -W '1 2 3 4 5 6' -- "$cur")"
+			mapfile -t COMPREPLY <<< "$(compgen -W '1 2 3 4 5 6' -- "$cur")"
 			return 0
 			;;
 		--dbms)
-			IFS=' ' read -r -a COMPREPLY <<< "$(compgen -W 'mysql mssql access postgres' -- "$cur")"
+			mapfile -t COMPREPLY <<< "$(compgen -W 'mysql mssql access postgres' -- "$cur")"
 			return 0
 			;;
 		--level | --crawl)
-			IFS=' ' read -r -a COMPREPLY <<< "$(compgen -W '1 2 3 4 5' -- "$cur")"
+			mapfile -t COMPREPLY <<< "$(compgen -W '1 2 3 4 5' -- "$cur")"
 			return 0
 			;;
 		--risk)
-			IFS=' ' read -r -a COMPREPLY <<< "$(compgen -W '0 1 2 3' -- "$cur")"
+			mapfile -t COMPREPLY <<< "$(compgen -W '0 1 2 3' -- "$cur")"
 			return 0
 			;;
 		--technique)
-			IFS=' ' read -r -a COMPREPLY <<< "$(compgen -W 'B E U S T Q' -- "$cur")"
+			mapfile -t COMPREPLY <<< "$(compgen -W 'B E U S T Q' -- "$cur")"
 			return 0
 			;;
 		-s)
@@ -68,7 +68,7 @@ function _sqlmap() {
 			return 0
 			;;
 		--dump-format)
-			IFS=' ' read -r -a COMPREPLY <<< "$(compgen -W 'CSV HTML SQLITE' -- "$cur")"
+			mapfile -t COMPREPLY <<< "$(compgen -W 'CSV HTML SQLITE' -- "$cur")"
 			return 0
 			;;
 		-x)
@@ -78,7 +78,7 @@ function _sqlmap() {
 	esac
 
 	if [[ "$cur" == * ]]; then
-		IFS=' ' read -r -a COMPREPLY <<< "$(
+		mapfile -t COMPREPLY <<< "$(
 			compgen -W '-h --help -hh --version -v -d -u --url -l -x -m -r -g -c --method \
 			--data --param-del --cookie --cookie-del --load-cookies \
 			--drop-set-cookie --user-agent --random-agent --host --referer \
