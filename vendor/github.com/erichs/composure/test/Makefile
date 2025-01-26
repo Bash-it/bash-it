@@ -15,3 +15,4 @@ tests:
 clean::
 	rm -f *~ t/*~
 	rm -rf composure_test
+
