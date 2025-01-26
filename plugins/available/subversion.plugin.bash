@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 cite about-plugin
 about-plugin 'svn helper functions'
 
@@ -10,7 +11,7 @@ rm_svn() {
 		reference rm_svn
 		return
 	fi
-	find $1 -name .svn -print0 | xargs -0 rm -rf
+	find "$1" -name .svn -print0 | xargs -0 rm -rf
 }
 
 svn_add() {

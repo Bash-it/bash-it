@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 cite about-plugin
 about-plugin 'Helper functions for Ruby on Rails'
 
@@ -7,9 +8,9 @@ function killrails() {
 	group 'rails'
 
 	railsPid="$(cat tmp/pids/server.pid)"
-	if [ ! -z "$railsPid" ]; then
+	if [ -n "$railsPid" ]; then
 		echo "[OK] Rails Server Process Id : ${railsPid}"
-		kill -9 $railsPid
+		kill -9 "$railsPid"
 		echo "[OK] Process Killed"
 	else
 		echo "[FAIL] Error killing Rails server"

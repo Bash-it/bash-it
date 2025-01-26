@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 cite about-plugin
 about-plugin 'sshagent helper functions'
 
@@ -22,8 +22,8 @@ function _get_process_status_field() {
 	pid="${1}"
 	field="${2}"
 	status_file="/proc/${pid}/status"
-	if ! ([[ -d "${status_file%/*}" ]] \
-		&& [[ -r "${status_file}" ]]); then
+	if ! { [[ -d "${status_file%/*}" ]] \
+		&& [[ -r "${status_file}" ]]; }; then
 		echo ""
 		return
 	fi
