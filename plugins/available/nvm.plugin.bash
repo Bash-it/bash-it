@@ -18,8 +18,10 @@ fi
 
 # This loads nvm
 if [[ -n "$NVM_BREW_PREFIX" && -s "${NVM_BREW_PREFIX}/nvm.sh" ]]; then
+	# shellcheck disable=SC1091
 	source "${NVM_BREW_PREFIX}/nvm.sh"
 else
+	# shellcheck disable=SC1091
 	[[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
 fi
 
