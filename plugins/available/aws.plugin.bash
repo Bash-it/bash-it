@@ -109,12 +109,12 @@ function __awskeys_comp {
 		show | export)
 			local profile_list
 			profile_list="$(__awskeys_list | grep "    ")"
-			IFS=" " read -r -a COMPREPLY <<< "$(compgen -W "${profile_list}" -- "${cur}")"
+			mapfile -t COMPREPLY < <(compgen -W "${profile_list}" -- "${cur}")
 			return 0
 			;;
 	esac
 
-	IFS=" " read -r -a COMPREPLY <<< "$(compgen -W "${opts}" -- "${cur}")"
+	mapfile -t COMPREPLY < <(compgen -W "${opts}" -- "${cur}")
 
 	return 0
 }
