@@ -7,6 +7,7 @@ function _sdkman_complete() {
 
 	COMPREPLY=()
 
+	local line
 	if [ "$COMP_CWORD" -eq 1 ]; then
 		while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "install uninstall rm list ls use default home env current upgrade ug version broadcast help offline selfupdate update flush" -- "${COMP_WORDS[COMP_CWORD]}")
 	elif [ "$COMP_CWORD" -eq 2 ]; then
