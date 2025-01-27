@@ -27,8 +27,8 @@ fe() {
 	example "fe foo"
 
 	local IFS=$'\n'
-	local files
-	mapfile -t files <<< "$(fzf-tmux --query="$1" --multi --select-1 --exit-0)"
+	local files=()
+	while IFS='' read -r line; do files+=("$line"); done < <(fzf-tmux --query="$1" --multi --select-1 --exit-0)
 	[[ -n "${files[0]}" ]] && ${EDITOR:-vim} "${files[@]}"
 }
 

@@ -6,7 +6,8 @@
 #  - Comment lines (#) are ignored
 #
 # shellcheck disable=SC2002  # Prefer 'cat' for cleaner script
-mapfile -t FILES < <(
+FILES=()
+while IFS='' read -r line; do FILES+=("$line"); done < <(
 	cat clean_files.txt \
 		| grep -E -v '^\s*$' \
 		| grep -E -v '^\s*#' \
