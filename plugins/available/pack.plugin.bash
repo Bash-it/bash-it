@@ -44,7 +44,7 @@ __pack_handle_reply() {
 			if [[ $(type -t compopt) = "builtin" ]]; then
 				compopt -o nospace
 			fi
-			local allflags
+			local allflags line
 			if [ ${#must_have_one_flag[@]} -ne 0 ]; then
 				allflags=("${must_have_one_flag[@]}")
 			else
@@ -81,7 +81,7 @@ __pack_handle_reply() {
 	esac
 
 	# check if we are handling a flag with special work handling
-	local index
+	local index completions line
 	__pack_index_of_word "${prev}" "${flags_with_completion[@]}"
 	if [[ ${index} -ge 0 ]]; then
 		${flags_completion[${index}]}
@@ -93,7 +93,6 @@ __pack_handle_reply() {
 		return
 	fi
 
-	local completions
 	completions=("${commands[@]}")
 	if [[ ${#must_have_one_noun[@]} -ne 0 ]]; then
 		completions=("${must_have_one_noun[@]}")

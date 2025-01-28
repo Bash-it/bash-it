@@ -26,7 +26,7 @@ fe() {
 	param "1: Search term"
 	example "fe foo"
 
-	local IFS=$'\n'
+	local IFS=$'\n' line
 	local files=()
 	while IFS='' read -r line; do files+=("$line"); done < <(fzf-tmux --query="$1" --multi --select-1 --exit-0)
 	[[ -n "${files[0]}" ]] && ${EDITOR:-vim} "${files[@]}"

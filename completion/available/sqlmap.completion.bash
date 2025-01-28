@@ -10,7 +10,7 @@
 _command_exists sqlmap || return
 
 function _sqlmap() {
-	local cur prev
+	local cur prev line
 
 	COMPREPLY=()
 	cur="$(_get_cword)"
