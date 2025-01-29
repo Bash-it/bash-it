@@ -33,6 +33,7 @@ function docker-enter() {
 function docker-remove-images() {
 	about 'attempt to remove images with supplied tags or all if no tags are supplied'
 	group 'docker'
+	local line
 	if [ -z "$1" ]; then
 		# shellcheck disable=SC2046
 		docker rmi $(docker images -q)
@@ -54,7 +55,7 @@ function docker-image-dependencies() {
 	if hash dot 2> /dev/null; then
 		OUT=$(mktemp -t docker-viz-XXXX.png)
 		docker images -viz | dot -Tpng > "$OUT"
-		case "$OSTYPE" in
+		case $OSTYPE in
 			linux*)
 				xdg-open "$OUT"
 				;;
@@ -63,7 +64,7 @@ function docker-image-dependencies() {
 				;;
 		esac
 	else
-		>&2 echo "Can't show dependencies; Graphiz is not installed"
+		echo "Can't show dependencies; Graphiz is not installed" >&2
 	fi
 }
 
