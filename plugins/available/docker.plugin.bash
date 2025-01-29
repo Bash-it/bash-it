@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 cite about-plugin
 about-plugin 'Helpers to more easily work with Docker'
 
@@ -32,15 +33,19 @@ function docker-enter() {
 function docker-remove-images() {
 	about 'attempt to remove images with supplied tags or all if no tags are supplied'
 	group 'docker'
+	local line
 	if [ -z "$1" ]; then
+		# shellcheck disable=SC2046
 		docker rmi $(docker images -q)
 	else
 		DOCKER_IMAGES=""
-		for IMAGE_ID in $@; do DOCKER_IMAGES="$DOCKER_IMAGES\|$IMAGE_ID"; done
+		for IMAGE_ID in "$@"; do DOCKER_IMAGES="$DOCKER_IMAGES\|$IMAGE_ID"; done
 		# Find the image IDs for the supplied tags
-		ID_ARRAY=($(docker images | grep "${DOCKER_IMAGES:2}" | awk {'print $3'}))
+		ID_ARRAY=()
+		while IFS='' read -r line; do ID_ARRAY+=("$line"); done < <(docker images | grep "${DOCKER_IMAGES:2}" | awk '{print $3}')
 		# Strip out duplicate IDs before attempting to remove the image(s)
-		docker rmi $(echo ${ID_ARRAY[@]} | tr ' ' '\n' | sort -u | tr '\n' ' ')
+		# shellcheck disable=SC2046
+		docker rmi $(echo "${ID_ARRAY[@]}" | tr ' ' '\n' | sort -u)
 	fi
 }
 
@@ -49,17 +54,17 @@ function docker-image-dependencies() {
 	group 'docker'
 	if hash dot 2> /dev/null; then
 		OUT=$(mktemp -t docker-viz-XXXX.png)
-		docker images -viz | dot -Tpng > $OUT
+		docker images -viz | dot -Tpng > "$OUT"
 		case $OSTYPE in
 			linux*)
-				xdg-open $OUT
+				xdg-open "$OUT"
 				;;
 			darwin*)
-				open $OUT
+				open "$OUT"
 				;;
 		esac
 	else
-		>&2 echo "Can't show dependencies; Graphiz is not installed"
+		echo "Can't show dependencies; Graphiz is not installed" >&2
 	fi
 }
 
@@ -76,6 +81,6 @@ function docker-archive-content() {
 	example 'docker-archive-content images.tar.gz'
 
 	if [ -n "$1" ]; then
-		tar -xzOf $1 manifest.json | jq '[.[] | .RepoTags] | add'
+		tar -xzOf "$1" manifest.json | jq '[.[] | .RepoTags] | add'
 	fi
 }

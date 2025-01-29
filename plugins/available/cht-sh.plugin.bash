@@ -1,4 +1,6 @@
+# shellcheck shell=bash
 cite about-plugin
+# shellcheck disable=SC2016
 about-plugin 'Simplify `curl cht.sh/<query>` to `cht.sh <query>`'
 
 # Play nicely if user already installed cht.sh cli tool
@@ -15,7 +17,8 @@ if ! _command_exists cht.sh; then
 		group 'cht-sh'
 
 		# Separate arguments with '/', preserving spaces within them
-		local query=$(
+		local query
+		query=$(
 			IFS=/
 			echo "$*"
 		)

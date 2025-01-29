@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 cite about-plugin
 about-plugin 'mankier.com explain function to explain other commands'
 
@@ -9,12 +10,12 @@ explain() {
 	group 'explain'
 
 	if [ "$#" -eq 0 ]; then
-		while read -p "Command: " cmd; do
-			curl -Gs "https://www.mankier.com/api/explain/?cols="$(tput cols) --data-urlencode "q=$cmd"
+		while read -r -p "Command: " cmd; do
+			curl -Gs "https://www.mankier.com/api/explain/?cols=$(tput cols)" --data-urlencode "q=$cmd"
 		done
 		echo "Bye!"
 	elif [ "$#" -eq 1 ]; then
-		curl -Gs "https://www.mankier.com/api/explain/?cols="$(tput cols) --data-urlencode "q=$1"
+		curl -Gs "https://www.mankier.com/api/explain/?cols=$(tput cols)" --data-urlencode "q=$1"
 	else
 		echo "Usage"
 		echo "explain                  interactive mode."

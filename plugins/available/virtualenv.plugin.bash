@@ -8,6 +8,7 @@ about-plugin 'virtualenvwrapper and pyenv-virtualenvwrapper helper functions'
 if _command_exists pyenv; then
 	pyenv virtualenvwrapper
 elif _command_exists virtualenvwrapper.sh; then
+	# shellcheck disable=SC1091
 	source virtualenvwrapper.sh
 fi
 
