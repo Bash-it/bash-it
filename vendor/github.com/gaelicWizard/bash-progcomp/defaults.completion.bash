@@ -16,9 +16,9 @@ function matchpattern()
 
 function _defaults_verbs()
 {
-	local IFS=$'\n'      # Treat only newlines as delimiters in string operations.
-	local LC_CTYPE='C'   # Do not consider character set in string operations.
-	local LC_COLLATE='C' # Do not consider character set in pattern matching.
+	local IFS=$'\n'	# Treat only newlines as delimiters in string operations.
+	local LC_CTYPE='C'	# Do not consider character set in string operations.
+	local LC_COLLATE='C'	# Do not consider character set in pattern matching.
 	local cur="${COMP_WORDS[COMP_CWORD]}"
 	local prev="${COMP_WORDS[COMP_CWORD - 1]}"
 	COMPREPLY=()
@@ -41,14 +41,15 @@ function _defaults_verbs()
 
 function _defaults_domains()
 {
-	local IFS=$'\n'      # Treat only newlines as delimiters in string operations.
-	local LC_CTYPE='C'   # Do not consider character set in string operations.
-	local LC_COLLATE='C' # Do not consider character set in pattern matching.
+	local IFS=$'\n'	# Treat only newlines as delimiters in string operations.
+	local LC_CTYPE='C'	# Do not consider character set in string operations.
+	local LC_COLLATE='C'	# Do not consider character set in pattern matching.
 	local cur="${COMP_WORDS[COMP_CWORD]}"
 	local prev="${COMP_WORDS[COMP_CWORD - 1]}"
 	COMPREPLY=()
 
-	if [[ "$BASH_VERSINFO" -ge 4 ]]; then # Exponential performance issue on strings greater than about 10k.
+	if [[ "$BASH_VERSINFO" -ge 4 ]]
+	then # Exponential performance issue on strings greater than about 10k.
 		local domains="$(defaults domains)"
 		local candidates=($(compgen -W "${domains//, /$IFS}" | grep -i "^${cur}"))
 	else
@@ -56,9 +57,11 @@ function _defaults_domains()
 		local candidates=($(compgen -W "${domains}" | grep -i "^${cur}"))
 	fi
 	COMPREPLY=($(printf '%q\n' "${candidates[@]}"))
-	if grep -q "^$cur" <<< '-app'; then
+	if grep -q "^$cur" <<< '-app'
+	then
 		COMPREPLY[${#COMPREPLY[@]}]="-app"
-	elif grep -q "^$cur" <<< '-g'; then
+	elif grep -q "^$cur" <<< '-g'
+	then
 		COMPREPLY[${#COMPREPLY[@]}]="-g"
 	fi
 
@@ -67,9 +70,9 @@ function _defaults_domains()
 
 function _defaults()
 {
-	local IFS=$'\n'      # Treat only newlines as delimiters in string operations.
-	local LC_CTYPE='C'   # Do not consider character set in string operations.
-	local LC_COLLATE='C' # Do not consider character set in pattern matching.
+	local IFS=$'\n'	# Treat only newlines as delimiters in string operations.
+	local LC_CTYPE='C'	# Do not consider character set in string operations.
+	local LC_COLLATE='C'	# Do not consider character set in pattern matching.
 	local cur="${COMP_WORDS[COMP_CWORD]}"
 	local prev="${COMP_WORDS[COMP_CWORD - 1]}"
 	COMPREPLY=()
@@ -94,7 +97,8 @@ function _defaults()
 			_known_hosts -a
 			;;
 		*)
-			if matchpattern "$prev" "${cmds// /|}"; then
+			if matchpattern "$prev" "${cmds// /|}"
+			then
 				# TODO: not correct for verbs: domains, find, help
 				_defaults_domains
 			else
@@ -119,7 +123,8 @@ function _defaults()
 	4)
 		case ${COMP_WORDS[1]} in
 		"-host")
-			if matchpattern "$prev" "${cmds// /|}"; then
+			if matchpattern "$prev" "${cmds// /|}"
+			then
 				# TODO: not correct for verbs: domains, find, help
 				_defaults_domains
 			else
@@ -134,12 +139,15 @@ function _defaults()
 
 	case ${COMP_WORDS[1]} in
 	"-currentHost")
-		if matchpattern "${COMP_WORDS[2]}" "${cmds// /|}"; then
+		if matchpattern "${COMP_WORDS[2]}" "${cmds// /|}"
+		then
 			cmd="${COMP_WORDS[2]}"
 			domain="${COMP_WORDS[3]}"
 			key_index=4
-			if [[ "$domain" == "-app" ]]; then
-				if [[ $COMP_CWORD -eq 4 ]]; then
+			if [[ "$domain" == "-app" ]]
+			then
+				if [[ $COMP_CWORD -eq 4 ]]
+				then
 					# Completing application name. Can't help here, sorry
 					return 0
 				fi
@@ -149,12 +157,15 @@ function _defaults()
 		fi
 		;;
 	"-host")
-		if matchpattern "${COMP_WORDS[3]}" "${cmds// /|}"; then
+		if matchpattern "${COMP_WORDS[3]}" "${cmds// /|}"
+		then
 			cmd="${COMP_WORDS[3]}"
 			domain="${COMP_WORDS[4]}"
 			key_index=5
-			if [[ "$domain" == "-app" ]]; then
-				if [[ $COMP_CWORD -eq 5 ]]; then
+			if [[ "$domain" == "-app" ]]
+			then
+				if [[ $COMP_CWORD -eq 5 ]]
+				then
 					# Completing application name. Can't help here, sorry
 					return 0
 				fi
@@ -164,12 +175,15 @@ function _defaults()
 		fi
 		;;
 	*)
-		if matchpattern "${COMP_WORDS[1]}" "${cmds// /|}"; then
+		if matchpattern "${COMP_WORDS[1]}" "${cmds// /|}"
+		then
 			cmd="${COMP_WORDS[1]}"
 			domain="${COMP_WORDS[2]}"
 			key_index=3
-			if [[ "$domain" == "-app" ]]; then
-				if [[ $COMP_CWORD -eq 3 ]]; then
+			if [[ "$domain" == "-app" ]]
+			then
+				if [[ $COMP_CWORD -eq 3 ]]
+				then
 					# Completing application name. Can't help here, sorry
 					return 0
 				fi
@@ -186,41 +200,51 @@ function _defaults()
 	case $cmd in
 	read | read-type)
 		# Complete key
-		if candidates=($(compgen -W "${keys[*]:-}" | grep -i "^${cur}")); then
+		if candidates=($(compgen -W "${keys[*]:-}" | grep -i "^${cur}"))
+		then
 			COMPREPLY=($(printf '%q\n' "${candidates[@]}"))
 		fi
 		;;
 	write)
-		if [[ $key_index -eq $COMP_CWORD ]]; then
+		if [[ $key_index -eq $COMP_CWORD ]]
+		then
 			# Complete key
-			if candidates=($(compgen -W "${keys[*]:-}" | grep -i "^${cur}")); then
+			if candidates=($(compgen -W "${keys[*]:-}" | grep -i "^${cur}"))
+			then
 				COMPREPLY=($(printf '%q\n' "${candidates[@]}"))
 			fi
-		elif [[ $((key_index + 1)) -eq $COMP_CWORD ]]; then
+		elif [[ $((key_index + 1)) -eq $COMP_CWORD ]]
+		then
 			# Complete value type
 			local cur_type="$(defaults read-type "$domain" "${COMP_WORDS[key_index]}" 2> /dev/null | sed -e 's/^Type is \(.*\)/-\1/' -e's/dictionary/dict/' | grep "^$cur")"
-			if [[ $cur_type ]]; then
+			if [[ $cur_type ]]
+			then
 				COMPREPLY=("$cur_type")
 			else
 				COMPREPLY=($(compgen -W "${value_types[*]}" -- "$cur"))
 			fi
-		elif [[ $((key_index + 2)) -eq $COMP_CWORD ]]; then
+		elif [[ $((key_index + 2)) -eq $COMP_CWORD ]]
+		then
 			# Complete value
 			COMPREPLY=($(defaults read "$domain" "${COMP_WORDS[key_index]}" 2> /dev/null | grep -i "^${cur//\\/\\\\}"))
 		fi
 		;;
 	rename)
-		if [[ $key_index -eq $COMP_CWORD || $((key_index + 1)) -eq $COMP_CWORD ]]; then
+		if [[ $key_index -eq $COMP_CWORD || $((key_index + 1)) -eq $COMP_CWORD ]]
+		then
 			# Complete source and destination keys
-			if candidates=($(compgen -W "${keys[*]:-}" | grep -i "^${cur}")); then
+			if candidates=($(compgen -W "${keys[*]:-}" | grep -i "^${cur}"))
+			then
 				COMPREPLY=($(printf '%q\n' "${candidates[@]}"))
 			fi
 		fi
 		;;
 	delete)
-		if [[ $key_index -eq $COMP_CWORD ]]; then
+		if [[ $key_index -eq $COMP_CWORD ]]
+		then
 			# Complete key
-			if candidates=($(compgen -W "${keys[*]:-}" | grep -i "^${cur}")); then
+			if candidates=($(compgen -W "${keys[*]:-}" | grep -i "^${cur}"))
+			then
 				COMPREPLY=($(printf '%q\n' "${candidates[@]}"))
 			fi
 		fi

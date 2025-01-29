@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 cite about-plugin
 about-plugin 'speeds up your life by using gitstatus for git status calculations. install from https://github.com/romkatv/gitstatus'
 
@@ -17,6 +18,7 @@ function gitstatus_on_disable() {
 
 : "${SCM_GIT_GITSTATUS_DIR:="$HOME/gitstatus"}"
 if [[ -d ${SCM_GIT_GITSTATUS_DIR} ]]; then
+	# shellcheck disable=SC1091
 	source "${SCM_GIT_GITSTATUS_DIR}/gitstatus.plugin.sh"
 	# Start the actual gitstatus binary
 	gitstatus_stop && gitstatus_start -s -1 -u -1 -c -1 -d -1

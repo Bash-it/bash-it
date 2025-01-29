@@ -33,3 +33,5 @@ RHEL/CentOS: `yum install bash-completion`
 Copy the file(s) to your `/etc/bash_completion.d` folder:
 
 `sudo cp jboss* /etc/bash_completion.d`
+
+
