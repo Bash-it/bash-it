@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 
 # Make sure terraform is installed
 _command_exists terraform || return
