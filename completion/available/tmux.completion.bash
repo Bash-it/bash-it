@@ -1,17 +1,20 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
+# shellcheck disable=SC2120,SC2207,SC2206
+# note: adding the SC2206 exception here is ugly.
+# A future refactor can fix this better.
 
 # tmux completion
 # See: http://www.debian-administration.org/articles/317 for how to write more.
 # Usage: Put "source bash_completion_tmux.sh" into your .bashrc
 
 _tmux_expand() {
-	[ "$cur" != "${cur%\\}" ] && cur="$cur"'\'
+	[ "$cur" != "${cur%\\}" ] && cur="$cur\\"
 	if [[ "$cur" == \~*/* ]]; then
-		eval cur=$cur
+		eval "cur=$cur"
 	else
 		if [[ "$cur" == \~* ]]; then
 			cur=${cur#\~}
-			COMPREPLY=($(compgen -P '~' -u $cur))
+			COMPREPLY=($(compgen -P '~' -u "$cur"))
 			return ${#COMPREPLY[@]}
 		fi
 	fi
@@ -22,10 +25,10 @@ _tmux_filedir() {
 '
 	_tmux_expand || return 0
 	if [ "$1" = -d ]; then
-		COMPREPLY=(${COMPREPLY[@]} $(compgen -d -- $cur))
+		COMPREPLY=("${COMPREPLY[@]}" $(compgen -d -- "$cur"))
 		return 0
 	fi
-	COMPREPLY=(${COMPREPLY[@]} $(eval compgen -f -- \"$cur\"))
+	COMPREPLY=("${COMPREPLY[@]}" $(eval "compgen -f -- \"$cur\""))
 }
 
 function _tmux_complete_client() {
@@ -41,33 +44,32 @@ function _tmux_complete_session() {
 function _tmux_complete_window() {
 	local IFS=$'\n'
 	local cur="${1}"
-	local session_name="$(echo "${cur}" | sed 's/\\//g' | cut -d ':' -f 1)"
-	local sessions
+	local session_name sessions
+	session_name="$(echo "${cur}" | sed 's/\\//g' | cut -d ':' -f 1)"
 
 	sessions="$(tmux -q list-sessions 2> /dev/null | sed -re 's/([^:]+:).*$/\1/')"
 	if [[ -n "${session_name}" ]]; then
 		sessions="${sessions}
         $(tmux -q list-windows -t "${session_name}" 2> /dev/null | sed -re 's/^([^:]+):.*$/'"${session_name}"':\1/')"
 	fi
-	cur="$(echo "${cur}" | sed -e 's/:/\\\\:/')"
-	sessions="$(echo "${sessions}" | sed -e 's/:/\\\\:/')"
+	cur=${cur/:/\\\\:}
+	sessions=${sessions/:/\\\\:}
 	COMPREPLY=(${COMPREPLY[@]:-} $(compgen -W "${sessions}" -- "${cur}"))
 }
 
 _tmux() {
 	local cur prev
 	local i cmd cmd_index option option_index
-	local opts=""
 	COMPREPLY=()
 	cur="${COMP_WORDS[COMP_CWORD]}"
 	prev="${COMP_WORDS[COMP_CWORD - 1]}"
 
-	if [ ${prev} == -f ]; then
+	if [ "${prev}" == -f ]; then
 		_tmux_filedir
 	else
 		# Search for the command
 		local skip_next=0
-		for ((i = 1; $i <= $COMP_CWORD; i++)); do
+		for ((i = 1; i <= COMP_CWORD; i++)); do
 			if [[ ${skip_next} -eq 1 ]]; then
 				#echo "Skipping"
 				skip_next=0
@@ -82,7 +84,7 @@ _tmux() {
 
 		# Search for the last option command
 		skip_next=0
-		for ((i = 1; $i <= $COMP_CWORD; i++)); do
+		for ((i = 1; i <= COMP_CWORD; i++)); do
 			if [[ ${skip_next} -eq 1 ]]; then
 				#echo "Skipping"
 				skip_next=0
@@ -99,7 +101,7 @@ _tmux() {
 
 		if [[ $COMP_CWORD -le $cmd_index ]]; then
 			# The user has not specified a command yet
-			COMPREPLY=(${COMPREPLY[@]:-} $(compgen -W "$(tmux start-server \; list-commands | cut -d' ' -f1)" -- "${cur}"))
+			COMPREPLY=("${COMPREPLY[@]:-}" $(compgen -W "$(tmux start-server \; list-commands | cut -d' ' -f1)" -- "${cur}"))
 		else
 			case ${cmd} in
 				attach-session | attach)
@@ -132,7 +134,7 @@ _tmux() {
 						-[n | d | s]) options="-d -n -s -t --" ;;
 						*)
 							if [[ ${COMP_WORDS[option_index]} == -- ]]; then
-								_command_offset ${option_index}
+								_command_offset "${option_index}"
 							else
 								options="-d -n -s -t --"
 							fi
@@ -183,7 +185,7 @@ _tmux() {
 	fi     # not -f
 
 	if [[ -n "${options}" ]]; then
-		COMPREPLY=(${COMPREPLY[@]:-} $(compgen -W "${options}" -- "${cur}"))
+		COMPREPLY=("${COMPREPLY[@]:-}" $(compgen -W "${options}" -- "${cur}"))
 	fi
 
 	return 0
