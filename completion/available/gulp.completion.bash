@@ -1,4 +1,4 @@
-#!/bin/bash
+# shellcheck shell=bash
 # Borrowed from grunt-cli
 # http://gruntjs.com/
 #
@@ -43,8 +43,9 @@ function _gulp_completions() {
 	# The currently-being-completed word.
 	local cur="${COMP_WORDS[COMP_CWORD]}"
 	#Grab tasks
-	local compls=$(gulp --tasks-simple)
+	local line compls
+	compls=$(gulp --tasks-simple)
 	# Tell complete what stuff to show.
-	COMPREPLY=($(compgen -W "$compls" -- "$cur"))
+	while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "$compls" -- "$cur")
 }
 complete -o default -F _gulp_completions gulp
