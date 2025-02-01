@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Ensure that we log to doctor so the user can address these issues
 _is_function _init_completion \
 	|| _log_error '_init_completion not found. Ensure bash-completion 2.0 or newer is installed and configured properly.'
@@ -11,7 +12,8 @@ _pj() {
 	shift
 	[ "$1" == "open" ] && shift
 
-	local cur prev words cword
+	# shellcheck disable=SC2034
+	local cur prev words cword # these are set by the call to _init_completion
 	_init_completion || return
 
 	local IFS=$'\n' i j k
@@ -24,11 +26,11 @@ _pj() {
 	for i in ${BASH_IT_PROJECT_PATHS//:/$'\n'}; do
 		# create an array of matched subdirs
 		k="${#COMPREPLY[@]}"
-		for j in $(compgen -d $i/$cur); do
-			if [[ ($mark_symdirs && -L $j || $mark_dirs && ! -L $j) && ! -d ${j#$i/} ]]; then
+		for j in $(compgen -d "$i/$cur"); do
+			if [[ ($mark_symdirs && -L $j || $mark_dirs && ! -L $j) && ! -d ${j#"$i"/} ]]; then
 				j+="/"
 			fi
-			COMPREPLY[k++]=${j#$i/}
+			COMPREPLY[k++]=${j#"$i"/}
 		done
 	done
 
