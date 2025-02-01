@@ -1,6 +1,5 @@
 # shellcheck shell=bash
-# shellcheck disable=SC2120,SC2207,SC2206
-# note: adding the SC2206 exception here is ugly.
+# shellcheck disable=SC2120,SC2207
 # A future refactor can fix this better.
 
 # tmux completion
@@ -8,7 +7,7 @@
 # Usage: Put "source bash_completion_tmux.sh" into your .bashrc
 
 _tmux_expand() {
-	[ "$cur" != "${cur%\\}" ] && cur="$cur\\"
+	[[ "$cur" != "${cur%\\}" ]] && cur="$cur\\"
 	if [[ "$cur" == \~*/* ]]; then
 		eval "cur=$cur"
 	else
@@ -24,7 +23,7 @@ _tmux_filedir() {
 	local IFS='
 '
 	_tmux_expand || return 0
-	if [ "$1" = -d ]; then
+	if [[ "$1" = -d ]]; then
 		COMPREPLY=("${COMPREPLY[@]}" $(compgen -d -- "$cur"))
 		return 0
 	fi
@@ -34,12 +33,12 @@ _tmux_filedir() {
 function _tmux_complete_client() {
 	local IFS=$'\n'
 	local cur="${1}"
-	COMPREPLY=(${COMPREPLY[@]:-} $(compgen -W "$(tmux -q list-clients 2> /dev/null | cut -f 1 -d ':')" -- "${cur}"))
+	COMPREPLY+=($(compgen -W "$(tmux -q list-clients 2> /dev/null | cut -f 1 -d ':')" -- "${cur}"))
 }
 function _tmux_complete_session() {
 	local IFS=$'\n'
 	local cur="${1}"
-	COMPREPLY=(${COMPREPLY[@]:-} $(compgen -W "$(tmux -q list-sessions 2> /dev/null | cut -f 1 -d ':')" -- "${cur}"))
+	COMPREPLY+=($(compgen -W "$(tmux -q list-sessions 2> /dev/null | cut -f 1 -d ':')" -- "${cur}"))
 }
 function _tmux_complete_window() {
 	local IFS=$'\n'
@@ -54,7 +53,7 @@ function _tmux_complete_window() {
 	fi
 	cur=${cur/:/\\\\:}
 	sessions=${sessions/:/\\\\:}
-	COMPREPLY=(${COMPREPLY[@]:-} $(compgen -W "${sessions}" -- "${cur}"))
+	COMPREPLY+=($(compgen -W "${sessions}" -- "${cur}"))
 }
 
 _tmux() {
@@ -64,7 +63,7 @@ _tmux() {
 	cur="${COMP_WORDS[COMP_CWORD]}"
 	prev="${COMP_WORDS[COMP_CWORD - 1]}"
 
-	if [ "${prev}" == -f ]; then
+	if [[ "${prev}" == -f ]]; then
 		_tmux_filedir
 	else
 		# Search for the command

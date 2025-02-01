@@ -128,14 +128,14 @@ if _is_function _git && ! _is_function __git_list_all_commands_without_hub; then
 	# hub compare [-u] [USER[/REPOSITORY]] [[START...]END]
 	_git_compare() {
 		local i c=$((cword - 1)) u=-u user remote owner repo arg_repo rev
-		while [ $c -gt 1 ]; do
+		while [[ $c -gt 1 ]]; do
 			i="${words[c]}"
 			case "$i" in
 				-u)
 					unset u
 					;;
 				*)
-					if [ -z "$rev" ]; then
+					if [[ -z "$rev" ]]; then
 						# Even though the logic below is able to complete both user/repo
 						# and revision in the right place, when there is only one argument
 						# (other than -u) in the command, that argument will be taken as
@@ -147,7 +147,7 @@ if _is_function _git && ! _is_function __git_list_all_commands_without_hub; then
 						else
 							rev=$i
 						fi
-					elif [ -z "$arg_repo" ]; then
+					elif [[ -z "$arg_repo" ]]; then
 						arg_repo=$i
 					fi
 					;;
@@ -157,13 +157,13 @@ if _is_function _git && ! _is_function __git_list_all_commands_without_hub; then
 
 		# Here we want to find out the git remote name of user/repo, in order to
 		# generate an appropriate revision list
-		if [ -z "$arg_repo" ]; then
+		if [[ -z "$arg_repo" ]]; then
 			user=$(__hub_github_user)
-			if [ -z "$user" ]; then
+			if [[ -z "$user" ]]; then
 				for i in $(__hub_github_repos); do
 					remote=${i%%:*}
 					repo=${i#*:}
-					if [ "$remote" = origin ]; then
+					if [[ "$remote" = origin ]]; then
 						break
 					fi
 				done
@@ -172,7 +172,7 @@ if _is_function _git && ! _is_function __git_list_all_commands_without_hub; then
 					remote=${i%%:*}
 					repo=${i#*:}
 					owner=${repo%%/*}
-					if [ "$user" = "$owner" ]; then
+					if [[ "$user" = "$owner" ]]; then
 						break
 					fi
 				done
@@ -198,9 +198,9 @@ if _is_function _git && ! _is_function __git_list_all_commands_without_hub; then
 				__gitcomp_nl "$(__hub_revlist "$remote")" "$pfx" "$cur_"
 				;;
 			*)
-				if [ -z "${arg_repo}${rev}" ]; then
+				if [[ -z "${arg_repo}${rev}" ]]; then
 					__gitcomp "$u $(__hub_github_repos '\o\n\p') $(__hub_revlist "$remote")"
-				elif [ -z "$rev" ]; then
+				elif [[ -z "$rev" ]]; then
 					__gitcomp "$u $(__hub_revlist "$remote")"
 				else
 					__gitcomp "$u"
@@ -228,7 +228,7 @@ if _is_function _git && ! _is_function __git_list_all_commands_without_hub; then
 			esac
 			((c++))
 		done
-		if [ -z "$name" ]; then
+		if [[ -z "$name" ]]; then
 			repo="$(basename "${PWD}")"
 		fi
 		case "$prev" in
@@ -317,20 +317,20 @@ if _is_function _git && ! _is_function __git_list_all_commands_without_hub; then
 	# Return $GITHUB_USER or the default github user defined in hub config
 	# HOST - Host to be looked-up in hub config. Default is "github.com"
 	__hub_github_user() {
-		if [ -n "$GITHUB_USER" ]; then
+		if [[ -n "$GITHUB_USER" ]]; then
 			echo "$GITHUB_USER"
 			return
 		fi
 		local line h k v host=${1:-github.com} config=${HUB_CONFIG:-~/.config/hub}
-		if [ -f "$config" ]; then
+		if [[ -f "$config" ]]; then
 			while read -r line; do
 				if [ "$line" = "---" ]; then
 					continue
 				fi
 				k=${line%%:*}
 				v=${line#*:}
-				if [ -z "$v" ]; then
-					if [ "$h" = "$host" ]; then
+				if [[ -z "$v" ]]; then
+					if [[ "$h" = "$host" ]]; then
 						break
 					fi
 					h=$k
@@ -338,7 +338,7 @@ if _is_function _git && ! _is_function __git_list_all_commands_without_hub; then
 				fi
 				k=${k#* }
 				v=${v#* }
-				if [ "$h" = "$host" ] && [ "$k" = "user" ]; then
+				if [[ "$h" = "$host" ]] && [[ "$k" = "user" ]]; then
 					echo "$v"
 					break
 				fi
@@ -356,10 +356,10 @@ if _is_function _git && ! _is_function __git_list_all_commands_without_hub; then
 	# If omitted, prints all github repos in the format of "remote:owner/repo"
 	__hub_github_repos() {
 		local format=$1
-		if [ -z "$(__gitdir)" ]; then
+		if [[ -z "$(__gitdir)" ]]; then
 			return
 		fi
-		if [ -z "$format" ]; then
+		if [[ -z "$format" ]]; then
 			format='\1:\2'
 		else
 			format=${format//\m/\1}
@@ -376,7 +376,7 @@ if _is_function _git && ! _is_function __git_list_all_commands_without_hub; then
 	__hub_heads() {
 		local i remote repo branch dir
 		dir=$(__gitdir)
-		if [ -d "$dir" ]; then
+		if [[ -d "$dir" ]]; then
 			command git --git-dir="$dir" for-each-ref --format='%(refname:short)' \
 				"refs/heads/"
 			for i in $(__hub_github_repos); do
@@ -396,7 +396,7 @@ if _is_function _git && ! _is_function __git_list_all_commands_without_hub; then
 	__hub_revlist() {
 		local i remote=${1:-origin} dir
 		dir=$(__gitdir)
-		if [ -d "$dir" ]; then
+		if [[ -d "$dir" ]]; then
 			command git --git-dir="$dir" for-each-ref --format='%(refname:short)' \
 				"refs/remotes/${remote}/" | while read -r i; do
 				echo "${i#"${remote}"/}"
