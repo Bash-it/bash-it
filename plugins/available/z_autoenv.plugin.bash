@@ -1,5 +1,5 @@
 # shellcheck shell=bash
-# shellcheck disable=SC2207
+# shellcheck disable=SC2207,SC2120,SC2034
 cite about-plugin
 about-plugin 'source into environment when cding to directories'
 
@@ -10,18 +10,20 @@ else
 fi
 
 autoenv_init() {
-	typeset home _file # target
+	typeset target home _file
 	typeset -a _files
-	#target=$1
+	target=$1
 	home="${HOME%/*}"
 
-	while [[ "$PWD" != "/" && "$PWD" != "$home" ]]; do
-		_file="$PWD/.env"
-		if [[ -e "${_file}" ]]; then
-			_files+=("${_file}")
-		fi
-		builtin cd .. || true
-	done
+	_files=($(
+		while [[ "$PWD" != "/" && "$PWD" != "$home" ]]; do
+			_file="$PWD/.env"
+			if [[ -e "${_file}" ]]; then
+				echo "${_file}"
+			fi
+			builtin cd .. || true
+		done
+	))
 
 	_file=${#_files[@]}
 	while ((_file > 0)); do
