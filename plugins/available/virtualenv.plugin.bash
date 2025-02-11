@@ -7,7 +7,7 @@ about-plugin 'virtualenvwrapper and pyenv-virtualenvwrapper helper functions'
 
 # Check for whole command instead of just pyenv
 if [ -n "$(command pyenv virtualenvwrapper --help 2> /dev/null)" ]; then
-	command pyenv virtualenvwrapper
+	pyenv virtualenvwrapper
 elif _command_exists virtualenvwrapper.sh; then
 	# shellcheck disable=SC1091
 	source virtualenvwrapper.sh
