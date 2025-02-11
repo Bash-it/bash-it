@@ -12,7 +12,7 @@ elif _command_exists virtualenvwrapper.sh; then
 	# shellcheck disable=SC1091
 	source virtualenvwrapper.sh
 else
-	log_debug "${2:-'virtualenvwrapper' was not found}"
+	_log_debug "${2:-'virtualenvwrapper' was not found}"
 fi
 
 function mkvenv {
