@@ -29,9 +29,11 @@ function git_short_sha() {
 
 function prompt() {
 	local return_status=""
-	local ruby; ruby="${red}$(ruby_version_prompt)${reset_color}"
+	local ruby
+	ruby="${red}$(ruby_version_prompt)${reset_color}"
 	local user_host="${green?}\h @ \w${reset_color?}"
-	local git_branch; git_branch="$(git_short_sha)${cyan?}$(scm_prompt_info)${reset_color?}"
+	local git_branch
+	git_branch="$(git_short_sha)${cyan?}$(scm_prompt_info)${reset_color?}"
 	local prompt_symbol=' '
 	local prompt_char="${purple?}>_${reset_color?} "
 
