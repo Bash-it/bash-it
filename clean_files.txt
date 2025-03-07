@@ -51,6 +51,10 @@ themes/brunton
 themes/candy
 themes/clean
 themes/doubletime
+themes/doubletime_multiline
+themes/doubletime_multiline_pyonly
+themes/dulcie
+themes/duru
 themes/easy
 themes/elixr
 themes/essential
