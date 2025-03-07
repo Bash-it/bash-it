@@ -50,6 +50,9 @@ themes/brainy
 themes/brunton
 themes/candy
 themes/clean
+themes/codeword
+themes/cooperkid
+themes/cupcake
 themes/doubletime
 themes/easy
 themes/elixr

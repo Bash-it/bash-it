@@ -1,4 +1,5 @@
 # shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
 
 SCM_THEME_PROMPT_PREFIX="${SCM_THEME_PROMPT_SUFFIX:-}"
 SCM_THEME_PROMPT_DIRTY="${bold_red?} ✗${normal?}"
