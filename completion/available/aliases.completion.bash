@@ -91,7 +91,7 @@ function _bash-it-component-completion-callback-on-init-aliases() {
                         if [[ \$COMP_LINE == \"\$prec_word \$compl_word\" ]]; then
                             prec_word='$alias_cmd $alias_args'
                             prec_word=\${prec_word#* }
-                        fi:
+                        fi
                         (( COMP_CWORD += ${#alias_arg_words[@]} ))
                         COMP_WORDS=(\"$alias_cmd\" $(printf "\"%q\" " "${alias_arg_words[@]}") \"\${COMP_WORDS[@]:1}\")
                         (( COMP_POINT -= \${#COMP_LINE} ))
