@@ -17,7 +17,7 @@
 # root directories
 #
 aliases/
-completions/
+completion/
 docs/
 hooks/
 lib/
