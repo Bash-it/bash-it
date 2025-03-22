@@ -7,6 +7,7 @@ function local_setup_file() {
 }
 
 function local_setup() {
+	: "${BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE:=}"
 	# Copy the test fixture to the Bash-it folder
 	cp -RP "${BASH_IT?}/test/fixtures/bash_it"/* "${BASH_IT?}/"
 }
