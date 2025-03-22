@@ -60,7 +60,7 @@ function virtualenv_prompt {
 
 # Rename tab
 function tabname {
-	printf "%s" "\e]1;$1\a"
+	printf "\e]1;%s\a" "$1"
 }
 
 # Rename window
