@@ -22,7 +22,8 @@
 
 # Bash breaks words on : by default. Subproject tasks have ':'
 # Avoid inaccurate completions for subproject tasks
-COMP_WORDBREAKS=$(echo "$COMP_WORDBREAKS" | sed -e 's/://g')
+# shellcheck disable=SC2001
+COMP_WORDBREAKS="$(echo "$COMP_WORDBREAKS" | sed -e 's/://g')"
 
 function __gradle-set-project-root-dir() {
 	project_root_dir="$(_bash-it-find-in-ancestor "settings.gradle" "gradlew")"
@@ -31,7 +32,7 @@ function __gradle-set-project-root-dir() {
 
 __gradle-init-cache-dir() {
 	cache_dir="$HOME/.gradle/completion"
-	mkdir -p $cache_dir
+	mkdir -p "$cache_dir"
 }
 
 __gradle-set-build-file() {
@@ -39,7 +40,8 @@ __gradle-set-build-file() {
 	# Otherwise, default is the file 'build.gradle' in the current directory.
 	gradle_build_file="$project_root_dir/build.gradle"
 	if [[ -f "$project_root_dir/settings.gradle" ]]; then
-		local build_file_name=$(grep "^rootProject\.buildFileName" "$project_root_dir/settings.gradle" \
+		local build_file_name
+		build_file_name=$(grep "^rootProject\.buildFileName" "$project_root_dir/settings.gradle" \
 			| sed -n -e "s/rootProject\.buildFileName = [\'\"]\(.*\)[\'\"]/\1/p")
 		gradle_build_file="$project_root_dir/${build_file_name:-build.gradle}"
 	fi
@@ -47,15 +49,15 @@ __gradle-set-build-file() {
 
 __gradle-set-cache-name() {
 	# Cache name is constructed from the absolute path of the build file.
-	cache_name=$(echo $gradle_build_file | sed -e 's/\//_/g')
+	cache_name=$(echo "$gradle_build_file" | sed -e 's/\//_/g')
 }
 
 __gradle-set-files-checksum() {
 	# Cache MD5 sum of all Gradle scripts and modified timestamps
 	if _command_exists md5; then
-		gradle_files_checksum=$(md5 -q -s "$(cat "$cache_dir/$cache_name" | xargs ls -o 2> /dev/null)")
+		gradle_files_checksum=$(md5 -q -s "$(xargs ls -o < "$cache_dir/$cache_name" 2> /dev/null)")
 	elif _command_exists md5sum; then
-		gradle_files_checksum=$(cat "$cache_dir/$cache_name" | xargs ls -o 2> /dev/null | md5sum | awk '{print $1}')
+		gradle_files_checksum=$(xargs ls -o < "$cache_dir/$cache_name" 2> /dev/null | md5sum | awk '{print $1}')
 	else
 		echo "Cannot generate completions as neither md5 nor md5sum exist on \$PATH"
 	fi
@@ -66,10 +68,11 @@ __gradle-generate-script-cache() {
 	local cache_ttl_mins=${GRADLE_CACHE_TTL_MINUTES:-30240}
 	local script_exclude_pattern=${GRADLE_COMPLETION_EXCLUDE_PATTERN:-"/(build|integTest|out)/"}
 
-	if [[ ! $(find $cache_dir/$cache_name -mmin -$cache_ttl_mins 2> /dev/null) ]]; then
+	if [[ ! $(find "$cache_dir/$cache_name" -mmin "-$cache_ttl_mins" 2> /dev/null) ]]; then
 		# Cache all Gradle scripts
-		local gradle_build_scripts=$(find $project_root_dir -type f -name "*.gradle" -o -name "*.gradle.kts" 2> /dev/null | grep -E -v "$script_exclude_pattern")
-		printf "%s\n" "${gradle_build_scripts[@]}" > $cache_dir/$cache_name
+		local gradle_build_scripts
+		gradle_build_scripts=$(find "$project_root_dir" -type f -name "*.gradle" -o -name "*.gradle.kts" 2> /dev/null | grep -E -v "$script_exclude_pattern")
+		printf "%s\n" "${gradle_build_scripts[@]}" > "$cache_dir/$cache_name"
 	fi
 }
 
@@ -115,7 +118,8 @@ __gradle-long-options() {
 --system-prop           - Set a system property
 --version               - Prints Gradle version info
 --warn                  - Log warnings and errors only"
-	COMPREPLY=($(compgen -W "$args" -- "${COMP_WORDS[COMP_CWORD]}"))
+	COMPREPLY=()
+	while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "$args" -- "${COMP_WORDS[COMP_CWORD]}")
 }
 
 __gradle-properties() {
@@ -130,7 +134,8 @@ __gradle-properties() {
 -Dorg.gradle.parallel=            - Set true to enable parallel project builds (incubating)
 -Dorg.gradle.parallel.intra=      - Set true to enable intra-project parallel builds (incubating)
 -Dorg.gradle.workers.max=         - Set the number of workers Gradle is allowed to use"
-	COMPREPLY=($(compgen -W "$args" -- "${COMP_WORDS[COMP_CWORD]}"))
+	COMPREPLY=()
+	while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "$args" -- "${COMP_WORDS[COMP_CWORD]}")
 	return 0
 }
 
@@ -156,7 +161,8 @@ __gradle-short-options() {
 -I                      - Specifies an initialization script
 -P                      - Sets a project property of the root project
 -S                      - Print out the full (very verbose) stacktrace"
-	COMPREPLY=($(compgen -W "$args" -- "${COMP_WORDS[COMP_CWORD]}"))
+	COMPREPLY=()
+	while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "$args" -- "${COMP_WORDS[COMP_CWORD]}")
 }
 
 __gradle-notify-tasks-cache-build() {
@@ -179,10 +185,10 @@ __gradle-generate-tasks-cache() {
 	# Run gradle to retrieve possible tasks and cache.
 	# Reuse Gradle Daemon if IDLE but don't start a new one.
 	local gradle_tasks_output
-	if [[ ! -z "$($gradle_cmd --status 2> /dev/null | grep IDLE)" ]]; then
-		gradle_tasks_output="$($gradle_cmd -b $gradle_build_file --daemon -q tasks --all)"
+	if $gradle_cmd --status 2> /dev/null | grep -q IDLE; then
+		gradle_tasks_output="$($gradle_cmd -b "$gradle_build_file" --daemon -q tasks --all)"
 	else
-		gradle_tasks_output="$($gradle_cmd -b $gradle_build_file --no-daemon -q tasks --all)"
+		gradle_tasks_output="$($gradle_cmd -b "$gradle_build_file" --no-daemon -q tasks --all)"
 	fi
 	local output_line
 	local task_description
@@ -206,15 +212,17 @@ __gradle-generate-tasks-cache() {
 
 	# subproject tasks can be referenced implicitly from root project
 	if [[ $GRADLE_COMPLETION_UNQUALIFIED_TASKS == "true" ]]; then
-		local -a implicit_tasks=()
-		implicit_tasks=($(comm -23 <(printf "%s\n" "${subproject_tasks[@]}" | sort) <(printf "%s\n" "${root_tasks[@]}" | sort)))
+		local -a implicit_tasks
+		while IFS='' read -r line; do
+			implicit_tasks+=("$line")
+		done < <(comm -23 <(printf "%s\n" "${subproject_tasks[@]}" | sort) <(printf "%s\n" "${root_tasks[@]}" | sort))
 		for task in $(printf "%s\n" "${implicit_tasks[@]}"); do
-			gradle_all_tasks+=($task)
+			gradle_all_tasks+=("$task")
 		done
 	fi
 
-	printf "%s\n" "${gradle_all_tasks[@]}" > $cache_dir/$gradle_files_checksum
-	echo $gradle_files_checksum > $cache_dir/$cache_name.md5
+	printf "%s\n" "${gradle_all_tasks[@]}" > "$cache_dir/$gradle_files_checksum"
+	echo "$gradle_files_checksum" > "$cache_dir/$cache_name.md5"
 }
 
 __gradle-completion-init() {
@@ -262,22 +270,23 @@ _gradle() {
 			__gradle-set-files-checksum
 
 			# The cache key is md5 sum of all gradle scripts, so it's valid if it exists.
-			if [[ -f $cache_dir/$cache_name.md5 ]]; then
-				local cached_checksum="$(cat $cache_dir/$cache_name.md5)"
+			if [[ -f "$cache_dir/$cache_name.md5" ]]; then
+				local cached_checksum
+				cached_checksum="$(cat "$cache_dir/$cache_name.md5")"
 				local -a cached_tasks
 				if [[ -z $cur ]]; then
-					cached_tasks=($(cat $cache_dir/$cached_checksum))
+					while IFS='' read -r line; do cached_tasks+=("$line"); done < "$cache_dir/$cached_checksum"
 				else
-					cached_tasks=($(grep "^$cur" $cache_dir/$cached_checksum))
+					while IFS='' read -r line; do cached_tasks+=("$line"); done < <(grep "^$cur" "$cache_dir/$cached_checksum")
 				fi
-				COMPREPLY=($(compgen -W "${cached_tasks[*]}" -- "$cur"))
+				while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "${cached_tasks[*]}" -- "$cur")
 			else
 				__gradle-notify-tasks-cache-build
 			fi
 
 			# Regenerate tasks cache in the background
-			if [[ $gradle_files_checksum != "$(cat $cache_dir/$cache_name.md5)" || ! -f $cache_dir/$gradle_files_checksum ]]; then
-				$(__gradle-generate-tasks-cache 1>&2 2> /dev/null &)
+			if [[ $gradle_files_checksum != "$(cat "$cache_dir/$cache_name.md5")" || ! -f "$cache_dir/$gradle_files_checksum" ]]; then
+				"$(__gradle-generate-tasks-cache 1>&2 2> /dev/null &)"
 			fi
 		else
 			# Default tasks available outside Gradle projects
@@ -293,7 +302,8 @@ projects             - Displays the sub-projects of root project.
 properties           - Displays the properties of root project.
 tasks                - Displays the tasks runnable from root project.
 wrapper              - Generates Gradle wrapper files."
-			COMPREPLY=($(compgen -W "$args" -- "${COMP_WORDS[COMP_CWORD]}"))
+			COMPREPLY=()
+			while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "${args}" -- "${cur}")
 		fi
 	fi
 
@@ -301,7 +311,7 @@ wrapper              - Generates Gradle wrapper files."
 
 	# Remove description ("[:space:]" and after) if only one possibility
 	if [[ ${#COMPREPLY[*]} -eq 1 ]]; then
-		COMPREPLY=(${COMPREPLY[0]%%  *})
+		COMPREPLY=("${COMPREPLY[0]%%  *}")
 	fi
 
 	return 0
