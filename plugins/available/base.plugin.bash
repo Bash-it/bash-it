@@ -187,7 +187,7 @@ fi
 # replace multiple file extensions at once
 function rex() {
 	about 'mass replace of the extension of multiple files'
- 	param '1: extension to replace'
+	param '1: extension to replace'
   	param '2: new extenstion'
    	example 'rex txt md'
     	group 'base'
