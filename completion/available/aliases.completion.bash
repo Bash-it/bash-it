@@ -78,6 +78,10 @@ function _bash-it-component-completion-callback-on-init-aliases() {
 			# avoid recursive call loops by ignoring our own functions
 			if [[ "${compl_func#_"$namespace"::}" == "$compl_func" ]]; then
 				compl_wrapper="_${namespace}::${alias_name}"
+
+				# Create a wrapper function for the alias
+				# The use of printf on alias_arg_words is needed to ensure each element of
+				# the array is quoted. E.X. (one two three) -> ('one' 'two' 'three')
 				echo "function $compl_wrapper {
                         local compl_word=\${2?}
                         local prec_word=\${3?}
@@ -89,7 +93,7 @@ function _bash-it-component-completion-callback-on-init-aliases() {
                             prec_word=\${prec_word#* }
                         fi
                         (( COMP_CWORD += ${#alias_arg_words[@]} ))
-                        COMP_WORDS=(\"$alias_cmd\" \"${alias_arg_words[*]}\" \"\${COMP_WORDS[@]:1}\")
+                        COMP_WORDS=(\"$alias_cmd\" $(printf "%q " "${alias_arg_words[@]}") \"\${COMP_WORDS[@]:1}\")
                         (( COMP_POINT -= \${#COMP_LINE} ))
                         COMP_LINE=\${COMP_LINE/$alias_name/$alias_cmd $alias_args}
                         (( COMP_POINT += \${#COMP_LINE} ))
