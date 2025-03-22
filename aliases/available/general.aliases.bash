@@ -71,7 +71,7 @@ alias md='mkdir -p'
 alias rd='rmdir'
 
 # Remove
-alias rmrf='rm -rf' 
+alias rmrf='rm -rf'
 
 # Shorten extract
 alias xt='extract'
