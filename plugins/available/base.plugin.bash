@@ -193,6 +193,6 @@ function renex() {
     	group 'base'
 	local ext2replace="${1:-}"
  	local newext="${2:-}"
-  	local files=(`ls *.$ext2replace`)
+	local files=(*."$ext2replace")
    	for file in "${files[@]}"; do mv "$file" "${file/%.$ext2replace/.$newext}"; done
 }
