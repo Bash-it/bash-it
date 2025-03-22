@@ -194,5 +194,8 @@ function renex() {
 	local ext2replace="${1:-}"
  	local newext="${2:-}"
 	local files=(*."$ext2replace")
-   	for file in "${files[@]}"; do mv "$file" "${file/%.$ext2replace/.$newext}"; done
+	for file in "${files[@]}"; do
+		local dst=${file/%."$ext2replace"/."$newext"}
+		mv "$file" "$dst"
+	done
 }
