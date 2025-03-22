@@ -65,7 +65,7 @@ function tabname {
 
 # Rename window
 function winname {
-	printf "%s" "\e]2;$1\a"
+	printf "\e]2;%s\a" "$1"
 }
 
 # PROMPT OUTPUT ===============================================================
