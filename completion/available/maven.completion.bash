@@ -28,7 +28,7 @@ _mvn() {
 	COMPREPLY=($(compgen -W "$cmds" -- "$cur"))
 	local i=${#COMPREPLY[*]}
 	while [ "$((--i))" -ge 0 ]; do
-		COMPREPLY[$i]=${COMPREPLY[$i]#"$colonprefixes"}
+		COMPREPLY[i]=${COMPREPLY[i]#"$colonprefixes"}
 	done
 
 	return 0
