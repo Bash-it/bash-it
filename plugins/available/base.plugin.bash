@@ -185,7 +185,7 @@ if ! _command_exists del; then
 fi
 
 # replace multiple file extensions at once
-function rex() {
+function renex() {
 	about 'mass replace of the extension of multiple files'
 	param '1: extension to replace'
   	param '2: new extenstion'
