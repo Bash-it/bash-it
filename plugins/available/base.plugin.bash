@@ -188,11 +188,11 @@ fi
 function renex() {
 	about 'mass replace of the extension of multiple files'
 	param '1: extension to replace'
-  	param '2: new extenstion'
-   	example 'rex txt md'
-    	group 'base'
+	param '2: new extenstion'
+	example 'rex txt md'
+	group 'base'
 	local ext2replace="${1:-}"
- 	local newext="${2:-}"
+	local newext="${2:-}"
 	local files=(*."$ext2replace")
 	for file in "${files[@]}"; do
 		local dst=${file/%."$ext2replace"/."$newext"}
