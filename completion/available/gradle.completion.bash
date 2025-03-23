@@ -22,7 +22,6 @@
 
 # Bash breaks words on : by default. Subproject tasks have ':'
 # Avoid inaccurate completions for subproject tasks
-# shellcheck disable=SC2001
 COMP_WORDBREAKS="${COMP_WORDBREAKS//:/}"
 
 function __gradle-set-project-root-dir() {
