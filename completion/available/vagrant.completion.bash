@@ -54,13 +54,13 @@ _vagrant() {
 	prev="${COMP_WORDS[COMP_CWORD - 1]}"
 	commands="box cloud destroy global-status halt help hostmanager init login package plugin port powershell provision push rdp reload resume scp snapshot ssh ssh-config status suspend up upload validate vbguest version winrm winrm-config"
 
-	if [ "$COMP_CWORD" == 1 ]; then
+	if ((COMP_CWORD == 1)); then
 		COMPREPLY=()
 		while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "${commands}" -- "${cur}")
 		return 0
 	fi
 
-	if [ "$COMP_CWORD" == 2 ]; then
+	if ((COMP_CWORD == 2)); then
 		case "$prev" in
 			"init")
 				local box_list
@@ -81,7 +81,7 @@ _vagrant() {
 				;;
 			"ssh" | "provision" | "reload" | "halt" | "suspend" | "resume" | "ssh-config")
 				vagrant_state_file=$(__vagrantinvestigate) || return 1
-				if [[ -f "$vagrant_state_file" ]]; then
+				if [[ -f $vagrant_state_file ]]; then
 					running_vm_list=$(grep 'active' "$vagrant_state_file" | sed -e 's/"active"://' | tr ',' '\n' | cut -d '"' -f 2 | tr '\n' ' ')
 				else
 					running_vm_list=$(find "$vagrant_state_file" -type f -name "id" | awk -F"/" '{print $(NF-2)}')
@@ -117,7 +117,7 @@ _vagrant() {
 		esac
 	fi
 
-	if [ "$COMP_CWORD" == 3 ]; then
+	if ((COMP_CWORD == 3)); then
 		action="${COMP_WORDS[COMP_CWORD - 2]}"
 		case "$action" in
 			"up")
@@ -149,7 +149,7 @@ _vagrant() {
 		esac
 	fi
 
-	if [ "$COMP_CWORD" == 4 ]; then
+	if ((COMP_CWORD == 4)); then
 		action="${COMP_WORDS[COMP_CWORD - 3]}"
 		prev="${COMP_WORDS[COMP_CWORD - 2]}"
 		case "$action" in

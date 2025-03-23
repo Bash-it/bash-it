@@ -41,11 +41,11 @@ export FAB_COMPLETION_CACHED_TASKS_FILENAME=".fab_tasks~"
 # Set command to get time of last file modification as seconds since Epoch
 case "$OSTYPE" in
 	'darwin'* | 'freebsd'*)
-		__FAB_COMPLETION_MTIME_COMMAND="stat -f '%m'"
+		__FAB_COMPLETION_MTIME_COMMAND=(stat -f '%m')
 		;;
 	*)
 		# shellcheck disable=SC2089
-		__FAB_COMPLETION_MTIME_COMMAND="stat -c '%Y'"
+		__FAB_COMPLETION_MTIME_COMMAND=(stat -c '%Y')
 		;;
 esac
 
@@ -54,7 +54,7 @@ esac
 #
 function __fab_chache_mtime() {
 	# shellcheck disable=SC2090
-	${__FAB_COMPLETION_MTIME_COMMAND} \
+	"${__FAB_COMPLETION_MTIME_COMMAND[@]}" \
 		$FAB_COMPLETION_CACHED_TASKS_FILENAME | xargs -n 1 expr
 }
 
@@ -65,11 +65,11 @@ function __fab_fabfile_mtime() {
 	local f="fabfile"
 	if [[ -e "$f.py" ]]; then
 		# shellcheck disable=SC2090
-		${__FAB_COMPLETION_MTIME_COMMAND} "$f.py" | xargs -n 1 expr
+		"${__FAB_COMPLETION_MTIME_COMMAND[@]}" "$f.py" | xargs -n 1 expr
 	else
 		# Suppose that it's a fabfile dir
-		# shellcheck disable=SC2086,SC2090,SC2038
-		find $f/*.py -exec ${__FAB_COMPLETION_MTIME_COMMAND} {} + \
+		# shellcheck disable=SC2090,SC2038
+		find "$f"/*.py -exec "${__FAB_COMPLETION_MTIME_COMMAND[@]}" {} + \
 			| xargs -n 1 expr | sort -n -r | head -1
 	fi
 }
@@ -92,7 +92,6 @@ function __fab_completion() {
 				__FAB_COMPLETION_LONG_OPT=$(
 					fab --help | grep -E -o "\-\-[A-Za-z_\-]+\=?" | sort -u
 				)
-				export __FAB_COMPLETION_LONG_OPT
 			fi
 			opts="${__FAB_COMPLETION_LONG_OPT}"
 			;;
