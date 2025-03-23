@@ -70,7 +70,11 @@ __gradle-generate-script-cache() {
 	if [[ ! $(find "$cache_dir/$cache_name" -mmin "-$cache_ttl_mins" 2> /dev/null) ]]; then
 		# Cache all Gradle scripts
 		local gradle_build_scripts
-		gradle_build_scripts=$(find "$project_root_dir" -type f -name "*.gradle" -o -name "*.gradle.kts" 2> /dev/null | grep -E -v "$script_exclude_pattern")
+		gradle_build_scripts=$(
+			find "$project_root_dir" -type f \
+				\( -name "*.gradle" -or -name "*.gradle.kts" \) 2> /dev/null \
+				| grep -E -v "$script_exclude_pattern"
+		)
 		printf "%s\n" "${gradle_build_scripts[@]}" > "$cache_dir/$cache_name"
 	fi
 }
@@ -118,7 +122,9 @@ __gradle-long-options() {
 --version               - Prints Gradle version info
 --warn                  - Log warnings and errors only"
 	COMPREPLY=()
-	while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "$args" -- "${COMP_WORDS[COMP_CWORD]}")
+	while IFS='' read -r line; do
+		COMPREPLY+=("$line")
+	done < <(compgen -W "$args" -- "${COMP_WORDS[COMP_CWORD]}")
 }
 
 __gradle-properties() {
@@ -134,7 +140,9 @@ __gradle-properties() {
 -Dorg.gradle.parallel.intra=      - Set true to enable intra-project parallel builds (incubating)
 -Dorg.gradle.workers.max=         - Set the number of workers Gradle is allowed to use"
 	COMPREPLY=()
-	while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "$args" -- "${COMP_WORDS[COMP_CWORD]}")
+	while IFS='' read -r line; do
+		COMPREPLY+=("$line")
+	done < <(compgen -W "$args" -- "${COMP_WORDS[COMP_CWORD]}")
 	return 0
 }
 
@@ -214,7 +222,8 @@ __gradle-generate-tasks-cache() {
 		local -a implicit_tasks
 		while IFS='' read -r line; do
 			implicit_tasks+=("$line")
-		done < <(comm -23 <(printf "%s\n" "${subproject_tasks[@]}" | sort) <(printf "%s\n" "${root_tasks[@]}" | sort))
+		done < <(comm -23 <(printf "%s\n" "${subproject_tasks[@]}" | sort) \
+			<(printf "%s\n" "${root_tasks[@]}" | sort))
 		for task in "${implicit_tasks[@]}"; do
 			gradle_all_tasks+=("$task")
 		done
@@ -274,18 +283,25 @@ _gradle() {
 				cached_checksum="$(cat "$cache_dir/$cache_name.md5")"
 				local -a cached_tasks
 				if [[ -z $cur ]]; then
-					while IFS='' read -r line; do cached_tasks+=("$line"); done < "$cache_dir/$cached_checksum"
+					while IFS='' read -r line; do
+						cached_tasks+=("$line")
+					done < "$cache_dir/$cached_checksum"
 				else
-					while IFS='' read -r line; do cached_tasks+=("$line"); done < <(grep "^$cur" "$cache_dir/$cached_checksum")
+					while IFS='' read -r line; do
+						cached_tasks+=("$line")
+					done < <(grep "^$cur" "$cache_dir/$cached_checksum")
 				fi
-				while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "${cached_tasks[*]}" -- "$cur")
+				while IFS='' read -r line; do
+					COMPREPLY+=("$line")
+				done < <(compgen -W "${cached_tasks[*]}" -- "$cur")
 			else
 				__gradle-notify-tasks-cache-build
 			fi
 
 			# Regenerate tasks cache in the background
-			if [[ $gradle_files_checksum != "$(cat "$cache_dir/$cache_name.md5")" || ! -f "$cache_dir/$gradle_files_checksum" ]]; then
-				"$(__gradle-generate-tasks-cache 1>&2 2> /dev/null &)"
+			if [[ $gradle_files_checksum != "$(cat "$cache_dir/$cache_name.md5")" ||
+			! -f "$cache_dir/$gradle_files_checksum" ]]; then
+				__gradle-generate-tasks-cache &> /dev/null &
 			fi
 		else
 			# Default tasks available outside Gradle projects
@@ -302,7 +318,9 @@ properties           - Displays the properties of root project.
 tasks                - Displays the tasks runnable from root project.
 wrapper              - Generates Gradle wrapper files."
 			COMPREPLY=()
-			while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "${args}" -- "${cur}")
+			while IFS='' read -r line; do
+				COMPREPLY+=("$line")
+			done < <(compgen -W "${args}" -- "${cur}")
 		fi
 	fi
 
