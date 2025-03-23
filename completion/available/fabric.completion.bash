@@ -53,7 +53,6 @@ esac
 # Get time of last fab cache file modification as seconds since Epoch
 #
 function __fab_chache_mtime() {
-	# shellcheck disable=SC2090
 	"${__FAB_COMPLETION_MTIME_COMMAND[@]}" \
 		$FAB_COMPLETION_CACHED_TASKS_FILENAME | xargs -n 1 expr
 }
@@ -64,11 +63,10 @@ function __fab_chache_mtime() {
 function __fab_fabfile_mtime() {
 	local f="fabfile"
 	if [[ -e "$f.py" ]]; then
-		# shellcheck disable=SC2090
 		"${__FAB_COMPLETION_MTIME_COMMAND[@]}" "$f.py" | xargs -n 1 expr
 	else
 		# Suppose that it's a fabfile dir
-		# shellcheck disable=SC2090,SC2038
+		# shellcheck disable=SC2038
 		find "$f"/*.py -exec "${__FAB_COMPLETION_MTIME_COMMAND[@]}" {} + \
 			| xargs -n 1 expr | sort -n -r | head -1
 	fi
