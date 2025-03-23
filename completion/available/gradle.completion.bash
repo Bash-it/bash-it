@@ -23,7 +23,7 @@
 # Bash breaks words on : by default. Subproject tasks have ':'
 # Avoid inaccurate completions for subproject tasks
 # shellcheck disable=SC2001
-COMP_WORDBREAKS="$(echo "$COMP_WORDBREAKS" | sed -e 's/://g')"
+COMP_WORDBREAKS="${COMP_WORDBREAKS//:/}"
 
 function __gradle-set-project-root-dir() {
 	project_root_dir="$(_bash-it-find-in-ancestor "settings.gradle" "gradlew")"
@@ -49,7 +49,7 @@ __gradle-set-build-file() {
 
 __gradle-set-cache-name() {
 	# Cache name is constructed from the absolute path of the build file.
-	cache_name=$(echo "$gradle_build_file" | sed -e 's/\//_/g')
+	cache_name=${gradle_build_file//'/'/_}
 }
 
 __gradle-set-files-checksum() {
