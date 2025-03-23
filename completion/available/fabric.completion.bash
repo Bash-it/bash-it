@@ -44,7 +44,6 @@ case "$OSTYPE" in
 		__FAB_COMPLETION_MTIME_COMMAND=(stat -f '%m')
 		;;
 	*)
-		# shellcheck disable=SC2089
 		__FAB_COMPLETION_MTIME_COMMAND=(stat -c '%Y')
 		;;
 esac
