@@ -216,7 +216,7 @@ __gradle-generate-tasks-cache() {
 		while IFS='' read -r line; do
 			implicit_tasks+=("$line")
 		done < <(comm -23 <(printf "%s\n" "${subproject_tasks[@]}" | sort) <(printf "%s\n" "${root_tasks[@]}" | sort))
-		for task in $(printf "%s\n" "${implicit_tasks[@]}"); do
+		for task in "${implicit_tasks[@]}"; do
 			gradle_all_tasks+=("$task")
 		done
 	fi
