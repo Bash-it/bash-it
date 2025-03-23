@@ -90,6 +90,7 @@ function __fab_completion() {
 				__FAB_COMPLETION_LONG_OPT=$(
 					fab --help | grep -E -o "\-\-[A-Za-z_\-]+\=?" | sort -u
 				)
+				export __FAB_COMPLETION_LONG_OPT
 			fi
 			opts="${__FAB_COMPLETION_LONG_OPT}"
 			;;
