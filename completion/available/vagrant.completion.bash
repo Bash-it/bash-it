@@ -1,4 +1,4 @@
-#!/bin/bash
+# shellcheck shell=bash
 
 # (The MIT License)
 #
@@ -26,21 +26,21 @@ __pwdln() {
 	pwdmod="${PWD}/"
 	itr=0
 	until [[ -z "$pwdmod" ]]; do
-		itr=$(($itr + 1))
+		itr=$((itr + 1))
 		pwdmod="${pwdmod#*/}"
 	done
-	echo -n $(($itr - 1))
+	echo -n $((itr - 1))
 }
 
 __vagrantinvestigate() {
-	if [ -f "${PWD}/.vagrant" -o -d "${PWD}/.vagrant" ]; then
+	if [ -f "${PWD}/.vagrant" ] || [ -d "${PWD}/.vagrant" ]; then
 		echo "${PWD}/.vagrant"
 		return 0
 	else
 		pwdmod2="${PWD}"
 		for ((i = 2; i <= $(__pwdln); i++)); do
 			pwdmod2="${pwdmod2%/*}"
-			if [ -f "${pwdmod2}/.vagrant" -o -d "${pwdmod2}/.vagrant" ]; then
+			if [ -f "${pwdmod2}/.vagrant" ] || [ -d "${pwdmod2}/.vagrant" ]; then
 				echo "${pwdmod2}/.vagrant"
 				return 0
 			fi
@@ -54,74 +54,86 @@ _vagrant() {
 	prev="${COMP_WORDS[COMP_CWORD - 1]}"
 	commands="box cloud destroy global-status halt help hostmanager init login package plugin port powershell provision push rdp reload resume scp snapshot ssh ssh-config status suspend up upload validate vbguest version winrm winrm-config"
 
-	if [ $COMP_CWORD == 1 ]; then
-		COMPREPLY=($(compgen -W "${commands}" -- ${cur}))
+	if ((COMP_CWORD == 1)); then
+		COMPREPLY=()
+		while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "${commands}" -- "${cur}")
 		return 0
 	fi
 
-	if [ $COMP_CWORD == 2 ]; then
+	if ((COMP_CWORD == 2)); then
 		case "$prev" in
 			"init")
-				local box_list=$(find "$HOME/.vagrant.d/boxes" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sed -e 's/-VAGRANTSLASH-/\//')
-				COMPREPLY=($(compgen -W "${box_list}" -- ${cur}))
+				local box_list
+				box_list=$(find "$HOME/.vagrant.d/boxes" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sed -e 's/-VAGRANTSLASH-/\//')
+				COMPREPLY=()
+				while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "${box_list}" -- "${cur}")
 				return 0
 				;;
 			"up")
 				vagrant_state_file=$(__vagrantinvestigate) || return 1
 				if [[ -d $vagrant_state_file ]]; then
-					vm_list=$(find $vagrant_state_file/machines -mindepth 1 -maxdepth 1 -type d -exec basename {} \;)
+					vm_list=$(find "$vagrant_state_file/machines" -mindepth 1 -maxdepth 1 -type d -exec basename {} \;)
 				fi
 				local up_commands="--no-provision"
-				COMPREPLY=($(compgen -W "${up_commands} ${vm_list}" -- ${cur}))
+				COMPREPLY=()
+				while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "${up_commands} ${vm_list}" -- "${cur}")
 				return 0
 				;;
 			"ssh" | "provision" | "reload" | "halt" | "suspend" | "resume" | "ssh-config")
 				vagrant_state_file=$(__vagrantinvestigate) || return 1
 				if [[ -f $vagrant_state_file ]]; then
-					running_vm_list=$(grep 'active' $vagrant_state_file | sed -e 's/"active"://' | tr ',' '\n' | cut -d '"' -f 2 | tr '\n' ' ')
+					running_vm_list=$(grep 'active' "$vagrant_state_file" | sed -e 's/"active"://' | tr ',' '\n' | cut -d '"' -f 2 | tr '\n' ' ')
 				else
-					running_vm_list=$(find $vagrant_state_file -type f -name "id" | awk -F"/" '{print $(NF-2)}')
+					running_vm_list=$(find "$vagrant_state_file" -type f -name "id" | awk -F"/" '{print $(NF-2)}')
 				fi
-				COMPREPLY=($(compgen -W "${running_vm_list}" -- ${cur}))
+				COMPREPLY=()
+				while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "${running_vm_list}" -- "${cur}")
 				return 0
 				;;
 			"box")
 				box_commands="add list outdated prune remove repackage update"
-				COMPREPLY=($(compgen -W "${box_commands}" -- ${cur}))
+				COMPREPLY=()
+				while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "${box_commands}" -- "${cur}")
 				return 0
 				;;
 			"plugin")
 				plugin_commands="expunge install license list repair uninstall update"
-				COMPREPLY=($(compgen -W "${plugin_commands}" -- ${cur}))
+				COMPREPLY=()
+				while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "${plugin_commands}" -- "${cur}")
 				return 0
 				;;
 			"help")
-				COMPREPLY=($(compgen -W "${commands}" -- ${cur}))
+				COMPREPLY=()
+				while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "${commands}" -- "${cur}")
 				return 0
 				;;
 			"snapshot")
 				snapshot_commands="delete list pop push restore save"
-				COMPREPLY=($(compgen -W "${snapshot_commands}" -- ${cur}))
+				COMPREPLY=()
+				while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "${snapshot_commands}" -- "${cur}")
 				return 0
 				;;
 			*) ;;
 		esac
 	fi
 
-	if [ $COMP_CWORD == 3 ]; then
+	if ((COMP_CWORD == 3)); then
 		action="${COMP_WORDS[COMP_CWORD - 2]}"
 		case "$action" in
 			"up")
 				if [ "$prev" == "--no-provision" ]; then
-					COMPREPLY=($(compgen -W "${vm_list}" -- ${cur}))
+					COMPREPLY=()
+					while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "${vm_list}" -- "${cur}")
 					return 0
 				fi
 				;;
 			"box")
 				case "$prev" in
 					"remove" | "repackage")
-						local box_list=$(find "$HOME/.vagrant.d/boxes" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sed -e 's/-VAGRANTSLASH-/\//')
-						COMPREPLY=($(compgen -W "${box_list}" -- ${cur}))
+						local box_list
+						box_list=$(find "$HOME/.vagrant.d/boxes" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sed -e 's/-VAGRANTSLASH-/\//')
+						COMPREPLY=()
+						while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "${box_list}" -- "${cur}")
 						return 0
 						;;
 					*) ;;
@@ -129,21 +141,24 @@ _vagrant() {
 				;;
 			"snapshot")
 				if [ "$prev" == "restore" ]; then
-					COMPREPLY=($(compgen -W "${vm_list}" -- ${cur}))
+					COMPREPLY=()
+					while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "${vm_list}" -- "${cur}")
 					return 0
 				fi
 				;;
 		esac
 	fi
 
-	if [ $COMP_CWORD == 4 ]; then
+	if ((COMP_CWORD == 4)); then
 		action="${COMP_WORDS[COMP_CWORD - 3]}"
 		prev="${COMP_WORDS[COMP_CWORD - 2]}"
 		case "$action" in
 			"snapshot")
 				if [ "$prev" == "restore" ]; then
-					local snapshot_list="$(vagrant snapshot list ${cur} 2> /dev/null | awk '{ORS=" "} /==>/ {next} {print}')"
-					COMPREPLY=($(compgen -W "${snapshot_list}" -- ${cur}))
+					local snapshot_list
+					snapshot_list="$(vagrant snapshot list "${cur}" 2> /dev/null | awk '{ORS=" "} /==>/ {next} {print}')"
+					COMPREPLY=()
+					while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "${snapshot_list}" -- "${cur}")
 					return 0
 				fi
 				;;
