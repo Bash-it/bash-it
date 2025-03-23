@@ -72,7 +72,7 @@ __gradle-generate-script-cache() {
 		local gradle_build_scripts
 		gradle_build_scripts=$(
 			find "$project_root_dir" -type f \
-				\( -name "*.gradle" -or -name "*.gradle.kts" \) 2> /dev/null \
+				\( -name "*.gradle" -o -name "*.gradle.kts" \) 2> /dev/null \
 				| grep -E -v "$script_exclude_pattern"
 		)
 		printf "%s\n" "${gradle_build_scripts[@]}" > "$cache_dir/$cache_name"
@@ -301,7 +301,7 @@ _gradle() {
 			# Regenerate tasks cache in the background
 			if [[ $gradle_files_checksum != "$(cat "$cache_dir/$cache_name.md5")" ||
 			! -f "$cache_dir/$gradle_files_checksum" ]]; then
-				__gradle-generate-tasks-cache &> /dev/null &
+				(__gradle-generate-tasks-cache &> /dev/null &)
 			fi
 		else
 			# Default tasks available outside Gradle projects
