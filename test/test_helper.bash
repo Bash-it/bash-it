@@ -101,6 +101,7 @@ function setup() {
 	BASH_IT_CONFIG="${BASH_IT?}" #"${BATS_TEST_TMPDIR//\/\///}"
 	export XDG_CACHE_HOME="${BATS_TEST_TMPDIR?}"
 
+	set -Eeuo pipefail # Bash Unofficial Strict Mode
 	setup_test_fixture
 	local_setup
 }
@@ -109,6 +110,7 @@ function teardown() {
 	unset GIT_CONFIG_NOSYSTEM
 	local_teardown
 	clean_test_fixture
+	set +Eeuo pipefail # Bash Unofficial Strict Mode
 }
 
 function teardown_file() {
