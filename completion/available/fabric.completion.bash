@@ -65,6 +65,7 @@ function __fab_fabfile_mtime() {
 		"${__FAB_COMPLETION_MTIME_COMMAND[@]}" "$f.py" | xargs -n 1 expr
 	else
 		# Suppose that it's a fabfile dir
+		# shellcheck disable=SC2038
 		find "$f"/*.py -exec "${__FAB_COMPLETION_MTIME_COMMAND[@]}" {} + \
 			| xargs -n 1 expr | sort -n -r | head -1
 	fi
@@ -79,7 +80,7 @@ function __fab_completion() {
 
 	# Variables to hold the current word and possible matches
 	local cur="${COMP_WORDS[COMP_CWORD]}"
-	local opts=()
+	local opts
 
 	# Generate possible matches and store them in variable "opts"
 	case "${cur}" in
@@ -125,6 +126,7 @@ function __fab_completion() {
 	esac
 
 	# Set possible completions
-	COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+	COMPREPLY=()
+	while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "${opts}" -- "${cur}")
 }
 complete -o default -o nospace -F __fab_completion fab
