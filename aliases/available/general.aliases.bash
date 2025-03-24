@@ -20,7 +20,6 @@ alias _='sudo'
 alias vbrc='${VISUAL:-vim} ~/.bashrc'
 alias vbpf='${VISUAL:-vim} ~/.bash_profile'
 
-
 # colored grep
 # Need to check an existing file for a pattern that will be found to ensure
 # that the check works when on an OS that supports the color option
@@ -51,11 +50,11 @@ alias ipy='ipython'
 
 alias piano='pianobar'
 
-alias ..='cd ..'         # Go up one directory
-alias cd..='cd ..'       # Common misspelling for going up one directory
-alias ...='cd ../..'     # Go up two directories
-alias ....='cd ../../..' # Go up three directories
-alias -- -='cd -'        # Go back
+alias ..='cd ..'                     # Go up one directory
+alias cd..='cd ..'                   # Common misspelling for going up one directory
+alias ...='cd ../..'                 # Go up two directories
+alias ....='cd ../../..'             # Go up three directories
+alias -- -='cd -'                    # Go back
 alias dow='cd /home/$USER/Downloads' # Go to the Downloads directory
 
 # Shell History

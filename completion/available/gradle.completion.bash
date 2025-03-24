@@ -48,7 +48,7 @@ __gradle-set-build-file() {
 
 __gradle-set-cache-name() {
 	# Cache name is constructed from the absolute path of the build file.
-	cache_name=${gradle_build_file//'/'/_}
+	cache_name=${gradle_build_file//"/"/_}
 }
 
 __gradle-set-files-checksum() {
