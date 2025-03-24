@@ -1,4 +1,5 @@
 # shellcheck shell=bats
+# shellcheck disable=SC2030 disable=SC2031
 
 load ../test_helper
 
@@ -11,8 +12,9 @@ function local_setup {
 	test_prompt_string=""
 	export PROMPT_COMMAND="$test_prompt_string"
 
-	load ../../vendor/github.com/rcaloras/bash-preexec/bash-preexec.sh
+	run load ../../vendor/github.com/rcaloras/bash-preexec/bash-preexec.sh
 	assert_success
+	load ../../vendor/github.com/rcaloras/bash-preexec/bash-preexec.sh
 
 	assert_equal "${PROMPT_COMMAND}" $'__bp_trap_string="$(trap -p DEBUG)"\ntrap - DEBUG\n__bp_install'
 }
@@ -21,8 +23,9 @@ function local_setup {
 	test_prompt_string="nah"
 	export PROMPT_COMMAND="$test_prompt_string"
 
-	load ../../vendor/github.com/rcaloras/bash-preexec/bash-preexec.sh
+	run load ../../vendor/github.com/rcaloras/bash-preexec/bash-preexec.sh
 	assert_success
+	load ../../vendor/github.com/rcaloras/bash-preexec/bash-preexec.sh
 
 	assert_equal "${PROMPT_COMMAND}" "$test_prompt_string"$'\n__bp_trap_string="$(trap -p DEBUG)"\ntrap - DEBUG\n__bp_install'
 }
@@ -32,8 +35,9 @@ function local_setup {
 	export PROMPT_COMMAND="$test_prompt_string"
 	export __bp_delay_install="blarg"
 
-	load ../../vendor/github.com/rcaloras/bash-preexec/bash-preexec.sh
+	run load ../../vendor/github.com/rcaloras/bash-preexec/bash-preexec.sh
 	assert_success
+	load ../../vendor/github.com/rcaloras/bash-preexec/bash-preexec.sh
 
 	assert_equal "${PROMPT_COMMAND}" "$test_prompt_string"
 
@@ -48,8 +52,9 @@ function local_setup {
 	test_prompt_string=""
 	export PROMPT_COMMAND="$test_prompt_string"
 
-	load ../../vendor/github.com/rcaloras/bash-preexec/bash-preexec.sh
+	run load ../../vendor/github.com/rcaloras/bash-preexec/bash-preexec.sh
 	assert_success
+	load ../../vendor/github.com/rcaloras/bash-preexec/bash-preexec.sh
 
 	run __bp_install
 	assert_success
@@ -62,8 +67,9 @@ function local_setup {
 	test_prompt_string="nah"
 	export PROMPT_COMMAND="$test_prompt_string"
 
-	load ../../vendor/github.com/rcaloras/bash-preexec/bash-preexec.sh
+	run load ../../vendor/github.com/rcaloras/bash-preexec/bash-preexec.sh
 	assert_success
+	load ../../vendor/github.com/rcaloras/bash-preexec/bash-preexec.sh
 
 	run __bp_install
 	assert_success
