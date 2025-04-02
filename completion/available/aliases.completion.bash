@@ -40,6 +40,12 @@ function _bash-it-component-completion-callback-on-init-aliases() {
 		line="${line#alias -- }"
 		line="${line#alias }"
 		alias_name="${line%%=*}"
+
+		if complete -p "$alias_name" &> /dev/null; then
+			# skip aliases that already have completion functions
+			continue
+		fi
+
 		alias_defn="${line#*=\'}" # alias definition
 		alias_defn="${alias_defn%\'}"
 		alias_cmd="${alias_defn%%[[:space:]]*}" # first word of alias
