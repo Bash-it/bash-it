@@ -41,9 +41,17 @@ function _bash-it-component-completion-callback-on-init-aliases() {
 		line="${line#alias }"
 		alias_name="${line%%=*}"
 
+		# Skip aliases not added by this script that already have completion functions.
+		# This allows users to define their own alias completion functions.
+		# For aliases added by this script, we do want to replace them in case the
+		# alias getting the completion added has changed.
 		if complete -p "$alias_name" &> /dev/null; then
-			# skip aliases that already have completion functions
-			continue
+			# Get the -F argument from the existing completion for this alias.
+			aliasCommandFunction=$(complete -p "$alias_name" | rev | cut -d " " -f 2 | rev)
+			# Check if aliasCommandFunction starts with our namespace.
+			if [[ "$aliasCommandFunction" != "_${namespace}::"* ]]; then
+				continue
+			fi
 		fi
 
 		alias_defn="${line#*=\'}" # alias definition
@@ -77,15 +85,20 @@ function _bash-it-component-completion-callback-on-init-aliases() {
 		fi
 		new_completion="$(complete -p "$alias_cmd" 2> /dev/null)"
 
-		# create a wrapper inserting the alias arguments if any
-		if [[ -n $alias_args ]]; then
-			compl_func="${new_completion/#* -F /}"
-			compl_func="${compl_func%% *}"
-			# avoid recursive call loops by ignoring our own functions
-			if [[ "${compl_func#_"$namespace"::}" == "$compl_func" ]]; then
-				compl_wrapper="_${namespace}::${alias_name}"
+		compl_func="${new_completion/#* -F /}"
+		compl_func="${compl_func%% *}"
+		# avoid recursive call loops by ignoring our own functions
+		if [[ "${compl_func#_"$namespace"::}" == "$compl_func" ]]; then
+			compl_wrapper="_${namespace}::${alias_name}"
 
-				# Create a wrapper function for the alias
+			if [[ -z $alias_args ]]; then
+				# Create a wrapper without arguments.
+				# This allows identifying the completions added by this script on reload.
+				echo "function $compl_wrapper {
+				$compl_func \"\$@\"
+				}" >> "$tmp_file"
+			else
+				# Create a wrapper inserting the alias arguments
 				# The use of printf on alias_arg_words is needed to ensure each element of
 				# the array is quoted. E.X. (one two three) -> ('one' 'two' 'three')
 				echo "function $compl_wrapper {
@@ -105,8 +118,8 @@ function _bash-it-component-completion-callback-on-init-aliases() {
                         (( COMP_POINT += \${#COMP_LINE} ))
                         \"$compl_func\" \"$alias_cmd\" \"\$compl_word\" \"\$prec_word\"
                     }" >> "$tmp_file"
-				new_completion="${new_completion/ -F $compl_func / -F $compl_wrapper }"
 			fi
+			new_completion="${new_completion/ -F $compl_func / -F $compl_wrapper }"
 		fi
 
 		# replace completion trigger by alias
