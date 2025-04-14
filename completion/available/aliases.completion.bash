@@ -52,6 +52,10 @@ function _bash-it-component-completion-callback-on-init-aliases() {
 			if [[ "$aliasCommandFunction" != "_${namespace}::"* ]]; then
 				continue
 			fi
+
+			# Remove existing completion. It will be replaced by the new one. We need to
+			# delete it in case the new alias does not support having completion added.
+			complete -r "$alias_name"
 		fi
 
 		alias_defn="${line#*=\'}" # alias definition
