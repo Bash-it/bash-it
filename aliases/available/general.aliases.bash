@@ -35,6 +35,13 @@ if _command_exists pianobar; then
 	alias piano='pianobar'
 fi
 
+alias ..='cd ..'                     # Go up one directory
+alias cd..='cd ..'                   # Common misspelling for going up one directory
+alias ...='cd ../..'                 # Go up two directories
+alias ....='cd ../../..'             # Go up three directories
+alias -- -='cd -'                    # Go back
+alias dow='cd /home/$USER/Downloads' # Go to the Downloads directory
+
 # Shell History
 alias h='history'
 
@@ -46,6 +53,9 @@ fi
 # Directory
 alias md='mkdir -p'
 alias rd='rmdir'
+
+# Remove
+alias rmrf='rm -rf'
 
 # Shorten extract
 alias xt='extract'

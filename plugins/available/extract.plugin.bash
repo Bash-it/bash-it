@@ -1,19 +1,20 @@
 # shellcheck shell=bash
+cite about-plugin
 about-plugin 'one command to extract them all...'
 
 # extract file(s) from compressed status
-function extract() {
-	local opt OPTIND=1 verbose
-	local filename filedirname targetdirname
+extract() {
+	local opt
+	local OPTIND=1
 	while getopts "hv" opt; do
 		case "$opt" in
 			h)
-				cat << EOU
+				cat << End-Of-Usage
 Usage: ${FUNCNAME[0]} [option] <archives>
     options:
         -h  show this message and exit
         -v  verbosely list files processed
-EOU
+End-Of-Usage
 				return
 				;;
 			v)

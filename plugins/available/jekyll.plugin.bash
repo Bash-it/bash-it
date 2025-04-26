@@ -284,5 +284,6 @@ function deploysite() {
 
 # Load the Jekyll config
 if [[ -s "$HOME/.jekyllconfig" ]]; then
+	# shellcheck disable=SC1091
 	source "$HOME/.jekyllconfig"
 fi

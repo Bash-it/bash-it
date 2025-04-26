@@ -7,25 +7,26 @@ function _sdkman_complete() {
 
 	COMPREPLY=()
 
+	local line
 	if [ "$COMP_CWORD" -eq 1 ]; then
-		mapfile -t COMPREPLY < <(compgen -W "install uninstall rm list ls use default home env current upgrade ug version broadcast help offline selfupdate update flush" -- "${COMP_WORDS[COMP_CWORD]}")
+		while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "install uninstall rm list ls use default home env current upgrade ug version broadcast help offline selfupdate update flush" -- "${COMP_WORDS[COMP_CWORD]}")
 	elif [ "$COMP_CWORD" -eq 2 ]; then
 		case "${COMP_WORDS[COMP_CWORD - 1]}" in
 			"install" | "i" | "uninstall" | "rm" | "list" | "ls" | "use" | "u" | "default" | "d" | "home" | "h" | "current" | "c" | "upgrade" | "ug")
 				CANDIDATES="${SDKMAN_CANDIDATES_CSV//,/${IFS:0:1}}"
-				mapfile -t COMPREPLY < <(compgen -W "$CANDIDATES" -- "${COMP_WORDS[COMP_CWORD]}")
+				while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "$CANDIDATES" -- "${COMP_WORDS[COMP_CWORD]}")
 				;;
 			"env")
-				mapfile -t COMPREPLY < <(compgen -W "init" -- "${COMP_WORDS[COMP_CWORD]}")
+				while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "init" -- "${COMP_WORDS[COMP_CWORD]}")
 				;;
 			"offline")
-				mapfile -t COMPREPLY < <(compgen -W "enable disable" -- "${COMP_WORDS[COMP_CWORD]}")
+				while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "enable disable" -- "${COMP_WORDS[COMP_CWORD]}")
 				;;
 			"selfupdate")
-				mapfile -t COMPREPLY < <(compgen -W "force" -- "${COMP_WORDS[COMP_CWORD]}")
+				while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "force" -- "${COMP_WORDS[COMP_CWORD]}")
 				;;
 			"flush")
-				mapfile -t COMPREPLY < <(compgen -W "archives tmp broadcast version" -- "${COMP_WORDS[COMP_CWORD]}")
+				while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "archives tmp broadcast version" -- "${COMP_WORDS[COMP_CWORD]}")
 				;;
 			*) ;;
 
@@ -34,11 +35,11 @@ function _sdkman_complete() {
 		case "${COMP_WORDS[COMP_CWORD - 2]}" in
 			"uninstall" | "rm" | "use" | "u" | "default" | "d" | "home" | "h")
 				_sdkman_candidate_local_versions "${COMP_WORDS[COMP_CWORD - 1]}"
-				mapfile -t COMPREPLY < <(compgen -W "$CANDIDATE_VERSIONS" -- "${COMP_WORDS[COMP_CWORD]}")
+				while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "$CANDIDATE_VERSIONS" -- "${COMP_WORDS[COMP_CWORD]}")
 				;;
 			"install" | "i")
 				_sdkman_candidate_all_versions "${COMP_WORDS[COMP_CWORD - 1]}"
-				mapfile -t COMPREPLY < <(compgen -W "$CANDIDATE_VERSIONS" -- "${COMP_WORDS[COMP_CWORD]}")
+				while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "$CANDIDATE_VERSIONS" -- "${COMP_WORDS[COMP_CWORD]}")
 				;;
 			*) ;;
 
