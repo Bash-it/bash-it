@@ -9,6 +9,7 @@ fi
 
 function compare_lines() {
 	prev=""
+	local line
 	while read -r line; do
 		# Skip unimportant lines
 		[[ $line =~ "#" ]] && continue

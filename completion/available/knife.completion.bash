@@ -55,12 +55,12 @@ _KAC_regen_cache() {
 
 # cached files can't have spaces in their names
 _KAC_get_cache_name_from_command() {
-	echo "${@/ /_SPACE_}"
+	echo "${@// /_SPACE_}"
 }
 
 # the reverse operation from the function above
 _KAC_get_command_from_cache_name() {
-	echo "${@/_SPACE_/ }"
+	echo "${@//_SPACE_/ }"
 }
 
 # given a command as argument, it fetches the cache for that command if it can find it
