@@ -1,4 +1,7 @@
 # shellcheck shell=bash
+# shellcheck disable=SC2034
+
+cite about-plugin
 about-plugin 'enables powerline daemon'
 
 if ! _binary_exists powerline-daemon; then

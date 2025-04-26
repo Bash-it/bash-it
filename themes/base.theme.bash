@@ -590,7 +590,9 @@ if ! _command_exists battery_charge; then
 fi
 
 function aws_profile() {
-	if [[ -n "${AWS_DEFAULT_PROFILE:-}" ]]; then
+	if [[ -n "${AWS_PROFILE:-}" ]]; then
+		echo -ne "${AWS_PROFILE}"
+	elif [[ -n "${AWS_DEFAULT_PROFILE:-}" ]]; then
 		echo -ne "${AWS_DEFAULT_PROFILE}"
 	else
 		echo -ne "default"

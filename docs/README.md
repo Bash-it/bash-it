@@ -46,6 +46,13 @@ That's it! :smiley:
 You can check out more components of Bash-it, and customize it to your desire.  
 For more information, see detailed instructions [here](https://bash-it.readthedocs.io/en/latest/installation/).
 
+### custom configuration file location
+
+By default the instller modifies/creates the actual ``~/.bashrc`` is updated.
+If this is undesirable, you can create another file, by run the installer:
+```bash
+BASH_IT_CONFIG_FILE=path/to/my/custom/location.bash ~/.bash_it/install.sh
+```
 
 ## Contributing
 

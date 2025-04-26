@@ -1,11 +1,16 @@
 # shellcheck shell=bash
+# Load after the system completion to make sure that the fzf completions are working
+# BASH_IT_LOAD_PRIORITY: 375
+
+cite about-plugin
 about-plugin 'load fzf, if you are using it'
 
-# shellcheck source-path=$HOME source-path=$HOME/.config/fzf disable=SC1090 disable=SC1091
-if [[ -r ~/.fzf.bash ]]; then
+if [ -r ~/.fzf.bash ]; then
+	# shellcheck disable=SC1090
 	source ~/.fzf.bash
-elif [[ -r "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/fzf.bash" ]]; then
-	source "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/fzf.bash"
+elif [ -r "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash ]; then
+	# shellcheck disable=SC1091
+	source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash
 fi
 
 # No need to continue if the command is not present
@@ -24,8 +29,8 @@ function fe() {
 	param "1: Search term"
 	example "fe foo"
 
-	local IFS=$'\n'
-	local files
+	local IFS=$'\n' line
+	local files=()
 	read -ra files < <(fzf-tmux --query="$1" --multi --select-1 --exit-0)
 	[[ -n "${files[*]}" ]] && "${EDITOR:-${ALTERNATE_EDITOR:-nano}}" "${files[@]}"
 }
@@ -39,5 +44,5 @@ function fcd() {
 	local dir
 	dir=$(find "${1:-.}" -path '*/\.*' -prune \
 		-o -type d -print 2> /dev/null | fzf +m) \
-		&& cd "$dir" || return
+		&& cd "$dir" || return 1
 }

@@ -1,11 +1,14 @@
 # shellcheck shell=bash
+cite about-plugin
 about-plugin 'load jenv, if you are using it'
 
 # Don't modify the environment if we can't find the tool:
 # - Check if in $PATH already
 # - Check if installed manually to $JENV_ROOT
 # - Check if installed manually to $HOME
-if ! _binary_exists jenv && ! [[ -n "${JENV_ROOT:-}" && -x "$JENV_ROOT/bin/jenv" ]] && ! [[ -x "$HOME/.jenv/bin/jenv" ]]; then
+if ! _binary_exists jenv && 
+  ! [[ -n "${JENV_ROOT:-}" && -x "$JENV_ROOT/bin/jenv" ]] &&
+  ! [[ -x "$HOME/.jenv/bin/jenv" ]]; then
 	_log_warning "Unable to locate 'jenv'."
 	return 1
 fi

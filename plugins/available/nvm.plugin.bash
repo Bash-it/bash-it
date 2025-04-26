@@ -10,17 +10,17 @@ export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
 
 # first check if NVM is managed by brew
 NVM_BREW_PREFIX=""
-if _bash_it_homebrew_check
-then
-  NVM_BREW_PREFIX=$(brew --prefix nvm 2>/dev/null)
+if _bash_it_homebrew_check; then
+	NVM_BREW_PREFIX=$(brew --prefix nvm 2> /dev/null)
 fi
 
 # This loads nvm
-if [[ -n "$NVM_BREW_PREFIX" && -s "${NVM_BREW_PREFIX}/nvm.sh" ]]
-then
-  source "${NVM_BREW_PREFIX}/nvm.sh"
+if [[ -n "$NVM_BREW_PREFIX" && -s "${NVM_BREW_PREFIX}/nvm.sh" ]]; then
+	# shellcheck disable=SC1091
+	source "${NVM_BREW_PREFIX}/nvm.sh"
 else
-  [[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
+	# shellcheck disable=SC1091
+	[[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
 fi
 
 # shellcheck disable=SC1091 # This loads nvm

@@ -10,7 +10,7 @@
 _command_exists sqlmap || return
 
 function _sqlmap() {
-	local cur prev
+	local cur prev line
 
 	COMPREPLY=()
 	cur="$(_get_cword)"
@@ -20,7 +20,7 @@ function _sqlmap() {
 
 		# List directory content
 		--tamper)
-			COMPREPLY=($(compgen -W "$tamper" -- "$cur"))
+			while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "${tamper:-}" -- "$cur")
 			return 0
 			;;
 		--output-dir | -t | -l | -m | -r | --load-cookies | --proxy-file | --sql-file | --shared-lib | --file-write)
@@ -32,35 +32,35 @@ function _sqlmap() {
 			return 0
 			;;
 		--method)
-			COMPREPLY=($(compgen -W 'GET POST PUT' -- "$cur"))
+			while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W 'GET POST PUT' -- "$cur")
 			return 0
 			;;
 		--auth-type)
-			COMPREPLY=($(compgen -W 'Basic Digest NTLM PKI' -- "$cur"))
+			while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W 'Basic Digest NTLM PKI' -- "$cur")
 			return 0
 			;;
 		--tor-type)
-			COMPREPLY=($(compgen -W 'HTTP SOCKS4 SOCKS5' -- "$cur"))
+			while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W 'HTTP SOCKS4 SOCKS5' -- "$cur")
 			return 0
 			;;
 		-v)
-			COMPREPLY=($(compgen -W '1 2 3 4 5 6' -- "$cur"))
+			while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W '1 2 3 4 5 6' -- "$cur")
 			return 0
 			;;
 		--dbms)
-			COMPREPLY=($(compgen -W 'mysql mssql access postgres' -- "$cur"))
+			while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W 'mysql mssql access postgres' -- "$cur")
 			return 0
 			;;
 		--level | --crawl)
-			COMPREPLY=($(compgen -W '1 2 3 4 5' -- "$cur"))
+			while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W '1 2 3 4 5' -- "$cur")
 			return 0
 			;;
 		--risk)
-			COMPREPLY=($(compgen -W '0 1 2 3' -- "$cur"))
+			while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W '0 1 2 3' -- "$cur")
 			return 0
 			;;
 		--technique)
-			COMPREPLY=($(compgen -W 'B E U S T Q' -- "$cur"))
+			while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W 'B E U S T Q' -- "$cur")
 			return 0
 			;;
 		-s)
@@ -68,7 +68,7 @@ function _sqlmap() {
 			return 0
 			;;
 		--dump-format)
-			COMPREPLY=($(compgen -W 'CSV HTML SQLITE' -- "$cur"))
+			while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W 'CSV HTML SQLITE' -- "$cur")
 			return 0
 			;;
 		-x)
@@ -78,7 +78,9 @@ function _sqlmap() {
 	esac
 
 	if [[ "$cur" == * ]]; then
-		COMPREPLY=($(compgen -W '-h --help -hh --version -v -d -u --url -l -x -m -r -g -c --method \
+		COMPREPLY=()
+		while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(
+			compgen -W '-h --help -hh --version -v -d -u --url -l -x -m -r -g -c --method \
 			--data --param-del --cookie --cookie-del --load-cookies \
 			--drop-set-cookie --user-agent --random-agent --host --referer \
 			--headers --auth-type --auth-cred --auth-private --ignore-401 \
@@ -107,7 +109,8 @@ function _sqlmap() {
 			-z --alert --answers --beep --check-waf --cleanup \
 			--dependencies --disable-coloring --gpage --identify-waf \
 			--mobile --page-rank --purge-output --smart \
-			--sqlmap-shell --wizard' -- "$cur"))
+			--sqlmap-shell --wizard' -- "$cur"
+		)
 		# this removes any options from the list of completions that have
 		# already been specified somewhere on the command line, as long as
 		# these options can only be used once (in a word, "options", in
@@ -141,20 +144,19 @@ function _sqlmap() {
 			--dependencies --disable-coloring --identify-waf \
 			--mobile --page-rank --purge-output --smart \
 			--sqlmap-shell --wizard '
-		COMPREPLY=($(
-			(
-				while read -d ' ' i; do
-					[[ -z "$i" || "${onlyonce/ ${i%% *} / }" == "$onlyonce" ]] && continue
-					# flatten array with spaces on either side,
-					# otherwise we cannot grep on word boundaries of
-					# first and last word
-					COMPREPLY=" ${COMPREPLY[@]} "
-					# remove word from list of completions
-					COMPREPLY=(${COMPREPLY/ ${i%% *} / })
-				done
-				printf '%s ' "${COMPREPLY[@]}"
-			) <<< "${COMP_WORDS[@]}"
-		))
+
+		IFS=" " read -r -a COMPREPLY <<< "$( (
+			while read -r -d ' ' i; do
+				[[ -z "$i" || "${onlyonce/ ${i%% *} / }" == "$onlyonce" ]] && continue
+				# flatten array with spaces on either side,
+				# otherwise we cannot grep on word boundaries of
+				# first and last word
+				COMPREPLYSTR=" ${COMPREPLY[*]} "
+				# remove word from list of completions
+				IFS=" " read -r -a COMPREPLY <<< "${COMPREPLYSTR/ ${i%% *} / }"
+			done
+			printf '%s ' "${COMPREPLY[@]}"
+		) <<< "${COMP_WORDS[@]}")"
 
 		#else
 		#_filedir bat
