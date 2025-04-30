@@ -6,11 +6,12 @@
 #  - Comment lines (#) are ignored
 #
 # shellcheck disable=SC2002  # Prefer 'cat' for cleaner script
-mapfile -t FILES < <(
+FILES=()
+while IFS='' read -r line; do FILES+=("$line"); done < <(
 	cat clean_files.txt \
-		| grep -v -E '^\s*$' \
-		| grep -v -E '^\s*#' \
-		| xargs -n1 -I{} find "{}" -type f
+		| grep -E -v '^\s*$' \
+		| grep -E -v '^\s*#' \
+		| xargs -I{} find "{}" -type f
 )
 
 # We clear the BASH_IT variable to help the shellcheck checker

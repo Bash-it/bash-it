@@ -1,4 +1,5 @@
 # shellcheck shell=bash
+# shellcheck disable=SC2034
 
 cite about-plugin
 about-plugin 'enables powerline daemon'
@@ -22,5 +23,6 @@ bashPowerlineInit="$(python -c \
 	'bindings', \
 	'bash', \
 	'powerline.sh'))")"
-[ -e $bashPowerlineInit ] || return
-source $bashPowerlineInit
+[ -e "$bashPowerlineInit" ] || return
+# shellcheck disable=SC1090
+source "$bashPowerlineInit"
