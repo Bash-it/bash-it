@@ -1,12 +1,11 @@
 # shellcheck shell=bash
 # shellcheck disable=SC2034 # Expected behavior for themes.
-# shellcheck disable=SC2154 #TODO: fix these all.
 
 # Detect whether a reboot is required
 function show_reboot_required() {
-	if [ -n "$_bf_prompt_reboot_info" ]; then
-		if [ -f /var/run/reboot-required ]; then
-			printf "Reboot required!"
+	if [[ -n "${_bf_prompt_reboot_info:-}" ]]; then
+		if [[ -f /var/run/reboot-required ]]; then
+			printf '%s' "Reboot required!"
 		fi
 	fi
 }
@@ -14,21 +13,21 @@ function show_reboot_required() {
 # Set different host color for local and remote sessions
 function set_host_color() {
 	# Detect if connection is through SSH
-	if [[ -n $SSH_CLIENT ]]; then
-		printf '%s' "${lime_yellow}"
+	if [[ -n "${SSH_CLIENT:-}" ]]; then
+		printf '%s' "${lime_yellow?}"
 	else
-		printf '%s' "${light_orange}"
+		printf '%s' "${light_orange?}"
 	fi
 }
 
 # Set different username color for users and root
 function set_user_color() {
-	case $(id -u) in
+	case ${EUID:-$UID} in
 		0)
-			printf '%s' "${red}"
+			printf '%s' "${red?}"
 			;;
 		*)
-			printf '%s' "${cyan}"
+			printf '%s' "${cyan?}"
 			;;
 	esac
 }
@@ -47,40 +46,48 @@ function set_custom_colors() {
 	powder_blue="\[$(tput setaf 153)\]"
 }
 
-__ps_time() {
-	printf '%s' "$(clock_prompt)${normal}\n"
+function __ps_time() {
+	local clock_prompt
+	clock_prompt="$(clock_prompt)"
+	printf '%s\n' "${clock_prompt}${normal?}"
 }
 
 function prompt_command() {
-	ps_reboot="${bright_yellow}$(show_reboot_required)${normal}\n"
+	local show_reboot_required set_user_color set_host_color scm_prompt ps_time
+	show_reboot_required="$(show_reboot_required)"
+	ps_reboot="${bright_yellow?}${show_reboot_required}${normal?}\n"
 
-	ps_username="$(set_user_color)\u${normal}"
-	ps_uh_separator="${dark_grey}@${normal}"
-	ps_hostname="$(set_host_color)\h${normal}"
+	set_user_color="$(set_user_color)"
+	ps_username="${set_user_color}\u${normal}"
+	ps_uh_separator="${dark_grey?}@${normal}"
+	set_host_color="$(set_host_color)"
+	ps_hostname="${set_host_color}\h${normal}"
 
-	ps_path="${yellow}\w${normal}"
-	ps_scm_prompt="${light_grey}$(scm_prompt)"
+	ps_path="${yellow?}\w${normal}"
+	scm_prompt="$(scm_prompt)"
+	ps_scm_prompt="${light_grey?}${scm_prompt}"
 
 	ps_user_mark="${normal} ${normal}"
 	ps_user_input="${normal}"
 
 	# Set prompt
-	PS1="$ps_reboot$(__ps_time)$ps_username$ps_uh_separator$ps_hostname $ps_path $ps_scm_prompt$ps_user_mark$ps_user_input"
+	ps_time="$(__ps_time)"
+	PS1="$ps_reboot${ps_time}$ps_username$ps_uh_separator$ps_hostname $ps_path $ps_scm_prompt$ps_user_mark$ps_user_input"
 }
 
 # Initialize custom colors
 set_custom_colors
 
-THEME_CLOCK_COLOR=${THEME_CLOCK_COLOR:-"$dark_grey"}
+: "${THEME_CLOCK_COLOR:="$dark_grey"}"
 
 # scm theming
 SCM_THEME_PROMPT_PREFIX=""
 SCM_THEME_PROMPT_SUFFIX=""
 
-SCM_THEME_PROMPT_DIRTY=" ${bold_red}✗${light_grey}"
-SCM_THEME_PROMPT_CLEAN=" ${green}✓${light_grey}"
-SCM_GIT_CHAR="${green}±${light_grey}"
-SCM_SVN_CHAR="${bold_cyan}⑆${light_grey}"
-SCM_HG_CHAR="${bold_red}☿${light_grey}"
+SCM_THEME_PROMPT_DIRTY=" ${bold_red?}✗${light_grey?}"
+SCM_THEME_PROMPT_CLEAN=" ${green?}✓${light_grey?}"
+SCM_GIT_CHAR="${green?}±${light_grey?}"
+SCM_SVN_CHAR="${bold_cyan?}⑆${light_grey?}"
+SCM_HG_CHAR="${bold_red?}☿${light_grey?}"
 
 safe_append_prompt_command prompt_command

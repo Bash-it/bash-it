@@ -17,7 +17,7 @@ function time-machine-list-machines() {
 	group "osx-timemachine"
 	about "Lists the OS X Time Machine machines on the backup volume"
 
-	local tmdest
+	local tmdest line
 	tmdest="$(time-machine-destination)/Backups.backupdb"
 
 	find "$tmdest" -maxdepth 1 -mindepth 1 -type d | grep -v "/\." | while read -r line; do
@@ -32,7 +32,7 @@ function time-machine-list-all-backups() {
 	example "time-machine-list-all-backups my-laptop"
 
 	# Use the local hostname if none provided
-	local COMPUTERNAME BACKUP_LOCATION
+	local COMPUTERNAME BACKUP_LOCATION line
 	COMPUTERNAME=${1:-$(scutil --get ComputerName)}
 	BACKUP_LOCATION="$(time-machine-destination)/Backups.backupdb/$COMPUTERNAME"
 
@@ -48,7 +48,7 @@ function time-machine-list-old-backups() {
 	example "time-machine-list-old-backups my-laptop"
 
 	# Use the local hostname if none provided
-	local COMPUTERNAME BACKUP_LOCATION
+	local COMPUTERNAME BACKUP_LOCATION line
 	COMPUTERNAME=${1:-$(scutil --get ComputerName)}
 	BACKUP_LOCATION="$(time-machine-destination)/Backups.backupdb/$COMPUTERNAME"
 

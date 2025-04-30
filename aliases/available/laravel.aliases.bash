@@ -1,9 +1,9 @@
-cite 'about-alias'
+# shellcheck shell=bash
 about-alias 'laravel artisan abbreviations'
 
 # A list of useful laravel aliases
 
-alias laravel="${HOME}/.composer/vendor/bin/laravel"
+alias laravel='${HOME?}/.composer/vendor/bin/laravel'
 # asset
 alias a:apub='php artisan asset:publish'
 

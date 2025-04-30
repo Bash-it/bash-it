@@ -1,4 +1,4 @@
-cite 'about-alias'
+# shellcheck shell=bash
 about-alias 'Tmux terminal multiplexer'
 
 alias txl='tmux ls'

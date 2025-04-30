@@ -45,46 +45,56 @@ function _bash-it-log-prefix-by-path() {
 
 function _has_colors() {
 	# Check that stdout is a terminal, and that it has at least 8 colors.
-	[[ -t 1 && "${_bash_it_available_colors:=$(tput colors 2> /dev/null)}" -ge 8 ]]
+	[[ -t 1 && "${CLICOLOR:=$(tput colors 2> /dev/null)}" -ge 8 ]]
 }
 
 function _bash-it-log-message() {
-	about 'Internal function used for logging, uses BASH_IT_LOG_PREFIX as a prefix'
-	param '1: color of the message'
-	param '2: log level to print before the prefix'
-	param '3: message to log'
-	group 'log'
+	: _about 'Internal function used for logging, uses BASH_IT_LOG_PREFIX as a prefix'
+	: _param '1: color of the message'
+	: _param '2: log level to print before the prefix'
+	: _param '3: message to log'
+	: _group 'log'
 
-	message="$2${BASH_IT_LOG_PREFIX:-default: }$3"
-	_has_colors && echo -e "$1${message}${echo_normal:-}" || echo -e "${message}"
+	local prefix="${BASH_IT_LOG_PREFIX:-default}"
+	local color="${1-${echo_cyan:-}}"
+	local level="${2:-TRACE}"
+	local message="${level%: }: ${prefix%: }: ${3?}"
+	if _has_colors; then
+		printf '%b%s%b\n' "${color}" "${message}" "${echo_normal:-}"
+	else
+		printf '%s\n' "${message}"
+	fi
 }
 
 function _log_debug() {
-	about 'log a debug message by echoing to the screen. needs BASH_IT_LOG_LEVEL >= BASH_IT_LOG_LEVEL_INFO'
-	param '1: message to log'
-	example '$ _log_debug "Loading plugin git..."'
-	group 'log'
+	: _about 'log a debug message by echoing to the screen. needs BASH_IT_LOG_LEVEL >= BASH_IT_LOG_LEVEL_INFO'
+	: _param '1: message to log'
+	: _example '$ _log_debug "Loading plugin git..."'
+	: _group 'log'
 
-	[[ "${BASH_IT_LOG_LEVEL:-0}" -ge "${BASH_IT_LOG_LEVEL_INFO?}" ]] || return 0
-	_bash-it-log-message "${echo_green:-}" "DEBUG: " "$1"
+	if [[ "${BASH_IT_LOG_LEVEL:-0}" -ge "${BASH_IT_LOG_LEVEL_INFO?}" ]]; then
+		_bash-it-log-message "${echo_green:-}" "DEBUG: " "$1"
+	fi
 }
 
 function _log_warning() {
-	about 'log a message by echoing to the screen. needs BASH_IT_LOG_LEVEL >= BASH_IT_LOG_LEVEL_WARNING'
-	param '1: message to log'
-	example '$ _log_warning "git binary not found, disabling git plugin..."'
-	group 'log'
+	: _about 'log a message by echoing to the screen. needs BASH_IT_LOG_LEVEL >= BASH_IT_LOG_LEVEL_WARNING'
+	: _param '1: message to log'
+	: _example '$ _log_warning "git binary not found, disabling git plugin..."'
+	: _group 'log'
 
-	[[ "${BASH_IT_LOG_LEVEL:-0}" -ge "${BASH_IT_LOG_LEVEL_WARNING?}" ]] || return 0
-	_bash-it-log-message "${echo_yellow:-}" " WARN: " "$1"
+	if [[ "${BASH_IT_LOG_LEVEL:-0}" -ge "${BASH_IT_LOG_LEVEL_WARNING?}" ]]; then
+		_bash-it-log-message "${echo_yellow:-}" " WARN: " "$1"
+	fi
 }
 
 function _log_error() {
-	about 'log a message by echoing to the screen. needs BASH_IT_LOG_LEVEL >= BASH_IT_LOG_LEVEL_ERROR'
-	param '1: message to log'
-	example '$ _log_error "Failed to load git plugin..."'
-	group 'log'
+	: _about 'log a message by echoing to the screen. needs BASH_IT_LOG_LEVEL >= BASH_IT_LOG_LEVEL_ERROR'
+	: _param '1: message to log'
+	: _example '$ _log_error "Failed to load git plugin..."'
+	: _group 'log'
 
-	[[ "${BASH_IT_LOG_LEVEL:-0}" -ge "${BASH_IT_LOG_LEVEL_ERROR?}" ]] || return 0
-	_bash-it-log-message "${echo_red:-}" "ERROR: " "$1"
+	if [[ "${BASH_IT_LOG_LEVEL:-0}" -ge "${BASH_IT_LOG_LEVEL_ERROR?}" ]]; then
+		_bash-it-log-message "${echo_red:-}" "ERROR: " "$1"
+	fi
 }
