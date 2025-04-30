@@ -71,6 +71,7 @@ themes/oh-my-posh
 themes/p4helpers.theme.bash
 themes/pete
 themes/powerline
+themes/powerline-naked
 themes/powerline-multiline
 themes/pure
 themes/purity
