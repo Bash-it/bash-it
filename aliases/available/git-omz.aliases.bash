@@ -2,9 +2,9 @@
 cite 'about-alias'
 about-alias 'git aliases from oh-my-zsh (incompatible with regular git aliases option)'
 
-if [[ -n $_bash_it_git_aliases_enabled ]]; then
-	_log_error "git-omz aliases are incompatible with regular git aliases"
-	return
+if _bash-it-component-item-is-enabled aliases git; then
+	_log_warning "git-omz aliases are incompatible with regular git aliases"
+	return 1
 fi
 
 # Load after regular git aliases
