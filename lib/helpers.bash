@@ -8,16 +8,19 @@
 : "${BASH_IT_LOAD_PRIORITY_COMPLETION:=350}"
 BASH_IT_LOAD_PRIORITY_SEPARATOR="---"
 
-# Handle the different ways of running `sed` without generating a backup file based on OS
-# - GNU sed (Linux) uses `-i`
-# - BSD sed (macOS) uses `-i ''`
+# Handle the different ways of running `sed` without generating a backup file based on provenance:
+# - GNU sed (Linux) uses `-i''`
+# - BSD sed (FreeBSD/macOS/Solaris/PlayStation) uses `-i ''`
 # To use this in Bash-it for inline replacements with `sed`, use the following syntax:
 # sed "${BASH_IT_SED_I_PARAMETERS[@]}" -e "..." file
-BASH_IT_SED_I_PARAMETERS=('-i')
 # shellcheck disable=SC2034 # expected for this case
-case "$OSTYPE" in
-	'darwin'*) BASH_IT_SED_I_PARAMETERS=('-i' '') ;;
-esac
+if sed --version > /dev/null 2>&1; then
+	# GNU sed accepts "long" options
+	BASH_IT_SED_I_PARAMETERS=('-i')
+else
+	# BSD sed errors on invalid option `-`
+	BASH_IT_SED_I_PARAMETERS=('-i' '')
+fi
 
 function _command_exists() {
 	_about 'checks for existence of a command'
@@ -208,7 +211,7 @@ function _is_function() {
 	_example '$ _is_function ls && echo exists'
 	_group 'lib'
 	local msg="${2:-Function '$1' does not exist}"
-	if LC_ALL=C type -t "$1" | _bash-it-egrep -q 'function'; then
+	if LC_ALL=C type -t "$1" | _bash-it-fgrep -q 'function'; then
 		return 0
 	else
 		_log_debug "$msg"
@@ -255,10 +258,10 @@ function _bash-it_update_migrate_and_restart() {
 	_about 'Checks out the wanted version, pops directory and restart. Does not return (because of the restart!)'
 	_param '1: Which branch to checkout to'
 	_param '2: Which type of version we are using'
-	if git checkout "$1" &> /dev/null; then
+	if git checkout "${1?}" &> /dev/null; then
 		echo "Bash-it successfully updated."
 		echo ""
-		echo "Migrating your installation to the latest $2 version now..."
+		echo "Migrating your installation to the latest ${2:-} version now..."
 		_bash-it-migrate
 		echo ""
 		echo "All done, enjoy!"
@@ -275,7 +278,7 @@ function _bash-it-update-() {
 	_param '1: What kind of update to do (stable|dev)'
 	_group 'lib'
 
-	local silent word DIFF version TARGET revision status revert log_color num_of_lines description i RESP
+	local silent word DIFF version TARGET revision status revert log_color RESP
 	for word in "$@"; do
 		if [[ "${word}" == "--silent" || "${word}" == "-s" ]]; then
 			silent=true
@@ -287,6 +290,7 @@ function _bash-it-update-() {
 	DIFF=$(git diff --name-status)
 	if [[ -n "$DIFF" ]]; then
 		echo -e "Local changes detected in bash-it directory. Clean '$BASH_IT' directory to proceed.\n$DIFF"
+		popd > /dev/null || return
 		return 1
 	fi
 
@@ -300,7 +304,7 @@ function _bash-it-update-() {
 		BASH_IT_DEVELOPMENT_BRANCH="master"
 	fi
 	# Defaults to stable update
-	if [[ -z "$1" || "$1" == "stable" ]]; then
+	if [[ -z "${1:-}" || "$1" == "stable" ]]; then
 		version="stable"
 		TARGET=$(git describe --tags "$(git rev-list --tags --max-count=1)" 2> /dev/null)
 
@@ -331,15 +335,7 @@ function _bash-it-update-() {
 			log_color="%Cred"
 		fi
 
-		for i in $(git rev-list --merges --first-parent "${revision}"); do
-			num_of_lines=$(git log -1 --format=%B "$i" | awk '!/^[[:space:]]*$/ {++i} END{print i}')
-			if [[ "$num_of_lines" -eq 1 ]]; then
-				description="%s"
-			else
-				description="%b"
-			fi
-			git log --format="${log_color}%h: $description (%an)" -1 "$i"
-		done
+		git log --no-merges --format="${log_color}%h: %s (%an)" "${revision}"
 		echo ""
 
 		if [[ -n "${silent}" ]]; then
@@ -542,7 +538,7 @@ function _bash-it-profile-save() {
 			fi
 		done
 	done
-	if [[ -z "$something_exists" ]]; then
+	if [[ -z "${something_exists:-}" ]]; then
 		echo "It seems like no configuration was enabled.."
 		echo "Make sure to double check that this is the wanted behavior."
 	fi
@@ -560,30 +556,30 @@ _bash-it-profile-load-parse-profile() {
 	_example '$ _bash-it-profile-load-parse-profile "profile.bash_it" "dry"'
 
 	local -i num=0
-	local line
+	local line enable_func subdirectory component to_enable bad
 	while read -r -a line; do
 		((++num))
 		# Ignore comments and empty lines
 		[[ -z "${line[*]}" || "${line[*]}" =~ ^#.* ]] && continue
-		local enable_func="_enable-${line[0]}"
-		local subdirectory=${line[0]}
-		local component=${line[1]}
+		enable_func="_enable-${line[0]}"
+		subdirectory=${line[0]}
+		component=${line[1]}
 
-		local to_enable=("${BASH_IT}/$subdirectory/available/$component.${subdirectory%s}"*.bash)
+		to_enable=("${BASH_IT}/$subdirectory/available/$component.${subdirectory%s}"*.bash)
 		# Ignore botched lines
 		if [[ ! -e "${to_enable[0]}" ]]; then
 			echo -e "${echo_orange?}Bad line(#$num) in profile, aborting load...${line[*]}${echo_reset_color?}"
-			local bad="bad line"
+			bad="bad line"
 			break
 		fi
 		# Do not actually modify config on dry run
-		[[ -z $2 ]] || continue
+		[[ -z "${2:-}" ]] || continue
 		# Actually enable the component
 		$enable_func "$component"
-	done < "$1"
+	done < "${1?}"
 
 	# Make sure to propagate the error
-	[[ -z $bad ]]
+	[[ -z ${bad:-} ]]
 }
 
 _bash-it-profile-list() {
@@ -602,7 +598,7 @@ _bash-it-profile-rm() {
 	about 'Removes a profile from the "profiles" directory'
 	_group 'lib'
 
-	local name="$1"
+	local name="${1:-}"
 	if [[ -z $name ]]; then
 		echo -e "${echo_orange?}Please specify profile name to remove...${echo_reset_color?}"
 		return 1
@@ -628,7 +624,7 @@ _bash-it-profile-load() {
 	_about 'loads a configuration from the "profiles" directory'
 	_group 'lib'
 
-	local name="$1"
+	local name="${1:-}"
 	if [[ -z $name ]]; then
 		echo -e "${echo_orange?}Please specify profile name to load, not changing configuration...${echo_reset_color?}"
 		return 1
@@ -659,19 +655,15 @@ function _bash-it-restart() {
 	_about 'restarts the shell in order to fully reload it'
 	_group 'lib'
 
-	local saved_pwd="${PWD}" init_file="${BASH_IT_BASHRC:-${HOME?}/.bashrc}"
-
-	exec "${0/-/}" --rcfile <(echo "source \"${init_file}\"; cd \"$saved_pwd\"")
+	exec "${0#-}" --rcfile "${BASH_IT_BASHRC:-${HOME?}/.bashrc}"
 }
 
 function _bash-it-reload() {
-	_about 'reloads a profile file'
+	_about 'reloads the shell initialization file'
 	_group 'lib'
 
-	pushd "${BASH_IT?}" > /dev/null || return
 	# shellcheck disable=SC1090
 	source "${BASH_IT_BASHRC:-${HOME?}/.bashrc}"
-	popd > /dev/null || return
 }
 
 function _bash-it-describe() {
@@ -709,7 +701,9 @@ function _on-disable-callback() {
 	_group 'lib'
 
 	local callback="${1}_on_disable"
-	_command_exists "$callback" && "$callback"
+	if _command_exists "$callback"; then
+		"$callback"
+	fi
 }
 
 function _disable-all() {
@@ -728,8 +722,8 @@ function _disable-plugin() {
 	_example '$ disable-plugin rvm'
 	_group 'lib'
 
-	_disable-thing "plugins" "plugin" "$1"
-	_on-disable-callback "$1"
+	_disable-thing "plugins" "plugin" "${1?}"
+	_on-disable-callback "${1?}"
 }
 
 function _disable-alias() {
@@ -738,7 +732,7 @@ function _disable-alias() {
 	_example '$ disable-alias git'
 	_group 'lib'
 
-	_disable-thing "aliases" "alias" "$1"
+	_disable-thing "aliases" "alias" "${1?}"
 }
 
 function _disable-completion() {
@@ -747,7 +741,7 @@ function _disable-completion() {
 	_example '$ disable-completion git'
 	_group 'lib'
 
-	_disable-thing "completion" "completion" "$1"
+	_disable-thing "completion" "completion" "${1?}"
 }
 
 function _disable-thing() {
@@ -781,7 +775,7 @@ function _disable-thing() {
 		# Either one will be matched by this glob
 		for plugin in "${BASH_IT}/enabled"/[[:digit:]][[:digit:]][[:digit:]]"${BASH_IT_LOAD_PRIORITY_SEPARATOR}${file_entity}.${suffix}.bash" "${BASH_IT}/$subdirectory/enabled/"{[[:digit:]][[:digit:]][[:digit:]]"${BASH_IT_LOAD_PRIORITY_SEPARATOR}${file_entity}.${suffix}.bash","${file_entity}.${suffix}.bash"}; do
 			if [[ -e "${plugin}" ]]; then
-				rm "${plugin}"
+				rm -f "${plugin}"
 				plugin=
 				break
 			fi
@@ -792,10 +786,11 @@ function _disable-thing() {
 		fi
 	fi
 
-	_bash-it-clean-component-cache "${file_type}"
+	_bash-it-component-cache-clean "${file_type}"
 
-	if [[ "$file_entity" = "all" ]]; then
-		printf '%s\n' "$file_entity $(_bash-it-pluralize-component "$file_type") disabled."
+	if [[ "$file_entity" == "all" ]]; then
+		_bash-it-component-pluralize "$file_type" file_type
+		printf '%s\n' "$file_entity ${file_type} disabled."
 	else
 		printf '%s\n' "$file_entity disabled."
 	fi
@@ -807,7 +802,7 @@ function _enable-plugin() {
 	_example '$ enable-plugin rvm'
 	_group 'lib'
 
-	_enable-thing "plugins" "plugin" "$1" "$BASH_IT_LOAD_PRIORITY_PLUGIN"
+	_enable-thing "plugins" "plugin" "${1?}" "$BASH_IT_LOAD_PRIORITY_PLUGIN"
 }
 
 function _enable-plugins() {
@@ -821,7 +816,7 @@ function _enable-alias() {
 	_example '$ enable-alias git'
 	_group 'lib'
 
-	_enable-thing "aliases" "alias" "$1" "$BASH_IT_LOAD_PRIORITY_ALIAS"
+	_enable-thing "aliases" "alias" "${1?}" "$BASH_IT_LOAD_PRIORITY_ALIAS"
 }
 
 function _enable-aliases() {
@@ -835,7 +830,7 @@ function _enable-completion() {
 	_example '$ enable-completion git'
 	_group 'lib'
 
-	_enable-thing "completion" "completion" "$1" "$BASH_IT_LOAD_PRIORITY_COMPLETION"
+	_enable-thing "completion" "completion" "${1?}" "$BASH_IT_LOAD_PRIORITY_COMPLETION"
 }
 
 function _enable-thing() {
@@ -890,7 +885,7 @@ function _enable-thing() {
 		ln -s "../$subdirectory/available/$to_enable" "${BASH_IT}/enabled/${use_load_priority}${BASH_IT_LOAD_PRIORITY_SEPARATOR}${to_enable}"
 	fi
 
-	_bash-it-clean-component-cache "${file_type}"
+	_bash-it-component-cache-clean "${file_type}"
 
 	printf '%s\n' "$file_entity enabled with priority $use_load_priority."
 }
@@ -908,7 +903,7 @@ function _help-aliases() {
 	_example '$ alias-help'
 	_example '$ alias-help git'
 
-	if [[ -n "$1" ]]; then
+	if [[ -n "${1:-}" ]]; then
 		case "$1" in
 			custom)
 				alias_path='custom.aliases.bash'
@@ -1021,14 +1016,14 @@ function pathmunge() {
 # a subshell to simplify our search to a simple `cd ..` and `[[ -r $1 ]]`
 # without any external dependencies. Let the shell do what it's good at.
 function _bash-it-find-in-ancestor() (
-	about 'searches parents of the current directory for any of the specified file names'
-	group 'helpers'
-	param '*: names of files or folders to search for'
-	returns '0: prints path of closest matching ancestor directory to stdout'
-	returns '1: no match found'
-	returns '2: improper usage of shell builtin' # uncommon
-	example '_bash-it-find-in-ancestor .git .hg'
-	example '_bash-it-find-in-ancestor GNUmakefile Makefile makefile'
+	: _about 'searches parents of the current directory for any of the specified file names'
+	: _group 'helpers'
+	: _param '*: names of files or folders to search for'
+	: _returns '0: prints path of closest matching ancestor directory to stdout'
+	: _returns '1: no match found'
+	: _returns '2: improper usage of shell builtin' # uncommon
+	: _example '_bash-it-find-in-ancestor .git .hg'
+	: _example '_bash-it-find-in-ancestor GNUmakefile Makefile makefile'
 
 	local kin
 	# To keep things simple, we do not search the root dir.

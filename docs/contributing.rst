@@ -79,9 +79,9 @@ The following libraries are used to help with the tests:
 
 
 * Test Framework: https://github.com/bats-core/bats-core
-* Support library for Bats-Assert: https://github.com/ztombol/bats-support
-* General ``assert`` functions: https://github.com/ztombol/bats-assert
-* File ``assert`` functions: https://github.com/ztombol/bats-file
+* Support library for Bats-Assert: https://github.com/bats-core/bats-support
+* General ``assert`` functions: https://github.com/bats-core/bats-assert
+* File ``assert`` functions: https://github.com/bats-core/bats-file
 
 When verifying test results, please try to use the ``assert`` functions found in these libraries.
 

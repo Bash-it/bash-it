@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 cite about-plugin
 about-plugin 'load fasd, if you are using it'
 
