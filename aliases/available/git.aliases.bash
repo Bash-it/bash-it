@@ -25,7 +25,6 @@ alias gblr='git branch --list --remotes'
 alias gbm='git branch --move'
 alias gbr='git branch --remotes'
 alias gbt='git branch --track'
-alias gdel='git branch -D'
 
 # for-each-ref
 alias gbc='git for-each-ref --format="%(authorname) %09 %(if)%(HEAD)%(then)*%(else)%(refname:short)%(end) %09 %(creatordate)" refs/remotes/ --sort=authorname DESC' # FROM https://stackoverflow.com/a/58623139/10362396
@@ -149,10 +148,9 @@ alias grmc='git rm --cached' # Removes the file only from the Git repository, bu
 alias grb='git rebase'
 alias grba='git rebase --abort'
 alias grbc='git rebase --continue'
-alias grbi='git rebase --interactive'
-alias grm='git rebase $(get_default_branch)'
-alias grmi='git rebase $(get_default_branch) -i'
-alias grma='GIT_SEQUENCE_EDITOR=: git rebase  $(get_default_branch) -i --autosquash'
+alias grbm='git rebase $(get_default_branch)'
+alias grbmi='git rebase $(get_default_branch) --interactive'
+alias grbma='GIT_SEQUENCE_EDITOR=: git rebase $(get_default_branch) --interactive --autosquash'
 alias gprom='git fetch origin $(get_default_branch) && git rebase origin/$(get_default_branch) && git update-ref refs/heads/$(get_default_branch) origin/$(get_default_branch)' # Rebase with latest remote
 
 # reset
