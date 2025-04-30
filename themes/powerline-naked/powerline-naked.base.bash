@@ -6,7 +6,7 @@ source "${BASH_IT?}/themes/powerline/powerline.base.bash"
 function __powerline_left_segment {
 	local OLD_IFS="${IFS}"
 	IFS="|"
-	local params=($1)
+	local params=("$1")
 	IFS="${OLD_IFS}"
 	local separator=""
 	local pad_before_segment=" "
