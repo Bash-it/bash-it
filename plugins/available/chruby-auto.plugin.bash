@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+# shellcheck disable=SC1091
 cite about-plugin
 about-plugin 'load chruby + auto-switching (from /usr/local/share/chruby)'
 

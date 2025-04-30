@@ -74,6 +74,9 @@ SCM_NONE_CHAR='○'
 NVM_THEME_PROMPT_PREFIX=' |'
 NVM_THEME_PROMPT_SUFFIX='|'
 
+NODE_THEME_PROMPT_PREFIX=' |'
+NODE_THEME_PROMPT_SUFFIX='|'
+
 RVM_THEME_PROMPT_PREFIX=' |'
 RVM_THEME_PROMPT_SUFFIX='|'
 
@@ -399,8 +402,24 @@ function nvm_version_prompt() {
 	fi
 }
 
+function node_native_version_prompt() {
+	local node
+	if _command_exists node; then
+		node=$(node --version 2> /dev/null)
+		echo -ne "${NODE_THEME_PROMPT_PREFIX-}${node}${NODE_THEME_PROMPT_SUFFIX-}"
+	fi
+}
+
 function node_version_prompt() {
-	nvm_version_prompt
+	NODE_VERSION_STRATEGY="${NODE_VERSION_STRATEGY:-nvm}"
+
+	_log_debug "node: using version strategy '$NODE_VERSION_STRATEGY'"
+
+	if [ "$NODE_VERSION_STRATEGY" == "nvm" ]; then
+		nvm_version_prompt
+	elif [ "$NODE_VERSION_STRATEGY" == "node" ]; then
+		node_native_version_prompt
+	fi
 }
 
 function rvm_version_prompt() {
@@ -571,7 +590,9 @@ if ! _command_exists battery_charge; then
 fi
 
 function aws_profile() {
-	if [[ -n "${AWS_DEFAULT_PROFILE:-}" ]]; then
+	if [[ -n "${AWS_PROFILE:-}" ]]; then
+		echo -ne "${AWS_PROFILE}"
+	elif [[ -n "${AWS_DEFAULT_PROFILE:-}" ]]; then
 		echo -ne "${AWS_DEFAULT_PROFILE}"
 	else
 		echo -ne "default"

@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # make sure that tmux is launched in 256 color mode
 
 cite about-plugin
