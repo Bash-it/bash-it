@@ -19,9 +19,8 @@ repos:
     hooks:
       - id: git-check  # Configure in .gitattributes
       - id: shellcheck
-        exclude: ".bats$"
+        files: "\\.(bash)$"
       - id: shfmt
-        exclude: ".bats$"
   - repo: https://github.com/Lucas-C/pre-commit-hooks
     rev: v1.1.7
     hooks:
@@ -38,7 +37,6 @@ repos:
         types: [file]
       - id: dot-bash
         name: Check .bash files against bash-it requirements
-        exclude: "test/test_helper.bash"
         entry: ./hooks/dot-bash.sh
         language: system
         files: "\\.bash$"

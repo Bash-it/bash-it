@@ -221,6 +221,21 @@ Envy
 
 ----
 
+Inretio
+^^^^^^^
+
+
+.. image:: https://raw.githubusercontent.com/inretio/bash-it/gh-pages/docs/images/inretio-black.png
+   :target: https://raw.githubusercontent.com/inretio/bash-it/gh-pages/docs/images/inretio-black.png
+   :alt: Inretio theme in dark color scheme
+
+
+.. image:: https://raw.githubusercontent.com/inretio/bash-it/gh-pages/docs/images/inretio-white.png
+   :target: https://raw.githubusercontent.com/inretio/bash-it/gh-pages/docs/images/inretio-white.png
+   :alt: Inretio theme in light color scheme
+
+----
+
 Iterate
 ^^^^^^^
 
@@ -343,6 +358,19 @@ NWinkler
 
 .. image:: https://bash-it.github.io/bash-it/docs/images/nwinkler-white.jpg
    :target: https://bash-it.github.io/bash-it/docs/images/nwinkler-white.jpg
+   :alt:
+
+
+----
+
+.. _oh_my_posh_image:
+
+Oh-My-Posh
+^^^^^^^^^^
+
+
+.. image:: https://bash-it.github.io/bash-it/docs/images/oh-my-posh.png
+   :target: https://bash-it.github.io/bash-it/docs/images/oh-my-posh.png
    :alt:
 
 

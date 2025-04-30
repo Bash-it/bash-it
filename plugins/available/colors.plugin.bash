@@ -8,13 +8,13 @@ function __() {
 function __make_ansi() {
 	next=$1
 	shift
-	echo "\[\e[$("__$next" "$@")m\]"
+	echo -e "\[\e[$("__$next" "$@")m\]"
 }
 
 function __make_echo() {
 	next=$1
 	shift
-	echo "\033[$("__$next" "$@")m"
+	echo -e "\033[$("__$next" "$@")m"
 }
 
 function __reset() {
