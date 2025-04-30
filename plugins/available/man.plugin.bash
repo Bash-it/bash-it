@@ -11,4 +11,4 @@ about-plugin 'colorize man pages for better readability'
 
 : "${LESS:=}"
 export "${!LESS_TERMCAP@}"
-export LESS="R${LESS#-}"
+export LESS="--RAW-CONTROL-CHARS ${LESS}"

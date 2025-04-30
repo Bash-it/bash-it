@@ -13,6 +13,7 @@ SCM_GIT_CHAR_DEFAULT=${BARBUK_GIT_DEFAULT_CHAR:='  '}
 SCM_GIT_CHAR_ICON_BRANCH=${BARBUK_GIT_BRANCH_ICON:=''}
 SCM_HG_CHAR=${BARBUK_HG_CHAR:='☿ '}
 SCM_SVN_CHAR=${BARBUK_SVN_CHAR:='⑆ '}
+SCM_THEME_CURRENT_USER_PREFFIX=${normal?}${BARBUK_CURRENT_USER_PREFFIX:='  '}
 # Exit code
 EXIT_CODE_ICON=${BARBUK_EXIT_CODE_ICON:=' '}
 # Programming and tools
@@ -26,13 +27,14 @@ SCALEWAY_PROFILE_CHAR=${BARBUK_SCALEWAY_PROFILE_CHAR:=" scw "}
 GCLOUD_CHAR=${BARBUK_GCLOUD_CHAR:=" google "}
 
 # Command duration
-COMMAND_DURATION_MIN_SECONDS=${COMMAND_DURATION_MIN_SECONDS:-1}
+: "${COMMAND_DURATION_MIN_SECONDS:=1}"
+: "${COMMAND_DURATION_COLOR:="${normal?}"}"
 
 # Ssh user and hostname display
 SSH_INFO=${BARBUK_SSH_INFO:=true}
 HOST_INFO=${BARBUK_HOST_INFO:=long}
 
-# Bash-it default glyphs customization
+# Bash-it default glyphs overrides
 SCM_NONE_CHAR=
 SCM_THEME_PROMPT_DIRTY=" ${bold_red?}✗"
 SCM_THEME_PROMPT_CLEAN=" ${bold_green?}✓"
@@ -49,7 +51,7 @@ GIT_THEME_PROMPT_PREFIX="${cyan?}"
 GIT_THEME_PROMPT_SUFFIX="${cyan?}"
 SCM_THEME_BRANCH_TRACK_PREFIX="${normal?} ⤏  ${cyan?}"
 SCM_THEME_CURRENT_USER_PREFFIX='  '
-SCM_GIT_SHOW_CURRENT_USER=false
+SCM_GIT_SHOW_CURRENT_USER='false'
 NVM_THEME_PROMPT_PREFIX=''
 NVM_THEME_PROMPT_SUFFIX=''
 RVM_THEME_PROMPT_PREFIX=''
@@ -59,21 +61,21 @@ RBENV_THEME_PROMPT_SUFFIX=''
 RBFU_THEME_PROMPT_PREFIX=''
 RBFU_THEME_PROMPT_SUFFIX=''
 
-function __git-uptream-remote-logo_prompt() {
-	[[ "$(_git-upstream)" == "" ]] && SCM_GIT_CHAR="$SCM_GIT_CHAR_DEFAULT"
+function _git-uptream-remote-logo() {
+	[[ -z "$(_git-upstream)" ]] && SCM_GIT_CHAR="${SCM_GIT_CHAR_DEFAULT:-}"
 
 	local remote remote_domain
-	remote=$(_git-upstream-remote)
-	remote_domain=$(git config --get remote."$remote".url | awk -F'[@:.]' '{print $2}')
+	remote="$(_git-upstream-remote)"
+	remote_domain="$(git config --get remote."${remote}".url | awk -F'[@:.]' '{print $2}')"
 
 	# remove // suffix for https:// url
-	remote_domain=${remote_domain//\//}
+	remote_domain="${remote_domain//\//}"
 
-	case $remote_domain in
-		github) SCM_GIT_CHAR="$SCM_GIT_CHAR_GITHUB" ;;
-		gitlab) SCM_GIT_CHAR="$SCM_GIT_CHAR_GITLAB" ;;
-		bitbucket) SCM_GIT_CHAR="$SCM_GIT_CHAR_BITBUCKET" ;;
-		*) SCM_GIT_CHAR="$SCM_GIT_CHAR_DEFAULT" ;;
+	case "${remote_domain}" in
+		github) SCM_GIT_CHAR="${SCM_GIT_CHAR_GITHUB:-}" ;;
+		gitlab) SCM_GIT_CHAR="${SCM_GIT_CHAR_GITLAB:-}" ;;
+		bitbucket) SCM_GIT_CHAR="${SCM_GIT_CHAR_BITBUCKET:-}" ;;
+		*) SCM_GIT_CHAR="${SCM_GIT_CHAR_DEFAULT:-}" ;;
 	esac
 
 	echo "${purple?}$(scm_char)"
@@ -81,7 +83,22 @@ function __git-uptream-remote-logo_prompt() {
 
 function git_prompt_info() {
 	git_prompt_vars
-	echo -e "on $SCM_GIT_CHAR_ICON_BRANCH $SCM_PREFIX$SCM_BRANCH$SCM_STATE$SCM_GIT_AHEAD$SCM_GIT_BEHIND$SCM_GIT_STASH$SCM_SUFFIX "
+	echo -e " on ${SCM_GIT_CHAR_ICON_BRANCH:-} ${SCM_PREFIX:-}${SCM_BRANCH:-}${SCM_STATE:-}${SCM_GIT_AHEAD:-}${SCM_GIT_BEHIND:-}${SCM_GIT_STASH:-}${SCM_SUFFIX:-}"
+}
+
+function _exit-code() {
+	if [[ "${1:-}" -ne 0 ]]; then
+		exit_code=" ${purple?}${EXIT_CODE_ICON:-}${yellow?}${exit_code:-}${bold_orange?}"
+	else
+		exit_code="${bold_green?}"
+	fi
+}
+
+function _prompt() {
+	local exit_code="$?" wrap_char=' ' dir_color=$green ssh_info='' python_venv='' host command_duration=
+	local scm_char scm_prompt_info
+
+	command_duration="$(_command_duration)"
 }
 
 function __exit_prompt() {
@@ -142,23 +159,27 @@ function __ruby_prompt() {
 
 function __ssh_prompt() {
 	# Detect ssh
-	if [[ -n "${SSH_CONNECTION}" ]] && [ "$SSH_INFO" = true ]; then
-		if [ "$HOST_INFO" = long ]; then
+	if [[ -n "${SSH_CONNECTION:-}" && "${SSH_INFO:-}" == true ]]; then
+		if [[ "${HOST_INFO:-}" == long ]]; then
 			host="\H"
 		else
 			host="\h"
 		fi
-		echo "${bold_blue?}\u${bold_orange?}@${cyan?}$host ${bold_orange?}in "
+		ssh_info="${bold_blue?}\u${bold_orange?}@${cyan?}$host ${bold_orange?}in"
 	fi
 }
 
 function __python_venv_prompt() {
 	# Detect python venv
-	if [[ -n "${CONDA_DEFAULT_ENV}" ]]; then
-		echo "${bold_purple?}$PYTHON_VENV_CHAR${normal?}${CONDA_DEFAULT_ENV} "
-	elif [[ -n "${VIRTUAL_ENV}" ]]; then
-		echo "${bold_purple?}$PYTHON_VENV_CHAR${normal?}$(basename "${VIRTUAL_ENV}") "
+	if [[ -n "${CONDA_DEFAULT_ENV:-}" ]]; then
+		python_venv="${PYTHON_VENV_CHAR:-}${CONDA_DEFAULT_ENV:-} "
+	elif [[ -n "${VIRTUAL_ENV:-}" ]]; then
+		python_venv="$PYTHON_VENV_CHAR${VIRTUAL_ENV##*/} "
 	fi
+
+	scm_char="$(scm_char)"
+	scm_prompt_info="$(scm_prompt_info)"
+	PS1="\\n${ssh_info} ${purple}${scm_char}${python_venv}${dir_color}\\w${normal}${scm_prompt_info}${command_duration}${exit_code}"
 }
 
 function __path_prompt() {
