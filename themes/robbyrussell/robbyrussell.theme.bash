@@ -1,5 +1,5 @@
-#!/usr/bin/env bash
-
+# shellcheck shell=bash
+# shellcheck disable=SC2034,SC2154
 SCM_THEME_PROMPT_DIRTY=" ${bold_yellow}✗"
 SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓"
 SCM_THEME_PROMPT_PREFIX=" ${bold_blue}scm:("
@@ -22,7 +22,7 @@ function git_prompt_info() {
 }
 
 function prompt_command() {
-  PS1="$(conda_or_venv_prompt)${bold_green}➜  ${bold_cyan}\W${reset_color}$(scm_prompt_info)${normal} "
+	PS1="$(conda_or_venv_prompt)${bold_green}➜  ${bold_cyan}\W${reset_color}$(scm_prompt_info)${normal} "
 }
 
 PROMPT_COMMAND=prompt_command
