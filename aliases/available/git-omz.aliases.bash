@@ -12,6 +12,7 @@ fi
 
 # Setup git version
 read -ra git_version_arr <<< "$(git version 2> /dev/null)"
+# shellcheck disable=SC2034
 git_version="${git_version_arr[2]}"
 
 # Setup is-at-least

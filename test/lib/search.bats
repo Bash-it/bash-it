@@ -18,26 +18,23 @@ function local_setup() {
 }
 
 @test "search: git" {
-  local plugin completion
-  run _bash-it-search 'git' --no-color
+	local plugin completion
+	run _bash-it-search 'git' --no-color
 
-  assert_line -n 0 -p '      aliases:'
-  assert_success
-  for alias in 'git' 'gitsvn' 'git-omz'
-  do
-    echo $alias
-    assert_line -n 0 -p $alias
-  done
+	assert_line -n 0 -p '      aliases:'
+	assert_success
+	for alias in 'git' 'gitsvn' 'git-omz'; do
+		echo $alias
+		assert_line -n 0 -p $alias
+	done
 
-  assert_line -n 1 -p '      plugins:'
-  for plugin in "autojump" "git" "gitstatus" "git-subrepo" "jgitflow" "jump"
-  do
-    assert_line -n 1 -p "$plugin"
-  done
-  for completion in "git" "git_flow" "git_flow_avh" "github-cli"
-  do
-    assert_line -n 2 -p "$completion"
-  done
+	assert_line -n 1 -p '      plugins:'
+	for plugin in "autojump" "git" "gitstatus" "git-subrepo" "jgitflow" "jump"; do
+		assert_line -n 1 -p "$plugin"
+	done
+	for completion in "git" "git_flow" "git_flow_avh" "github-cli"; do
+		assert_line -n 2 -p "$completion"
+	done
 }
 
 @test "search: ruby gem bundle rake rails" {
