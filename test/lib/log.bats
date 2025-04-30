@@ -1,85 +1,84 @@
-#!/usr/bin/env bats
+# shellcheck shell=bats
+# shellcheck disable=SC2034
 
-load ../test_helper
-load ../../themes/colors.theme
+load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
-load ../../lib/log
-load ../../lib/helpers
-load ../../plugins/available/base.plugin
+function local_setup_file() {
+	setup_libs "log"
+}
 
 @test "lib log: basic debug logging with BASH_IT_LOG_LEVEL_ALL" {
-  BASH_IT_LOG_LEVEL=$BASH_IT_LOG_LEVEL_ALL
-  run _log_debug "test test test"
-  assert_output "DEBUG: default: test test test"
+	BASH_IT_LOG_LEVEL=${BASH_IT_LOG_LEVEL_ALL?}
+	run _log_debug "test test test"
+	assert_output "DEBUG: default: test test test"
 }
 
 @test "lib log: basic warning logging with BASH_IT_LOG_LEVEL_ALL" {
-  BASH_IT_LOG_LEVEL=$BASH_IT_LOG_LEVEL_ALL
-  run _log_warning "test test test"
-  assert_output " WARN: default: test test test"
+	BASH_IT_LOG_LEVEL=${BASH_IT_LOG_LEVEL_ALL?}
+	run _log_warning "test test test"
+	assert_output " WARN: default: test test test"
 }
 
 @test "lib log: basic error logging with BASH_IT_LOG_LEVEL_ALL" {
-  BASH_IT_LOG_LEVEL=$BASH_IT_LOG_LEVEL_ALL
-  run _log_error "test test test"
-  assert_output "ERROR: default: test test test"
+	BASH_IT_LOG_LEVEL=${BASH_IT_LOG_LEVEL_ALL?}
+	run _log_error "test test test"
+	assert_output "ERROR: default: test test test"
 }
 
 @test "lib log: basic debug logging with BASH_IT_LOG_LEVEL_WARNING" {
-  BASH_IT_LOG_LEVEL=$BASH_IT_LOG_LEVEL_WARNING
-  run _log_debug "test test test"
-  refute_output
+	BASH_IT_LOG_LEVEL=${BASH_IT_LOG_LEVEL_WARNING?}
+	run _log_debug "test test test"
+	assert_output ""
 }
 
 @test "lib log: basic warning logging with BASH_IT_LOG_LEVEL_WARNING" {
-  BASH_IT_LOG_LEVEL=$BASH_IT_LOG_LEVEL_WARNING
-  run _log_warning "test test test"
-  assert_output " WARN: default: test test test"
+	BASH_IT_LOG_LEVEL=${BASH_IT_LOG_LEVEL_WARNING?}
+	run _log_warning "test test test"
+	assert_output " WARN: default: test test test"
 }
 
 @test "lib log: basic error logging with BASH_IT_LOG_LEVEL_WARNING" {
-  BASH_IT_LOG_LEVEL=$BASH_IT_LOG_LEVEL_WARNING
-  run _log_error "test test test"
-  assert_output "ERROR: default: test test test"
+	BASH_IT_LOG_LEVEL=${BASH_IT_LOG_LEVEL_WARNING?}
+	run _log_error "test test test"
+	assert_output "ERROR: default: test test test"
 }
 
-
 @test "lib log: basic debug logging with BASH_IT_LOG_LEVEL_ERROR" {
-  BASH_IT_LOG_LEVEL=$BASH_IT_LOG_LEVEL_ERROR
-  run _log_debug "test test test"
-  refute_output
+	BASH_IT_LOG_LEVEL=${BASH_IT_LOG_LEVEL_ERROR?}
+	run _log_debug "test test test"
+	assert_output ""
 }
 
 @test "lib log: basic warning logging with BASH_IT_LOG_LEVEL_ERROR" {
-  BASH_IT_LOG_LEVEL=$BASH_IT_LOG_LEVEL_ERROR
-  run _log_warning "test test test"
-  refute_output
+	BASH_IT_LOG_LEVEL=${BASH_IT_LOG_LEVEL_ERROR?}
+	run _log_warning "test test test"
+	assert_output ""
 }
 
 @test "lib log: basic error logging with BASH_IT_LOG_LEVEL_ERROR" {
-  BASH_IT_LOG_LEVEL=$BASH_IT_LOG_LEVEL_ERROR
-  run _log_error "test test test"
-  assert_output "ERROR: default: test test test"
+	BASH_IT_LOG_LEVEL=${BASH_IT_LOG_LEVEL_ERROR?}
+	run _log_error "test test test"
+	assert_output "ERROR: default: test test test"
 }
 
 @test "lib log: basic debug silent logging" {
-  run _log_debug "test test test"
-  refute_output
+	run _log_debug "test test test"
+	assert_output ""
 }
 
 @test "lib log: basic warning silent logging" {
-  run _log_warning "test test test"
-  refute_output
+	run _log_warning "test test test"
+	assert_output ""
 }
 
 @test "lib log: basic error silent logging" {
-  run _log_error "test test test"
-  refute_output
+	run _log_error "test test test"
+	assert_output ""
 }
 
 @test "lib log: logging with prefix" {
-  BASH_IT_LOG_LEVEL=$BASH_IT_LOG_LEVEL_ALL
-  BASH_IT_LOG_PREFIX="nice: prefix: "
-  run _log_debug "test test test"
-  assert_output "DEBUG: nice: prefix: test test test"
+	BASH_IT_LOG_LEVEL=${BASH_IT_LOG_LEVEL_ALL?}
+	BASH_IT_LOG_PREFIX="nice: prefix: "
+	run _log_debug "test test test"
+	assert_output "DEBUG: nice: prefix: test test test"
 }

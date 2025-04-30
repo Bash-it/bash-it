@@ -17,8 +17,8 @@ VIRTUALENV_THEME_PROMPT_PREFIX='('
 VIRTUALENV_THEME_PROMPT_SUFFIX=') '
 
 function git_prompt_info() {
-  git_prompt_vars
-  echo -e "$SCM_PREFIX${bold_red}$SCM_BRANCH$SCM_STATE$SCM_SUFFIX"
+	git_prompt_vars
+	echo -e "$SCM_PREFIX${bold_red}$SCM_BRANCH$SCM_STATE$SCM_SUFFIX"
 }
 
 function prompt_command() {
