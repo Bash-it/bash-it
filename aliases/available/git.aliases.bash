@@ -2,7 +2,10 @@
 about-alias 'common git abbreviations'
 
 # We can use this variable to make sure that we don't accidentally clash with git-zsh aliases
-_bash_it_git_aliases_enabled=true
+if _bash-it-component-item-is-enabled aliases git-omz; then
+    _log_warning "The aliases from 'git' and from 'git-omz' conflict with each other; please only enable one."
+    return 1
+fi
 
 alias g='git'
 alias get='git'
