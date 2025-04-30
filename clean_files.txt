@@ -65,6 +65,7 @@ themes/githelpers.theme.bash
 themes/gitline
 themes/inretio
 themes/lambda
+themes/liquidprompt
 themes/modern
 themes/norbu
 themes/oh-my-posh
