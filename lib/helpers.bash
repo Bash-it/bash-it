@@ -22,51 +22,6 @@ else
 	BASH_IT_SED_I_PARAMETERS=('-i' '')
 fi
 
-function _command_exists() {
-	_about 'checks for existence of a command'
-	_param '1: command to check'
-	_param '2: (optional) log message to include when command not found'
-	_example '$ _command_exists ls && echo exists'
-	_group 'lib'
-	local msg="${2:-Command '$1' does not exist}"
-	if type -t "$1" > /dev/null; then
-		return 0
-	else
-		_log_debug "$msg"
-		return 1
-	fi
-}
-
-function _binary_exists() {
-	_about 'checks for existence of a binary'
-	_param '1: binary to check'
-	_param '2: (optional) log message to include when binary not found'
-	_example '$ _binary_exists ls && echo exists'
-	_group 'lib'
-	local msg="${2:-Binary '$1' does not exist}"
-	if type -P "$1" > /dev/null; then
-		return 0
-	else
-		_log_debug "$msg"
-		return 1
-	fi
-}
-
-function _completion_exists() {
-	_about 'checks for existence of a completion'
-	_param '1: command to check'
-	_param '2: (optional) log message to include when completion is found'
-	_example '$ _completion_exists gh && echo exists'
-	_group 'lib'
-	local msg="${2:-Completion for '$1' already exists}"
-	if complete -p "$1" &> /dev/null; then
-		_log_debug "$msg"
-		return 0
-	else
-		return 1
-	fi
-}
-
 function _bash_it_homebrew_check() {
 	if _binary_exists 'brew'; then
 		# Homebrew is installed
@@ -200,22 +155,6 @@ function bash-it() {
 		fi
 	else
 		"$func" "$@"
-	fi
-}
-
-function _is_function() {
-	_about 'sets $? to true if parameter is the name of a function'
-	_param '1: name of alleged function'
-	_param '2: (optional) log message to include when function not found'
-	_group 'lib'
-	_example '$ _is_function ls && echo exists'
-	_group 'lib'
-	local msg="${2:-Function '$1' does not exist}"
-	if LC_ALL=C type -t "$1" | _bash-it-fgrep -q 'function'; then
-		return 0
-	else
-		_log_debug "$msg"
-		return 1
 	fi
 }
 

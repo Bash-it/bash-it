@@ -78,6 +78,42 @@ function _bash-it-egrep() {
 	"${BASH_IT_GREP:-/usr/bin/grep}" -E "$@"
 }
 
+function _command_exists() {
+	: _about 'checks for existence of a command'
+	: _param '1: command to check'
+	: _example '$ _command_exists ls && echo exists'
+	: _group 'lib'
+
+	type -t "${1?}" > /dev/null
+}
+
+function _binary_exists() {
+	: _about 'checks for existence of a binary'
+	: _param '1: binary to check'
+	: _example '$ _binary_exists ls && echo exists'
+	: _group 'lib'
+
+	type -P "${1?}" > /dev/null
+}
+
+function _completion_exists() {
+	: _about 'checks for existence of a completion'
+	: _param '1: command to check'
+	: _example '$ _completion_exists gh && echo exists'
+	: _group 'lib'
+
+	complete -p "${1?}" &> /dev/null
+}
+
+function _is_function() {
+	: _about 'sets $? to true if parameter is the name of a function'
+	: _param '1: name of alleged function'
+	: _example '$ _is_function ls && echo exists'
+	: _group 'lib'
+
+	declare -F "${1?}" > /dev/null
+}
+
 ###########################################################################
 # Component-specific functions (component is either an alias, a plugin, or a
 # completion).
@@ -181,7 +217,7 @@ function _bash-it-component-item-is-enabled() {
 		component_type="${1}" item_name="${2?}"
 	fi
 
-	for each_file in "${BASH_IT}/enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR?}${item_name}.${component_type}"*."bash" \
+	for each_file in "${BASH_IT?}/enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR?}${item_name}.${component_type}"*."bash" \
 		"${BASH_IT}/${component_type}"*/"enabled/${item_name}.${component_type}"*."bash" \
 		"${BASH_IT}/${component_type}"*/"enabled"/*"${BASH_IT_LOAD_PRIORITY_SEPARATOR?}${item_name}.${component_type}"*."bash"; do
 		if [[ -f "${each_file}" ]]; then
