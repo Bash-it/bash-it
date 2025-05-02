@@ -1,5 +1,9 @@
 # shellcheck shell=bash
 
-if _command_exists flutter; then
-	eval "$(flutter bash-completion)"
-fi
+# Make sure flutter is installed
+_bash-it-completion-helper-necessary flutter || return
+
+# Don't handle completion if it's already managed
+_bash-it-completion-helper-sufficient flutter || return
+
+eval "$(flutter bash-completion)"

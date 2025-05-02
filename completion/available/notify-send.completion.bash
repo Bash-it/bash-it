@@ -1,21 +1,22 @@
 # shellcheck shell=bash
 
-function __notify-send_completions() {
-	# shellcheck disable=SC2155
-	local curr=$(_get_cword)
-	# shellcheck disable=SC2155
-	local prev=$(_get_pword)
+# Make sure notify-send is installed
+_bash-it-completion-helper-necessary notify-send || :
+
+# Don't handle completion if it's already managed
+_bash-it-completion-helper-sufficient notify-send || return
+
+function _notify-send() {
+	local prev="${COMP_WORDS[COMP_CWORD - 1]}"
 
 	case $prev in
 		-u | --urgency)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "low normal critical" -- "$curr"))
+			COMPREPLY=("low" "normal" "critical")
 			;;
 		*)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "-? --help -u --urgency -t --expire-time -a --app-name -i --icon -c --category -h --hint -v --version" -- "$curr"))
+			COMPREPLY=("-?" "--help" "-u" "--urgency" "-t" "--expire-time" "-a" "--app-name" "-i" "--icon" "-c" "--category" "-h" "--hint" "-v" "--version")
 			;;
 	esac
 }
 
-complete -F __notify-send_completions notify-send
+complete -F _notify-send -X '!&*' notify-send

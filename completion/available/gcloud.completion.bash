@@ -1,5 +1,4 @@
 # shellcheck shell=bash
-cite "about-completion"
 about-completion "Google Cloud SDK completion"
 
 if _command_exists gcloud; then

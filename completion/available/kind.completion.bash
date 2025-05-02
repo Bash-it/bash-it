@@ -1,5 +1,9 @@
 # shellcheck shell=bash
 
-if _command_exists kind; then
-	eval "$(kind completion bash)"
-fi
+# Make sure kind is installed
+_bash-it-completion-helper-necessary kind || return
+
+# Don't handle completion if it's already managed
+_bash-it-completion-helper-sufficient kind || return
+
+eval "$(kind completion bash)"
