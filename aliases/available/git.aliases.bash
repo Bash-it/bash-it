@@ -9,7 +9,7 @@ fi
 
 alias g='git'
 alias get='git'
-alias got='git '
+alias got='git'
 
 # add
 alias ga='git add'
@@ -111,6 +111,7 @@ alias gm='git merge'
 alias gma='git merge --abort'
 alias gmc='git merge --continue'
 alias gms='git merge --squash'
+alias gmt='git mergetool'
 
 # mv
 alias gmv='git mv'
