@@ -45,11 +45,12 @@ function local_setup_file() {
 }
 
 @test "uninstall: run the uninstall script with existing backup 'bash_profile'" {
+	local md5_bak md5_conf
 	BASH_IT_CONFIG_FILE=.bash_profile
 
 	echo "test file content for backup file" > "${HOME?}/$BASH_IT_CONFIG_FILE.bak"
 	echo "test file content for original BASH_IT file" > "${HOME?}/$BASH_IT_CONFIG_FILE"
-	local md5_bak=$(md5sum "${HOME?}/$BASH_IT_CONFIG_FILE.bak" | awk '{print $1}')
+	md5_bak=$(md5sum "${HOME?}/$BASH_IT_CONFIG_FILE.bak" | awk '{print $1}')
 
 	run "${BASH_IT?}/uninstall.sh"
 	assert_success
@@ -58,16 +59,17 @@ function local_setup_file() {
 	assert_file_not_exist "${HOME?}/$BASH_IT_CONFIG_FILE.bak"
 	assert_file_exist "${HOME?}/$BASH_IT_CONFIG_FILE"
 
-	local md5_conf=$(md5sum "${HOME?}/$BASH_IT_CONFIG_FILE" | awk '{print $1}')
+	md5_conf=$(md5sum "${HOME?}/$BASH_IT_CONFIG_FILE" | awk '{print $1}')
 
 	assert_equal "$md5_bak" "$md5_conf"
 }
 
 @test "uninstall: run the uninstall script without existing backup 'bashrc" {
+	local md5_orig md5_uninstall
 	BASH_IT_CONFIG_FILE=.bashrc
 
 	echo "test file content for original BASH_IT file" > "${HOME?}/$BASH_IT_CONFIG_FILE"
-	local md5_orig=$(md5sum "${HOME?}/$BASH_IT_CONFIG_FILE" | awk '{print $1}')
+	md5_orig=$(md5sum "${HOME?}/$BASH_IT_CONFIG_FILE" | awk '{print $1}')
 
 	run "${BASH_IT?}/uninstall.sh"
 	assert_success
@@ -76,16 +78,17 @@ function local_setup_file() {
 	assert_file_not_exist "${HOME?}/$BASH_IT_CONFIG_FILE.bak"
 	assert_file_not_exist "${HOME?}/$BASH_IT_CONFIG_FILE"
 
-	local md5_uninstall=$(md5sum "${HOME?}/$BASH_IT_CONFIG_FILE.uninstall" | awk '{print $1}')
+	md5_uninstall=$(md5sum "${HOME?}/$BASH_IT_CONFIG_FILE.uninstall" | awk '{print $1}')
 
 	assert_equal "$md5_orig" "$md5_uninstall"
 }
 
 @test "uninstall: run the uninstall script without existing backup 'bash_profile" {
+	local md5_orig md5_uninstall
 	BASH_IT_CONFIG_FILE=.bash_profile
 
 	echo "test file content for original BASH_IT file" > "${HOME?}/$BASH_IT_CONFIG_FILE"
-	local md5_orig=$(md5sum "${HOME?}/$BASH_IT_CONFIG_FILE" | awk '{print $1}')
+	md5_orig=$(md5sum "${HOME?}/$BASH_IT_CONFIG_FILE" | awk '{print $1}')
 
 	run "${BASH_IT?}/uninstall.sh"
 
@@ -95,7 +98,7 @@ function local_setup_file() {
 	assert_file_not_exist "${HOME?}/$BASH_IT_CONFIG_FILE.bak"
 	assert_file_not_exist "${HOME?}/$BASH_IT_CONFIG_FILE"
 
-	local md5_uninstall=$(md5sum "${HOME?}/$BASH_IT_CONFIG_FILE.uninstall" | awk '{print $1}')
+	md5_uninstall=$(md5sum "${HOME?}/$BASH_IT_CONFIG_FILE.uninstall" | awk '{print $1}')
 
 	assert_equal "$md5_orig" "$md5_uninstall"
 }
