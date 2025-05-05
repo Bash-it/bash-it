@@ -52,16 +52,16 @@ function setup_go_path() {
 	{ _command_exists go && go version &> /dev/null; } || skip 'golang not found'
 	setup_go_path "$BASH_IT/test/fixtures/go/gopath"
 	setup_go_path "$BASH_IT/test/fixtures/go/gopath2"
-    load "${BASH_IT?}/plugins/available/go.plugin.bash"
-    assert_equal "$(cut -d':' -f1,2 <<< "$PATH")" "$BASH_IT/test/fixtures/go/gopath/bin:$BASH_IT/test/fixtures/go/gopath2/bin"
+	load "${BASH_IT?}/plugins/available/go.plugin.bash"
+	assert_equal "$(cut -d':' -f1,2 <<< "$PATH")" "$BASH_IT/test/fixtures/go/gopath/bin:$BASH_IT/test/fixtures/go/gopath2/bin"
 }
 
 @test 'plugins go: multiple entries in GOPATH, with space' {
 	{ _command_exists go && go version &> /dev/null; } || skip 'golang not found'
 	setup_go_path "$BASH_IT/test/fixtures/go/gopath"
 	setup_go_path "$BASH_IT/test/fixtures/go/go path"
-    load "${BASH_IT?}/plugins/available/go.plugin.bash"
-    assert_equal "$(cut -d':' -f1,2 <<< "$PATH")" "$BASH_IT/test/fixtures/go/gopath/bin:$BASH_IT/test/fixtures/go/go path/bin"
+	load "${BASH_IT?}/plugins/available/go.plugin.bash"
+	assert_equal "$(cut -d':' -f1,2 <<< "$PATH")" "$BASH_IT/test/fixtures/go/gopath/bin:$BASH_IT/test/fixtures/go/go path/bin"
 }
 
 @test 'plugins go: multiple entries in GOPATH, with escaped space' {
