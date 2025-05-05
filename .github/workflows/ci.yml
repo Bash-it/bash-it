@@ -47,7 +47,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: 3.12
+        python-version: 3.11
     - name: Install docs dependencies
       run: python3 -m pip install -r docs/requirements.txt
     - name: Build the docs
@@ -65,7 +65,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: 3.12
+        python-version: 3.11
     - name: Install shfmt
       run: go install mvdan.cc/sh/v3/cmd/shfmt@latest
     - name: Install shellcheck
