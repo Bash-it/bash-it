@@ -23,7 +23,7 @@ jobs:
       run: test/run
 
   code-coverage:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v2
     - uses: ruby/setup-ruby@v1.99.0
@@ -40,7 +40,7 @@ jobs:
         ./codecov -f coverage/codecov-result.json -Z
 
   build-docs:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
     - uses: actions/checkout@v4
@@ -54,7 +54,7 @@ jobs:
       run: sphinx-build -W -b html docs docs/_build/html
 
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
     - uses: actions/checkout@v4
@@ -81,7 +81,7 @@ jobs:
       run: ./lint_clean_files.sh
 
   lint-differential:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     permissions:
       security-events: write
