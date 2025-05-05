@@ -26,9 +26,9 @@ function local_setup_file() {
 	run alias test_alias &> /dev/null
 	assert_failure
 
-	ln -s $BASH_IT/aliases/available/a.aliases.bash $BASH_IT/aliases/enabled/750---a.aliases.bash
+	ln -s "$BASH_IT/aliases/available/a.aliases.bash" "$BASH_IT/aliases/enabled/750---a.aliases.bash"
 	assert_link_exist "$BASH_IT/aliases/enabled/750---a.aliases.bash"
-	ln -s $BASH_IT/aliases/available/b.aliases.bash $BASH_IT/aliases/enabled/750---b.aliases.bash
+	ln -s "$BASH_IT/aliases/available/b.aliases.bash" "$BASH_IT/aliases/enabled/750---b.aliases.bash"
 	assert_link_exist "$BASH_IT/aliases/enabled/750---b.aliases.bash"
 
 	load "${BASH_IT?}/bash_it.sh"
@@ -51,9 +51,9 @@ function local_setup_file() {
 	run alias test_alias &> /dev/null
 	assert_failure
 
-	ln -s $BASH_IT/aliases/available/a.aliases.bash $BASH_IT/aliases/enabled/755---a.aliases.bash
+	ln -s "$BASH_IT/aliases/available/a.aliases.bash" "$BASH_IT/aliases/enabled/755---a.aliases.bash"
 	assert_link_exist "$BASH_IT/aliases/enabled/755---a.aliases.bash"
-	ln -s $BASH_IT/aliases/available/b.aliases.bash $BASH_IT/aliases/enabled/750---b.aliases.bash
+	ln -s "$BASH_IT/aliases/available/b.aliases.bash" "$BASH_IT/aliases/enabled/750---b.aliases.bash"
 	assert_link_exist "$BASH_IT/aliases/enabled/750---b.aliases.bash"
 
 	load "${BASH_IT?}/bash_it.sh"
@@ -78,11 +78,11 @@ function local_setup_file() {
 	run alias test_alias &> /dev/null
 	assert_failure
 
-	ln -s $BASH_IT/aliases/available/a.aliases.bash $BASH_IT/aliases/enabled/750---a.aliases.bash
+	ln -s "$BASH_IT/aliases/available/a.aliases.bash" "$BASH_IT/aliases/enabled/750---a.aliases.bash"
 	assert_link_exist "$BASH_IT/aliases/enabled/750---a.aliases.bash"
-	ln -s $BASH_IT/aliases/available/b.aliases.bash $BASH_IT/aliases/enabled/750---b.aliases.bash
+	ln -s "$BASH_IT/aliases/available/b.aliases.bash" "$BASH_IT/aliases/enabled/750---b.aliases.bash"
 	assert_link_exist "$BASH_IT/aliases/enabled/750---b.aliases.bash"
-	ln -s $BASH_IT/plugins/available/c.plugin.bash $BASH_IT/plugins/enabled/250---c.plugin.bash
+	ln -s "$BASH_IT/plugins/available/c.plugin.bash" "$BASH_IT/plugins/enabled/250---c.plugin.bash"
 	assert_link_exist "$BASH_IT/plugins/enabled/250---c.plugin.bash"
 
 	load "${BASH_IT?}/bash_it.sh"
@@ -107,11 +107,11 @@ function local_setup_file() {
 	run alias test_alias &> /dev/null
 	assert_failure
 
-	ln -s $BASH_IT/aliases/available/a.aliases.bash $BASH_IT/aliases/enabled/750---a.aliases.bash
+	ln -s "$BASH_IT/aliases/available/a.aliases.bash" "$BASH_IT/aliases/enabled/750---a.aliases.bash"
 	assert_link_exist "$BASH_IT/aliases/enabled/750---a.aliases.bash"
-	ln -s $BASH_IT/aliases/available/b.aliases.bash $BASH_IT/completion/enabled/350---b.completion.bash
+	ln -s "$BASH_IT/aliases/available/b.aliases.bash" "$BASH_IT/completion/enabled/350---b.completion.bash"
 	assert_link_exist "$BASH_IT/completion/enabled/350---b.completion.bash"
-	ln -s $BASH_IT/plugins/available/c.plugin.bash $BASH_IT/plugins/enabled/250---c.plugin.bash
+	ln -s "$BASH_IT/plugins/available/c.plugin.bash" "$BASH_IT/plugins/enabled/250---c.plugin.bash"
 	assert_link_exist "$BASH_IT/plugins/enabled/250---c.plugin.bash"
 
 	load "${BASH_IT?}/bash_it.sh"
@@ -160,11 +160,11 @@ function local_setup_file() {
 	run alias test_alias &> /dev/null
 	assert_failure
 
-	ln -s $BASH_IT/aliases/available/a.aliases.bash $BASH_IT/aliases/enabled/350---a.aliases.bash
+	ln -s "$BASH_IT/aliases/available/a.aliases.bash" "$BASH_IT/aliases/enabled/350---a.aliases.bash"
 	assert_link_exist "$BASH_IT/aliases/enabled/350---a.aliases.bash"
-	ln -s $BASH_IT/aliases/available/b.aliases.bash $BASH_IT/aliases/enabled/750---b.aliases.bash
+	ln -s "$BASH_IT/aliases/available/b.aliases.bash" "$BASH_IT/aliases/enabled/750---b.aliases.bash"
 	assert_link_exist "$BASH_IT/aliases/enabled/750---b.aliases.bash"
-	ln -s $BASH_IT/plugins/available/c.plugin.bash $BASH_IT/plugins/enabled/250---c.plugin.bash
+	ln -s "$BASH_IT/plugins/available/c.plugin.bash" "$BASH_IT/plugins/enabled/250---c.plugin.bash"
 	assert_link_exist "$BASH_IT/plugins/enabled/250---c.plugin.bash"
 
 	load "${BASH_IT?}/bash_it.sh"
@@ -189,9 +189,9 @@ function local_setup_file() {
 	run alias test_alias &> /dev/null
 	assert_failure
 
-	ln -s $BASH_IT/aliases/available/a.aliases.bash $BASH_IT/enabled/750---a.aliases.bash
+	ln -s "$BASH_IT/aliases/available/a.aliases.bash" "$BASH_IT/enabled/750---a.aliases.bash"
 	assert_link_exist "$BASH_IT/enabled/750---a.aliases.bash"
-	ln -s $BASH_IT/aliases/available/b.aliases.bash $BASH_IT/enabled/750---b.aliases.bash
+	ln -s "$BASH_IT/aliases/available/b.aliases.bash" "$BASH_IT/enabled/750---b.aliases.bash"
 	assert_link_exist "$BASH_IT/enabled/750---b.aliases.bash"
 
 	load "${BASH_IT?}/bash_it.sh"
@@ -214,9 +214,9 @@ function local_setup_file() {
 	run alias test_alias &> /dev/null
 	assert_failure
 
-	ln -s $BASH_IT/aliases/available/a.aliases.bash $BASH_IT/enabled/755---a.aliases.bash
+	ln -s "$BASH_IT/aliases/available/a.aliases.bash" "$BASH_IT/enabled/755---a.aliases.bash"
 	assert_link_exist "$BASH_IT/enabled/755---a.aliases.bash"
-	ln -s $BASH_IT/aliases/available/b.aliases.bash $BASH_IT/enabled/750---b.aliases.bash
+	ln -s "$BASH_IT/aliases/available/b.aliases.bash" "$BASH_IT/enabled/750---b.aliases.bash"
 	assert_link_exist "$BASH_IT/enabled/750---b.aliases.bash"
 
 	load "${BASH_IT?}/bash_it.sh"
@@ -241,11 +241,11 @@ function local_setup_file() {
 	run alias test_alias &> /dev/null
 	assert_failure
 
-	ln -s $BASH_IT/aliases/available/a.aliases.bash $BASH_IT/enabled/755---a.aliases.bash
+	ln -s "$BASH_IT/aliases/available/a.aliases.bash" "$BASH_IT/enabled/755---a.aliases.bash"
 	assert_link_exist "$BASH_IT/enabled/755---a.aliases.bash"
-	ln -s $BASH_IT/aliases/available/b.aliases.bash $BASH_IT/enabled/750---b.aliases.bash
+	ln -s "$BASH_IT/aliases/available/b.aliases.bash" "$BASH_IT/enabled/750---b.aliases.bash"
 	assert_link_exist "$BASH_IT/enabled/750---b.aliases.bash"
-	ln -s $BASH_IT/plugins/available/c.plugin.bash $BASH_IT/enabled/850---c.plugin.bash
+	ln -s "$BASH_IT/plugins/available/c.plugin.bash" "$BASH_IT/enabled/850---c.plugin.bash"
 	assert_link_exist "$BASH_IT/enabled/850---c.plugin.bash"
 
 	load "${BASH_IT?}/bash_it.sh"
@@ -270,11 +270,11 @@ function local_setup_file() {
 	run alias test_alias &> /dev/null
 	assert_failure
 
-	ln -s $BASH_IT/aliases/available/a.aliases.bash $BASH_IT/enabled/950---a.aliases.bash
+	ln -s "$BASH_IT/aliases/available/a.aliases.bash" "$BASH_IT/enabled/950---a.aliases.bash"
 	assert_link_exist "$BASH_IT/enabled/950---a.aliases.bash"
-	ln -s $BASH_IT/aliases/available/b.aliases.bash $BASH_IT/enabled/750---b.aliases.bash
+	ln -s "$BASH_IT/aliases/available/b.aliases.bash" "$BASH_IT/enabled/750---b.aliases.bash"
 	assert_link_exist "$BASH_IT/enabled/750---b.aliases.bash"
-	ln -s $BASH_IT/plugins/available/c.plugin.bash $BASH_IT/enabled/850---c.plugin.bash
+	ln -s "$BASH_IT/plugins/available/c.plugin.bash" "$BASH_IT/enabled/850---c.plugin.bash"
 	assert_link_exist "$BASH_IT/enabled/850---c.plugin.bash"
 
 	load "${BASH_IT?}/bash_it.sh"
@@ -304,14 +304,14 @@ function local_setup_file() {
 	run alias test_alias &> /dev/null
 	assert_failure
 
-	ln -s $BASH_IT/aliases/available/a.aliases.bash $BASH_IT/enabled/350---a.aliases.bash
+	ln -s "$BASH_IT/aliases/available/a.aliases.bash" "$BASH_IT/enabled/350---a.aliases.bash"
 	assert_link_exist "$BASH_IT/enabled/350---a.aliases.bash"
-	ln -s $BASH_IT/aliases/available/b.aliases.bash $BASH_IT/enabled/750---b.aliases.bash
+	ln -s "$BASH_IT/aliases/available/b.aliases.bash" "$BASH_IT/enabled/750---b.aliases.bash"
 	assert_link_exist "$BASH_IT/enabled/750---b.aliases.bash"
-	ln -s $BASH_IT/plugins/available/c.plugin.bash $BASH_IT/enabled/250---c.plugin.bash
+	ln -s "$BASH_IT/plugins/available/c.plugin.bash" "$BASH_IT/enabled/250---c.aplugin.bash"
 	assert_link_exist "$BASH_IT/enabled/250---c.plugin.bash"
 	# Add one file in the old directory structure
-	ln -s $BASH_IT/aliases/available/b.aliases.bash $BASH_IT/aliases/enabled/750---b.aliases.bash
+	ln -s "$BASH_IT/aliases/available/b.aliases.bash" "$BASH_IT/aliases/enabled/750---b.aliases.bash"
 	assert_link_exist "$BASH_IT/aliases/enabled/750---b.aliases.bash"
 
 	load "${BASH_IT?}/bash_it.sh"
@@ -329,10 +329,10 @@ function local_setup_file() {
 	ln -s "${BASH_IT?}/plugins/available/base.plugin.bash" "${BASH_IT?}/enabled/250---base.plugin.bash"
 	assert_link_exist "${BASH_IT?}/enabled/250---base.plugin.bash"
 
-	mkdir -p $BASH_IT/enabled
-	ln -s $BASH_IT/aliases/available/atom.aliases.bash $BASH_IT/enabled/750---atom.aliases.bash
+	mkdir -p "$BASH_IT/enabled"
+	ln -s "$BASH_IT/aliases/available/atom.aliases.bash" "$BASH_IT/enabled/750---atom.aliases.bash"
 	assert_link_exist "$BASH_IT/enabled/750---atom.aliases.bash"
-	ln -s $BASH_IT/plugins/available/base.plugin.bash $BASH_IT/enabled/250---base.plugin.bash
+	ln -s "$BASH_IT/plugins/available/base.plugin.bash" "$BASH_IT/enabled/250---base.plugin.bash"
 	assert_link_exist "$BASH_IT/enabled/250---base.plugin.bash"
 
 	# The `ah` alias should not exist
@@ -351,11 +351,11 @@ function local_setup_file() {
 	ln -s "${BASH_IT?}/plugins/available/base.plugin.bash" "${BASH_IT?}/plugins/enabled/250---base.plugin.bash"
 	assert_link_exist "${BASH_IT?}/plugins/enabled/250---base.plugin.bash"
 
-	mkdir -p $BASH_IT/aliases/enabled
-	mkdir -p $BASH_IT/plugins/enabled
-	ln -s $BASH_IT/aliases/available/atom.aliases.bash $BASH_IT/aliases/enabled/750---atom.aliases.bash
+	mkdir -p "$BASH_IT/aliases/enabled"
+	mkdir -p "$BASH_IT/plugins/enabled"
+	ln -s "$BASH_IT/aliases/available/atom.aliases.bash" "$BASH_IT/aliases/enabled/750---atom.aliases.bash"
 	assert_link_exist "$BASH_IT/aliases/enabled/750---atom.aliases.bash"
-	ln -s $BASH_IT/plugins/available/base.plugin.bash $BASH_IT/plugins/enabled/250---base.plugin.bash
+	ln -s "$BASH_IT/plugins/available/base.plugin.bash" "$BASH_IT/plugins/enabled/250---base.plugin.bash"
 	assert_link_exist "$BASH_IT/plugins/enabled/250---base.plugin.bash"
 
 	# The `ah` alias should not exist
