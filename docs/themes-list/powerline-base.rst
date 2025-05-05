@@ -24,7 +24,7 @@ Provided Information
 * An indicator when connected by SSH
 * An indicator when ``sudo`` has the credentials cached (see the ``sudo`` manpage for more info about this)
 * An indicator when the current shell is inside the Vim editor
-* Battery charging status (depends on the battery plugin)
+* Battery charging status (depends on the battery library)
 * SCM Repository status (e.g. Git, SVN)
 * The current Kubernetes environment
 * The current Python environment (Virtualenv, venv, and Conda are supported) in use
