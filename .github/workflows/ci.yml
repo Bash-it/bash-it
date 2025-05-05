@@ -23,7 +23,7 @@ jobs:
       run: test/run
 
   code-coverage:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v2
     - uses: ruby/setup-ruby@v1.99.0
@@ -40,21 +40,21 @@ jobs:
         ./codecov -f coverage/codecov-result.json -Z
 
   build-docs:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: 3.8
+        python-version: 3.12
     - name: Install docs dependencies
       run: python3 -m pip install -r docs/requirements.txt
     - name: Build the docs
       run: sphinx-build -W -b html docs docs/_build/html
 
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
     - uses: actions/checkout@v4
@@ -65,7 +65,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: 3.8
+        python-version: 3.12
     - name: Install shfmt
       run: go install mvdan.cc/sh/v3/cmd/shfmt@latest
     - name: Install shellcheck
@@ -81,7 +81,7 @@ jobs:
       run: ./lint_clean_files.sh
 
   lint-differential:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     permissions:
       security-events: write
