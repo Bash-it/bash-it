@@ -12,7 +12,7 @@ if [[ -f $_bash_it_ble_path ]]; then
 	# shellcheck disable=1090
 	source "$_bash_it_ble_path" --attach=prompt
 	if _bash-it-component-item-is-enabled plugin fzf; then
-		ble-import integration/fzf-key-bindings
+		ble-import -d integration/fzf-key-bindings
 		ble-import -d integration/fzf-completion
 	fi
 else
