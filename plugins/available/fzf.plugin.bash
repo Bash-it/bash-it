@@ -5,13 +5,15 @@
 cite about-plugin
 about-plugin 'load fzf, if you are using it'
 
-if [ -r ~/.fzf.bash ]; then
-	# shellcheck disable=SC1090
-	source ~/.fzf.bash
-elif [ -r "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash ]; then
-	# shellcheck disable=SC1091
-	source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash
-fi
+if ! _bash-it-component-item-is-enabled plugin blesh; then
+	if [ -r ~/.fzf.bash ]; then
+		# shellcheck disable=SC1090
+		source ~/.fzf.bash
+	elif [ -r "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash ]; then
+		# shellcheck disable=SC1091
+		source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash
+	fi
+fi # only sources the keybindings and integration if blesh is not integrated already
 
 # No need to continue if the command is not present
 _command_exists fzf || return
