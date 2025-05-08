@@ -604,3 +604,11 @@ function _save-and-reload-history() {
 	[[ ${autosave} -eq 1 ]] && local HISTCONTROL="${HISTCONTROL:-}${HISTCONTROL:+:}autoshare"
 	_bash-it-history-auto-save && _bash-it-history-auto-load
 }
+
+function conda_or_venv_prompt() {
+	if [[ -n "${CONDA_DEFAULT_ENV:-}" ]]; then
+		condaenv_prompt
+	elif [[ -n "${VIRTUAL_ENV:-}" ]]; then
+		virtualenv_prompt
+	fi
+}

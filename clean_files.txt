@@ -65,15 +65,19 @@ themes/githelpers.theme.bash
 themes/gitline
 themes/inretio
 themes/lambda
+themes/liquidprompt
 themes/modern
 themes/norbu
 themes/oh-my-posh
 themes/p4helpers.theme.bash
 themes/pete
 themes/powerline
+themes/powerline-multiline
+themes/powerline-naked
 themes/pure
 themes/purity
 themes/rjorgenson
+themes/robbyrussell
 
 # vendor init files
 #
