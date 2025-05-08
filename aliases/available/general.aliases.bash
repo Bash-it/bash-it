@@ -9,8 +9,8 @@ fi
 # List directory contents
 alias sl=ls
 alias la='ls -AF' # Compact view, show hidden
-alias ll='ls -al'
-alias l='ls -a'
+alias ll='ls -Al'
+alias l='ls -A'
 alias l1='ls -1'
 alias lf='ls -F'
 
@@ -47,8 +47,8 @@ alias py='python'
 alias ipy='ipython'
 
 # Pianobar can be found here: http://github.com/PromyLOPh/pianobar/
-
-alias piano='pianobar'
+_command_exists pianobar \
+	&& alias piano='pianobar'
 
 alias ..='cd ..'               # Go up one directory
 alias cd..='cd ..'             # Common misspelling for going up one directory
@@ -73,7 +73,12 @@ alias rd='rmdir'
 alias rmrf='rm -rf'
 
 # Shorten extract
-alias xt='extract'
+_command_exists 'extract' \
+	&& alias xt='extract'
+
+# sudo editors
+alias svim='sudo "${VISUAL:-vim}"'
+alias snano='sudo "${ALTERNATE_EDITOR:-nano}"'
 
 # Display whatever file is regular file or folder
 function catt() {
