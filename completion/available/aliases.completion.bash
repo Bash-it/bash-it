@@ -9,7 +9,7 @@ about-plugin 'Automatic completion of aliases'
 
 # Automatically add completion for all aliases to commands having completion functions
 function _bash-it-component-completion-callback-on-init-aliases() {
-	local namespace="alias_completion"
+	local aliasCommandFunction namespace="alias_completion"
 	local tmp_file completion_loader alias_name line completions chars
 	local alias_arg_words new_completion compl_func compl_wrapper alias_defn
 
