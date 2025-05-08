@@ -2,8 +2,8 @@
 
 # If not running interactively, don't do anything
 case $- in
-  *i*) ;;
-    *) return;;
+	*i*) ;;
+	*) return ;;
 esac
 
 # Path to the bash it configuration
@@ -11,7 +11,7 @@ export BASH_IT="{{BASH_IT}}"
 
 # Lock and Load a custom theme file.
 # Leave empty to disable theming.
-# location /.bash_it/themes/
+# location "$BASH_IT"/themes/
 export BASH_IT_THEME='bobby'
 
 # Some themes can show whether `sudo` has a current token or not.

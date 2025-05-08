@@ -1,4 +1,5 @@
 # shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
 
 case $HISTCONTROL in
 *'auto'*)
@@ -18,19 +19,19 @@ SCM_THEME_PROMPT_CLEAN="${bold_green?} ✓${normal?}"
 SCM_GIT_CHAR="${green?}±${normal?}"
 
 function mark_prompt() {
-    echo "${green?}\$${normal?}"
+	echo "${green?}\$${normal?}"
 }
 
 function user_host_path_prompt() {
-    ps_user="${green?}\u${normal?}";
-    ps_host="${blue?}\H${normal?}";
-    ps_path="${yellow?}\w${normal?}";
-    echo "${ps_user?}@${ps_host?}:${ps_path?}"
+	ps_user="${green?}\u${normal?}"
+	ps_host="${blue?}\H${normal?}"
+	ps_path="${yellow?}\w${normal?}"
+	echo "${ps_user?}@${ps_host?}:${ps_path?}"
 }
 
 function prompt() {
-  local SCM_PROMPT_FORMAT=' [%s%s]'
-  PS1="$(user_host_path_prompt)$(virtualenv_prompt)$(scm_prompt) $(mark_prompt) "
+	local SCM_PROMPT_FORMAT=' [%s%s]'
+	PS1="$(user_host_path_prompt)$(virtualenv_prompt)$(scm_prompt) $(mark_prompt) "
 }
 
 safe_append_prompt_command prompt

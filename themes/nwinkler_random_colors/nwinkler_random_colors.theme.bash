@@ -18,76 +18,75 @@
 RANDOM_COLOR_FILE=$HOME/.nwinkler_random_colors
 
 function randomize_nwinkler {
-  declare -a AVAILABLE_COLORS
+	declare -a AVAILABLE_COLORS
 
-  AVAILABLE_COLORS=(
-    $black
-    $red
-    $green
-    $yellow
-    $blue
-    $purple
-    $cyan
-    $white
-    $orange
-    $bold_black
-    $bold_red
-    $bold_green
-    $bold_yellow
-    $bold_blue
-    $bold_purple
-    $bold_cyan
-    $bold_white
-    $bold_orange
-  )
-  # Uncomment these to allow underlines:
-    #$underline_black
-    #$underline_red
-    #$underline_green
-    #$underline_yellow
-    #$underline_blue
-    #$underline_purple
-    #$underline_cyan
-    #$underline_white
-    #$underline_orange
-  #)
+	AVAILABLE_COLORS=(
+		$black
+		$red
+		$green
+		$yellow
+		$blue
+		$purple
+		$cyan
+		$white
+		$orange
+		$bold_black
+		$bold_red
+		$bold_green
+		$bold_yellow
+		$bold_blue
+		$bold_purple
+		$bold_cyan
+		$bold_white
+		$bold_orange
+	)
+	# Uncomment these to allow underlines:
+	#$underline_black
+	#$underline_red
+	#$underline_green
+	#$underline_yellow
+	#$underline_blue
+	#$underline_purple
+	#$underline_cyan
+	#$underline_white
+	#$underline_orange
+	#)
 
-  USERNAME_COLOR=${AVAILABLE_COLORS[$RANDOM % ${#AVAILABLE_COLORS[@]} ]}
-  HOSTNAME_COLOR=${AVAILABLE_COLORS[$RANDOM % ${#AVAILABLE_COLORS[@]} ]}
-  TIME_COLOR=${AVAILABLE_COLORS[$RANDOM % ${#AVAILABLE_COLORS[@]} ]}
-  THEME_CLOCK_COLOR=$TIME_COLOR
-  PATH_COLOR=${AVAILABLE_COLORS[$RANDOM % ${#AVAILABLE_COLORS[@]} ]}
+	USERNAME_COLOR=${AVAILABLE_COLORS[$RANDOM % ${#AVAILABLE_COLORS[@]}]}
+	HOSTNAME_COLOR=${AVAILABLE_COLORS[$RANDOM % ${#AVAILABLE_COLORS[@]}]}
+	TIME_COLOR=${AVAILABLE_COLORS[$RANDOM % ${#AVAILABLE_COLORS[@]}]}
+	THEME_CLOCK_COLOR=$TIME_COLOR
+	PATH_COLOR=${AVAILABLE_COLORS[$RANDOM % ${#AVAILABLE_COLORS[@]}]}
 
-  echo "$USERNAME_COLOR,$HOSTNAME_COLOR,$TIME_COLOR,$PATH_COLOR," > $RANDOM_COLOR_FILE
+	echo "$USERNAME_COLOR,$HOSTNAME_COLOR,$TIME_COLOR,$PATH_COLOR," > $RANDOM_COLOR_FILE
 }
 
-if [ -f $RANDOM_COLOR_FILE ];
-then
-  # read the colors already stored in the file
-  IFS=',' read -ra COLORS < $RANDOM_COLOR_FILE
-  USERNAME_COLOR=${COLORS[0]}
-  HOSTNAME_COLOR=${COLORS[1]}
-  TIME_COLOR=${COLORS[2]}
-  THEME_CLOCK_COLOR=$TIME_COLOR
-  PATH_COLOR=${COLORS[3]}
+if [ -f $RANDOM_COLOR_FILE ]; then
+	# read the colors already stored in the file
+	IFS=',' read -ra COLORS < $RANDOM_COLOR_FILE
+	USERNAME_COLOR=${COLORS[0]}
+	HOSTNAME_COLOR=${COLORS[1]}
+	TIME_COLOR=${COLORS[2]}
+	THEME_CLOCK_COLOR=$TIME_COLOR
+	PATH_COLOR=${COLORS[3]}
 else
-  # No colors stored yet. Generate them!
-  randomize_nwinkler
+	# No colors stored yet. Generate them!
+	randomize_nwinkler
 
-  echo
-  echo "Looks like you are using the nwinkler_random_color bashit theme for the first time."
-  echo "Random colors have been generated to be used in your prompt."
-  echo "If you don't like them, run the command:"
-  echo "  randomize_nwinkler"
-  echo "until you get a combination that you like."
-  echo
+	echo
+	echo "Looks like you are using the nwinkler_random_color bashit theme for the first time."
+	echo "Random colors have been generated to be used in your prompt."
+	echo "If you don't like them, run the command:"
+	echo "  randomize_nwinkler"
+	echo "until you get a combination that you like."
+	echo
 fi
 
 PROMPT_END_CLEAN="${green}→${reset_color}"
 PROMPT_END_DIRTY="${red}→${reset_color}"
 
 function prompt_end() {
-  echo -e "$PROMPT_END"
+	echo -e "$PROMPT_END"
 }
 
 prompt_setter() {

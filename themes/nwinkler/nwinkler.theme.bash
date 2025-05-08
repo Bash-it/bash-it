@@ -15,24 +15,11 @@
 # The exit code functionality currently doesn't work if you are using the 'fasd' plugin,
 # since 'fasd' is messing with the $PROMPT_COMMAND
 
-
-case $HISTCONTROL in
-*'auto'*)
-	: # Do nothing, already configured.
-	;;
-*)
-	# Append new history lines to history file
-	HISTCONTROL="${HISTCONTROL:-}${HISTCONTROL:+:}autosave"
-	;;
-esac
-safe_append_preexec '_bash-it-history-auto-load'
-safe_append_prompt_command '_bash-it-history-auto-save'
-
 PROMPT_END_CLEAN="${green}→${reset_color}"
 PROMPT_END_DIRTY="${red}→${reset_color}"
 
 function prompt_end() {
-  echo -e "$PROMPT_END"
+	echo -e "$PROMPT_END"
 }
 
 prompt_setter() {

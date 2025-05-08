@@ -59,16 +59,19 @@ function dirs-help() {
 # Add bookmarking functionality
 # Usage:
 
-: "${BASH_IT_DIRS_BKS:=${XDG_STATE_HOME:-~/.local/state}/bash_it/dirs}"
+: "${BASH_IT_DIRS_BKS:=${XDG_STATE_HOME:-${HOME}/.local/state}/bash_it/dirs}"
 if [[ -f "${BASH_IT_DIRS_BKS?}" ]]; then
 	# shellcheck disable=SC1090
 	source "${BASH_IT_DIRS_BKS?}"
-elif [[ -f ~/.dirs ]]; then
-	mv -vn ~/.dirs "${BASH_IT_DIRS_BKS?}"
-	# shellcheck disable=SC1090
-	source "${BASH_IT_DIRS_BKS?}"
 else
-	touch "${BASH_IT_DIRS_BKS?}"
+	mkdir -p "${BASH_IT_DIRS_BKS%/*}"
+	if [[ -f ~/.dirs ]]; then
+		mv -vn ~/.dirs "${BASH_IT_DIRS_BKS?}"
+		# shellcheck disable=SC1090
+		source "${BASH_IT_DIRS_BKS?}"
+	else
+		touch "${BASH_IT_DIRS_BKS?}"
+	fi
 fi
 
 alias L='cat "${BASH_IT_DIRS_BKS?}"'
