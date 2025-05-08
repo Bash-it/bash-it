@@ -42,6 +42,7 @@ End-Of-Usage
 
 		local -r filename=$(basename -- "$1")
 		local -r filedirname=$(dirname -- "$1")
+		local targetdirname
 		# shellcheck disable=SC2001 # we don't depend on `extglob`...
 		targetdirname=$(sed 's/\(\.tar\.bz2$\|\.tbz$\|\.tbz2$\|\.tar\.gz$\|\.tgz$\|\.tar$\|\.tar\.xz$\|\.txz$\|\.tar\.Z$\|\.7z$\|\.nupkg$\|\.zip$\|\.war$\|\.jar$\)//g' <<< "$filename")
 		if [[ "$filename" == "$targetdirname" ]]; then
