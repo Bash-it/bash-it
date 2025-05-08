@@ -2,6 +2,10 @@
 cite about-plugin
 about-plugin 'load fasd, if you are using it'
 
-_command_exists fasd || return
+if ! _binary_exists fasd; then
+	_log_warning "Unable to locage 'fasd'."
+	return 1
+fi
 
-eval "$(fasd --init auto)"
+# shellcheck disable=SC1090
+source < <(fasd --init auto)
