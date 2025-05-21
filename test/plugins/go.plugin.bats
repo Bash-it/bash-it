@@ -19,6 +19,13 @@ function setup_go_path() {
 
 # We test `go version` in each test to account for users with goenv and no system go.
 
+@test 'ensure _bash-it-component-plugin-callback-on-init-go is defined' {
+  { _command_exists go && go version &>/dev/null; } || skip 'golang not found'
+  load ../../plugins/available/go.plugin
+  run type -t _bash-it-component-plugin-callback-on-init-go
+  assert_line 'function'
+}
+
 @test 'ensure _bash-it-gopath-pathmunge is defined' {
 	{ _command_exists go && go version &> /dev/null; } || skip 'golang not found'
 	load "${BASH_IT?}/plugins/available/go.plugin.bash"

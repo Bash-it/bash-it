@@ -4,6 +4,12 @@ cite about-plugin
 about-plugin 'Simplify `curl cht.sh/<query>` to `cht.sh <query>`'
 
 # Play nicely if user already installed cht.sh cli tool
+if _binary_exists cht.sh ; then
+	_log_warning "You have already installed 'cht.sh', so it's safe to disable this plugin."
+	return 1
+fi
+
+# Play nicely if user already installed cht.sh cli tool
 if ! _command_exists cht.sh; then
 	function cht.sh() {
 		about 'Executes a cht.sh curl query using the provided arguments'
