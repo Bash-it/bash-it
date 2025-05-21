@@ -12,8 +12,8 @@ function local_setup_file() {
 	assert_failure
 }
 
-@test 'themes base: battery_percentage should exist if battery plugin loaded' {
-	load "${BASH_IT?}/plugins/available/battery.plugin.bash"
+@test 'themes base: battery_percentage should exist if battery library loaded' {
+	load "${BASH_IT?}/lib/battery.bash"
 
 	run type -a battery_percentage &> /dev/null
 	assert_success
@@ -28,10 +28,10 @@ function local_setup_file() {
 	assert_output ""
 }
 
-@test 'themes base: battery_char should exist if battery plugin loaded' {
+@test 'themes base: battery_char should exist if battery library loaded' {
 	unset -f battery_char
 
-	load "${BASH_IT?}/plugins/available/battery.plugin.bash"
+	load "${BASH_IT?}/lib/battery.bash"
 	run type -t battery_percentage
 	assert_success
 	assert_line "function"
@@ -57,9 +57,9 @@ function local_setup_file() {
 	assert_output ""
 }
 
-@test 'themes base: battery_charge should exist if battery plugin loaded' {
+@test 'themes base: battery_charge should exist if battery library loaded' {
 	unset -f battery_charge
-	load "${BASH_IT?}/plugins/available/battery.plugin.bash"
+	load "${BASH_IT?}/lib/battery.bash"
 	load "${BASH_IT?}/themes/base.theme.bash"
 
 	run type -a battery_charge &> /dev/null
