@@ -90,7 +90,7 @@ function __powerline_prompt_command() {
 	# but when part of the prompt exists within that segment, we instead match the foreground color.
 	prompt_color="$(set_color "${LAST_SEGMENT_COLOR?}" -)"
 	if [[ -n "${LEFT_PROMPT:-}" && -n "${POWERLINE_LEFT_LAST_SEGMENT_END_CHAR:-}" ]]; then
-		LEFT_PROMPT+="$(set_color - "${LAST_SEGMENT_COLOR?}")${POWERLINE_LEFT_LAST_SEGMENT_END_CHAR}"
+		LEFT_PROMPT+="$(set_color "${LAST_SEGMENT_COLOR?}" -)${POWERLINE_LEFT_LAST_SEGMENT_END_CHAR}"
 		prompt_color="${normal?}"
 	fi
 
