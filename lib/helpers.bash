@@ -234,7 +234,7 @@ function _bash-it-update-() {
 	fi
 
 	if [[ -z "$BASH_IT_REMOTE" ]]; then
-		BASH_IT_REMOTE="origin"
+		BASH_IT_REMOTE=$(_remote_name)
 	fi
 
 	git fetch "$BASH_IT_REMOTE" --tags &> /dev/null
@@ -352,7 +352,7 @@ function _bash-it-version() {
 	pushd "${BASH_IT?}" > /dev/null || return
 
 	if [[ -z "${BASH_IT_REMOTE:-}" ]]; then
-		BASH_IT_REMOTE="origin"
+		BASH_IT_REMOTE=$(_remote_name)
 	fi
 
 	BASH_IT_GIT_REMOTE="$(git remote get-url "$BASH_IT_REMOTE")"
@@ -1230,6 +1230,24 @@ function pathmunge() {
 		else
 			export PATH="${1}:$PATH"
 		fi
+	fi
+}
+
+function _remote_name() {
+	local branch
+	branch=$(git branch --show-current)
+
+	local remote_name=
+	remote_name=$(git config --get --default '' "branch.$branch.remote")
+	if [[ -n "$remote_name" ]]; then
+		printf '%s\n' "$remote_name"
+		return
+	fi
+
+	if remote_name=$(git remote -v | awk 'NR==1 { name=$1; print name } $1 != name { exit 1 }'); then
+		printf '%s\n' "$remote_name"
+	else
+		printf '%s\n' 'origin'
 	fi
 }
 
