@@ -98,9 +98,10 @@ function ip_prompt_info() {
 
 # Displays virtual info prompt (virtualenv/rvm)
 function virtual_prompt_info() {
-	local virtual_env_info rvm_info virtual_prompt=""
+	local virtual_env_info rvm_info virtual_prompt
 	virtual_env_info=$(virtualenv_prompt)
 	rvm_info=$(ruby_version_prompt)
+	virtual_prompt=""
 
 	local prefix=${VIRTUAL_THEME_PROMPT_PREFIX}
 	local suffix=${VIRTUAL_THEME_PROMPT_SUFFIX}

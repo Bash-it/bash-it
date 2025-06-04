@@ -235,7 +235,7 @@ prompt_histdt() {
 }
 
 git_status_dirty() {
-	local dirty=
+	local dirty
 	dirty=$(git status --porcelain 2> /dev/null | tail -n 1)
 	[[ -n $dirty ]] && echo " ●"
 }

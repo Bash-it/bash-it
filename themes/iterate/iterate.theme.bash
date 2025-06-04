@@ -55,7 +55,7 @@ function prompt_command() {
 	fi
 
 	local wrap_char=""
-	[[ $COLUMNS && ${#new_PS1} -gt $((COLUMNS / 1)) ]] && wrap_char="\n"
+	[[ $COLUMNS && ${#new_PS1} -gt COLUMNS ]] && wrap_char="\n"
 	PS1="${new_PS1}${green?}${wrap_char}→${reset_color?} "
 }
 

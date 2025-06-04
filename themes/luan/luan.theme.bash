@@ -28,7 +28,7 @@ function prompt_command() {
       $arrow $prompt"
 }
 
-THEME_CLOCK_COLOR=${THEME_CLOCK_COLOR:-"$yellow?"}
+THEME_CLOCK_COLOR=${THEME_CLOCK_COLOR:-"${yellow?}"}
 THEME_CLOCK_FORMAT=${THEME_TIME_FORMAT:-"%I:%M:%S "}
 
 safe_append_prompt_command prompt_command
