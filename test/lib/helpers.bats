@@ -439,14 +439,14 @@ function local_setup() {
 	assert_link_exist "${BASH_IT?}/enabled/250---ssh.plugin.bash"
 
 	run _bash-it-migrate
-	assert_line -n 0 'Migrating alias todo.txt-cli.'
-	assert_line -n 1 'todo.txt-cli disabled.'
-	assert_line -n 2 'todo.txt-cli enabled with priority 150.'
+	assert_line -n 0 'Migrating alias todo.'
+	assert_line -n 1 'todo disabled.'
+	assert_line -n 2 'todo enabled with priority 150.'
 
 	assert_link_exist "${BASH_IT?}/enabled/225---nvm.plugin.bash"
 	assert_link_exist "${BASH_IT?}/enabled/250---node.plugin.bash"
 	assert_link_exist "${BASH_IT?}/enabled/250---ssh.plugin.bash"
-	assert_link_exist "${BASH_IT?}/enabled/150---todo.txt-cli.aliases.bash"
+	assert_link_exist "${BASH_IT?}/enabled/150---todo.aliases.bash"
 	assert [ ! -L "${BASH_IT?}/plugins/enabled/node.plugin.bash" ]
 	assert [ ! -L "${BASH_IT?}/plugins/enabled/nvm.plugin.bash" ]
 	assert [ ! -L "${BASH_IT?}/aliases/enabled/todo.txt-cli.aliases.bash" ]
@@ -469,10 +469,10 @@ function local_setup() {
 	assert_link_exist "${BASH_IT?}/enabled/225---nvm.plugin.bash"
 	assert_link_exist "${BASH_IT?}/enabled/250---node.plugin.bash"
 	assert_link_exist "${BASH_IT?}/enabled/250---ssh.plugin.bash"
-	assert_link_exist "${BASH_IT?}/enabled/150---todo.txt-cli.aliases.bash"
+	assert_link_exist "${BASH_IT?}/enabled/150---todo.aliases.bash"
 	assert [ ! -L "${BASH_IT?}/plugins/enabled/225----node.plugin.bash" ]
 	assert [ ! -L "${BASH_IT?}/plugins/enabled/250----nvm.plugin.bash" ]
-	assert [ ! -L "${BASH_IT?}/aliases/enabled/250----todo.txt-cli.aliases.bash" ]
+	assert [ ! -L "${BASH_IT?}/aliases/enabled/250----todo.aliases.bash" ]
 }
 
 @test "helpers: run the migrate command without anything to migrate and nothing enabled" {
