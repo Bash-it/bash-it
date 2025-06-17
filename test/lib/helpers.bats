@@ -95,8 +95,8 @@ function local_setup() {
 
 @test "helpers: enable the todo.txt-cli aliases through the bash-it function" {
 	run bash-it enable alias "todo.txt-cli"
-	assert_line -n 0 'todo.txt-cli enabled with priority 150.'
-	assert_link_exist "${BASH_IT?}/enabled/150---todo.txt-cli.aliases.bash"
+	assert_line -n 0 'todo enabled with priority 150.'
+	assert_link_exist "${BASH_IT?}/enabled/150---todo.aliases.bash"
 }
 
 @test "helpers: enable the curl aliases" {
