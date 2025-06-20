@@ -24,7 +24,7 @@ fi
 BC=$(battery_percentage)
 function prompt_command() {
 	#PS1="${TITLEBAR}[\u@\h \W $(scm_prompt_info)]\$ "
-	PS1="\n${cyan}┌─${bold_white}[\u@\h]${cyan}─${bold_yellow}(\w)$(scm_prompt_info)\n${cyan}└─${bold_green}[\A]-${green}($BC%)${bold_cyan}-[${green}${bold_green}\$${bold_cyan}]${green} "
+	PS1="\n${cyan}┌─${bold_white}[\u@\h]${cyan}─${bold_yellow}(\w)$(scm_prompt_info)\n${cyan}└─${bold_green}[\A]-${green}($BC%)${bold_cyan}-[${green}${bold_green}\$${bold_cyan}]${green}${reset_color} "
 }
 
 # scm theming
