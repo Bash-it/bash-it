@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 
 # based off of n0qorg
 # looks like, if you're in a git repo:
@@ -6,16 +6,14 @@
 # in glorious red / blue / yellow color scheme
 
 prompt_setter() {
-  # Save history
-  history -a
-  history -c
-  history -r
-  # displays user@server in purple
-  # PS1="$red$(scm_char) $purple\u@\h$reset_color:$blue\w$yellow$(scm_prompt_info)$(ruby_version_prompt) $black\$$reset_color "
-  # no user@server
-  PS1="$red$(scm_char) $blue\w$yellow$(scm_prompt_info)$(ruby_version_prompt) $black\$$reset_color "
-  PS2='> '
-  PS4='+ '
+	# Save history
+	_save-and-reload-history 1
+	# displays user@server in purple
+	# PS1="$red$(scm_char) $purple\u@\h$reset_color:$blue\w$yellow$(scm_prompt_info)$(ruby_version_prompt) $black\$$reset_color "
+	# no user@server
+	PS1="$red$(scm_char) $blue\w$yellow$(scm_prompt_info)$(ruby_version_prompt) $black\$$reset_color "
+	PS2='> '
+	PS4='+ '
 }
 
 safe_append_prompt_command prompt_setter

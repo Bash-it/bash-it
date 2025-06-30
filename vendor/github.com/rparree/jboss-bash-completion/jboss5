@@ -1,0 +1,95 @@
+# Completions for JBoss Application Server 5
+# VERSION: 1.3
+# DATE: 2012-06-21
+# rparree-at-edc4it-dot-com
+
+
+
+
+_serverProfiles5(){
+ # from http://unix.stackexchange.com/questions/34238/complete-files-from-a-different-directory-in-bash
+    if [ -d "../server" ]
+    then
+      IFS=$'\n' tmp=( $(compgen -W "$(ls "../server")" -- "$cur" ))
+      COMPREPLY=( "${tmp[@]// /\ }" )
+          unset IFS
+    else
+      COMPREPLY=( $(compgen -W "default standard all web minimal production" -- ${cur}) )
+    fi
+}
+
+_bindingAddress5(){
+  # from /etc/bash_completion.d/ssh
+    COMPREPLY=( "${COMPREPLY[@]}" $( compgen -W \
+    "0.0.0.0 $( PATH="$PATH:/sbin" ifconfig -a | \
+    sed -ne 's/.*addr:\([^[:space:]]*\).*/\1/p' \
+        -ne 's/.*inet[[:space:]]\{1,\}\([^[:space:]]*\).*/\1/p' )" \
+    -- "$cur" ) )
+}
+
+_jboss5()
+{
+    
+    local cur prev words cword
+    COMPREPLY=()
+    _get_comp_words_by_ref -n = cur prev words cword
+  
+    case $cur in
+	
+        -Djboss.service.binding.set=*)
+            cur=${cur#*=}
+            #static list of common bindings sets
+            local bindings="ports-01 ports-02 ports-03 ports-04"
+            COMPREPLY=( $(compgen -W "${bindings}" -- ${cur}) )
+            return 0
+            ;;
+        -Djboss.default.jgroups.stack=*)
+            cur=${cur#*=}
+            #static list of standard JGroups stacks
+            local stacks="udp udp-async udp-sync tcp tcp-sync"
+            COMPREPLY=( $(compgen -W "${stacks}" -- ${cur}) )
+            return 0
+            ;;
+
+        -Dorg.jboss.ejb3.remoting.IsLocalInterceptor.passByRef=*|-Dcom.sun.management.jmxremote.authenticate=*|-Dcom.sun.management.jmxremote.ssl=*)
+            cur=${cur#*=}
+            local booleans="true false"
+            COMPREPLY=( $(compgen -W "${booleans}" -- ${cur}) )
+            return 0
+            ;;
+    esac
+
+
+    case $prev in
+        -u)
+            # a few from RFC 2365 IPv4 Local Scope ()
+           local addresses="239.255.0.1 239.255.0.2 239.255.0.3"
+            COMPREPLY=( $(compgen -W "${addresses}" -- ${cur}) )
+            return 0
+            ;;
+        -l)
+                local loggers="log4j jdk"
+            COMPREPLY=( $(compgen -W "${loggers}" -- ${cur}) )
+            return 0
+            ;;
+        -b)
+            _bindingAddress5
+            return 0
+            ;;
+        -c)
+            _serverProfiles5
+            return 0
+            ;;
+        *)
+            ;;
+    esac
+
+       
+    COMPREPLY=( $( compgen -W ' -u  -c -m - -b  -g -l -d -p -n -B -L -C -P -v -help -Djboss.platform.mbeanserver' -- "$cur" ) \
+                $( compgen -W '-Djboss.Domain -Djboss.modcluster.proxyList -Djboss.service.binding.set -Djboss.jvmRoute -Djboss.messaging.ServerPeerID -Djboss.default.jgroups.stack -Dorg.jboss.ejb3.remoting.IsLocalInterceptor.passByRef -Djboss.platform.mbeanserver -Dcom.sun.management.jmxremote.port -Dcom.sun.management.jmxremote.ssl' \
+                           -S '=' -- "$cur" ) )       
+    return 0
+
+  
+}
+complete -o nospace -F _jboss5 run.sh

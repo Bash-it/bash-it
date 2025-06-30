@@ -70,16 +70,18 @@ The contents of the prompt can be "reordered", all the "segments" (every piece o
 * ``battery`` - Battery information (you'll need to enable the ``battery`` plugin)
 * ``clock`` - Current time in ``HH:MM:SS`` format
 * ``cwd`` - Current working directory including full folder hierarchy (c.f. ``wd``\ )
+* ``duration`` - Duration of the last command. See :ref:`Command duration <command_duration>` for details.
 * ``gcloud`` - Current gcloud active account
 * ``hostname`` - Host name of machine
 * ``in_toolbox`` - Show identifier if running inside a `toolbox <https://github.com/containers/toolbox>`_
 * ``in_vim`` - Show identifier if running in ``:terminal`` from vim
 * ``k8s_context`` - Show current kubernetes context
+* ``k8s_namespace`` - Show current kubernetes namespace
 * ``last_status`` - Exit status of last run command
 * ``python_venv`` - Python virtual environment information (\ ``virtualenv``\ , ``venv``
   and ``conda`` supported)
 * ``ruby`` - Current ruby version if using ``rvm``
-* ``node`` - Current node version (only ``nvm`` is supported)
+* ``node`` - Current node version (``nvm`` is the default strategy; set ``NODE_VERSION_STRATEGY`` to ``node`` to use ``node --version``)
 * ``scm`` - Version control information, ``git``
 * ``terraform`` - Current terraform workspace
 * ``user_info`` - Current user

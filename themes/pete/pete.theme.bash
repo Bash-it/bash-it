@@ -1,13 +1,16 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
 
-prompt_setter() {
-  # Save history
-  history -a
-  history -c
-  history -r
-  PS1="($(clock_prompt)) $(scm_char) [$blue\u$reset_color@$green\H$reset_color] $yellow\w${reset_color}$(scm_prompt_info)$(ruby_version_prompt) $reset_color "
-  PS2='> '
-  PS4='+ '
+function prompt_setter() {
+	local clock_prompt scm_char scm_prompt_info ruby_version_prompt
+	clock_prompt="$(clock_prompt)"
+	scm_char="$(scm_char)"
+	scm_prompt_info="$(scm_prompt_info)"
+	ruby_version_prompt="$(ruby_version_prompt)"
+	_save-and-reload-history 1 # Save history
+	PS1="(${clock_prompt}) ${scm_char} [${blue?}\u${reset_color?}@${green?}\H${reset_color?}] ${yellow?}\w${reset_color?}${scm_prompt_info}${ruby_version_prompt} ${reset_color?} "
+	PS2='> '
+	PS4='+ '
 }
 
 safe_append_prompt_command prompt_setter

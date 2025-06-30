@@ -1,7 +1,9 @@
-# Bash-it
-![Build Status](https://github.com/Bash-it/bash-it/workflows/CI/badge.svg?branch=master)
+![logo](https://github.com/Bash-it/media/raw/master/media/Bash-it.png)
+
+![Build Status](../../../workflows/CI/badge.svg?event=push)
 ![Docs Status](https://readthedocs.org/projects/bash-it/badge/)
-[![Join the chat at https://webchat.freenode.net/?channel=#bash-it](https://img.shields.io/badge/chat-on%20freenode-brightgreen.svg)](https://webchat.freenode.net/?channel=#bash-it)
+![License](https://img.shields.io/github/license/Bash-it/bash-it)
+![shell](https://img.shields.io/badge/Shell-Bash-blue)
 
 **Bash-it** is a collection of community Bash commands and scripts for Bash 3.2+.
 (And a shameless ripoff of [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) :smiley:)
@@ -39,10 +41,18 @@ Stop polluting your `~/bin` directory and your `.bashrc` file, fork/clone Bash-i
    ``git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it``
 2) Run ``~/.bash_it/install.sh``
 
-Thats it! :smiley:  
+That's it! :smiley:  
+
 You can check out more components of Bash-it, and customize it to your desire.  
 For more information, see detailed instructions [here](https://bash-it.readthedocs.io/en/latest/installation/).
 
+### custom configuration file location
+
+By default the instller modifies/creates the actual ``~/.bashrc`` is updated.
+If this is undesirable, you can create another file, by run the installer:
+```bash
+BASH_IT_CONFIG_FILE=path/to/my/custom/location.bash ~/.bash_it/install.sh
+```
 
 ## Contributing
 
@@ -53,10 +63,8 @@ please feel free to read through this page if you're interested in how Bash-it l
 
 ## Contributors
 
-* [List of contributors][contribute]
+[List of contributors](https://github.com/Bash-it/bash-it/contributors)
 
 ## License
 
 Bash-it is licensed under the [MIT License](https://github.com/Bash-it/bash-it/blob/master/LICENSE).
-
-[contribute]: https://github.com/Bash-it/bash-it/contributors

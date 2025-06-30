@@ -1,7 +1,5 @@
-# Some aliases for Homebrew Cask
-
-cite 'about-alias'
-about-alias 'homebrew-cask abbreviations'
+# shellcheck shell=bash
+about-alias 'Some aliases for Homebrew Cask'
 
 alias bcin='brew cask install'
 alias bcrm='brew cask uninstall'

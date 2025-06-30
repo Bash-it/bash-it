@@ -1,25 +1,24 @@
 name: CI
 
 # Triggers the workflow on push or pull request events
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [push, pull_request]
 
 jobs:
   bats-test:
     strategy:
       matrix:
-        os: [ubuntu-20.04, ubuntu-18.04, ubuntu-16.04, macos-10.15]
+        os: [ubuntu-24.04, macos-14]
 
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Install greadlink
       if: startsWith(runner.os, 'macOS')
       run: brew install coreutils
+    - name: Install parallel
+      if: startsWith(runner.os, 'macOS')
+      run: brew install parallel
     - name: Test code
       run: test/run
 
@@ -27,9 +26,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: 3.8
     - name: Install docs dependencies
@@ -41,20 +40,43 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Set up Go
-      uses: actions/setup-go@v2
+      uses: actions/setup-go@v4
       with:
-        go-version: 1.14
+        go-version: 1.21.0
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: 3.8
     - name: Install shfmt
-      run: GO111MODULE=on go get mvdan.cc/sh/v3/cmd/shfmt
+      run: go install mvdan.cc/sh/v3/cmd/shfmt@latest
     - name: Install shellcheck
-      run: brew install shellcheck
+      env:
+        scversion: stable # Or latest, vxx, etc
+      run: |
+        wget -qO- "https://github.com/koalaman/shellcheck/releases/download/${scversion?}/shellcheck-${scversion?}.linux.x86_64.tar.xz" | tar -xJv "shellcheck-${scversion}/shellcheck"
+        sudo cp "shellcheck-${scversion}/shellcheck" /usr/bin/
+        shellcheck --version
     - name: Install pre-commit
       run: python3 -m pip install -r test/lint-requirements.txt
     - name: Run lint
       run: ./lint_clean_files.sh
+
+  lint-differential:
+    runs-on: ubuntu-latest
+
+    permissions:
+      security-events: write
+
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: ShellCheck
+        name: Differential ShellCheck
+        uses: redhat-plumbers-in-action/differential-shellcheck@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
