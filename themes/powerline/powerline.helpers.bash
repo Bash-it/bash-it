@@ -19,7 +19,7 @@ function cwd.shorten() {
 	local begin=""            # The unshortened beginning of the path.
 	local shortbegin=""       # The shortened beginning of the path.
 	local current=""          # The section of the path we're currently working on.
-	local end="${2:-$(pwd)}/" # The unmodified rest of the path.
+	local end="${2:-$(pwd)}/" # The unmodified rest of the path....
 
 	if [[ "$end" =~ ${HOME} ]]; then
 		INHOME=1
@@ -296,6 +296,22 @@ function powerline.prompt.left() {
 	fi
 }
 
+function powerline.prompt.randomize-left-to() {
+	if [[ -z $* ]]; then
+		echo "${POWERLINE_LEFT_PROMPT}"
+	else
+		export POWERLINE_LEFT_PROMPT="$(powerline.filter-and-print "$@")"
+	fi
+}
+
+function powerline.prompt.randomize-right-to() {
+	if [[ -z $* ]]; then
+		echo "${POWERLINE_RIGHT_PROMPT}"
+	else
+		export POWERLINE_RIGHT_PROMPT="$(powerline.filter-and-print "$@")"
+	fi
+}
+
 function powerline.prompt.randomize-to() {
 	if [[ -z $* ]]; then
 		echo "${POWERLINE_PROMPT}"
@@ -345,8 +361,8 @@ function powerline.prompt.all() {
 }
 
 function powerline.prompt.default() {
-	export POWERLINE_LEFT_PROMPT="scm node ruby go cwd "
-	export POWERLINE_RIGHT_PROMPT=" clock user_info hostname battery"
+	export POWERLINE_LEFT_PROMPT="scm node python_env ruby"
+	export POWERLINE_RIGHT_PROMPT=" clock hostname"
 }
 
 function powerline.default() {
@@ -356,12 +372,12 @@ function powerline.default() {
 function powerline.prompt.alternative-symbols() {
 	export SCM_GIT_CHAR=" ᛋ "
 	export USER_INFO_SSH_CHAR=" 🔐 "
-	export PYTHON_VENV_CHAR=" 🐍  "
+	export PYTHON_VENV_CHAR=" Ⓟ  "
 	export CONDA_PYTHON_VENV_CHAR=" 🐍 "
-	export NODE_CHAR=" 🅽  "
-	export RUBY_CHAR=" 🔻 "
-	export GO_CHAR=" 🅶  "
-	export TERRAFORM_CHAR=" 🆃 "
+	export NODE_CHAR="ⓝ  "
+	export RUBY_CHAR="ⓡ  "
+	export GO_CHAR="ⓖ  "
+	export TERRAFORM_CHAR="ⓣ  "
 	export KUBERNETES_CONTEXT_THEME_CHAR="⎈ "
 	export AWS_PROFILE_CHAR=" ☁️  "
 	export BATTERY_AC_CHAR=" 🔋 "

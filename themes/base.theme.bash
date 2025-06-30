@@ -411,7 +411,7 @@ function node_native_version_prompt() {
 }
 
 function node_version_prompt() {
-	NODE_VERSION_STRATEGY="${NODE_VERSION_STRATEGY:-nvm}"
+	NODE_VERSION_STRATEGY="${NODE_VERSION_STRATEGY:-node}"
 
 	_log_debug "node: using version strategy '$NODE_VERSION_STRATEGY'"
 
