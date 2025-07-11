@@ -342,7 +342,7 @@ function p4_prompt_vars() {
 	else
 		SCM_DIRTY=0
 		SCM_STATE="${SCM_THEME_PROMPT_CLEAN?}"
-  		SCM_BRANCH=""
+		SCM_BRANCH=""
 	fi
 
 	SCM_PREFIX="${P4_THEME_PROMPT_PREFIX:-${SCM_THEME_PROMPT_PREFIX-}}"
