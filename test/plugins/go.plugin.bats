@@ -53,7 +53,7 @@ function setup_go_path() {
 	setup_go_path "$BASH_IT/test/fixtures/go/gopath"
 	setup_go_path "$BASH_IT/test/fixtures/go/gopath2"
 	load "${BASH_IT?}/plugins/available/go.plugin.bash"
-	assert_equal "$(cut -d':' -f1,2 <<< "$PATH")" "$BASH_IT/test/fixtures/go/gopath2/bin:$BASH_IT/test/fixtures/go/gopath/bin"
+	assert_equal "$(cut -d':' -f1,2 <<< "$PATH")" "$BASH_IT/test/fixtures/go/gopath/bin:$BASH_IT/test/fixtures/go/gopath2/bin"
 }
 
 @test 'plugins go: multiple entries in GOPATH, with space' {
@@ -61,7 +61,7 @@ function setup_go_path() {
 	setup_go_path "$BASH_IT/test/fixtures/go/gopath"
 	setup_go_path "$BASH_IT/test/fixtures/go/go path"
 	load "${BASH_IT?}/plugins/available/go.plugin.bash"
-	assert_equal "$(cut -d':' -f1,2 <<< "$PATH")" "$BASH_IT/test/fixtures/go/go path/bin:$BASH_IT/test/fixtures/go/gopath/bin"
+	assert_equal "$(cut -d':' -f1,2 <<< "$PATH")" "$BASH_IT/test/fixtures/go/gopath/bin:$BASH_IT/test/fixtures/go/go path/bin"
 }
 
 @test 'plugins go: multiple entries in GOPATH, with escaped space' {
