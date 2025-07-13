@@ -175,6 +175,7 @@ function scm_prompt_vars() {
 	scm_prompt_char
 	SCM_DIRTY=0
 	SCM_STATE=''
+	SCM_BRANCH=''
 
 	local prompt_vars="${SCM}_prompt_vars"
 	_is_function "${prompt_vars}" && "${prompt_vars}"
