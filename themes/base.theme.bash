@@ -175,6 +175,7 @@ function scm_prompt_vars() {
 	scm_prompt_char
 	SCM_DIRTY=0
 	SCM_STATE=''
+	SCM_BRANCH=''
 
 	local prompt_vars="${SCM}_prompt_vars"
 	_is_function "${prompt_vars}" && "${prompt_vars}"
@@ -393,20 +394,30 @@ function hg_prompt_vars() {
 	fi
 }
 
+function node_command_version_prompt() {
+	local node_version
+	if _command_exists node; then
+		node_version="$(node --version 2> /dev/null)"
+		if [[ -n ${node_version} ]]; then
+			echo -e "${NVM_THEME_PROMPT_PREFIX}${node_version}${NVM_THEME_PROMPT_SUFFIX}"
+		fi
+	fi
+}
+
 function nvm_version_prompt() {
-	local node
+	local nvm_ver
 	if _is_function nvm; then
-		node=$(nvm current 2> /dev/null)
-		[[ "${node}" == "system" ]] && return
-		echo -ne "${NVM_THEME_PROMPT_PREFIX-}${node}${NVM_THEME_PROMPT_SUFFIX-}"
+		nvm_ver=$(nvm current 2> /dev/null)
+		[[ "${nvm_ver}" == "system" ]] && return
+		echo -ne "${NVM_THEME_PROMPT_PREFIX-}${nvm_ver}${NVM_THEME_PROMPT_SUFFIX-}"
 	fi
 }
 
 function node_native_version_prompt() {
-	local node
+	local node_ver
 	if _command_exists node; then
-		node=$(node --version 2> /dev/null)
-		echo -ne "${NODE_THEME_PROMPT_PREFIX-}${node}${NODE_THEME_PROMPT_SUFFIX-}"
+		node_ver=$(node --version 2> /dev/null)
+		echo -ne "${NODE_THEME_PROMPT_PREFIX-}${node_ver}${NODE_THEME_PROMPT_SUFFIX-}"
 	fi
 }
 

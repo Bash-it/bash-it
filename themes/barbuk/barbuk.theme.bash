@@ -50,8 +50,6 @@ GIT_THEME_PROMPT_CLEAN=" ${bold_green?}✓"
 GIT_THEME_PROMPT_PREFIX="${cyan?}"
 GIT_THEME_PROMPT_SUFFIX="${cyan?}"
 SCM_THEME_BRANCH_TRACK_PREFIX="${normal?} ⤏  ${cyan?}"
-SCM_THEME_CURRENT_USER_PREFFIX='  '
-SCM_GIT_SHOW_CURRENT_USER='false'
 NVM_THEME_PROMPT_PREFIX=''
 NVM_THEME_PROMPT_SUFFIX=''
 RVM_THEME_PROMPT_PREFIX=''
@@ -61,7 +59,7 @@ RBENV_THEME_PROMPT_SUFFIX=''
 RBFU_THEME_PROMPT_PREFIX=''
 RBFU_THEME_PROMPT_SUFFIX=''
 
-function _git-uptream-remote-logo() {
+function __git-uptream-remote-logo_prompt() {
 	[[ -z "$(_git-upstream)" ]] && SCM_GIT_CHAR="${SCM_GIT_CHAR_DEFAULT:-}"
 
 	local remote remote_domain
@@ -83,22 +81,7 @@ function _git-uptream-remote-logo() {
 
 function git_prompt_info() {
 	git_prompt_vars
-	echo -e " on ${SCM_GIT_CHAR_ICON_BRANCH:-} ${SCM_PREFIX:-}${SCM_BRANCH:-}${SCM_STATE:-}${SCM_GIT_AHEAD:-}${SCM_GIT_BEHIND:-}${SCM_GIT_STASH:-}${SCM_SUFFIX:-}"
-}
-
-function _exit-code() {
-	if [[ "${1:-}" -ne 0 ]]; then
-		exit_code=" ${purple?}${EXIT_CODE_ICON:-}${yellow?}${exit_code:-}${bold_orange?}"
-	else
-		exit_code="${bold_green?}"
-	fi
-}
-
-function _prompt() {
-	local exit_code="$?" wrap_char=' ' dir_color=$green ssh_info='' python_venv='' host command_duration=
-	local scm_char scm_prompt_info
-
-	command_duration="$(_command_duration)"
+	echo -e "on $SCM_GIT_CHAR_ICON_BRANCH $SCM_PREFIX$SCM_BRANCH$SCM_STATE$SCM_GIT_AHEAD$SCM_GIT_BEHIND$SCM_GIT_STASH$SCM_SUFFIX "
 }
 
 function __exit_prompt() {
@@ -165,21 +148,17 @@ function __ssh_prompt() {
 		else
 			host="\h"
 		fi
-		ssh_info="${bold_blue?}\u${bold_orange?}@${cyan?}$host ${bold_orange?}in"
+		echo "${bold_blue?}\u${bold_orange?}@${cyan?}$host ${bold_orange?}in "
 	fi
 }
 
 function __python_venv_prompt() {
 	# Detect python venv
-	if [[ -n "${CONDA_DEFAULT_ENV:-}" ]]; then
-		python_venv="${PYTHON_VENV_CHAR:-}${CONDA_DEFAULT_ENV:-} "
-	elif [[ -n "${VIRTUAL_ENV:-}" ]]; then
-		python_venv="$PYTHON_VENV_CHAR${VIRTUAL_ENV##*/} "
+	if [[ -n "${CONDA_DEFAULT_ENV}" ]]; then
+		echo "${bold_purple?}$PYTHON_VENV_CHAR${normal?}${CONDA_DEFAULT_ENV} "
+	elif [[ -n "${VIRTUAL_ENV}" ]]; then
+		echo "${bold_purple?}$PYTHON_VENV_CHAR${normal?}$(basename "${VIRTUAL_ENV}") "
 	fi
-
-	scm_char="$(scm_char)"
-	scm_prompt_info="$(scm_prompt_info)"
-	PS1="\\n${ssh_info} ${purple}${scm_char}${python_venv}${dir_color}\\w${normal}${scm_prompt_info}${command_duration}${exit_code}"
 }
 
 function __path_prompt() {
