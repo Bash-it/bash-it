@@ -394,6 +394,27 @@ function hg_prompt_vars() {
 	fi
 }
 
+function node_command_version_prompt() {
+	local node_version
+	if _command_exists node; then
+		node_version="$(node --version 2> /dev/null)"
+		if [[ -n ${node_version} ]]; then
+			echo -e "${NVM_THEME_PROMPT_PREFIX}${node_version}${NVM_THEME_PROMPT_SUFFIX}"
+		fi
+	fi
+}
+
+function node_version_prompt() {
+	local node_version
+	node_version="$(nvm_version_prompt)"
+	if [[ -z "${node_version}" ]]; then
+		node_version="$(node_command_version_prompt)"
+	fi
+	if [[ -n "${node_version}" ]]; then
+		echo -e "${node_version}"
+	fi
+}
+
 function nvm_version_prompt() {
 	local node
 	if _is_function nvm; then
