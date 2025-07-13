@@ -50,11 +50,12 @@ alias ipy='ipython'
 
 alias piano='pianobar'
 
-alias ..='cd ..'         # Go up one directory
-alias cd..='cd ..'       # Common misspelling for going up one directory
-alias ...='cd ../..'     # Go up two directories
-alias ....='cd ../../..' # Go up three directories
-alias -- -='cd -'        # Go back
+alias ..='cd ..'               # Go up one directory
+alias cd..='cd ..'             # Common misspelling for going up one directory
+alias ...='cd ../..'           # Go up two directories
+alias ....='cd ../../..'       # Go up three directories
+alias -- -='cd -'              # Go back
+alias dow='cd $HOME/Downloads' # Go to the Downloads directory
 
 # Shell History
 alias h='history'
@@ -68,12 +69,11 @@ fi
 alias md='mkdir -p'
 alias rd='rmdir'
 
+# Remove
+alias rmrf='rm -rf'
+
 # Shorten extract
 alias xt='extract'
-
-# sudo editors
-alias svim='sudo ${VISUAL:-vim}'
-alias snano='sudo nano'
 
 # Display whatever file is regular file or folder
 function catt() {
