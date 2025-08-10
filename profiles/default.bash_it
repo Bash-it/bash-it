@@ -10,3 +10,6 @@ completion system
 
 # aliases
 aliases general
+aliases bash-it
+aliases directory
+aliases editor

@@ -1,7 +1,7 @@
 [submodule "test_lib/bats-core"]
 	path = test_lib/bats-core
 	url = https://github.com/bats-core/bats-core
-	branch = tags/v1.2.0
+	branch = tags/v1.9.0
 [submodule "test_lib/bats-support"]
 	path = test_lib/bats-support
 	url = https://github.com/bats-core/bats-support
@@ -9,8 +9,8 @@
 [submodule "test_lib/bats-assert"]
 	path = test_lib/bats-assert
 	url = https://github.com/bats-core/bats-assert
-	branch = tags/v2.0.0
+	branch = tags/v2.1.0
 [submodule "test_lib/bats-file"]
 	path = test_lib/bats-file
 	url = https://github.com/bats-core/bats-file
-	branch = tags/v0.3.0
+	branch = tags/v0.4.0

@@ -13,6 +13,7 @@ SCM_GIT_CHAR_DEFAULT=${BARBUK_GIT_DEFAULT_CHAR:='  '}
 SCM_GIT_CHAR_ICON_BRANCH=${BARBUK_GIT_BRANCH_ICON:=''}
 SCM_HG_CHAR=${BARBUK_HG_CHAR:='☿ '}
 SCM_SVN_CHAR=${BARBUK_SVN_CHAR:='⑆ '}
+SCM_THEME_CURRENT_USER_PREFFIX=${normal?}${BARBUK_CURRENT_USER_PREFFIX:='  '}
 # Exit code
 EXIT_CODE_ICON=${BARBUK_EXIT_CODE_ICON:=' '}
 # Programming and tools
@@ -26,13 +27,14 @@ SCALEWAY_PROFILE_CHAR=${BARBUK_SCALEWAY_PROFILE_CHAR:=" scw "}
 GCLOUD_CHAR=${BARBUK_GCLOUD_CHAR:=" google "}
 
 # Command duration
-COMMAND_DURATION_MIN_SECONDS=${COMMAND_DURATION_MIN_SECONDS:-1}
+: "${COMMAND_DURATION_MIN_SECONDS:=1}"
+: "${COMMAND_DURATION_COLOR:="${normal?}"}"
 
 # Ssh user and hostname display
 SSH_INFO=${BARBUK_SSH_INFO:=true}
 HOST_INFO=${BARBUK_HOST_INFO:=long}
 
-# Bash-it default glyphs customization
+# Bash-it default glyphs overrides
 SCM_NONE_CHAR=
 SCM_THEME_PROMPT_DIRTY=" ${bold_red?}✗"
 SCM_THEME_PROMPT_CLEAN=" ${bold_green?}✓"
@@ -48,8 +50,6 @@ GIT_THEME_PROMPT_CLEAN=" ${bold_green?}✓"
 GIT_THEME_PROMPT_PREFIX="${cyan?}"
 GIT_THEME_PROMPT_SUFFIX="${cyan?}"
 SCM_THEME_BRANCH_TRACK_PREFIX="${normal?} ⤏  ${cyan?}"
-SCM_THEME_CURRENT_USER_PREFFIX='  '
-SCM_GIT_SHOW_CURRENT_USER=false
 NVM_THEME_PROMPT_PREFIX=''
 NVM_THEME_PROMPT_SUFFIX=''
 RVM_THEME_PROMPT_PREFIX=''
@@ -60,20 +60,20 @@ RBFU_THEME_PROMPT_PREFIX=''
 RBFU_THEME_PROMPT_SUFFIX=''
 
 function __git-uptream-remote-logo_prompt() {
-	[[ "$(_git-upstream)" == "" ]] && SCM_GIT_CHAR="$SCM_GIT_CHAR_DEFAULT"
+	[[ -z "$(_git-upstream)" ]] && SCM_GIT_CHAR="${SCM_GIT_CHAR_DEFAULT:-}"
 
 	local remote remote_domain
-	remote=$(_git-upstream-remote)
-	remote_domain=$(git config --get remote."$remote".url | awk -F'[@:.]' '{print $2}')
+	remote="$(_git-upstream-remote)"
+	remote_domain="$(git config --get remote."${remote}".url | awk -F'[@:.]' '{print $2}')"
 
 	# remove // suffix for https:// url
-	remote_domain=${remote_domain//\//}
+	remote_domain="${remote_domain//\//}"
 
-	case $remote_domain in
-		github) SCM_GIT_CHAR="$SCM_GIT_CHAR_GITHUB" ;;
-		gitlab) SCM_GIT_CHAR="$SCM_GIT_CHAR_GITLAB" ;;
-		bitbucket) SCM_GIT_CHAR="$SCM_GIT_CHAR_BITBUCKET" ;;
-		*) SCM_GIT_CHAR="$SCM_GIT_CHAR_DEFAULT" ;;
+	case "${remote_domain}" in
+		github) SCM_GIT_CHAR="${SCM_GIT_CHAR_GITHUB:-}" ;;
+		gitlab) SCM_GIT_CHAR="${SCM_GIT_CHAR_GITLAB:-}" ;;
+		bitbucket) SCM_GIT_CHAR="${SCM_GIT_CHAR_BITBUCKET:-}" ;;
+		*) SCM_GIT_CHAR="${SCM_GIT_CHAR_DEFAULT:-}" ;;
 	esac
 
 	echo "${purple?}$(scm_char)"
@@ -142,8 +142,8 @@ function __ruby_prompt() {
 
 function __ssh_prompt() {
 	# Detect ssh
-	if [[ -n "${SSH_CONNECTION}" ]] && [ "$SSH_INFO" = true ]; then
-		if [ "$HOST_INFO" = long ]; then
+	if [[ -n "${SSH_CONNECTION:-}" && "${SSH_INFO:-}" == true ]]; then
+		if [[ "${HOST_INFO:-}" == long ]]; then
 			host="\H"
 		else
 			host="\h"

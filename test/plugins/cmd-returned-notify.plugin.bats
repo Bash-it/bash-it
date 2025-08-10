@@ -1,4 +1,5 @@
 # shellcheck shell=bats
+# shellcheck disable=SC2034
 
 load ../test_helper
 load ../../lib/helpers
@@ -9,13 +10,14 @@ load "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
 >>>>>>> 30eda03f30af6d62452ca1efdec919031f83c013
 
 function local_setup_file() {
-  setup_libs "command_duration"
-  load "${BASH_IT?}/plugins/available/cmd-returned-notify.plugin.bash"
+	setup_libs "command_duration"
+	load "${BASH_IT?}/plugins/available/cmd-returned-notify.plugin.bash"
 }
 
 @test "plugins cmd-returned-notify: notify after elapsed time" {
-	export NOTIFY_IF_COMMAND_RETURNS_AFTER=0
-	export COMMAND_DURATION_START_SECONDS="$(_shell_duration_en)"
+	NOTIFY_IF_COMMAND_RETURNS_AFTER=0
+	COMMAND_DURATION_START_SECONDS="$(_shell_duration_en)"
+	export COMMAND_DURATION_START_SECONDS NOTIFY_IF_COMMAND_RETURNS_AFTER
 	sleep 1
 	run precmd_return_notification
 	assert_success
@@ -23,8 +25,9 @@ function local_setup_file() {
 }
 
 @test "plugins cmd-returned-notify: do not notify before elapsed time" {
-	export NOTIFY_IF_COMMAND_RETURNS_AFTER=10
-	export COMMAND_DURATION_START_SECONDS="$(_shell_duration_en)"
+	NOTIFY_IF_COMMAND_RETURNS_AFTER=10
+	COMMAND_DURATION_START_SECONDS="$(_shell_duration_en)"
+	export COMMAND_DURATION_START_SECONDS NOTIFY_IF_COMMAND_RETURNS_AFTER
 	sleep 1
 	run precmd_return_notification
 	assert_success
@@ -32,13 +35,13 @@ function local_setup_file() {
 }
 
 @test "lib command_duration: preexec no output" {
-	export COMMAND_DURATION_START_SECONDS=
+	COMMAND_DURATION_START_SECONDS=
 	run _command_duration_pre_exec
 	assert_success
 	assert_output ""
 }
 @test "lib command_duration: preexec set COMMAND_DURATION_START_SECONDS" {
-	export COMMAND_DURATION_START_SECONDS=
+	COMMAND_DURATION_START_SECONDS=
 	assert_equal "${COMMAND_DURATION_START_SECONDS}" ""
 	NOW="$(_shell_duration_en)"
 	_command_duration_pre_exec

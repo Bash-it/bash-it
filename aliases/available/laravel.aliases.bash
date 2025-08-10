@@ -3,7 +3,14 @@ about-alias 'laravel artisan abbreviations'
 
 # A list of useful laravel aliases
 
-alias laravel='${HOME?}/.composer/vendor/bin/laravel'
+if [[ -x "${HOME?}/.config/composer/vendor/bin/laravel" ]]; then
+	alias laravel='${HOME?}/.config/composer/vendor/bin/laravel'
+elif [[ -x "${HOME?}/.composer/vendor/bin/laravel" ]]; then
+	alias laravel='${HOME?}/.composer/vendor/bin/laravel'
+else
+	return
+fi
+
 # asset
 alias a:apub='php artisan asset:publish'
 
