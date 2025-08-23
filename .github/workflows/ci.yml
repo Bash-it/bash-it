@@ -7,7 +7,7 @@ jobs:
   bats-test:
     strategy:
       matrix:
-        os: [ubuntu-20.04, ubuntu-24.04, macos-14]
+        os: [ubuntu-24.04, macos-14]
 
     runs-on: ${{ matrix.os }}
 

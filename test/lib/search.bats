@@ -20,8 +20,14 @@ function local_setup() {
 @test "search: git" {
 	local plugin completion
 	run _bash-it-search 'git' --no-color
+
+	assert_line -n 0 -p '      aliases:'
 	assert_success
-	assert_line -n 0 '      aliases: git   gitsvn   '
+	for alias in 'git' 'gitsvn' 'git-omz'; do
+		echo $alias
+		assert_line -n 0 -p $alias
+	done
+
 	assert_line -n 1 -p '      plugins:'
 	for plugin in "autojump" "git" "gitstatus" "git-subrepo" "jgitflow" "jump"; do
 		assert_line -n 1 -p "$plugin"

@@ -19,48 +19,6 @@ function local_setup() {
 	assert_file_exist "${BASH_IT?}/profiles/test-bad-type.bash_it"
 }
 
-@test "helpers: _command_exists function exists" {
-	run type -t _command_exists
-	assert_success
-	assert_output "function"
-}
-
-@test "helpers: _command_exists function positive test ls" {
-	run _command_exists ls
-	assert_success
-}
-
-@test "helpers: _command_exists function positive test bash-it" {
-	run _command_exists bash-it
-	assert_success
-}
-
-@test "helpers: _command_exists function negative test" {
-	run _command_exists __addfkds_dfdsjdf
-	assert_failure
-}
-
-@test "helpers: _binary_exists function exists" {
-	run type -t _binary_exists
-	assert_success
-	assert_output "function"
-}
-
-@test "helpers: _binary_exists function positive test ls" {
-	run _binary_exists ls
-	assert_success
-}
-
-@test "helpers: _binary_exists function negative test function" {
-	run _binary_exists _binary_exists
-	assert_failure
-}
-
-@test "helpers: _binary_exists function negative test" {
-	run _binary_exists __addfkds_dfdsjdf
-	assert_failure
-}
-
 @test "helpers: bash-it help aliases ag" {
 	run bash-it help aliases "ag"
 	assert_line -n 0 "ag='ag --smart-case --pager=\"less -MIRFX'"

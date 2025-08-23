@@ -6,6 +6,71 @@ function local_setup_file() {
 	setup_libs "helpers"
 }
 
+@test "utilities: _is_function: _command_exists" {
+	run _is_function _command_exists
+	assert_success
+}
+
+@test "utilities: _command_exists function positive test ls" {
+	run _command_exists ls
+	assert_success
+}
+
+@test "utilities: _command_exists function positive test bash-it" {
+	run _command_exists bash-it
+	assert_success
+}
+
+@test "utilities: _command_exists function negative test" {
+	run _command_exists "__addfkds_dfdsjdf_${RANDOM:-}"
+	assert_failure
+}
+
+@test "utilities: _is_function: _binary_exists" {
+	run _is_function _binary_exists
+	assert_success
+}
+
+@test "utilities: _binary_exists function positive test ls" {
+	run _binary_exists ls
+	assert_success
+}
+
+@test "utilities: _binary_exists function negative test function" {
+	run _binary_exists _binary_exists
+	assert_failure
+}
+
+@test "utilities: _binary_exists function negative test" {
+	run _binary_exists "__addfkds_dfdsjdf_${RANDOM:-}"
+	assert_failure
+}
+
+@test "utilities: _is_function: _completion_exists" {
+	run _is_function _completion_exists
+	assert_success
+}
+
+@test "utilities: _is_function new function" {
+	local teh_new_func="__addfkds_dfdsjdf_${RANDOM:-}"
+	run _is_function "${teh_new_func?}"
+	assert_failure
+
+	cite "${teh_new_func?}"
+	run _is_function "${teh_new_func?}"
+	assert_success
+}
+
+@test "utilities: _command_exists new function" {
+	local teh_new_func="__addfkds_dfdsjdf_${RANDOM:-}"
+	run _command_exists "${teh_new_func?}"
+	assert_failure
+
+	cite "${teh_new_func?}"
+	run _command_exists "${teh_new_func?}"
+	assert_success
+}
+
 @test "_bash-it-component-item-is-enabled() - for a disabled item" {
 	run _bash-it-component-item-is-enabled aliases svn
 	assert_failure
