@@ -280,7 +280,7 @@ function __powerline_left_last_segment_padding() {
 }
 
 function __powerline_last_status_prompt() {
-	if [[ "${1?}" -ne 0 ]]; then
+	if [[ "${1:-0}" -ne 0 ]]; then
 		printf '%s|%s' "${1}" "${LAST_STATUS_THEME_PROMPT_COLOR-"52"}"
 	fi
 }
