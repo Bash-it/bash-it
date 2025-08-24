@@ -17,3 +17,12 @@ elif _command_exists tofu; then
 	complete -C tofu tofu
 
 fi
+
+
+
+## TODO: change the logic to the new way of doing things?
+## Make sure terraform is installed
+#_bash-it-completion-helper-necessary terraform || return
+
+## Don't handle completion if it's already managed
+#_bash-it-completion-helper-sufficient terraform || return

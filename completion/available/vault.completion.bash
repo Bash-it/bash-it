@@ -1,7 +1,10 @@
 # shellcheck shell=bash
-cite "about-completion"
 about-completion "vault completion"
 
-if _binary_exists vault; then
-	complete -C vault vault
-fi
+# Make sure vault is installed
+_bash-it-completion-helper-necessary vault || return
+
+# Don't handle completion if it's already managed
+_bash-it-completion-helper-sufficient vault || return
+
+complete -C vault vault
