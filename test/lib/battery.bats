@@ -4,7 +4,7 @@ load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
 function local_setup_file() {
 	setup_libs "helpers"
-	load "${BASH_IT?}/plugins/available/battery.plugin.bash"
+	load "${BASH_IT?}/lib/battery.bash"
 }
 
 # Sets up the `_command_exists` function so that it only responds `true` if called with
