@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
+# shellcheck disable=SC2034
 
 . "$BASH_IT/themes/powerline-plain/powerline-plain.base.bash"
 

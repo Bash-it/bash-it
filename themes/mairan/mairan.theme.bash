@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+# shellcheck disable=SC2034
 # Mairan Bash Prompt, inspired by "Zork"
 
 if tput setaf 1 &> /dev/null; then
@@ -34,11 +36,11 @@ BRACKET_COLOR=$ORANGE
 SCM_THEME_PROMPT_PREFIX=""
 SCM_THEME_PROMPT_SUFFIX=""
 
-SCM_THEME_PROMPT_DIRTY=" ${bold_red}✗${normal}"
-SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓${normal}"
-SCM_GIT_CHAR="${bold_green}±${normal}"
-SCM_SVN_CHAR="${bold_cyan}⑆${normal}"
-SCM_HG_CHAR="${bold_red}☿${normal}"
+SCM_THEME_PROMPT_DIRTY=" ${bold_red?}✗${normal?}"
+SCM_THEME_PROMPT_CLEAN=" ${bold_green?}✓${normal?}"
+SCM_GIT_CHAR="${bold_green?}±${normal?}"
+SCM_SVN_CHAR="${bold_cyan?}⑆${normal?}"
+SCM_HG_CHAR="${bold_red?}☿${normal?}"
 
 #Mysql Prompt
 export MYSQL_PS1="(\u@\h) [\d]> "
@@ -55,23 +57,25 @@ esac
 PS3=">> "
 
 __my_rvm_ruby_version() {
-	local gemset=$(echo $GEM_HOME | awk -F'@' '{print $2}')
+	local gemset
+	gemset=$(echo "$GEM_HOME" | awk -F'@' '{print $2}')
 	[ "$gemset" != "" ] && gemset="@$gemset"
-	local version=$(echo $MY_RUBY_HOME | awk -F'-' '{print $2}')
+	local version
+	version=$(echo "$MY_RUBY_HOME" | awk -F'-' '{print $2}')
 	local full="$version$gemset"
 	[ "$full" != "" ] && echo "[$full]"
 }
 
 is_vim_shell() {
-	if [ ! -z "$VIMRUNTIME" ]; then
-		echo "[${cyan}vim shell${normal}]"
+	if [ -n "$VIMRUNTIME" ]; then
+		echo "[${cyan?}vim shell${normal?}]"
 	fi
 }
 
 # show chroot if exist
 chroot() {
 	if [ -n "$debian_chroot" ]; then
-		my_ps_chroot="${bold_cyan}$debian_chroot${normal}"
+		my_ps_chroot="${bold_cyan?}$debian_chroot${normal?}"
 		echo "($my_ps_chroot)"
 	fi
 }
@@ -79,7 +83,7 @@ chroot() {
 # show virtualenvwrapper
 my_ve() {
 	if [ -n "$VIRTUAL_ENV" ]; then
-		my_ps_ve="${bold_purple}$ve${normal}"
+		my_ps_ve="${bold_purple?}$ve${normal?}"
 		echo "($my_ps_ve)"
 	fi
 	echo ""
@@ -87,12 +91,12 @@ my_ve() {
 
 prompt() {
 	SCM_PROMPT_FORMAT="[%s$GREEN%s]"
-	my_ps_host="$BOLD$ORANGE\h${normal}"
+	my_ps_host="$BOLD$ORANGE\h${normal?}"
 	# yes, these are the the same for now ...
-	my_ps_host_root="$ORANGE\h${normal}"
+	my_ps_host_root="$ORANGE\h${normal?}"
 
-	my_ps_user="$BOLD$GREEN\u${normal}"
-	my_ps_root="${bold_red}\u${normal}"
+	my_ps_user="$BOLD$GREEN\u${normal?}"
+	my_ps_root="${bold_red?}\u${normal?}"
 
 	if [ -n "$VIRTUAL_ENV" ]; then
 		ve=$(basename "$VIRTUAL_ENV")
@@ -101,12 +105,12 @@ prompt() {
 	# nice prompt
 	case "$(id -u)" in
 		0)
-			PS1="\n${TITLEBAR}${BRACKET_COLOR}┌─${normal}$(my_ve)$(chroot)[$my_ps_root][$my_ps_host_root]$(scm_prompt)$(__my_rvm_ruby_version)[${green}\w${normal}]$(is_vim_shell)${BRACKET_COLOR}
-└─▪ ${prompt_symbol} ${normal}"
+			PS1="\n${TITLEBAR}${BRACKET_COLOR}┌─${normal?}$(my_ve)$(chroot)[$my_ps_root][$my_ps_host_root]$(scm_prompt)$(__my_rvm_ruby_version)[${green?}\w${normal?}]$(is_vim_shell)${BRACKET_COLOR}
+└─▪ ${prompt_symbol} ${normal?}"
 			;;
 		*)
-			PS1="\n${TITLEBAR}${BRACKET_COLOR}┌─${normal}$(my_ve)$(chroot)[$my_ps_user][$my_ps_host]$(scm_prompt)${normal}$(__my_rvm_ruby_version)[${green}\w${normal}]$(is_vim_shell)${BRACKET_COLOR}
-└─▪ ${prompt_symbol} ${normal}"
+			PS1="\n${TITLEBAR}${BRACKET_COLOR}┌─${normal?}$(my_ve)$(chroot)[$my_ps_user][$my_ps_host]$(scm_prompt)${normal?}$(__my_rvm_ruby_version)[${green?}\w${normal?}]$(is_vim_shell)${BRACKET_COLOR}
+└─▪ ${prompt_symbol} ${normal?}"
 			;;
 	esac
 }
