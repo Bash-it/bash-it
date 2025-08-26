@@ -36,7 +36,7 @@ is_vim_shell() {
 prompt() {
 	local last_status=$?
 	SCM_PROMPT_FORMAT='[%s][%s]'
-	if [ $last_status -ne 0 ]; then
+	if [ "$last_status" -ne 0 ]; then
 		# Yes, the indenting on these is weird, but it has to be like
 		# this otherwise it won't display properly.
 
