@@ -1,5 +1,4 @@
 # shellcheck shell=bash
-cite about-plugin
 about-plugin 'search history using the prefix already entered'
 
 # enter a few characters and press UpArrow/DownArrow

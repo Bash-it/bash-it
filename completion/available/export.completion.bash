@@ -1,1 +1,4 @@
-complete -o nospace -S = -W '$(printenv | awk -F= "{print \$1}")' export
+# shellcheck shell=bash
+
+_log_warning 'Bash completion for "export" is now covered by "system".'
+_disable-completion "export"

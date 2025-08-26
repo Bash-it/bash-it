@@ -1,25 +1,16 @@
 # shellcheck shell=bash
-cite 'about-alias'
 about-alias 'vim abbreviations'
 
-VIM=$(command -v vim)
-GVIM=$(command -v gvim)
-MVIM=$(command -v mvim)
+alias v='${VISUAL:-vim}'
 
-if [[ -n $VIM ]]; then
-	alias v='$VIM'
-	# open the vim help in fullscreen incorporated from
-	# https://stackoverflow.com/a/4687513
-	alias vimh='${VIM} -c ":h | only"'
+if ! _command_exists vim; then
+	_log_warning "Without 'vim', these aliases just aren't that useful..."
 fi
+# open the vim help in fullscreen incorporated from
+# https://stackoverflow.com/a/4687513
+alias vimh='vim -c ":h | only"'
 
 # open vim in new tab is taken from
 # http://stackoverflow.com/questions/936501/let-gvim-always-run-a-single-instancek
-case $OSTYPE in
-	darwin*)
-		[[ -n $MVIM ]] && function mvimt { command mvim --remote-tab-silent "$@" || command mvim "$@"; }
-		;;
-	*)
-		[[ -n $GVIM ]] && function gvimt { command gvim --remote-tab-silent "$@" || command gvim "$@"; }
-		;;
-esac
+_command_exists mvim && function mvimt { command mvim --remote-tab-silent "$@" || command mvim "$@"; }
+_command_exists gvim && function gvimt { command gvim --remote-tab-silent "$@" || command gvim "$@"; }

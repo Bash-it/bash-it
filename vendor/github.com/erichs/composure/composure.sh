@@ -19,7 +19,7 @@ _bootstrap_composure() {
 
 _get_composure_dir ()
 {
-  if [ -n "$XDG_DATA_HOME" ]; then
+  if [ -n "${XDG_DATA_HOME:-}" ]; then
     echo "$XDG_DATA_HOME/composure"
   else
     echo "$HOME/.local/composure"
@@ -30,7 +30,7 @@ _get_author_name ()
 {
   typeset name localname
   localname="$(git --git-dir "$(_get_composure_dir)/.git" config --get user.name)"
-  for name in "$GIT_AUTHOR_NAME" "$localname"; do
+  for name in "${GIT_AUTHOR_NAME:-}" "$localname"; do
     if [ -n "$name" ]; then
       echo "$name"
       break
@@ -55,7 +55,7 @@ _letterpress ()
 }
 
 _determine_printf_cmd() {
-  if [ -z "$_printf_cmd" ]; then
+  if [ -z "${_printf_cmd:-}" ]; then
     _printf_cmd=printf
     # prefer GNU gprintf if available
     [ -x "$(which gprintf 2>/dev/null)" ] && _printf_cmd=gprintf
@@ -78,7 +78,7 @@ _longest_function_name_length ()
 
 _temp_filename_for ()
 {
-  typeset file=$(mktemp "/tmp/$1.XXXX")
+  typeset file="$(mktemp "/tmp/$1.XXXX")"
   command rm "$file" 2>/dev/null   # ensure file is unlinked prior to use
   echo "$file"
 }
@@ -136,7 +136,7 @@ _transcribe ()
     if [ -d "$composure_dir" ]; then
       _add_composure_file "$func" "$file" "$operation" "$comment"
     else
-      if [ "$USE_COMPOSURE_REPO" = "0" ]; then
+      if [ "${USE_COMPOSURE_REPO:-}" = "0" ]; then
         return  # if you say so...
       fi
       printf "%s\n" "I see you don't have a $composure_dir repo..."
@@ -223,7 +223,7 @@ _load_composed_functions () {
   # you may disable this by adding the following line to your shell startup:
   # export LOAD_COMPOSED_FUNCTIONS=0
 
-  if [ "$LOAD_COMPOSED_FUNCTIONS" = "0" ]; then
+  if [ "${LOAD_COMPOSED_FUNCTIONS:-}" = "0" ]; then
     return  # if you say so...
   fi
 
@@ -379,7 +379,7 @@ metafor ()
   # 'grep' for the metadata keyword, and then parse/filter the matching line
 
   # grep keyword # strip trailing '|"|; # ignore thru keyword and leading '|"
-  sed -n "/$keyword / s/['\";]*\$//;s/^[ 	]*$keyword ['\"]*\([^([].*\)*\$/\1/p"
+  sed -n "/$keyword / s/['\";]*\$//;s/^[ 	]*\(: _\)*$keyword ['\"]*\([^([].*\)*\$/\2/p"
 }
 
 reference ()
@@ -462,7 +462,7 @@ revise ()
     cat "$composure_dir/$func.inc" > "$temp"
   fi
 
-  if [ -z "$EDITOR" ]
+  if [ -z "${EDITOR:-}" ]
   then
     typeset EDITOR=vi
   fi

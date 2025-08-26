@@ -147,6 +147,11 @@ Plugin Disable Callbacks
 Plugins can define a function that will be called when the plugin is being disabled.
 The callback name should be ``{PLUGIN_NAME}_on_disable``\ , you can see ``gitstatus`` for usage example.
 
+Library Finalization Callback
+-----------------------------
+
+Specifically for Bash-it library code, e.g. in the `lib` subdirectory, a hook is available to run some code at the very end of the main loader script after all other code has been loaded. For example, `lib/theme` uses `_bash_it_library_finalize_hook+=('_bash_it_appearance_scm_init')` to add a function to be called after all plugins have been loaded.
+
 Using the pre-commit hook
 -------------------------
 

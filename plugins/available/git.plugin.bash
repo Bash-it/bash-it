@@ -2,12 +2,13 @@
 cite about-plugin
 about-plugin 'git helper functions'
 
+# shellcheck disable=SC2016
 function git_remote {
-	about "adds remote $GIT_HOSTING:$1 to current repo"
+	about 'adds remote $GIT_HOSTING:$1 to current repo'
 	group "git"
 
-	echo "Running: git remote add origin ${GIT_HOSTING}:$1.git"
-	git remote add origin "$GIT_HOSTING:$1".git
+	echo "Running: git remote add origin ${GIT_HOSTING:?}:$1.git"
+	git remote add origin "${GIT_HOSTING}:${1}".git
 }
 
 function git_first_push {
@@ -24,14 +25,14 @@ function git_pub() {
 	BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 	echo "Publishing ${BRANCH} to remote origin"
-	git push -u origin "$BRANCH"
+	git push -u origin "${BRANCH}"
 }
 
 function git_revert() {
 	about 'applies changes to HEAD that revert all changes after this commit'
 	group 'git'
 
-	git reset "$1"
+	git reset "${1:?}"
 	git reset --soft "HEAD@{1}"
 	git commit -m "Revert to ${1}"
 	git reset --hard
@@ -49,9 +50,7 @@ function git_rollback() {
 	}
 
 	function commit_exists() {
-		git rev-list --quiet "$1"
-		status=$?
-		if [ $status -ne 0 ]; then
+		if git rev-list --quiet "${1:?}"; then
 			echo "Commit ${1} does not exist"
 			kill -INT $$
 		fi
@@ -61,7 +60,7 @@ function git_rollback() {
 		while true; do
 			# shellcheck disable=SC2162
 			read -p "Do you want to keep all changes from rolled back revisions in your working tree? [Y/N]" RESP
-			case $RESP in
+			case "${RESP}" in
 
 				[yY])
 					echo "Rolling back to commit ${1} with unstaged changes"
@@ -87,7 +86,7 @@ function git_rollback() {
 		while true; do
 			# shellcheck disable=SC2162
 			read -p "WARNING: This will change your history and move the current HEAD back to commit ${1}, continue? [Y/N]" RESP
-			case $RESP in
+			case "${RESP}" in
 
 				[yY])
 					keep_changes "$1"
@@ -134,8 +133,8 @@ function git_info() {
 
 		# print all remotes and thier details
 		for remote in $(git remote show); do
-			echo "$remote":
-			git remote show "$remote"
+			echo "${remote}":
+			git remote show "${remote}"
 			echo
 		done
 
@@ -172,32 +171,32 @@ function git_stats {
 		AUTHORS=$(git shortlog -sn --all | cut -f2 | cut -f1 -d' ')
 		LOGOPTS=""
 		if [ "$1" == '-w' ]; then
-			LOGOPTS="$LOGOPTS -w"
+			LOGOPTS="${LOGOPTS} -w"
 			shift
 		fi
 		if [ "$1" == '-M' ]; then
-			LOGOPTS="$LOGOPTS -M"
+			LOGOPTS="${LOGOPTS} -M"
 			shift
 		fi
 		if [ "$1" == '-C' ]; then
-			LOGOPTS="$LOGOPTS -C --find-copies-harder"
+			LOGOPTS="${LOGOPTS} -C --find-copies-harder"
 			shift
 		fi
-		for a in $AUTHORS; do
+		for a in ${AUTHORS}; do
 			echo '-------------------'
-			echo "Statistics for: $a"
+			echo "Statistics for: ${a}"
 			echo -n "Number of files changed: "
 			# shellcheck disable=SC2086
-			git log $LOGOPTS --all --numstat --format="%n" --author="$a" | cut -f3 | sort -iu | wc -l
+			git log ${LOGOPTS} --all --numstat --format="%n" --author="${a}" | cut -f3 | sort -iu | wc -l
 			echo -n "Number of lines added: "
 			# shellcheck disable=SC2086
-			git log $LOGOPTS --all --numstat --format="%n" --author="$a" | cut -f1 | awk '{s+=$1} END {print s}'
+			git log ${LOGOPTS} --all --numstat --format="%n" --author="${a}" | cut -f1 | awk '{s+=$1} END {print s}'
 			echo -n "Number of lines deleted: "
 			# shellcheck disable=SC2086
-			git log $LOGOPTS --all --numstat --format="%n" --author="$a" | cut -f2 | awk '{s+=$1} END {print s}'
+			git log ${LOGOPTS} --all --numstat --format="%n" --author="${a}" | cut -f2 | awk '{s+=$1} END {print s}'
 			echo -n "Number of merges: "
 			# shellcheck disable=SC2086
-			git log $LOGOPTS --all --merges --author="$a" | grep -c '^commit'
+			git log ${LOGOPTS} --all --merges --author="${a}" | grep -c '^commit'
 		done
 	else
 		echo "you're currently not in a git repository"
@@ -212,18 +211,16 @@ function gittowork() {
 
 	result=$(curl -L "https://www.gitignore.io/api/$1" 2> /dev/null)
 
-	if [[ $result =~ ERROR ]]; then
+	if [[ "${result}" =~ ERROR ]]; then
 		echo "Query '$1' has no match. See a list of possible queries with 'gittowork list'"
-	elif [[ $1 = list ]]; then
-		echo "$result"
+	elif [[ $1 == list ]]; then
+		echo "${result}"
 	else
 		if [[ -f .gitignore ]]; then
-			result=$(echo "$result" | grep -v "# Created by http://www.gitignore.io")
+			result=$(grep -v "# Created by http://www.gitignore.io" <<< "${result}")
 			echo ".gitignore already exists, appending..."
-			echo "$result" >> .gitignore
-		else
-			echo "$result" > .gitignore
 		fi
+		echo "${result}" >> .gitignore
 	fi
 }
 
@@ -257,7 +254,7 @@ function gitignore-reload() {
 	fi
 
 	# Prompt user to commit or stash changes and exit
-	if [ $err = 1 ]; then
+	if [[ "${err}" == 1 ]]; then
 		echo >&2 "Please commit or stash them."
 	fi
 
@@ -265,7 +262,7 @@ function gitignore-reload() {
 
 	# If we're here, then there are no uncommited or unstaged changes dangling around.
 	# Proceed to reload .gitignore
-	if [ $err = 0 ]; then
+	if [[ "${err}" == 0 ]]; then
 		# Remove all cached files
 		git rm -r --cached .
 
@@ -290,6 +287,7 @@ function git-changelog() {
 		return 1
 	fi
 
+	# shellcheck disable=SC2155
 	local NEXT=$(date +%F)
 
 	if [[ "$2" == "md" ]]; then
@@ -298,9 +296,9 @@ function git-changelog() {
 		# shellcheck disable=SC2162
 		git log "$1" --no-merges --format="%cd" --date=short | sort -u -r | while read DATE; do
 			echo
-			echo "### $DATE"
-			git log --no-merges --format=" * (%h) %s by [%an](mailto:%ae)" --since="$DATE 00:00:00" --until="$DATE 24:00:00"
-			NEXT=$DATE
+			echo "### ${DATE}"
+			git log --no-merges --format=" * (%h) %s by [%an](mailto:%ae)" --since="${DATE} 00:00:00" --until="${DATE} 24:00:00"
+			NEXT=${DATE}
 		done
 	else
 		echo "CHANGELOG $1"
@@ -309,9 +307,10 @@ function git-changelog() {
 		# shellcheck disable=SC2162
 		git log "$1" --no-merges --format="%cd" --date=short | sort -u -r | while read DATE; do
 			echo
-			echo [$DATE]
-			git log --no-merges --format=" * (%h) %s by %an <%ae>" --since="$DATE 00:00:00" --until="$DATE 24:00:00"
-			NEXT=$DATE
+			echo "[${DATE}]"
+			git log --no-merges --format=" * (%h) %s by %an <%ae>" --since="${DATE} 00:00:00" --until="${DATE} 24:00:00"
+			# shellcheck disable=SC2034
+			NEXT=${DATE}
 		done
 	fi
 }
