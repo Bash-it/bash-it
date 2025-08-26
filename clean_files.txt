@@ -41,6 +41,7 @@ themes/atomic
 themes/axin
 themes/bakke
 themes/barbuk
+themes/base.theme.bash
 themes/binaryanomaly
 themes/bira
 themes/bobby
@@ -74,7 +75,12 @@ themes/kitsune
 themes/lambda
 themes/liquidprompt
 themes/luan
+themes/mairan
+themes/mbriggs
+themes/metal
+themes/minimal
 themes/modern
+themes/modern-t
 themes/norbu
 themes/oh-my-posh
 themes/p4helpers.theme.bash
