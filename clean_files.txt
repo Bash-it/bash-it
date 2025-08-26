@@ -81,7 +81,12 @@ themes/metal
 themes/minimal
 themes/modern
 themes/modern-t
+themes/modern-time
+themes/morris
+themes/n0qorg
+themes/newin
 themes/norbu
+themes/nwinkler
 themes/oh-my-posh
 themes/p4helpers.theme.bash
 themes/pete
