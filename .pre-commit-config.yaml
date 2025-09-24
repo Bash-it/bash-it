@@ -3,7 +3,7 @@
 ---
 # fail_fast: true
 minimum_pre_commit_version: 1.18.1
-exclude: "docs/_build/"
+exclude: "docs/_build/|vendor/"
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.3.0

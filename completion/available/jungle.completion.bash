@@ -1,7 +1,10 @@
 # shellcheck shell=bash
-cite "about-completion"
 about-completion "jungle(AWS cli tool) completion"
 
-if _command_exists jungle; then
-	eval "$(_JUNGLE_COMPLETE=source jungle)"
-fi
+# Make sure jungle is installed
+_bash-it-completion-helper-necessary jungle || return
+
+# Don't handle completion if it's already managed
+_bash-it-completion-helper-sufficient jungle || return
+
+eval "$(_JUNGLE_COMPLETE=source jungle)"

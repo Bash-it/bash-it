@@ -1,6 +1,10 @@
 # shellcheck shell=bash
-# minikube (Local Kubernetes) completion
+about-completion "minikube (Local Kubernetes) completion"
 
-if _command_exists minikube; then
-	eval "$(minikube completion bash)"
-fi
+# Make sure minikube is installed
+_bash-it-completion-helper-necessary minikube || return
+
+# Don't handle completion if it's already managed
+_bash-it-completion-helper-sufficient minikube || return
+
+eval "$(minikube completion bash)"

@@ -1,6 +1,10 @@
 # shellcheck shell=bash
-# cargo (Rust package manager) completion
+about-completion "cargo (Rust package manager) completion"
 
-if _binary_exists rustup && _binary_exists cargo; then
-	eval "$(rustup completions bash cargo)"
-fi
+# Make sure cargo is installed
+_bash-it-completion-helper-necessary rustup cargo || return
+
+# Don't handle completion if it's already managed
+_bash-it-completion-helper-sufficient cargo || return
+
+eval "$(rustup completions bash cargo)"
