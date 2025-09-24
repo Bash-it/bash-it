@@ -41,7 +41,6 @@ themes/atomic
 themes/axin
 themes/bakke
 themes/barbuk
-themes/base.theme.bash
 themes/binaryanomaly
 themes/bira
 themes/bobby
@@ -53,6 +52,8 @@ themes/clean
 themes/codeword
 themes/cooperkid
 themes/cupcake
+themes/demula
+themes/dos
 themes/doubletime
 themes/doubletime_multiline
 themes/doubletime_multiline_pyonly
@@ -60,12 +61,19 @@ themes/dulcie
 themes/duru
 themes/easy
 themes/elixr
+themes/emperor
+themes/envy
 themes/essential
-themes/githelpers.theme.bash
+themes/font
+themes/gallifrey
 themes/gitline
+themes/hawaii50
 themes/inretio
+themes/iterate
+themes/kitsune
 themes/lambda
 themes/liquidprompt
+themes/luan
 themes/modern
 themes/norbu
 themes/oh-my-posh

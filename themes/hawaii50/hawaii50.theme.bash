@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
 #
 # This theme was obviously inspired a lot by
 #
@@ -42,22 +43,22 @@ VIRTUAL_PROMPT_ENABLED=1
 # COLORS ======================================================================
 ORANGE='\[\e[0;33m\]'
 
-DEFAULT_COLOR="${white}"
+DEFAULT_COLOR="${white?}"
 
-USER_COLOR="${purple}"
-SUPERUSER_COLOR="${red}"
+USER_COLOR="${purple?}"
+SUPERUSER_COLOR="${red?}"
 MACHINE_COLOR=$ORANGE
 IP_COLOR=$ORANGE
-DIRECTORY_COLOR="${green}"
+DIRECTORY_COLOR="${green?}"
 
-VE_COLOR="${cyan}"
-RVM_COLOR="${cyan}"
+VE_COLOR="${cyan?}"
+RVM_COLOR="${cyan?}"
 
-REF_COLOR="${purple}"
+REF_COLOR="${purple?}"
 
 # SCM prompts
-SCM_THEME_PROMPT_DIRTY=" ${bold_red}✗${normal}"
-SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓${normal}"
+SCM_THEME_PROMPT_DIRTY=" ${bold_red?}✗${normal?}"
+SCM_THEME_PROMPT_CLEAN=" ${bold_green?}✓${normal?}"
 SCM_THEME_PROMPT_PREFIX=' on '
 SCM_THEME_PROMPT_SUFFIX=''
 
@@ -85,7 +86,7 @@ IP_SEPARATOR=', '
 
 function get_ip_info {
 	myip=$(curl -s checkip.dyndns.org | grep -Eo '[0-9\.]+')
-	echo -e "$(ips | sed -e :a -e '$!N;s/\n/${IP_SEPARATOR}/;ta' | sed -e 's/127\.0\.0\.1\${IP_SEPARATOR}//g'), ${myip}"
+	echo -e "$(ips | sed -e :a -e "\$!N;s/\\n/${IP_SEPARATOR}/;ta" | sed -e "s/127\\.0\\.0\\.1\\${IP_SEPARATOR}//g"), ${myip}"
 }
 
 # Displays ip prompt
@@ -97,9 +98,10 @@ function ip_prompt_info() {
 
 # Displays virtual info prompt (virtualenv/rvm)
 function virtual_prompt_info() {
-	local virtual_env_info=$(virtualenv_prompt)
-	local rvm_info=$(ruby_version_prompt)
-	local virtual_prompt=""
+	local virtual_env_info rvm_info virtual_prompt
+	virtual_env_info=$(virtualenv_prompt)
+	rvm_info=$(ruby_version_prompt)
+	virtual_prompt=""
 
 	local prefix=${VIRTUAL_THEME_PROMPT_PREFIX}
 	local suffix=${VIRTUAL_THEME_PROMPT_SUFFIX}
@@ -119,7 +121,10 @@ function virtual_prompt_info() {
 
 # Parse git info
 function git_prompt_info() {
-	if [[ -n $(git status -s 2> /dev/null | grep -v ^# | grep -v "working directory clean") ]]; then
+	local dirty
+	dirty=$(git status --porcelain 2> /dev/null | tail -n 1)
+
+	if [[ -n $dirty ]]; then
 		state=${GIT_THEME_PROMPT_DIRTY:-$SCM_THEME_PROMPT_DIRTY}
 	else
 		state=${GIT_THEME_PROMPT_CLEAN:-$SCM_THEME_PROMPT_CLEAN}
@@ -170,7 +175,7 @@ function limited_pwd() {
 	# Replace $HOME with ~ if possible
 	RELATIVE_PWD=${PWD/#$HOME/\~}
 
-	local offset=$((${#RELATIVE_PWD} - $MAX_PWD_LENGTH))
+	local offset=$((${#RELATIVE_PWD} - MAX_PWD_LENGTH))
 
 	if [ $offset -gt "0" ]; then
 		local truncated_symbol="..."
@@ -187,9 +192,9 @@ function prompt() {
 	[ $UID -eq "0" ] && UC=$SUPERUSER_COLOR
 
 	if [[ $VIRTUAL_PROMPT_ENABLED == 1 ]]; then
-		PS1="$(scm_char) ${UC}\u ${DEFAULT_COLOR}at ${MACHINE_COLOR}\h$(ip_prompt_info) ${DEFAULT_COLOR}in ${DIRECTORY_COLOR}$(limited_pwd)${DEFAULT_COLOR}$(virtual_prompt_info)$(scm_prompt_info)${reset_color} \$ "
+		PS1="$(scm_char) ${UC}\u ${DEFAULT_COLOR}at ${MACHINE_COLOR}\h$(ip_prompt_info) ${DEFAULT_COLOR}in ${DIRECTORY_COLOR}$(limited_pwd)${DEFAULT_COLOR}$(virtual_prompt_info)$(scm_prompt_info)${reset_color?} \$ "
 	else
-		PS1="$(scm_char) ${UC}\u ${DEFAULT_COLOR}at ${MACHINE_COLOR}\h$(ip_prompt_info) ${DEFAULT_COLOR}in ${DIRECTORY_COLOR}$(limited_pwd)${DEFAULT_COLOR}$(scm_prompt_info)${reset_color} \$ "
+		PS1="$(scm_char) ${UC}\u ${DEFAULT_COLOR}at ${MACHINE_COLOR}\h$(ip_prompt_info) ${DEFAULT_COLOR}in ${DIRECTORY_COLOR}$(limited_pwd)${DEFAULT_COLOR}$(scm_prompt_info)${reset_color?} \$ "
 	fi
 	PS2='> '
 	PS4='+ '

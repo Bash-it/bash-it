@@ -1,61 +1,61 @@
 # shellcheck shell=bash
 
-__vuejs_completion() {
-	# shellcheck disable=SC2155
-	local prev=$(_get_pword)
-	# shellcheck disable=SC2155
-	local curr=$(_get_cword)
+# Make sure vue is installed
+_bash-it-completion-helper-necessary vue || :
+
+# Don't handle completion if it's already managed
+_bash-it-completion-helper-sufficient vue || return
+
+function _vuejs() {
+	local prev="${COMP_WORDS[COMP_CWORD - 1]}"
 
 	case $prev in
 		create)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "-p -d -i -m -r -g -n -f -c -x -b -h --help --preset --default --inilinePreset --packageManager --registry --git --no-git --force --merge --clone --proxy --bare  --skipGetStarted" -- "$curr"))
+			COMPREPLY=("-p" "-d" "-i" "-m" "-r" "-g" "-n" "-f" "-c" "-x" "-b"
+				"-h" "--help" "--preset" "--default" "--inilinePreset"
+				"--packageManager" "--registry" "--git" "--no-git" "--force"
+				"--merge" "--clone" "--proxy" "--bare" "" "--skipGetStarted")
 			;;
 		add | invoke)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "--registry -h --help" -- "$curr"))
+			COMPREPLY=("--registry" "-h" "--help")
 			;;
 		inspect)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "-v --help --verbose --mode --rule --plugin --plugins --rules" -- "$curr"))
+			COMPREPLY=("-v" "--help" "--verbose" "--mode" "--rule" "--plugin"
+				"--plugins" "--rules")
 			;;
 		serve)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "-o -h --help --open -c --copy -p --port" -- "$curr"))
+			COMPREPLY=("-o" "-h" "--help" "--open" "-c" "--copy" "-p" "--port")
 			;;
 		build)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "-t --target -n --name -d --dest -h --help" -- "$curr"))
+			COMPREPLY=("-t" "--target" "-n" "--name" "-d" "--dest" "-h" "--help")
 			;;
 		ui)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "-H --host -p --port -D --dev --quiet --headless -h --help" -- "$curr"))
+			COMPREPLY=("-H" "--host" "-p" "--port" "-D" "--dev" "--quiet"
+				"--headless" "-h" "--help")
 			;;
 		init)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "-c --clone --offline -h --help" -- "$curr"))
+			COMPREPLY=("-c" "--clone" "--offline" "-h" "--help")
 			;;
 		config)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "-g --get -s --set -d --delete -e --edit --json -h --help" -- "$curr"))
+			COMPREPLY=("-g" "--get" "-s" "--set" "-d" "--delete" "-e" "--edit"
+				"--json" "-h" "--help")
 			;;
 		outdated)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "--next -h --help" -- "$curr"))
+			COMPREPLY=("--next" "-h" "--help")
 			;;
 		upgrade)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "-t --to -f --from -r --registry --all --next -h --help" -- "$curr"))
+			COMPREPLY=("-t" "--to" "-f" "--from" "-r" "--registry" "--all"
+				"--next" "-h" "--help")
 			;;
 		migrate)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "-f --from -h --help" -- "$curr"))
+			COMPREPLY=("-f" "--from" "-h" "--help")
 			;;
 		*)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "-h --help -v --version create add invoke inspect serve build ui init config outdated upgrade migrate info" -- "$curr"))
+			COMPREPLY=("-h" "--help" "-v" "--version" "create" "add" "invoke"
+				"inspect" "serve" "build" "ui" "init" "config" "outdated"
+				"upgrade" "migrate" "info")
 			;;
 	esac
 }
 
-complete -F __vuejs_completion vue
+complete -F _vuejs -X '!&*' vue

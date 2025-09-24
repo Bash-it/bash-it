@@ -212,6 +212,12 @@ alias gta='git tag -a'
 alias gtd='git tag -d'
 alias gtl='git tag -l'
 
+#worktree
+alias gw='git worktree'
+alias gwa='git worktree add'
+alias gwl='git worktree list'
+alias gwr='git worktree remove'
+
 case $OSTYPE in
 	darwin*)
 		alias gtls="git tag -l | gsort -V"

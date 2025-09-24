@@ -3,13 +3,10 @@
 # Locate and load completions for `git`.
 
 # Make sure git is installed
-_command_exists git || return
+_bash-it-completion-helper-necessary git || :
 
 # Don't handle completion if it's already managed
-if complete -p git &> /dev/null; then
-	_log_warning "completion already loaded - this usually means it is safe to stop using this completion"
-	return 0
-fi
+_bash-it-completion-helper-sufficient git || return
 
 _git_bash_completion_xcrun_git=
 if _command_exists xcrun; then

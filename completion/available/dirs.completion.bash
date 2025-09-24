@@ -1,16 +1,13 @@
 # shellcheck shell=bash
-# Bash completion support for the 'dirs' plugin (commands G, R).
+about-completion "Bash completion support for the 'dirs' plugin (commands G, R)."
 
-_dirs-complete() {
-	local CURRENT_PROMPT="${COMP_WORDS[COMP_CWORD]}"
-
-	# parse all defined shortcuts from ~/.dirs
-	if [ -r "$HOME/.dirs" ]; then
-		# shellcheck disable=SC2207
-		COMPREPLY=($(compgen -W "$(grep -v '^#' ~/.dirs | sed -e 's/\(.*\)=.*/\1/')" -- "${CURRENT_PROMPT}"))
+function _dirs-complete() {
+	# parse all defined shortcuts ${BASH_IT_DIRS_BKS}
+	if [[ -s "${BASH_IT_DIRS_BKS:-/dev/null}" ]]; then
+		IFS=$'\n' read -d '' -ra COMPREPLY < <(grep -v '^#' "${BASH_IT_DIRS_BKS?}" | sed -e 's/\(.*\)=.*/\1/')
 	fi
 
 	return 0
 }
 
-complete -o default -o nospace -F _dirs-complete G R
+complete -o default -o nospace -F _dirs-complete -X '!&*' G R

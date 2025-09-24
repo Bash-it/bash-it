@@ -49,14 +49,14 @@ function __powerline_right_first_segment_padding() {
 }
 
 function __powerline_last_status_prompt() {
-	if [[ "${1?}" -ne 0 ]]; then
+	if [[ "${1}" -ne 0 ]]; then
 		printf '%b %s %b' "$(set_color "${LAST_STATUS_THEME_PROMPT_COLOR-"52"}" -)" "${1}" "${normal?}"
 	fi
 }
 
 function __powerline_prompt_command() {
 	local last_status="$?" ## always the first
-	local beginning_of_line='\[\e[G\]'
+	local beginning_of_line='\[\e[B\]'
 	local move_cursor_rightmost='\e[500C'
 	local info prompt_color segment prompt
 
@@ -75,7 +75,7 @@ function __powerline_prompt_command() {
 
 	## left prompt ##
 	# shellcheck disable=SC2068 # intended behavior
-	for segment in ${POWERLINE_PROMPT[@]-"user_info" "scm" "python_venv" "ruby" "node" "cwd"}; do
+	for segment in ${POWERLINE_LEFT_PROMPT[@]:-${POWERLINE_PROMPT[@]:-"user_info" "scm" "python_venv" "ruby node" "cwd"}}; do
 		info="$("__powerline_${segment}_prompt")"
 		if [[ -n "${info}" ]]; then
 			__powerline_left_segment "${info}"
@@ -90,7 +90,7 @@ function __powerline_prompt_command() {
 	# but when part of the prompt exists within that segment, we instead match the foreground color.
 	prompt_color="$(set_color "${LAST_SEGMENT_COLOR?}" -)"
 	if [[ -n "${LEFT_PROMPT:-}" && -n "${POWERLINE_LEFT_LAST_SEGMENT_END_CHAR:-}" ]]; then
-		LEFT_PROMPT+="$(set_color - "${LAST_SEGMENT_COLOR?}")${POWERLINE_LEFT_LAST_SEGMENT_END_CHAR}"
+		LEFT_PROMPT+="$(set_color "${LAST_SEGMENT_COLOR?}" -)${POWERLINE_LEFT_LAST_SEGMENT_END_CHAR}"
 		prompt_color="${normal?}"
 	fi
 
