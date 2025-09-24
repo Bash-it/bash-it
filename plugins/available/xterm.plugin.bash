@@ -39,7 +39,23 @@ function preexec_xterm_title() {
 
 case "${TERM:-dumb}" in
 	xterm* | rxvt* | gnome-terminal | konsole | zvt | dtterm | kterm | Eterm | zterm)
-		safe_append_prompt_command 'precmd_xterm_title'
-		safe_append_preexec 'preexec_xterm_title'
+		# Check for safe_append functions and use fallback if not available
+		if _is_function safe_append_prompt_command; then
+			safe_append_prompt_command 'precmd_xterm_title'
+		elif [[ -n "${PROMPT_COMMAND:-}" ]]; then
+			# Fallback: append to PROMPT_COMMAND if it exists
+			PROMPT_COMMAND="precmd_xterm_title;${PROMPT_COMMAND}"
+		else
+			PROMPT_COMMAND='precmd_xterm_title'
+		fi
+
+		if _is_function safe_append_preexec; then
+			safe_append_preexec 'preexec_xterm_title'
+		else
+			# Fallback: register function directly if preexec array is available
+			if [[ -n "${preexec_functions:-}" ]]; then
+				preexec_functions+=('preexec_xterm_title')
+			fi
+		fi
 		;;
 esac

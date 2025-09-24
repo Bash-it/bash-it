@@ -586,12 +586,21 @@ function prompt_char() {
 
 function battery_char() {
 	local battery_percentage
-	battery_percentage="$(battery_percentage)"
-	if [[ "${THEME_BATTERY_PERCENTAGE_CHECK}" == true ]]; then
-		echo -e "${bold_red?}${battery_percentage}%"
+	if _is_function battery_percentage; then
+		battery_percentage="$(battery_percentage)"
+		if [[ "${THEME_BATTERY_PERCENTAGE_CHECK}" == true ]]; then
+			echo -e "${bold_red?}${battery_percentage}%"
+		else
+			false
+		fi
 	else
 		false
 	fi
+}
+
+function battery_charge() {
+	# Provide a stub that always returns empty - the real implementation is in lib/battery.bash
+	echo ""
 }
 
 function aws_profile() {
