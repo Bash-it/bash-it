@@ -68,9 +68,9 @@ function _bash-it-install-backup-check() {
 	fi
 	echo -e "${echo_yellow:-}Backup file already exists. Make sure to backup your .bashrc before running this installation.${echo_normal:-}" >&2
 
-	if [[ -z "${overwrite_backup}" ]]; then
-		while [[ -z "${silent}" ]]; do
-			read -e -n 1 -r -p "Would you like to overwrite the existing backup? This will delete your existing backup file (${HOME?}/$BACKUP_FILE) [y/N] " RESP
+	if [[ -z "${overwrite_backup:-}" ]]; then
+		while [[ -z "${silent:-}" ]]; do
+			read -e -n 1 -r -p "Would you like to overwrite the existing backup? This will delete your existing backup file ($HOME/$BACKUP_FILE) [y/N] " RESP
 			case $RESP in
 				[yY])
 					overwrite_backup=true
@@ -85,9 +85,9 @@ function _bash-it-install-backup-check() {
 			esac
 		done
 	fi
-	if [[ -z "${overwrite_backup}" ]]; then
+	if [[ -z "${overwrite_backup:-}" ]]; then
 		echo -e "${echo_orange:-}Installation aborted. Please come back soon!${echo_normal:-}"
-		if [[ -n "${silent}" ]]; then
+		if [[ -n "${silent:-}" ]]; then
 			echo -e "${echo_orange:-}Use \"-f\" flag to force overwrite of backup.${echo_normal:-}"
 		fi
 		exit 1
@@ -99,9 +99,9 @@ function _bash-it-install-backup-check() {
 function _bash-it-install-modify-config() {
 	_bash-it-install-backup-check
 
-	if [[ -z "${silent}" ]]; then
-		while [[ -z "${append_to_config}" ]]; do
-			read -e -n 1 -r -p "Would you like to keep your ${CONFIG_FILE?} and append bash-it templates at the end? [y/N] " choice
+	if [[ -z "${silent:-}" ]]; then
+		while [[ -z "${append_to_config:-}" ]]; do
+			read -e -n 1 -r -p "Would you like to keep your $CONFIG_FILE and append bash-it templates at the end? [y/N] " choice
 			case $choice in
 				[yY])
 					append_to_config=true
@@ -170,12 +170,12 @@ done
 
 shift $((OPTIND - 1))
 
-if [[ -n "${silent}" && -n "${interactive}" ]]; then
+if [[ -n "${silent:-}" && -n "${interactive:-}" ]]; then
 	echo -e "${echo_orange:-}Options --silent and --interactive are mutually exclusive. Please choose one or the other.${echo_normal:-}"
 	exit 1
 fi
 
-if [[ -n "${no_modify_config}" && -n "${append_to_config}" ]]; then
+if [[ -n "${no_modify_config:-}" && -n "${append_to_config:-}" ]]; then
 	echo -e "${echo_orange:-}Options --no-modify-config and --append-to-config are mutually exclusive. Please choose one or the other.${echo_normal:-}"
 	exit 1
 fi
@@ -212,7 +212,7 @@ source "${BASH_IT?}/lib/helpers.bash"
 # shellcheck source-path=SCRIPTDIR/lib
 source "${BASH_IT?}/lib/colors.bash"
 
-if [[ -n $interactive && -z "${silent}" ]]; then
+if [[ -n ${interactive:-} && -z "${silent:-}" ]]; then
 	for type in "aliases" "plugins" "completion"; do
 		echo -e "${echo_green:-}Enabling ${type}${echo_normal:-}"
 		_bash-it-install-enable "$type"
