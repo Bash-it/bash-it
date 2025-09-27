@@ -77,5 +77,5 @@ function local_setup_file() {
 	run cat "$HOME/$BASH_IT_CONFIG_FILE"
 
 	assert_line "test file content"
-	assert_line "source \"\$BASH_IT\"/bash_it.sh"
+	assert_line "source \"\${BASH_IT?}/bash_it.sh\""
 }
