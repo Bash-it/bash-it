@@ -585,18 +585,23 @@ function prompt_char() {
 }
 
 function battery_char() {
-	# The battery_char function depends on the presence of the battery_percentage function.
-	if [[ "${THEME_BATTERY_PERCENTAGE_CHECK}" == true ]] && _command_exists battery_percentage; then
-		echo -ne "${bold_red?}$(battery_percentage)%"
+	local battery_percentage
+	if _is_function battery_percentage; then
+		battery_percentage="$(battery_percentage)"
+		if [[ "${THEME_BATTERY_PERCENTAGE_CHECK}" == true ]]; then
+			echo -e "${bold_red?}${battery_percentage}%"
+		else
+			false
+		fi
 	else
 		false
 	fi
 }
 
 if ! _command_exists battery_charge; then
-	# if user has installed battery plugin, skip this...
 	function battery_charge() {
-		: # no op
+		# Provide a stub that always returns empty - the real implementation is in lib/battery.bash
+		echo ""
 	}
 fi
 

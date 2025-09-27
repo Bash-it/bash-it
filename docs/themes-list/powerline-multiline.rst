@@ -19,7 +19,7 @@ To get the length of the left and right segments right, a *padding* value is use
 In most cases, the default value (\ *2*\ ) works fine, but on some operating systems, this needs to be adjusted.
 One example is *macOS High Sierra*\ , where the default padding causes the right segment to extend to the next line.
 On macOS High Sierra, the padding value needs to be changed to *3* to make the theme look right.
-This can be done by setting the ``POWERLINE_PADDING`` variable before Bash-it is loaded, e.g. in your ``~/.bash_profile`` or ``~/.bashrc`` file:
+This can be done by setting the ``POWERLINE_PADDING`` variable before Bash-it is loaded, e.g. in your ``~/.bashrc`` file:
 
 .. code-block:: bash
 

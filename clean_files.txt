@@ -23,6 +23,7 @@ hooks/
 lib/
 plugins/
 scripts/
+template/
 test/
 
 # root files
@@ -32,6 +33,7 @@ bash_it.sh
 clean_files.txt
 install.sh
 lint_clean_files.sh
+uninstall.sh
 
 # themes
 #
