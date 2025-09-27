@@ -598,10 +598,12 @@ function battery_char() {
 	fi
 }
 
-function battery_charge() {
-	# Provide a stub that always returns empty - the real implementation is in lib/battery.bash
-	echo ""
-}
+if ! _command_exists battery_charge; then
+	function battery_charge() {
+		# Provide a stub that always returns empty - the real implementation is in lib/battery.bash
+		echo ""
+	}
+fi
 
 function aws_profile() {
 	if [[ -n "${AWS_PROFILE:-}" ]]; then
