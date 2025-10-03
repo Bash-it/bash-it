@@ -2,6 +2,19 @@
 # shellcheck source-path=SCRIPTDIR
 about-alias 'general aliases'
 
+if command ls --color -d . &> /dev/null; then
+	alias ls='ls --color=auto'
+	# BSD `ls` doesn't need an argument (`-G`) when `$CLICOLOR` is set.
+fi
+
+# List directory contents
+alias sl=ls
+alias la='ls -AF' # Compact view, show hidden
+alias ll='ls -Al'
+alias l='ls -A'
+alias l1='ls -1'
+alias lf='ls -F'
+
 alias _='sudo'
 
 # colored grep
@@ -58,7 +71,12 @@ alias rd='rmdir'
 alias rmrf='rm -rf'
 
 # Shorten extract
-alias xt='extract'
+_command_exists 'extract' \
+	&& alias xt='extract'
+
+# sudo editors
+alias svim='sudo "${VISUAL:-vim}"'
+alias snano='sudo "${ALTERNATE_EDITOR:-nano}"'
 
 # Display whatever file is regular file or folder
 function catt() {

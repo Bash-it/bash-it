@@ -80,13 +80,6 @@ ${D_BRANCH_COLOR}%b %r ${D_CHANGES_COLOR}%m%u ${D_DEFAULT_COLOR}"
 	fi
 }
 
-# checks if the plugin is installed before calling battery_charge
-safe_battery_charge() {
-	if _command_exists battery_charge; then
-		battery_charge
-	fi
-}
-
 # -------------------------------------------------------------- PROMPT OUTPUT
 prompt() {
 	local LAST_COMMAND_FAILED
@@ -98,7 +91,7 @@ prompt() {
 
 	if [[ "$OSTYPE" = 'linux'* ]]; then
 		PS1="${TITLEBAR}${SAVE_CURSOR}${MOVE_CURSOR_RIGHTMOST}${MOVE_CURSOR_5_LEFT}
-$(safe_battery_charge)${RESTORE_CURSOR}\
+$(battery_charge)${RESTORE_CURSOR}\
 ${D_USER_COLOR}\u ${D_INTERMEDIATE_COLOR}\
 at ${D_MACHINE_COLOR}\h ${D_INTERMEDIATE_COLOR}\
 in ${D_DIR_COLOR}\w ${D_INTERMEDIATE_COLOR}\
@@ -114,7 +107,7 @@ in ${D_DIR_COLOR}\w ${D_INTERMEDIATE_COLOR}\
 ${LAST_COMMAND_FAILED}\
 $(demula_vcprompt)\
 $(is_vim_shell)\
-$(safe_battery_charge)
+$(battery_charge)
 ${D_INTERMEDIATE_COLOR}$ ${D_DEFAULT_COLOR}"
 	fi
 

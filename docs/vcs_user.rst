@@ -10,7 +10,7 @@ Turn version control checking off to prevent slow directory navigation within la
 Controlling Flags
 ^^^^^^^^^^^^^^^^^
 
-Bash-it provides a flag (\ ``SCM_CHECK``\ ) within the ``~/.bash_profile`` file that turns off/on version control information checking and display within all themes.
+Bash-it provides a flag (\ ``SCM_CHECK``\ ) within the ``~/.bashrc`` file that turns off/on version control information checking and display within all themes.
 Version control checking is on by default unless explicitly turned off.
 
 Set ``SCM_CHECK`` to 'false' to **turn off** version control checks for all themes:
