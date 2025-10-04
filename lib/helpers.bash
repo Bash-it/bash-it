@@ -414,6 +414,90 @@ function _bash-it-doctor-errors() {
 	_bash-it-doctor "${BASH_IT_LOG_LEVEL_ERROR?}"
 }
 
+function _bash-it-doctor-check-profile-sourcing-grep() {
+	_about 'checks if .bashrc is sourced from profile using grep'
+	_param '1: profile file path'
+	_group 'lib'
+
+	local profile_file="${1}"
+	[[ ! -f "$profile_file" ]] && return 1
+
+	# Look for common patterns that source .bashrc
+	command grep -qE '(source|\.)\s+(~|\$HOME|"\$HOME")?/\.bashrc|if.*BASH_VERSION.*bashrc' "$profile_file"
+}
+
+function _bash-it-doctor-check-profile-sourcing-test() {
+	_about 'checks if .bashrc is actually sourced using brute force test'
+	_group 'lib'
+
+	local bashrc="$HOME/.bashrc"
+	[[ ! -f "$bashrc" ]] && return 1
+
+	local backup_bashrc="/tmp/.bashrc_backup_$$"
+
+	# Move .bashrc aside
+	command mv "$bashrc" "$backup_bashrc" 2> /dev/null || return 1
+
+	# Create test .bashrc that just echoes
+	echo 'echo "__BASHRC_WAS_SOURCED__"' > "$bashrc"
+
+	# Test in login shell, capture output
+	local output
+	output=$(bash -l -c ':' 2>&1)
+
+	# Restore immediately
+	command mv "$backup_bashrc" "$bashrc"
+
+	# Check if our marker appeared
+	command grep -q "__BASHRC_WAS_SOURCED__" <<< "$output"
+}
+
+function _bash-it-doctor-check-profile-sourcing() {
+	_about 'checks if .bashrc is sourced from login shell profile files'
+	_group 'lib'
+
+	local profile_file
+	if [[ -f "$HOME/.bash_profile" ]]; then
+		profile_file="$HOME/.bash_profile"
+	elif [[ -f "$HOME/.profile" ]]; then
+		profile_file="$HOME/.profile"
+	else
+		echo "${YELLOW}No .bash_profile or .profile found${RESET}"
+		echo "Login shells may not load bash-it configuration"
+		return
+	fi
+
+	# Show if it's a symlink
+	if [[ -L "$profile_file" ]]; then
+		echo "${YELLOW}Note:${RESET} $profile_file is a symlink to $(readlink "$profile_file")"
+	fi
+
+	# Try grep detection first (fast and safe)
+	if _bash-it-doctor-check-profile-sourcing-grep "$profile_file"; then
+		echo "${GREEN}✓${RESET} .bashrc is sourced from $profile_file"
+		return 0
+	fi
+
+	# Grep didn't find it, try brute force test
+	echo "Grep detection unclear, testing if .bashrc actually loads..."
+	if _bash-it-doctor-check-profile-sourcing-test; then
+		echo "${GREEN}✓${RESET} .bashrc is sourced (confirmed via test)"
+		return 0
+	fi
+
+	# Not sourced
+	echo "${RED}✗${RESET} .bashrc is NOT sourced from $profile_file"
+	echo "  ${YELLOW}Warning:${RESET} bash-it will not load in login shells (Terminal.app, SSH sessions)"
+	echo "  ${YELLOW}Fix:${RESET} Add the following to $profile_file:"
+	echo ""
+	echo "    if [ -n \"\$BASH_VERSION\" ]; then"
+	echo "        if [ -f \"\$HOME/.bashrc\" ]; then"
+	echo "            . \"\$HOME/.bashrc\""
+	echo "        fi"
+	echo "    fi"
+	echo ""
+}
+
 function _bash-it-doctor-summary() {
 	_about 'shows a comprehensive diagnostic summary for bug reports'
 	_group 'lib'
@@ -494,7 +578,7 @@ function _bash-it-doctor-summary() {
 		# Offer to update if behind and it's safe to do so
 		local git_status untracked_files merge_base can_ff
 		git_status="$(git status --porcelain 2> /dev/null)"
-		untracked_files="$(echo "$git_status" | grep -c '^??' || true)"
+		untracked_files="$(echo "$git_status" | command grep -c '^??' || true)"
 
 		# Check if we can fast-forward
 		merge_base="$(git merge-base HEAD "${BASH_IT_REMOTE}/${BASH_IT_DEVELOPMENT_BRANCH}" 2> /dev/null)"
@@ -506,7 +590,7 @@ function _bash-it-doctor-summary() {
 		# Only offer merge if:
 		# 1. No modified/staged files (untracked are OK)
 		# 2. Can fast-forward OR no untracked files that would conflict
-		if ! echo "$git_status" | grep -v '^??' -q; then
+		if ! echo "$git_status" | command grep -v '^??' -q; then
 			if [[ "$can_ff" == "true" ]] || [[ "$untracked_files" == "0" ]]; then
 				echo ""
 				echo "Would you like to update now? This will merge ${BASH_IT_REMOTE}/${BASH_IT_DEVELOPMENT_BRANCH} into your current branch."
@@ -551,15 +635,27 @@ function _bash-it-doctor-summary() {
 
 	if [[ ${#config_files_to_check[@]} -gt 0 ]]; then
 		for config_file_path in "${config_files_to_check[@]}"; do
-			if grep -i "bash.it\|bash_it" "$config_file_path" > /dev/null 2>&1; then
+			if command grep -i "bash.it\|bash_it" "$config_file_path" > /dev/null 2>&1; then
 				echo "From ${config_file_path}:"
-				grep -n -i "bash.it\|bash_it" -B2 -A2 "$config_file_path" 2> /dev/null
+				command grep -n -i "bash.it\|bash_it" -B2 -A2 "$config_file_path" 2> /dev/null
 				echo ""
 			fi
 		done
 	else
 		echo "No config files found (.bashrc, .bash_profile, .profile)"
 	fi
+
+	# Profile Sourcing Check (macOS/Solaris/BSD)
+	echo "${BOLD}## Profile Configuration${RESET}"
+	case "$(uname -s)" in
+		Darwin | SunOS | Illumos | *BSD)
+			_bash-it-doctor-check-profile-sourcing
+			;;
+		*)
+			echo "Not applicable (Linux uses .bashrc for non-login shells by default)"
+			;;
+	esac
+	echo ""
 
 	# Enabled Components Summary
 	echo "${BOLD}## Enabled Components${RESET}"
