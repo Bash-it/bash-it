@@ -72,7 +72,7 @@ function bash-it() {
 	example '$ bash-it reload'
 	example '$ bash-it restart'
 	example '$ bash-it profile list|save|load|rm [profile_name]'
-	example '$ bash-it doctor errors|warnings|all'
+	example '$ bash-it doctor errors|warnings|all|summary'
 	local verb=${1:-}
 	shift
 	local component=${1:-}
@@ -414,11 +414,130 @@ function _bash-it-doctor-errors() {
 	_bash-it-doctor "${BASH_IT_LOG_LEVEL_ERROR?}"
 }
 
-function _bash-it-doctor-() {
-	_about 'default bash-it doctor behavior, behaves like bash-it doctor all'
+function _bash-it-doctor-summary() {
+	_about 'shows a comprehensive diagnostic summary for bug reports'
 	_group 'lib'
 
-	_bash-it-doctor-all
+	local component_type enabled_count enabled_list f component_name
+
+	echo "Bash-it Doctor Summary"
+	echo "======================"
+	echo ""
+
+	# Environment Information
+	echo "## Environment"
+	echo "OS: $(uname -s) $(uname -r)"
+	echo "Bash Version: ${BASH_VERSION}"
+	echo "Bash-it Location: ${BASH_IT}"
+
+	# Check which config file is used
+	local config_file
+	if [[ -n "${BASH_IT_BASHRC:-}" ]]; then
+		config_file="${BASH_IT_BASHRC}"
+	elif [[ -f "${HOME}/.bashrc" ]]; then
+		config_file="${HOME}/.bashrc"
+	elif [[ -f "${HOME}/.bash_profile" ]]; then
+		config_file="${HOME}/.bash_profile"
+	else
+		config_file="unknown"
+	fi
+	echo "Config File: ${config_file}"
+	echo ""
+
+	# Bash-it Version Information
+	echo "## Bash-it Version"
+	pushd "${BASH_IT}" > /dev/null 2>&1 || {
+		echo "Error: Cannot access Bash-it directory"
+		return 1
+	}
+
+	local current_commit current_tag commits_behind
+	current_commit="$(git rev-parse --short HEAD 2> /dev/null || echo 'unknown')"
+	current_tag="$(git describe --exact-match --tags 2> /dev/null || echo 'none')"
+
+	if [[ -z "${BASH_IT_REMOTE:-}" ]]; then
+		BASH_IT_REMOTE="origin"
+	fi
+
+	echo "Current Commit: ${current_commit}"
+	if [[ "${current_tag}" != "none" ]]; then
+		echo "Current Tag: ${current_tag}"
+	fi
+
+	# Check how far behind we are
+	git fetch "${BASH_IT_REMOTE}" --quiet 2> /dev/null
+	if [[ -z "${BASH_IT_DEVELOPMENT_BRANCH:-}" ]]; then
+		BASH_IT_DEVELOPMENT_BRANCH="master"
+	fi
+	commits_behind="$(git rev-list --count HEAD.."${BASH_IT_REMOTE}/${BASH_IT_DEVELOPMENT_BRANCH}" 2> /dev/null || echo 'unknown')"
+
+	if [[ "${commits_behind}" == "0" ]]; then
+		echo "Status: Up to date with ${BASH_IT_REMOTE}/${BASH_IT_DEVELOPMENT_BRANCH}"
+	elif [[ "${commits_behind}" != "unknown" ]]; then
+		echo "Status: ${commits_behind} commits behind ${BASH_IT_REMOTE}/${BASH_IT_DEVELOPMENT_BRANCH}"
+	fi
+
+	popd > /dev/null 2>&1 || true
+	echo ""
+
+	# Bash-it Loading Configuration
+	echo "## Bash-it Loading"
+	if [[ "${config_file}" != "unknown" && -f "${config_file}" ]]; then
+		echo "From ${config_file}:"
+		if grep -i "bash.it\|bash_it" "${config_file}" > /dev/null 2>&1; then
+			grep -n -i "bash.it\|bash_it" -B2 -A2 "${config_file}" 2> /dev/null || echo "  (no bash-it references found)"
+		else
+			echo "  (no bash-it references found)"
+		fi
+	else
+		echo "Config file not found or unknown"
+	fi
+	echo ""
+
+	# Enabled Components Summary
+	echo "## Enabled Components"
+
+	# Process each component type
+	for component_type in aliases plugins completion; do
+		enabled_count=0
+		enabled_list=()
+
+		# Get singular form for display
+		local display_type="${component_type}"
+		if [[ "$component_type" == "aliases" ]]; then
+			display_type="Aliases"
+		elif [[ "$component_type" == "plugins" ]]; then
+			display_type="Plugins"
+		else
+			display_type="Completions"
+		fi
+
+		# Count and collect enabled components
+		for f in "${BASH_IT?}/$component_type/available"/*.*.bash; do
+			[[ -f "$f" ]] || continue
+			component_name="$(_bash-it-get-component-name-from-path "$f")"
+			if _bash-it-component-item-is-enabled "$f"; then
+				enabled_list+=("$component_name")
+				((enabled_count++))
+			fi
+		done
+
+		# Display the summary
+		if [[ $enabled_count -eq 0 ]]; then
+			printf '%s (%d): %s\n' "$display_type" "$enabled_count" "none"
+		else
+			printf '%s (%d): %s\n' "$display_type" "$enabled_count" "${enabled_list[*]}"
+		fi
+	done
+	echo ""
+	echo "To copy this report: bash-it doctor summary | pbcopy (macOS) or xclip (Linux)"
+}
+
+function _bash-it-doctor-() {
+	_about 'default bash-it doctor behavior, shows component summary'
+	_group 'lib'
+
+	_bash-it-doctor-summary
 }
 
 function _bash-it-profile-save() {
