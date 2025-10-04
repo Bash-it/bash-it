@@ -436,7 +436,7 @@ function _bash-it-doctor-check-profile-sourcing-test() {
 	local backup_bashrc="/tmp/.bashrc_backup_$$"
 
 	# Move .bashrc aside
-	mv "$bashrc" "$backup_bashrc" 2> /dev/null || return 1
+	command mv "$bashrc" "$backup_bashrc" 2> /dev/null || return 1
 
 	# Create test .bashrc that just echoes
 	echo 'echo "__BASHRC_WAS_SOURCED__"' > "$bashrc"
