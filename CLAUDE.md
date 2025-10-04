@@ -108,6 +108,13 @@ bash-it search docker
 
 ## Development Guidelines
 
+### Git Workflow
+- **NEVER commit directly to master branch**
+- Master should always stay in sync with `origin/master`
+- Always create a feature branch for new work: `git checkout -b feature/feature-name`
+- Keep feature branches focused on a single issue/feature
+- Create separate branches for separate features
+
 ### Component Development
 - Use composure metadata: `about`, `group`, `author`, `example`
 - Follow naming convention: `{name}.{type}.bash`

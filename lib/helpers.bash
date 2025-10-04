@@ -414,6 +414,90 @@ function _bash-it-doctor-errors() {
 	_bash-it-doctor "${BASH_IT_LOG_LEVEL_ERROR?}"
 }
 
+function _bash-it-doctor-check-profile-sourcing-grep() {
+	_about 'checks if .bashrc is sourced from profile using grep'
+	_param '1: profile file path'
+	_group 'lib'
+
+	local profile_file="${1}"
+	[[ ! -f "$profile_file" ]] && return 1
+
+	# Look for common patterns that source .bashrc
+	grep -qE '(source|\.)\s+(~|\$HOME|"\$HOME")?/\.bashrc|if.*BASH_VERSION.*bashrc' "$profile_file"
+}
+
+function _bash-it-doctor-check-profile-sourcing-test() {
+	_about 'checks if .bashrc is actually sourced using brute force test'
+	_group 'lib'
+
+	local bashrc="$HOME/.bashrc"
+	[[ ! -f "$bashrc" ]] && return 1
+
+	local backup_bashrc="/tmp/.bashrc_backup_$$"
+
+	# Move .bashrc aside
+	mv "$bashrc" "$backup_bashrc" 2> /dev/null || return 1
+
+	# Create test .bashrc that just echoes
+	echo 'echo "__BASHRC_WAS_SOURCED__"' > "$bashrc"
+
+	# Test in login shell, capture output
+	local output
+	output=$(bash -l -c ':' 2>&1)
+
+	# Restore immediately
+	mv "$backup_bashrc" "$bashrc"
+
+	# Check if our marker appeared
+	grep -q "__BASHRC_WAS_SOURCED__" <<< "$output"
+}
+
+function _bash-it-doctor-check-profile-sourcing() {
+	_about 'checks if .bashrc is sourced from login shell profile files'
+	_group 'lib'
+
+	local profile_file
+	if [[ -f "$HOME/.bash_profile" ]]; then
+		profile_file="$HOME/.bash_profile"
+	elif [[ -f "$HOME/.profile" ]]; then
+		profile_file="$HOME/.profile"
+	else
+		echo "${YELLOW}No .bash_profile or .profile found${RESET}"
+		echo "Login shells may not load bash-it configuration"
+		return
+	fi
+
+	# Show if it's a symlink
+	if [[ -L "$profile_file" ]]; then
+		echo "${YELLOW}Note:${RESET} $profile_file is a symlink to $(readlink "$profile_file")"
+	fi
+
+	# Try grep detection first (fast and safe)
+	if _bash-it-doctor-check-profile-sourcing-grep "$profile_file"; then
+		echo "${GREEN}✓${RESET} .bashrc is sourced from $profile_file"
+		return 0
+	fi
+
+	# Grep didn't find it, try brute force test
+	echo "Grep detection unclear, testing if .bashrc actually loads..."
+	if _bash-it-doctor-check-profile-sourcing-test; then
+		echo "${GREEN}✓${RESET} .bashrc is sourced (confirmed via test)"
+		return 0
+	fi
+
+	# Not sourced
+	echo "${RED}✗${RESET} .bashrc is NOT sourced from $profile_file"
+	echo "  ${YELLOW}Warning:${RESET} bash-it will not load in login shells (Terminal.app, SSH sessions)"
+	echo "  ${YELLOW}Fix:${RESET} Add the following to $profile_file:"
+	echo ""
+	echo "    if [ -n \"\$BASH_VERSION\" ]; then"
+	echo "        if [ -f \"\$HOME/.bashrc\" ]; then"
+	echo "            . \"\$HOME/.bashrc\""
+	echo "        fi"
+	echo "    fi"
+	echo ""
+}
+
 function _bash-it-doctor-summary() {
 	_about 'shows a comprehensive diagnostic summary for bug reports'
 	_group 'lib'
@@ -560,6 +644,18 @@ function _bash-it-doctor-summary() {
 	else
 		echo "No config files found (.bashrc, .bash_profile, .profile)"
 	fi
+
+	# Profile Sourcing Check (macOS/Solaris/BSD)
+	echo "${BOLD}## Profile Configuration${RESET}"
+	case "$(uname -s)" in
+		Darwin | SunOS | Illumos | *BSD)
+			_bash-it-doctor-check-profile-sourcing
+			;;
+		*)
+			echo "Not applicable (Linux uses .bashrc for non-login shells by default)"
+			;;
+	esac
+	echo ""
 
 	# Enabled Components Summary
 	echo "${BOLD}## Enabled Components${RESET}"
