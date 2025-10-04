@@ -41,6 +41,79 @@ function _bash-it-install-enable() {
 	done
 }
 
+# Ensure .bashrc is sourced from profile files on macOS/BSD/Solaris
+function _bash-it-install-ensure-bashrc-sourcing() {
+	# Only needed on platforms where login shells don't source .bashrc
+	case "$(uname -s)" in
+		Darwin | SunOS | Illumos | *BSD) ;;
+		*) return 0 ;; # Not needed on Linux
+	esac
+
+	# Find which profile file exists
+	local profile_file
+	if [[ -f "$HOME/.bash_profile" ]]; then
+		profile_file="$HOME/.bash_profile"
+	elif [[ -f "$HOME/.profile" ]]; then
+		profile_file="$HOME/.profile"
+	else
+		# No profile file exists, create .bash_profile
+		profile_file="$HOME/.bash_profile"
+		echo -e "${echo_yellow:-}Creating $profile_file to source .bashrc${echo_normal:-}"
+	fi
+
+	# Check if already sourced (reuse helper from doctor)
+	if _bash-it-doctor-check-profile-sourcing-grep "$profile_file" 2> /dev/null; then
+		return 0 # Already configured
+	fi
+
+	# Not sourced, offer to add it
+	echo ""
+	echo -e "${echo_yellow:-}Warning: .bashrc is not sourced from $profile_file${echo_normal:-}"
+	echo "On macOS/BSD/Solaris, login shells won't load bash-it without this."
+	echo ""
+
+	local RESP
+	if [[ -z "${silent:-}" ]]; then
+		read -r -e -n 1 -p "Would you like to add .bashrc sourcing to $profile_file? [Y/n] " RESP
+		case $RESP in
+			[nN])
+				echo ""
+				echo -e "${echo_orange:-}Skipping. You can add this manually later:${echo_normal:-}"
+				echo ""
+				echo "    if [ -n \"\${BASH_VERSION-}\" ]; then"
+				echo "        if [ -f \"\$HOME/.bashrc\" ]; then"
+				echo "            . \"\$HOME/.bashrc\""
+				echo "        fi"
+				echo "    fi"
+				echo ""
+				return 0
+				;;
+		esac
+	fi
+
+	# Backup profile file if it exists
+	if [[ -f "$profile_file" ]]; then
+		local backup_file
+		backup_file="${profile_file}.bak.$(date +%Y%m%d_%H%M%S)"
+		command cp "$profile_file" "$backup_file"
+		echo -e "${echo_green:-}Backed up $profile_file to $backup_file${echo_normal:-}"
+	fi
+
+	# Add the sourcing snippet
+	cat >> "$profile_file" << 'EOF'
+
+# Source .bashrc if running bash
+if [ -n "${BASH_VERSION-}" ]; then
+	if [ -f "$HOME/.bashrc" ]; then
+		. "$HOME/.bashrc"
+	fi
+fi
+EOF
+
+	echo -e "${echo_green:-}✓ Added .bashrc sourcing to $profile_file${echo_normal:-}"
+	echo ""
+}
+
 # Back up existing profile
 function _bash-it-install-backup-config() {
 	test -w "${HOME?}/${CONFIG_FILE?}" \
@@ -221,6 +294,9 @@ else
 	echo ""
 	_bash-it-profile-load "default"
 fi
+
+# Ensure .bashrc sourcing is set up on macOS/BSD/Solaris
+_bash-it-install-ensure-bashrc-sourcing
 
 echo ""
 echo -e "${echo_green:-}Installation finished successfully! Enjoy bash-it!${echo_normal:-}"
