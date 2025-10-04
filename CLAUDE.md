@@ -114,6 +114,9 @@ bash-it search docker
 - Always create a feature branch for new work: `git checkout -b feature/feature-name`
 - Keep feature branches focused on a single issue/feature
 - Create separate branches for separate features
+- Push feature branches with upstream tracking: `git push -u fork feature-branch-name`
+  - This allows manual pushes later with just `git push`
+  - Use `--force-with-lease` for rebased branches
 
 ### Component Development
 - Use composure metadata: `about`, `group`, `author`, `example`
