@@ -80,7 +80,7 @@ function _bash-it-install-ensure-bashrc-sourcing() {
 				echo ""
 				echo -e "${echo_orange:-}Skipping. You can add this manually later:${echo_normal:-}"
 				echo ""
-				echo "    if [ -n \"\$BASH_VERSION\" ]; then"
+				echo "    if [ -n \"\${BASH_VERSION-}\" ]; then"
 				echo "        if [ -f \"\$HOME/.bashrc\" ]; then"
 				echo "            . \"\$HOME/.bashrc\""
 				echo "        fi"
@@ -103,7 +103,7 @@ function _bash-it-install-ensure-bashrc-sourcing() {
 	cat >> "$profile_file" << 'EOF'
 
 # Source .bashrc if running bash
-if [ -n "$BASH_VERSION" ]; then
+if [ -n "${BASH_VERSION-}" ]; then
 	if [ -f "$HOME/.bashrc" ]; then
 		. "$HOME/.bashrc"
 	fi

@@ -140,3 +140,9 @@ bash-it search docker
   - `command rm` instead of `rm` (users may have `alias rm='rm -i'`)
   - Apply to any command that could be aliased and break core functionality
   - This prevents surprises from user's alias configurations in bash-it core functions
+- **Use parameter expansion with default for potentially unset variables**:
+  - `${VARIABLE-}` instead of `$VARIABLE` when variable may be unset
+  - Prevents errors when `set -u` is active in user's shell
+  - Examples: `${BASH_VERSION-}`, `${HOME-}`, `${PATH-}`
+  - Critical for variables checked in conditionals: `if [ -n "${BASH_VERSION-}" ]`
+  - This defensive practice ensures scripts work regardless of user's shell options
