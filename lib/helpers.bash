@@ -423,7 +423,7 @@ function _bash-it-doctor-check-profile-sourcing-grep() {
 	[[ ! -f "$profile_file" ]] && return 1
 
 	# Look for common patterns that source .bashrc
-	grep -qE '(source|\.)\s+(~|\$HOME|"\$HOME")?/\.bashrc|if.*BASH_VERSION.*bashrc' "$profile_file"
+	command grep -qE '(source|\.)\s+(~|\$HOME|"\$HOME")?/\.bashrc|if.*BASH_VERSION.*bashrc' "$profile_file"
 }
 
 function _bash-it-doctor-check-profile-sourcing-test() {
@@ -446,10 +446,10 @@ function _bash-it-doctor-check-profile-sourcing-test() {
 	output=$(bash -l -c ':' 2>&1)
 
 	# Restore immediately
-	mv "$backup_bashrc" "$bashrc"
+	command mv "$backup_bashrc" "$bashrc"
 
 	# Check if our marker appeared
-	grep -q "__BASHRC_WAS_SOURCED__" <<< "$output"
+	command grep -q "__BASHRC_WAS_SOURCED__" <<< "$output"
 }
 
 function _bash-it-doctor-check-profile-sourcing() {
@@ -578,7 +578,7 @@ function _bash-it-doctor-summary() {
 		# Offer to update if behind and it's safe to do so
 		local git_status untracked_files merge_base can_ff
 		git_status="$(git status --porcelain 2> /dev/null)"
-		untracked_files="$(echo "$git_status" | grep -c '^??' || true)"
+		untracked_files="$(echo "$git_status" | command grep -c '^??' || true)"
 
 		# Check if we can fast-forward
 		merge_base="$(git merge-base HEAD "${BASH_IT_REMOTE}/${BASH_IT_DEVELOPMENT_BRANCH}" 2> /dev/null)"
@@ -590,7 +590,7 @@ function _bash-it-doctor-summary() {
 		# Only offer merge if:
 		# 1. No modified/staged files (untracked are OK)
 		# 2. Can fast-forward OR no untracked files that would conflict
-		if ! echo "$git_status" | grep -v '^??' -q; then
+		if ! echo "$git_status" | command grep -v '^??' -q; then
 			if [[ "$can_ff" == "true" ]] || [[ "$untracked_files" == "0" ]]; then
 				echo ""
 				echo "Would you like to update now? This will merge ${BASH_IT_REMOTE}/${BASH_IT_DEVELOPMENT_BRANCH} into your current branch."
@@ -635,9 +635,9 @@ function _bash-it-doctor-summary() {
 
 	if [[ ${#config_files_to_check[@]} -gt 0 ]]; then
 		for config_file_path in "${config_files_to_check[@]}"; do
-			if grep -i "bash.it\|bash_it" "$config_file_path" > /dev/null 2>&1; then
+			if command grep -i "bash.it\|bash_it" "$config_file_path" > /dev/null 2>&1; then
 				echo "From ${config_file_path}:"
-				grep -n -i "bash.it\|bash_it" -B2 -A2 "$config_file_path" 2> /dev/null
+				command grep -n -i "bash.it\|bash_it" -B2 -A2 "$config_file_path" 2> /dev/null
 				echo ""
 			fi
 		done

@@ -134,3 +134,9 @@ bash-it search docker
 - Follow existing code style in the repository
 - Add appropriate metadata using composure functions
 - Components should handle missing dependencies gracefully
+- **Prefix sensitive commands with `command`** to bypass user aliases:
+  - `command mv` instead of `mv` (users may have `alias mv='mv -i'`)
+  - `command grep` instead of `grep` (users may have custom grep flags)
+  - `command rm` instead of `rm` (users may have `alias rm='rm -i'`)
+  - Apply to any command that could be aliased and break core functionality
+  - This prevents surprises from user's alias configurations in bash-it core functions
