@@ -36,48 +36,32 @@ body:
         Provide a link to a live example, or an unambiguous set of steps to reproduce this bug. Include code to reproduce, if relevant.
     validations:
       required: true
-  - type: input
+  - type: textarea
     attributes:
-      label: Bash-it version
-      placeholder: "How to get: bash-it version"
-    validations:
-      required: true
-  - type: input
-    attributes:
-      label: List of enabled plugins, themes and aliases
-      placeholder: "How to get: bash-it show plugins|themes|aliases (it is not a pipe)"
-    validations:
-      required: true
-  - type: input
-    attributes:
-      label: Bash version
-      placeholder: "How to get: bash --version"
-    validations:
-      required: true
-  - type: input
-    attributes:
-      label: Operating system and version
-      placeholder: "How to get: neofetch (or another command)"
+      label: "Diagnostic Information"
+      description: >
+        **Please run `bash-it doctor` and paste the complete output below.**
+        This single command provides all the diagnostic information we need including:
+        bash-it version, enabled components, bash version, OS version, and configuration.
+      placeholder: "Run: bash-it doctor"
+      value: |
+        ```
+        # Paste the output of: bash-it doctor
+
+
+        ```
     validations:
       required: true
   - type: textarea
     attributes:
-      label: "bash-it doctor output"
-      value: |
-        ```
-        # How to get: bash-it doctor
-        ```
+      label: "Additional Context (Optional)"
+      description: >
+        Any additional information that might help diagnose the issue.
+        This could include specific error messages, relevant parts of your ~/.bashrc,
+        or other configuration details not captured by `bash-it doctor`.
+      placeholder: "Paste any additional relevant information here"
     validations:
       required: false
-  - type: textarea
-    attributes:
-      label: Your ~/.bashrc
-      value: |
-        ```bash
-        # How to get: cat ~/.bashrc
-        ```
-    validations:
-      required: true
   - type: textarea
     attributes:
       label: Notes

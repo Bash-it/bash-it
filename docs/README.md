@@ -21,6 +21,7 @@ Stop polluting your `~/bin` directory and your `.bashrc` file, fork/clone Bash-i
   - [via Docker](https://bash-it.readthedocs.io/en/latest/installation/#install-using-docker)
   - [Updating](https://bash-it.readthedocs.io/en/latest/installation/#updating)
 - [Help](https://bash-it.readthedocs.io/en/latest/misc/#help-screens)
+- [Diagnostics](#diagnostics)
 - [Search](https://bash-it.readthedocs.io/en/latest/commands/search)
   - [Syntax](https://bash-it.readthedocs.io/en/latest/commands/search/#syntax)
   - [Searching with Negations](
@@ -54,9 +55,29 @@ If this is undesirable, you can create another file, by run the installer:
 BASH_IT_CONFIG_FILE=path/to/my/custom/location.bash ~/.bash_it/install.sh
 ```
 
+## Diagnostics
+
+If you're experiencing issues with Bash-it or need to report a bug, use the built-in diagnostics tool:
+
+```bash
+bash-it doctor
+```
+
+This command provides a comprehensive summary including:
+- Environment information (OS, Bash version)
+- Bash-it version and update status
+- Configuration file locations and how Bash-it is loaded
+- List of enabled components (aliases, plugins, completions)
+
+**When reporting bugs**, please include the full output of `bash-it doctor` in your issue report.
+
+The doctor command can also help you update Bash-it - if you're behind the latest version and it's safe to update, you'll be prompted to merge the latest changes.
+
 ## Contributing
 
 Please take a look at the [Contribution Guidelines](https://bash-it.readthedocs.io/en/latest/contributing) before reporting a bug or providing a new feature.
+
+**When reporting bugs**, always run `bash-it doctor` and include its output in your issue report to help maintainers diagnose the problem quickly.
 
 The [Development Guidelines](https://bash-it.readthedocs.io/en/latest/development) have more information on some of the internal workings of Bash-it,
 please feel free to read through this page if you're interested in how Bash-it loads its components.

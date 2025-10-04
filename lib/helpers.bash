@@ -420,15 +420,23 @@ function _bash-it-doctor-summary() {
 
 	local component_type enabled_count enabled_list f component_name
 
-	echo "Bash-it Doctor Summary"
-	echo "======================"
+	# Color definitions
+	local BOLD CYAN GREEN YELLOW RESET
+	BOLD=$(tput bold 2> /dev/null || echo "")
+	CYAN=$(tput setaf 6 2> /dev/null || echo "")
+	GREEN=$(tput setaf 2 2> /dev/null || echo "")
+	YELLOW=$(tput setaf 3 2> /dev/null || echo "")
+	RESET=$(tput sgr0 2> /dev/null || echo "")
+
+	echo "${BOLD}${CYAN}Bash-it Doctor Summary${RESET}"
+	echo "${CYAN}======================${RESET}"
 	echo ""
 
 	# Environment Information
-	echo "## Environment"
-	echo "OS: $(uname -s) $(uname -r)"
-	echo "Bash Version: ${BASH_VERSION}"
-	echo "Bash-it Location: ${BASH_IT}"
+	echo "${BOLD}## Environment${RESET}"
+	echo "${GREEN}OS:${RESET} $(uname -s) $(uname -r)"
+	echo "${GREEN}Bash Version:${RESET} ${BASH_VERSION}"
+	echo "${GREEN}Bash-it Location:${RESET} ${BASH_IT}"
 
 	# Check which config file is used
 	local config_file
@@ -441,17 +449,17 @@ function _bash-it-doctor-summary() {
 	else
 		config_file="unknown"
 	fi
-	echo "Config File: ${config_file}"
+	echo "${GREEN}Config File:${RESET} ${config_file}"
 	echo ""
 
 	# Bash-it Version Information
-	echo "## Bash-it Version"
+	echo "${BOLD}## Bash-it Version${RESET}"
 	pushd "${BASH_IT}" > /dev/null 2>&1 || {
 		echo "Error: Cannot access Bash-it directory"
 		return 1
 	}
 
-	local current_commit current_tag commits_behind
+	local current_commit current_tag commits_behind latest_tag commits_since_tag
 	current_commit="$(git rev-parse --short HEAD 2> /dev/null || echo 'unknown')"
 	current_tag="$(git describe --exact-match --tags 2> /dev/null || echo 'none')"
 
@@ -459,9 +467,16 @@ function _bash-it-doctor-summary() {
 		BASH_IT_REMOTE="origin"
 	fi
 
-	echo "Current Commit: ${current_commit}"
+	# Get version info relative to tags
+	latest_tag="$(git describe --tags --abbrev=0 2> /dev/null || echo 'none')"
+	commits_since_tag="$(git rev-list --count "${latest_tag}..HEAD" 2> /dev/null || echo '0')"
+
 	if [[ "${current_tag}" != "none" ]]; then
-		echo "Current Tag: ${current_tag}"
+		echo "${GREEN}Current Version:${RESET} ${current_tag} (${current_commit})"
+	elif [[ "${latest_tag}" != "none" && "${commits_since_tag}" != "0" ]]; then
+		echo "${GREEN}Current Version:${RESET} ${latest_tag} +${commits_since_tag} (${current_commit})"
+	else
+		echo "${GREEN}Current Commit:${RESET} ${current_commit}"
 	fi
 
 	# Check how far behind we are
@@ -472,30 +487,82 @@ function _bash-it-doctor-summary() {
 	commits_behind="$(git rev-list --count HEAD.."${BASH_IT_REMOTE}/${BASH_IT_DEVELOPMENT_BRANCH}" 2> /dev/null || echo 'unknown')"
 
 	if [[ "${commits_behind}" == "0" ]]; then
-		echo "Status: Up to date with ${BASH_IT_REMOTE}/${BASH_IT_DEVELOPMENT_BRANCH}"
+		echo "${GREEN}Status:${RESET} Up to date with ${BASH_IT_REMOTE}/${BASH_IT_DEVELOPMENT_BRANCH} ✓"
 	elif [[ "${commits_behind}" != "unknown" ]]; then
-		echo "Status: ${commits_behind} commits behind ${BASH_IT_REMOTE}/${BASH_IT_DEVELOPMENT_BRANCH}"
+		echo "${YELLOW}Status:${RESET} ${commits_behind} commits behind ${BASH_IT_REMOTE}/${BASH_IT_DEVELOPMENT_BRANCH}"
+
+		# Offer to update if behind and it's safe to do so
+		local git_status untracked_files merge_base can_ff
+		git_status="$(git status --porcelain 2> /dev/null)"
+		untracked_files="$(echo "$git_status" | grep -c '^??' || true)"
+
+		# Check if we can fast-forward
+		merge_base="$(git merge-base HEAD "${BASH_IT_REMOTE}/${BASH_IT_DEVELOPMENT_BRANCH}" 2> /dev/null)"
+		can_ff=false
+		if [[ "$(git rev-parse HEAD 2> /dev/null)" == "$merge_base" ]]; then
+			can_ff=true
+		fi
+
+		# Only offer merge if:
+		# 1. No modified/staged files (untracked are OK)
+		# 2. Can fast-forward OR no untracked files that would conflict
+		if ! echo "$git_status" | grep -v '^??' -q; then
+			if [[ "$can_ff" == "true" ]] || [[ "$untracked_files" == "0" ]]; then
+				echo ""
+				echo "Would you like to update now? This will merge ${BASH_IT_REMOTE}/${BASH_IT_DEVELOPMENT_BRANCH} into your current branch."
+				read -r -p "Update? [y/N] " response
+				case "$response" in
+					[yY] | [yY][eE][sS])
+						echo "Updating bash-it..."
+						if git merge "${BASH_IT_REMOTE}/${BASH_IT_DEVELOPMENT_BRANCH}" --ff-only 2> /dev/null; then
+							echo "✓ Successfully updated to latest version!"
+							echo ""
+							echo "Please restart your shell or run: source ~/.bashrc"
+						else
+							echo "✗ Fast-forward merge failed. Please run 'bash-it update' for a guided update."
+						fi
+						;;
+					*)
+						echo "Skipping update. You can update later with: bash-it update"
+						;;
+				esac
+			else
+				echo ""
+				echo "Note: Cannot safely auto-update (untracked files may conflict). Use: bash-it update"
+			fi
+		else
+			echo ""
+			echo "Note: Cannot auto-update (uncommitted changes present). Use: bash-it update"
+		fi
 	fi
 
 	popd > /dev/null 2>&1 || true
 	echo ""
 
 	# Bash-it Loading Configuration
-	echo "## Bash-it Loading"
-	if [[ "${config_file}" != "unknown" && -f "${config_file}" ]]; then
-		echo "From ${config_file}:"
-		if grep -i "bash.it\|bash_it" "${config_file}" > /dev/null 2>&1; then
-			grep -n -i "bash.it\|bash_it" -B2 -A2 "${config_file}" 2> /dev/null || echo "  (no bash-it references found)"
-		else
-			echo "  (no bash-it references found)"
-		fi
+	echo "${BOLD}## Bash-it Loading${RESET}"
+	local config_files_to_check=()
+	local config_file_path
+
+	# Check all common config files
+	for config_file_path in "${HOME}/.bashrc" "${HOME}/.bash_profile" "${HOME}/.profile"; do
+		[[ -f "$config_file_path" ]] && config_files_to_check+=("$config_file_path")
+	done
+
+	if [[ ${#config_files_to_check[@]} -gt 0 ]]; then
+		for config_file_path in "${config_files_to_check[@]}"; do
+			if grep -i "bash.it\|bash_it" "$config_file_path" > /dev/null 2>&1; then
+				echo "From ${config_file_path}:"
+				grep -n -i "bash.it\|bash_it" -B2 -A2 "$config_file_path" 2> /dev/null
+				echo ""
+			fi
+		done
 	else
-		echo "Config file not found or unknown"
+		echo "No config files found (.bashrc, .bash_profile, .profile)"
 	fi
-	echo ""
 
 	# Enabled Components Summary
-	echo "## Enabled Components"
+	echo "${BOLD}## Enabled Components${RESET}"
 
 	# Process each component type
 	for component_type in aliases plugins completion; do
@@ -522,15 +589,15 @@ function _bash-it-doctor-summary() {
 			fi
 		done
 
-		# Display the summary
+		# Display the summary with colors
 		if [[ $enabled_count -eq 0 ]]; then
-			printf '%s (%d): %s\n' "$display_type" "$enabled_count" "none"
+			printf '%s%s%s (%s): %s\n' "$CYAN" "$display_type" "$RESET" "$enabled_count" "${YELLOW}none${RESET}"
 		else
-			printf '%s (%d): %s\n' "$display_type" "$enabled_count" "${enabled_list[*]}"
+			printf '%s%s%s (%s): %s\n' "$CYAN" "$display_type" "$RESET" "$enabled_count" "${enabled_list[*]}"
 		fi
 	done
 	echo ""
-	echo "To copy this report: bash-it doctor summary | pbcopy (macOS) or xclip (Linux)"
+	echo "${YELLOW}Tip:${RESET} To copy this report: ${CYAN}bash-it doctor${RESET} | pbcopy (macOS) or xclip (Linux)"
 }
 
 function _bash-it-doctor-() {
