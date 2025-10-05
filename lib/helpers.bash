@@ -3,7 +3,7 @@
 #
 # A collection of reusable functions.
 
-: "${BASH_IT_LOAD_PRIORITY_ALIAS:=150}"
+: "${BASH_IT_LOAD_PRIORITY_ALIAS:=750}"
 : "${BASH_IT_LOAD_PRIORITY_PLUGIN:=250}"
 : "${BASH_IT_LOAD_PRIORITY_COMPLETION:=350}"
 BASH_IT_LOAD_PRIORITY_SEPARATOR="---"
@@ -72,7 +72,7 @@ function bash-it() {
 	example '$ bash-it reload'
 	example '$ bash-it restart'
 	example '$ bash-it profile list|save|load|rm [profile_name]'
-	example '$ bash-it doctor errors|warnings|all'
+	example '$ bash-it doctor errors|warnings|all|summary'
 	local verb=${1:-}
 	shift
 	local component=${1:-}
@@ -414,11 +414,293 @@ function _bash-it-doctor-errors() {
 	_bash-it-doctor "${BASH_IT_LOG_LEVEL_ERROR?}"
 }
 
-function _bash-it-doctor-() {
-	_about 'default bash-it doctor behavior, behaves like bash-it doctor all'
+function _bash-it-doctor-check-profile-sourcing-grep() {
+	_about 'checks if .bashrc is sourced from profile using grep'
+	_param '1: profile file path'
 	_group 'lib'
 
-	_bash-it-doctor-all
+	local profile_file="${1}"
+	[[ ! -f "$profile_file" ]] && return 1
+
+	# Look for common patterns that source .bashrc
+	command grep -qE '(source|\.)\s+(~|\$HOME|"\$HOME")?/\.bashrc|if.*BASH_VERSION.*bashrc' "$profile_file"
+}
+
+function _bash-it-doctor-check-profile-sourcing-test() {
+	_about 'checks if .bashrc is actually sourced using brute force test'
+	_group 'lib'
+
+	local bashrc="$HOME/.bashrc"
+	[[ ! -f "$bashrc" ]] && return 1
+
+	local backup_bashrc="/tmp/.bashrc_backup_$$"
+
+	# Move .bashrc aside
+	command mv "$bashrc" "$backup_bashrc" 2> /dev/null || return 1
+
+	# Create test .bashrc that just echoes
+	echo 'echo "__BASHRC_WAS_SOURCED__"' > "$bashrc"
+
+	# Test in login shell, capture output
+	local output
+	output=$(bash -l -c ':' 2>&1)
+
+	# Restore immediately
+	command mv "$backup_bashrc" "$bashrc"
+
+	# Check if our marker appeared
+	command grep -q "__BASHRC_WAS_SOURCED__" <<< "$output"
+}
+
+function _bash-it-doctor-check-profile-sourcing() {
+	_about 'checks if .bashrc is sourced from login shell profile files'
+	_group 'lib'
+
+	local profile_file
+	if [[ -f "$HOME/.bash_profile" ]]; then
+		profile_file="$HOME/.bash_profile"
+	elif [[ -f "$HOME/.profile" ]]; then
+		profile_file="$HOME/.profile"
+	else
+		echo "${YELLOW}No .bash_profile or .profile found${RESET}"
+		echo "Login shells may not load bash-it configuration"
+		return
+	fi
+
+	# Show if it's a symlink
+	if [[ -L "$profile_file" ]]; then
+		echo "${YELLOW}Note:${RESET} $profile_file is a symlink to $(readlink "$profile_file")"
+	fi
+
+	# Try grep detection first (fast and safe)
+	if _bash-it-doctor-check-profile-sourcing-grep "$profile_file"; then
+		echo "${GREEN}✓${RESET} .bashrc is sourced from $profile_file"
+		return 0
+	fi
+
+	# Grep didn't find it, try brute force test
+	echo "Grep detection unclear, testing if .bashrc actually loads..."
+	if _bash-it-doctor-check-profile-sourcing-test; then
+		echo "${GREEN}✓${RESET} .bashrc is sourced (confirmed via test)"
+		return 0
+	fi
+
+	# Not sourced
+	echo "${RED}✗${RESET} .bashrc is NOT sourced from $profile_file"
+	echo "  ${YELLOW}Warning:${RESET} bash-it will not load in login shells (Terminal.app, SSH sessions)"
+	echo "  ${YELLOW}Fix:${RESET} Add the following to $profile_file:"
+	echo ""
+	echo "    if [ -n \"\$BASH_VERSION\" ]; then"
+	echo "        if [ -f \"\$HOME/.bashrc\" ]; then"
+	echo "            . \"\$HOME/.bashrc\""
+	echo "        fi"
+	echo "    fi"
+	echo ""
+}
+
+function _bash-it-doctor-summary() {
+	_about 'shows a comprehensive diagnostic summary for bug reports'
+	_group 'lib'
+
+	local component_type enabled_count enabled_list f component_name
+
+	# Color definitions
+	local BOLD CYAN GREEN YELLOW RESET
+	BOLD=$(tput bold 2> /dev/null || echo "")
+	CYAN=$(tput setaf 6 2> /dev/null || echo "")
+	GREEN=$(tput setaf 2 2> /dev/null || echo "")
+	YELLOW=$(tput setaf 3 2> /dev/null || echo "")
+	RESET=$(tput sgr0 2> /dev/null || echo "")
+
+	echo "${BOLD}${CYAN}Bash-it Doctor Summary${RESET}"
+	echo "${CYAN}======================${RESET}"
+	echo ""
+
+	# Environment Information
+	echo "${BOLD}## Environment${RESET}"
+	echo "${GREEN}OS:${RESET} $(uname -s) $(uname -r)"
+	echo "${GREEN}Bash Version:${RESET} ${BASH_VERSION}"
+	echo "${GREEN}Bash-it Location:${RESET} ${BASH_IT}"
+
+	# Check which config file is used
+	local config_file
+	if [[ -n "${BASH_IT_BASHRC:-}" ]]; then
+		config_file="${BASH_IT_BASHRC}"
+	elif [[ -f "${HOME}/.bashrc" ]]; then
+		config_file="${HOME}/.bashrc"
+	elif [[ -f "${HOME}/.bash_profile" ]]; then
+		config_file="${HOME}/.bash_profile"
+	else
+		config_file="unknown"
+	fi
+	echo "${GREEN}Config File:${RESET} ${config_file}"
+	echo ""
+
+	# Bash-it Version Information
+	echo "${BOLD}## Bash-it Version${RESET}"
+	pushd "${BASH_IT}" > /dev/null 2>&1 || {
+		echo "Error: Cannot access Bash-it directory"
+		return 1
+	}
+
+	local current_commit current_tag commits_behind latest_tag commits_since_tag
+	current_commit="$(git rev-parse --short HEAD 2> /dev/null || echo 'unknown')"
+	current_tag="$(git describe --exact-match --tags 2> /dev/null || echo 'none')"
+
+	if [[ -z "${BASH_IT_REMOTE:-}" ]]; then
+		BASH_IT_REMOTE="origin"
+	fi
+
+	# Get version info relative to tags
+	latest_tag="$(git describe --tags --abbrev=0 2> /dev/null || echo 'none')"
+	commits_since_tag="$(git rev-list --count "${latest_tag}..HEAD" 2> /dev/null || echo '0')"
+
+	if [[ "${current_tag}" != "none" ]]; then
+		echo "${GREEN}Current Version:${RESET} ${current_tag} (${current_commit})"
+	elif [[ "${latest_tag}" != "none" && "${commits_since_tag}" != "0" ]]; then
+		echo "${GREEN}Current Version:${RESET} ${latest_tag} +${commits_since_tag} (${current_commit})"
+	else
+		echo "${GREEN}Current Commit:${RESET} ${current_commit}"
+	fi
+
+	# Check how far behind we are
+	git fetch "${BASH_IT_REMOTE}" --quiet 2> /dev/null
+	if [[ -z "${BASH_IT_DEVELOPMENT_BRANCH:-}" ]]; then
+		BASH_IT_DEVELOPMENT_BRANCH="master"
+	fi
+	commits_behind="$(git rev-list --count HEAD.."${BASH_IT_REMOTE}/${BASH_IT_DEVELOPMENT_BRANCH}" 2> /dev/null || echo 'unknown')"
+
+	if [[ "${commits_behind}" == "0" ]]; then
+		echo "${GREEN}Status:${RESET} Up to date with ${BASH_IT_REMOTE}/${BASH_IT_DEVELOPMENT_BRANCH} ✓"
+	elif [[ "${commits_behind}" != "unknown" ]]; then
+		echo "${YELLOW}Status:${RESET} ${commits_behind} commits behind ${BASH_IT_REMOTE}/${BASH_IT_DEVELOPMENT_BRANCH}"
+
+		# Offer to update if behind and it's safe to do so
+		local git_status untracked_files merge_base can_ff
+		git_status="$(git status --porcelain 2> /dev/null)"
+		untracked_files="$(echo "$git_status" | command grep -c '^??' || true)"
+
+		# Check if we can fast-forward
+		merge_base="$(git merge-base HEAD "${BASH_IT_REMOTE}/${BASH_IT_DEVELOPMENT_BRANCH}" 2> /dev/null)"
+		can_ff=false
+		if [[ "$(git rev-parse HEAD 2> /dev/null)" == "$merge_base" ]]; then
+			can_ff=true
+		fi
+
+		# Only offer merge if:
+		# 1. No modified/staged files (untracked are OK)
+		# 2. Can fast-forward OR no untracked files that would conflict
+		if ! echo "$git_status" | command grep -v '^??' -q; then
+			if [[ "$can_ff" == "true" ]] || [[ "$untracked_files" == "0" ]]; then
+				echo ""
+				echo "Would you like to update now? This will merge ${BASH_IT_REMOTE}/${BASH_IT_DEVELOPMENT_BRANCH} into your current branch."
+				read -r -p "Update? [y/N] " response
+				case "$response" in
+					[yY] | [yY][eE][sS])
+						echo "Updating bash-it..."
+						if git merge "${BASH_IT_REMOTE}/${BASH_IT_DEVELOPMENT_BRANCH}" --ff-only 2> /dev/null; then
+							echo "✓ Successfully updated to latest version!"
+							echo ""
+							echo "Please restart your shell or run: source ~/.bashrc"
+						else
+							echo "✗ Fast-forward merge failed. Please run 'bash-it update' for a guided update."
+						fi
+						;;
+					*)
+						echo "Skipping update. You can update later with: bash-it update"
+						;;
+				esac
+			else
+				echo ""
+				echo "Note: Cannot safely auto-update (untracked files may conflict). Use: bash-it update"
+			fi
+		else
+			echo ""
+			echo "Note: Cannot auto-update (uncommitted changes present). Use: bash-it update"
+		fi
+	fi
+
+	popd > /dev/null 2>&1 || true
+	echo ""
+
+	# Bash-it Loading Configuration
+	echo "${BOLD}## Bash-it Loading${RESET}"
+	local config_files_to_check=()
+	local config_file_path
+
+	# Check all common config files
+	for config_file_path in "${HOME}/.bashrc" "${HOME}/.bash_profile" "${HOME}/.profile"; do
+		[[ -f "$config_file_path" ]] && config_files_to_check+=("$config_file_path")
+	done
+
+	if [[ ${#config_files_to_check[@]} -gt 0 ]]; then
+		for config_file_path in "${config_files_to_check[@]}"; do
+			if command grep -i "bash.it\|bash_it" "$config_file_path" > /dev/null 2>&1; then
+				echo "From ${config_file_path}:"
+				command grep -n -i "bash.it\|bash_it" -B2 -A2 "$config_file_path" 2> /dev/null
+				echo ""
+			fi
+		done
+	else
+		echo "No config files found (.bashrc, .bash_profile, .profile)"
+	fi
+
+	# Profile Sourcing Check (macOS/Solaris/BSD)
+	echo "${BOLD}## Profile Configuration${RESET}"
+	case "$(uname -s)" in
+		Darwin | SunOS | Illumos | *BSD)
+			_bash-it-doctor-check-profile-sourcing
+			;;
+		*)
+			echo "Not applicable (Linux uses .bashrc for non-login shells by default)"
+			;;
+	esac
+	echo ""
+
+	# Enabled Components Summary
+	echo "${BOLD}## Enabled Components${RESET}"
+
+	# Process each component type
+	for component_type in aliases plugins completion; do
+		enabled_count=0
+		enabled_list=()
+
+		# Get singular form for display
+		local display_type="${component_type}"
+		if [[ "$component_type" == "aliases" ]]; then
+			display_type="Aliases"
+		elif [[ "$component_type" == "plugins" ]]; then
+			display_type="Plugins"
+		else
+			display_type="Completions"
+		fi
+
+		# Count and collect enabled components
+		for f in "${BASH_IT?}/$component_type/available"/*.*.bash; do
+			[[ -f "$f" ]] || continue
+			component_name="$(_bash-it-get-component-name-from-path "$f")"
+			if _bash-it-component-item-is-enabled "$f"; then
+				enabled_list+=("$component_name")
+				((enabled_count++))
+			fi
+		done
+
+		# Display the summary with colors
+		if [[ $enabled_count -eq 0 ]]; then
+			printf '%s%s%s (%s): %s\n' "$CYAN" "$display_type" "$RESET" "$enabled_count" "${YELLOW}none${RESET}"
+		else
+			printf '%s%s%s (%s): %s\n' "$CYAN" "$display_type" "$RESET" "$enabled_count" "${enabled_list[*]}"
+		fi
+	done
+	echo ""
+	echo "${YELLOW}Tip:${RESET} To copy this report: ${CYAN}bash-it doctor${RESET} | pbcopy (macOS) or xclip (Linux)"
+}
+
+function _bash-it-doctor-() {
+	_about 'default bash-it doctor behavior, shows component summary'
+	_group 'lib'
+
+	_bash-it-doctor-summary
 }
 
 function _bash-it-profile-save() {
