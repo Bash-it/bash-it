@@ -42,6 +42,24 @@ function _make_reload_alias() {
 	echo "source '${BASH_IT?}/scripts/reloader.bash' '${1?}' '${2?}'"
 }
 
+# Auto-detect git remote name for bash-it repository
+# Returns the first remote found, or "origin" as fallback
+function _bash-it-get-remote-name() {
+	local remote_name
+
+	# If BASH_IT_REMOTE is already set, use it
+	if [[ -n "${BASH_IT_REMOTE:-}" ]]; then
+		echo "${BASH_IT_REMOTE}"
+		return 0
+	fi
+
+	# Try to get the first remote from git
+	remote_name="$(git remote 2> /dev/null | head -n 1)"
+
+	# Fallback to "origin" if no remotes found
+	echo "${remote_name:-origin}"
+}
+
 # Alias for reloading aliases
 # shellcheck disable=SC2139
 alias reload_aliases="$(_make_reload_alias alias aliases)"
@@ -233,9 +251,7 @@ function _bash-it-update-() {
 		return 1
 	fi
 
-	if [[ -z "$BASH_IT_REMOTE" ]]; then
-		BASH_IT_REMOTE="origin"
-	fi
+	BASH_IT_REMOTE="$(_bash-it-get-remote-name)"
 
 	git fetch "$BASH_IT_REMOTE" --tags &> /dev/null
 
@@ -351,9 +367,7 @@ function _bash-it-version() {
 
 	pushd "${BASH_IT?}" > /dev/null || return
 
-	if [[ -z "${BASH_IT_REMOTE:-}" ]]; then
-		BASH_IT_REMOTE="origin"
-	fi
+	BASH_IT_REMOTE="$(_bash-it-get-remote-name)"
 
 	BASH_IT_GIT_REMOTE="$(git remote get-url "$BASH_IT_REMOTE")"
 	BASH_IT_GIT_URL="${BASH_IT_GIT_REMOTE%.git}"
@@ -547,9 +561,7 @@ function _bash-it-doctor-summary() {
 	current_commit="$(git rev-parse --short HEAD 2> /dev/null || echo 'unknown')"
 	current_tag="$(git describe --exact-match --tags 2> /dev/null || echo 'none')"
 
-	if [[ -z "${BASH_IT_REMOTE:-}" ]]; then
-		BASH_IT_REMOTE="origin"
-	fi
+	BASH_IT_REMOTE="$(_bash-it-get-remote-name)"
 
 	# Get version info relative to tags
 	latest_tag="$(git describe --tags --abbrev=0 2> /dev/null || echo 'none')"
