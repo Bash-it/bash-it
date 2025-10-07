@@ -49,10 +49,19 @@ if [[ ! -e "${HOME?}/$BACKUP_FILE" ]]; then
 		&& mv "${HOME?}/$CONFIG_FILE" "${HOME?}/$CONFIG_FILE.uninstall" \
 		&& printf '\e[0;32m%s\e[0m\n' "Moved your ~/$CONFIG_FILE to ~/$CONFIG_FILE.uninstall."
 else
+	# Create a backup of the current config before restoring the old one
+	# Use -L to dereference symlinks (for homesick/dotfile managers)
+	if [[ -e "${HOME?}/$CONFIG_FILE" ]]; then
+		cp -L "${HOME?}/$CONFIG_FILE" "${HOME?}/$CONFIG_FILE.pre-uninstall.bak"
+		printf '\e[0;33m%s\e[0m\n' "Current ~/$CONFIG_FILE backed up to ~/$CONFIG_FILE.pre-uninstall.bak"
+	fi
+
 	test -w "${HOME?}/$BACKUP_FILE" \
 		&& cp -a "${HOME?}/$BACKUP_FILE" "${HOME?}/$CONFIG_FILE" \
 		&& rm "${HOME?}/$BACKUP_FILE" \
 		&& printf '\e[0;32m%s\e[0m\n' "Your original ~/$CONFIG_FILE has been restored."
+
+	printf '\e[0;33m%s\e[0m\n' "NOTE: If you had made changes since installing Bash-it, they are preserved in ~/$CONFIG_FILE.pre-uninstall.bak"
 fi
 
 printf '\n\e[0;32m%s\e[0m\n\n' "Uninstallation finished successfully! Sorry to see you go!"
