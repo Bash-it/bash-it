@@ -48,10 +48,10 @@ function local_setup() {
 }
 
 @test "helpers: bash-it help list aliases with todo aliases enabled" {
-	ln -s "${BASH_IT?}/aliases/available/todo.aliases.bash" "${BASH_IT?}/aliases/enabled/150---todo.aliases.bash"
-	assert_link_exist "${BASH_IT?}/aliases/enabled/150---todo.aliases.bash"
+	ln -s "${BASH_IT?}/aliases/available/todo.aliases.bash" "${BASH_IT?}/aliases/enabled/750---todo.aliases.bash"
+	assert_link_exist "${BASH_IT?}/aliases/enabled/750---todo.aliases.bash"
 
-	run _help-list-aliases "${BASH_IT?}/aliases/enabled/150---todo.aliases.bash"
+	run _help-list-aliases "${BASH_IT?}/aliases/enabled/750---todo.aliases.bash"
 	assert_line -n 0 "todo:"
 }
 
@@ -95,8 +95,8 @@ function local_setup() {
 
 @test "helpers: enable the todo aliases through the bash-it function" {
 	run bash-it enable alias "todo"
-	assert_line -n 0 'todo enabled with priority 150.'
-	assert_link_exist "${BASH_IT?}/enabled/150---todo.aliases.bash"
+	assert_line -n 0 'todo enabled with priority 750.'
+	assert_link_exist "${BASH_IT?}/enabled/750---todo.aliases.bash"
 }
 
 @test "helpers: enable the curl aliases" {
@@ -441,12 +441,12 @@ function local_setup() {
 	run _bash-it-migrate
 	assert_line -n 0 'Migrating alias todo.'
 	assert_line -n 1 'todo disabled.'
-	assert_line -n 2 'todo enabled with priority 150.'
+	assert_line -n 2 'todo enabled with priority 750.'
 
 	assert_link_exist "${BASH_IT?}/enabled/225---nvm.plugin.bash"
 	assert_link_exist "${BASH_IT?}/enabled/250---node.plugin.bash"
 	assert_link_exist "${BASH_IT?}/enabled/250---ssh.plugin.bash"
-	assert_link_exist "${BASH_IT?}/enabled/150---todo.aliases.bash"
+	assert_link_exist "${BASH_IT?}/enabled/750---todo.aliases.bash"
 	assert [ ! -L "${BASH_IT?}/plugins/enabled/node.plugin.bash" ]
 	assert [ ! -L "${BASH_IT?}/plugins/enabled/nvm.plugin.bash" ]
 	assert [ ! -L "${BASH_IT?}/aliases/enabled/todo.aliases.bash" ]
@@ -469,7 +469,7 @@ function local_setup() {
 	assert_link_exist "${BASH_IT?}/enabled/225---nvm.plugin.bash"
 	assert_link_exist "${BASH_IT?}/enabled/250---node.plugin.bash"
 	assert_link_exist "${BASH_IT?}/enabled/250---ssh.plugin.bash"
-	assert_link_exist "${BASH_IT?}/enabled/150---todo.aliases.bash"
+	assert_link_exist "${BASH_IT?}/enabled/750---todo.aliases.bash"
 	assert [ ! -L "${BASH_IT?}/plugins/enabled/225----node.plugin.bash" ]
 	assert [ ! -L "${BASH_IT?}/plugins/enabled/250----nvm.plugin.bash" ]
 	assert [ ! -L "${BASH_IT?}/aliases/enabled/250----todo.aliases.bash" ]
