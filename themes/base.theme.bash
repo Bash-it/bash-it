@@ -395,6 +395,14 @@ function hg_prompt_vars() {
 }
 
 function node_command_version_prompt() {
+	# Set to 'true' to only show node version in directories with package.json
+	NODE_VERSION_CHECK_PROJECT="${NODE_VERSION_CHECK_PROJECT:-false}"
+
+	# If NODE_VERSION_CHECK_PROJECT is enabled, only show version in Node.js projects
+	if [[ "${NODE_VERSION_CHECK_PROJECT}" == "true" ]] && ! _is_node_project; then
+		return 0
+	fi
+
 	local node_version
 	if _command_exists node; then
 		node_version="$(node --version 2> /dev/null)"
@@ -421,10 +429,32 @@ function node_native_version_prompt() {
 	fi
 }
 
+function _is_node_project() {
+	# Check if we're in a Node.js project by looking for package.json
+	# Search current directory and parent directories up to $HOME
+	local dir="${PWD}"
+	while [[ "${dir}" != "${HOME-}" && "${dir}" != "/" ]]; do
+		if [[ -f "${dir}/package.json" ]]; then
+			return 0
+		fi
+		dir=$(dirname "${dir}")
+	done
+	# Also check $HOME itself
+	[[ -f "${HOME-}/package.json" ]] && return 0
+	return 1
+}
+
 function node_version_prompt() {
 	NODE_VERSION_STRATEGY="${NODE_VERSION_STRATEGY:-nvm}"
+	# Set to 'true' to only show node version in directories with package.json
+	NODE_VERSION_CHECK_PROJECT="${NODE_VERSION_CHECK_PROJECT:-false}"
 
 	_log_debug "node: using version strategy '$NODE_VERSION_STRATEGY'"
+
+	# If NODE_VERSION_CHECK_PROJECT is enabled, only show version in Node.js projects
+	if [[ "${NODE_VERSION_CHECK_PROJECT}" == "true" ]] && ! _is_node_project; then
+		return 0
+	fi
 
 	if [ "$NODE_VERSION_STRATEGY" == "nvm" ]; then
 		nvm_version_prompt
