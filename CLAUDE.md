@@ -146,3 +146,13 @@ bash-it search docker
   - Examples: `${BASH_VERSION-}`, `${HOME-}`, `${PATH-}`
   - Critical for variables checked in conditionals: `if [ -n "${BASH_VERSION-}" ]`
   - This defensive practice ensures scripts work regardless of user's shell options
+
+## Project Planning & Roadmaps
+
+Strategic planning documents are maintained in `docs/plans/`:
+
+- **[Quick Reference](docs/plans/bash-it-quick-reference.md)** - TL;DR summary of current issues and action items
+- **[Comprehensive Issue Analysis](docs/plans/bash-it-issues-comprehensive-analysis.md)** - Detailed breakdown of all open issues with categorization and recommendations
+- **[2025 Roadmap](docs/plans/bash-it-roadmap-2025.md)** - 6-month technical debt reduction plan with phases and success metrics
+
+These documents guide ongoing maintenance, issue triage, and code quality improvements.
