@@ -400,7 +400,7 @@ function node_command_version_prompt() {
 
 	# If NODE_VERSION_CHECK_PROJECT is enabled, only show version in Node.js projects
 	if [[ "${NODE_VERSION_CHECK_PROJECT}" == "true" ]] && ! _is_node_project; then
-		return
+		return 0
 	fi
 
 	local node_version
@@ -453,7 +453,7 @@ function node_version_prompt() {
 
 	# If NODE_VERSION_CHECK_PROJECT is enabled, only show version in Node.js projects
 	if [[ "${NODE_VERSION_CHECK_PROJECT}" == "true" ]] && ! _is_node_project; then
-		return
+		return 0
 	fi
 
 	if [ "$NODE_VERSION_STRATEGY" == "nvm" ]; then
