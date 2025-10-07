@@ -1,9 +1,14 @@
 # shellcheck shell=bash
 # shellcheck disable=SC1090
 
-if _command_exists travis; then
-	if [[ -s "${__TRAVIS_COMPLETION_SCRIPT:=${TRAVIS_CONFIG_PATH:-${HOME}/.travis}/travis.sh}" ]]; then
-		source "${__TRAVIS_COMPLETION_SCRIPT}"
-	fi
-	unset __TRAVIS_COMPLETION_SCRIPT
+# Make sure travis is installed
+_bash-it-completion-helper-necessary travis || :
+
+# Don't handle completion if it's already managed
+_bash-it-completion-helper-sufficient travis || return
+
+if [[ -s "${_travis_bash_completion_script:=${TRAVIS_CONFIG_PATH:-${HOME}/.travis}/travis.sh}" ]]; then
+	# shellcheck disable=SC1090
+	source "${_travis_bash_completion_script}"
 fi
+unset "${!_travis_bash_completion@}"

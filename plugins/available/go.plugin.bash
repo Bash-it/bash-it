@@ -19,18 +19,14 @@ export GOPATH="${GOPATH:-$(go env GOPATH)}"
 _bash-it-gopath-pathmunge() {
 	_about 'Ensures paths in GOPATH are added to PATH using pathmunge, with /bin appended'
 	_group 'go'
-	if [[ -z $GOPATH ]]; then
-		echo 'GOPATH empty' >&2
+	if [[ -z "${GOPATH:-}" ]]; then
+		_log_warning 'GOPATH empty'
 		return 1
 	fi
-	local paths i
+	local paths apath
 	IFS=: read -r -a paths <<< "$GOPATH"
-	i=${#paths[@]}
-	while [[ $i -gt 0 ]]; do
-		i=$((i - 1))
-		if [[ -n "${paths[i]}" ]]; then
-			pathmunge "${paths[i]}/bin"
-		fi
+	for apath in "${paths[@]}"; do
+		pathmunge "${apath}/bin" || true
 	done
 }
 _bash-it-gopath-pathmunge

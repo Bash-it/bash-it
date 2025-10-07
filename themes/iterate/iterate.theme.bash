@@ -1,19 +1,21 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
+
 SCM_GIT_CHAR="± "
 SCM_HG_CHAR="☿ "
 SCM_SVN_CHAR="⑆ "
 SCM_NONE_CHAR=""
-SCM_THEME_PROMPT_DIRTY=" ${red}✗"
-SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓"
+SCM_THEME_PROMPT_DIRTY=" ${red?}✗"
+SCM_THEME_PROMPT_CLEAN=" ${bold_green?}✓"
 SCM_THEME_PROMPT_PREFIX="|"
-SCM_THEME_PROMPT_SUFFIX="${green}| "
-SCM_GIT_AHEAD_CHAR="${green}+"
-SCM_GIT_BEHIND_CHAR="${red}-"
+SCM_THEME_PROMPT_SUFFIX="${green?}| "
+SCM_GIT_AHEAD_CHAR="${green?}+"
+SCM_GIT_BEHIND_CHAR="${red?}-"
 
-GIT_THEME_PROMPT_DIRTY=" ${bold_red}✗"
-GIT_THEME_PROMPT_CLEAN=" ${bold_green}✓"
-GIT_THEME_PROMPT_PREFIX="${cyan}|"
-GIT_THEME_PROMPT_SUFFIX="${cyan}| "
+GIT_THEME_PROMPT_DIRTY=" ${bold_red?}✗"
+GIT_THEME_PROMPT_CLEAN=" ${bold_green?}✓"
+GIT_THEME_PROMPT_PREFIX="${cyan?}|"
+GIT_THEME_PROMPT_SUFFIX="${cyan?}| "
 
 RVM_THEME_PROMPT_PREFIX="|"
 RVM_THEME_PROMPT_SUFFIX="| "
@@ -42,8 +44,9 @@ function git_prompt_info {
 
 LAST_PROMPT=""
 function prompt_command() {
-	local new_PS1="${bold_cyan}$(scm_char)${yellow}$(ruby_version_prompt)${green}\w $(scm_prompt_info)"
-	local new_prompt=$(PS1="$new_PS1" "$BASH" --norc -i < /dev/null 2>&1 | sed -n '${s/^\(.*\)exit$/\1/p;}')
+	local new_PS1 new_prompt
+	new_PS1="${bold_cyan?}$(scm_char)${yellow?}$(ruby_version_prompt)${green?}\w $(scm_prompt_info)"
+	new_prompt=$(PS1="$new_PS1" "$BASH" --norc -i < /dev/null 2>&1 | sed -n "\${s/^\(.*\)exit\$/\1/p;}")
 
 	if [ "$LAST_PROMPT" = "$new_prompt" ]; then
 		new_PS1=""
@@ -52,8 +55,8 @@ function prompt_command() {
 	fi
 
 	local wrap_char=""
-	[[ $COLUMNS && ${#new_PS1} > $(($COLUMNS / 1)) ]] && wrap_char="\n"
-	PS1="${new_PS1}${green}${wrap_char}→${reset_color} "
+	[[ $COLUMNS && ${#new_PS1} -gt COLUMNS ]] && wrap_char="\n"
+	PS1="${new_PS1}${green?}${wrap_char}→${reset_color?} "
 }
 
 safe_append_prompt_command prompt_command
