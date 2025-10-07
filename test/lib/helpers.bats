@@ -47,12 +47,12 @@ function local_setup() {
 	assert_line -n 0 "ag:"
 }
 
-@test "helpers: bash-it help list aliases with todo.txt-cli aliases enabled" {
-	run ln -s "${BASH_IT?}/aliases/available/todo.txt-cli.aliases.bash" "${BASH_IT?}/aliases/enabled/750---todo.txt-cli.aliases.bash"
-	assert_link_exist "${BASH_IT?}/aliases/enabled/750---todo.txt-cli.aliases.bash"
+@test "helpers: bash-it help list aliases with todo aliases enabled" {
+	ln -s "${BASH_IT?}/aliases/available/todo.aliases.bash" "${BASH_IT?}/aliases/enabled/750---todo.aliases.bash"
+	assert_link_exist "${BASH_IT?}/aliases/enabled/750---todo.aliases.bash"
 
-	run _help-list-aliases "${BASH_IT?}/aliases/enabled/750---todo.txt-cli.aliases.bash"
-	assert_line -n 0 "todo.txt-cli:"
+	run _help-list-aliases "${BASH_IT?}/aliases/enabled/750---todo.aliases.bash"
+	assert_line -n 0 "todo:"
 }
 
 @test "helpers: bash-it help list aliases with docker-compose aliases enabled" {
@@ -93,10 +93,10 @@ function local_setup() {
 	assert_line -n 1 "ag='ag --smart-case --pager=\"less -MIRFX'"
 }
 
-@test "helpers: enable the todo.txt-cli aliases through the bash-it function" {
-	run bash-it enable alias "todo.txt-cli"
-	assert_line -n 0 'todo.txt-cli enabled with priority 750.'
-	assert_link_exist "${BASH_IT?}/enabled/750---todo.txt-cli.aliases.bash"
+@test "helpers: enable the todo aliases through the bash-it function" {
+	run bash-it enable alias "todo"
+	assert_line -n 0 'todo enabled with priority 750.'
+	assert_link_exist "${BASH_IT?}/enabled/750---todo.aliases.bash"
 }
 
 @test "helpers: enable the curl aliases" {
@@ -432,24 +432,24 @@ function local_setup() {
 	run ln -s "${BASH_IT?}/plugins/available/node.plugin.bash" "${BASH_IT?}/plugins/enabled/node.plugin.bash"
 	assert_link_exist "${BASH_IT?}/plugins/enabled/node.plugin.bash"
 
-	run ln -s "${BASH_IT?}/aliases/available/todo.txt-cli.aliases.bash" "${BASH_IT?}/aliases/enabled/todo.txt-cli.aliases.bash"
-	assert_link_exist "${BASH_IT?}/aliases/enabled/todo.txt-cli.aliases.bash"
+	ln -s "${BASH_IT?}/aliases/available/todo.aliases.bash" "${BASH_IT?}/aliases/enabled/todo.aliases.bash"
+	assert_link_exist "${BASH_IT?}/aliases/enabled/todo.aliases.bash"
 
 	run _enable-plugin "ssh"
 	assert_link_exist "${BASH_IT?}/enabled/250---ssh.plugin.bash"
 
 	run _bash-it-migrate
-	assert_line -n 0 'Migrating alias todo.txt-cli.'
-	assert_line -n 1 'todo.txt-cli disabled.'
-	assert_line -n 2 'todo.txt-cli enabled with priority 750.'
+	assert_line -n 0 'Migrating alias todo.'
+	assert_line -n 1 'todo disabled.'
+	assert_line -n 2 'todo enabled with priority 750.'
 
 	assert_link_exist "${BASH_IT?}/enabled/225---nvm.plugin.bash"
 	assert_link_exist "${BASH_IT?}/enabled/250---node.plugin.bash"
 	assert_link_exist "${BASH_IT?}/enabled/250---ssh.plugin.bash"
-	assert_link_exist "${BASH_IT?}/enabled/750---todo.txt-cli.aliases.bash"
+	assert_link_exist "${BASH_IT?}/enabled/750---todo.aliases.bash"
 	assert [ ! -L "${BASH_IT?}/plugins/enabled/node.plugin.bash" ]
 	assert [ ! -L "${BASH_IT?}/plugins/enabled/nvm.plugin.bash" ]
-	assert [ ! -L "${BASH_IT?}/aliases/enabled/todo.txt-cli.aliases.bash" ]
+	assert [ ! -L "${BASH_IT?}/aliases/enabled/todo.aliases.bash" ]
 }
 
 @test "helpers: migrate enabled plugins that use the new priority-based configuration in the individual directories" {
@@ -459,8 +459,8 @@ function local_setup() {
 	run ln -s "${BASH_IT?}/plugins/available/node.plugin.bash" "${BASH_IT?}/plugins/enabled/250---node.plugin.bash"
 	assert_link_exist "${BASH_IT?}/plugins/enabled/250---node.plugin.bash"
 
-	run ln -s "${BASH_IT?}/aliases/available/todo.txt-cli.aliases.bash" "${BASH_IT?}/aliases/enabled/250---todo.txt-cli.aliases.bash"
-	assert_link_exist "${BASH_IT?}/aliases/enabled/250---todo.txt-cli.aliases.bash"
+	ln -s "${BASH_IT?}/aliases/available/todo.aliases.bash" "${BASH_IT?}/aliases/enabled/250---todo.aliases.bash"
+	assert_link_exist "${BASH_IT?}/aliases/enabled/250---todo.aliases.bash"
 
 	run _enable-plugin "ssh"
 	assert_link_exist "${BASH_IT?}/enabled/250---ssh.plugin.bash"
@@ -469,10 +469,10 @@ function local_setup() {
 	assert_link_exist "${BASH_IT?}/enabled/225---nvm.plugin.bash"
 	assert_link_exist "${BASH_IT?}/enabled/250---node.plugin.bash"
 	assert_link_exist "${BASH_IT?}/enabled/250---ssh.plugin.bash"
-	assert_link_exist "${BASH_IT?}/enabled/750---todo.txt-cli.aliases.bash"
+	assert_link_exist "${BASH_IT?}/enabled/750---todo.aliases.bash"
 	assert [ ! -L "${BASH_IT?}/plugins/enabled/225----node.plugin.bash" ]
 	assert [ ! -L "${BASH_IT?}/plugins/enabled/250----nvm.plugin.bash" ]
-	assert [ ! -L "${BASH_IT?}/aliases/enabled/250----todo.txt-cli.aliases.bash" ]
+	assert [ ! -L "${BASH_IT?}/aliases/enabled/250----todo.aliases.bash" ]
 }
 
 @test "helpers: run the migrate command without anything to migrate and nothing enabled" {
@@ -711,7 +711,7 @@ function __migrate_all_components() {
 	_bash-it-plugins | grep "nvm" | grep "\[x\]"
 }
 
-@test "helpers: describe the todo.txt-cli aliases without enabling them" {
+@test "helpers: describe the todo aliases without enabling them" {
 	run _bash-it-aliases
-	assert_line "todo.txt-cli         [ ]        todo.txt-cli abbreviations"
+	assert_line "todo                 [ ]        todo.txt-cli abbreviations"
 }

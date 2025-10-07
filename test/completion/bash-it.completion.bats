@@ -224,36 +224,36 @@ function __check_completion() {
 }
 
 @test "completion bash-it: disable - provide the todo.txt-cli aliases when todo plugin is enabled with the old location and name" {
-	run ln -s "$BASH_IT/aliases/available/todo.txt-cli.aliases.bash" "$BASH_IT/aliases/enabled/todo.txt-cli.aliases.bash"
-	assert_link_exist "$BASH_IT/aliases/enabled/todo.txt-cli.aliases.bash"
+	run ln -s "$BASH_IT/aliases/available/todo.aliases.bash" "$BASH_IT/aliases/enabled/todo.aliases.bash"
+	assert_link_exist "$BASH_IT/aliases/enabled/todo.aliases.bash"
 
 	run ln -s "$BASH_IT/plugins/available/todo.plugin.bash" "$BASH_IT/plugins/enabled/todo.plugin.bash"
 	assert_link_exist "$BASH_IT/plugins/enabled/todo.plugin.bash"
 
 	run __check_completion 'bash-it disable alias to'
-	assert_output "todo.txt-cli"
+	assert_output "todo"
 }
 
 @test "completion bash-it: disable - provide the todo.txt-cli aliases when todo plugin is enabled with the old location and priority-based name" {
-	run ln -s "$BASH_IT/aliases/available/todo.txt-cli.aliases.bash" "$BASH_IT/aliases/enabled/750---todo.txt-cli.aliases.bash"
-	assert_link_exist "$BASH_IT/aliases/enabled/750---todo.txt-cli.aliases.bash"
+	run ln -s "$BASH_IT/aliases/available/todo.aliases.bash" "$BASH_IT/aliases/enabled/750---todo.aliases.bash"
+	assert_link_exist "$BASH_IT/aliases/enabled/750---todo.aliases.bash"
 
 	run ln -s "$BASH_IT/plugins/available/todo.plugin.bash" "$BASH_IT/plugins/enabled/350---todo.plugin.bash"
 	assert_link_exist "$BASH_IT/plugins/enabled/350---todo.plugin.bash"
 
 	run __check_completion 'bash-it disable alias to'
-	assert_output "todo.txt-cli"
+	assert_output "todo"
 }
 
 @test "completion bash-it: disable - provide the todo.txt-cli aliases when todo plugin is enabled with the new location and priority-based name" {
-	run ln -s "$BASH_IT/aliases/available/todo.txt-cli.aliases.bash" "$BASH_IT/enabled/750---todo.txt-cli.aliases.bash"
-	assert_link_exist "$BASH_IT/enabled/750---todo.txt-cli.aliases.bash"
+	run ln -s "$BASH_IT/aliases/available/todo.aliases.bash" "$BASH_IT/enabled/750---todo.aliases.bash"
+	assert_link_exist "$BASH_IT/enabled/750---todo.aliases.bash"
 
 	run ln -s "$BASH_IT/plugins/available/todo.plugin.bash" "$BASH_IT/enabled/350---todo.plugin.bash"
 	assert_link_exist "$BASH_IT/enabled/350---todo.plugin.bash"
 
 	run __check_completion 'bash-it disable alias to'
-	assert_output "todo.txt-cli"
+	assert_output "todo"
 }
 
 @test "completion bash-it: enable - provide the atom aliases when not enabled" {
@@ -343,7 +343,7 @@ function __check_completion() {
 	assert_link_exist "$BASH_IT/plugins/enabled/todo.plugin.bash"
 
 	run __check_completion 'bash-it enable alias to'
-	assert_output "todo.txt-cli"
+	assert_output "todo"
 }
 
 @test "completion bash-it: enable - provide the todo.txt-cli aliases when todo plugin is enabled with the old location and priority-based name" {
@@ -351,7 +351,7 @@ function __check_completion() {
 	assert_link_exist "$BASH_IT/plugins/enabled/350---todo.plugin.bash"
 
 	run __check_completion 'bash-it enable alias to'
-	assert_output "todo.txt-cli"
+	assert_output "todo"
 }
 
 @test "completion bash-it: enable - provide the todo.txt-cli aliases when todo plugin is enabled with the new location and priority-based name" {
@@ -359,5 +359,5 @@ function __check_completion() {
 	assert_link_exist "$BASH_IT/enabled/350---todo.plugin.bash"
 
 	run __check_completion 'bash-it enable alias to'
-	assert_output "todo.txt-cli"
+	assert_output "todo"
 }
