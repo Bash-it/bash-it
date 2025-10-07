@@ -50,8 +50,9 @@ if [[ ! -e "${HOME?}/$BACKUP_FILE" ]]; then
 		&& printf '\e[0;32m%s\e[0m\n' "Moved your ~/$CONFIG_FILE to ~/$CONFIG_FILE.uninstall."
 else
 	# Create a backup of the current config before restoring the old one
+	# Use -L to dereference symlinks (for homesick/dotfile managers)
 	if [[ -e "${HOME?}/$CONFIG_FILE" ]]; then
-		cp -a "${HOME?}/$CONFIG_FILE" "${HOME?}/$CONFIG_FILE.pre-uninstall.bak"
+		cp -L "${HOME?}/$CONFIG_FILE" "${HOME?}/$CONFIG_FILE.pre-uninstall.bak"
 		printf '\e[0;33m%s\e[0m\n' "Current ~/$CONFIG_FILE backed up to ~/$CONFIG_FILE.pre-uninstall.bak"
 	fi
 
