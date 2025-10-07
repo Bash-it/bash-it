@@ -234,7 +234,7 @@ function _bash-it-update-() {
 	fi
 
 	if [[ -z "$BASH_IT_REMOTE" ]]; then
-		BASH_IT_REMOTE="origin"
+		BASH_IT_REMOTE=$(_get-git-default-remote-name)
 	fi
 
 	git fetch "$BASH_IT_REMOTE" --tags &> /dev/null
@@ -352,7 +352,7 @@ function _bash-it-version() {
 	pushd "${BASH_IT?}" > /dev/null || return
 
 	if [[ -z "${BASH_IT_REMOTE:-}" ]]; then
-		BASH_IT_REMOTE="origin"
+		BASH_IT_REMOTE=$(_get-git-default-remote-name)
 	fi
 
 	BASH_IT_GIT_REMOTE="$(git remote get-url "$BASH_IT_REMOTE")"
@@ -1231,6 +1231,21 @@ function pathmunge() {
 			export PATH="${1}:$PATH"
 		fi
 	fi
+}
+
+function _get-git-default-remote-name() {
+	local branch
+	branch=$(command git --git-dir="${BASH_IT?}/.git" --work-tree="${BASH_IT?}" branch --show-current)
+
+	local remote_name=
+	remote_name=$(command git --git-dir="${BASH_IT?}/.git" --work-tree="${BASH_IT?}" config --get --default '' "branch.$branch.remote")
+	if [[ -n "$remote_name" ]]; then
+		printf '%s\n' "$remote_name"
+		return
+	fi
+
+	remote_name=$(command git --git-dir="${BASH_IT?}/.git" --work-tree="${BASH_IT?}" remote -v | awk 'NR==1 { print $1 }')
+	printf '%s\n' "${remote_name:-origin}"
 }
 
 # `_bash-it-find-in-ancestor` uses the shell's ability to run a function in
