@@ -18,7 +18,7 @@ _artisan_completion() {
 	commands=$(command php artisan --raw --no-ansi list 2> /dev/null | command sed "s/[[:space:]].*//")
 
 	# shellcheck disable=SC2034,SC2207
-	COMPREPLY=($(compgen -W "${commands}" -- "${cur}"))
+	COMPREPLY=($(compgen -W '${commands}' -- "${cur}"))
 	return 0
 }
 
