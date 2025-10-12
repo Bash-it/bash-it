@@ -130,12 +130,13 @@ _tmux() {
 				new-session | new)
 					case "$prev" in
 						-t) _tmux_complete_session "${cur}" ;;
+						-c) _tmux_filedir -d ;;
 						-[n | d | s]) options="-d -n -s -t --" ;;
 						*)
 							if [[ ${COMP_WORDS[option_index]} == -- ]]; then
 								_command_offset "${option_index}"
 							else
-								options="-d -n -s -t --"
+								options="-d -n -s -t -c --"
 							fi
 							;;
 					esac
