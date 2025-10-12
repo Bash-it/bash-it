@@ -4,7 +4,7 @@ about-completion "Laravel artisan completion"
 
 # Completion function for Laravel artisan
 _artisan_completion() {
-	local cur commands
+	local cur artisan_commands
 	COMPREPLY=()
 	cur="${COMP_WORDS[COMP_CWORD]}"
 
@@ -15,10 +15,11 @@ _artisan_completion() {
 
 	# Get list of available artisan commands
 	# Use command prefix to bypass user aliases
-	commands=$(command php artisan --raw --no-ansi list 2> /dev/null | command sed "s/[[:space:]].*//")
+	# shellcheck disable=SC2034
+	artisan_commands=$(command php artisan --raw --no-ansi list 2> /dev/null | command sed "s/[[:space:]].*//")
 
-	# shellcheck disable=SC2034,SC2207
-	COMPREPLY=($(compgen -W '${commands}' -- "${cur}"))
+	# shellcheck disable=SC2016,SC2207
+	COMPREPLY=($(compgen -W '${artisan_commands}' -- "${cur}"))
 	return 0
 }
 
