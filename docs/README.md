@@ -5,8 +5,9 @@
 ![License](https://img.shields.io/github/license/Bash-it/bash-it)
 ![shell](https://img.shields.io/badge/Shell-Bash-blue)
 
-**Bash-it** is a collection of community Bash commands and scripts for Bash 3.2+.
+**Bash-it** is a collection of community Bash commands and scripts for Bash.
 (And a shameless ripoff of [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) :smiley:)
+97% of the code is compatible with bash 3.2+ but we are geared toward power users, and one or two plugins may need bash 5 features to run. 
 
 Includes autocompletion, themes, aliases, custom functions, a few stolen pieces from Steve Losh, and more.
 
