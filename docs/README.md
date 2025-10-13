@@ -5,13 +5,17 @@
 ![License](https://img.shields.io/github/license/Bash-it/bash-it)
 ![shell](https://img.shields.io/badge/Shell-Bash-blue)
 
-**Bash-it** is a collection of community Bash commands and scripts for Bash 3.2+.
+**Bash-it** is a collection of community Bash commands and scripts for Bash.
 (And a shameless ripoff of [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) :smiley:)
+97% of the code is compatible with bash 3.2+ but we are geared also toward power users,
+and one or two of the more complex plugins may need bash 5 features to run. If you
+happen to be "stuck" on an older version of bash, we have code in place to prevent you
+from running those modules and getting errors. It's a short list though, and none of the core code.
 
 Includes autocompletion, themes, aliases, custom functions, a few stolen pieces from Steve Losh, and more.
 
 Bash-it provides a solid framework for using, developing and maintaining shell scripts and custom commands for your daily work.
-If you're using the _Bourne Again Shell_ (Bash) regularly and have been looking for an easy way on how to keep all of these nice little scripts and aliases under control, then Bash-it is for you!  
+If you're using the _Bourne Again Shell_ (Bash) regularly and have been looking for an easy way on how to keep all of these nice little scripts and aliases under control, then Bash-it is for you!
 Stop polluting your `~/bin` directory and your `.bashrc` file, fork/clone Bash-it and start hacking away.
 
 - [Main Page](https://bash-it.readthedocs.io/en/latest)
@@ -42,9 +46,9 @@ Stop polluting your `~/bin` directory and your `.bashrc` file, fork/clone Bash-i
    ``git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it``
 2) Run ``~/.bash_it/install.sh``
 
-That's it! :smiley:  
+That's it! :smiley:
 
-You can check out more components of Bash-it, and customize it to your desire.  
+You can check out more components of Bash-it, and customize it to your desire.
 For more information, see detailed instructions [here](https://bash-it.readthedocs.io/en/latest/installation/).
 
 ### custom configuration file location
