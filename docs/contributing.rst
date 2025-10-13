@@ -47,8 +47,12 @@ Code Style
   Take a look at the existing code for an example (e.g. `the base plugin <plugins/available/base.plugin.bash>`_\ ).
 * When adding files, please use the existing file naming conventions, e.g. plugin files need to end in ``.plugin.bash``.
   This is important for the installation functionality.
-* When using the ``$BASH_IT`` variable, please always enclose it in double quotes to ensure that the code also works when Bash-it is installed in a directory that contains spaces in its name: ``for f in "${BASH_IT}/plugins/available"/*.bash ; do echo "$f" ; done``
+* When using the ``$BASH_IT`` variable, please always enclose it in double quotes to ensure that the code also works when
+  Bash-it is installed in a directory that contains spaces in its name: ``for f in "${BASH_IT}/plugins/available"/*.bash ; do echo "$f" ; done``
 * Bash-it supports Bash 3.2 and higher. Please don't use features only available in Bash 4, such as associative arrays.
+* That said, if you have a really cool plugin or feature to contribute and it absolutely too slow or hard to implement
+  without bash4 or higher, please see plugins/available/pack.plugin.bash for an example how to self disable and log the reason
+  so bash 3.2 users are not stuck with errors that don't need to handle.
 
 Unit Tests
 ----------
