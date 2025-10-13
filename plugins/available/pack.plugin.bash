@@ -1,6 +1,13 @@
 # shellcheck shell=bash
 # bash completion for pack                                 -*- shell-script -*-
 
+# Requires bash 3.3+ for associative arrays
+# Skip loading if bash version is too old
+if [[ -n "${BASH_VERSINFO[0]}" ]] && [[ "${BASH_VERSINFO[0]}" -eq 3 ]] && [[ "${BASH_VERSINFO[1]}" -lt 3 ]]; then
+	_disable-plugin pack
+	return 0
+fi
+
 cite about-plugin
 about-plugin 'CNB pack cli aliases'
 
