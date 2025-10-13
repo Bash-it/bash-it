@@ -18,6 +18,7 @@ _command_exists percol || return
 if [[ ${BASH_VERSINFO[0]} -lt 4 ]]; then
 	_log_warning "You have to upgrade Bash to Bash v4.x to use the 'percol' plugin."
 	_log_warning "Your current Bash version is $BASH_VERSION."
+	_disable-plugin percol
 	return
 fi
 

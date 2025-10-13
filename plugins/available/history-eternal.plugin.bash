@@ -3,6 +3,7 @@ about-plugin 'eternal bash history'
 
 if [[ ${BASH_VERSINFO[0]} -lt 4 ]] || [[ ${BASH_VERSINFO[0]} -eq 4 && ${BASH_VERSINFO[1]} -lt 3 ]]; then
 	_log_warning "Bash version 4.3 introduced the 'unlimited' history size capability."
+	_disable-plugin history-eternal
 	return 1
 fi
 
