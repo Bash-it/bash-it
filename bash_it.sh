@@ -14,6 +14,7 @@ BASH_IT_LOG_PREFIX="core: main: "
 source "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
 
 # Extend composure with additional metadata functions
+# shellcheck disable=SC2329
 url() { :; }
 # support 'plumbing' metadata
 cite _about _param _example _group _author _version url
