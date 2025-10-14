@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 cite about-plugin
 about-plugin 'svn helper functions'
+url "https://subversion.apache.org/"
 
 rm_svn() {
 	about 'remove ".svn" files from directory'

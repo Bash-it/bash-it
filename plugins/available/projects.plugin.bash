@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-plugin 'quickly navigate configured project paths'
+url "https://github.com/Bash-it/bash-it"
 
 : "${BASH_IT_PROJECT_PATHS:=$HOME/Projects:$HOME/src:$HOME/work}"
 

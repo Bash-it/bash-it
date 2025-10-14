@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 cite about-plugin
 about-plugin 'ssh helper functions'
+url "https://www.openssh.com/"
 
 function add_ssh() {
 	about 'add entry to ssh config'

@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 cite about-plugin
 about-plugin 'Load Software Development Kit Manager'
+url "https://sdkman.io/"
 
 # Use $SDKMAN_DIR if defined,
 # otherwise default to ~/.sdkman

@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 cite about-plugin
 about-plugin 'load pyenv, if you are using it'
+url "https://github.com/pyenv/pyenv"
 
 # https://github.com/pyenv/pyenv
 

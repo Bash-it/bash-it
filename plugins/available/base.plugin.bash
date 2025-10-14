@@ -2,6 +2,7 @@
 
 cite about-plugin
 about-plugin 'miscellaneous tools'
+url "https://github.com/Bash-it/bash-it"
 
 function ips() {
 	about 'display all ip addresses for this host'

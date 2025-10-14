@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 cite about-plugin
 about-plugin 'Helper functions for Ruby on Rails'
+url "https://rubyonrails.org/"
 
 # Quick function to kill a daemonized Rails server
 function killrails() {

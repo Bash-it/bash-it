@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 cite about-plugin
 about-plugin 'Basic url handling and manipulation functions'
+url "https://github.com/Bash-it/bash-it"
 
 function slugify() {
 	about 'takes the text and transform to slug url, also supports formats like (html,link,rst,md)'

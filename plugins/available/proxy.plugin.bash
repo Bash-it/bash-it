@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-plugin 'Proxy Tools'
+url "https://github.com/Bash-it/bash-it"
 
 function disable-proxy() {
 	about 'Disables proxy settings for Bash, npm and SSH'
