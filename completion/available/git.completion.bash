@@ -1,4 +1,7 @@
 # shellcheck shell=bash
+
+cite "about-completion"
+about-completion "git - distributed version control system"
 #
 # Locate and load completions for `git`.
 

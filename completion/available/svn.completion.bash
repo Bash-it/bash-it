@@ -1,4 +1,8 @@
 # shellcheck shell=bash
+
+cite "about-completion"
+about-completion "svn - Apache Subversion version control system"
+group "version-control"
 #
 # Locate and load completions for `svn`.
 

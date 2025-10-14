@@ -1,4 +1,8 @@
 # shellcheck shell=bash
+
+cite "about-completion"
+about-completion "fabric - Python library and CLI tool for streamlining SSH deployments"
+group "deployment"
 #
 # Bash completion support for Fabric (http://fabfile.org/)
 #

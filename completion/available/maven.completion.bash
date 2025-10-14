@@ -1,5 +1,9 @@
 # shellcheck shell=bash
 # shellcheck disable=SC2034,SC2207
+
+cite "about-completion"
+about-completion "maven - Java project build automation and dependency management tool"
+
 # Bash Maven completion
 
 _mvn() {

@@ -1,5 +1,10 @@
 # shellcheck shell=bash
 
+cite "about-completion"
+about-completion "flutter - Google's UI toolkit for building cross-platform applications"
+group "mobile"
+url "https://flutter.dev"
+
 # Make sure flutter is installed
 _bash-it-completion-helper-necessary flutter || return
 

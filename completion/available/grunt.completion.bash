@@ -1,5 +1,8 @@
 # shellcheck shell=bash
 
+cite "about-completion"
+about-completion "grunt - JavaScript task runner for automation"
+
 # grunt-cli
 # http://gruntjs.com/
 #

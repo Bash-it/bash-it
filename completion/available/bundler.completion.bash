@@ -1,5 +1,9 @@
 # shellcheck shell=bash
 # shellcheck disable=SC2207
+
+cite "about-completion"
+about-completion "bundler - Ruby dependency manager for managing gem dependencies"
+
 # bash completion for the `bundle` command.
 #
 # Copyright (c) 2008 Daniel Luz

@@ -1,5 +1,9 @@
 # shellcheck shell=bash
 
+cite "about-completion"
+about-completion "pipenv - Python development workflow tool combining pip and virtualenv"
+group "python"
+
 # Make sure pipenv is installed
 _bash-it-completion-helper-necessary pipenv || return
 

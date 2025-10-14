@@ -1,5 +1,10 @@
 # shellcheck shell=bash
 
+cite "about-completion"
+about-completion "vagrant - tool for building and managing virtualized development environments"
+group "virtualization"
+url "https://www.vagrantup.com"
+
 # (The MIT License)
 #
 # Copyright (c) 2014 Kura

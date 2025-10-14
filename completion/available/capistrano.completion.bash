@@ -1,4 +1,9 @@
 # shellcheck shell=bash
+
+cite "about-completion"
+about-completion "capistrano - remote server automation and deployment tool for Ruby"
+group "deployment"
+
 # Bash completion support for Capistrano.
 
 export COMP_WORDBREAKS=${COMP_WORDBREAKS/\:/}

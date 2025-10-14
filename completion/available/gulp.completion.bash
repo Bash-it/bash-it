@@ -1,4 +1,8 @@
 # shellcheck shell=bash
+
+cite "about-completion"
+about-completion "gulp - JavaScript build system and task automation tool"
+
 # Borrowed from grunt-cli
 # http://gruntjs.com/
 #

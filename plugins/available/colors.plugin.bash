@@ -1,6 +1,10 @@
 # shellcheck shell=bash
 # shellcheck disable=SC2005
 
+cite "about-plugin"
+about-plugin "Provides color definitions and ANSI color code functions for terminal output"
+group "bash-it"
+
 function __() {
 	echo "$@"
 }

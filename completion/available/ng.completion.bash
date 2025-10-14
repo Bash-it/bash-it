@@ -1,5 +1,9 @@
 # shellcheck shell=bash
 
+cite "about-completion"
+about-completion "ng - Angular CLI for scaffolding and managing Angular applications"
+group "javascript"
+
 # Make sure ng is installed
 _bash-it-completion-helper-necessary ng || :
 

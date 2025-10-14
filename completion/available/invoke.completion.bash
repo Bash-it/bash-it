@@ -1,4 +1,9 @@
 # shellcheck shell=bash
+
+cite "about-completion"
+about-completion "invoke - Python task execution tool and library"
+group "python"
+
 # Invoke (pyinvoke.org) tab-completion script to be sourced with Bash shell.
 
 # Copyright (c) 2020 Jeff Forcier.
