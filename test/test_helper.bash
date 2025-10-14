@@ -45,7 +45,7 @@ function common_setup_file() {
 
 	load "${BASH_IT?}/vendor/github.com/erichs/composure/composure.sh"
 	# Extend composure with additional metadata functions
-	# shellcheck disable=SC2317
+	# shellcheck disable=SC2317,SC2329
 	url() { :; }
 	# support 'plumbing' metadata
 	cite _about _param _example _group _author _version url
