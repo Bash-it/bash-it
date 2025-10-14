@@ -4,7 +4,7 @@ cite "about-completion"
 about-completion "svn - Apache Subversion version control system"
 group "version-control"
 url "https://subversion.apache.org/"
-#
+
 # Locate and load completions for `svn`.
 
 # Make sure svn is installed

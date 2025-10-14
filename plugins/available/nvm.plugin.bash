@@ -2,12 +2,12 @@
 #
 # BASH_IT_LOAD_PRIORITY: 225
 #
-url "https://github.com/nvm-sh/nvm"
 # Bash-it no longer bundles nvm, as this was quickly becoming outdated.
 # Please install nvm from https://github.com/creationix/nvm.git if you want to use it.
 
 cite about-plugin
 about-plugin 'node version manager configuration'
+url "https://github.com/nvm-sh/nvm"
 
 export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
 

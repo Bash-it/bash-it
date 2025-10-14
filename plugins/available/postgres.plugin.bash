@@ -1,4 +1,5 @@
 # shellcheck shell=bash
+
 cite about-plugin
 about-plugin 'postgres helper functions'
 url "https://www.postgresql.org/"
