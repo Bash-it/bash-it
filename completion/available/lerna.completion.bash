@@ -1,6 +1,8 @@
 # shellcheck shell=bash
 cite "about-completion"
 about-completion "lerna(javascript project manager tool) completion"
+group "javascript"
+url "https://lerna.js.org/"
 
 function __lerna_completion() {
 	local cur compls

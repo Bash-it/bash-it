@@ -3,6 +3,7 @@
 cite "about-completion"
 about-completion "invoke - Python task execution tool and library"
 group "python"
+url "https://www.pyinvoke.org/"
 
 # Invoke (pyinvoke.org) tab-completion script to be sourced with Bash shell.
 

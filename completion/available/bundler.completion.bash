@@ -3,6 +3,8 @@
 
 cite "about-completion"
 about-completion "bundler - Ruby dependency manager for managing gem dependencies"
+group "ruby"
+url "https://bundler.io/"
 
 # bash completion for the `bundle` command.
 #

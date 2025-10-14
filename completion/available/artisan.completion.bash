@@ -1,6 +1,8 @@
 # shellcheck shell=bash
 cite "about-completion"
 about-completion "Laravel artisan completion"
+group "php"
+url "https://laravel.com/docs/artisan"
 
 # Completion function for Laravel artisan
 _artisan_completion() {

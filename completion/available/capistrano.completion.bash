@@ -3,6 +3,7 @@
 cite "about-completion"
 about-completion "capistrano - remote server automation and deployment tool for Ruby"
 group "deployment"
+url "https://capistranorb.com/"
 
 # Bash completion support for Capistrano.
 

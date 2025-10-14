@@ -2,6 +2,8 @@
 
 cite "about-completion"
 about-completion "ssh - secure shell remote login and command execution"
+group "networking"
+url "https://www.openssh.com/"
 
 # Bash completion support for ssh.
 

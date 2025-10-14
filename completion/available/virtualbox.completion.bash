@@ -4,6 +4,7 @@
 cite "about-completion"
 about-completion "virtualbox - Oracle VM VirtualBox virtualization software"
 group "virtualization"
+url "https://www.virtualbox.org/"
 
 _vboxmanage_realopts() {
 	vboxmanage | grep -i vboxmanage | cut -d' ' -f2 | grep '\[' | tr -s '\[\|\]\n' ' '

@@ -3,6 +3,7 @@
 cite "about-completion"
 about-completion "fabric - Python library and CLI tool for streamlining SSH deployments"
 group "deployment"
+url "https://www.fabfile.org/"
 #
 # Bash completion support for Fabric (http://fabfile.org/)
 #

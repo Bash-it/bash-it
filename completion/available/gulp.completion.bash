@@ -2,6 +2,8 @@
 
 cite "about-completion"
 about-completion "gulp - JavaScript build system and task automation tool"
+group "javascript"
+url "https://gulpjs.com/"
 
 # Borrowed from grunt-cli
 # http://gruntjs.com/

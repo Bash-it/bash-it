@@ -1,6 +1,8 @@
 # shellcheck shell=bash
 cite "about-completion"
 about-completion "brew completion"
+group "package-manager"
+url "https://brew.sh/"
 
 # Load late to make sure `system` completion loads first
 # BASH_IT_LOAD_PRIORITY: 375

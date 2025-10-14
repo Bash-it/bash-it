@@ -4,6 +4,7 @@
 cite "about-completion"
 about-completion "maven - Java project build and dependency tool"
 group "java"
+url "https://maven.apache.org/"
 
 # Bash Maven completion
 

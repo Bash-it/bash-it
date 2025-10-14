@@ -3,6 +3,8 @@
 
 cite "about-completion"
 about-completion "docker-compose - tool for defining and running multi-container Docker applications"
+group "docker"
+url "https://docs.docker.com/compose/"
 #
 
 # Licensed under the Apache License, Version 2.0 (the "License");

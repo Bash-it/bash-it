@@ -2,6 +2,8 @@
 
 cite "about-completion"
 about-completion "pip - Python package installer and dependency manager"
+group "python"
+url "https://pip.pypa.io/"
 
 # https://pip.pypa.io/en/stable/user_guide/#command-completion
 # Of course, you should first install pip, say on Debian:
