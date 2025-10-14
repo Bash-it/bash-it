@@ -2,7 +2,8 @@
 # shellcheck disable=SC2034,SC2207
 
 cite "about-completion"
-about-completion "maven - Java project build automation and dependency management tool"
+about-completion "maven - Java project build and dependency tool"
+group "java"
 
 # Bash Maven completion
 
