@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'Aliases for Terraform and Terragrunt'
+url "https://terragrunt.gruntwork.io/"
 
 alias tg='terragrunt'
 alias tgv='terragrunt validate'

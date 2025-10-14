@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 cite about-plugin
 about-plugin 'load jenv, if you are using it'
+url "https://www.jenv.be/"
 
 # Don't modify the environment if we can't find the tool:
 # - Check if in $PATH already

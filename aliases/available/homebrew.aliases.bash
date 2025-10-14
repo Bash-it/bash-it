@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'Some aliases for Homebrew'
+url "https://brew.sh/"
 
 if _command_exists brew; then
 	alias bed='brew edit'

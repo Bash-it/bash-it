@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'heroku task abbreviations'
+url "https://devcenter.heroku.com/"
 
 # heroku
 alias h='heroku'

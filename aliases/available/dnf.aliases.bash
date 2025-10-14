@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'dnf aliases for fedora 22+ distros'
+url "https://dnf.readthedocs.io/"
 
 if _command_exists dnf; then
 	alias dnfp="dnf info"            # Show package information

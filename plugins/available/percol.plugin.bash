@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 cite about-plugin
 about-plugin 'Search&Select history with percol'
+url "https://github.com/mooz/percol"
 
 # Notice
 ## You have to upgrade bash to bash 4.x on Mac OS X.

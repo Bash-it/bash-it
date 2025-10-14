@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'common git abbreviations'
+url "https://git-scm.com/"
 
 # We can use this variable to make sure that we don't accidentally clash with git-zsh aliases
 if _bash-it-component-item-is-enabled aliases git-omz; then

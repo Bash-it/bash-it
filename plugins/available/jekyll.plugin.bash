@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 cite about-plugin
 about-plugin 'manage your jekyll site'
+url "https://jekyllrb.com/"
 
 function editpost() {
 	about 'edit a post'

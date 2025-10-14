@@ -3,6 +3,7 @@
 
 cite about-plugin
 about-plugin 'CNB pack cli aliases'
+url "https://buildpacks.io/"
 
 __pack_debug() {
 	if [[ -n ${BASH_COMP_DEBUG_FILE} ]]; then

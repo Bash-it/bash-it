@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 cite about-plugin
 about-plugin 'Autojump configuration, see https://github.com/wting/autojump for more details'
+url "https://github.com/wting/autojump"
 
 # Only supports the Homebrew variant, Debian and Arch at the moment.
 # Feel free to provide a PR to support other install locations

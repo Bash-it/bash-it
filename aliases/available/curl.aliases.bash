@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'Curl aliases for convenience.'
+url "https://curl.se/"
 
 # set apt aliases
 function _set_pkg_aliases() {

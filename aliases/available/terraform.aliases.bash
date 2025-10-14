@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'Aliases for Terraform/OpenTofu and Terragrunt'
+url "https://www.terraform.io/"
 
 if _command_exists terraform; then
 	alias tf='terraform'

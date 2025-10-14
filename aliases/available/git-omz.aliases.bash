@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 cite 'about-alias'
 about-alias 'git aliases from oh-my-zsh (incompatible with regular git aliases option)'
+url "https://git-scm.com/"
 
 if _bash-it-component-item-is-enabled aliases git; then
 	_log_warning "git-omz aliases are incompatible with regular git aliases"

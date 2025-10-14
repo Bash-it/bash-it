@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 cite about-plugin
 about-plugin 'Alert (BEL) when process ends after a threshold of seconds'
+url "https://github.com/Bash-it/bash-it"
 
 function precmd_return_notification() {
 	local command_start="${COMMAND_DURATION_START_SECONDS:=0}"

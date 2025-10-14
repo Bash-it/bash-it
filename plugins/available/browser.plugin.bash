@@ -3,6 +3,7 @@
 
 cite about-plugin
 about-plugin 'render commandline output in your browser'
+url "https://github.com/Bash-it/bash-it"
 
 # shellcheck disable=SC2120
 function browser() {

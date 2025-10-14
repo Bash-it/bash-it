@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'textmate abbreviations'
+url "https://macromates.com/"
 
 case $OSTYPE in
 	darwin*)

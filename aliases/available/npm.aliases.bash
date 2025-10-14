@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'common npm abbreviations'
+url "https://docs.npmjs.com/"
 
 # Aliases
 

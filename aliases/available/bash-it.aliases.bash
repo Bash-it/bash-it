@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'Aliases for the bash-it command (these aliases are automatically included with the "general" aliases)'
+url "https://github.com/Bash-it/bash-it"
 
 # Common misspellings of bash-it
 alias shit='bash-it'

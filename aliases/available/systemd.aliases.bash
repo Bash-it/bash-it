@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'systemd service'
+url "https://systemd.io/"
 
 case $OSTYPE in
 	linux*)

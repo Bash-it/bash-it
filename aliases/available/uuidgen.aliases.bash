@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'uuidgen aliases'
+url "https://github.com/Bash-it/bash-it"
 
 if _command_exists uuid; then # Linux
 	alias uuidu="uuid | tr '[:lower:]' '[:upper:]'"

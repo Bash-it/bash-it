@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 cite about-plugin
 about-plugin 'Helper functions for using docker-compose'
+url "https://docs.docker.com/compose/"
 
 function docker-compose-fresh() {
 	about 'Shut down, remove and start again the docker-compose setup, then tail the logs'

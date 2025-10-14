@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'docker abbreviations'
+url "https://docs.docker.com/"
 
 alias dk='docker'
 alias dklc='docker ps -l'                                                            # List last Docker container

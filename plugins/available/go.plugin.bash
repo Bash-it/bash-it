@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 cite about-plugin
 about-plugin 'go environment variables & path configuration'
+url "https://golang.org/"
 
 # Load after basher and goenv
 # BASH_IT_LOAD_PRIORITY: 270

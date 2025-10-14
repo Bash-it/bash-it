@@ -4,6 +4,7 @@
 
 cite about-plugin
 about-plugin 'plenv plugin for Perl'
+url "https://github.com/tokuhirom/plenv"
 
 if [[ -d "${HOME}/.plenv/bin" ]]; then
 	# load plenv bin dir into path if it exists

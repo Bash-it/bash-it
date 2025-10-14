@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'docker-compose abbreviations'
+url "https://docs.docker.com/compose/"
 
 alias dco="docker-compose"
 

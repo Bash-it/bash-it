@@ -3,6 +3,7 @@
 
 cite about-plugin
 about-plugin 'enables powerline daemon'
+url "https://github.com/powerline/powerline"
 
 _command_exists powerline-daemon || return
 powerline-daemon -q

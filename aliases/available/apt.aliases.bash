@@ -4,6 +4,7 @@
 
 cite 'about-alias'
 about-alias 'Apt and dpkg aliases for Ubuntu and Debian distros.'
+url "https://wiki.debian.org/Apt"
 
 # set apt aliases
 function _set_pkg_aliases() {

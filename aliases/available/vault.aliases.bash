@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'vault aliases'
+url "https://www.vaultproject.io/"
 
 # Aliases
 alias vad="vault delete"

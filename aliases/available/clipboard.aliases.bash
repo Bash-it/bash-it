@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'xclip shortcuts'
+url "https://github.com/astrand/xclip"
 
 alias pbcopy="xclip -selection clipboard"
 alias pbpaste="xclip -selection clipboard -o"

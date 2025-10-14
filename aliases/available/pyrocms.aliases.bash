@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'pyrocms abbreviations'
+url "https://pyrocms.com/"
 
 ###
 ## PyroCMS 3.4 bash aliases

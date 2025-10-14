@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-plugin 'search history using the prefix already entered'
+url "https://github.com/Bash-it/bash-it"
 
 # enter a few characters and press UpArrow/DownArrow
 # to search backwards/forwards through the history

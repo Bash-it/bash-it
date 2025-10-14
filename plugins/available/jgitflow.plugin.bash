@@ -2,6 +2,7 @@
 # shellcheck disable=SC2086
 cite about-plugin
 about-plugin 'Maven jgitflow build helpers'
+url "https://bitbucket.org/atlassian/jgit-flow/"
 
 function pre-jgitflow {
 	about 'helper function for execute before jgitflow'

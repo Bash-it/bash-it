@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'puppet aliases'
+url "https://www.puppet.com/docs/puppet/"
 
 # Aliases
 alias pupval="puppet parser validate *.pp"
