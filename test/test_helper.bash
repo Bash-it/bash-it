@@ -44,8 +44,10 @@ function common_setup_file() {
 	git --git-dir="${MAIN_BASH_IT_GITDIR?}" worktree add --detach "${BASH_IT}"
 
 	load "${BASH_IT?}/vendor/github.com/erichs/composure/composure.sh"
+	# Extend composure with additional metadata functions
+	url() { :; }
 	# support 'plumbing' metadata
-	cite _about _param _example _group _author _version
+	cite _about _param _example _group _author _version url
 	cite about-alias about-plugin about-completion
 
 	# Run any local test setup
