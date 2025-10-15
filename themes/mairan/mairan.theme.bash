@@ -58,22 +58,24 @@ esac
 PS3=">> "
 
 __my_rvm_ruby_version() {
-	local gemset=$(echo $GEM_HOME | awk -F'@' '{print $2}')
-	[ "$gemset" != "" ] && gemset="@$gemset"
-	local version=$(echo $MY_RUBY_HOME | awk -F'-' '{print $2}')
-	local full="$version$gemset"
-	[ "$full" != "" ] && echo "[$full]"
+	local version gemset
+	gemset=$(echo "${GEM_HOME}" | awk -F'@' '{print $2}')
+	[[ "${gemset}" != "" ]] && gemset="@${gemset}"
+	local version
+	version=$(echo "${MY_RUBY_HOME}" | awk -F'-' '{print $2}')
+	local full="${version}${gemset}"
+	[[ "${full}" != "" ]] && echo "[${full}]"
 }
 
 is_vim_shell() {
-	if [ ! -z "$VIMRUNTIME" ]; then
+	if [[ ! -z "$VIMRUNTIME" ]]; then
 		echo "[${cyan?}vim shell${normal?}]"
 	fi
 }
 
 # show chroot if exist
 chroot() {
-	if [ -n "$debian_chroot" ]; then
+	if [[ -n "$debian_chroot" ]]; then
 		my_ps_chroot="${bold_cyan?}$debian_chroot${normal?}"
 		echo "($my_ps_chroot)"
 	fi
@@ -81,7 +83,7 @@ chroot() {
 
 # show virtualenvwrapper
 my_ve() {
-	if [ -n "$VIRTUAL_ENV" ]; then
+	if [[ -n "$VIRTUAL_ENV" ]]; then
 		my_ps_ve="${bold_purple?}$ve${normal?}"
 		echo "($my_ps_ve)"
 	fi
@@ -89,25 +91,27 @@ my_ve() {
 }
 
 prompt() {
-	SCM_PROMPT_FORMAT="[%s$GREEN%s]"
-	my_ps_host="$BOLD$ORANGE\h${normal?}"
+	SCM_PROMPT_FORMAT="[%s${GREEN}%s]"
+	my_ps_host="${BOLD}${ORANGE}\h${normal?}"
 	# yes, these are the the same for now ...
-	my_ps_host_root="$ORANGE\h${normal?}"
+	my_ps_host_root="${ORANGE}\h${normal?}"
 
-	my_ps_user="$BOLD$GREEN\u${normal?}"
+	my_ps_user="${BOLD}${GREEN}\u${normal?}"
 	my_ps_root="${bold_red?}\u${normal?}"
 
-	if [ -n "$VIRTUAL_ENV" ]; then
-		ve=$(basename "$VIRTUAL_ENV")
+	if [[ -n "$VIRTUAL_ENV" ]]; then
+		ve=$(basename "${VIRTUAL_ENV}")
 	fi
 
 	# nice prompt
 	case "$(id -u)" in
 		0)
+			# shellcheck disable=SC2312
 			PS1="\n${TITLEBAR}${BRACKET_COLOR}┌─${normal?}$(my_ve)$(chroot)[$my_ps_root][$my_ps_host_root]$(scm_prompt)$(__my_rvm_ruby_version)[${green?}\w${normal?}]$(is_vim_shell)${BRACKET_COLOR}
 └─▪ ${prompt_symbol} ${normal?}"
 			;;
 		*)
+			# shellcheck disable=SC2312
 			PS1="\n${TITLEBAR}${BRACKET_COLOR}┌─${normal?}$(my_ve)$(chroot)[$my_ps_user][$my_ps_host]$(scm_prompt)${normal?}$(__my_rvm_ruby_version)[${green?}\w${normal?}]$(is_vim_shell)${BRACKET_COLOR}
 └─▪ ${prompt_symbol} ${normal?}"
 			;;

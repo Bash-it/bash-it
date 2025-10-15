@@ -36,7 +36,8 @@ is_vim_shell() {
 
 prompt() {
 	SCM_PROMPT_FORMAT='[%s][%s]'
-	if [ $? -ne 0 ]; then
+	# shellcheck disable=SC2181 # How can this assignment fail? an immutable VAR name?
+	if [[ $? -ne 0 ]]; then
 		# Yes, the indenting on these is weird, but it has to be like
 		# this otherwise it won't display properly.
 
