@@ -6,6 +6,7 @@
 function __powerline_left_segment {
 	local OLD_IFS="${IFS}"
 	IFS="|"
+	# shellcheck disable=SC2206
 	local params=($1)
 	IFS="${OLD_IFS}"
 	local pad_before_segment=" "

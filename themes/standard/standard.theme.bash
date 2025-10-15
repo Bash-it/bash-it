@@ -21,6 +21,7 @@ case $TERM in
 esac
 
 function prompt_command() {
+	# shellcheck disable=SC2016
 	PROMPT='${green?}\u${normal?}@${green?}\h${normal?}:${blue?}\w${normal?}${red?}$(prompt_char)$(git_prompt_info)${normal?}\$ '
 }
 

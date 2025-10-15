@@ -32,11 +32,12 @@ LAST_STATUS_THEME_PROMPT_COLOR=52
 
 _collapsed_wd() {
 	# echo -e "\u2771\u276d\u276f"
-	echo $(pwd | perl -pe "
+	# shellcheck disable=SC2005
+	echo "$(pwd | perl -pe "
    BEGIN {
       binmode STDIN,  ':encoding(UTF-8)';
       binmode STDOUT, ':encoding(UTF-8)';
-   }; s|^$HOME|<HOME>|g; s|/([^/])[^/]*(?=/)|/\$1|g") \
+   }; s|^$HOME|<HOME>|g; s|/([^/])[^/]*(?=/)|/\$1|g")" \
 		| sed -re "s/\//  /g"
 }
 
@@ -47,22 +48,22 @@ _swd() {
 	current=""          # The section of the path we're currently working on.
 	end="${2:-${PWD}}/" # The unmodified rest of the path.
 
-	if [[ "$end" =~ "$HOME" ]]; then
+	if [[ "$end" =~ $HOME ]]; then
 		INHOME=1
-		end="${end#$HOME}" #strip /home/username from start of string
-		begin="$HOME"      #start expansion from the right spot
+		end="${end#"$HOME"}" #strip /home/username from start of string
+		begin="${HOME}"      #start expansion from the right spot
 	else
 		INHOME=0
 	fi
 
-	end="${end#/}"       # Strip the first /
-	shortenedpath="$end" # The whole path, to check the length.
+	end="${end#/}"         # Strip the first /
+	shortenedpath="${end}" # The whole path, to check the length.
 	maxlength="${1:-0}"
 
 	shopt -q nullglob && NGV="-s" || NGV="-u" # Store the value for later.
 	shopt -s nullglob                         # Without this, anything that doesn't exist in the filesystem turns into */*/*/...
 
-	while [[ "$end" ]] && ((${#shortenedpath} > maxlength)); do
+	while [[ "${end}" ]] && ((${#shortenedpath} > maxlength)); do
 		current="${end%%/*}" # everything before the first /
 		end="${end#*/}"      # everything after the first /
 
@@ -71,10 +72,10 @@ _swd() {
 
 		for ((i = ${#current} - 2; i >= 0; i--)); do
 			subcurrent="${current:0:i}"
-			matching=("$begin/$subcurrent"*)  # Array of all files that start with $subcurrent.
-			((${#matching[*]} != 1)) && break # Stop shortening if more than one file matches.
-			shortcur="$subcurrent"
-			shortcurstar="$subcurrent*"
+			matching=("${begin}/${subcurrent}"*) # Array of all files that start with $subcurrent.
+			((${#matching[*]} != 1)) && break    # Stop shortening if more than one file matches.
+			shortcur="${subcurrent}"
+			shortcurstar="${subcurrent}*"
 		done
 
 		#advance
@@ -88,6 +89,7 @@ _swd() {
 
 	# Replaces slashes with  except first occurence.
 	if [ $INHOME -eq 1 ]; then
+		# shellcheck disable=SC2088
 		echo "~/$shortenedpath" | sed "s/\///2g" # make sure it starts with ~/
 	else
 		echo "/$shortenedpath" | sed "s/\///2g" # Make sure it starts with /

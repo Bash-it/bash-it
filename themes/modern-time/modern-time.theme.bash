@@ -13,7 +13,7 @@ SCM_GIT_CHAR="${bold_green?}±${normal?}"
 SCM_SVN_CHAR="${bold_cyan?}⑆${normal?}"
 SCM_HG_CHAR="${bold_red?}☿${normal?}"
 
-case $TERM in
+case ${TERM} in
 	xterm*)
 		TITLEBAR="\[\033]0;\w\007\]"
 		;;
@@ -36,6 +36,7 @@ modern_current_time_prompt() {
 
 prompt() {
 	SCM_PROMPT_FORMAT='[%s][%s]'
+	# shellcheck disable=SC2181
 	if [ $? -ne 0 ]; then
 		# Yes, the indenting on these is weird, but it has to be like
 		# this otherwise it won't display properly.

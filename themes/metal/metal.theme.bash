@@ -62,11 +62,13 @@ function virtualenv_prompt {
 
 # Rename tab
 function tabname {
+	# shellcheck disable=SC2059
 	printf "\e]1;$1\a"
 }
 
 # Rename window
 function winname {
+	# shellcheck disable=SC2059
 	printf "\e]2;$1\a"
 }
 
