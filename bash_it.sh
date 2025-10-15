@@ -1,7 +1,14 @@
 #!/usr/bin/env bash
 # shellcheck source-path=SCRIPTDIR/lib source-path=SCRIPTDIR/scripts
 # shellcheck disable=SC2034
-#
+
+# Requires bash 3.2+ to install and run
+# Skip loading if bash version is too old
+if [[ "${BASH_VERSINFO[0]-}" -lt 3 ]] || [[ "${BASH_VERSINFO[0]-}" -eq 3 && "${BASH_VERSINFO[1]}" -lt 2 ]]; then
+	echo "sorry, but the minimum version of BASH supported by bash_it is 3.2, consider upgrading?" >&2
+	return 1
+fi
+
 # Initialize Bash It
 BASH_IT_LOG_PREFIX="core: main: "
 : "${BASH_IT:=${BASH_SOURCE%/*}}"

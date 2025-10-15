@@ -4,7 +4,9 @@ url "https://github.com/Bash-it/bash-it"
 
 if [[ ${BASH_VERSINFO[0]} -lt 4 ]] || [[ ${BASH_VERSINFO[0]} -eq 4 && ${BASH_VERSINFO[1]} -lt 3 ]]; then
 	_log_warning "Bash version 4.3 introduced the 'unlimited' history size capability."
-	return 1
+	_log_warning "Disabling history-eternal plugin (current version: $BASH_VERSION)"
+	_disable-plugin history-eternal
+	return 0
 fi
 
 # Modify history sizes before changing location to avoid unintentionally
