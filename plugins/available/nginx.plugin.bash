@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-plugin 'manage your nginx service'
+url "https://nginx.org/"
 
 pathmunge "${NGINX_PATH:=/opt/nginx}/sbin" after
 export NGINX_PATH

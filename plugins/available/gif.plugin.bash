@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-plugin 'video to gif, gif to WebM helper functions'
+url "https://github.com/Bash-it/bash-it"
 
 # Based loosely on:
 #  https://gist.github.com/SlexAxton/4989674#comment-1199058

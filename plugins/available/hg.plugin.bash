@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 cite about-plugin
 about-plugin 'hg helper functions'
+url "https://www.mercurial-scm.org/"
 
 hg_dirty() {
 	about 'displays dirty status of hg repository'

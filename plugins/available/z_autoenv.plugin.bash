@@ -2,6 +2,7 @@
 # shellcheck disable=SC2207,SC2120,SC2034
 cite about-plugin
 about-plugin 'source into environment when cding to directories'
+url "https://github.com/Bash-it/bash-it"
 
 if [[ -n "${ZSH_VERSION}" ]]; then
 	__array_offset=0

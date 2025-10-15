@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'common svn abbreviations'
+url "https://subversion.apache.org/"
 
 # Aliases
 alias svs='svn status'

@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-plugin 'Java and JAR helper functions'
+url "https://www.java.com/"
 
 function jar_manifest {
 	about "extracts the specified JAR file's MANIFEST file and prints it to stdout"

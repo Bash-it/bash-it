@@ -1,5 +1,10 @@
 # shellcheck shell=bash
 
+cite "about-completion"
+about-completion "laravel - PHP web application framework installer and command-line tool"
+group "php"
+url "https://laravel.com/"
+
 # Make sure laravel is installed
 _bash-it-completion-helper-necessary laravel || :
 

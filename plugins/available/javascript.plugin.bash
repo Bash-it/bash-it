@@ -3,6 +3,7 @@
 
 cite about-plugin
 about-plugin 'download jquery files into current project'
+url "https://jquery.com/"
 
 [[ -z "$JQUERY_VERSION_NUMBER" ]] && JQUERY_VERSION_NUMBER="1.6.1"
 [[ -z "$JQUERY_UI_VERSION_NUMBER" ]] && JQUERY_UI_VERSION_NUMBER="1.8.13"

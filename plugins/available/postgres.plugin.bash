@@ -1,6 +1,8 @@
 # shellcheck shell=bash
+
 cite about-plugin
 about-plugin 'postgres helper functions'
+url "https://www.postgresql.org/"
 
 PGVERSION=$(pg_config --version | awk '{print $2}')
 POSTGRES_BIN=$(pg_config --bindir)

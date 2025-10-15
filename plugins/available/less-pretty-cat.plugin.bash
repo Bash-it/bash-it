@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 cite about-plugin
 about-plugin 'pygmentize instead of cat to terminal if possible'
+url "https://pygments.org/"
 
 _command_exists pygmentize || return
 

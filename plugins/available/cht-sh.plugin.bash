@@ -2,6 +2,7 @@
 cite about-plugin
 # shellcheck disable=SC2016
 about-plugin 'Simplify `curl cht.sh/<query>` to `cht.sh <query>`'
+url "https://cht.sh/"
 
 # Play nicely if user already installed cht.sh cli tool
 if ! _command_exists cht.sh; then

@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-plugin 'colorize man pages for better readability'
+url "https://github.com/Bash-it/bash-it"
 
 alias man="\
 LESS_TERMCAP_mb=$'\e[1;32m' \

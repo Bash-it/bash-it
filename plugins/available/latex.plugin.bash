@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-plugin 'add MacTeX to PATH'
+url "https://www.latex-project.org/"
 
 _bash_it_plugin_latex_paths=(
 	# Standard locations

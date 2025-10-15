@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'jitsu task abbreviations'
+url "https://github.com/nodejitsu/jitsu"
 
 # jitsu
 alias j='jitsu'

@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 cite about-plugin
 about-plugin 'git helper functions'
+url "https://git-scm.com/"
 
 # shellcheck disable=SC2016
 function git_remote {

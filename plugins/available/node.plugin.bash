@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 cite about-plugin
 about-plugin 'Node.js helper functions'
+url "https://nodejs.org/"
 
 # Check that we have npm
 _command_exists npm || return

@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'laravel artisan abbreviations'
+url "https://laravel.com/docs/artisan"
 
 # A list of useful laravel aliases
 

@@ -7,6 +7,7 @@
 
 cite about-plugin
 about-plugin 'node version manager configuration'
+url "https://github.com/nvm-sh/nvm"
 
 export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
 

@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-plugin 'alias "shttp" to SimpleHTTPServer'
+url "https://docs.python.org/3/library/http.server.html"
 
 if _command_exists python3; then
 	alias shttp='python3 -m http.server'

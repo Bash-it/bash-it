@@ -1,5 +1,10 @@
 # shellcheck shell=bash
 
+cite "about-completion"
+about-completion "pip3 - Python 3 package installer and dependency manager"
+group "python"
+url "https://pip.pypa.io/"
+
 # https://pip.pypa.io/en/stable/user_guide/#command-completion
 # Of course, you should first install pip, say on Debian:
 # sudo apt-get install python3-pip

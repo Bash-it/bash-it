@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-plugin 'improve history handling with sane defaults'
+url "https://github.com/Bash-it/bash-it"
 
 # Append the history list to the file named by the value of the HISTFILE
 # variable when the shell exits, rather than overwriting the file.

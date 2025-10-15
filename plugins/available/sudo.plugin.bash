@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 cite about-plugin
 about-plugin 'Toggle sudo at the beginning of the current or the previous command by hitting the ESC key twice'
+url "https://www.sudo.ws/"
 
 function sudo-command-line() {
 	about "toggle sudo at the beginning of the current or the previous command by hitting the ESC key twice"

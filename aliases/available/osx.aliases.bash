@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'osx-specific aliases'
+url "https://github.com/Bash-it/bash-it"
 
 # Desktop Programs
 alias fireworks='open -a "/Applications/Adobe Fireworks CS3/Adobe Fireworks CS3.app"'

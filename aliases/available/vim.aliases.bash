@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'vim abbreviations'
+url "https://www.vim.org/"
 
 alias v='${VISUAL:-vim}'
 

@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'common composer abbreviations'
+url "https://getcomposer.org/"
 
 # Aliases
 alias coab='composer about'

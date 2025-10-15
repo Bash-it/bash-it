@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'kubectl aliases'
+url "https://kubernetes.io/docs/reference/kubectl/"
 
 if _command_exists kubectl; then
 	alias kc='kubectl'

@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'phoenix abbreviations'
+url "https://www.phoenixframework.org/"
 
 # Phoenix Commands
 alias i='iex'

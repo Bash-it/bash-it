@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'maven abbreviations'
+url "https://maven.apache.org/"
 
 alias mci='mvn clean install'
 alias mi='mvn install'

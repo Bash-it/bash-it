@@ -1,6 +1,8 @@
 # shellcheck shell=bash
 cite "about-completion"
 about-completion "composer completion"
+group "php"
+url "https://getcomposer.org/"
 
 function __composer_completion() {
 	local cur coms opts com words

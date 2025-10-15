@@ -1,5 +1,10 @@
 # shellcheck shell=bash
 
+cite "about-completion"
+about-completion "gradle - Java build automation tool using Groovy-based DSL"
+group "java"
+url "https://gradle.org/"
+
 # Copyright (c) 2017 Eric Wendelin
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy of

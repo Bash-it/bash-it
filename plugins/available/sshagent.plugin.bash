@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 cite about-plugin
 about-plugin 'sshagent helper functions'
+url "https://github.com/Bash-it/bash-it"
 
 function _get_sshagent_pid_from_env_file() {
 	local env_file="${1}"

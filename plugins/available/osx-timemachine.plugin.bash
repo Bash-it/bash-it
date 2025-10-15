@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-plugin 'OS X Time Machine functions'
+url "https://github.com/Bash-it/bash-it"
 
 if [[ "${OSTYPE}" != 'darwin'* ]]; then
 	_log_warning "This plugin only works with Mac OS X"

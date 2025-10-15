@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'emacs editor'
+url "https://www.gnu.org/software/emacs/"
 
 case $OSTYPE in
 	linux*)

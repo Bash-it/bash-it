@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'the silver searcher (ag) aliases'
+url "https://geoff.greer.fm/ag/"
 
 ## Summary for args to less:
 # less(1)

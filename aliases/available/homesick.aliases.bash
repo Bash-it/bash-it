@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'homesick aliases'
+url "https://github.com/technicalpickles/homesick"
 
 # Aliases
 alias sikhm="homesick cd dotfiles"

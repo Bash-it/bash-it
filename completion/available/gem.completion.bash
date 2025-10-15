@@ -1,6 +1,8 @@
 # shellcheck shell=bash
 cite "about-completion"
 about-completion "gem completion"
+group "ruby"
+url "https://rubygems.org/"
 
 __gem_completion() {
 	local cur=${COMP_WORDS[COMP_CWORD]}

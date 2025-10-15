@@ -3,6 +3,7 @@
 # make sure virtualenvwrapper is enabled if available
 
 cite about-plugin
+url "https://virtualenvwrapper.readthedocs.io/"
 about-plugin 'virtualenvwrapper and pyenv-virtualenvwrapper helper functions'
 
 # Check for whole command instead of just pyenv

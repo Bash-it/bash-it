@@ -1,5 +1,11 @@
 # shellcheck shell=bash
 # shellcheck disable=SC2154,SC2120
+
+cite "about-completion"
+about-completion "hub - GitHub command-line wrapper extending git with GitHub features"
+group "version-control"
+url "https://hub.github.com/"
+
 # hub tab-completion script for bash.
 # This script complements the completion script that ships with git.
 

@@ -58,8 +58,9 @@ function bash-it() {
 	about 'Bash-it help and maintenance'
 	param '1: verb [one of: help | show | enable | disable | migrate | update | search | preview | version | reload | restart | doctor ] '
 	param '2: component type [one of: alias(es) | completion(s) | plugin(s) ] or search term(s)'
-	param '3: specific component [optional]'
+	param '3: specific component [optional] or flags (--verbose, -v for show command)'
 	example '$ bash-it show plugins'
+	example '$ bash-it show plugins --verbose'
 	example '$ bash-it help aliases'
 	example '$ bash-it enable plugin git [tmux]...'
 	example '$ bash-it disable alias hg [tmux]...'
@@ -162,21 +163,21 @@ function _bash-it-aliases() {
 	_about 'summarizes available bash_it aliases'
 	_group 'lib'
 
-	_bash-it-describe "aliases" "an" "alias" "Alias"
+	_bash-it-describe "aliases" "an" "alias" "Alias" "$@"
 }
 
 function _bash-it-completions() {
 	_about 'summarizes available bash_it completions'
 	_group 'lib'
 
-	_bash-it-describe "completion" "a" "completion" "Completion"
+	_bash-it-describe "completion" "a" "completion" "Completion" "$@"
 }
 
 function _bash-it-plugins() {
 	_about 'summarizes available bash_it plugins'
 	_group 'lib'
 
-	_bash-it-describe "plugins" "a" "plugin" "Plugin"
+	_bash-it-describe "plugins" "a" "plugin" "Plugin" "$@"
 }
 
 function _bash-it-update-dev() {
@@ -893,22 +894,47 @@ function _bash-it-describe() {
 	_param '2: preposition'
 	_param '3: file_type'
 	_param '4: column_header'
+	_param '5+: optional flags (--verbose, -v)'
 	_example '$ _bash-it-describe "plugins" "a" "plugin" "Plugin"'
+	_example '$ _bash-it-describe "plugins" "a" "plugin" "Plugin" --verbose'
 
-	local subdirectory preposition file_type column_header f enabled enabled_file
+	local subdirectory preposition file_type column_header f enabled enabled_file verbose url_value
 	subdirectory="$1"
 	preposition="$2"
 	file_type="$3"
 	column_header="$4"
+	shift 4
 
-	printf "%-20s %-10s %s\n" "$column_header" 'Enabled?' 'Description'
+	# Check for verbose flag
+	verbose=false
+	for arg in "$@"; do
+		if [[ "$arg" == "--verbose" || "$arg" == "-v" ]]; then
+			verbose=true
+			break
+		fi
+	done
+
+	if [[ "$verbose" == true ]]; then
+		printf "%-20s %-10s %-40s %s\n" "$column_header" 'Enabled?' 'Description' 'URL'
+	else
+		printf "%-20s %-10s %s\n" "$column_header" 'Enabled?' 'Description'
+	fi
+
 	for f in "${BASH_IT?}/$subdirectory/available"/*.*.bash; do
 		enabled=''
 		enabled_file="${f##*/}"
 		enabled_file="${enabled_file%."${file_type}"*.bash}"
 		_bash-it-component-item-is-enabled "${file_type}" "${enabled_file}" && enabled='x'
-		printf "%-20s %-10s %s\n" "$enabled_file" "[${enabled:- }]" "$(metafor "about-$file_type" < "$f")"
+
+		if [[ "$verbose" == true ]]; then
+			url_value="$(metafor "url" < "$f")"
+			[[ -z "$url_value" ]] && url_value="-"
+			printf "%-20s %-10s %-40s %s\n" "$enabled_file" "[${enabled:- }]" "$(metafor "about-$file_type" < "$f")" "$url_value"
+		else
+			printf "%-20s %-10s %s\n" "$enabled_file" "[${enabled:- }]" "$(metafor "about-$file_type" < "$f")"
+		fi
 	done
+
 	printf '\n%s\n' "to enable $preposition $file_type, do:"
 	printf '%s\n' "$ bash-it enable $file_type  <$file_type name> [$file_type name]... -or- $ bash-it enable $file_type all"
 	printf '\n%s\n' "to disable $preposition $file_type, do:"
@@ -1115,7 +1141,7 @@ function _help-completions() {
 	_about 'summarize all completions available in bash-it'
 	_group 'lib'
 
-	_bash-it-completions
+	_bash-it-completions "$@"
 }
 
 function _help-aliases() {

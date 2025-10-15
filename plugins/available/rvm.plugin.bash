@@ -3,6 +3,7 @@
 
 cite about-plugin
 about-plugin 'load rvm, if you are using it'
+url "https://rvm.io/"
 
 # shellcheck disable=SC1091
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"

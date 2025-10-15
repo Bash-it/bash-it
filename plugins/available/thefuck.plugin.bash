@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 cite about-plugin
 about-plugin 'Initialization for fuck'
+url "https://github.com/nvbn/thefuck"
 
 # https://github.com/nvbn/thefuck
 

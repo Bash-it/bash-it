@@ -1,5 +1,10 @@
 # shellcheck shell=bash
 
+cite "about-completion"
+about-completion "grunt - JavaScript task runner for automation"
+group "javascript"
+url "https://gruntjs.com/"
+
 # grunt-cli
 # http://gruntjs.com/
 #

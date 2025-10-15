@@ -1,5 +1,10 @@
 # shellcheck shell=bash
-#
+
+cite "about-completion"
+about-completion "git - distributed version control system"
+group "version-control"
+url "https://git-scm.com/"
+
 # Locate and load completions for `git`.
 
 # Make sure git is installed

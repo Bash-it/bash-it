@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'Shortcuts for directory commands: ls, cd, &c.'
+url "https://github.com/Bash-it/bash-it"
 
 if command ls --color -d . &> /dev/null; then
 	alias ls='ls --color=auto'

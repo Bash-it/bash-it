@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 cite about-plugin
 about-plugin 'speeds up your life by using gitstatus for git status calculations. install from https://github.com/romkatv/gitstatus'
+url "https://github.com/romkatv/gitstatus"
 
 function gitstatus_on_disable() {
 	about 'Destructor of gitstatus plugin'

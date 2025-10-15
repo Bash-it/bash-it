@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 # shellcheck source-path=SCRIPTDIR
 about-alias 'general aliases'
+url "https://github.com/Bash-it/bash-it"
 
 if command ls --color -d . &> /dev/null; then
 	alias ls='ls --color=auto'

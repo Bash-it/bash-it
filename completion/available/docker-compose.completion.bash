@@ -1,6 +1,10 @@
 # shellcheck shell=bash
 # shellcheck disable=SC2207
-#
+
+cite "about-completion"
+about-completion "docker-compose - tool for defining and running multi-container Docker applications"
+group "docker"
+url "https://docs.docker.com/compose/"
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

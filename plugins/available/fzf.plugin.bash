@@ -4,6 +4,7 @@
 
 cite about-plugin
 about-plugin 'load fzf, if you are using it'
+url "https://github.com/junegunn/fzf"
 
 if ! _bash-it-component-item-is-enabled plugin blesh; then
 	if [ -r ~/.fzf.bash ]; then

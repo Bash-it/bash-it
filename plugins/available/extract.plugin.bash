@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 cite about-plugin
 about-plugin 'one command to extract them all...'
+url "https://github.com/Bash-it/bash-it"
 
 # extract file(s) from compressed status
 extract() {

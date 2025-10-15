@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 cite about-plugin
 about-plugin 'Helpers to more easily work with Docker'
+url "https://www.docker.com/"
 
 function docker-remove-most-recent-container() {
 	about 'attempt to remove the most recent container from docker ps -a'

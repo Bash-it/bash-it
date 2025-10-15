@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 cite about-plugin
 about-plugin 'mankier.com explain function to explain other commands'
+url "https://www.mankier.com/"
 
 explain() {
 	about 'explain any bash command via mankier.com manpage API'

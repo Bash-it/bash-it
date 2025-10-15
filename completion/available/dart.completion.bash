@@ -1,5 +1,10 @@
 # shellcheck shell=bash
 
+cite "about-completion"
+about-completion "dart - programming language optimized for client-side development"
+group "mobile"
+url "https://dart.dev/"
+
 __dart_completion() {
 	# shellcheck disable=SC2155
 	local prev=$(_get_pword)

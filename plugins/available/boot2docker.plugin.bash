@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 cite about-plugin
 about-plugin 'Helpers to get Docker setup correctly for boot2docker'
+url "https://github.com/boot2docker/boot2docker"
 
 # Note, this might need to be different if you have an older version
 # of boot2docker, or its configured for a different IP

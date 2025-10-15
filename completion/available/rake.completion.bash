@@ -1,4 +1,10 @@
 # shellcheck shell=bash
+
+cite "about-completion"
+about-completion "rake - Ruby task automation and build tool"
+group "ruby"
+url "https://ruby.github.io/rake/"
+
 # Bash completion support for Rake, Ruby Make.
 
 export COMP_WORDBREAKS=${COMP_WORDBREAKS/\:/}

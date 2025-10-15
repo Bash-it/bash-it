@@ -8,6 +8,7 @@
 
 cite about-plugin
 about-plugin 'directory stack navigation'
+url "https://github.com/Bash-it/bash-it"
 
 # Show directory stack
 alias d="dirs -v -l"

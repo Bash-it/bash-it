@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 cite about-plugin
 about-plugin 'automatically set your xterm title with host and location info'
+url "https://github.com/Bash-it/bash-it"
 
 function _short-dirname() {
 	local dir_name="${PWD/~/\~}"

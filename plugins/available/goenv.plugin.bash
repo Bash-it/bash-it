@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 cite about-plugin
 about-plugin 'load goenv, if you are using it'
+url "https://github.com/syndbg/goenv"
 
 # https://github.com/syndbg/goenv
 

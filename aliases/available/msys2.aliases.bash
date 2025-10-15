@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'MSYS2 aliases'
+url "https://www.msys2.org/"
 
 LS_COMMON="-hG"
 LS_COMMON="$LS_COMMON --color=auto"

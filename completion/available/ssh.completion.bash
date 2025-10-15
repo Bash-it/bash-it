@@ -1,4 +1,10 @@
 # shellcheck shell=bash
+
+cite "about-completion"
+about-completion "ssh - secure shell remote login and command execution"
+group "networking"
+url "https://www.openssh.com/"
+
 # Bash completion support for ssh.
 
 # Remove : and @ from COMP_WORDBREAKS to support user@host completion

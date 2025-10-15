@@ -12,8 +12,13 @@ BASH_IT_LOG_PREFIX="core: main: "
 # Load composure first, so we support function metadata
 # shellcheck source-path=SCRIPTDIR/vendor/github.com/erichs/composure
 source "${BASH_IT}/vendor/github.com/erichs/composure/composure.sh"
+
+# Extend composure with additional metadata functions
+# shellcheck disable=SC2329
+url() { :; }
+
 # support 'plumbing' metadata
-cite _about _param _example _group _author _version
+cite _about _param _example _group _author _version url
 cite about-alias about-plugin about-completion
 
 # Declare our end-of-main finishing hook, but don't use `declare`/`typeset`

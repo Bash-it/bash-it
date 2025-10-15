@@ -1,5 +1,10 @@
 # shellcheck shell=bash
 
+cite "about-completion"
+about-completion "bash-it - completion for bash-it framework commands"
+group "bash-it"
+url "https://bash-it.readthedocs.io/"
+
 function _compreply_candidates() {
 	local IFS=$'\n'
 

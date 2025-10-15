@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'shortcuts for editing'
+url "https://github.com/Bash-it/bash-it"
 
 alias edit='${EDITOR:-${ALTERNATE_EDITOR:-nano}}'
 alias e='edit'

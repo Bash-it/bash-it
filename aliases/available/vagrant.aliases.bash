@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 about-alias 'vagrant aliases'
+url "https://www.vagrantup.com/"
 
 # Aliases
 alias vhl='vagrant hosts list'
