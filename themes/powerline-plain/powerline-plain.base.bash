@@ -21,11 +21,11 @@ function __powerline_left_segment {
 		# Since the previous segment wasn't the last segment, add padding, if needed
 		#
 		if [[ "${POWERLINE_COMPACT_BEFORE_SEPARATOR}" -eq 0 ]]; then
-			LEFT_PROMPT+="$(set_color - ${LAST_SEGMENT_COLOR}) ${normal}"
+			LEFT_PROMPT+="$(set_color - ${LAST_SEGMENT_COLOR}) ${normal?}"
 		fi
 	fi
 
-	LEFT_PROMPT+="$(set_color - ${params[1]})${pad_before_segment}${params[0]}${normal}"
+	LEFT_PROMPT+="$(set_color - ${params[1]})${pad_before_segment}${params[0]}${normal?}"
 	LAST_SEGMENT_COLOR=${params[1]}
 	((SEGMENTS_AT_LEFT += 1))
 }

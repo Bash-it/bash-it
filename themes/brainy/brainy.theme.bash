@@ -90,59 +90,59 @@ ____brainy_bottom() {
 ##############
 
 ___brainy_prompt_user_info() {
-	color=$bold_blue
+	color=${bold_blue?}
 	if [ "${THEME_SHOW_SUDO}" == "true" ]; then
 		if sudo -vn 1> /dev/null 2>&1; then
-			color=$bold_red
+			color=${bold_red?}
 		fi
 	fi
 	box="[|]"
 	info="\u@\H"
 	if [ -n "${SSH_CLIENT}" ]; then
-		printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
+		printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white?}" "${box}"
 	else
 		printf "%s|%s" "${color}" "${info}"
 	fi
 }
 
 ___brainy_prompt_dir() {
-	color=$bold_yellow
+	color=${bold_yellow?}
 	box="[|]"
 	info="\w"
-	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
+	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white?}" "${box}"
 }
 
 ___brainy_prompt_scm() {
 	[ "${THEME_SHOW_SCM}" != "true" ] && return
-	color=$bold_green
+	color=${bold_green?}
 	box="$(scm_char) "
 	info="$(scm_prompt_info)"
-	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
+	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white?}" "${box}"
 }
 
 ___brainy_prompt_python() {
 	[ "${THEME_SHOW_PYTHON}" != "true" ] && return
-	color=$bold_yellow
+	color=${bold_yellow?}
 	box="[|]"
 	info="$(python_version_prompt)"
-	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_blue}" "${box}"
+	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_blue?}" "${box}"
 }
 
 ___brainy_prompt_ruby() {
 	[ "${THEME_SHOW_RUBY}" != "true" ] && return
-	color=$bold_white
+	color=${bold_white?}
 	box="[|]"
 	info="rb-$(ruby_version_prompt)"
-	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_red}" "${box}"
+	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_red?}" "${box}"
 }
 
 ___brainy_prompt_todo() {
 	[ "${THEME_SHOW_TODO}" != "true" ] \
 		|| [ -z "$(which todo.sh)" ] && return
-	color=$bold_white
+	color=${bold_white?}
 	box="[|]"
 	info="t:$(todo.sh ls | grep -E "TODO: [0-9]+ of ([0-9]+)" | awk '{ print $4 }')"
-	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_green}" "${box}"
+	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_green?}" "${box}"
 }
 
 ___brainy_prompt_clock() {
@@ -150,7 +150,7 @@ ___brainy_prompt_clock() {
 	color=$THEME_CLOCK_COLOR
 	box="[|]"
 	info="$(date +"${THEME_CLOCK_FORMAT}")"
-	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_purple}" "${box}"
+	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_purple?}" "${box}"
 }
 
 ___brainy_prompt_battery() {
@@ -159,28 +159,28 @@ ___brainy_prompt_battery() {
 		|| [ "$(battery_percentage)" = "no" ] && return
 
 	info=$(battery_percentage)
-	color=$bold_green
+	color=${bold_green?}
 	if [ "$info" -lt 50 ]; then
-		color=$bold_yellow
+		color=${bold_yellow?}
 	elif [ "$info" -lt 25 ]; then
-		color=$bold_red
+		color=${bold_red?}
 	fi
 	box="[|]"
 	ac_adapter_connected && charging="+"
 	ac_adapter_disconnected && charging="-"
 	info+="$charging"
 	[ "$info" == "100+" ] && info="AC"
-	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white}" "${box}"
+	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white?}" "${box}"
 }
 
 ___brainy_prompt_exitcode() {
 	[ "${THEME_SHOW_EXITCODE}" != "true" ] && return
-	color=$bold_purple
+	color=${bold_purple?}
 	[ "$exitcode" -ne 0 ] && printf "%s|%s" "${color}" "${exitcode}"
 }
 
 ___brainy_prompt_char() {
-	color=$bold_white
+	color=${bold_white?}
 	prompt_char="${__BRAINY_PROMPT_CHAR_PS1}"
 	printf "%s|%s" "${color}" "${prompt_char}"
 }
@@ -258,8 +258,8 @@ export RVM_THEME_PROMPT_SUFFIX=""
 export VIRTUALENV_THEME_PROMPT_PREFIX=""
 export VIRTUALENV_THEME_PROMPT_SUFFIX=""
 
-export SCM_THEME_PROMPT_DIRTY=" ${bold_red}✗${normal}"
-export SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓${normal}"
+export SCM_THEME_PROMPT_DIRTY=" ${bold_red?}✗${normal?}"
+export SCM_THEME_PROMPT_CLEAN=" ${bold_green?}✓${normal?}"
 
 THEME_SHOW_SUDO=${THEME_SHOW_SUDO:-"true"}
 THEME_SHOW_SCM=${THEME_SHOW_SCM:-"true"}
@@ -270,7 +270,7 @@ THEME_SHOW_TODO=${THEME_SHOW_TODO:-"false"}
 THEME_SHOW_BATTERY=${THEME_SHOW_BATTERY:-"false"}
 THEME_SHOW_EXITCODE=${THEME_SHOW_EXITCODE:-"true"}
 
-THEME_CLOCK_COLOR=${THEME_CLOCK_COLOR:-"$bold_white"}
+THEME_CLOCK_COLOR=${THEME_CLOCK_COLOR:-"${bold_white?}"}
 THEME_CLOCK_FORMAT=${THEME_CLOCK_FORMAT:-"%H:%M:%S"}
 
 __BRAINY_PROMPT_CHAR_PS1=${THEME_PROMPT_CHAR_PS1:-">"}
@@ -285,12 +285,12 @@ ___BRAINY_BOTTOM=${___BRAINY_BOTTOM:-"exitcode char"}
 ############
 
 __brainy_ps1() {
-	printf "%s%s%s" "$(____brainy_top)" "$(____brainy_bottom)" "${normal}"
+	printf "%s%s%s" "$(____brainy_top)" "$(____brainy_bottom)" "${normal?}"
 }
 
 __brainy_ps2() {
-	color=$bold_white
-	printf "%s%s%s" "${color}" "${__BRAINY_PROMPT_CHAR_PS2}  " "${normal}"
+	color=${bold_white?}
+	printf "%s%s%s" "${color}" "${__BRAINY_PROMPT_CHAR_PS2}  " "${normal?}"
 }
 
 _brainy_prompt() {

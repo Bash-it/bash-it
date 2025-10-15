@@ -5,7 +5,7 @@
 
 ## git-theme
 # feel free to change git chars.
-GIT_THEME_PROMPT_DIRTY="${bold_yellow}*${normal}"
+GIT_THEME_PROMPT_DIRTY="${bold_yellow?}*${normal?}"
 GIT_THEME_PROMPT_CLEAN=""
 GIT_THEME_PROMPT_PREFIX=""
 GIT_THEME_PROMPT_SUFFIX=""
@@ -20,7 +20,7 @@ function prompt_command() {
 	# user:host:pwd git-branch(*)$
 	# for example:
 	# noqqe:deathstar:themes master*$
-	PS1="${no_color}\u:$(hostname)${normal}:${bold_yellow}\W/${normal} $(git_prompt_info)${reset_color}$ "
+	PS1="${no_color}\u:$(hostname)${normal?}:${bold_yellow?}\W/${normal?} $(git_prompt_info)${reset_color?}$ "
 }
 
 safe_append_prompt_command prompt_command

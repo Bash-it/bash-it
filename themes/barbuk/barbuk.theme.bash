@@ -88,7 +88,7 @@ function __exit_prompt() {
 	if [[ "$exit_code" -ne 0 ]]; then
 		echo "${purple?}${EXIT_CODE_ICON}${yellow?}${exit_code}${bold_orange?} "
 	else
-		echo "${bold_green}"
+		echo "${bold_green?}"
 	fi
 }
 
@@ -168,7 +168,7 @@ function __path_prompt() {
 		dir_color=${red?}
 	fi
 
-	echo "${dir_color}\w${normal} "
+	echo "${dir_color}\w${normal?} "
 }
 
 function __scm_prompt() {
@@ -197,7 +197,7 @@ function __prompt-command() {
 		wrap_char="\n"
 	fi
 
-	PS1="${PS1}${wrap_char}❯${normal} "
+	PS1="${PS1}${wrap_char}❯${normal?} "
 }
 
 safe_append_prompt_command __prompt-command

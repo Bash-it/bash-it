@@ -11,11 +11,11 @@
 SCM_THEME_PROMPT_PREFIX=""
 SCM_THEME_PROMPT_SUFFIX=""
 
-SCM_THEME_PROMPT_DIRTY=" ${bold_red}✗${normal}"
-SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓${normal}"
-SCM_GIT_CHAR="${bold_green}±${normal}"
-SCM_SVN_CHAR="${bold_cyan}⑆${normal}"
-SCM_HG_CHAR="${bold_red}☿${normal}"
+SCM_THEME_PROMPT_DIRTY=" ${bold_red?}✗${normal?}"
+SCM_THEME_PROMPT_CLEAN=" ${bold_green?}✓${normal?}"
+SCM_GIT_CHAR="${bold_green?}±${normal?}"
+SCM_SVN_CHAR="${bold_cyan?}⑆${normal?}"
+SCM_HG_CHAR="${bold_red?}☿${normal?}"
 
 case $TERM in
 	xterm*)
@@ -30,7 +30,7 @@ PS3=">> "
 
 is_vim_shell() {
 	if [ ! -z "$VIMRUNTIME" ]; then
-		echo "[${cyan}vim shell${normal}]"
+		echo "[${cyan?}vim shell${normal?}]"
 	fi
 }
 
@@ -40,10 +40,10 @@ prompt() {
 		# Yes, the indenting on these is weird, but it has to be like
 		# this otherwise it won't display properly.
 
-		PS1="${TITLEBAR}${bold_red}┌─[${cyan}$(t | wc -l | sed -e's/ *//')${reset_color}]${reset_color}$(scm_prompt)[${cyan}\W${normal}]$(is_vim_shell)
-${bold_red}└─▪${normal} "
+		PS1="${TITLEBAR}${bold_red?}┌─[${cyan?}$(t | wc -l | sed -e's/ *//')${reset_color?}]${reset_color?}$(scm_prompt)[${cyan?}\W${normal?}]$(is_vim_shell)
+${bold_red?}└─▪${normal?} "
 	else
-		PS1="${TITLEBAR}┌─[${cyan}$(t | wc -l | sed -e's/ *//')${reset_color}]$(scm_prompt)[${cyan}\W${normal}]$(is_vim_shell)
+		PS1="${TITLEBAR}┌─[${cyan?}$(t | wc -l | sed -e's/ *//')${reset_color?}]$(scm_prompt)[${cyan?}\W${normal?}]$(is_vim_shell)
 └─▪ "
 	fi
 }

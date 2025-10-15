@@ -118,7 +118,7 @@ function ___atomic_prompt_user_info() {
 
 function ___atomic_prompt_dir() {
 	local color="${IRed?}"
-	local box="[|]${normal}"
+	local box="[|]${normal?}"
 	local info="\w"
 	printf "%s|%s|%s|%s" "${color}" "${info}" "${bold_white?}" "${box}"
 }
@@ -276,8 +276,8 @@ RBFU_THEME_PROMPT_SUFFIX=""
 RVM_THEME_PROMPT_PREFIX=""
 RVM_THEME_PROMPT_SUFFIX=""
 
-SCM_THEME_PROMPT_DIRTY=" ${bold_red}✗${normal}"
-SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓${normal}"
+SCM_THEME_PROMPT_DIRTY=" ${bold_red?}✗${normal?}"
+SCM_THEME_PROMPT_CLEAN=" ${bold_green?}✓${normal?}"
 
 : "${THEME_SHOW_SUDO:="true"}"
 : "${THEME_SHOW_SCM:="true"}"

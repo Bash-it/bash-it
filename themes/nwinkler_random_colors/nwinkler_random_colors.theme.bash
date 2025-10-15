@@ -21,25 +21,26 @@ RANDOM_COLOR_FILE=$HOME/.nwinkler_random_colors
 function randomize_nwinkler {
 	declare -a AVAILABLE_COLORS
 
+	# shellcheck disable=SC2206 # Expected behavior but fine for this theme.
 	AVAILABLE_COLORS=(
-		$black
-		$red
-		$green
-		$yellow
-		$blue
-		$purple
-		$cyan
-		$white
-		$orange
-		$bold_black
-		$bold_red
-		$bold_green
-		$bold_yellow
-		$bold_blue
-		$bold_purple
-		$bold_cyan
-		$bold_white
-		$bold_orange
+		${black?}
+		${red?}
+		${green?}
+		${yellow?}
+		${blue?}
+		${purple?}
+		${cyan?}
+		${white?}
+		${orange?}
+		${bold_black?}
+		${bold_red?}
+		${bold_green?}
+		${bold_yellow?}
+		${bold_blue?}
+		${bold_purple?}
+		${bold_cyan?}
+		${bold_white?}
+		${bold_orange?}
 	)
 	# Uncomment these to allow underlines:
 	#$underline_black
@@ -83,8 +84,8 @@ else
 	echo
 fi
 
-PROMPT_END_CLEAN="${green}→${reset_color}"
-PROMPT_END_DIRTY="${red}→${reset_color}"
+PROMPT_END_CLEAN="${green?}→${reset_color?}"
+PROMPT_END_DIRTY="${red?}→${reset_color?}"
 
 function prompt_end() {
 	echo -e "$PROMPT_END"
@@ -99,15 +100,15 @@ prompt_setter() {
 	fi
 	# Save history
 	_save-and-reload-history 1
-	PS1="($(clock_prompt)${reset_color}) $(scm_char) [${USERNAME_COLOR}\u${reset_color}@${HOSTNAME_COLOR}\H${reset_color}] ${PATH_COLOR}\w${reset_color}$(scm_prompt_info) ${reset_color}\n$(prompt_end) "
+	PS1="($(clock_prompt)${reset_color?}) $(scm_char) [${USERNAME_COLOR}\u${reset_color?}@${HOSTNAME_COLOR}\H${reset_color?}] ${PATH_COLOR}\w${reset_color?}$(scm_prompt_info) ${reset_color}\n$(prompt_end) "
 	PS2='> '
 	PS4='+ '
 }
 
 safe_append_prompt_command prompt_setter
 
-SCM_THEME_PROMPT_DIRTY=" ${bold_red}✗${normal}"
-SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓${normal}"
+SCM_THEME_PROMPT_DIRTY=" ${bold_red?}✗${normal?}"
+SCM_THEME_PROMPT_CLEAN=" ${bold_green?}✓${normal?}"
 SCM_THEME_PROMPT_PREFIX=" ("
 SCM_THEME_PROMPT_SUFFIX=")"
 RVM_THEME_PROMPT_PREFIX=" ("

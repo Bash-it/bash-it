@@ -109,10 +109,10 @@ function set_rgb_color {
 
 function powerline_shell_prompt {
 	if [[ -n "${SSH_CLIENT}" ]]; then
-		SHELL_PROMPT="${bold_white}$(set_rgb_color - ${SHELL_SSH_THEME_PROMPT_COLOR}) ${SHELL_SSH_CHAR}\u@\h ${normal}"
+		SHELL_PROMPT="${bold_white?}$(set_rgb_color - ${SHELL_SSH_THEME_PROMPT_COLOR}) ${SHELL_SSH_CHAR}\u@\h ${normal?}"
 		LAST_THEME_COLOR=${SHELL_SSH_THEME_PROMPT_COLOR}
 	else
-		SHELL_PROMPT="${bold_white}$(set_rgb_color - ${SHELL_THEME_PROMPT_COLOR}) ${normal}"
+		SHELL_PROMPT="${bold_white?}$(set_rgb_color - ${SHELL_THEME_PROMPT_COLOR}) ${normal?}"
 		LAST_THEME_COLOR=${SHELL_THEME_PROMPT_COLOR}
 	fi
 }
@@ -127,7 +127,7 @@ function powerline_virtualenv_prompt {
 	fi
 
 	if [[ -n "$environ" ]]; then
-		VIRTUALENV_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${VIRTUALENV_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}$(set_rgb_color - ${VIRTUALENV_THEME_PROMPT_COLOR}) ${VIRTUALENV_CHAR}$environ ${normal}"
+		VIRTUALENV_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${VIRTUALENV_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal?}$(set_rgb_color - ${VIRTUALENV_THEME_PROMPT_COLOR}) ${VIRTUALENV_CHAR}$environ ${normal?}"
 		LAST_THEME_COLOR=${VIRTUALENV_THEME_PROMPT_COLOR}
 	else
 		VIRTUALENV_PROMPT=""
@@ -150,7 +150,7 @@ function powerline_scm_prompt {
 		if [[ "${SCM_GIT_CHAR}" == "${SCM_CHAR}" ]]; then
 			SCM_PROMPT+=" ${SCM_CHAR}${SCM_BRANCH}${SCM_STATE}"
 		fi
-		SCM_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${SCM_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}${SCM_PROMPT} ${normal}"
+		SCM_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${SCM_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal?}${SCM_PROMPT} ${normal?}"
 		LAST_THEME_COLOR=${SCM_THEME_PROMPT_COLOR}
 	else
 		SCM_PROMPT=""
@@ -158,15 +158,15 @@ function powerline_scm_prompt {
 }
 
 function powerline_cwd_prompt {
-	CWD_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${CWD_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}$(set_rgb_color 0 ${CWD_THEME_PROMPT_COLOR}) $(_swd)${normal}$(set_rgb_color ${CWD_THEME_PROMPT_COLOR} -)${normal}"
+	CWD_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${CWD_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}$(set_rgb_color 0 ${CWD_THEME_PROMPT_COLOR}) $(_swd)${normal?}$(set_rgb_color ${CWD_THEME_PROMPT_COLOR} -)${normal?}"
 	LAST_THEME_COLOR=${CWD_THEME_PROMPT_COLOR}
 }
 
 function powerline_last_status_prompt {
 	if [[ "$1" -eq 0 ]]; then
-		LAST_STATUS_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} -)${THEME_PROMPT_SEPARATOR}${normal}"
+		LAST_STATUS_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} -)${THEME_PROMPT_SEPARATOR}${normal?}"
 	else
-		LAST_STATUS_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${LAST_STATUS_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}$(set_rgb_color - ${LAST_STATUS_THEME_PROMPT_COLOR}) ${LAST_STATUS} ${normal}$(set_rgb_color ${LAST_STATUS_THEME_PROMPT_COLOR} -)${THEME_PROMPT_SEPARATOR}${normal}"
+		LAST_STATUS_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${LAST_STATUS_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal?}$(set_rgb_color - ${LAST_STATUS_THEME_PROMPT_COLOR}) ${LAST_STATUS} ${normal?}$(set_rgb_color ${LAST_STATUS_THEME_PROMPT_COLOR} -)${THEME_PROMPT_SEPARATOR}${normal?}"
 	fi
 }
 

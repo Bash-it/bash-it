@@ -58,17 +58,17 @@ function prompt_command() {
 	ps_reboot="${bright_yellow?}${show_reboot_required}${normal?}\n"
 
 	set_user_color="$(set_user_color)"
-	ps_username="${set_user_color}\u${normal}"
-	ps_uh_separator="${dark_grey?}@${normal}"
+	ps_username="${set_user_color}\u${normal?}"
+	ps_uh_separator="${dark_grey?}@${normal?}"
 	set_host_color="$(set_host_color)"
-	ps_hostname="${set_host_color}\h${normal}"
+	ps_hostname="${set_host_color}\h${normal?}"
 
-	ps_path="${yellow?}\w${normal}"
+	ps_path="${yellow?}\w${normal?}"
 	scm_prompt="$(scm_prompt)"
 	ps_scm_prompt="${light_grey?}${scm_prompt}"
 
-	ps_user_mark="${normal} ${normal}"
-	ps_user_input="${normal}"
+	ps_user_mark="${normal?} ${normal?}"
+	ps_user_input="${normal?}"
 
 	# Set prompt
 	ps_time="$(__ps_time)"
