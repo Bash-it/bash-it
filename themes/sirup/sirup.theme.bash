@@ -1,3 +1,6 @@
+# shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
+
 # For unstaged(*) and staged(+) values next to branch name in __git_ps1
 GIT_PS1_SHOWDIRTYSTATE="enabled"
 

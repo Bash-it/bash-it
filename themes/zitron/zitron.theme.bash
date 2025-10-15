@@ -1,4 +1,6 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
+
 # zitron theme by Florian Baumann <flo@noqqe.de>
 
 ## git-theme

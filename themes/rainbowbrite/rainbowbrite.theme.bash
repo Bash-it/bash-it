@@ -1,4 +1,5 @@
 # shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
 
 # based off of n0qorg
 # looks like, if you're in a git repo:

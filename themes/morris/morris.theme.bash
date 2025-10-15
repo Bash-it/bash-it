@@ -1,3 +1,6 @@
+# shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
+
 # prompt theming
 
 # added TITLEBAR for updating the tab and window titles with the pwd

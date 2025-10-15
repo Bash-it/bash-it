@@ -1,5 +1,6 @@
-#!/usr/bin/env bash
-#
+# shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
+
 # Based on 'bobby' theme with the addition of virtualenv_prompt
 #
 

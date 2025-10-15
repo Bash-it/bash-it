@@ -1,3 +1,6 @@
+# shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
+
 # Modified version of the original modern theme in bash-it
 # Removes the battery charge and adds the current time
 

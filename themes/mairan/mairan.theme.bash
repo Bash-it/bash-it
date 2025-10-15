@@ -1,3 +1,6 @@
+# shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
+
 # Mairan Bash Prompt, inspired by "Zork"
 
 if tput setaf 1 &> /dev/null; then

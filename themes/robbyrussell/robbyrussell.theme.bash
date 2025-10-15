@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 # shellcheck disable=SC2034,SC2154
+
 SCM_THEME_PROMPT_DIRTY=" ${bold_yellow}✗"
 SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓"
 SCM_THEME_PROMPT_PREFIX=" ${bold_blue}scm:("

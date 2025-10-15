@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
 
 SCM_THEME_PROMPT_PREFIX="${cyan}(${green}"
 SCM_THEME_PROMPT_SUFFIX="${cyan})"

@@ -1,3 +1,6 @@
+# shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
+
 # scm themeing
 SCM_THEME_PROMPT_DIRTY="×"
 SCM_THEME_PROMPT_CLEAN="✓"

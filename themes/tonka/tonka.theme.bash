@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
 
 __tonka_time() {
 	THEME_CLOCK_FORMAT="%H%M"

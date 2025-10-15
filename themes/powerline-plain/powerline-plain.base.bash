@@ -1,3 +1,6 @@
+# shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
+
 . "$BASH_IT/themes/powerline/powerline.base.bash"
 
 function __powerline_left_segment {

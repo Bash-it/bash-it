@@ -1,3 +1,6 @@
+# shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
+
 # The "modern-t" theme is a "modern" theme variant with support
 # for "t", the minimalist python todo list utility by Steve Losh.
 # Get and install "t" at https://github.com/sjl/t#installing-t

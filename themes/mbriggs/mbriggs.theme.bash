@@ -1,3 +1,6 @@
+# shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
+
 # ------------------------------------------------------------------#
 #          FILE: mbriggs.zsh-theme                                  #
 #            BY: Matt Briggs (matt@mattbriggs.net)                  #

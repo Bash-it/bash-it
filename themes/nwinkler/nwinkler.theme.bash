@@ -1,4 +1,5 @@
 # shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
 
 # Two line prompt showing the following information:
 # (time) SCM [username@hostname] pwd (SCM branch SCM status)

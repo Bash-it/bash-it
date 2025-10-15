@@ -1,4 +1,6 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
+
 # Power-Turk theme for bash-it
 # Author (C) 2015 Ahmed Seref Guneysu
 

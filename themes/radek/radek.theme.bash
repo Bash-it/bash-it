@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
 
 GIT_THEME_PROMPT_DIRTY="${red}✗"
 GIT_THEME_PROMPT_CLEAN="${bold_green}✓"

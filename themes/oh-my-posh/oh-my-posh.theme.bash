@@ -1,4 +1,5 @@
 # shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
 
 if _command_exists oh-my-posh; then
 	export POSH_THEME=${POSH_THEME:-https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/v$(oh-my-posh --version)/themes/jandedobbeleer.omp.json}
