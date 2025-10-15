@@ -90,14 +90,14 @@ case $TERM in
 esac
 
 is_vim_shell() {
-	if [ ! -z "$VIMRUNTIME" ]; then
+	if [[ -n "$VIMRUNTIME" ]]; then
 		echo "${D_INTERMEDIATE_COLOR}on ${D_VIMSHELL_COLOR}\
 vim shell${D_DEFAULT_COLOR} "
 	fi
 }
 
 mitsuhikos_lastcommandfailed() {
-	code=$?
+	local code=$?
 	if [ $code != 0 ]; then
 		echo "${D_INTERMEDIATE_COLOR}exited ${D_CMDFAIL_COLOR}\
 $code ${D_DEFAULT_COLOR}"
@@ -106,7 +106,7 @@ $code ${D_DEFAULT_COLOR}"
 
 # vcprompt for scm instead of bash_it default
 demula_vcprompt() {
-	if [ ! -z "$VCPROMPT_EXECUTABLE" ]; then
+	if [[ -n "$VCPROMPT_EXECUTABLE" ]]; then
 		local D_VCPROMPT_FORMAT="on ${D_SCM_COLOR}%s${D_INTERMEDIATE_COLOR}:\
 ${D_BRANCH_COLOR}%b %r ${D_CHANGES_COLOR}%m%u ${D_DEFAULT_COLOR}"
 		$VCPROMPT_EXECUTABLE -f "$D_VCPROMPT_FORMAT"
@@ -118,10 +118,7 @@ prompt_git() {
 	local branchName=''
 
 	# Check if the current directory is in a Git repository.
-	if [ "$(
-		git rev-parse --is-inside-work-tree &> /dev/null
-		echo "${?}"
-	)" == '0' ]; then
+	if git rev-parse --is-inside-work-tree &> /dev/null; then
 
 		# check if the current directory is in .git before running git checks
 		if [ "$(git rev-parse --is-inside-git-dir 2> /dev/null)" == 'false' ]; then

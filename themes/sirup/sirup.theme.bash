@@ -5,18 +5,13 @@
 GIT_PS1_SHOWDIRTYSTATE="enabled"
 
 function rvm_version_prompt {
-	local gemset
+	local gemset version
 	gemset=$(echo "$GEM_HOME" | awk -F'@' '{print $2}')
-
-	[ "$gemset" != "" ] && gemset="@$gemset"
-	local version
+	[[ -n "$gemset" ]] && gemset="@$gemset"
 	version=$(echo "$MY_RUBY_HOME" | awk -F'-' '{print $2}')
-
-	[ "$version" == "1.9.2" ] && version=""
-
+	[[ "$version" == "1.9.2" ]] && version=""
 	local full="$version$gemset"
-
-	[ "$full" != "" ] && echo "$full"
+	[[ -n "$full" ]] && echo "$full"
 }
 
 function prompt_command() {

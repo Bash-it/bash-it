@@ -25,7 +25,7 @@ esac
 PS3=">> "
 
 is_vim_shell() {
-	if [ ! -z "$VIMRUNTIME" ]; then
+	if [[ -n "$VIMRUNTIME" ]]; then
 		echo "[${cyan?}vim shell${normal?}]"
 	fi
 }
@@ -35,15 +35,15 @@ modern_current_time_prompt() {
 }
 
 prompt() {
-	SCM_PROMPT_FORMAT='[%s][%s]'
-	# shellcheck disable=SC2181
 	if [ $? -ne 0 ]; then
+		SCM_PROMPT_FORMAT='[%s][%s]'
 		# Yes, the indenting on these is weird, but it has to be like
 		# this otherwise it won't display properly.
 
 		PS1="${TITLEBAR}${bold_red?}┌─${reset_color?}$(scm_prompt)$(modern_current_time_prompt)[${cyan?}\W${normal?}]$(is_vim_shell)
 ${bold_red?}└─▪${normal?} "
 	else
+		SCM_PROMPT_FORMAT='[%s][%s]'
 		PS1="${TITLEBAR}┌─$(scm_prompt)$(modern_current_time_prompt)[${cyan?}\W${normal?}]$(is_vim_shell)
 └─▪ "
 	fi

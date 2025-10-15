@@ -61,10 +61,9 @@ __my_rvm_ruby_version() {
 	local version gemset
 	gemset=$(echo "${GEM_HOME}" | awk -F'@' '{print $2}')
 	[[ -n "${gemset}" ]] && gemset="@${gemset}"
-	local version
 	version=$(echo "${MY_RUBY_HOME}" | awk -F'-' '{print $2}')
 	local full="${version}${gemset}"
-	[[ "${full}" != "" ]] && echo "[${full}]"
+	[[ -n "${full}" ]] && echo "[${full}]"
 }
 
 is_vim_shell() {

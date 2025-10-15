@@ -25,24 +25,23 @@ esac
 PS3=">> "
 
 __my_rvm_ruby_version() {
-	local gemset
+	local gemset version
 	gemset=$(echo "$GEM_HOME" | awk -F'@' '{print $2}')
-	[ "$gemset" != "" ] && gemset="@$gemset"
-	local version
+	[[ -n "$gemset" ]] && gemset="@$gemset"
 	version=$(echo "$MY_RUBY_HOME" | awk -F'-' '{print $2}')
 	local full="$version$gemset"
-	[ "$full" != "" ] && echo "[$full]"
+	[[ -n "$full" ]] && echo "[$full]"
 }
 
 is_vim_shell() {
-	if [ ! -z "$VIMRUNTIME" ]; then
+	if [[ -n "$VIMRUNTIME" ]]; then
 		echo "[${cyan?}vim shell${normal?}]"
 	fi
 }
 
 # show chroot if exist
 chroot() {
-	if [ -n "$debian_chroot" ]; then
+	if [[ -n "$debian_chroot" ]]; then
 		my_ps_chroot="${bold_cyan?}$debian_chroot${normal?}"
 		echo "($my_ps_chroot)"
 	fi
@@ -51,10 +50,10 @@ chroot() {
 # show virtualenvwrapper
 my_ve() {
 
-	if [ -n "$CONDA_DEFAULT_ENV" ]; then
+	if [[ -n "$CONDA_DEFAULT_ENV" ]]; then
 		my_ps_ve="${bold_purple?}${CONDA_DEFAULT_ENV}${normal?}"
 		echo "($my_ps_ve)"
-	elif [ -n "$VIRTUAL_ENV" ]; then
+	elif [[ -n "$VIRTUAL_ENV" ]]; then
 		my_ps_ve="${bold_purple?}$ve${normal?}"
 		echo "($my_ps_ve)"
 	fi

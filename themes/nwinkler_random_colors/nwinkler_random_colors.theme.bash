@@ -23,24 +23,24 @@ function randomize_nwinkler {
 
 	# shellcheck disable=SC2206 # Expected behavior but fine for this theme.
 	AVAILABLE_COLORS=(
-		${black?}
-		${red?}
-		${green?}
-		${yellow?}
-		${blue?}
-		${purple?}
-		${cyan?}
-		${white?}
-		${orange?}
-		${bold_black?}
-		${bold_red?}
-		${bold_green?}
-		${bold_yellow?}
-		${bold_blue?}
-		${bold_purple?}
-		${bold_cyan?}
-		${bold_white?}
-		${bold_orange?}
+		"${black?}"
+		"${red?}"
+		"${green?}"
+		"${yellow?}"
+		"${blue?}"
+		"${purple?}"
+		"${cyan?}"
+		"${white?}"
+		"${orange?}"
+		"${bold_black?}"
+		"${bold_red?}"
+		"${bold_green?}"
+		"${bold_yellow?}"
+		"${bold_blue?}"
+		"${bold_purple?}"
+		"${bold_cyan?}"
+		"${bold_white?}"
+		"${bold_orange?}"
 	)
 	# Uncomment these to allow underlines:
 	#$underline_black

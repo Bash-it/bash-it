@@ -25,23 +25,22 @@ esac
 PS3=">> "
 
 __my_rvm_ruby_version() {
-	local gemset
+	local gemset version
 	gemset=$(echo "$GEM_HOME" | awk -F'@' '{print $2}')
-	[ "$gemset" != "" ] && gemset="@$gemset"
-	local version
+	[[ "$gemset" ]] && gemset="@$gemset"
 	version=$(echo "$MY_RUBY_HOME" | awk -F'-' '{print $2}')
 	local full="$version$gemset"
-	[ "$full" != "" ] && echo "[$full]"
+	[[ "$full" ]] && echo "[$full]"
 }
 
 __my_venv_prompt() {
-	if [ ! -z "$VIRTUAL_ENV" ]; then
+	if [[ -n "$VIRTUAL_ENV" ]]; then
 		echo "[${blue?}@${normal?}${VIRTUAL_ENV##*/}]"
 	fi
 }
 
 is_vim_shell() {
-	if [ ! -z "$VIMRUNTIME" ]; then
+	if [[ -n "$VIMRUNTIME" ]]; then
 		echo "[${cyan?}vim shell${normal?}]"
 	fi
 }
