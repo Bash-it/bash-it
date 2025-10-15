@@ -160,6 +160,7 @@ function powerline_scm_prompt {
 }
 
 function powerline_cwd_prompt {
+	# shellcheck disable=SC2119
 	CWD_PROMPT="$(set_rgb_color "${LAST_THEME_COLOR}" "${CWD_THEME_PROMPT_COLOR}")${THEME_PROMPT_SEPARATOR}$(set_rgb_color 0 "${CWD_THEME_PROMPT_COLOR}") $(_swd)${normal?}$(set_rgb_color "${CWD_THEME_PROMPT_COLOR}" -)${normal?}"
 	LAST_THEME_COLOR=${CWD_THEME_PROMPT_COLOR}
 }

@@ -68,7 +68,7 @@ __my_rvm_ruby_version() {
 }
 
 is_vim_shell() {
-	if [[ ! -z "$VIMRUNTIME" ]]; then
+	if [[ -n "$VIMRUNTIME" ]]; then
 		echo "[${cyan?}vim shell${normal?}]"
 	fi
 }
@@ -96,7 +96,7 @@ prompt() {
 	# yes, these are the the same for now ...
 	my_ps_host_root="${ORANGE}\h${normal?}"
 
-	my_ps_user="${BOLD}${GREEN}\u${normal?}"
+	my_ps_user="${BOLD}${GREEN?}\u${normal?}"
 	my_ps_root="${bold_red?}\u${normal?}"
 
 	if [[ -n "$VIRTUAL_ENV" ]]; then
