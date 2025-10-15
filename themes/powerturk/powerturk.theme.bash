@@ -48,7 +48,7 @@ _swd() {
 	current=""          # The section of the path we're currently working on.
 	end="${2:-${PWD}}/" # The unmodified rest of the path.
 
-	if [[ "$end" =~ $HOME ]]; then
+	if [[ "$end" == "$HOME"* ]]; then
 		INHOME=1
 		end="${end#"$HOME"}" #strip /home/username from start of string
 		begin="${HOME}"      #start expansion from the right spot
