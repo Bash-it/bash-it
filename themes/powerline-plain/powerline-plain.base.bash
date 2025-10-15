@@ -42,7 +42,8 @@ function __powerline_prompt_command {
 
 	## left prompt ##
 	for segment in $POWERLINE_PROMPT; do
-		local info="$(__powerline_${segment}_prompt)"
+		local info
+		info="$(__powerline_${segment}_prompt)"
 		[[ -n "${info}" ]] && __powerline_left_segment "${info}"
 	done
 

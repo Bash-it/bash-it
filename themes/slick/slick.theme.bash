@@ -25,9 +25,11 @@ esac
 PS3=">> "
 
 __my_rvm_ruby_version() {
-	local gemset=$(echo $GEM_HOME | awk -F'@' '{print $2}')
+	local gemset
+	gemset=$(echo $GEM_HOME | awk -F'@' '{print $2}')
 	[ "$gemset" != "" ] && gemset="@$gemset"
-	local version=$(echo $MY_RUBY_HOME | awk -F'-' '{print $2}')
+	local version
+	version=$(echo $MY_RUBY_HOME | awk -F'-' '{print $2}')
 	local full="$version$gemset"
 	[ "$full" != "" ] && echo "[$full]"
 }
