@@ -1,4 +1,6 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
+
 # Power-Turk theme for bash-it
 # Author (C) 2015 Ahmed Seref Guneysu
 
@@ -30,11 +32,12 @@ LAST_STATUS_THEME_PROMPT_COLOR=52
 
 _collapsed_wd() {
 	# echo -e "\u2771\u276d\u276f"
-	echo $(pwd | perl -pe "
+	# shellcheck disable=SC2005
+	echo "$(pwd | perl -pe "
    BEGIN {
       binmode STDIN,  ':encoding(UTF-8)';
       binmode STDOUT, ':encoding(UTF-8)';
-   }; s|^$HOME|<HOME>|g; s|/([^/])[^/]*(?=/)|/\$1|g") \
+   }; s|^$HOME|<HOME>|g; s|/([^/])[^/]*(?=/)|/\$1|g")" \
 		| sed -re "s/\//  /g"
 }
 
@@ -45,22 +48,22 @@ _swd() {
 	current=""          # The section of the path we're currently working on.
 	end="${2:-${PWD}}/" # The unmodified rest of the path.
 
-	if [[ "$end" =~ "$HOME" ]]; then
+	if [[ "$end" == "$HOME"* ]]; then
 		INHOME=1
-		end="${end#$HOME}" #strip /home/username from start of string
-		begin="$HOME"      #start expansion from the right spot
+		end="${end#"$HOME"}" #strip /home/username from start of string
+		begin="${HOME}"      #start expansion from the right spot
 	else
 		INHOME=0
 	fi
 
-	end="${end#/}"       # Strip the first /
-	shortenedpath="$end" # The whole path, to check the length.
+	end="${end#/}"         # Strip the first /
+	shortenedpath="${end}" # The whole path, to check the length.
 	maxlength="${1:-0}"
 
 	shopt -q nullglob && NGV="-s" || NGV="-u" # Store the value for later.
 	shopt -s nullglob                         # Without this, anything that doesn't exist in the filesystem turns into */*/*/...
 
-	while [[ "$end" ]] && ((${#shortenedpath} > maxlength)); do
+	while [[ "${end}" ]] && ((${#shortenedpath} > maxlength)); do
 		current="${end%%/*}" # everything before the first /
 		end="${end#*/}"      # everything after the first /
 
@@ -69,10 +72,10 @@ _swd() {
 
 		for ((i = ${#current} - 2; i >= 0; i--)); do
 			subcurrent="${current:0:i}"
-			matching=("$begin/$subcurrent"*)  # Array of all files that start with $subcurrent.
-			((${#matching[*]} != 1)) && break # Stop shortening if more than one file matches.
-			shortcur="$subcurrent"
-			shortcurstar="$subcurrent*"
+			matching=("${begin}/${subcurrent}"*) # Array of all files that start with $subcurrent.
+			((${#matching[*]} != 1)) && break    # Stop shortening if more than one file matches.
+			shortcur="${subcurrent}"
+			shortcurstar="${subcurrent}*"
 		done
 
 		#advance
@@ -86,6 +89,7 @@ _swd() {
 
 	# Replaces slashes with  except first occurence.
 	if [ $INHOME -eq 1 ]; then
+		# shellcheck disable=SC2088
 		echo "~/$shortenedpath" | sed "s/\///2g" # make sure it starts with ~/
 	else
 		echo "/$shortenedpath" | sed "s/\///2g" # Make sure it starts with /
@@ -107,10 +111,10 @@ function set_rgb_color {
 
 function powerline_shell_prompt {
 	if [[ -n "${SSH_CLIENT}" ]]; then
-		SHELL_PROMPT="${bold_white}$(set_rgb_color - ${SHELL_SSH_THEME_PROMPT_COLOR}) ${SHELL_SSH_CHAR}\u@\h ${normal}"
+		SHELL_PROMPT="${bold_white?}$(set_rgb_color - ${SHELL_SSH_THEME_PROMPT_COLOR}) ${SHELL_SSH_CHAR}\u@\h ${normal?}"
 		LAST_THEME_COLOR=${SHELL_SSH_THEME_PROMPT_COLOR}
 	else
-		SHELL_PROMPT="${bold_white}$(set_rgb_color - ${SHELL_THEME_PROMPT_COLOR}) ${normal}"
+		SHELL_PROMPT="${bold_white?}$(set_rgb_color - ${SHELL_THEME_PROMPT_COLOR}) ${normal?}"
 		LAST_THEME_COLOR=${SHELL_THEME_PROMPT_COLOR}
 	fi
 }
@@ -125,7 +129,7 @@ function powerline_virtualenv_prompt {
 	fi
 
 	if [[ -n "$environ" ]]; then
-		VIRTUALENV_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${VIRTUALENV_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}$(set_rgb_color - ${VIRTUALENV_THEME_PROMPT_COLOR}) ${VIRTUALENV_CHAR}$environ ${normal}"
+		VIRTUALENV_PROMPT="$(set_rgb_color "${LAST_THEME_COLOR}" "${VIRTUALENV_THEME_PROMPT_COLOR}")${THEME_PROMPT_SEPARATOR}${normal?}$(set_rgb_color - "${VIRTUALENV_THEME_PROMPT_COLOR}") ${VIRTUALENV_CHAR}$environ ${normal?}"
 		LAST_THEME_COLOR=${VIRTUALENV_THEME_PROMPT_COLOR}
 	else
 		VIRTUALENV_PROMPT=""
@@ -137,18 +141,18 @@ function powerline_scm_prompt {
 
 	if [[ "${SCM_NONE_CHAR}" != "${SCM_CHAR}" ]]; then
 		if [[ "${SCM_DIRTY}" -eq 3 ]]; then
-			SCM_PROMPT="$(set_rgb_color ${SCM_THEME_PROMPT_STAGED_COLOR} ${SCM_THEME_PROMPT_COLOR})"
+			SCM_PROMPT="$(set_rgb_color "${SCM_THEME_PROMPT_STAGED_COLOR}" "${SCM_THEME_PROMPT_COLOR}")"
 		elif [[ "${SCM_DIRTY}" -eq 2 ]]; then
-			SCM_PROMPT="$(set_rgb_color ${SCM_THEME_PROMPT_UNSTAGED_COLOR} ${SCM_THEME_PROMPT_COLOR})"
+			SCM_PROMPT="$(set_rgb_color "${SCM_THEME_PROMPT_UNSTAGED_COLOR}" "${SCM_THEME_PROMPT_COLOR}")"
 		elif [[ "${SCM_DIRTY}" -eq 1 ]]; then
-			SCM_PROMPT="$(set_rgb_color ${SCM_THEME_PROMPT_DIRTY_COLOR} ${SCM_THEME_PROMPT_COLOR})"
+			SCM_PROMPT="$(set_rgb_color "${SCM_THEME_PROMPT_DIRTY_COLOR}" "${SCM_THEME_PROMPT_COLOR}")"
 		else
-			SCM_PROMPT="$(set_rgb_color ${SCM_THEME_PROMPT_CLEAN_COLOR} ${SCM_THEME_PROMPT_COLOR})"
+			SCM_PROMPT="$(set_rgb_color "${SCM_THEME_PROMPT_CLEAN_COLOR}" "${SCM_THEME_PROMPT_COLOR}")"
 		fi
 		if [[ "${SCM_GIT_CHAR}" == "${SCM_CHAR}" ]]; then
 			SCM_PROMPT+=" ${SCM_CHAR}${SCM_BRANCH}${SCM_STATE}"
 		fi
-		SCM_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${SCM_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}${SCM_PROMPT} ${normal}"
+		SCM_PROMPT="$(set_rgb_color "${LAST_THEME_COLOR}" "${SCM_THEME_PROMPT_COLOR}")${THEME_PROMPT_SEPARATOR}${normal?}${SCM_PROMPT} ${normal?}"
 		LAST_THEME_COLOR=${SCM_THEME_PROMPT_COLOR}
 	else
 		SCM_PROMPT=""
@@ -156,15 +160,16 @@ function powerline_scm_prompt {
 }
 
 function powerline_cwd_prompt {
-	CWD_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${CWD_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}$(set_rgb_color 0 ${CWD_THEME_PROMPT_COLOR}) $(_swd)${normal}$(set_rgb_color ${CWD_THEME_PROMPT_COLOR} -)${normal}"
+	# shellcheck disable=SC2119
+	CWD_PROMPT="$(set_rgb_color "${LAST_THEME_COLOR}" "${CWD_THEME_PROMPT_COLOR}")${THEME_PROMPT_SEPARATOR}$(set_rgb_color 0 "${CWD_THEME_PROMPT_COLOR}") $(_swd)${normal?}$(set_rgb_color "${CWD_THEME_PROMPT_COLOR}" -)${normal?}"
 	LAST_THEME_COLOR=${CWD_THEME_PROMPT_COLOR}
 }
 
 function powerline_last_status_prompt {
 	if [[ "$1" -eq 0 ]]; then
-		LAST_STATUS_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} -)${THEME_PROMPT_SEPARATOR}${normal}"
+		LAST_STATUS_PROMPT="$(set_rgb_color "${LAST_THEME_COLOR}" -)${THEME_PROMPT_SEPARATOR}${normal?}"
 	else
-		LAST_STATUS_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${LAST_STATUS_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}$(set_rgb_color - ${LAST_STATUS_THEME_PROMPT_COLOR}) ${LAST_STATUS} ${normal}$(set_rgb_color ${LAST_STATUS_THEME_PROMPT_COLOR} -)${THEME_PROMPT_SEPARATOR}${normal}"
+		LAST_STATUS_PROMPT="$(set_rgb_color "${LAST_THEME_COLOR}" "${LAST_STATUS_THEME_PROMPT_COLOR}")${THEME_PROMPT_SEPARATOR}${normal?}$(set_rgb_color - "${LAST_STATUS_THEME_PROMPT_COLOR}") ${LAST_STATUS} ${normal?}$(set_rgb_color "${LAST_STATUS_THEME_PROMPT_COLOR}" -)${THEME_PROMPT_SEPARATOR}${normal?}"
 	fi
 }
 

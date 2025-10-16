@@ -54,11 +54,11 @@ dulcie_prompt() {
 		DULCIE_WORKINGDIR="${color_workingdir?}\W${reset_color?}"
 		DULCIE_PROMPTCHAR="${color_user?}"'\$'"${reset_color?}"
 
-		SCM_THEME_PROMPT_DIRTY=" ${red?}✗${reset_color}"
+		SCM_THEME_PROMPT_DIRTY=" ${red?}✗${reset_color?}"
 		SCM_THEME_PROMPT_CLEAN=" ${bold_green?}✓${normal?}"
 		DULCIE_SCM_BACKGROUND="${background_scm}"
 		DULCIE_SCM_DIR_COLOR="${color_rootdir}"
-		SCM_THEME_ROOT_SUFFIX="${reset_color}${SCM_THEME_ROOT_SUFFIX}"
+		SCM_THEME_ROOT_SUFFIX="${reset_color?}${SCM_THEME_ROOT_SUFFIX}"
 		SCM_THEME_PROMPT_DIRTY=" $(dulcie_color 1)✗${reset_color?}"
 		SCM_THEME_PROMPT_CLEAN=" $(dulcie_color 10)✓${reset_color?}"
 	else
@@ -80,17 +80,17 @@ dulcie_prompt() {
 	# Open the new terminal in the same directory
 	_is_function __vte_osc7 && __vte_osc7
 
-	PS1="${reset_color}[${DULCIE_USER}@${DULCIE_HOST}$(scm_prompt_info)${reset_color?} ${DULCIE_WORKINGDIR}]"
+	PS1="${reset_color?}[${DULCIE_USER}@${DULCIE_HOST}$(scm_prompt_info)${reset_color?} ${DULCIE_WORKINGDIR}]"
 	if [[ "${DULCIE_MULTILINE}" -eq "1" ]]; then
-		PS1="${reset_color}[${DULCIE_USER}@${DULCIE_HOST}${reset_color?} ${DULCIE_WORKINGDIR}]"
+		PS1="${reset_color?}[${DULCIE_USER}@${DULCIE_HOST}${reset_color?} ${DULCIE_WORKINGDIR}]"
 		if [[ "$(scm_prompt_info)" ]]; then
 			SCM_THEME_PROMPT_PREFIX="${DULCIE_SCM_BACKGROUND}|${DULCIE_SCM_DIR_COLOR}"
-			SCM_THEME_PROMPT_SUFFIX="|${normal}"
+			SCM_THEME_PROMPT_SUFFIX="|${normal?}"
 			PS1="$(scm_prompt_info)\n${PS1}"
 		fi
 	else
 		SCM_THEME_PROMPT_PREFIX=" ${DULCIE_SCM_BACKGROUND}|${DULCIE_SCM_DIR_COLOR}"
-		SCM_THEME_PROMPT_SUFFIX="|${normal}"
+		SCM_THEME_PROMPT_SUFFIX="|${normal?}"
 		PS1="${reset_color?}[${DULCIE_USER}@${DULCIE_HOST}$(scm_prompt_info)${reset_color?} ${DULCIE_WORKINGDIR}]"
 	fi
 	PS1="${PS1}${DULCIE_PROMPTCHAR} "

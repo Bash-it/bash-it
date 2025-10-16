@@ -1,3 +1,6 @@
+# shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
+
 # prompt theming
 
 # added TITLEBAR for updating the tab and window titles with the pwd
@@ -18,9 +21,9 @@ function prompt_command() {
 }
 
 # scm theming
-SCM_THEME_PROMPT_DIRTY=" ${red}✗"
-SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓"
-SCM_THEME_PROMPT_PREFIX="${green}("
-SCM_THEME_PROMPT_SUFFIX="${green})${reset_color}"
+SCM_THEME_PROMPT_DIRTY=" ${red?}✗"
+SCM_THEME_PROMPT_CLEAN=" ${bold_green?}✓"
+SCM_THEME_PROMPT_PREFIX="${green?}("
+SCM_THEME_PROMPT_SUFFIX="${green?})${reset_color?}"
 
 safe_append_prompt_command prompt_command

@@ -13,7 +13,7 @@ GIT_THEME_PROMPT_SUFFIX=" ${reset_color?})"
 
 STATUS_THEME_PROMPT_BAD="${bold_red?}❯${reset_color?}${normal?} "
 STATUS_THEME_PROMPT_OK="${bold_green?}❯${reset_color?}${normal?} "
-: "${PURITY_THEME_PROMPT_COLOR:=$blue}"
+: "${PURITY_THEME_PROMPT_COLOR:=${blue?}}"
 
 function venv_prompt() {
 	python_venv=""

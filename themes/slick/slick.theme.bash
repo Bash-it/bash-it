@@ -1,11 +1,14 @@
+# shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
+
 SCM_THEME_PROMPT_PREFIX=""
 SCM_THEME_PROMPT_SUFFIX=""
 
-SCM_THEME_PROMPT_DIRTY=" ${bold_red}✗${normal}"
-SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓${normal}"
-SCM_GIT_CHAR="${bold_cyan}±${normal}"
-SCM_SVN_CHAR="${bold_green}⑆${normal}"
-SCM_HG_CHAR="${bold_red}☿${normal}"
+SCM_THEME_PROMPT_DIRTY=" ${bold_red?}✗${normal?}"
+SCM_THEME_PROMPT_CLEAN=" ${bold_green?}✓${normal?}"
+SCM_GIT_CHAR="${bold_cyan?}±${normal?}"
+SCM_SVN_CHAR="${bold_green?}⑆${normal?}"
+SCM_HG_CHAR="${bold_red?}☿${normal?}"
 
 #Mysql Prompt
 export MYSQL_PS1="(\u@\h) [\d]> "
@@ -22,22 +25,23 @@ esac
 PS3=">> "
 
 __my_rvm_ruby_version() {
-	local gemset=$(echo $GEM_HOME | awk -F'@' '{print $2}')
-	[ "$gemset" != "" ] && gemset="@$gemset"
-	local version=$(echo $MY_RUBY_HOME | awk -F'-' '{print $2}')
+	local gemset version
+	gemset=$(echo "$GEM_HOME" | awk -F'@' '{print $2}')
+	[[ "$gemset" ]] && gemset="@$gemset"
+	version=$(echo "$MY_RUBY_HOME" | awk -F'-' '{print $2}')
 	local full="$version$gemset"
-	[ "$full" != "" ] && echo "[$full]"
+	[[ "$full" ]] && echo "[$full]"
 }
 
 __my_venv_prompt() {
-	if [ ! -z "$VIRTUAL_ENV" ]; then
-		echo "[${blue}@${normal}${VIRTUAL_ENV##*/}]"
+	if [[ -n "$VIRTUAL_ENV" ]]; then
+		echo "[${blue?}@${normal?}${VIRTUAL_ENV##*/}]"
 	fi
 }
 
 is_vim_shell() {
-	if [ ! -z "$VIMRUNTIME" ]; then
-		echo "[${cyan}vim shell${normal}]"
+	if [[ -n "$VIMRUNTIME" ]]; then
+		echo "[${cyan?}vim shell${normal?}]"
 	fi
 }
 
@@ -45,13 +49,13 @@ prompt() {
 	SCM_PROMPT_FORMAT='[%s][%s]'
 	case $HOSTNAME in
 		"clappy"*)
-			my_ps_host="${green}\h${normal}"
+			my_ps_host="${green?}\h${normal?}"
 			;;
 		"icekernel")
-			my_ps_host="${red}\h${normal}"
+			my_ps_host="${red?}\h${normal?}"
 			;;
 		*)
-			my_ps_host="${green}\h${normal}"
+			my_ps_host="${green?}\h${normal?}"
 			;;
 	esac
 
@@ -62,11 +66,11 @@ prompt() {
 	# nice prompt
 	case "$(id -u)" in
 		0)
-			PS1="${TITLEBAR}[$my_ps_root][$my_ps_host]$(scm_prompt)$(__my_rvm_ruby_version)[${cyan}\w${normal}]$(is_vim_shell)
+			PS1="${TITLEBAR}[$my_ps_root][$my_ps_host]$(scm_prompt)$(__my_rvm_ruby_version)[${cyan?}\w${normal?}]$(is_vim_shell)
 $ "
 			;;
 		*)
-			PS1="${TITLEBAR}[$my_ps_user][$my_ps_host]$(scm_prompt)$(__my_rvm_ruby_version)$(__my_venv_prompt)[${cyan}\w${normal}]$(is_vim_shell)
+			PS1="${TITLEBAR}[$my_ps_user][$my_ps_host]$(scm_prompt)$(__my_rvm_ruby_version)$(__my_venv_prompt)[${cyan?}\w${normal?}]$(is_vim_shell)
 $ "
 			;;
 	esac

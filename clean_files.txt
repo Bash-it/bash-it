@@ -25,6 +25,7 @@ plugins/
 scripts/
 template/
 test/
+themes/
 
 # root files
 #
@@ -34,60 +35,6 @@ clean_files.txt
 install.sh
 lint_clean_files.sh
 uninstall.sh
-
-# themes
-#
-themes/90210
-themes/agnoster
-themes/atomic
-themes/axin
-themes/bakke
-themes/barbuk
-themes/binaryanomaly
-themes/bira
-themes/bobby
-themes/bobby-python
-themes/brainy
-themes/brunton
-themes/candy
-themes/clean
-themes/codeword
-themes/cooperkid
-themes/cupcake
-themes/demula
-themes/dos
-themes/doubletime
-themes/doubletime_multiline
-themes/doubletime_multiline_pyonly
-themes/dulcie
-themes/duru
-themes/easy
-themes/elixr
-themes/emperor
-themes/envy
-themes/essential
-themes/font
-themes/gallifrey
-themes/gitline
-themes/hawaii50
-themes/inretio
-themes/iterate
-themes/kitsune
-themes/lambda
-themes/liquidprompt
-themes/luan
-themes/modern
-themes/norbu
-themes/oh-my-posh
-themes/p4helpers.theme.bash
-themes/pete
-themes/powerline
-themes/powerline-multiline
-themes/powerline-naked
-themes/pure
-themes/purity
-themes/rjorgenson
-themes/robbyrussell
 
 # vendor init files
 #

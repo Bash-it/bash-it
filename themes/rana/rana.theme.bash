@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
+# shellcheck disable=SC2034,SC2312 # Expected behavior for themes.
 
 # Theme inspired on:
 #  - Ronacher's dotfiles (mitsuhikos) - http://github.com/mitsuhiko/dotfiles/tree/master/bash/
@@ -11,24 +12,24 @@
 
 # For the real Monokai colors you should add these to your .XDefaults or
 # terminal configuration:
-#! ----------------------------------------------------------- TERMINAL COLORS
-#! monokai - http://www.monokai.nl/blog/2006/07/15/textmate-color-theme/
+# ----------------------------------------------------------- TERMINAL COLORS
+# monokai - http://www.monokai.nl/blog/2006/07/15/textmate-color-theme/
 #*background: #272822
 #*foreground: #E2DA6E
 #*color0: black
-#! mild red
+# mild red
 #*color1: #CD0000
-#! light green
+# light green
 #*color2: #A5E02D
-#! orange (yellow)
+# orange (yellow)
 #*color3: #FB951F
-#! "dark" blue
+# "dark" blue
 #*color4: #076BCC
-#! hot pink
+# hot pink
 #*color5: #F6266C
-#! cyan
+# cyan
 #*color6: #64D9ED
-#! gray
+# gray
 #*color7: #E5E5E5
 
 # ----------------------------------------------------------------- DEF COLOR
@@ -89,14 +90,14 @@ case $TERM in
 esac
 
 is_vim_shell() {
-	if [ ! -z "$VIMRUNTIME" ]; then
+	if [[ -n "$VIMRUNTIME" ]]; then
 		echo "${D_INTERMEDIATE_COLOR}on ${D_VIMSHELL_COLOR}\
 vim shell${D_DEFAULT_COLOR} "
 	fi
 }
 
 mitsuhikos_lastcommandfailed() {
-	code=$?
+	local code=$?
 	if [ $code != 0 ]; then
 		echo "${D_INTERMEDIATE_COLOR}exited ${D_CMDFAIL_COLOR}\
 $code ${D_DEFAULT_COLOR}"
@@ -105,7 +106,7 @@ $code ${D_DEFAULT_COLOR}"
 
 # vcprompt for scm instead of bash_it default
 demula_vcprompt() {
-	if [ ! -z "$VCPROMPT_EXECUTABLE" ]; then
+	if [[ -n "$VCPROMPT_EXECUTABLE" ]]; then
 		local D_VCPROMPT_FORMAT="on ${D_SCM_COLOR}%s${D_INTERMEDIATE_COLOR}:\
 ${D_BRANCH_COLOR}%b %r ${D_CHANGES_COLOR}%m%u ${D_DEFAULT_COLOR}"
 		$VCPROMPT_EXECUTABLE -f "$D_VCPROMPT_FORMAT"
@@ -117,10 +118,7 @@ prompt_git() {
 	local branchName=''
 
 	# Check if the current directory is in a Git repository.
-	if [ $(
-		git rev-parse --is-inside-work-tree &> /dev/null
-		echo "${?}"
-	) == '0' ]; then
+	if git rev-parse --is-inside-work-tree &> /dev/null; then
 
 		# check if the current directory is in .git before running git checks
 		if [ "$(git rev-parse --is-inside-git-dir 2> /dev/null)" == 'false' ]; then
@@ -129,22 +127,22 @@ prompt_git() {
 			git update-index --really-refresh -q &> /dev/null
 
 			# Check for uncommitted changes in the index.
-			if ! $(git diff --quiet --ignore-submodules --cached); then
+			if ! git diff --quiet --ignore-submodules --cached; then
 				s+='+'
 			fi
 
 			# Check for unstaged changes.
-			if ! $(git diff-files --quiet --ignore-submodules --); then
+			if ! git diff-files --quiet --ignore-submodules --; then
 				s+='!'
 			fi
 
 			# Check for untracked files.
-			if [ -n "$(git ls-files --others --exclude-standard)" ]; then
+			if [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
 				s+='?'
 			fi
 
 			# Check for stashed files.
-			if $(git rev-parse --verify refs/stash &> /dev/null); then
+			if git rev-parse --verify refs/stash &> /dev/null; then
 				s+='$'
 			fi
 
@@ -157,7 +155,7 @@ prompt_git() {
 			|| git rev-parse --short HEAD 2> /dev/null \
 			|| echo '(unknown)')"
 
-		[ -n "${s}" ] && s=" [${s}]"
+		[[ -n "${s}" ]] && s=" [${s}]"
 
 		echo -e "${1}${branchName}${Cya}${s}"
 	else
@@ -167,13 +165,14 @@ prompt_git() {
 
 # -------------------------------------------------------------- PROMPT OUTPUT
 prompt() {
-	local LAST_COMMAND_FAILED=$(mitsuhikos_lastcommandfailed)
+	local LAST_COMMAND_FAILED
+	LAST_COMMAND_FAILED=$(mitsuhikos_lastcommandfailed)
 	local SAVE_CURSOR='\033[s'
 	local RESTORE_CURSOR='\033[u'
 	local MOVE_CURSOR_RIGHTMOST='\033[500C'
 	local MOVE_CURSOR_5_LEFT='\033[5D'
 
-	if [[ "$OSTYPE" == 'linux'* ]]; then
+	if [[ "${OSTYPE}" == 'linux'* ]]; then
 		PS1="${TITLEBAR}
 ${SAVE_CURSOR}${MOVE_CURSOR_RIGHTMOST}${MOVE_CURSOR_5_LEFT}\
 $(battery_charge)${RESTORE_CURSOR}\

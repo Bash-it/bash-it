@@ -1,4 +1,6 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
+
 # n0qorg theme by Florian Baumann <flo@noqqe.de>
 
 ## look-a-like
@@ -6,17 +8,17 @@
 # for example:
 # ananas ~/Code/bash-it/themes (master*)»
 function prompt_command() {
-	PS1="${bold_blue}[$(hostname)]${normal} \w${normal} ${bold_white}[$(git_prompt_info)]${normal}» "
+	PS1="${bold_blue?}[$(hostname)]${normal?} \w${normal?} ${bold_white?}[$(git_prompt_info)]${normal?}» "
 }
 
 safe_append_prompt_command prompt_command
 
 ## git-theme
 # feel free to change git chars.
-GIT_THEME_PROMPT_DIRTY="${bold_blue}*${bold_white}"
+GIT_THEME_PROMPT_DIRTY="${bold_blue?}*${bold_white?}"
 GIT_THEME_PROMPT_CLEAN=""
-GIT_THEME_PROMPT_PREFIX="${bold_blue}(${bold_white}"
-GIT_THEME_PROMPT_SUFFIX="${bold_blue})"
+GIT_THEME_PROMPT_PREFIX="${bold_blue?}(${bold_white?}"
+GIT_THEME_PROMPT_SUFFIX="${bold_blue?})"
 
 ## alternate chars
 #

@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
 
 # prompt themeing
 
@@ -13,7 +14,7 @@ case $TERM in
 esac
 
 function prompt_command() {
-	PS1="${TITLEBAR}${orange}${reset_color}${green}\w${bold_blue}\[$(scm_prompt_info)\]${normal} "
+	PS1="${TITLEBAR}${orange?}${reset_color?}${green?}\w${bold_blue?}\[$(scm_prompt_info)\]${normal?} "
 }
 
 # scm themeing

@@ -23,13 +23,13 @@ function set_prompt {
 	PS1+="${dir_color} \\w"             # current working directory
 
 	# Git information (status symbol)
-	PS1+=" ${git_color}$(__git_ps1 "[%s]")${reset_color}"
+	PS1+=" ${git_color}$(__git_ps1 "[%s]")${reset_color?}"
 
 	if [ $time_taken -gt 0 ]; then
 		PS1+=" ${time_color}took ${time_taken}ms" # time taken in milliseconds
 	fi
 
-	PS1+="\n${prompt_symbol_color}╰─λ${reset_color} " # red color for the prompt symbol, reset color after
+	PS1+="\n${prompt_symbol_color}╰─λ${reset_color?} " # red color for the prompt symbol, reset color after
 }
 
 PROMPT_COMMAND='start_time=$(date +%s%3N); set_prompt'

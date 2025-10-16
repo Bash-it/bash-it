@@ -22,7 +22,7 @@ function __powerline_right_segment() {
 		# Since the previous segment wasn't the last segment, add padding, if needed
 		#
 		if [[ "${POWERLINE_COMPACT_AFTER_SEPARATOR:-0}" -eq 0 ]]; then
-			RIGHT_PROMPT+="$(set_color - "${LAST_SEGMENT_COLOR?}") ${normal}"
+			RIGHT_PROMPT+="$(set_color - "${LAST_SEGMENT_COLOR?}") ${normal?}"
 			((padding += 1))
 		fi
 		if [[ "${LAST_SEGMENT_COLOR}" -eq "${params[1]:-}" ]]; then

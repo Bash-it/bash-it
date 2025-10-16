@@ -1,4 +1,5 @@
 # shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
 
 # Two line prompt showing the following information:
 # (time) SCM [username@hostname] pwd (SCM branch SCM status)
@@ -15,8 +16,8 @@
 # The exit code functionality currently doesn't work if you are using the 'fasd' plugin,
 # since 'fasd' is messing with the $PROMPT_COMMAND
 
-PROMPT_END_CLEAN="${green}→${reset_color}"
-PROMPT_END_DIRTY="${red}→${reset_color}"
+PROMPT_END_CLEAN="${green?}→${reset_color?}"
+PROMPT_END_DIRTY="${red?}→${reset_color?}"
 
 function prompt_end() {
 	echo -e "$PROMPT_END"
@@ -31,15 +32,15 @@ prompt_setter() {
 	fi
 	# Save history
 	_save-and-reload-history 1
-	PS1="($(clock_prompt)) $(scm_char) [${blue}\u${reset_color}@${green}\H${reset_color}] ${yellow}\w${reset_color}$(scm_prompt_info) ${reset_color}\n$(prompt_end) "
+	PS1="($(clock_prompt)) $(scm_char) [${blue?}\u${reset_color?}@${green?}\H${reset_color?}] ${yellow?}\w${reset_color?}$(scm_prompt_info) ${reset_color?}\n$(prompt_end) "
 	PS2='> '
 	PS4='+ '
 }
 
 safe_append_prompt_command prompt_setter
 
-SCM_THEME_PROMPT_DIRTY=" ${bold_red}✗${normal}"
-SCM_THEME_PROMPT_CLEAN=" ${bold_green}✓${normal}"
+SCM_THEME_PROMPT_DIRTY=" ${bold_red?}✗${normal?}"
+SCM_THEME_PROMPT_CLEAN=" ${bold_green?}✓${normal?}"
 SCM_THEME_PROMPT_PREFIX=" ("
 SCM_THEME_PROMPT_SUFFIX=")"
 RVM_THEME_PROMPT_PREFIX=" ("

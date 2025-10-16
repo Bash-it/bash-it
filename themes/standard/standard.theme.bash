@@ -1,3 +1,6 @@
+# shellcheck shell=bash
+# shellcheck disable=SC2034 # Expected behavior for themes.
+
 # scm themeing
 SCM_THEME_PROMPT_DIRTY="×"
 SCM_THEME_PROMPT_CLEAN="✓"
@@ -18,7 +21,8 @@ case $TERM in
 esac
 
 function prompt_command() {
-	PROMPT='${green}\u${normal}@${green}\h${normal}:${blue}\w${normal}${red}$(prompt_char)$(git_prompt_info)${normal}\$ '
+	# shellcheck disable=SC2016
+	PROMPT='${green?}\u${normal?}@${green?}\h${normal?}:${blue?}\w${normal?}${red?}$(prompt_char)$(git_prompt_info)${normal?}\$ '
 }
 
 safe_append_prompt_command prompt_command
