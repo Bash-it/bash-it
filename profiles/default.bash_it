@@ -2,14 +2,22 @@
 
 # plugins
 plugins base
+plugins git
+plugins aws
 
 # completion
 completion aliases
 completion bash-it
 completion system
+compltion git
+completion docker
 
 # aliases
 aliases general
 aliases bash-it
 aliases directory
 aliases editor
+aliases git
+aliases kubectl
+aliases terraform
+
