@@ -48,6 +48,7 @@ function _bash-it-install-enable() {
 	done
 }
 
+
 # Ensure .bashrc is sourced from profile files on macOS/BSD/Solaris
 function _bash-it-install-ensure-bashrc-sourcing() {
 	# Only needed on platforms where login shells don't source .bashrc
@@ -300,6 +301,20 @@ if [[ -n ${interactive:-} && -z "${silent:-}" ]]; then
 else
 	echo ""
 	_bash-it-profile-load "default"
+fi
+
+if command -v code-server > /dev/null 2>&1; then
+    echo ""
+    echo "Installing VS Code extensions..."
+    if [ -f "${BASH_IT}/extensions.txt" ]; then
+        while IFS= read -r extension || [ -n "$extension" ]; do
+            # Skip empty lines and comments
+            [[ -z "$extension" || "$extension" =~ ^# ]] && continue
+            echo "Installing $extension..."
+            code-server --install-extension "$extension" 2>/dev/null || echo "Note: Could not install $extension (may already be installed or unavailable)"
+        done < "${BASH_IT}/extensions.txt"
+        echo "VS Code extensions installation complete!"
+    fi
 fi
 
 # Ensure .bashrc sourcing is set up on macOS/BSD/Solaris
