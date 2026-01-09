@@ -40,6 +40,7 @@ prompt() {
 	if [[ $? -ne 0 ]]; then
 		# Yes, the indenting on these is weird, but it has to be like
 		# this otherwise it won't display properly.
+		# test
 
 		PS1="${TITLEBAR}${bold_red?}┌─[${cyan?}$(t | wc -l | sed -e's/ *//')${reset_color?}]${reset_color?}$(scm_prompt)[${cyan?}\W${normal?}]$(is_vim_shell)
 ${bold_red?}└─▪${normal?} "
