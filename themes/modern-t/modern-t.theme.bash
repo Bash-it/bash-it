@@ -29,7 +29,7 @@ esac
 PS3=">> "
 
 is_vim_shell() {
-	if [ ! -z "$VIMRUNTIME" ]; then
+	if [ -n "$VIMRUNTIME" ]; then
 		echo "[${cyan?}vim shell${normal?}]"
 	fi
 }

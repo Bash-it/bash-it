@@ -41,6 +41,7 @@ _collapsed_wd() {
 		| sed -re "s/\//  /g"
 }
 
+# shellcheck disable=SC2120
 _swd() {
 	# Adapted from http://stackoverflow.com/a/2951707/1766716
 	begin=""            # The unshortened beginning of the path.
