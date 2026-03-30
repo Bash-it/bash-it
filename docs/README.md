@@ -10,7 +10,7 @@
 97% of the code is compatible with bash 3.2+ but we are geared also toward power users,
 and one or two of the more complex plugins may need bash 5 features to run. If you
 happen to be "stuck" on an older version of bash, we have code in place to prevent you
-from running those modules and getting errors. It's a short list though, and none of the core code.
+from  running those modules and getting errors. It's a short list though, and none of the core code.
 
 Includes autocompletion, themes, aliases, custom functions, a few stolen pieces from Steve Losh, and more.
 
