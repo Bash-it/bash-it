@@ -6,7 +6,7 @@ minimum_pre_commit_version: 1.18.1
 exclude: "docs/_build/|vendor/"
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.3.0
+    rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c  # frozen: v6.0.0
     hooks:
       - id: trailing-whitespace
         exclude: ".(md|rst)$"
@@ -15,14 +15,14 @@ repos:
       - id: mixed-line-ending
       - id: check-added-large-files
   - repo: https://github.com/jumanjihouse/pre-commit-hooks
-    rev: 2.1.5
+    rev: 38980559e3a605691d6579f96222c30778e5a69e  # frozen: 3.0.0
     hooks:
       - id: git-check  # Configure in .gitattributes
       - id: shellcheck
         files: "\\.(bash)$"
       - id: shfmt
   - repo: https://github.com/Lucas-C/pre-commit-hooks
-    rev: v1.1.7
+    rev: ad1b27d73581aa16cca06fc4a0761fc563ffe8e8  # frozen: v1.5.6
     hooks:
       # - id: forbid-crlf
       - id: remove-crlf
