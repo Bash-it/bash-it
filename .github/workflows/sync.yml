@@ -1,0 +1,18 @@
+name: Sync Master Only
+
+on:
+  schedule:
+    # 每天台灣時間 00:00 執行 (UTC 16:00)
+    - cron: '0 16 * * *'
+  workflow_dispatch: # 方便你隨時手動測試
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync master branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # 指定同步 master 分支
+          gh repo sync gatorliu/bash-it --source bash-it/bash-it --branch master

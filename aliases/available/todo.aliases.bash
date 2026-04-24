@@ -1,9 +1,0 @@
-# shellcheck shell=bash
-about-alias 'todo.txt-cli abbreviations'
-url "https://github.com/todotxt/todo.txt-cli"
-
-alias tls='"${TODO?}" ls'
-alias ta='"${TODO?}" a'
-alias trm='"${TODO?}" rm'
-alias tdo='"${TODO?}" do'
-alias tpri='"${TODO?}" pri'
