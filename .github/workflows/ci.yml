@@ -20,17 +20,11 @@ jobs:
     - name: Install greadlink
       if: startsWith(runner.os, 'macOS')
       run: brew install coreutils
-    - name: Install parallel
-      if: startsWith(runner.os, 'macOS')
-      run: |
-        brew install parallel
-        which parallel  # Verify installation
     - name: Test code
       run: test/run
       env:
-        # Ubuntu runners ship GNU parallel, causing --tap + --jobs count mismatches.
-        # Force single-threaded on Linux; let macOS use parallel (installed above).
-        TEST_JOBS: ${{ runner.os == 'Linux' && '1' || 'detect' }}
+        # --tap + --jobs causes TAP plan count mismatches on both Linux and macOS.
+        TEST_JOBS: 1
 
   build-docs:
     runs-on: ubuntu-latest
