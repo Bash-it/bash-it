@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+IMAGE="bash-it-local-test-runner"
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+# Build the image — idempotent, Docker cache makes subsequent runs instant
+docker build --tag "${IMAGE}" - <<'DOCKERFILE'
+FROM ubuntu:24.04
+RUN apt-get update -q \
+    && apt-get install -qy git locales curl iproute2 \
+    && locale-gen en_US.UTF-8 \
+    && rm -rf /var/lib/apt/lists/*
+ENV LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
+DOCKERFILE
+
+# Mirror CI exactly: TEST_JOBS=1 avoids --tap + --jobs TAP count mismatches.
+# Pass any arguments through to test/run (e.g. test/completion/op.completion.bats)
+exec docker run --rm \
+  --volume "${REPO_ROOT}:/workspace" \
+  --workdir /workspace \
+  --env TEST_JOBS=1 \
+  "${IMAGE}" \
+  bash test/run "$@"

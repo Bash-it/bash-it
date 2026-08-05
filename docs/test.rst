@@ -26,17 +26,46 @@ To execute the unit tests, please run the ``run`` script:
 
 The ``run`` script will automatically install if it is not already present, and will then run all tests found under the ``test`` directory, including subdirectories.
 
-To run only a subset of the tests, you can provide the name of the test subdirectory that you want to run, e.g. like this for the tests in the ``test/themes`` directory:
+To run only a subset of the tests, you can provide a directory or a specific test file:
 
 .. code-block:: bash
 
-   # If you are in the root `.bash_it` directory:
+   # Run all tests in a directory:
    test/run test/themes
 
-By default, the tests run in single-threaded mode.
-If you want to speed up the test execution, you can install the `GNU ``parallel`` tool <https://www.gnu.org/software/parallel/>`_\ , which is supported by Bats.
-When using ``parallel``\ , the ``test/run`` script will use a number of threads in parallel, depending on the available CPU cores of your system.
-This can speed up test execution significantly.
+   # Run a single test file:
+   test/run test/completion/op.completion.bats
+
+   # Run multiple specific files:
+   test/run test/completion/op.completion.bats test/completion/herdr.completion.bats
+
+The tests always run in single-threaded mode (``TEST_JOBS=1``). Parallel execution
+via GNU ``parallel`` was previously supported but caused TAP plan count mismatches
+when combined with the ``--tap`` flag, producing false failures. Single-threaded
+mode is reliable and is what CI enforces.
+
+Local Runs and Isolation
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Running ``test/run`` directly on your machine works, but it inherits your shell's
+``PATH``. Any tool installed locally (e.g. ``op``, ``herdr``, ``docker``) will be
+visible to the tests, which can cause tests to behave differently than they do on CI,
+where the runner is a clean environment with only a known set of packages installed.
+
+To reproduce CI conditions exactly, use ``test/run-local``, which builds a minimal
+Docker image and runs the tests inside it:
+
+.. code-block:: bash
+
+   # Run all tests in a clean container:
+   test/run-local
+
+   # Run a subset:
+   test/run-local test/completion/op.completion.bats
+
+The image is built on the first run and cached afterwards, so subsequent runs are
+fast. The trade-off compared to running ``test/run`` directly is that the first run
+takes longer and Docker must be installed.
 
 Writing Tests
 -------------
