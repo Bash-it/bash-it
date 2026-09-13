@@ -6,7 +6,7 @@ SCM_THEME_PROMPT_SUFFIX=" "
 SCM_THEME_PROMPT_DIRTY=" ?"
 SCM_THEME_PROMPT_CLEAN=" ✓"
 
-function distro_prompt_info() {
+function _tokyonight-distro-prompt-info() {
 	local id
 
 	if [[ -f /etc/os-release ]]; then
@@ -38,62 +38,89 @@ function distro_prompt_info() {
 	esac
 }
 
-function nodejs_prompt_info() {
-	if [[ -n $(command -v node) && -d "node_modules" ]]; then
+function _tokyonight-cache-nodejs-prompt-info() {
+	if [[ -n "$(command -v node)" ]]; then
 		echo "  $(node -v) "
 	fi
 }
 
-function python_prompt_info() {
+function _tokyonight-nodejs-prompt-info() {
+	if [[ -n "$_tokyonight_cached_nodejs_prompt_info" && -f package.json ]]; then
+		echo "$_tokyonight_cached_nodejs_prompt_info"
+	fi
+}
+
+function _tokyonight-cache-rust-prompt-info() {
+	if [[ -n "$(command -v rustc)" ]]; then
+		echo "  $(rustc --version | awk '{print $2}') "
+	fi
+}
+
+function _tokyonight-rust-prompt-info() {
+	if [[ -n "$_tokyonight_cached_rust_prompt_info" && -f Cargo.toml ]]; then
+		echo "$_tokyonight_cached_rust_prompt_info"
+	fi
+}
+
+function _tokyonight-python-prompt-info() {
 	if [[ -n "$VIRTUAL_ENV" ]]; then
 		echo "  ${VIRTUAL_ENV##*/} "
 	fi
 }
 
-function rust_prompt_info() {
-	if [[ -n $(command -v rustc) && -f "Cargo.toml" ]]; then
-		echo "  $(rustc --version | awk '{print $2}') "
-	fi
-}
-
 # Static prompt info
-distro_prompt_info=" $(distro_prompt_info) "
+: "${TOKYONIGHT_DISTRO_PROMPT_INFO:="$(_tokyonight-distro-prompt-info)"}"
+_tokyonight_cached_nodejs_prompt_info="$(_tokyonight-cache-nodejs-prompt-info)"
+_tokyonight_cached_rust_prompt_info="$(_tokyonight-cache-rust-prompt-info)"
 
 # Colors
-dir_color="\[\033[38;2;227;229;229m\]\[\033[48;2;118;159;240m\]"
-distro_color="\[\033[48;2;163;174;210m\]\[\033[38;2;9;12;12m\]"
-scm_color="\[\033[38;2;118;159;240m\]\[\033[48;2;57;66;96m\]"
-clock_color="\[\033[38;2;160;169;203m\]\[\033[48;2;29;34;48m\]"
-other_color="\[\033[38;2;57;66;96m\]\[\033[48;2;33;39;54m\]"
+_tokyonight_dir_color="\[\033[38;2;227;229;229m\]\[\033[48;2;118;159;240m\]"
+_tokyonight_distro_color="\[\033[48;2;163;174;210m\]\[\033[38;2;9;12;12m\]"
+_tokyonight_scm_color="\[\033[38;2;118;159;240m\]\[\033[48;2;57;66;96m\]"
+_tokyonight_clock_color="\[\033[38;2;160;169;203m\]\[\033[48;2;29;34;48m\]"
+_tokyonight_other_color="\[\033[38;2;57;66;96m\]\[\033[48;2;33;39;54m\]"
 
 # Separators
-sep1="\[\033[38;2;163;174;210m\]░▒▓"
-sep2="\[\033[48;2;118;159;240m\]\[\033[38;2;163;174;210m\]"
-sep3="\[\033[38;2;118;159;240m\]\[\033[48;2;57;66;96m\]"
-sep4="\[\033[38;2;57;66;96m\]\[\033[48;2;33;39;54m\]"
-sep5="\[\033[38;2;33;39;54m\]\[\033[48;2;29;34;48m\]"
-sep6="\[\033[38;2;29;34;48m\]\[\033[49m\] "
+_tokyonight_sep1="\[\033[38;2;163;174;210m\]░▒▓"
+_tokyonight_sep2="\[\033[48;2;118;159;240m\]\[\033[38;2;163;174;210m\]"
+_tokyonight_sep3="\[\033[38;2;118;159;240m\]\[\033[48;2;57;66;96m\]"
+_tokyonight_sep4="\[\033[38;2;57;66;96m\]\[\033[48;2;33;39;54m\]"
+_tokyonight_sep5="\[\033[38;2;33;39;54m\]\[\033[48;2;29;34;48m\]"
+_tokyonight_sep6="\[\033[38;2;29;34;48m\]\[\033[49m\]"
 
-function prompt_command() {
-	if [[ "$?" -eq 0 ]]; then
+# Characters
+: "${TOKYONIGHT_USER_CHARACTER:="❯"}"
+: "${TOKYONIGHT_ROOT_CHARACTER:="▶"}"
+
+function _tokyonight-prompt-command() {
+	local exit_code="$?"
+	local cursor_color
+	local character
+
+	if [[ "$exit_code" -eq 0 ]]; then
 		cursor_color="${bold_green?}"
 	else
 		cursor_color="${bold_red?}"
 	fi
 
 	if [[ "${USER:-${LOGNAME?}}" = root ]]; then
-		character="▶"
+		character="$TOKYONIGHT_ROOT_CHARACTER"
 	else
-		character="❯"
+		character="$TOKYONIGHT_USER_CHARACTER"
 	fi
 
 	# Dynamic prompt info
-	scm_prompt_info="$(scm_prompt_info)"
-	nodejs_prompt_info="$(nodejs_prompt_info)"
-	python_prompt_info="$(python_prompt_info)"
-	rust_prompt_info="$(rust_prompt_info)"
+	local scm_prompt_info
+	local nodejs_prompt_info
+	local python_prompt_info
+	local rust_prompt_info
 
-	PS1="\n${sep1}${distro_color}${distro_prompt_info}${sep2}${dir_color} \w ${sep3}${scm_color}${scm_prompt_info}${sep4}${other_color}${nodejs_prompt_info}${python_prompt_info}${rust_prompt_info}${sep5}${clock_color}   \A ${sep6}\n${cursor_color}${character} ${normal?}"
+	scm_prompt_info="$(scm_prompt_info)"
+	nodejs_prompt_info="$(_tokyonight-nodejs-prompt-info)"
+	python_prompt_info="$(_tokyonight-python-prompt-info)"
+	rust_prompt_info="$(_tokyonight-rust-prompt-info)"
+
+	PS1="\n${_tokyonight_sep1}${_tokyonight_distro_color} ${TOKYONIGHT_DISTRO_PROMPT_INFO} ${_tokyonight_sep2}${_tokyonight_dir_color} \w ${_tokyonight_sep3}${_tokyonight_scm_color}${scm_prompt_info}${_tokyonight_sep4}${_tokyonight_other_color}${nodejs_prompt_info}${python_prompt_info}${rust_prompt_info}${_tokyonight_sep5}${_tokyonight_clock_color}   \A ${_tokyonight_sep6}\n${cursor_color}${character} ${normal?}"
 }
 
-safe_append_prompt_command prompt_command
+safe_append_prompt_command _tokyonight-prompt-command
