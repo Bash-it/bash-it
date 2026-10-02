@@ -12,6 +12,7 @@ function _bash-it-component-completion-callback-on-init-aliases() {
 	local aliasCommandFunction namespace="alias_completion"
 	local tmp_file completion_loader alias_name line completions chars
 	local alias_arg_words new_completion compl_func compl_wrapper alias_defn
+	local alias_cmd_quoted alias_args_quoted
 
 	# create array of function completion triggers, keeping multi-word triggers together
 	IFS=$'\n' read -d '' -ra completions < <(complete -p)
@@ -105,6 +106,11 @@ function _bash-it-component-completion-callback-on-init-aliases() {
 				# Create a wrapper inserting the alias arguments
 				# The use of printf on alias_arg_words is needed to ensure each element of
 				# the array is quoted. E.X. (one two three) -> ('one' 'two' 'three')
+				# alias_cmd and alias_args can themselves contain shell-special characters
+				# (e.g. an unescaped single quote), so they are also run through printf %q
+				# before being embedded below, otherwise they can generate invalid code.
+				alias_cmd_quoted="$(printf '%q' "$alias_cmd")"
+				alias_args_quoted="$(printf '%q' "$alias_args")"
 				echo "function $compl_wrapper {
                         local compl_word=\${2?}
                         local prec_word=\${3?}
@@ -112,15 +118,15 @@ function _bash-it-component-completion-callback-on-init-aliases() {
                         # with the last word in the unaliased form, i.e.,
                         # alias_cmd + ' ' + alias_args.
                         if [[ \$COMP_LINE == \"\$prec_word \$compl_word\" ]]; then
-                            prec_word='$alias_cmd $alias_args'
+                            prec_word=$alias_cmd_quoted' '$alias_args_quoted
                             prec_word=\${prec_word#* }
                         fi
                         (( COMP_CWORD += ${#alias_arg_words[@]} ))
-                        COMP_WORDS=(\"$alias_cmd\" $(printf "%q " "${alias_arg_words[@]}") \"\${COMP_WORDS[@]:1}\")
+                        COMP_WORDS=($alias_cmd_quoted $(printf "%q " "${alias_arg_words[@]}") \"\${COMP_WORDS[@]:1}\")
                         (( COMP_POINT -= \${#COMP_LINE} ))
-                        COMP_LINE=\${COMP_LINE/$alias_name/$alias_cmd $alias_args}
+                        COMP_LINE=\${COMP_LINE/$alias_name/$alias_cmd_quoted' '$alias_args_quoted}
                         (( COMP_POINT += \${#COMP_LINE} ))
-                        \"$compl_func\" \"$alias_cmd\" \"\$compl_word\" \"\$prec_word\"
+                        \"$compl_func\" $alias_cmd_quoted \"\$compl_word\" \"\$prec_word\"
                     }" >> "$tmp_file"
 			fi
 			new_completion="${new_completion/ -F $compl_func / -F $compl_wrapper }"
