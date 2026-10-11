@@ -49,29 +49,16 @@ jobs:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         persist-credentials: false
-    - name: Set up Python
-      uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-      with:
-        python-version: 3.12
-    - name: Install shfmt
-      env:
-        shfmt_version: v3.14.0
-      run: |
-        wget -qO shfmt "https://github.com/mvdan/sh/releases/download/${shfmt_version?}/shfmt_${shfmt_version?}_linux_amd64"
-        chmod +x shfmt
-        sudo mv shfmt /usr/bin/
-        shfmt --version
     - name: Install shellcheck
-      env:
-        scversion: stable # Or latest, vxx, etc
       run: |
-        wget -qO- "https://github.com/koalaman/shellcheck/releases/download/${scversion?}/shellcheck-${scversion?}.linux.x86_64.tar.xz" | tar -xJv "shellcheck-${scversion}/shellcheck"
-        sudo cp "shellcheck-${scversion}/shellcheck" /usr/bin/
-        shellcheck --version
-    - name: Install pre-commit
-      run: python3 -m pip install -r test/lint-requirements.txt
-    - name: Run lint
-      run: ./lint_clean_files.sh
+        sudo apt-get -qq update
+        sudo apt-get -qq install -y shellcheck shfmt
+
+    # Check modified file in this PR
+    - uses: j178/prek-action@4e14d07f9231acabce116ccfca13b13dd9755ece # v3.0.0
+      with:
+        extra-args: --from-ref ${{ github.event.pull_request.base.sha }} --to-ref ${{ github.event.pull_request.head.sha }}
+        show-verbose-logs: false
 
   lint-differential:
     runs-on: ubuntu-latest
