@@ -21,4 +21,9 @@ while IFS='' read -r line; do FILES+=("$line"); done < <(
 #    "Shellcheck SC1090 - Can't follow non-constant source"
 #     https://www.shellcheck.net/wiki/SC1090
 #
-BASH_IT='' pre-commit run --files "${FILES[@]}"
+
+if command -v prek > /dev/null 2>&1; then
+	BASH_IT='' prek run --files "${FILES[@]}"
+else
+	BASH_IT='' pre-commit run --files "${FILES[@]}"
+fi
