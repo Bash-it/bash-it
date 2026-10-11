@@ -55,10 +55,10 @@ jobs:
         sudo apt-get -qq update
         sudo apt-get -qq install -y shellcheck shfmt
 
-    # Check modified file in this PR
+    # Check modified files in this PR; on push events (no PR refs) check the last commit
     - uses: j178/prek-action@4e14d07f9231acabce116ccfca13b13dd9755ece # v3.0.0
       with:
-        extra-args: --from-ref ${{ github.event.pull_request.base.sha }} --to-ref ${{ github.event.pull_request.head.sha }}
+        extra-args: ${{ github.event_name == 'pull_request' && format('--from-ref {0} --to-ref {1}', github.event.pull_request.base.sha, github.event.pull_request.head.sha) || '--last-commit' }}
         show-verbose-logs: false
 
   lint-differential:
