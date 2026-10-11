@@ -14,7 +14,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         persist-credentials: false
     - name: Install greadlink
@@ -30,11 +30,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         persist-credentials: false
     - name: Set up Python
-      uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+      uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
       with:
         python-version: 3.12
     - name: Install docs dependencies
@@ -46,32 +46,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
+        fetch-depth: 0
         persist-credentials: false
-    - name: Set up Python
-      uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
-      with:
-        python-version: 3.12
-    - name: Install shfmt
-      env:
-        shfmt_version: v3.14.0
-      run: |
-        wget -qO shfmt "https://github.com/mvdan/sh/releases/download/${shfmt_version?}/shfmt_${shfmt_version?}_linux_amd64"
-        chmod +x shfmt
-        sudo mv shfmt /usr/bin/
-        shfmt --version
     - name: Install shellcheck
-      env:
-        scversion: stable # Or latest, vxx, etc
       run: |
-        wget -qO- "https://github.com/koalaman/shellcheck/releases/download/${scversion?}/shellcheck-${scversion?}.linux.x86_64.tar.xz" | tar -xJv "shellcheck-${scversion}/shellcheck"
-        sudo cp "shellcheck-${scversion}/shellcheck" /usr/bin/
-        shellcheck --version
-    - name: Install pre-commit
-      run: python3 -m pip install -r test/lint-requirements.txt
-    - name: Run lint
-      run: ./lint_clean_files.sh
+        sudo apt-get -qq update
+        sudo apt-get -qq install -y shellcheck shfmt
+
+    # Check modified file in this PR
+    - uses: j178/prek-action@4e14d07f9231acabce116ccfca13b13dd9755ece # v3.0.0
+      with:
+        extra-args: --from-ref ${{ github.event.pull_request.base.sha }} --to-ref ${{ github.event.pull_request.head.sha }}
+        show-verbose-logs: false
 
   lint-differential:
     runs-on: ubuntu-latest
@@ -81,13 +69,13 @@ jobs:
 
     steps:
       - name: Repository checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: false
 
       - id: ShellCheck
         name: Differential ShellCheck
-        uses: redhat-plumbers-in-action/differential-shellcheck@d965e66ec0b3b2f821f75c8eff9b12442d9a7d1e # v5.5.6
+        uses: redhat-plumbers-in-action/differential-shellcheck@f51c7c0d32777d00de777131d25918617a246415 # v5.5.7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
