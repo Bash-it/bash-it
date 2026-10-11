@@ -6,14 +6,27 @@ minimum_pre_commit_version: 1.18.1
 exclude: "docs/_build/|vendor/"
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c  # frozen: v6.0.0
+    rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c # frozen: v6.0.0
     hooks:
+      - id: check-added-large-files
+      - id: check-case-conflict
+      - id: check-executables-have-shebangs
+        exclude: "xcrun"
+      - id: check-shebang-scripts-are-executable
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: destroyed-symlinks
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: fix-byte-order-marker
+      - id: check-yaml
       - id: trailing-whitespace
         exclude: ".(md|rst)$"
-      - id: end-of-file-fixer
-      - id: check-merge-conflict
       - id: mixed-line-ending
-      - id: check-added-large-files
+      - id: check-json
+      - id: pretty-format-json
+        args:
+          - --autofix
   - repo: https://github.com/jumanjihouse/pre-commit-hooks
     rev: 38980559e3a605691d6579f96222c30778e5a69e  # frozen: 3.0.0
     hooks:
