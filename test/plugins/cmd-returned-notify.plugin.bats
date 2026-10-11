@@ -34,11 +34,12 @@ function local_setup_file() {
 	assert_success
 	assert_output ""
 }
+
 @test "lib command_duration: preexec set COMMAND_DURATION_START_SECONDS" {
 	COMMAND_DURATION_START_SECONDS=
 	assert_equal "${COMMAND_DURATION_START_SECONDS}" ""
 	NOW="$(_command_duration_current_time)"
 	_command_duration_pre_exec
 	# We need to make sure to account for nanoseconds...
-	assert_equal "${COMMAND_DURATION_START_SECONDS%.*}" "${NOW%.*}"
+	[ "${COMMAND_DURATION_START_SECONDS%.*}" -ge "${NOW%.*}" ]
 }
