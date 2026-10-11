@@ -67,7 +67,7 @@ function _lp_git_branch() {
 }
 
 function _lp_time() {
-	if ((LP_ENABLE_TIME)) && ((!${LP_TIME_ANALOG:-0})); then
+	if ((LP_ENABLE_TIME)) && ((! ${LP_TIME_ANALOG:-0})); then
 		LP_TIME="${gray?}\D{${THEME_CLOCK_FORMAT:-"%d-%H:%M"}}${normal?}"
 	else
 		LP_TIME=""
