@@ -9,6 +9,11 @@ if _command_exists dnf; then
 	alias dnfgl="dnf grouplist"      # List package groups
 	alias dnfmc="dnf makecache"      # Generate metadata cache
 	alias dnfs="dnf search"          # Search package
+	alias dnfhs="dnf history"        # Show transaction history
+	alias dnfhu="dnf history undo"   # Undo a transaction by ID
+	alias dnfrepo="dnf repolist"     # List enabled repos
+	alias dnfrq="dnf repoquery"      # Query package metadata
+	alias dnfchk="dnf check"         # Check dependencies
 
 	alias dnfi="sudo dnf install"       # Install package
 	alias dnfr="sudo dnf remove"        # Remove package
