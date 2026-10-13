@@ -23,5 +23,4 @@ profiles/*
 # apart from the default one
 !profiles/default.bash_it
 
-/vendor/github.com/nojhan/liquidprompt
 .trunk/
