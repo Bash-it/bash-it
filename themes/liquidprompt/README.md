@@ -1,8 +1,9 @@
 # Liquidprompt
 
-[Liquidprompt](https://github.com/liquidprompt/liquidprompt) is GPL-licensed.
-Bash-it is MIT-licensed, so this repository cannot vendor Liquidprompt's code
-or install it on your behalf.
+[Liquidprompt](https://github.com/liquidprompt/liquidprompt) is GPL-licensed,
+while Bash-it is MIT-licensed. To keep the two separate, this theme does not
+bundle, patch, or install Liquidprompt: it only sources a copy you installed
+yourself and relies on nothing but its public interface.
 
 `liquidprompt.theme.bash` is only a thin wrapper: it activates Liquidprompt
 if you already have it installed, and otherwise prints a warning. It looks
