@@ -5,8 +5,10 @@ Bash-it is MIT-licensed, so this repository cannot vendor Liquidprompt's code
 or install it on your behalf.
 
 `liquidprompt.theme.bash` is only a thin wrapper: it activates Liquidprompt
-if you already have it installed and available on your `PATH`, and otherwise
-prints a warning. It does not download, clone, or bundle Liquidprompt in any
+if you already have it installed, and otherwise prints a warning. It looks
+for `~/liquidprompt/liquidprompt` (the location suggested in the Liquidprompt
+installation docs) first, then for `liquidprompt` on your `PATH`. If you
+installed it elsewhere, `source` it from your own configuration instead. It does not download, clone, or bundle Liquidprompt in any
 way (this used to `git clone` it at runtime, which we no longer do).
 
 ## Installing Liquidprompt
