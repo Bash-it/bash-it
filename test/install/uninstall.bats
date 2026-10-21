@@ -6,10 +6,6 @@ function local_setup() {
 	export HOME="${BATS_TEST_TMPDIR?}"
 }
 
-function local_setup_file() {
-	: # don't load any libraries as the tests here test the *whole* kit
-}
-
 @test "uninstall: verify that the uninstall script exists" {
 	assert_file_exist "${BASH_IT?}/uninstall.sh"
 }
