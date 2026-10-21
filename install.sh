@@ -50,12 +50,6 @@ function _bash-it-install-enable() {
 
 # Ensure .bashrc is sourced from profile files on macOS/BSD/Solaris
 function _bash-it-install-ensure-bashrc-sourcing() {
-	# Only needed on platforms where login shells don't source .bashrc
-	case "$(uname -s)" in
-		Darwin | SunOS | Illumos | *BSD) ;;
-		*) return 0 ;; # Not needed on Linux
-	esac
-
 	# Find which profile file exists
 	local profile_file profile_exists=1
 	if [[ -f "$HOME/.bash_profile" ]]; then
