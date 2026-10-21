@@ -57,45 +57,48 @@ function _bash-it-install-ensure-bashrc-sourcing() {
 	esac
 
 	# Find which profile file exists
-	local profile_file
+	local profile_file profile_exists=1
 	if [[ -f "$HOME/.bash_profile" ]]; then
 		profile_file="$HOME/.bash_profile"
 	elif [[ -f "$HOME/.profile" ]]; then
 		profile_file="$HOME/.profile"
 	else
 		# No profile file exists, create .bash_profile
+		profile_exists=0
 		profile_file="$HOME/.bash_profile"
 		echo -e "${echo_yellow:-}Creating $profile_file to source .bashrc${echo_normal:-}"
 	fi
 
-	# Check if already sourced (reuse helper from doctor)
-	if _bash-it-doctor-check-profile-sourcing-grep "$profile_file" 2> /dev/null; then
-		return 0 # Already configured
-	fi
+	if ((profile_exists)); then
+		# Check if already sourced (reuse helper from doctor)
+		if _bash-it-doctor-check-profile-sourcing-grep "$profile_file" 2> /dev/null; then
+			return 0 # Already configured
+		fi
 
-	# Not sourced, offer to add it
-	echo ""
-	echo -e "${echo_yellow:-}Warning: .bashrc is not sourced from $profile_file${echo_normal:-}"
-	echo "On macOS/BSD/Solaris, login shells won't load bash-it without this."
-	echo ""
+		# Not sourced, offer to add it
+		echo ""
+		echo -e "${echo_yellow:-}Warning: .bashrc is not sourced from $profile_file${echo_normal:-}"
+		echo "On macOS/BSD/Solaris, login shells won't load bash-it without this."
+		echo ""
 
-	local RESP
-	if [[ -z "${silent:-}" ]]; then
-		read -r -e -n 1 -p "Would you like to add .bashrc sourcing to $profile_file? [Y/n] " RESP
-		case $RESP in
-			[nN])
-				echo ""
-				echo -e "${echo_orange:-}Skipping. You can add this manually later:${echo_normal:-}"
-				echo ""
-				echo "    if [ -n \"\${BASH_VERSION-}\" ]; then"
-				echo "        if [ -f \"\$HOME/.bashrc\" ]; then"
-				echo "            . \"\$HOME/.bashrc\""
-				echo "        fi"
-				echo "    fi"
-				echo ""
-				return 0
-				;;
-		esac
+		local RESP
+		if [[ -z "${silent:-}" ]]; then
+			read -r -e -n 1 -p "Would you like to add .bashrc sourcing to $profile_file? [Y/n] " RESP
+			case $RESP in
+				[nN])
+					echo ""
+					echo -e "${echo_orange:-}Skipping. You can add this manually later:${echo_normal:-}"
+					echo ""
+					echo "    if [ -n \"\${BASH_VERSION-}\" ]; then"
+					echo "        if [ -f \"\$HOME/.bashrc\" ]; then"
+					echo "            . \"\$HOME/.bashrc\""
+					echo "        fi"
+					echo "    fi"
+					echo ""
+					return 0
+					;;
+			esac
+		fi
 	fi
 
 	# Backup profile file if it exists
@@ -106,16 +109,32 @@ function _bash-it-install-ensure-bashrc-sourcing() {
 		echo -e "${echo_green:-}Backed up $profile_file to $backup_file${echo_normal:-}"
 	fi
 
-	# Add the sourcing snippet
-	cat >> "$profile_file" << 'EOF'
-
-# Source .bashrc if running bash
-if [ -n "${BASH_VERSION-}" ]; then
-	if [ -f "$HOME/.bashrc" ]; then
-		. "$HOME/.bashrc"
-	fi
-fi
+	if ((profile_exists)); then
+		# # Add the sourcing snippet to $profile_file (.bash_profile or maybe .profile)
+		cat >> "$profile_file" << 'EOF'
+		# Source .bashrc if running bash and interactive
+		if [ -n "${BASH_VERSION-}" ]; then
+			if [[ -f "$HOME/.bashrc" && $- == *i* ]]; then
+				source "$HOME/.bashrc"
+			fi
+		fi
 EOF
+	else
+		# Create a new ~/.bash_profile
+		cat >> "$profile_file" << 'EOF'
+	# Source .profile if it exists
+	if [[ -f "$HOME/.profile" ]]; then
+		source "$HOME/.profile"
+	fi
+
+	# Source .bashrc if interactive
+	if [[ $- == *i* ]]; then
+		if [[ -f "$HOME/.bashrc" ]]; then
+			source "$HOME/.bashrc"
+		fi
+	fi
+EOF
+	fi
 
 	echo -e "${echo_green:-}✓ Added .bashrc sourcing to $profile_file${echo_normal:-}"
 	echo ""
@@ -202,17 +221,6 @@ function _bash-it-install-modify-config() {
 	else
 		# backup/new by default
 		_bash-it-install-backup-new
-	fi
-	_bash-it-install-modify-profile
-}
-
-function _bash-it-install-modify-profile() {
-	local choice profile_string=$'if [[ -s ~/.profile ]]; then\n\tsource ~/.profile\nfi\nif [[ $- == *"i"* && -s ~/.bashrc ]]; then\n\tsource ~/.bashrc\nfi'
-	if [[ ! -f ~/.bash_profile ]]; then
-		printf '%s\n' "${profile_string}" > ~/.bash_profile
-	else
-		printf "${echo_yellow:-}%s${echo_normal:-}" "You may need to update your ~/.bash_profile (or ~/.profile) to source your ~/.bashrc:"
-		printf '%s\n' "${profile_string}"
 	fi
 }
 
