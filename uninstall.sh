@@ -3,6 +3,9 @@
 # Since we're uninstalling, avoid depending on any other part of _Bash It_.
 # I.e., hard-code colors (avoid `lib/colors.bash`), &c.
 
+# Be strict when moving and deleting user's files
+set -euo pipefail
+
 : "${BASH_IT:=${HOME?}/.bash_it}"
 
 if [[ ! -e ~/.bashrc && ! -e ~/.bash_profile && ! -e ~/.bashrc.bak && ! -e ~/.bash_profile.bak ]]; then

@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 # bash-it installer
+# bash -c "$(curl -s https://raw.github.com/bash-it/bash-it/master/install.sh)"
+
+# Be strict when moving and deleting user's files
+set -euo pipefail
 
 # Requires bash 3.2+ to install and run
 # Skip loading if bash version is too old
@@ -275,7 +279,7 @@ fi
 
 BACKUP_FILE="${CONFIG_FILE?}.bak"
 echo "Installing bash-it"
-if [[ -z "${no_modify_config}" ]]; then
+if [[ -z "${no_modify_config:-}" ]]; then
 	_bash-it-install-modify-config
 fi
 
