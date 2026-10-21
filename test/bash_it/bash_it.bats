@@ -42,7 +42,7 @@ function local_setup_file() {
 	run ln -s "${BASH_IT?}/plugins/available/base.plugin.bash" "${BASH_IT?}/plugins/enabled/250---base.plugin.bash"
 	assert_link_exist "${BASH_IT?}/plugins/enabled/250---base.plugin.bash"
 
-	run ln -s "${BASH_IT?}/aliases/available/a.aliases.bash" "${BASH_IT?}/aliases/enabled/755--a.aliases.bash"
+	run ln -s "${BASH_IT?}/aliases/available/a.aliases.bash" "${BASH_IT?}/aliases/enabled/755---a.aliases.bash"
 	assert_link_exist "${BASH_IT?}/aliases/enabled/755---a.aliases.bash"
 	run ln -s "${BASH_IT?}/aliases/available/b.aliases.bash" "${BASH_IT?}/aliases/enabled/750---b.aliases.bash"
 	assert_link_exist "${BASH_IT?}/aliases/enabled/750---b.aliases.bash"
