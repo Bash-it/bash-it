@@ -273,21 +273,6 @@ fi
 
 BASH_IT="$(cd "${BASH_SOURCE%/*}" && pwd)"
 
-CONFIG_FILE=".bashrc"
-
-# overriding CONFIG_FILE:
-CONFIG_FILE="${BASH_IT_CONFIG_FILE:-"${CONFIG_FILE}"}"
-# create subdir if CONFIG_FILE has subdirectory components
-if [[ "${CONFIG_FILE%/*}" != "${CONFIG_FILE}" ]]; then
-	mkdir -p "${HOME}/${CONFIG_FILE%/*}"
-fi
-
-BACKUP_FILE="${CONFIG_FILE?}.bak"
-echo "Installing bash-it"
-if [[ -z "${no_modify_config:-}" ]]; then
-	_bash-it-install-modify-config
-fi
-
 # Disable auto-reload in case its enabled
 export BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE=''
 # Load dependencies for enabling components
@@ -302,6 +287,21 @@ source "${BASH_IT?}/lib/utilities.bash"
 source "${BASH_IT?}/lib/helpers.bash"
 # shellcheck source-path=SCRIPTDIR/lib
 source "${BASH_IT?}/lib/colors.bash"
+
+CONFIG_FILE=".bashrc"
+
+# overriding CONFIG_FILE:
+CONFIG_FILE="${BASH_IT_CONFIG_FILE:-"${CONFIG_FILE}"}"
+# create subdir if CONFIG_FILE has subdirectory components
+if [[ "${CONFIG_FILE%/*}" != "${CONFIG_FILE}" ]]; then
+	mkdir -p "${HOME}/${CONFIG_FILE%/*}"
+fi
+
+BACKUP_FILE="${CONFIG_FILE?}.bak"
+echo "Installing bash-it"
+if [[ -z "${no_modify_config:-}" ]]; then
+	_bash-it-install-modify-config
+fi
 
 if [[ -n ${interactive:-} && -z "${silent:-}" ]]; then
 	for type in "aliases" "plugins" "completion"; do
