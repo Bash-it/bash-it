@@ -18,9 +18,22 @@ function local_setup_file() {
 @test "install: run the install script silently" {
 	cd "$BASH_IT"
 
-	./install.sh --silent
+	run ./install.sh --silent
+	assert_success
+}
+
+@test "install: verify that the config file is created" {
+	cd "$BASH_IT"
+
+	run ./install.sh --silent
 
 	assert_file_exist "$HOME/$BASH_IT_CONFIG_FILE"
+}
+
+@test "install: verify default plugins are enabled" {
+	cd "$BASH_IT"
+
+	run ./install.sh --silent
 
 	assert_link_exist "${BASH_IT?}/enabled/750---general.aliases.bash"
 	assert_link_exist "${BASH_IT?}/enabled/250---base.plugin.bash"
@@ -37,7 +50,7 @@ function local_setup_file() {
 	echo "test file content" > "$HOME/$BASH_IT_CONFIG_FILE"
 	md5_orig=$(md5sum "$HOME/$BASH_IT_CONFIG_FILE" | awk '{print $1}')
 
-	./install.sh --silent
+	run ./install.sh --silent
 
 	assert_file_exist "$HOME/$BASH_IT_CONFIG_FILE"
 	assert_file_exist "$HOME/$BASH_IT_CONFIG_FILE.bak"
@@ -69,7 +82,7 @@ function local_setup_file() {
 	touch "$HOME/$BASH_IT_CONFIG_FILE"
 	echo "test file content" > "$HOME/$BASH_IT_CONFIG_FILE"
 
-	./install.sh --silent --append-to-config
+	run ./install.sh --silent --append-to-config
 
 	assert_file_exist "$HOME/$BASH_IT_CONFIG_FILE"
 	assert_file_exist "$HOME/$BASH_IT_CONFIG_FILE.bak"

@@ -55,16 +55,20 @@ function _bash-it-install-enable() {
 # Ensure .bashrc is sourced from profile files on macOS/BSD/Solaris
 function _bash-it-install-ensure-bashrc-sourcing() {
 	# Find which profile file exists
-	local profile_file profile_exists=1
-	if [[ -f "$HOME/.bash_profile" ]]; then
-		profile_file="$HOME/.bash_profile"
-	elif [[ -f "$HOME/.profile" ]]; then
+	local profile_file
+	local -i profile_exists
+	if [[ -f "$HOME/.profile" ]]; then
 		profile_file="$HOME/.profile"
+		profile_exists=1
 	else
-		# No profile file exists, create .bash_profile
-		profile_exists=0
 		profile_file="$HOME/.bash_profile"
-		echo -e "${echo_yellow:-}Creating $profile_file to source .bashrc${echo_normal:-}"
+		if [[ -f "$HOME/.bash_profile" ]]; then
+			profile_exists=1
+		else
+			# No profile file exists, create .bash_profile
+			profile_exists=0
+			echo -e "${echo_yellow:-}Creating $profile_file to source .bashrc${echo_normal:-}"
+		fi
 	fi
 
 	if ((profile_exists)); then
@@ -100,7 +104,7 @@ function _bash-it-install-ensure-bashrc-sourcing() {
 	fi
 
 	# Backup profile file if it exists
-	if [[ -f "$profile_file" ]]; then
+	if ((profile_exists)); then
 		local backup_file
 		backup_file="${profile_file}.bak.$(date +%Y%m%d_%H%M%S)"
 		command cp "$profile_file" "$backup_file"
@@ -140,9 +144,10 @@ EOF
 
 # Back up existing profile
 function _bash-it-install-backup-config() {
-	test -w "${HOME?}/${CONFIG_FILE?}" \
-		&& cp -aL "${HOME?}/${CONFIG_FILE?}" "${HOME?}/${CONFIG_FILE?}.bak" \
-		&& echo -e "${echo_green:-}Your original ${CONFIG_FILE?} has been backed up to ${CONFIG_FILE?}.bak${echo_normal:-}"
+	if [[ -w "${HOME?}/${CONFIG_FILE?}" ]]; then
+		cp -aL "${HOME?}/${CONFIG_FILE?}" "${HOME?}/${CONFIG_FILE?}.bak" \
+			&& echo -e "${echo_green:-}Your original ${CONFIG_FILE?} has been backed up to ${CONFIG_FILE?}.bak${echo_normal:-}"
+	fi
 }
 
 # Back up existing profile and create new one for bash-it
@@ -160,8 +165,8 @@ function _bash-it-install-backup-append() {
 }
 
 function _bash-it-install-backup-check() {
-	if ! [[ -e "${HOME?}/$BACKUP_FILE" ]]; then
-		return
+	if [[ ! -e "${HOME?}/$BACKUP_FILE" ]]; then
+		return 0
 	fi
 	echo -e "${echo_yellow:-}Backup file already exists. Make sure to backup your .bashrc before running this installation.${echo_normal:-}" >&2
 
