@@ -207,7 +207,7 @@ function _bash-it-install-modify-config() {
 }
 
 function _bash-it-install-modify-profile() {
-	local choice profile_string=$'if [[ $- == *i* && -s ~/.bashrc ]]; then\n\tsource ~/.bashrc\nfi'
+	local choice profile_string=$'if [[ -s ~/.profile ]]; then\n\tsource ~/.profile\nfi\nif [[ $- == *"i"* && -s ~/.bashrc ]]; then\n\tsource ~/.bashrc\nfi'
 	if [[ ! -f ~/.bash_profile ]]; then
 		printf '%s\n' "${profile_string}" > ~/.bash_profile
 	else
