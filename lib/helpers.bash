@@ -782,7 +782,7 @@ _bash-it-profile-load-parse-profile() {
 	while read -r -a line; do
 		((++num))
 		# Ignore comments and empty lines
-		[[ -z "${line[*]}" || "${line[*]}" =~ ^#.* ]] && continue
+		[[ -z "${line[*]:-}" || "${line[*]:-}" =~ ^#.* ]] && continue
 		enable_func="_enable-${line[0]}"
 		subdirectory=${line[0]}
 		component=${line[1]}
