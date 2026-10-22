@@ -55,20 +55,17 @@ function _bash-it-install-enable() {
 # Ensure .bashrc is sourced from profile files on macOS/BSD/Solaris
 function _bash-it-install-ensure-bashrc-sourcing() {
 	# Find which profile file exists
-	local profile_file
+	local profile_file="$HOME/.bash_profile"
 	local -i profile_exists
-	if [[ -f "$HOME/.profile" ]]; then
+	if [[ -f "$profile_file" ]]; then
+		profile_exists=1
+	elif [[ -f "$HOME/.profile" ]]; then
 		profile_file="$HOME/.profile"
 		profile_exists=1
 	else
-		profile_file="$HOME/.bash_profile"
-		if [[ -f "$HOME/.bash_profile" ]]; then
-			profile_exists=1
-		else
-			# No profile file exists, create .bash_profile
-			profile_exists=0
-			echo -e "${echo_yellow:-}Creating $profile_file to source .bashrc${echo_normal:-}"
-		fi
+		# No profile file exists, create .bash_profile
+		profile_exists=0
+		echo -e "${echo_yellow:-}Creating $profile_file to source .bashrc${echo_normal:-}"
 	fi
 
 	if ((profile_exists)); then
@@ -76,31 +73,31 @@ function _bash-it-install-ensure-bashrc-sourcing() {
 		if _bash-it-doctor-check-profile-sourcing-grep "$profile_file" 2> /dev/null; then
 			return 0 # Already configured
 		fi
+	fi
 
-		# Not sourced, offer to add it
-		echo ""
-		echo -e "${echo_yellow:-}Warning: .bashrc is not sourced from $profile_file${echo_normal:-}"
-		echo "On macOS/BSD/Solaris, login shells won't load bash-it without this."
-		echo ""
+	# Not sourced, offer to add it
+	echo ""
+	echo -e "${echo_yellow:-}Warning: .bashrc is not sourced from $profile_file${echo_normal:-}"
+	echo "On macOS/BSD/Solaris, login shells won't load bash-it without this."
+	echo ""
 
+	if [[ -z "${silent:-}" ]]; then
 		local RESP
-		if [[ -z "${silent:-}" ]]; then
-			read -r -e -n 1 -p "Would you like to add .bashrc sourcing to $profile_file? [Y/n] " RESP
-			case $RESP in
-				[nN])
-					echo ""
-					echo -e "${echo_orange:-}Skipping. You can add this manually later:${echo_normal:-}"
-					echo ""
-					echo "    if [ -n \"\${BASH_VERSION-}\" ]; then"
-					echo "        if [ -f \"\$HOME/.bashrc\" ]; then"
-					echo "            . \"\$HOME/.bashrc\""
-					echo "        fi"
-					echo "    fi"
-					echo ""
-					return 0
-					;;
-			esac
-		fi
+		read -r -e -n 1 -p "Would you like to add .bashrc sourcing to $profile_file? [Y/n] " RESP
+		case $RESP in
+			[nN])
+				echo ""
+				echo -e "${echo_orange:-}Skipping. You can add this manually later:${echo_normal:-}"
+				echo ""
+				echo "    if [ -n \"\${BASH_VERSION-}\" ]; then"
+				echo "        if [ -f \"\$HOME/.bashrc\" ]; then"
+				echo "            . \"\$HOME/.bashrc\""
+				echo "        fi"
+				echo "    fi"
+				echo ""
+				return 0
+				;;
+		esac
 	fi
 
 	# Backup profile file if it exists
@@ -112,29 +109,29 @@ function _bash-it-install-ensure-bashrc-sourcing() {
 	fi
 
 	if ((profile_exists)); then
-		# # Add the sourcing snippet to $profile_file (.bash_profile or maybe .profile)
+		# Add the sourcing snippet to $profile_file (.bash_profile or maybe .profile)
 		cat >> "$profile_file" << 'EOF'
-		# Source .bashrc if running bash and interactive
-		if [ -n "${BASH_VERSION-}" ]; then
-			if [[ -f "$HOME/.bashrc" && $- == *i* ]]; then
-				source "$HOME/.bashrc"
-			fi
-		fi
+# Source .bashrc if running bash and interactive
+if [ -n "${BASH_VERSION-}" ]; then
+	if [[ -f "$HOME/.bashrc" && $- == *i* ]]; then
+		source "$HOME/.bashrc"
+	fi
+fi
 EOF
 	else
 		# Create a new ~/.bash_profile
 		cat >> "$profile_file" << 'EOF'
-	# Source .profile if it exists
-	if [[ -f "$HOME/.profile" ]]; then
-		source "$HOME/.profile"
-	fi
+# Source .profile if it exists
+if [[ -f "$HOME/.profile" ]]; then
+	source "$HOME/.profile"
+fi
 
-	# Source .bashrc if interactive
-	if [[ $- == *i* ]]; then
-		if [[ -f "$HOME/.bashrc" ]]; then
-			source "$HOME/.bashrc"
-		fi
+# Source .bashrc if interactive
+if [[ $- == *i* ]]; then
+	if [[ -f "$HOME/.bashrc" ]]; then
+		source "$HOME/.bashrc"
 	fi
+fi
 EOF
 	fi
 

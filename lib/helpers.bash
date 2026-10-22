@@ -424,7 +424,7 @@ function _bash-it-doctor-check-profile-sourcing-grep() {
 	[[ ! -f "$profile_file" ]] && return 1
 
 	# Look for common patterns that source .bashrc
-	command grep -qE '(source|\.)\s+(~|\$HOME|"\$HOME")?/\.bashrc|if.*BASH_VERSION.*bashrc' "$profile_file"
+	command grep -qE '(source|\.)\s+(~|\$HOME|"\$?{?HOME}?"?)?/\.bashrc' "$profile_file"
 }
 
 function _bash-it-doctor-check-profile-sourcing-test() {

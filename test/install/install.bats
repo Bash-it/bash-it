@@ -7,7 +7,6 @@ function local_setup() {
 }
 
 function local_setup_file() {
-	# Determine which config file to use based on OS.
 	export BASH_IT_CONFIG_FILE=.bashrc
 }
 
@@ -92,4 +91,82 @@ function local_setup_file() {
 	assert_line "test file content"
 	# shellcheck disable=SC2016
 	assert_line 'source "${BASH_IT?}/bash_it.sh"'
+}
+
+@test "install: template .profile appended" {
+	cd "$BASH_IT"
+
+	touch "$HOME/.profile"
+	echo "test file content" > "$HOME/.profile"
+
+	run ./install.sh --silent
+
+	assert_file_exist "$HOME/.profile"
+	assert_file_not_exist "$HOME/.bash_profile"
+
+	run cat "$HOME/.profile"
+
+	assert_line "test file content"
+	# shellcheck disable=SC2016
+	assert_output --partial 'source "$HOME/.bashrc"'
+
+	run bash -n "$HOME/.profile"
+	assert_success
+}
+
+@test "install: template .bash_profile appended" {
+	cd "$BASH_IT"
+
+	touch "$HOME/.bash_profile"
+	echo "test file content" > "$HOME/.bash_profile"
+	echo "test file content" > "$HOME/.profile"
+
+	run ./install.sh --silent
+
+	assert_file_exist "$HOME/.bash_profile"
+
+	run cat "$HOME/.bash_profile"
+
+	assert_line "test file content"
+	# shellcheck disable=SC2016
+	assert_output --partial 'source "$HOME/.bashrc"'
+
+	run cat "$HOME/.profile"
+	assert_output "test file content"
+}
+
+@test "install: template .bash_profile created" {
+	cd "$BASH_IT"
+
+	run ./install.sh --silent
+
+	assert_file_exist "$HOME/.bash_profile"
+
+	run cat "$HOME/.bash_profile"
+
+	# shellcheck disable=SC2016
+	assert_line --partial 'source "$HOME/.bashrc"'
+}
+
+@test "install: validate .bash_profile template sytax" {
+	cd "$BASH_IT"
+
+	run ./install.sh --silent
+
+	assert_file_exists "$HOME/.bash_profile"
+
+	run bash -n "$HOME/.bash_profile"
+	assert_success
+}
+
+@test "install: validate .profile template sytax" {
+	cd "$BASH_IT"
+
+	touch "$HOME/.profile"
+	run ./install.sh --silent
+
+	assert_file_exists "$HOME/.profile"
+
+	run bash -n "$HOME/.profile"
+	assert_success
 }
