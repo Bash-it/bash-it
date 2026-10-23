@@ -3,13 +3,17 @@ on: [push, pull_request]
 
 jobs:
   test:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        bash-version: ['3.2', '4.4', '5.0', '5.3']
+    container:
+      image: bash:${{ matrix.bash-version }}
     steps:
-      - name: Install Bats
-        run: |
-          sudo apt-get update
-          sudo apt-get install --assume-yes bats
       - name: Check out repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v5
+      - name: Install test dependencies
+        run: apk add --no-cache bats git
       - name: Run tests
         run: bats test
