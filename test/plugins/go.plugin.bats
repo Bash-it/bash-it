@@ -7,6 +7,11 @@ function local_setup_file() {
 	setup_libs "helpers"
 }
 
+function local_setup() {
+	# Don't inherit the developer's GOPATH: the plugin adds each entry to PATH, so it would precede the fixtures
+	unset GOPATH
+}
+
 function setup_go_path() {
 	local go_path="$1"
 
