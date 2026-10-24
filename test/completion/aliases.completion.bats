@@ -36,7 +36,12 @@ function local_setup_file() {
 	function atest_cmd() { :; }
 	complete -F _alias_test_complete atest_cmd
 	alias atest="atest_cmd config use-context"
+	# The init callback ends a 'read -d ""' at EOF (status 1); bash 3.2 propagates
+	# that through bats' errexit, so load without it and check the result below.
+	set +e
 	load "${BASH_IT?}/completion/available/aliases.completion.bash"
+	set -e
+	declare -F _alias_completion::atest
 
 	COMP_LINE="atest mi"
 	COMP_POINT=${#COMP_LINE}
