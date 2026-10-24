@@ -1,8 +1,4 @@
 # shellcheck shell=bash
-#
-# plugin for plenv
-
-cite about-plugin
 about-plugin 'plenv plugin for Perl'
 url "https://github.com/tokuhirom/plenv"
 
@@ -11,7 +7,10 @@ if [[ -d "${HOME}/.plenv/bin" ]]; then
 	pathmunge "${HOME}/.plenv/bin"
 fi
 
-if _command_exists plenv; then
-	# init plenv
-	eval "$(plenv init - bash)"
+if ! _binary_exists plenv; then
+	_log_warning "Unable to locage 'plenv'."
+	return 1
 fi
+
+# shellcheck disable=SC1090 # init plenv
+source < <(plenv init - bash)
