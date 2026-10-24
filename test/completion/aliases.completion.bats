@@ -28,3 +28,32 @@ function local_setup_file() {
 
 	assert_output ""
 }
+
+@test "alias-completion: wrapper passes the last alias word as the preceding word" {
+	function _alias_test_complete() {
+		printf '%s\n' "cmd=$1" "cur=$2" "prev=$3" "line=$COMP_LINE" "words=${COMP_WORDS[*]}" "cword=$COMP_CWORD"
+	}
+	function atest_cmd() { :; }
+	complete -F _alias_test_complete atest_cmd
+	alias atest="atest_cmd config use-context"
+	# The init callback ends a 'read -d ""' at EOF (status 1); bash 3.2 propagates
+	# that through bats' errexit, so load without it and check the result below.
+	set +e
+	load "${BASH_IT?}/completion/available/aliases.completion.bash"
+	set -e
+	declare -F _alias_completion::atest
+
+	COMP_LINE="atest mi"
+	COMP_POINT=${#COMP_LINE}
+	COMP_WORDS=(atest mi)
+	COMP_CWORD=1
+	run _alias_completion::atest atest mi atest
+
+	assert_success
+	assert_line "cmd=atest_cmd"
+	assert_line "cur=mi"
+	assert_line "prev=use-context"
+	assert_line "line=atest_cmd config use-context mi"
+	assert_line "words=atest_cmd config use-context mi"
+	assert_line "cword=3"
+}
