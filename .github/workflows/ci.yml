@@ -39,7 +39,7 @@ jobs:
       run: |
         docker run --rm -v "$PWD":/repo -w /repo -e TEST_JOBS=1 \
           bash@sha256:c058ddf59fee36dad43d3df8ed80fcbc2166bcdfe50069ee546a9e4c7125d466 \
-          bash -c 'apk add --no-cache git coreutils procps util-linux grep sed findutils \
+          bash -c 'apk add --no-cache git curl perl coreutils procps util-linux grep sed findutils \
             && git config --global --add safe.directory "*" \
             && bash --version | head -1 \
             && test/run'
