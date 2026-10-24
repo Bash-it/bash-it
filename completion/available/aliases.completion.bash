@@ -12,7 +12,7 @@ function _bash-it-component-completion-callback-on-init-aliases() {
 	local aliasCommandFunction namespace="alias_completion"
 	local tmp_file completion_loader alias_name line completions chars
 	local alias_arg_words new_completion compl_func compl_wrapper alias_defn
-	local alias_cmd_quoted alias_args_quoted
+	local alias_cmd_quoted alias_args_quoted alias_last_word_quoted
 
 	# create array of function completion triggers, keeping multi-word triggers together
 	IFS=$'\n' read -d '' -ra completions < <(complete -p)
@@ -111,6 +111,7 @@ function _bash-it-component-completion-callback-on-init-aliases() {
 				# before being embedded below, otherwise they can generate invalid code.
 				alias_cmd_quoted="$(printf '%q' "$alias_cmd")"
 				alias_args_quoted="$(printf '%q' "$alias_args")"
+				alias_last_word_quoted="$(printf '%q' "${alias_arg_words[${#alias_arg_words[@]} - 1]}")"
 				echo "function $compl_wrapper {
                         local compl_word=\${2?}
                         local prec_word=\${3?}
@@ -118,8 +119,7 @@ function _bash-it-component-completion-callback-on-init-aliases() {
                         # with the last word in the unaliased form, i.e.,
                         # alias_cmd + ' ' + alias_args.
                         if [[ \$COMP_LINE == \"\$prec_word \$compl_word\" ]]; then
-                            prec_word=$alias_cmd_quoted' '$alias_args_quoted
-                            prec_word=\${prec_word#* }
+                            prec_word=$alias_last_word_quoted
                         fi
                         (( COMP_CWORD += ${#alias_arg_words[@]} ))
                         COMP_WORDS=($alias_cmd_quoted $(printf "%q " "${alias_arg_words[@]}") \"\${COMP_WORDS[@]:1}\")
