@@ -26,6 +26,24 @@ jobs:
         # --tap + --jobs causes TAP plan count mismatches on both Linux and macOS.
         TEST_JOBS: 1
 
+  # ubuntu-24.04 ships Bash 5.2 and macos-14 Bash 3.2; cover Bash 5.3 in a container.
+  bats-test-bash-5-3:
+    runs-on: ubuntu-24.04
+
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
+        submodules: true
+    - name: Test code (Bash 5.3)
+      run: |
+        docker run --rm -v "$PWD":/repo -w /repo -e TEST_JOBS=1 \
+          bash@sha256:c058ddf59fee36dad43d3df8ed80fcbc2166bcdfe50069ee546a9e4c7125d466 \
+          bash -c 'apk add --no-cache git curl perl coreutils procps util-linux grep sed findutils \
+            && git config --global --add safe.directory "*" \
+            && bash --version | head -1 \
+            && test/run'
+
   build-docs:
     runs-on: ubuntu-latest
 
@@ -78,4 +96,5 @@ jobs:
         name: Differential ShellCheck
         uses: redhat-plumbers-in-action/differential-shellcheck@f51c7c0d32777d00de777131d25918617a246415 # v5.5.7
         with:
+          exclude-path: "vendor/**"
           token: ${{ secrets.GITHUB_TOKEN }}
