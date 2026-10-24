@@ -90,7 +90,7 @@ function prompt_command_lines() {
 	assert_equal "$(prompt_command_lines)" $'__bp_precmd_invoke_cmd "$_"\n'"$test_prompt_string"$'\n__bp_interactive_mode'
 }
 
-@test "vendor preexec: precmd_functions and preexec_functions are global when sourced from a function" {
+@test "vendor preexec: precmd_functions and preexec_functions are preserved when sourced from a function" {
 	# shellcheck disable=SC2317
 	function source_and_append() {
 		# shellcheck disable=SC1091
