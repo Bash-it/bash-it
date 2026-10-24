@@ -24,6 +24,8 @@ function local_setup_file() {
 
 @test "plugins xterm: shorten dirname output" {
 	SHORT_TERM_LINE=true
+	# _short-dirname only shortens paths longer than 8 characters, so don't depend on the caller's cwd
+	cd "${BASH_IT?}"
 	run _short-dirname
 	assert_success
 	assert_output "$(basename "${PWD}")"
