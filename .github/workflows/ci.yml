@@ -78,4 +78,5 @@ jobs:
         name: Differential ShellCheck
         uses: redhat-plumbers-in-action/differential-shellcheck@f51c7c0d32777d00de777131d25918617a246415 # v5.5.7
         with:
+          exclude-path: "vendor/**"
           token: ${{ secrets.GITHUB_TOKEN }}
