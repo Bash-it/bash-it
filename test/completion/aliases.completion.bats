@@ -45,6 +45,7 @@ function local_setup_file() {
 
 	COMP_LINE="atest mi"
 	COMP_POINT=${#COMP_LINE}
+	# shellcheck disable=SC2030 # each test sets its own COMP_WORDS
 	COMP_WORDS=(atest mi)
 	COMP_CWORD=1
 	run _alias_completion::atest atest mi atest
@@ -61,6 +62,7 @@ function local_setup_file() {
 # Regression test for #2254: a `'` in an alias definition used to produce an
 # unsourceable wrapper function, aborting the whole completion load.
 @test "alias-completion: alias containing a single quote gets a working wrapper" {
+	# shellcheck disable=SC2031 # reads the COMP_WORDS this test sets below, not the other test's
 	function _probe_complete() { printf '%s\n' "${COMP_WORDS[@]}" > "${BATS_TEST_TMPDIR?}/words"; }
 	complete -F _probe_complete probecmd
 	alias quoted="probecmd --msg=it's"
