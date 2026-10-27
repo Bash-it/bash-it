@@ -13,7 +13,7 @@ BASH_IT="{{BASH_IT}}"
 # Lock and Load a custom theme file.
 # Leave empty to disable theming.
 # location "$BASH_IT"/themes/
-export BASH_IT_THEME='bobby'
+BASH_IT_THEME='bobby'
 
 # Some themes can show whether `sudo` has a current token or not.
 # Set `$THEME_CHECK_SUDO` to `true` to check every prompt:

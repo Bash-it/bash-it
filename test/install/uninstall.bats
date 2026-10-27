@@ -1,22 +1,10 @@
 # shellcheck shell=bats
+# shellcheck disable=SC2030,SC2031 # intended behavior for BATS
 
 load "${MAIN_BASH_IT_DIR?}/test/test_helper.bash"
 
 function local_setup() {
 	export HOME="${BATS_TEST_TMPDIR?}"
-}
-
-function local_setup_file() {
-	# Determine which config file to use based on OS.
-	case $OSTYPE in
-		darwin*)
-			export BASH_IT_CONFIG_FILE=.bash_profile
-			;;
-		*)
-			export BASH_IT_CONFIG_FILE=.bashrc
-			;;
-	esac
-	# don't load any libraries as the tests here test the *whole* kit
 }
 
 @test "uninstall: verify that the uninstall script exists" {
@@ -25,9 +13,9 @@ function local_setup_file() {
 
 @test "uninstall: run the uninstall script with existing backup 'bashrc'" {
 	local md5_bak md5_conf
-	cd "${BASH_IT?}"
+	export BASH_IT_CONFIG_FILE=.bashrc
 
-	echo "test file cont  BASH_IT_COent for backup" > "${HOME?}/$BASH_IT_CONFIG_FILE.bak"
+	echo "test file content for backup" > "${HOME?}/$BASH_IT_CONFIG_FILE.bak"
 	echo "test file content for original BASH_IT file" > "${HOME?}/$BASH_IT_CONFIG_FILE"
 	md5_bak=$(md5sum "${HOME?}/$BASH_IT_CONFIG_FILE.bak" | awk '{print $1}')
 
@@ -46,7 +34,7 @@ function local_setup_file() {
 
 @test "uninstall: run the uninstall script with existing backup 'bash_profile'" {
 	local md5_bak md5_conf
-	BASH_IT_CONFIG_FILE=.bash_profile
+	export BASH_IT_CONFIG_FILE=.bash_profile
 
 	echo "test file content for backup file" > "${HOME?}/$BASH_IT_CONFIG_FILE.bak"
 	echo "test file content for original BASH_IT file" > "${HOME?}/$BASH_IT_CONFIG_FILE"
@@ -66,7 +54,7 @@ function local_setup_file() {
 
 @test "uninstall: run the uninstall script without existing backup 'bashrc" {
 	local md5_orig md5_uninstall
-	BASH_IT_CONFIG_FILE=.bashrc
+	export BASH_IT_CONFIG_FILE=.bashrc
 
 	echo "test file content for original BASH_IT file" > "${HOME?}/$BASH_IT_CONFIG_FILE"
 	md5_orig=$(md5sum "${HOME?}/$BASH_IT_CONFIG_FILE" | awk '{print $1}')
@@ -85,7 +73,7 @@ function local_setup_file() {
 
 @test "uninstall: run the uninstall script without existing backup 'bash_profile" {
 	local md5_orig md5_uninstall
-	BASH_IT_CONFIG_FILE=.bash_profile
+	export BASH_IT_CONFIG_FILE=.bash_profile
 
 	echo "test file content for original BASH_IT file" > "${HOME?}/$BASH_IT_CONFIG_FILE"
 	md5_orig=$(md5sum "${HOME?}/$BASH_IT_CONFIG_FILE" | awk '{print $1}')
