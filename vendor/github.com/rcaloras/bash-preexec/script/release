@@ -1,0 +1,222 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+usage() {
+    cat <<'EOF'
+Usage: script/release [--dry-run] [--yes] VERSION ["Color Animal"]
+
+Prepare a release, push it, and create draft release notes on GitHub.
+
+Options:
+  --dry-run  Validate the release and run tests without changing anything.
+  --yes      Skip confirmation prompts.
+  -h, --help Show this help.
+
+If no title is supplied, an unused Color Animal title is generated.
+EOF
+}
+
+die() {
+    echo "release: $*" >&2
+    exit 1
+}
+
+require_command() {
+    command -v "$1" >/dev/null 2>&1 || die "required command not found: $1"
+}
+
+confirm() {
+    local answer
+
+    if [[ "$assume_yes" == true ]]; then
+        return 0
+    fi
+
+    read -r -p "$1 [y/N] " answer || return 1
+    [[ "$answer" == "y" || "$answer" == "Y" || "$answer" == "yes" || "$answer" == "YES" ]]
+}
+
+title_exists() {
+    printf '%s\n' "$existing_titles" | grep -Fxi -- "$1" >/dev/null 2>&1
+}
+
+generate_title() {
+    local colors=(
+        Amber Aqua Black Blue Bronze Brown Coral Crimson Cyan Emerald
+        Gold Gray Green Indigo Ivory Lavender Lime Magenta Maroon Navy
+        Ochre Olive Orange Peach Pink Plum Purple Red Rose Ruby
+        Sapphire Scarlet Silver Tan Teal Turquoise Violet White Yellow
+    )
+    local animals=(
+        Alpaca Badger Bear Beaver Bison Boa Bobcat Buffalo Camel Capybara
+        Cat Cheetah Cobra Condor Cougar Coyote Crane Crow Deer Dolphin
+        Donkey Eagle Elephant Falcon Ferret Finch Fox Gecko Giraffe Goat
+        Goldfish Goose Heron Hippo Horse Ibex Iguana Jaguar Koala Lemur
+        Leopard Lion Llama Lobster Lynx Mantis Mole Moose Narwhal Octopus
+        Otter Owl Oyster Panda Panther Parrot Pelican Penguin Pigeon Puma
+        Rabbit Raven Rhino Seal Shark Sheep Sloth Sparrow Squid Swan Tiger
+        Toad Toucan Turtle Walrus Whale Wolf Wombat Yak Zebra
+    )
+    local candidate
+    local attempts=0
+
+    while (( attempts < 200 )); do
+        candidate="${colors[RANDOM % ${#colors[@]}]} ${animals[RANDOM % ${#animals[@]}]}"
+        if ! title_exists "$candidate"; then
+            printf '%s\n' "$candidate"
+            return 0
+        fi
+        attempts=$((attempts + 1))
+    done
+
+    die "could not generate an unused release title"
+}
+
+dry_run=false
+assume_yes=false
+
+while (( $# > 0 )); do
+    case "$1" in
+        --dry-run)
+            dry_run=true
+            shift
+            ;;
+        --yes)
+            assume_yes=true
+            shift
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        --)
+            shift
+            break
+            ;;
+        -*)
+            die "unknown option: $1"
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+(( $# >= 1 && $# <= 2 )) || {
+    usage >&2
+    exit 1
+}
+
+version=$1
+requested_title=${2:-}
+
+[[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]] || \
+    die "version must look like 0.7.0 or 0.7.0-rc.1"
+
+require_command git
+require_command gh
+require_command bats
+
+repo_root=$(git rev-parse --show-toplevel 2>/dev/null) || die "not inside a Git repository"
+cd "$repo_root"
+
+[[ -f bash-preexec.sh ]] || die "run this from the bash-preexec repository"
+[[ -z "$(git status --porcelain)" ]] || die "working tree is not clean"
+
+branch=$(git symbolic-ref --quiet --short HEAD) || die "releases cannot be made from a detached HEAD"
+default_branch=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null || true)
+default_branch=${default_branch#origin/}
+default_branch=${default_branch:-master}
+[[ "$branch" == "$default_branch" ]] || \
+    die "switch to the default branch ($default_branch); currently on $branch"
+
+echo "Fetching the latest branch and tags from origin..."
+git fetch --quiet origin "$branch" --tags
+
+[[ "$(git rev-parse HEAD)" == "$(git rev-parse "refs/remotes/origin/$branch")" ]] || \
+    die "$branch must exactly match origin/$branch before releasing"
+
+if git rev-parse --quiet --verify "refs/tags/$version" >/dev/null; then
+    die "tag already exists: $version"
+fi
+
+if gh release view "$version" >/dev/null 2>&1; then
+    die "GitHub release already exists: $version"
+fi
+
+current_versions=$(sed -n 's/^# V\(.*\)$/\1/p' bash-preexec.sh)
+[[ -n "$current_versions" && "$current_versions" != *$'\n'* ]] || \
+    die "expected exactly one '# V...' version marker in bash-preexec.sh"
+current_version=$current_versions
+[[ "$current_version" != "$version" ]] || die "bash-preexec.sh is already at version $version"
+
+existing_titles=$(gh release list --limit 1000 --json name --jq '.[].name')
+
+if [[ -n "$requested_title" ]]; then
+    [[ "$requested_title" =~ ^[[:alpha:]]+[[:space:]][[:alpha:]]+$ ]] || \
+        die "release title must have the form 'Color Animal'"
+    title=$requested_title
+    title_exists "$title" && die "release title is already in use: $title"
+else
+    title=$(generate_title)
+fi
+
+echo
+echo "Release plan"
+echo "  Version: $current_version -> $version"
+echo "  Title:   $title"
+echo "  Branch:  $branch"
+echo "  Notes:   GitHub-generated draft"
+echo
+
+if [[ "$dry_run" == true ]]; then
+    echo "Running bats test..."
+    bats test
+    echo
+    echo "Dry run complete; no files, commits, tags, or releases were changed."
+    exit 0
+fi
+
+confirm "Prepare the release commit and tag?" || die "cancelled"
+
+sed -i.bak "s/^# V.*$/# V${version}/" bash-preexec.sh
+rm -f bash-preexec.sh.bak
+
+echo "Running bats test..."
+if ! bats test; then
+    sed -i.bak "s/^# V.*$/# V${current_version}/" bash-preexec.sh
+    rm -f bash-preexec.sh.bak
+    die "tests failed; restored bash-preexec.sh"
+fi
+
+git diff --check
+git add -- bash-preexec.sh
+git commit -m "Preparing to tag v${version}"
+git tag "$version"
+
+if ! confirm "Push $branch and tag $version, then create the draft GitHub release?"; then
+    echo
+    echo "Release commit and tag were created locally but not pushed."
+    echo "To finish later:"
+    echo "  git push --atomic origin $branch refs/tags/$version"
+    echo "  gh release create $version --verify-tag --title \"$title\" --generate-notes --draft"
+    exit 0
+fi
+
+git push --atomic origin "$branch" "refs/tags/$version"
+
+echo
+echo "Creating draft GitHub release..."
+if release_url=$(gh release create "$version" \
+    --verify-tag \
+    --title "$title" \
+    --generate-notes \
+    --draft); then
+    echo "Draft release created: $release_url"
+else
+    echo "The commit and tag were pushed, but the draft release could not be created." >&2
+    echo "Retry with:" >&2
+    echo "  gh release create $version --verify-tag --title \"$title\" --generate-notes --draft" >&2
+    exit 1
+fi
