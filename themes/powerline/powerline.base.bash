@@ -4,10 +4,10 @@
 #To set color for foreground and background
 function set_color() {
 	local fg='' bg=''
-	if [[ "${1:-}" != "-" ]]; then
+	if [[ "${1:--}" != "-" ]]; then
 		fg="38;5;${1}"
 	fi
-	if [[ "${2:-}" != "-" ]]; then
+	if [[ "${2:--}" != "-" ]]; then
 		bg="48;5;${2}"
 		if [[ -n "${fg}" ]]; then
 			bg=";${bg}"
@@ -23,7 +23,7 @@ function __powerline_user_info_prompt() {
 
 	if [[ "${THEME_CHECK_SUDO:-false}" == true ]]; then
 		if sudo -vn 2> /dev/null; then
-			color=${USER_INFO_THEME_PROMPT_COLOR_SUDO-${POWERLINE_USER_INFO_COLOR_SUDO-"202"}}
+			color=${USER_INFO_THEME_PROMPT_COLOR_SUDO:-${POWERLINE_USER_INFO_COLOR_SUDO-"202"}}
 			if [[ "${POWERLINE_PROMPT_USER_INFO_MODE:-}" == "sudo" ]]; then
 				user_info="!"
 			fi
@@ -269,7 +269,7 @@ function __powerline_left_segment() {
 	fi
 
 	#change here to change fg color
-	LEFT_PROMPT+="$(set_color "${POWERLINE_PROMPT_FOREGROUND_COLOR:--}" "${params[1]:-}")${pad_before_segment}${params[0]}${normal?}"
+	LEFT_PROMPT+="$(set_color "${POWERLINE_PROMPT_FOREGROUND_COLOR:--}" "${params[1]:-}")${pad_before_segment}${params[0]:-}${normal?}"
 	#seperator char color == current bg
 	LAST_SEGMENT_COLOR="${params[1]:-}"
 	((SEGMENTS_AT_LEFT += 1))
