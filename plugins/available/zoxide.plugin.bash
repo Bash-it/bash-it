@@ -1,10 +1,10 @@
 # shellcheck shell=bash
-cite about-plugin
 about-plugin 'zoxide is a smarter cd command for your shell.'
 url "https://github.com/ajeetdsouza/zoxide"
 
-if _command_exists zoxide; then
-	eval "$(zoxide init bash)"
-else
+if ! _binary_exists zoxide; then
 	_log_error 'zoxide not found, please install it from https://github.com/ajeetdsouza/zoxide'
+	return 1
 fi
+
+source < <(zoxide init bash)

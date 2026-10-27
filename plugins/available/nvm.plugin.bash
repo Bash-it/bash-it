@@ -9,16 +9,16 @@ cite about-plugin
 about-plugin 'node version manager configuration'
 url "https://github.com/nvm-sh/nvm"
 
-export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+: "${NVM_DIR:=$HOME/.nvm}"
+export NVM_DIR
 
 # first check if NVM is managed by brew
-NVM_BREW_PREFIX=""
 if _bash_it_homebrew_check; then
 	NVM_BREW_PREFIX=$(brew --prefix nvm 2> /dev/null)
 fi
 
 # This loads nvm
-if [[ -n "$NVM_BREW_PREFIX" && -s "${NVM_BREW_PREFIX}/nvm.sh" ]]; then
+if [[ -n "${NVM_BREW_PREFIX:-}" && -s "${NVM_BREW_PREFIX}/nvm.sh" ]]; then
 	# shellcheck disable=SC1091
 	source "${NVM_BREW_PREFIX}/nvm.sh"
 else
