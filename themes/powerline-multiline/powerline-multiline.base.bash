@@ -35,12 +35,43 @@ function __powerline_right_segment() {
 
 	RIGHT_PROMPT+="$(set_color - "${params[1]:-}")${pad_before_segment}${params[0]}${normal?}"
 
+	# Segments may return prompt escapes (\D{...}, \u, \h, \w, \W): measure the text they render to.
+	local text="${params[0]}"
+	if [[ "${BASH_VERSINFO[0]}" -gt 4 || ("${BASH_VERSINFO[0]}" -eq 4 && "${BASH_VERSINFO[1]}" -ge 4) ]]; then
+		text="${text@P}"
+	else
+		__powerline_expand_prompt_escapes
+	fi
+
 	((padding += ${#pad_before_segment}))
-	((padding += ${#params[0]}))
+	((padding += ${#text}))
 
 	((RIGHT_PROMPT_LENGTH += padding))
 	LAST_SEGMENT_COLOR="${params[1]:-}"
 	((SEGMENTS_AT_RIGHT += 1))
+}
+
+# Bash < 4.4 has no ${text@P}: expand the escapes the powerline segments use in the caller's `text`.
+function __powerline_expand_prompt_escapes() {
+	local tilde='~' dir="${PWD}" base time
+	if [[ "${dir}" == "${HOME}" || "${dir}" == "${HOME}/"* ]]; then
+		dir="${tilde}${dir#"${HOME}"}"
+	fi
+	base="${dir##*/}"
+	text="${text//\\u/${USER:-$(id -un)}}"
+	text="${text//\\h/${HOSTNAME%%.*}}"
+	text="${text//\\w/${dir}}"
+	text="${text//\\W/${base:-/}}"
+	if [[ "${text}" == *'\D{'*'}'* ]]; then
+		local format="${text#*\\D\{}"
+		format="${format%%\}*}"
+		if [[ "${BASH_VERSINFO[0]}" -gt 4 || ("${BASH_VERSINFO[0]}" -eq 4 && "${BASH_VERSINFO[1]}" -ge 2) ]]; then
+			printf -v time "%(${format:-%X})T" -1
+		else
+			time="$(date +"${format:-%X}")"
+		fi
+		text="${text%%\\D\{*}${time}${text#*\\D\{*\}}"
+	fi
 }
 
 function __powerline_right_first_segment_padding() {
