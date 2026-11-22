@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 # bash-it installer
+# bash -c "$(curl -s https://raw.github.com/bash-it/bash-it/master/install.sh)"
+
+# Be strict when moving and deleting user's files
+set -euo pipefail
 
 # Requires bash 3.2+ to install and run
 # Skip loading if bash version is too old
@@ -50,27 +54,25 @@ function _bash-it-install-enable() {
 
 # Ensure .bashrc is sourced from profile files on macOS/BSD/Solaris
 function _bash-it-install-ensure-bashrc-sourcing() {
-	# Only needed on platforms where login shells don't source .bashrc
-	case "$(uname -s)" in
-		Darwin | SunOS | Illumos | *BSD) ;;
-		*) return 0 ;; # Not needed on Linux
-	esac
-
 	# Find which profile file exists
-	local profile_file
-	if [[ -f "$HOME/.bash_profile" ]]; then
-		profile_file="$HOME/.bash_profile"
+	local profile_file="$HOME/.bash_profile"
+	local -i profile_exists
+	if [[ -f "$profile_file" ]]; then
+		profile_exists=1
 	elif [[ -f "$HOME/.profile" ]]; then
 		profile_file="$HOME/.profile"
+		profile_exists=1
 	else
 		# No profile file exists, create .bash_profile
-		profile_file="$HOME/.bash_profile"
+		profile_exists=0
 		echo -e "${echo_yellow:-}Creating $profile_file to source .bashrc${echo_normal:-}"
 	fi
 
-	# Check if already sourced (reuse helper from doctor)
-	if _bash-it-doctor-check-profile-sourcing-grep "$profile_file" 2> /dev/null; then
-		return 0 # Already configured
+	if ((profile_exists)); then
+		# Check if already sourced (reuse helper from doctor)
+		if _bash-it-doctor-check-profile-sourcing-grep "$profile_file" 2> /dev/null; then
+			return 0 # Already configured
+		fi
 	fi
 
 	# Not sourced, offer to add it
@@ -79,8 +81,8 @@ function _bash-it-install-ensure-bashrc-sourcing() {
 	echo "On macOS/BSD/Solaris, login shells won't load bash-it without this."
 	echo ""
 
-	local RESP
 	if [[ -z "${silent:-}" ]]; then
+		local RESP
 		read -r -e -n 1 -p "Would you like to add .bashrc sourcing to $profile_file? [Y/n] " RESP
 		case $RESP in
 			[nN])
@@ -99,23 +101,39 @@ function _bash-it-install-ensure-bashrc-sourcing() {
 	fi
 
 	# Backup profile file if it exists
-	if [[ -f "$profile_file" ]]; then
+	if ((profile_exists)); then
 		local backup_file
 		backup_file="${profile_file}.bak.$(date +%Y%m%d_%H%M%S)"
 		command cp "$profile_file" "$backup_file"
 		echo -e "${echo_green:-}Backed up $profile_file to $backup_file${echo_normal:-}"
 	fi
 
-	# Add the sourcing snippet
-	cat >> "$profile_file" << 'EOF'
-
-# Source .bashrc if running bash
+	if ((profile_exists)); then
+		# Add the sourcing snippet to $profile_file (.bash_profile or maybe .profile)
+		cat >> "$profile_file" << 'EOF'
+# Source .bashrc if running bash and interactive
 if [ -n "${BASH_VERSION-}" ]; then
-	if [ -f "$HOME/.bashrc" ]; then
-		. "$HOME/.bashrc"
+	if [[ -f "$HOME/.bashrc" && $- == *i* ]]; then
+		source "$HOME/.bashrc"
 	fi
 fi
 EOF
+	else
+		# Create a new ~/.bash_profile
+		cat >> "$profile_file" << 'EOF'
+# Source .profile if it exists
+if [[ -f "$HOME/.profile" ]]; then
+	source "$HOME/.profile"
+fi
+
+# Source .bashrc if interactive
+if [[ $- == *i* ]]; then
+	if [[ -f "$HOME/.bashrc" ]]; then
+		source "$HOME/.bashrc"
+	fi
+fi
+EOF
+	fi
 
 	echo -e "${echo_green:-}✓ Added .bashrc sourcing to $profile_file${echo_normal:-}"
 	echo ""
@@ -123,9 +141,10 @@ EOF
 
 # Back up existing profile
 function _bash-it-install-backup-config() {
-	test -w "${HOME?}/${CONFIG_FILE?}" \
-		&& cp -aL "${HOME?}/${CONFIG_FILE?}" "${HOME?}/${CONFIG_FILE?}.bak" \
-		&& echo -e "${echo_green:-}Your original ${CONFIG_FILE?} has been backed up to ${CONFIG_FILE?}.bak${echo_normal:-}"
+	if [[ -w "${HOME?}/${CONFIG_FILE?}" ]]; then
+		cp -aL "${HOME?}/${CONFIG_FILE?}" "${HOME?}/${CONFIG_FILE?}.bak" \
+			&& echo -e "${echo_green:-}Your original ${CONFIG_FILE?} has been backed up to ${CONFIG_FILE?}.bak${echo_normal:-}"
+	fi
 }
 
 # Back up existing profile and create new one for bash-it
@@ -143,8 +162,8 @@ function _bash-it-install-backup-append() {
 }
 
 function _bash-it-install-backup-check() {
-	if ! [[ -e "${HOME?}/$BACKUP_FILE" ]]; then
-		return
+	if [[ ! -e "${HOME?}/$BACKUP_FILE" ]]; then
+		return 0
 	fi
 	echo -e "${echo_yellow:-}Backup file already exists. Make sure to backup your .bashrc before running this installation.${echo_normal:-}" >&2
 
@@ -203,17 +222,6 @@ function _bash-it-install-modify-config() {
 		# backup/new by default
 		_bash-it-install-backup-new
 	fi
-	_bash-it-install-modify-profile
-}
-
-function _bash-it-install-modify-profile() {
-	local choice profile_string=$'if [[ $- == *i* && -s ~/.bashrc ]]; then\n\tsource ~/.bashrc\nfi'
-	if [[ ! -f ~/.bash_profile ]]; then
-		printf '%s\n' "${profile_string}" > ~/.bash_profile
-	else
-		printf "${echo_yellow:-}%s${echo_normal:-}" "You may need to update your ~/.bash_profile (or ~/.profile) to source your ~/.bashrc:"
-		printf '%s\n' "${profile_string}"
-	fi
 }
 
 for param in "$@"; do
@@ -262,21 +270,6 @@ fi
 
 BASH_IT="$(cd "${BASH_SOURCE%/*}" && pwd)"
 
-CONFIG_FILE=".bashrc"
-
-# overriding CONFIG_FILE:
-CONFIG_FILE="${BASH_IT_CONFIG_FILE:-"${CONFIG_FILE}"}"
-# create subdir if CONFIG_FILE has subdirectory components
-if [[ "${CONFIG_FILE%/*}" != "${CONFIG_FILE}" ]]; then
-	mkdir -p "${HOME}/${CONFIG_FILE%/*}"
-fi
-
-BACKUP_FILE="${CONFIG_FILE?}.bak"
-echo "Installing bash-it"
-if [[ -z "${no_modify_config}" ]]; then
-	_bash-it-install-modify-config
-fi
-
 # Disable auto-reload in case its enabled
 export BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE=''
 # Load dependencies for enabling components
@@ -291,6 +284,21 @@ source "${BASH_IT?}/lib/utilities.bash"
 source "${BASH_IT?}/lib/helpers.bash"
 # shellcheck source-path=SCRIPTDIR/lib
 source "${BASH_IT?}/lib/colors.bash"
+
+CONFIG_FILE=".bashrc"
+
+# overriding CONFIG_FILE:
+CONFIG_FILE="${BASH_IT_CONFIG_FILE:-"${CONFIG_FILE}"}"
+# create subdir if CONFIG_FILE has subdirectory components
+if [[ "${CONFIG_FILE%/*}" != "${CONFIG_FILE}" ]]; then
+	mkdir -p "${HOME}/${CONFIG_FILE%/*}"
+fi
+
+BACKUP_FILE="${CONFIG_FILE?}.bak"
+echo "Installing bash-it"
+if [[ -z "${no_modify_config:-}" ]]; then
+	_bash-it-install-modify-config
+fi
 
 if [[ -n ${interactive:-} && -z "${silent:-}" ]]; then
 	for type in "aliases" "plugins" "completion"; do
