@@ -14,7 +14,10 @@ url "https://github.com/mooz/percol"
 # Usage
 ## C-r to search&select from history
 
-_command_exists percol || return
+if ! _binary_exists percol; then
+	_log_warning "Unable to locate 'percol'."
+	return 1
+fi
 
 if [[ ${BASH_VERSINFO[0]} -lt 4 ]]; then
 	_log_warning "You have to upgrade Bash to Bash v4.x to use the 'percol' plugin."
@@ -31,4 +34,5 @@ function _replace_by_history() {
 	READLINE_LINE="${l}"
 	READLINE_POINT=${#l}
 }
+
 bind -x '"\C-r": _replace_by_history'

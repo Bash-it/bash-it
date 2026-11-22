@@ -1,10 +1,11 @@
 # shellcheck shell=bash
-cite about-plugin
 about-plugin 'set textmate as a default editor'
 url "https://macromates.com/"
 
-if _command_exists mate; then
-	EDITOR="$(type -p mate) -w"
-	GIT_EDITOR="$EDITOR"
-	export EDITOR GIT_EDITOR
+if ! _binary_exists mate; then
+	_log_warning "Unable to locage 'mate'."
+	return 1
 fi
+
+EDITOR="$(type -p mate) -w"
+export EDITOR

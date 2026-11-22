@@ -1,5 +1,4 @@
 # shellcheck shell=bash
-cite about-plugin
 about-plugin 'initializes basher, the shell package manager'
 url "https://github.com/basherpm/basher"
 
@@ -14,4 +13,5 @@ if ! _command_exists basher; then
 	fi
 fi
 
-eval "$(basher init - bash)"
+# shellcheck disable=SC1090
+source < <(basher init - bash)

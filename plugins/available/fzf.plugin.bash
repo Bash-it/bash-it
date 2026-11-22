@@ -7,19 +7,22 @@ about-plugin 'load fzf, if you are using it'
 url "https://github.com/junegunn/fzf"
 
 if ! _bash-it-component-item-is-enabled plugin blesh; then
-	if [ -r ~/.fzf.bash ]; then
-		# shellcheck disable=SC1090
+	if [[ -r ~/.fzf.bash ]]; then
+		# shellcheck disable=SC1091
 		source ~/.fzf.bash
-	elif [ -r "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash ]; then
+	elif [[ -r "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/fzf.bash" ]]; then
 		# shellcheck disable=SC1091
 		source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash
 	fi
 fi # only sources the keybindings and integration if blesh is not integrated already
 
 # No need to continue if the command is not present
-_command_exists fzf || return
+if ! _binary_exists fzf; then
+	_log_warning "unable to initialize without '$_' installed."
+	return 1
+fi
 
-if [ -z ${FZF_DEFAULT_COMMAND+x} ] && _command_exists fd; then
+if [[ -z ${FZF_DEFAULT_COMMAND+x} ]] && _command_exists fd; then
 	export FZF_DEFAULT_COMMAND='fd --type f'
 fi
 
@@ -32,7 +35,7 @@ fe() {
 	local IFS=$'\n' line
 	local files=()
 	while IFS='' read -r line; do files+=("$line"); done < <(fzf-tmux --query="$1" --multi --select-1 --exit-0)
-	[[ -n "${files[0]}" ]] && ${EDITOR:-vim} "${files[@]}"
+	[[ -n "${files[0]}" ]] && ${EDITOR:-${ALTERNATE_EDITOR:-nano}} "${files[@]}"
 }
 
 fcd() {
